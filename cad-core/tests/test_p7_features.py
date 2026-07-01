@@ -261,6 +261,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p7_pad_open_wire_profile_auto_surface_extrusion(self) -> None:
         result = self.run_recompute("partdesign-pad-open-wire-surface-auto", "p7")
         pad = result["objects"]["Pad"]
+        pad_named_shape = result["named_shapes"]["Pad"]
         sketch = result["objects"]["Sketch"]
 
         self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile_surface_display_only"])
@@ -271,10 +272,20 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["resolvedOpenProfileMode"], "SurfaceExtrusion")
         self.assertEqual(pad["bodyParticipation"], "display_only")
         self.assertEqual(pad["sourceProfile"], {"object": "Sketch", "stableSubnames": ["g101", "g102", "g103"]})
-        self.assertEqual(pad["topo_naming_history"], "history_pending:open_profile_surface")
+        self.assertEqual(pad["topo_naming_history"], "mapper_history:open_profile_surface")
         self.assertEqual(pad["volume"], 0.0)
         self.assertGreater(len(result["subshapes"]["Pad"]), 0)
         self.assertEqual(sketch["raw_edge_identity"]["byStableSubname"]["g102"], "Edge2")
+        self.assertEqual(pad_named_shape["element_map"]["g101"], "Face1")
+        self.assertEqual(pad_named_shape["element_map"]["g102"], "Face2")
+        self.assertTrue(
+            any(
+                event["relation"] == "generated"
+                and event["source"]["subname"] == "g101"
+                and event["target"]["subname"] == "Face1"
+                for event in pad_named_shape["mapper_history"]
+            )
+        )
 
     def test_p7_pocket_open_wire_profile_is_body_display_only(self) -> None:
         result = self.run_recompute("partdesign-pocket-open-wire-body-display-only", "p7")
@@ -289,7 +300,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pocket["resolvedOpenProfileMode"], "SurfaceExtrusion")
         self.assertEqual(pocket["bodyParticipation"], "display_only")
         self.assertEqual(pocket["sourceProfile"]["stableSubnames"], ["g201", "g202", "g203"])
-        self.assertEqual(pocket["topo_naming_history"], "history_pending:open_profile_surface")
+        self.assertEqual(pocket["topo_naming_history"], "mapper_history:open_profile_surface")
         self.assertEqual(pocket["volume"], 0.0)
         self.assertEqual(body["status"], "ok")
         self.assertEqual(body["shape"], "occt_solid")
@@ -361,7 +372,14 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["profileKind"], "open_wire")
         self.assertEqual(pad["resolvedOpenProfileMode"], "ThinSolid")
         self.assertEqual(pad["bodyParticipation"], "solid_add")
-        self.assertEqual(pad["topo_naming_history"], "history_pending:open_profile_thin")
+        self.assertEqual(pad["topo_naming_history"], "mapper_history:open_profile_thin")
+        self.assertTrue(
+            any(
+                event["relation"] in {"generated", "split"}
+                and event["source"]["subname"] == "g101"
+                for event in result["named_shapes"]["Pad"]["mapper_history"]
+            )
+        )
         self.assertGreater(pad["volume"], 0.0)
 
     def test_p7_pocket_open_wire_thin_cut_requires_thickness(self) -> None:
@@ -408,7 +426,14 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pocket["profileKind"], "open_wire")
         self.assertEqual(pocket["resolvedOpenProfileMode"], "ThinCut")
         self.assertEqual(pocket["bodyParticipation"], "solid_cut")
-        self.assertEqual(pocket["topo_naming_history"], "history_pending:open_profile_thin")
+        self.assertEqual(pocket["topo_naming_history"], "mapper_history:open_profile_thin")
+        self.assertTrue(
+            any(
+                event["relation"] in {"generated", "split"}
+                and event["source"]["subname"] == "g201"
+                for event in result["named_shapes"]["Pocket"]["mapper_history"]
+            )
+        )
         self.assertGreater(pocket["volume"], 0.0)
         self.assertEqual(body["status"], "ok")
         self.assertEqual(body["replayed_additive_features"], ["Pad"])

@@ -1338,7 +1338,8 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                        const app::Link& profileLink,
                                        const std::string& method,
                                        const std::string& featureName,
-                                       const std::string& historyOwner)
+                                       const std::string& historyOwner,
+                                       const part::NamedShape* profileNamedShape = nullptr)
 {
     if (firstFaceOf(profile)) {
         BRepPrimAPI_MakePrism prism(profile, length * gp_Vec(direction));
@@ -1351,15 +1352,27 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                    object.name);
             return std::nullopt;
         }
-        auto namedShape = part::namedShapeForMakerHistory(historyOwner,
-                                                          prism.Shape(),
-                                                          profileLink.object,
-                                                          profile,
-                                                          prism);
+        std::optional<part::NamedShape> namedShape;
+        if (profileNamedShape != nullptr) {
+            const part::NamedShapeSource profileSource{profileLink.object, profile, profileNamedShape};
+            namedShape = part::namedShapeForMakerHistory(historyOwner,
+                                                         prism.Shape(),
+                                                         std::vector<part::NamedShapeSource>{profileSource},
+                                                         prism);
+        }
+        else {
+            namedShape = part::namedShapeForMakerHistory(historyOwner,
+                                                         prism.Shape(),
+                                                         profileLink.object,
+                                                         profile,
+                                                         prism);
+        }
         return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
     }
 
-    const part::NamedShape* profileNamedShape = namedShapeForProfileSource(context, profileLink, profile);
+    const part::NamedShape* sourceNamedShape = profileNamedShape != nullptr
+        ? profileNamedShape
+        : namedShapeForProfileSource(context, profileLink, profile);
     std::string error;
     const auto extrusion = part::buildLinearExtrusionFromProfile(
         historyOwner,
@@ -1373,7 +1386,7 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
             0.0,
             true,
         },
-        profileNamedShape,
+        sourceNamedShape,
         error
     );
     if (!extrusion) {
@@ -1404,7 +1417,8 @@ std::optional<SideBuild> makePrismUntilSide(const TopoDS_Shape& profile,
                                             const std::string& method,
                                             const std::string& property,
                                             const std::string& featureName,
-                                            const std::string& historyOwner)
+                                            const std::string& historyOwner,
+                                            const part::NamedShape* profileNamedShape = nullptr)
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
     // ::FeatureExtrude::generateSingleExtrusionSide(), calls "prism.makeElementPrismUntil(...,
@@ -1451,13 +1465,27 @@ std::optional<SideBuild> makePrismUntilSide(const TopoDS_Shape& profile,
         // The selected-face ledger above already comes from FreeCAD's Part::findAllFacesCutBy()
         // path. Keep valid LinkSubList requests supported when raw BRepFeat rejects the open
         // shell, and still derive the reach from the FreeCAD cut-face ordering.
-        return makePrismSide(profile, direction, reportLength, object, context, profileLink, method, featureName, historyOwner);
+        return makePrismSide(profile,
+                             direction,
+                             reportLength,
+                             object,
+                             context,
+                             profileLink,
+                             method,
+                             featureName,
+                             historyOwner,
+                             profileNamedShape);
     }
 
     part::NamedShapeSource profileSource{profileLink.object, profile};
-    const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object);
-    if (profileNamedShapeIt != context.namedShapes.end()) {
-        profileSource.namedShape = &profileNamedShapeIt->second;
+    if (profileNamedShape != nullptr) {
+        profileSource.namedShape = profileNamedShape;
+    }
+    else {
+        const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object);
+        if (profileNamedShapeIt != context.namedShapes.end()) {
+            profileSource.namedShape = &profileNamedShapeIt->second;
+        }
     }
     auto namedShape = part::namedShapeForPreservedSources(historyOwner, *prismShape, {profileSource});
     return SideBuild{method, reportLength, *prismShape, false, false, std::move(namedShape)};
@@ -1473,10 +1501,20 @@ std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
                                             const std::string& taperProperty,
                                             const std::string& featureName,
                                             const app::Link& profileLink,
-                                            const std::string& historyOwner)
+                                            const std::string& historyOwner,
+                                            const part::NamedShape* profileNamedShape = nullptr)
 {
     if (std::abs(taperAngleDegrees) <= Precision::Angular()) {
-        return makePrismSide(profile, direction, length, object, context, profileLink, method, featureName, historyOwner);
+        return makePrismSide(profile,
+                             direction,
+                             length,
+                             object,
+                             context,
+                             profileLink,
+                             method,
+                             featureName,
+                             historyOwner,
+                             profileNamedShape);
     }
 
     std::string error;
@@ -1498,9 +1536,14 @@ std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
         return std::nullopt;
     }
     part::NamedShapeSource profileSource{profileLink.object, profile};
-    const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object);
-    if (profileNamedShapeIt != context.namedShapes.end()) {
-        profileSource.namedShape = &profileNamedShapeIt->second;
+    if (profileNamedShape != nullptr) {
+        profileSource.namedShape = profileNamedShape;
+    }
+    else {
+        const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object);
+        if (profileNamedShapeIt != context.namedShapes.end()) {
+            profileSource.namedShape = &profileNamedShapeIt->second;
+        }
     }
     auto namedShape = part::namedShapeForTaperedExtrusionHistory(historyOwner, *tapered, profile, profileSource)
         .value_or(part::namedShapeForPreservedSources(historyOwner, tapered->shape, {profileSource}));
@@ -1785,7 +1828,8 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
                                          AddSubMode mode,
                                          const std::string& featureName,
                                          double lengthScale,
-                                         const std::string& historyOwner)
+                                         const std::string& historyOwner,
+                                         const part::NamedShape* profileNamedShape = nullptr)
 {
     const std::string method = readStringProperty(object, side.typeProperty, "Length");
     const double taper = readOptionalNumberProperty(object, side.taperProperty);
@@ -1889,7 +1933,8 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
                                       method,
                                       side.upToShapeProperty,
                                       featureName,
-                                      historyOwner);
+                                      historyOwner,
+                                      profileNamedShape);
         }
         if (std::abs(offset) > Precision::Confusion()) {
             return rejectOffset(side.offsetProperty + " requires the full FreeCAD UpTo offset path");
@@ -1909,8 +1954,18 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
         return SideBuild{method, length, TopoDS_Shape{}, false, false};
     }
 
-    return makeExtrusionShape(
-        object, context, profile, direction, length, taper, method, side.taperProperty, featureName, profileLink, historyOwner);
+    return makeExtrusionShape(object,
+                              context,
+                              profile,
+                              direction,
+                              length,
+                              taper,
+                              method,
+                              side.taperProperty,
+                              featureName,
+                              profileLink,
+                              historyOwner,
+                              profileNamedShape);
 }
 
 }  // namespace
@@ -1935,6 +1990,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     std::optional<OpenProfileMode> resolvedOpenProfileMode;
     std::string bodyParticipation = bodyParticipationForClosedProfile(mode);
     TopoDS_Shape extrusionProfileShape = profile->shape;
+    std::optional<part::NamedShape> extrusionProfileNamedShape;
     bool displayOnlyOpenProfile = false;
     if (openProfile) {
         resolvedOpenProfileMode =
@@ -1953,6 +2009,7 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                 return std::nullopt;
             }
             extrusionProfileShape = thinProfile->shape;
+            extrusionProfileNamedShape = thinProfile->namedShape;
             bodyParticipation = bodyParticipationForClosedProfile(mode);
         }
     }
@@ -1996,7 +2053,16 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
 
     if (sideType == "One side") {
         auto side = buildSingleSide(
-            object, context, extrusionProfileShape, profile->link, side1, mode, featureName, direction->lengthScale, object.name);
+            object,
+            context,
+            extrusionProfileShape,
+            profile->link,
+            side1,
+            mode,
+            featureName,
+            direction->lengthScale,
+            object.name,
+            extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
         if (!side) {
             return std::nullopt;
         }
@@ -2054,7 +2120,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              profile->link,
                                              "Two sides",
                                              featureName,
-                                             object.name);
+                                             object.name,
+                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
             if (!prism) {
                 return std::nullopt;
             }
@@ -2072,7 +2139,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                          mode,
                                          featureName,
                                          direction->lengthScale,
-                                         object.name + ".Prism1");
+                                         object.name + ".Prism1",
+                                         extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
             if (!first) {
                 return std::nullopt;
             }
@@ -2084,7 +2152,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                           mode,
                                           featureName,
                                           direction->lengthScale,
-                                          object.name + ".Prism2");
+                                          object.name + ".Prism2",
+                                          extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
             if (!second) {
                 return std::nullopt;
             }
@@ -2141,7 +2210,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                             "TaperAngle",
                                             featureName,
                                             profile->link,
-                                            object.name + ".Prism1");
+                                            object.name + ".Prism1",
+                                            extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
             if (!first) {
                 return std::nullopt;
             }
@@ -2155,7 +2225,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              "TaperAngle",
                                              featureName,
                                              profile->link,
-                                             object.name + ".Prism2");
+                                             object.name + ".Prism2",
+                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
             if (!second) {
                 return std::nullopt;
             }
@@ -2178,7 +2249,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              profile->link,
                                              "Symmetric",
                                              featureName,
-                                             object.name);
+                                             object.name,
+                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
             if (!prism) {
                 return std::nullopt;
             }

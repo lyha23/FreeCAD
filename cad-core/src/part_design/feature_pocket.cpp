@@ -149,7 +149,7 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
             {"kernel", cad_core::part::kernelVersion()},
         };
         appendOpenProfileResultFields(result, *extrusion);
-        result["topo_naming_history"] = "history_pending:open_profile_surface";
+        result["topo_naming_history"] = "mapper_history:open_profile_surface";
         context.objects[object.name] = result;
         return;
     }
@@ -185,7 +185,7 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
     };
     appendOpenProfileResultFields(result, *extrusion);
     if (extrusion->profileKind != ProfileKind::ClosedFace) {
-        result["topo_naming_history"] = "history_pending:open_profile_thin";
+        result["topo_naming_history"] = "mapper_history:open_profile_thin";
     }
     if (extrusion->taperHistory) {
         result["topo_naming_history"] = "maker_history:taper_thru_sections";
