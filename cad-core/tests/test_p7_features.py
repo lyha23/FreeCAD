@@ -416,6 +416,40 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("display_only_features", body)
         self.assertLess(body["volume"], pad["volume"])
 
+    def test_p7_open_wire_surface_split_cut_remains_explicitly_unsupported(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pocket-open-wire-body-display-only.json").read_text())
+        self.object_payload(payload, "Pocket")["Properties"]["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "SurfaceSplitCut",
+        }
+
+        result = self.run_recompute_payload(payload)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_open_profile_pocket"])
+        self.assertEqual(result["objects"]["Pocket"]["status"], "error")
+
+    def test_p7_open_wire_thin_solid_rejects_invalid_side(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-surface-auto.json").read_text())
+        pad_properties = self.object_payload(payload, "Pad")["Properties"]
+        pad_properties["OpenProfileMode"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "ThinSolid",
+        }
+        pad_properties["OpenProfileThickness"] = {
+            "PropertyType": "App::PropertyLength",
+            "value": 1.0,
+        }
+        pad_properties["OpenProfileSide"] = {
+            "PropertyType": "App::PropertyEnumeration",
+            "value": "Outside",
+        }
+
+        result = self.run_recompute_payload(payload)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_property"])
+        self.assertEqual(result["diagnostics"][0]["property"], "OpenProfileSide")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
     def test_p7_pocket_missing_refine_uses_partdesign_default_refinemodel(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p7" / "pocket-refine-true.json").read_text())
         self.object_payload(payload, "Pocket")["Properties"].pop("Refine")
