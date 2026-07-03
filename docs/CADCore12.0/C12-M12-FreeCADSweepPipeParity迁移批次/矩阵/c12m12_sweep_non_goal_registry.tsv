@@ -1,0 +1,9 @@
+id	non_goal	reason	owner_step	status	reopen_condition
+C12M12-NONGOAL-001	Copy old chili3d always-Frenet sweep	chili3d behavior is not FreeCAD source authority	S1	closed	Only reopen if user explicitly asks for chili3d compatibility instead of FreeCAD parity.
+C12M12-NONGOAL-002	Use mesh normal split as BRep parity proof	Mesh quality does not prove PipeShell shape/history correctness	S3/S5	closed	Only use mesh checks as response quality gate after BRep/source parity.
+C12M12-NONGOAL-003	Keep automatic profile relocation without FreeCAD source	Auto attach can hide wrong profile/spine setup	S2/S4	open	May become explicit product contract only if source review and user approval reject FreeCAD behavior.
+C12M12-NONGOAL-004	Rebuild invalid planar side faces as general repair	Face rebuild may mask incorrect PipeShell setup	S2/S4	open	Only retain with source-backed evidence or isolated diagnostic path.
+C12M12-NONGOAL-005	Implement full Topological Naming	Sweep/Pipe migration only needs local history/subshape response	All	closed	Open separate Topological Naming package if requested.
+C12M12-NONGOAL-006	Modify my-chili3d frontend consumer	This package targets FreeCAD/cad-core backend	S5	closed	Open frontend follow-up only after backend response is proven correct.
+C12M12-NONGOAL-007	Rewrite all Part surface family features	C12-M12 scope is Sweep/Pipe only	All	closed	New surface-family package required for other features.
+C12M12-NONGOAL-008	Change capability wording before evidence	Capability must follow source/oracle/current validation	S6	closed	Allowed only after S6 final status is evidence-backed.
