@@ -85,6 +85,22 @@ void appendOpenProfileResultFields(nlohmann::json& result, const ExtrudeResult& 
     };
 }
 
+void appendProfileResolveFields(nlohmann::json& result, const ExtrudeResult& extrusion)
+{
+    if (!extrusion.profileResolveMode.empty()) {
+        result["profileResolveMode"] = extrusion.profileResolveMode;
+    }
+    if (!extrusion.profileOwner.empty()) {
+        result["profileOwner"] = extrusion.profileOwner;
+    }
+    if (!extrusion.requestedProfileSubname.empty()) {
+        result["requestedSubname"] = extrusion.requestedProfileSubname;
+    }
+    if (!extrusion.currentProfileSubname.empty()) {
+        result["currentSubname"] = extrusion.currentProfileSubname;
+    }
+}
+
 }  // namespace
 
 void executePad(const app::DocumentObject& object, runtime::ComputeContext& context)
@@ -149,6 +165,7 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
             {"kernel", cad_core::part::kernelVersion()},
         };
         appendOpenProfileResultFields(result, *extrusion);
+        appendProfileResolveFields(result, *extrusion);
         result["topo_naming_history"] = "mapper_history:open_profile_surface";
         context.objects[object.name] = result;
         return;
@@ -188,6 +205,7 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         {"kernel", cad_core::part::kernelVersion()},
     };
     appendOpenProfileResultFields(result, *extrusion);
+    appendProfileResolveFields(result, *extrusion);
     if (extrusion->profileKind != ProfileKind::ClosedFace) {
         result["topo_naming_history"] = "mapper_history:open_profile_thin";
     }

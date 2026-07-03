@@ -9,9 +9,9 @@
   "volume": 350.0,
   "volume_delta": 1e-6,
   "topology_counts": {
-    "faces": 10,
-    "edges": 20,
-    "vertices": 12
+    "faces": 6,
+    "edges": 12,
+    "vertices": 8
   },
   "named_shapes": {
     "Body": {

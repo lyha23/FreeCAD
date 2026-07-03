@@ -1,0 +1,233 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "草图 2:10:13 PM",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              -471.93103116301336,
+              -400.7286327319748
+            ],
+            "id": 100001,
+            "kind": "LineSegment",
+            "start": [
+              -669.3371282932459,
+              329.8345865396568
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 2,
+      "Name": "Pad",
+      "Properties": {
+        "AlongSketchNormal": true,
+        "Direction": [
+          0,
+          0,
+          1
+        ],
+        "FuzzyTolerance": 0,
+        "Length": 353,
+        "OpenProfileMode": "SurfaceExtrusion",
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "g100001"
+              ],
+              "SubList": [
+                "Edge1"
+              ],
+              "value": "草图 2:10:13 PM"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length",
+        "UseCustomVector": true
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 3,
+      "Name": "Pad2",
+      "Properties": {
+        "AlongSketchNormal": true,
+        "Direction": [
+          0.9653778434554792,
+          0.26085555268241617,
+          0
+        ],
+        "FuzzyTolerance": 0,
+        "Length": 368,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "g100001"
+              ],
+              "SubList": [
+                "Face1"
+              ],
+              "value": "Pad"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length",
+        "UseCustomVector": true
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 4,
+      "Name": "Pad3",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 277,
+        "OpenProfileMode": "SurfaceExtrusion",
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Edge12"
+              ],
+              "SubList": [
+                "Edge12"
+              ],
+              "value": "Pad2"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 5,
+      "Name": "Pad4",
+      "Properties": {
+        "AlongSketchNormal": true,
+        "Direction": [
+          0.965377843455479,
+          0.2608555526824162,
+          0
+        ],
+        "FuzzyTolerance": 0,
+        "Length": 317,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Face1"
+              ],
+              "SubList": [
+                "Face1"
+              ],
+              "value": "Pad3"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length",
+        "UseCustomVector": true
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 6,
+      "Name": "FilletPreview",
+      "Properties": {
+        "Base": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge12"
+          ],
+          "SubList": [
+            "Edge23"
+          ],
+          "value": "Pad4"
+        },
+        "Radius": 1,
+        "SupportTransform": true,
+        "UseAllEdges": false
+      },
+      "TypeId": "PartDesign::Fillet"
+    },
+    {
+      "ID": 7,
+      "Name": "Pad4Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "草图 2:10:13 PM",
+            "Pad",
+            "Pad2",
+            "Pad3",
+            "Pad4",
+            "FilletPreview"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "FilletPreview"
+        }
+      },
+      "TypeId": "PartDesign::Body"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Pad4Body"
+    ]
+  }
+}

@@ -10,6 +10,7 @@
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Wire.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
 #include <nlohmann/json.hpp>
 
 #include <cstddef>
@@ -38,6 +39,7 @@ enum class SketchProfileEdgeKind
     ArcOfHyperbola,
     ArcOfParabola,
     BSpline,
+    InterpolatedSpline,
     Bezier
 };
 
@@ -56,6 +58,9 @@ struct SketchProfileEdge
     double endAngle = 0.0;
     int degree = 0;
     std::vector<gp_Pnt> poles;
+    bool periodic = false;
+    std::optional<gp_Vec> startTangent;
+    std::optional<gp_Vec> endTangent;
     std::vector<double> weights;
     SketchGeometryIdentity identity;
 };
@@ -76,6 +81,7 @@ struct RawSketchShapeBuild
     TopoDS_Shape shape;
     std::vector<TopoDS_Edge> sourceEdges;
     std::vector<SketchGeometryIdentity> sourceEdgeIdentities;
+    bool sourceOrderMatchesPublishedShape = false;
 };
 
 struct ProfileFaceBuild
@@ -93,6 +99,7 @@ std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& se
                                             const std::vector<SketchHyperbolaArc>& hyperbolaArcs,
                                             const std::vector<SketchParabolaArc>& parabolaArcs,
                                             const std::vector<SketchBSpline>& bsplines,
+                                            const std::vector<SketchInterpolatedSpline>& interpolatedSplines,
                                             const std::vector<SketchBezier>& beziers);
 
 std::optional<RawSketchShapeBuild> buildRawSketchShape(const app::DocumentObject& object,

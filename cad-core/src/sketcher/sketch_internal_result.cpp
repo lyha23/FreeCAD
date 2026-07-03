@@ -49,7 +49,7 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
     result.shapeValue.profileRequiresSubshapeSelection = input.profileRequiresSubshapeSelection;
 
     const bool hasNonEmptyInternalShape = input.internalShape && !input.internalShape->IsNull();
-    if (!input.rawShape.IsNull() && !hasNonEmptyInternalShape) {
+    if (!input.rawShape.IsNull()) {
         result.rawNamedShape = namedShapeForSketchRawEdgeIdentity(
             input.objectName,
             input.rawShape,

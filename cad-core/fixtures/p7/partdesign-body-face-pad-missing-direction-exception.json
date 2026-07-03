@@ -1,0 +1,259 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "草图 7:03:05 PM",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              -443.4602991054706,
+              205.4652673715269
+            ],
+            "id": 100001,
+            "kind": "LineSegment",
+            "start": [
+              -778.6562631010715,
+              205.465267833471
+            ]
+          },
+          {
+            "end": [
+              -443.4602991054706,
+              -389.0055364335765
+            ],
+            "id": 100002,
+            "kind": "LineSegment",
+            "start": [
+              -443.4602991054706,
+              205.4652673715269
+            ]
+          },
+          {
+            "end": [
+              -778.6562627004704,
+              -389.0055364335765
+            ],
+            "id": 100003,
+            "kind": "LineSegment",
+            "start": [
+              -443.4602991054706,
+              -389.0055364335765
+            ]
+          },
+          {
+            "end": [
+              -778.6562631010715,
+              205.465267833471
+            ],
+            "id": 100004,
+            "kind": "LineSegment",
+            "start": [
+              -778.6562627004704,
+              -389.0055364335765
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 2,
+      "Name": "Pad",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 844,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [],
+              "SubList": [
+                "InternalFace1"
+              ],
+              "value": "草图 7:03:05 PM"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 3,
+      "Name": "Fillet",
+      "Properties": {
+        "Base": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge12"
+          ],
+          "SubList": [
+            "Edge12"
+          ],
+          "value": "Pad"
+        },
+        "Radius": 163.1,
+        "SupportTransform": true,
+        "UseAllEdges": false
+      },
+      "TypeId": "PartDesign::Fillet"
+    },
+    {
+      "ID": 4,
+      "Name": "Revolution",
+      "Properties": {
+        "Angle": 360,
+        "FuseOrder": "BaseFirst",
+        "FuzzyTolerance": 0,
+        "Midplane": false,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Pad.Face6"
+              ],
+              "SubList": [
+                "Face5"
+              ],
+              "value": "Fillet"
+            }
+          ]
+        },
+        "ReferenceAxis": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge4"
+          ],
+          "SubList": [
+            "Edge4"
+          ],
+          "value": "草图 7:03:05 PM"
+        },
+        "Refine": false,
+        "Reversed": false,
+        "Type": "Angle"
+      },
+      "TypeId": "PartDesign::Revolution"
+    },
+    {
+      "ID": 5,
+      "Name": "Pad2",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 520,
+        "OpenProfileMode": "SurfaceExtrusion",
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Edge19"
+              ],
+              "SubList": [
+                "Edge19"
+              ],
+              "value": "Revolution"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 7,
+      "Name": "Pad3",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 492,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Face1"
+              ],
+              "SubList": [
+                "Face1"
+              ],
+              "value": "Pad2"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 8,
+      "Name": "Pad3Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "草图 7:03:05 PM",
+            "Pad",
+            "Fillet",
+            "Revolution",
+            "Pad2",
+            "Pad3"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad3"
+        }
+      },
+      "TypeId": "PartDesign::Body"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Pad3Body"
+    ]
+  }
+}

@@ -31,6 +31,7 @@
 #include "cad_core/part_design/feature_scaled.h"
 #include "cad_core/part_design/feature_shape_binder.h"
 #include "cad_core/sketcher/sketch_object.h"
+#include "cad_core/part_design/feature_thicken.h"
 #include "cad_core/part_design/feature_thickness.h"
 
 #include <utility>
@@ -128,6 +129,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("PartDesign::Boolean", part_design::executeBoolean);
     registry.registerExecutor("PartDesign::Fillet", part_design::executeFillet);
     registry.registerExecutor("PartDesign::Draft", part_design::executeDraft);
+    registry.registerExecutor("PartDesign::Thicken", part_design::executeThicken);
     registry.registerExecutor("PartDesign::Thickness", part_design::executeThickness);
     registry.registerExecutor("PartDesign::Hole", part_design::executeHole);
     registry.registerExecutor("PartDesign::LinearPattern", part_design::executeLinearPattern);

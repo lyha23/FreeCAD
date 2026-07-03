@@ -1,5 +1,10 @@
 {
   "freecad_version": "1.2.0 revision 20260519",
+  "diagnostic_codes": [
+    "missing_link_target",
+    "unsupported_subshape_kind",
+    "invalid_subshape"
+  ],
   "product_diagnostic_contract": {
     "cad_core_fixture": "cad-core/fixtures/c5m9/part-project-on-surface-invalid-provenance-diagnostics.json",
     "kind": "project_on_surface_invalid_request_local_diagnostic",

@@ -894,6 +894,31 @@ std::optional<TransformApplication> applyFeatureTransforms(
         originalNames.push_back(original.object);
         const auto addSubIt = context.addSubShapes.find(original.object);
         if (addSubIt == context.addSubShapes.end()) {
+            const auto objectResultIt = context.objects.find(original.object);
+            const std::string addSubCacheStatus = objectResultIt != context.objects.end()
+                ? objectResultIt->second.value("add_sub_cache", "")
+                : "";
+            if (addSubCacheStatus == "degraded" || addSubCacheStatus == "empty") {
+                const std::string code = addSubCacheStatus == "degraded"
+                    ? "degraded_addsub_cache"
+                    : "missing_addsub_cache";
+                const std::string message = addSubCacheStatus == "degraded"
+                    ? "Transformed Features mode cannot consume degraded AddSubShape cache from "
+                        + original.object
+                    : "Transformed Features mode requires AddSubShape cache from "
+                        + original.object;
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    code,
+                    message,
+                    object.name,
+                    "Originals",
+                    "runtime",
+                    original.object
+                );
+                return std::nullopt;
+            }
             runtime::addDiagnostic(
                 context.diagnostics,
                 "error",

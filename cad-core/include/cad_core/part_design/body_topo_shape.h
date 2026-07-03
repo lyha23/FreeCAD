@@ -15,6 +15,7 @@ namespace cad_core::part_design {
 struct BodyTopoShapeOptions {
     bool emitDocumentUpdates = true;
     bool applyBodyPlacement = true;
+    bool includeDisplayOnlyGeometry = true;
 };
 
 struct DisplayOnlyChild {

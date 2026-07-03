@@ -239,7 +239,8 @@ app::Link bodyTopoShapeLink(const app::Link& link)
 
 std::optional<BodyTopoShapeResult> bodyTopoShapeAtFeature(
     const BodyLocalFeatureContext& target,
-    runtime::ComputeContext& context
+    runtime::ComputeContext& context,
+    bool includeDisplayOnlyGeometry = true
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
@@ -248,6 +249,7 @@ std::optional<BodyTopoShapeResult> bodyTopoShapeAtFeature(
     const BodyTopoShapeOptions options {
         false,
         false,
+        includeDisplayOnlyGeometry,
     };
     const std::size_t diagnosticCount = context.diagnostics.size();
     const auto result =
@@ -261,7 +263,8 @@ std::optional<BodyTopoShapeResult> bodyTopoShapeAtFeature(
 
 std::optional<BodyTopoShapeResult> previousBodyTopoShape(
     const std::string& featureName,
-    runtime::ComputeContext& context
+    runtime::ComputeContext& context,
+    bool includeDisplayOnlyGeometry = true
 )
 {
     const auto current = bodyLocalFeatureContext(featureName, context);
@@ -272,7 +275,7 @@ std::optional<BodyTopoShapeResult> previousBodyTopoShape(
     for (std::size_t index = current->featureIndex; index > 0U; --index) {
         BodyLocalFeatureContext target = *current;
         target.featureIndex = index - 1U;
-        const auto bodyTopoShape = bodyTopoShapeAtFeature(target, context);
+        const auto bodyTopoShape = bodyTopoShapeAtFeature(target, context, includeDisplayOnlyGeometry);
         if (bodyTopoShape && hasSolid(bodyTopoShape->shape)) {
             return bodyTopoShape;
         }
@@ -377,7 +380,8 @@ std::optional<TopoDS_Shape> priorBodyOrBaseTopoShapeForFeature(
     const std::string& featureName,
     runtime::ComputeContext& context,
     const app::DocumentObject& object,
-    bool diagnoseMissingTarget
+    bool diagnoseMissingTarget,
+    bool includeDisplayOnlyGeometry = true
 )
 {
     const auto baseFeatureShape =
@@ -385,11 +389,27 @@ std::optional<TopoDS_Shape> priorBodyOrBaseTopoShapeForFeature(
     if (baseFeatureShape) {
         return baseFeatureShape;
     }
-    const auto priorBodyShape = previousBodyTopoShape(featureName, context);
+    const auto priorBodyShape = previousBodyTopoShape(featureName, context, includeDisplayOnlyGeometry);
     if (priorBodyShape) {
         return priorBodyShape->shape;
     }
     return std::nullopt;
+}
+
+std::optional<TopoDS_Shape> priorBodySolidOrBaseTopoShapeForFeature(
+    const std::string& featureName,
+    runtime::ComputeContext& context,
+    const app::DocumentObject& object,
+    bool diagnoseMissingTarget
+)
+{
+    return priorBodyOrBaseTopoShapeForFeature(
+        featureName,
+        context,
+        object,
+        diagnoseMissingTarget,
+        false
+    );
 }
 
 std::optional<std::string> baseLinkObjectName(const app::DocumentObject& object)
@@ -474,7 +494,11 @@ ShapeSlotBuild cutSlot(
     const std::string& rightOwner,
     const TopoDS_Shape& right,
     const std::optional<part::NamedShape>& rightNamedShape,
-    const std::string& property
+    const std::string& property,
+    const std::string& failureSeverity = "error",
+    const std::string& failureCode = "execution_failed",
+    const std::string& failureMessagePrefix =
+        "Dress-up AddSubShape cache could not cut boolean sources: "
 )
 {
     const auto build = part::makeElementBooleanFromSources(
@@ -486,9 +510,9 @@ ShapeSlotBuild cutSlot(
     if (!build.error.empty()) {
         runtime::addDiagnostic(
             context.diagnostics,
-            "error",
-            "execution_failed",
-            "Dress-up AddSubShape cache could not cut boolean sources: " + build.error,
+            failureSeverity,
+            failureCode,
+            failureMessagePrefix + build.error,
             object.name,
             property
         );
@@ -1122,6 +1146,8 @@ bool cacheDressUpAddSubShape(
 {
     runtime::AddSubShape cache;
     const auto resultNamedShape = std::optional<part::NamedShape> {result.namedShape};
+    result.addSubCacheStatus = "empty";
+    result.addSubCacheWarning.clear();
 
     if (result.supportTransform) {
         const auto supportFeature = resolveSupportTransformFeature(result.base, context);
@@ -1140,7 +1166,12 @@ bool cacheDressUpAddSubShape(
 
         const auto supportKind = addSubKindForFeature(*supportFeature, context);
         const auto priorBaseShape =
-            priorBodyOrBaseTopoShapeForFeature(*supportFeature, context, object, true);
+            priorBodySolidOrBaseTopoShapeForFeature(*supportFeature, context, object, true);
+        const auto degradeSupportTransformCache = [&result]() {
+            result.addSubCacheStatus = "degraded";
+            result.addSubCacheWarning = "support_transform_cache_degraded";
+            return true;
+        };
         if (supportKind == AddSubKind::Additive) {
             if (priorBaseShape && hasSolid(*priorBaseShape)) {
                 const auto priorBaseNamedShape
@@ -1155,10 +1186,13 @@ bool cacheDressUpAddSubShape(
                     *supportFeature + ".Base",
                     *priorBaseShape,
                     priorBaseNamedShape,
-                    "SupportTransform"
+                    "SupportTransform",
+                    "warning",
+                    "support_transform_cache_degraded",
+                    "Dress-up SupportTransform AddSubShape cache degraded: "
                 );
                 if (!add.ok) {
-                    return false;
+                    return degradeSupportTransformCache();
                 }
                 cache.addShape = add.shape;
                 cache.addNamedShape = add.namedShape;
@@ -1182,10 +1216,13 @@ bool cacheDressUpAddSubShape(
                     object.name,
                     result.shape,
                     resultNamedShape,
-                    "SupportTransform"
+                    "SupportTransform",
+                    "warning",
+                    "support_transform_cache_degraded",
+                    "Dress-up SupportTransform AddSubShape cache degraded: "
                 );
                 if (!sub.ok) {
-                    return false;
+                    return degradeSupportTransformCache();
                 }
                 cache.subShape = sub.shape;
                 cache.subNamedShape = sub.namedShape;
@@ -1212,6 +1249,7 @@ bool cacheDressUpAddSubShape(
 
         if (cache.addShape || cache.subShape) {
             context.addSubShapes[object.name] = cache;
+            result.addSubCacheStatus = "support_transform";
         }
         return true;
     }
@@ -1262,6 +1300,7 @@ bool cacheDressUpAddSubShape(
     cache.subNamedShape = sub.namedShape;
     if (cache.addShape || cache.subShape) {
         context.addSubShapes[object.name] = cache;
+        result.addSubCacheStatus = "delta";
     }
     return true;
 }
@@ -1318,10 +1357,7 @@ void publishDressUpResult(
         {"dress_up", result.mode},
         {"support_transform", result.supportTransform},
         {"support_transform_source", result.supportTransformSource},
-        {"add_sub_cache",
-         result.supportTransform
-             ? "support_transform"
-             : (context.addSubShapes.count(object.name) != 0U ? "delta" : "empty")},
+        {"add_sub_cache", result.addSubCacheStatus},
         {"source_base", result.sourceBase},
         {"base_selection", selectionEvidenceJson(result.selection)},
         {"bbox", cad_core::part::objectBBoxForShape(result.shape)},
@@ -1330,6 +1366,9 @@ void publishDressUpResult(
     };
     if (result.refineApplied) {
         context.objects[object.name]["refine"] = "applied";
+    }
+    if (!result.addSubCacheWarning.empty()) {
+        context.objects[object.name]["add_sub_cache_warning"] = result.addSubCacheWarning;
     }
     if (!result.parameters.empty()) {
         context.objects[object.name]["parameters"] = result.parameters;

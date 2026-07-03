@@ -1,0 +1,84 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "id": 100001,
+            "start": [-5, 0],
+            "end": [-5, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 100002,
+            "start": [0, 0],
+            "end": [10, 0]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 100003,
+            "start": [10, 0],
+            "end": [10, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 100004,
+            "start": [10, 5],
+            "end": [0, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 100005,
+            "start": [0, 5],
+            "end": [0, 0]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": ["Edge5"],
+              "StableSubList": ["g100005"]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "OpenProfileMode": "SurfaceExtrusion",
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 3,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Sketch", "Pad"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

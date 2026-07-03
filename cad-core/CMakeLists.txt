@@ -306,6 +306,7 @@ add_library(cad-core-lib STATIC
   src/part_design/feature_revolution.cpp
   src/part_design/feature_scaled.cpp
   src/part_design/feature_shape_binder.cpp
+  src/part_design/feature_thicken.cpp
   src/part_design/feature_thickness.cpp
   src/part_design/feature_transformed.cpp
   src/runtime/compute_context.cpp

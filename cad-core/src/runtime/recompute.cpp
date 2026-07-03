@@ -9,6 +9,9 @@
 #include "cad_core/runtime/reference_resolution.h"
 #include "cad_core/part/topo_shape.h"
 
+#include <Standard_Failure.hxx>
+#include <TopAbs_ShapeEnum.hxx>
+
 #include <algorithm>
 #include <cctype>
 #include <cstddef>
@@ -95,6 +98,44 @@ std::set<std::string> findTransformationTemplateObjects(const app::Document& doc
         }
     }
     return templates;
+}
+
+std::string standardFailureTypeName(const Standard_Failure& failure)
+{
+    const Handle(Standard_Type)& type = failure.DynamicType();
+    if (!type.IsNull() && type->Name() != nullptr && type->Name()[0] != '\0') {
+        return type->Name();
+    }
+    return "Standard_Failure";
+}
+
+std::string standardFailureMessage(const Standard_Failure& failure)
+{
+    const std::string typeName = standardFailureTypeName(failure);
+    const char* message = failure.GetMessageString();
+    if (message == nullptr || message[0] == '\0') {
+        return typeName;
+    }
+    return typeName + ": " + message;
+}
+
+void markOcctExecutionFailure(const app::DocumentObject& object,
+                              ComputeContext& context,
+                              const std::string& message)
+{
+    addDiagnostic(
+        context.diagnostics,
+        "error",
+        "execution_failed",
+        message,
+        object.name,
+        {},
+        "runtime"
+    );
+    context.objects[object.name] = {
+        {"status", "error"},
+        {"reason", message},
+    };
 }
 
 void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
@@ -262,6 +303,106 @@ std::string internalElementStableSubnameFor(const std::string& objectName,
     // with findSubShapesWithSharedVertex(..., CheckGeometry | SingleResult). InternalFace still
     // waits for FaceMaker/WireJoiner history before cad-core can publish a stable name.
     return stableSubname;
+}
+
+bool isRawSketchGeometryStableSubname(const std::string& value)
+{
+    if (value.size() < 2U || value.front() != 'g') {
+        return false;
+    }
+    return std::all_of(value.begin() + 1, value.end(), [](unsigned char item) {
+        return std::isdigit(item) != 0;
+    });
+}
+
+std::optional<std::string> rawSketchStableSubnameForCurrentEdge(const std::string& objectName,
+                                                                const std::string& indexed,
+                                                                const ComputeContext& context)
+{
+    const auto parsed = part::parseSubshapeName(localElementName(indexed));
+    if (!parsed || parsed->kind != TopAbs_EDGE) {
+        return std::nullopt;
+    }
+
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return std::nullopt;
+    }
+    const auto identityIt = objectIt->second.find("raw_edge_identity");
+    if (identityIt == objectIt->second.end() || !identityIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto byIndexedIt = identityIt->find("byIndexed");
+    if (byIndexedIt == identityIt->end() || !byIndexedIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto indexedIt = byIndexedIt->find(localElementName(indexed));
+    if (indexedIt == byIndexedIt->end() || !indexedIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto stableIt = indexedIt->find("sourceStableSubname");
+    if (stableIt == indexedIt->end() || !stableIt->is_string()) {
+        return std::nullopt;
+    }
+    const std::string stableSubname = stableIt->get<std::string>();
+    if (!isRawSketchGeometryStableSubname(stableSubname)) {
+        return std::nullopt;
+    }
+    return stableSubname;
+}
+
+std::optional<std::string> rawSketchEdgeForInternalEdge(const std::string& objectName,
+                                                        const std::string& indexed,
+                                                        const ComputeContext& context)
+{
+    if (indexed.rfind("InternalEdge", 0) != 0) {
+        return std::nullopt;
+    }
+
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return std::nullopt;
+    }
+    const auto mapIt = objectIt->second.find("internal_element_map");
+    if (mapIt == objectIt->second.end() || !mapIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto mappedIt = mapIt->find(indexed);
+    if (mappedIt == mapIt->end() || !mappedIt->is_string()) {
+        return std::nullopt;
+    }
+    const std::string rawEdge = mappedIt->get<std::string>();
+    const auto parsed = part::parseSubshapeName(rawEdge);
+    if (!parsed || parsed->kind != TopAbs_EDGE) {
+        return std::nullopt;
+    }
+    return rawEdge;
+}
+
+std::string normalizedInternalEdgeStableSubname(const std::string& objectName,
+                                                const std::string& indexed,
+                                                const std::string& candidateStableSubname,
+                                                const ComputeContext& context)
+{
+    if (indexed.rfind("InternalEdge", 0) != 0) {
+        return candidateStableSubname;
+    }
+    if (isRawSketchGeometryStableSubname(candidateStableSubname)) {
+        return candidateStableSubname;
+    }
+
+    std::optional<std::string> rawEdge;
+    const auto candidate = part::parseSubshapeName(localElementName(candidateStableSubname));
+    if (candidate && candidate->kind == TopAbs_EDGE) {
+        rawEdge = localElementName(candidateStableSubname);
+    }
+    if (!rawEdge) {
+        rawEdge = rawSketchEdgeForInternalEdge(objectName, indexed, context);
+    }
+    if (!rawEdge) {
+        return {};
+    }
+    return rawSketchStableSubnameForCurrentEdge(objectName, *rawEdge, context).value_or(std::string {});
 }
 
 std::string currentSubnameForStable(const std::string& indexed,
@@ -432,6 +573,59 @@ std::optional<std::string> bodyDisplayCompoundSubnameFor(
         return childMap.sourceOwner + "." + token->prefix + std::to_string(localIndex);
     }
     return std::nullopt;
+}
+
+std::optional<std::string> bodyDisplayCompoundOwnerFor(
+    const std::string& indexed,
+    const std::optional<BodyDisplayCompoundResponseContext>& displayContext)
+{
+    if (!displayContext || displayContext->namedShape == nullptr) {
+        return std::nullopt;
+    }
+    const auto token = parseTopologicalElementToken(indexed);
+    if (!token) {
+        return std::nullopt;
+    }
+    for (const part::NamedShapeChildMap& childMap : displayContext->namedShape->childElementMaps) {
+        if (childMap.kind != token->kind || childMap.count <= 0 || childMap.sourceOwner.empty()) {
+            continue;
+        }
+        if (!displayContext->childFeatures.empty()
+            && displayContext->childFeatures.count(childMap.sourceOwner) == 0U) {
+            continue;
+        }
+        if (token->index <= childMap.offset || token->index > childMap.offset + childMap.count) {
+            continue;
+        }
+        return childMap.sourceOwner;
+    }
+    return std::nullopt;
+}
+
+std::string bodyDisplayCompoundQualifiedStableSubname(
+    const std::string& indexed,
+    const std::string& stableSubname,
+    const std::optional<BodyDisplayCompoundResponseContext>& displayContext)
+{
+    if (!displayContext || stableSubname.empty() || stableSubname.find('.') != std::string::npos
+        || isPlainTopologicalElementName(stableSubname)) {
+        return stableSubname;
+    }
+    const auto owner = bodyDisplayCompoundOwnerFor(indexed, displayContext);
+    if (!owner) {
+        return stableSubname;
+    }
+    const auto childIt = displayContext->childHasNamedShape.find(*owner);
+    if (childIt != displayContext->childHasNamedShape.end() && !childIt->second) {
+        return {};
+    }
+    // FreeCAD:
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
+    // reads the Tip/display child shape while App::ElementMap child maps keep the child source
+    // owner. When a Body display-only compound preserves a child-local stable alias such as
+    // "g100001", publish it as "Pad.g100001" so downstream PropertyLinkSub can peel off the
+    // selected child owner instead of treating the Body result as an ownerless stable name.
+    return *owner + "." + stableSubname;
 }
 
 bool bodyDisplayCompoundStableSubnameHasChildEvidence(
@@ -635,7 +829,10 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             stableSource = &*shapeValue->internalNamedShape;
         }
         std::string stableSubname = stableSubnameFor(indexed, stableSource);
-        if (stableSubname.empty()) {
+        if (indexed.rfind("InternalEdge", 0) == 0) {
+            stableSubname = normalizedInternalEdgeStableSubname(objectName, indexed, stableSubname, context);
+        }
+        else if (stableSubname.empty()) {
             stableSubname = internalElementStableSubnameFor(objectName, indexed, context);
         }
         const std::string identityStatus = subshape.value("identityStatus", "");
@@ -655,6 +852,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         if (!bodyDisplayCompoundStableSubnameHasChildEvidence(stableSubname, displayContext)) {
             stableSubname.clear();
         }
+        stableSubname = bodyDisplayCompoundQualifiedStableSubname(indexed, stableSubname, displayContext);
         const std::string subname = responseSubnameFor(indexed, stableSubname, namedShape, tipContext, displayContext);
         nlohmann::json responseSubshape {
             {"id", objectName + ":" + indexed},
@@ -750,7 +948,15 @@ ComputeContext recomputeContext(const app::Document& document,
             context.objects[object.name] = {{"status", "error"}};
             continue;
         }
-        executor(object, context);
+        try {
+            executor(object, context);
+        }
+        catch (const Standard_Failure& failure) {
+            markOcctExecutionFailure(object, context, standardFailureMessage(failure));
+        }
+        if (hasFailed(context, name)) {
+            continue;
+        }
         registerIndexedNamedShape(name, context);
         context.executionOrder.push_back(name);
     }

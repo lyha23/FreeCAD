@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
 #include <nlohmann/json.hpp>
 
 #include <cstddef>
@@ -78,6 +79,17 @@ struct SketchBSpline
     std::optional<long> geometryId;
 };
 
+struct SketchInterpolatedSpline
+{
+    std::size_t geometryIndex = 0;
+    std::vector<gp_Pnt> points;
+    std::optional<gp_Vec> startTangent;
+    std::optional<gp_Vec> endTangent;
+    bool periodic = false;
+    bool construction = false;
+    std::optional<long> geometryId;
+};
+
 struct SketchBezier
 {
     std::size_t geometryIndex = 0;
@@ -140,6 +152,7 @@ struct SketchGeometrySet
     std::vector<SketchHyperbolaArc> hyperbolaArcs;
     std::vector<SketchParabolaArc> parabolaArcs;
     std::vector<SketchBSpline> bsplines;
+    std::vector<SketchInterpolatedSpline> interpolatedSplines;
     std::vector<SketchBezier> beziers;
 };
 
@@ -160,6 +173,9 @@ std::vector<SketchEllipseArc> profileEllipseArcs(const std::vector<SketchEllipse
 std::vector<SketchHyperbolaArc> profileHyperbolaArcs(const std::vector<SketchHyperbolaArc>& arcs);
 std::vector<SketchParabolaArc> profileParabolaArcs(const std::vector<SketchParabolaArc>& arcs);
 std::vector<SketchBSpline> profileBSplines(const std::vector<SketchBSpline>& bsplines);
+std::vector<SketchInterpolatedSpline> profileInterpolatedSplines(
+    const std::vector<SketchInterpolatedSpline>& splines
+);
 std::vector<SketchBezier> profileBeziers(const std::vector<SketchBezier>& beziers);
 
 gp_Pnt pointAtAngle(const gp_Pnt& center, double radius, double angle);

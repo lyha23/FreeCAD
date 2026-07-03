@@ -1,0 +1,116 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [0, 0],
+            "end": [10, 0]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 0],
+            "end": [10, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 5],
+            "end": [0, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [0, 5],
+            "end": [0, 0]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": ["InternalFace1"],
+              "StableSubList": [""]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Draft",
+      "ID": 3,
+      "TypeId": "PartDesign::Draft",
+      "Properties": {
+        "Base": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": []
+        },
+        "Angle": 5.0,
+        "Reversed": false
+      }
+    },
+    {
+      "Name": "MirrorPlane",
+      "ID": 4,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [2, 0, 0],
+          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+        }
+      }
+    },
+    {
+      "Name": "Mirrored",
+      "ID": 5,
+      "TypeId": "PartDesign::Mirrored",
+      "Properties": {
+        "Originals": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["Draft"]
+        },
+        "MirrorPlane": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "MirrorPlane",
+          "SubList": []
+        },
+        "TransformMode": "Features"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 6,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPad", "Pad", "Draft", "MirrorPlane", "Mirrored"]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Mirrored"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}

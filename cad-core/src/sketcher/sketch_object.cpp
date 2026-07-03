@@ -551,6 +551,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         externalGeometry->bsplines.begin(),
         externalGeometry->bsplines.end()
     );
+    std::vector<SketchInterpolatedSpline> resolvedInterpolatedSplines = parsed.interpolatedSplines;
     std::vector<SketchBezier> resolvedBeziers = parsed.beziers;
     resolvedBeziers.insert(
         resolvedBeziers.end(),
@@ -565,9 +566,20 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const std::vector<SketchHyperbolaArc> hyperbolaArcs = profileHyperbolaArcs(resolvedHyperbolaArcs);
     const std::vector<SketchParabolaArc> parabolaArcs = profileParabolaArcs(resolvedParabolaArcs);
     const std::vector<SketchBSpline> bsplines = profileBSplines(resolvedBSplines);
+    const std::vector<SketchInterpolatedSpline> interpolatedSplines =
+        profileInterpolatedSplines(resolvedInterpolatedSplines);
     const std::vector<SketchBezier> beziers = profileBeziers(resolvedBeziers);
     const std::vector<SketchProfileEdge> edges
-        = profileEdges(profile, arcs, ellipseArcs, hyperbolaArcs, parabolaArcs, bsplines, beziers);
+        = profileEdges(
+            profile,
+            arcs,
+            ellipseArcs,
+            hyperbolaArcs,
+            parabolaArcs,
+            bsplines,
+            interpolatedSplines,
+            beziers
+        );
     const std::vector<SketchCircle> circles = profileCircles(resolvedCircles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(resolvedEllipses);
     auto rawShapeBuild = buildRawSketchShape(object, context, edges, points, circles, ellipses);
@@ -619,7 +631,8 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const RawSketchEdgeIdentityLedger rawEdgeIdentityLedger = buildRawSketchEdgeIdentityLedger(
         rawShape,
         rawShapeBuild->sourceEdges,
-        rawShapeBuild->sourceEdgeIdentities
+        rawShapeBuild->sourceEdgeIdentities,
+        rawShapeBuild->sourceOrderMatchesPublishedShape
     );
 
     const SketchInternalResult internalResult = buildSketchInternalResult({

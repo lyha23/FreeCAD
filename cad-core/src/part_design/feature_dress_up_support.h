@@ -97,6 +97,8 @@ struct DressUpResult
     part::NamedShape namedShape;
     bool supportTransform = false;
     std::string supportTransformSource;
+    std::string addSubCacheStatus = "empty";
+    std::string addSubCacheWarning;
     bool refineApplied = false;
     DressUpSelectionEvidence selection;
     nlohmann::json parameters = nlohmann::json::object();

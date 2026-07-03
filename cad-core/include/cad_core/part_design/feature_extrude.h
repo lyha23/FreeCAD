@@ -26,6 +26,10 @@ struct ExtrudeResult {
     std::string bodyParticipation;
     std::vector<std::string> sourceProfileSubnames;
     std::vector<std::string> sourceProfileStableSubnames;
+    std::string profileResolveMode;
+    std::string profileOwner;
+    std::string requestedProfileSubname;
+    std::string currentProfileSubname;
     std::string method;
     double length = 0.0;
     bool reversed = false;

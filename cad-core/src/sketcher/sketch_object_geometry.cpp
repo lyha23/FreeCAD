@@ -104,6 +104,17 @@ std::optional<gp_Pnt> readPoint2Field(const nlohmann::json& value)
     return gp_Pnt(x, y, 0.0);
 }
 
+std::optional<gp_Vec> readVector2Field(const nlohmann::json& value)
+{
+    bool ok = true;
+    const double x = readNumber2(value, 0, ok);
+    const double y = readNumber2(value, 1, ok);
+    if (!ok) {
+        return std::nullopt;
+    }
+    return gp_Vec(x, y, 0.0);
+}
+
 std::optional<double> readNumberField(const nlohmann::json& value, const std::string& field)
 {
     const auto it = value.find(field);
@@ -528,6 +539,95 @@ bool parseSketchGeometry(
             continue;
         }
 
+        if (kind == "InterpolatedSpline") {
+            const auto pointsIt = item.find("points");
+            std::vector<gp_Pnt> points;
+            if (pointsIt != item.end() && pointsIt->is_array()) {
+                points.reserve(pointsIt->size());
+                for (const auto& pointValue : *pointsIt) {
+                    const auto point = readPoint2Field(pointValue);
+                    if (!point) {
+                        break;
+                    }
+                    points.push_back(*point);
+                }
+            }
+            const std::size_t rawPointCount = pointsIt != item.end() && pointsIt->is_array()
+                ? pointsIt->size()
+                : 0U;
+            const bool periodic = readBoolField(item, "periodic", false);
+            if (points.size() != rawPointCount || points.size() < 2U
+                || (periodic && points.size() < 3U)) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "InterpolatedSpline requires at least two two-number points, or three when periodic",
+                    object.name,
+                    propertyName
+                );
+                return false;
+            }
+
+            std::optional<gp_Vec> startTangent;
+            const auto startTangentIt = item.find("startTangent");
+            if (startTangentIt != item.end()) {
+                startTangent = readVector2Field(*startTangentIt);
+                if (!startTangent) {
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_geometry",
+                        "InterpolatedSpline startTangent must be two numbers",
+                        object.name,
+                        propertyName
+                    );
+                    return false;
+                }
+            }
+
+            std::optional<gp_Vec> endTangent;
+            const auto endTangentIt = item.find("endTangent");
+            if (endTangentIt != item.end()) {
+                endTangent = readVector2Field(*endTangentIt);
+                if (!endTangent) {
+                    runtime::addDiagnostic(
+                        context.diagnostics,
+                        "error",
+                        "unsupported_geometry",
+                        "InterpolatedSpline endTangent must be two numbers",
+                        object.name,
+                        propertyName
+                    );
+                    return false;
+                }
+            }
+            if (startTangent.has_value() != endTangent.has_value()) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "unsupported_geometry",
+                    "InterpolatedSpline startTangent and endTangent must be provided together",
+                    object.name,
+                    propertyName
+                );
+                return false;
+            }
+
+            parsed.interpolatedSplines.push_back(
+                SketchInterpolatedSpline {
+                    index,
+                    std::move(points),
+                    startTangent,
+                    endTangent,
+                    periodic,
+                    readBoolField(item, "construction", false),
+                    geometryId.value,
+                }
+            );
+            continue;
+        }
+
         if (kind == "Bezier" || kind == "BezierCurve" || kind == "GeomBezierCurve") {
             const auto polesIt = item.find("poles");
             std::vector<gp_Pnt> poles;
@@ -712,6 +812,19 @@ std::vector<SketchBSpline> profileBSplines(const std::vector<SketchBSpline>& bsp
     for (const auto& bspline : bsplines) {
         if (!bspline.construction) {
             profile.push_back(bspline);
+        }
+    }
+    return profile;
+}
+
+std::vector<SketchInterpolatedSpline> profileInterpolatedSplines(
+    const std::vector<SketchInterpolatedSpline>& splines
+)
+{
+    std::vector<SketchInterpolatedSpline> profile;
+    for (const auto& spline : splines) {
+        if (!spline.construction) {
+            profile.push_back(spline);
         }
     }
     return profile;

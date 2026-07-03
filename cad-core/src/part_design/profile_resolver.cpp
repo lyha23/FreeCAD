@@ -44,6 +44,7 @@ struct ResolveAttempt {
     std::string subname;
     std::vector<std::string> subnames;
     std::vector<std::string> stableSubnames;
+    std::vector<bool> downgradedStableSubnames;
     ProfileKind kind = ProfileKind::ClosedFace;
     bool unstableOpenProfileReference = false;
 };
@@ -78,7 +79,21 @@ bool isRawSketchGeometryStableSubname(const std::string& value)
     });
 }
 
-bool linkRequestsRawOpenSketchProfile(const app::Link& profileLink)
+bool isInternalEdgeSubname(const std::string& value)
+{
+    const auto parsed = part::parseInternalSubshapeName(value);
+    return parsed && parsed->kind == TopAbs_EDGE;
+}
+
+bool openProfileModeAcceptsInternalEdgeAlias(OpenProfileMode mode)
+{
+    return mode == OpenProfileMode::SurfaceExtrusion
+        || mode == OpenProfileMode::ThinSolid
+        || mode == OpenProfileMode::ThinCut
+        || mode == OpenProfileMode::SurfaceSplitCut;
+}
+
+bool linkRequestsRawOpenSketchProfile(const app::Link& profileLink, OpenProfileMode openProfileMode)
 {
     if (profileLink.stableSubnamesExplicit
         && std::any_of(profileLink.stableSubnames.begin(),
@@ -86,10 +101,109 @@ bool linkRequestsRawOpenSketchProfile(const app::Link& profileLink)
                        isRawSketchGeometryStableSubname)) {
         return true;
     }
+    const bool acceptsInternalEdgeAlias = openProfileModeAcceptsInternalEdgeAlias(openProfileMode);
     return std::any_of(profileLink.subnames.begin(), profileLink.subnames.end(), [](const std::string& subname) {
         const auto parsed = part::parseSubshapeName(subname);
         return parsed && parsed->kind == TopAbs_EDGE;
-    });
+    }) || (acceptsInternalEdgeAlias
+           && std::any_of(profileLink.subnames.begin(),
+                          profileLink.subnames.end(),
+                          isInternalEdgeSubname));
+}
+
+bool objectPublishesRawSketchEdgeIdentity(const runtime::ComputeContext& context,
+                                          const std::string& objectName)
+{
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return false;
+    }
+    const auto identityIt = objectIt->second.find("raw_edge_identity");
+    return identityIt != objectIt->second.end() && identityIt->is_object();
+}
+
+std::optional<std::string> rawSketchCurrentEdgeForStable(
+    const runtime::ComputeContext& context,
+    const std::string& objectName,
+    const std::string& stableSubname)
+{
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return std::nullopt;
+    }
+    const auto identityIt = objectIt->second.find("raw_edge_identity");
+    if (identityIt == objectIt->second.end() || !identityIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto byStableIt = identityIt->find("byStableSubname");
+    if (byStableIt == identityIt->end() || !byStableIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto indexedIt = byStableIt->find(stableSubname);
+    if (indexedIt == byStableIt->end() || !indexedIt->is_string()) {
+        return std::nullopt;
+    }
+    return indexedIt->get<std::string>();
+}
+
+std::optional<std::string> rawSketchCurrentEdgeForInternalEdge(
+    const runtime::ComputeContext& context,
+    const std::string& objectName,
+    const std::string& internalSubname)
+{
+    if (!isInternalEdgeSubname(internalSubname)) {
+        return std::nullopt;
+    }
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return std::nullopt;
+    }
+    const auto mapIt = objectIt->second.find("internal_element_map");
+    if (mapIt == objectIt->second.end() || !mapIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto mappedIt = mapIt->find(internalSubname);
+    if (mappedIt == mapIt->end() || !mappedIt->is_string()) {
+        return std::nullopt;
+    }
+    const std::string currentRawEdge = mappedIt->get<std::string>();
+    const auto parsed = part::parseSubshapeName(currentRawEdge);
+    if (!parsed || parsed->kind != TopAbs_EDGE) {
+        return std::nullopt;
+    }
+    return currentRawEdge;
+}
+
+std::optional<std::string> rawSketchStableSubnameForCurrentEdge(
+    const runtime::ComputeContext& context,
+    const std::string& objectName,
+    const std::string& indexedSubname)
+{
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return std::nullopt;
+    }
+    const auto identityIt = objectIt->second.find("raw_edge_identity");
+    if (identityIt == objectIt->second.end() || !identityIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto byIndexedIt = identityIt->find("byIndexed");
+    if (byIndexedIt == identityIt->end() || !byIndexedIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto indexedIt = byIndexedIt->find(indexedSubname);
+    if (indexedIt == byIndexedIt->end() || !indexedIt->is_object()) {
+        return std::nullopt;
+    }
+    const auto stableIt = indexedIt->find("sourceStableSubname");
+    if (stableIt == indexedIt->end() || !stableIt->is_string()) {
+        return std::nullopt;
+    }
+    const std::string stableSubname = stableIt->get<std::string>();
+    if (!isRawSketchGeometryStableSubname(stableSubname)) {
+        return std::nullopt;
+    }
+    return stableSubname;
 }
 
 bool qualifiedSubnameHasKind(const std::string& value, TopAbs_ShapeEnum kind)
@@ -172,7 +286,7 @@ RawOpenProfileResolveAttempt resolveRawSketchOpenProfile(
     const std::string& featureName)
 {
     RawOpenProfileResolveAttempt attempt;
-    if (!linkRequestsRawOpenSketchProfile(profileLink)) {
+    if (!linkRequestsRawOpenSketchProfile(profileLink, openProfileMode)) {
         return attempt;
     }
     attempt.attempted = true;
@@ -213,6 +327,30 @@ RawOpenProfileResolveAttempt resolveRawSketchOpenProfile(
                 continue;
             }
             if (!isRawSketchGeometryStableSubname(stableSubname)) {
+                addOpenProfileDiagnostic(context,
+                                         object,
+                                         profileLink,
+                                         "error",
+                                         "unsupported_stable_subname",
+                                         featureName + " open wire Profile.StableSubList must use g<ID> raw sketch identity",
+                                         stableSubname);
+                return attempt;
+            }
+            if (objectPublishesRawSketchEdgeIdentity(context, profileLink.object)) {
+                const auto indexed = rawSketchCurrentEdgeForStable(context, profileLink.object, stableSubname);
+                if (!indexed) {
+                    addOpenProfileDiagnostic(context,
+                                             object,
+                                             profileLink,
+                                             "error",
+                                             "unsupported_stable_subname",
+                                             featureName + " Profile.StableSubList cannot resolve " + stableSubname
+                                                 + " to a current raw sketch edge",
+                                             stableSubname);
+                    return attempt;
+                }
+                requestedSubnames.push_back(*indexed);
+                requestedStableSubnames.push_back(stableSubname);
                 continue;
             }
             if (rawNamedShape == nullptr) {
@@ -243,21 +381,44 @@ RawOpenProfileResolveAttempt resolveRawSketchOpenProfile(
     }
 
     if (requestedSubnames.empty()) {
-        for (const std::string& subname : profileLink.subnames) {
+        for (std::size_t index = 0; index < profileLink.subnames.size(); ++index) {
+            const std::string& subname = profileLink.subnames.at(index);
             const auto parsed = part::parseSubshapeName(subname);
-            if (!parsed || parsed->kind != TopAbs_EDGE) {
-                continue;
+            std::optional<std::string> requestedSubname;
+            if (parsed && parsed->kind == TopAbs_EDGE) {
+                requestedSubname = subname;
             }
-            requestedSubnames.push_back(subname);
-            const auto stableIt = std::find_if(
-                profileLink.stableSubnames.begin(),
-                profileLink.stableSubnames.end(),
-                isRawSketchGeometryStableSubname);
-            if (stableIt != profileLink.stableSubnames.end()) {
-                requestedStableSubnames.push_back(*stableIt);
+            else if (openProfileModeAcceptsInternalEdgeAlias(openProfileMode) && isInternalEdgeSubname(subname)) {
+                requestedSubname = rawSketchCurrentEdgeForInternalEdge(context, profileLink.object, subname);
+                if (!requestedSubname) {
+                    addOpenProfileDiagnostic(context,
+                                             object,
+                                             profileLink,
+                                             "error",
+                                             "ambiguous_open_profile_reference",
+                                             featureName + " open wire Profile.SubList cannot map " + subname
+                                                 + " to a raw sketch EdgeN",
+                                             subname);
+                    return attempt;
+                }
             }
             else {
-                requestedStableSubnames.push_back(subname);
+                continue;
+            }
+
+            requestedSubnames.push_back(*requestedSubname);
+            const std::string explicitStableSubname = index < profileLink.stableSubnames.size()
+                ? profileLink.stableSubnames.at(index)
+                : std::string {};
+            if (isRawSketchGeometryStableSubname(explicitStableSubname)) {
+                requestedStableSubnames.push_back(explicitStableSubname);
+            }
+            else if (const auto stableSubname =
+                         rawSketchStableSubnameForCurrentEdge(context, profileLink.object, *requestedSubname)) {
+                requestedStableSubnames.push_back(*stableSubname);
+            }
+            else {
+                requestedStableSubnames.push_back(*requestedSubname);
                 unstableOpenProfileReference = true;
             }
         }
@@ -269,7 +430,8 @@ RawOpenProfileResolveAttempt resolveRawSketchOpenProfile(
                                  profileLink,
                                  "error",
                                  "ambiguous_open_profile_reference",
-                                 featureName + " open wire Profile must reference raw sketch EdgeN or StableSubList g<ID>",
+                                 featureName
+                                     + " open wire Profile must reference raw sketch EdgeN, InternalEdgeN, or StableSubList g<ID>",
                                  profileLink.object);
         return attempt;
     }
@@ -293,18 +455,29 @@ RawOpenProfileResolveAttempt resolveRawSketchOpenProfile(
         if (rawNamedShape != nullptr) {
             subshape = part::subshapeByName(*rawNamedShape, subname);
         }
-        else {
+        if (!subshape) {
             subshape = part::subshapeByName(shapeIt->second.shape, subname);
         }
         if (!subshape || subshape->IsNull() || subshape->ShapeType() != TopAbs_EDGE) {
+            const std::size_t requestIndex = selectedEdges.size();
+            const std::string stableSubname = requestIndex < requestedStableSubnames.size()
+                ? requestedStableSubnames.at(requestIndex)
+                : std::string {};
+            const bool stableIdentityRequested = isRawSketchGeometryStableSubname(stableSubname)
+                && !unstableOpenProfileReference;
             addOpenProfileDiagnostic(context,
                                      object,
                                      profileLink,
                                      "error",
-                                     "ambiguous_open_profile_reference",
-                                     featureName + " Profile target " + profileLink.object
-                                         + " has no raw sketch edge " + subname,
-                                     subname);
+                                     stableIdentityRequested
+                                         ? "unsupported_stable_subname"
+                                         : "ambiguous_open_profile_reference",
+                                     stableIdentityRequested
+                                         ? featureName + " Profile.StableSubList resolved " + stableSubname
+                                             + " to " + subname + ", but the current raw sketch edge is missing"
+                                         : featureName + " Profile target " + profileLink.object
+                                             + " has no raw sketch edge " + subname,
+                                     stableIdentityRequested ? stableSubname : subname);
             return attempt;
         }
         selectedEdges.push_back(*subshape);
@@ -648,6 +821,11 @@ bool hasObjectPrefix(const std::string& value)
     return value.find('.') != std::string::npos;
 }
 
+bool isBareTopologicalSubname(const std::string& value)
+{
+    return !hasObjectPrefix(value) && part::parseSubshapeName(value).has_value();
+}
+
 std::optional<std::string> ownerPrefixFromQualifiedSubshape(const std::string& value)
 {
     const std::size_t dot = value.find('.');
@@ -716,18 +894,85 @@ std::optional<app::Link> normalizedBodyQualifiedProfileLink(const app::Link& pro
     return link;
 }
 
-std::string bodyStableSubnameForProfile(const app::Link& profileLink,
-                                        const std::string& subname,
-                                        const std::string& stableSubname)
+bool profileTargetIsDisplayOnly(const runtime::ComputeContext& context, const std::string& objectName)
+{
+    const auto objectIt = context.objects.find(objectName);
+    return objectIt != context.objects.end()
+        && objectIt->second.is_object()
+        && objectIt->second.value("bodyParticipation", "") == "display_only";
+}
+
+bool linkHasExplicitBodyReplayEvidence(const app::Link& profileLink)
+{
+    if (!profileLink.fullSubnames.empty()) {
+        return true;
+    }
+    const auto hasQualifiedSubshape = [](const std::vector<std::string>& values) {
+        return std::any_of(values.begin(), values.end(), [](const std::string& value) {
+            return ownerPrefixFromQualifiedSubshape(value).has_value();
+        });
+    };
+    return hasQualifiedSubshape(profileLink.subnames)
+        || hasQualifiedSubshape(profileLink.stableSubnames);
+}
+
+bool linkHasStrongSubshapeEvidenceAt(const app::Link& profileLink, std::size_t index)
+{
+    if (index < profileLink.referenceShadows.size()) {
+        return true;
+    }
+    if (index < profileLink.shadowSubs.size()) {
+        return true;
+    }
+    return index < profileLink.fullSubnames.size()
+        && ownerPrefixFromQualifiedSubshape(profileLink.fullSubnames.at(index)).has_value();
+}
+
+std::string stableSubnameForElementReference(const app::Link& profileLink,
+                                             std::size_t index,
+                                             const std::string& subname,
+                                             const std::string& stableSubname,
+                                             bool currentSubnameIsResolvable)
 {
     if (stableSubname.empty()) {
+        return {};
+    }
+
+    const std::string strippedSubname = stripObjectPrefix(subname, profileLink.object);
+    const std::string strippedStableSubname = stripObjectPrefix(stableSubname, profileLink.object);
+    if (strippedStableSubname == strippedSubname) {
+        return strippedStableSubname;
+    }
+    if (!isBareTopologicalSubname(strippedStableSubname)
+        || !isBareTopologicalSubname(strippedSubname)
+        || !currentSubnameIsResolvable
+        || !profileLink.fullSubnamesExplicit
+        || linkHasStrongSubshapeEvidenceAt(profileLink, index)) {
         return stableSubname;
     }
 
-    const std::string strippedStableSubname = stripObjectPrefix(stableSubname, profileLink.object);
+    return {};
+}
+
+std::string bodyStableSubnameForProfile(const app::Link& profileLink,
+                                        std::size_t index,
+                                        const std::string& subname,
+                                        const std::string& stableSubname,
+                                        bool downgradeWeakStableSubname)
+{
+    if (downgradeWeakStableSubname) {
+        return {};
+    }
+    const std::string elementStableSubname =
+        stableSubnameForElementReference(profileLink, index, subname, stableSubname, false);
+    if (elementStableSubname.empty()) {
+        return {};
+    }
+
+    const std::string strippedStableSubname = stripObjectPrefix(elementStableSubname, profileLink.object);
     const std::string strippedSubname = stripObjectPrefix(subname, profileLink.object);
     if (strippedStableSubname == strippedSubname
-        || hasObjectPrefix(stableSubname)
+        || hasObjectPrefix(elementStableSubname)
         || !part::parseSubshapeName(strippedStableSubname)) {
         return strippedStableSubname;
     }
@@ -735,7 +980,8 @@ std::string bodyStableSubnameForProfile(const app::Link& profileLink,
     return profileLink.object + "." + strippedStableSubname;
 }
 
-app::Link bodyTopoShapeLink(const app::Link& profileLink)
+app::Link bodyTopoShapeLink(const app::Link& profileLink,
+                            const std::vector<bool>& downgradedStableSubnames = {})
 {
     app::Link link = profileLink;
     for (auto& subname : link.subnames) {
@@ -743,8 +989,15 @@ app::Link bodyTopoShapeLink(const app::Link& profileLink)
     }
     for (std::size_t index = 0; index < link.stableSubnames.size(); ++index) {
         const std::string subname = index < profileLink.subnames.size() ? profileLink.subnames.at(index) : std::string {};
+        const bool downgradeWeakStableSubname =
+            index < downgradedStableSubnames.size() && downgradedStableSubnames.at(index);
         link.stableSubnames[index] =
-            bodyStableSubnameForProfile(profileLink, subname, profileLink.stableSubnames.at(index));
+            bodyStableSubnameForProfile(
+                profileLink,
+                index,
+                subname,
+                profileLink.stableSubnames.at(index),
+                downgradeWeakStableSubname);
     }
     return link;
 }
@@ -765,8 +1018,21 @@ ResolveAttempt resolveFaceOnSource(const app::DocumentObject& object,
     }
 
     const std::string& subname = profileLink.subnames.front();
-    const std::string stableSubname =
+    const std::string rawStableSubname =
         profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string {};
+    bool currentSubnameIsResolvable = false;
+    if (namedShape != nullptr) {
+        const auto currentResolved = part::resolveElementReference(*namedShape, subname, {});
+        currentSubnameIsResolvable =
+            currentResolved.status == part::ElementResolveStatus::Resolved && currentResolved.element.has_value();
+    }
+    else {
+        const auto currentSubshape = part::subshapeByName(sourceShape, subname);
+        currentSubnameIsResolvable = currentSubshape.has_value() && !currentSubshape->IsNull();
+    }
+    const std::string stableSubname =
+        stableSubnameForElementReference(profileLink, 0U, subname, rawStableSubname, currentSubnameIsResolvable);
+    const bool downgradedStableSubname = !rawStableSubname.empty() && stableSubname.empty();
     std::string currentSubname = subname;
     if (namedShape != nullptr) {
         const auto resolved = part::resolveElementReference(*namedShape, subname, stableSubname);
@@ -825,7 +1091,15 @@ ResolveAttempt resolveFaceOnSource(const app::DocumentObject& object,
         };
     }
 
-    return {*subshape, {}, {}, currentSubname};
+    return {
+        *subshape,
+        {},
+        {},
+        currentSubname,
+        {},
+        stableSubname.empty() ? std::vector<std::string> {} : std::vector<std::string> {stableSubname},
+        downgradedStableSubname ? std::vector<bool> {true} : std::vector<bool> {},
+    };
 }
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.h
@@ -885,13 +1159,31 @@ ResolveAttempt resolveEdgesOnSource(const app::DocumentObject& object,
     std::vector<TopoDS_Shape> selectedEdges;
     std::vector<std::string> selectedSubnames;
     std::vector<std::string> selectedStableSubnames;
+    std::vector<bool> downgradedStableSubnames;
     bool unstableOpenProfileReference = false;
 
     for (std::size_t index = 0; index < profileLink.subnames.size(); ++index) {
         const std::string subname = stripObjectPrefix(profileLink.subnames.at(index), profileLink.object);
-        const std::string stableSubname = index < profileLink.stableSubnames.size()
+        const std::string rawStableSubname = index < profileLink.stableSubnames.size()
             ? stripObjectPrefix(profileLink.stableSubnames.at(index), profileLink.object)
             : std::string {};
+        bool currentSubnameIsResolvable = false;
+        if (namedShape != nullptr) {
+            const auto currentResolved = part::resolveElementReference(*namedShape, subname, {});
+            currentSubnameIsResolvable =
+                currentResolved.status == part::ElementResolveStatus::Resolved && currentResolved.element.has_value();
+        }
+        else {
+            const auto currentSubshape = part::subshapeByName(sourceShape, subname);
+            currentSubnameIsResolvable = currentSubshape.has_value() && !currentSubshape->IsNull();
+        }
+        const std::string stableSubname =
+            stableSubnameForElementReference(
+                profileLink,
+                index,
+                subname,
+                rawStableSubname,
+                currentSubnameIsResolvable);
 
         std::string currentSubname = subname;
         if (namedShape != nullptr) {
@@ -971,6 +1263,7 @@ ResolveAttempt resolveEdgesOnSource(const app::DocumentObject& object,
             || qualifiedSubnameHasKind(stableSubname, TopAbs_EDGE)) {
             unstableOpenProfileReference = true;
         }
+        downgradedStableSubnames.push_back(!rawStableSubname.empty() && stableSubname.empty());
     }
 
     TopoDS_Shape profileShape;
@@ -1010,6 +1303,7 @@ ResolveAttempt resolveEdgesOnSource(const app::DocumentObject& object,
         selectedSubnames.empty() ? std::string{} : selectedSubnames.front(),
         std::move(selectedSubnames),
         std::move(selectedStableSubnames),
+        std::move(downgradedStableSubnames),
         kind,
         unstableOpenProfileReference,
     };
@@ -1426,7 +1720,7 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedFaceProfileSelection(
 
     const auto selectionFromAttempt = [&](const ResolveAttempt& attempt, bool fromBodyCumulativeReplay) {
         const std::string stableSubname =
-            profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string {};
+            attempt.stableSubnames.size() == 1U ? attempt.stableSubnames.front() : std::string {};
         return ProfileBasedProfileSelection {
             profileLink,
             *attempt.shape,
@@ -1445,8 +1739,13 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedFaceProfileSelection(
         namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
     ResolveAttempt direct =
         resolveFaceOnSource(object, profileLink, shapeValue.shape, namedShape, featureName);
+    const bool targetIsDisplayOnly = profileTargetIsDisplayOnly(context, profileLink.object);
+    if (targetIsDisplayOnly && direct.shape) {
+        return selectionFromAttempt(direct, false);
+    }
 
-    if (bodyTopoShapeContext) {
+    if (bodyTopoShapeContext
+        && (!targetIsDisplayOnly || linkHasExplicitBodyReplayEvidence(profileLink))) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureRevolved.cpp
         // ::Revolved::setResult(), stores the revolved tool in AddSubShape and the fused/cut body
         // state in Shape. Same-Body feature FaceN links are resolved through Body::getSubObject()
@@ -1462,7 +1761,7 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedFaceProfileSelection(
             const part::NamedShape bodyNamedShape =
                 bodyTopoShape->namedShape.value_or(
                     part::indexedNamedShapeForObject(bodyTopoShapeContext->body->name, bodyTopoShape->shape));
-            const app::Link bodyShapeLink = bodyTopoShapeLink(profileLink);
+            const app::Link bodyShapeLink = bodyTopoShapeLink(profileLink, direct.downgradedStableSubnames);
             ResolveAttempt bodyShapeAttempt =
                 resolveFaceOnSource(object, bodyShapeLink, bodyTopoShape->shape, &bodyNamedShape, featureName);
             if (bodyShapeAttempt.shape) {
@@ -1558,8 +1857,15 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedOpenProfileSelection(
         namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
     ResolveAttempt direct =
         resolveEdgesOnSource(object, profileLink, shapeValue.shape, namedShape, featureName);
+    const bool targetIsDisplayOnly = profileTargetIsDisplayOnly(context, profileLink.object);
+    if (targetIsDisplayOnly && direct.shape) {
+        auto selection = selectionFromAttempt(profileLink, direct, false);
+        warnIfUnstable(selection);
+        return selection;
+    }
 
-    if (bodyTopoShapeContext) {
+    if (bodyTopoShapeContext
+        && (!targetIsDisplayOnly || linkHasExplicitBodyReplayEvidence(profileLink))) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
         // ::ProfileBased::getProfileShape(), calls Part::Feature::getTopoShape(..., sub.c_str()).
         // Same-Body "Pad.EdgeN" profile links must resolve against the cumulative Body shape at
@@ -1575,7 +1881,7 @@ std::optional<ProfileBasedProfileSelection> resolveLinkedOpenProfileSelection(
             const part::NamedShape bodyNamedShape =
                 bodyTopoShape->namedShape.value_or(
                     part::indexedNamedShapeForObject(bodyTopoShapeContext->body->name, bodyTopoShape->shape));
-            const app::Link bodyShapeLink = bodyTopoShapeLink(profileLink);
+            const app::Link bodyShapeLink = bodyTopoShapeLink(profileLink, direct.downgradedStableSubnames);
             ResolveAttempt bodyShapeAttempt =
                 resolveEdgesOnSource(object, bodyShapeLink, bodyTopoShape->shape, &bodyNamedShape, featureName);
             if (bodyShapeAttempt.shape) {

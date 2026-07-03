@@ -93,6 +93,10 @@ struct ExtrusionProfile {
     std::vector<std::string> selectedSubnames;
     std::vector<std::string> selectedStableSubnames;
     bool unstableOpenProfileReference = false;
+    std::string profileResolveMode;
+    std::string profileOwner;
+    std::string requestedProfileSubname;
+    std::string currentProfileSubname;
 };
 
 struct ToolShapeBuild {
@@ -275,6 +279,22 @@ std::vector<std::string> appendDistinctStrings(std::vector<std::string> values,
     return values;
 }
 
+std::string firstNonEmptyString(const std::vector<std::string>& values)
+{
+    const auto it = std::find_if(values.begin(), values.end(), [](const std::string& value) {
+        return !value.empty();
+    });
+    return it == values.end() ? std::string{} : *it;
+}
+
+std::string selectedProfileSubname(const ProfileBasedProfileSelection& selection)
+{
+    if (!selection.selectedSubname.empty()) {
+        return selection.selectedSubname;
+    }
+    return firstNonEmptyString(selection.selectedSubnames);
+}
+
 std::optional<ExtrusionProfile> resolveFeatureExtrusionProfile(const app::DocumentObject& object,
                                                                runtime::ComputeContext& context,
                                                                const std::string& featureName,
@@ -302,6 +322,10 @@ std::optional<ExtrusionProfile> resolveFeatureExtrusionProfile(const app::Docume
                 ? std::vector<std::string>{selections.front().stableSubname}
                 : selections.front().selectedStableSubnames,
             selections.front().unstableOpenProfileReference,
+            selections.front().fromBodyCumulativeReplay ? "body_cumulative_replay" : "feature_local",
+            selections.front().link.object,
+            firstNonEmptyString(selections.front().link.subnames),
+            selectedProfileSubname(selections.front()),
         };
     }
 
@@ -311,11 +335,13 @@ std::optional<ExtrusionProfile> resolveFeatureExtrusionProfile(const app::Docume
     std::vector<std::string> selectedSubnames;
     std::vector<std::string> selectedStableSubnames;
     bool unstableOpenProfileReference = false;
+    bool fromBodyCumulativeReplay = false;
     for (const auto& selection : selections) {
         profileShapes.push_back(selection.shape);
         selectedSubnames = appendDistinctStrings(selectedSubnames, selection.selectedSubnames);
         selectedStableSubnames = appendDistinctStrings(selectedStableSubnames, selection.selectedStableSubnames);
         unstableOpenProfileReference = unstableOpenProfileReference || selection.unstableOpenProfileReference;
+        fromBodyCumulativeReplay = fromBodyCumulativeReplay || selection.fromBodyCumulativeReplay;
         if (selection.kind == ProfileKind::EdgeCompound) {
             profileKind = ProfileKind::EdgeCompound;
         }
@@ -338,6 +364,10 @@ std::optional<ExtrusionProfile> resolveFeatureExtrusionProfile(const app::Docume
         std::move(selectedSubnames),
         std::move(selectedStableSubnames),
         unstableOpenProfileReference,
+        fromBodyCumulativeReplay ? "body_cumulative_replay" : "feature_local",
+        selections.front().link.object,
+        firstNonEmptyString(selections.front().link.subnames),
+        selectedProfileSubname(selections.front()),
     };
 }
 
@@ -2300,6 +2330,10 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         bodyParticipation,
         nonEmptyStrings(profile->selectedSubnames),
         nonEmptyStrings(profile->selectedStableSubnames),
+        profile->profileResolveMode,
+        profile->profileOwner,
+        profile->requestedProfileSubname,
+        profile->currentProfileSubname,
         method,
         reportedLength,
         reversed,

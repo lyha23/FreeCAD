@@ -98,7 +98,8 @@ std::string stableSubnameForGeometryId(long geometryId)
 RawSketchEdgeIdentityLedger buildRawSketchEdgeIdentityLedger(
     const TopoDS_Shape& rawShape,
     const std::vector<TopoDS_Edge>& sourceEdges,
-    const std::vector<SketchGeometryIdentity>& sourceIdentities)
+    const std::vector<SketchGeometryIdentity>& sourceIdentities,
+    bool sourceOrderMatchesPublishedShape)
 {
     RawSketchEdgeIdentityLedger ledger;
     if (rawShape.IsNull()) {
@@ -114,9 +115,9 @@ RawSketchEdgeIdentityLedger buildRawSketchEdgeIdentityLedger(
         const TopoDS_Edge rawEdge = TopoDS::Edge(rawEdges(index));
         std::optional<std::size_t> sourceIndex =
             sourceIndexForRawEdge(rawEdge, sourceEdges, usedSources);
-        if (!sourceIndex) {
+        if (!sourceIndex && sourceOrderMatchesPublishedShape) {
             const std::size_t orderIndex = static_cast<std::size_t>(index - 1);
-            if (orderIndex < sourceIdentities.size()) {
+            if (orderIndex < sourceEdges.size() && orderIndex < sourceIdentities.size()) {
                 sourceIndex = orderIndex;
                 if (orderIndex < usedSources.size()) {
                     usedSources[orderIndex] = true;

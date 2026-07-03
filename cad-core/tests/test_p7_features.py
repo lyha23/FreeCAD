@@ -43,6 +43,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
             return json.loads(output.read_text(encoding="utf-8"))
 
+    def response_result(self, response: dict, object_name: str) -> dict:
+        return next(item for item in response["results"] if item["object"] == object_name)
+
+    def response_subshape_by_stable_subname(self, response: dict, object_name: str, stable_subname: str) -> dict:
+        return next(
+            item
+            for item in self.response_result(response, object_name)["subshapes"]
+            if item.get("stableSubname") == stable_subname
+        )
+
     def assert_pad_profile_source_element_map(self, named_shape: dict) -> None:
         self.assertEqual(named_shape["element_map"]["Sketch.Face1"], "Face5")
         self.assertEqual(named_shape["element_map"]["Sketch.Edge1"], "Edge3")
@@ -345,6 +355,113 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(result["mesh"]["Body"]["edgeSegments"]), 0)
         self.assertGreater(len(result["subshapes"]["Body"]), 0)
 
+    def test_p7_pad_open_wire_stable_sublist_resolves_mixed_internal_raw_edge(self) -> None:
+        result = self.run_recompute("partdesign-pad-open-wire-stable-sublist-mixed-internal", "p7")
+        sketch = result["objects"]["Sketch"]
+        pad = result["objects"]["Pad"]
+        body = result["objects"]["Body"]
+        sketch_named_shape = result["named_shapes"]["Sketch"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile_surface_display_only"])
+        self.assertEqual(sketch["raw_edge_identity"]["byStableSubname"]["g100005"], "Edge4")
+        self.assertEqual(sketch_named_shape["element_map"]["g100005"], "Edge4")
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["currentSubname"], "Edge4")
+        self.assertEqual(pad["sourceProfile"], {"object": "Sketch", "stableSubnames": ["g100005"]})
+        self.assertEqual(pad["resolvedOpenProfileMode"], "SurfaceExtrusion")
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["shape"], "occt_shell")
+        self.assertGreater(len(result["mesh"]["Body"]["edgeSegments"]), 0)
+        self.assertGreater(len(result["subshapes"]["Body"]), 0)
+
+    def test_p7_pad_open_wire_accepts_sketch_internal_edge_alias(self) -> None:
+        payload = json.loads(
+            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            .read_text(encoding="utf-8")
+        )
+        profile = self.object_payload(payload, "Pad")["Properties"]["Profile"]["SubSet"][0]
+        profile["SubList"] = ["InternalEdge1"]
+        profile["StableSubList"] = ["g100005"]
+
+        result = self.run_recompute_payload(payload)
+        pad = result["objects"]["Pad"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile_surface_display_only"])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["currentSubname"], "Edge4")
+        self.assertEqual(pad["sourceProfile"], {"object": "Sketch", "stableSubnames": ["g100005"]})
+        self.assertEqual(pad["resolvedOpenProfileMode"], "SurfaceExtrusion")
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["shape"], "occt_shell")
+        self.assertGreater(len(result["mesh"]["Body"]["edgeSegments"]), 0)
+        self.assertGreater(len(result["subshapes"]["Body"]), 0)
+
+    def test_p7_pad_open_wire_rejects_current_edge_stable_sublist(self) -> None:
+        payload = json.loads(
+            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            .read_text(encoding="utf-8")
+        )
+        profile = self.object_payload(payload, "Pad")["Properties"]["Profile"]["SubSet"][0]
+        profile["SubList"] = ["InternalEdge1"]
+        profile["StableSubList"] = ["Edge4"]
+
+        result = self.run_recompute_payload(payload)
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "Edge4")
+        self.assertIn("g<ID>", diagnostic["message"])
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p7_pocket_open_wire_stable_sublist_resolves_mixed_internal_raw_edge(self) -> None:
+        payload = json.loads(
+            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            .read_text(encoding="utf-8")
+        )
+        pocket_object = self.object_payload(payload, "Pad")
+        pocket_object["Name"] = "Pocket"
+        pocket_object["TypeId"] = "PartDesign::Pocket"
+        body_properties = self.object_payload(payload, "Body")["Properties"]
+        body_properties["Group"]["values"] = ["Sketch", "Pocket"]
+        body_properties["Tip"]["value"] = "Pocket"
+
+        result = self.run_recompute_payload(payload)
+        pocket = result["objects"]["Pocket"]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile_surface_display_only"])
+        self.assertEqual(result["objects"]["Sketch"]["raw_edge_identity"]["byStableSubname"]["g100005"], "Edge4")
+        self.assertEqual(pocket["status"], "ok")
+        self.assertEqual(pocket["currentSubname"], "Edge4")
+        self.assertEqual(pocket["sourceProfile"], {"object": "Sketch", "stableSubnames": ["g100005"]})
+        self.assertEqual(pocket["resolvedOpenProfileMode"], "SurfaceExtrusion")
+
+    def test_p7_pad_open_wire_deleted_stable_sublist_does_not_hit_stale_edge(self) -> None:
+        payload = json.loads(
+            (ROOT / "fixtures" / "p7" / "partdesign-pad-open-wire-stable-sublist-mixed-internal.json")
+            .read_text(encoding="utf-8")
+        )
+        sketch = self.object_payload(payload, "Sketch")
+        sketch["Properties"]["Geometry"] = [
+            item
+            for item in sketch["Properties"]["Geometry"]
+            if item["id"] != 100005
+        ]
+
+        result = self.run_recompute_payload(payload)
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "g100005")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+        self.assertNotIn("Body", result["mesh"])
+
     def test_p7_body_accumulates_display_only_surface_chain(self) -> None:
         result = self.run_recompute("partdesign-body-display-only-surface-chain", "p7")
         response = self.run_recompute_response("partdesign-body-display-only-surface-chain", "p7")
@@ -357,6 +474,8 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for item in response_subshapes
             if item.get("stableSubname")
         ]
+        pad_face = next(item for item in response_subshapes if item["subname"] == "Pad.Face1")
+        pad2_face = next(item for item in response_subshapes if item["subname"] == "Pad2.Face1")
         edge_z_values = [
             point[2]
             for segment in result["mesh"]["Body"]["edgeSegments"]
@@ -380,9 +499,19 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(any(abs(z - 614.0) <= 1e-6 for z in edge_z_values))
         self.assertTrue(any(name.startswith("Pad.") for name in response_subnames))
         self.assertTrue(any(name.startswith("Pad2.") for name in response_subnames))
+        self.assertEqual(pad_face["stableSubname"], "Pad.g100001")
+        self.assertEqual(pad2_face["stableSubname"], "Pad2.Face1")
+        self.assertNotIn("g100001", response_stable_subnames)
         self.assertFalse(
             any(
                 stable == item.get("indexed")
+                for item in response_subshapes
+                if (stable := item.get("stableSubname"))
+            )
+        )
+        self.assertFalse(
+            any(
+                stable == item.get("subname") and "." not in stable
                 for item in response_subshapes
                 if (stable := item.get("stableSubname"))
             )
@@ -398,6 +527,117 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "partdesign_body:display_only_compound",
             body_named_shape["element_history_status"],
         )
+
+    def test_p7_body_displays_display_only_tip_after_solid(self) -> None:
+        fixture = "partdesign-body-solid-plus-display-only-tip"
+        result = self.run_recompute(fixture, "p7")
+        response = self.run_recompute_response(fixture, "p7")
+        body = result["objects"]["Pad3Body"]
+        response_body = self.response_result(response, "Pad3Body")
+        z_values = [point[2] for point in response_body["mesh"]["vertices"]]
+        subnames = [item["subname"] for item in response_body["subshapes"]]
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            [
+                "open_profile_surface_display_only",
+                "ambiguous_open_profile_reference",
+                "open_profile_surface_display_only",
+            ],
+        )
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["display_only_features"], ["Pad", "Pad3"])
+        self.assertEqual(body["body_adopted_display_only_compound"], True)
+        self.assertEqual(body["shape"], "occt_compound")
+        self.assertGreater(max(z_values), 3000.0)
+        self.assertTrue(any(name.startswith("Pad3.") for name in subnames))
+
+    def test_p7_face_pad_construction_exception_returns_diagnostic(self) -> None:
+        result = self.run_recompute("partdesign-body-face-pad-missing-direction-exception", "p7")
+        diagnostics = result["diagnostics"]
+        body = result["objects"]["Pad3Body"]
+
+        self.assertEqual(diagnostics[-1]["code"], "execution_failed")
+        self.assertEqual(diagnostics[-1]["object"], "Pad3Body")
+        self.assertIn("Standard_ConstructionError", diagnostics[-1]["message"])
+        self.assertEqual(body["status"], "error")
+        self.assertIn("Standard_ConstructionError", body["reason"])
+
+    def test_c3m5_support_transform_cache_ignores_display_only_open_wire_boolean(self) -> None:
+        result = self.run_recompute("body-display-only-support-transform-cache", "c3m5")
+        pad = result["objects"]["Pad"]
+        pad3 = result["objects"]["Pad3"]
+        fillet = result["objects"]["FilletPreview"]
+        body = result["objects"]["Pad4Body"]
+
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            [
+                "open_profile_surface_display_only",
+                "ambiguous_open_profile_reference",
+                "open_profile_surface_display_only",
+            ],
+        )
+        self.assertFalse([item for item in result["diagnostics"] if item["severity"] == "error"])
+        self.assertEqual(pad["bodyParticipation"], "display_only")
+        self.assertEqual(pad3["bodyParticipation"], "display_only")
+        self.assertEqual(fillet["status"], "ok")
+        self.assertEqual(fillet["support_transform"], True)
+        self.assertEqual(fillet["support_transform_source"], "Pad4")
+        self.assertEqual(fillet["add_sub_cache"], "support_transform")
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(body["tip"], "FilletPreview")
+        self.assertEqual(body["display_only_features"], ["Pad", "Pad3"])
+        self.assertIn("Pad4Body", result["mesh"])
+        self.assertGreater(len(result["mesh"]["Pad4Body"]["triangles"]), 0)
+        self.assertGreater(len(result["subshapes"]["Pad4Body"]), 0)
+
+    def test_p7_display_only_surface_face_profile_preserves_feature_owner(self) -> None:
+        fixture = "partdesign-display-only-surface-face-profile-owner"
+        result = self.run_recompute(fixture, "p7")
+        response = self.run_recompute_response(fixture, "p7")
+        pad2_face1_bbox = result["subshapes"]["Pad2"]["Face1"]["bbox"]
+        inherited_pad2_face = self.response_subshape_by_stable_subname(
+            response,
+            "PadPreviewBody",
+            "Pad2.Face1",
+        )
+        inherited_bbox = result["subshapes"]["PadPreviewBody"][inherited_pad2_face["indexed"]]["bbox"]
+        diagnostic_codes = [item["code"] for item in result["diagnostics"]]
+
+        self.assertEqual(
+            diagnostic_codes,
+            [
+                "open_profile_surface_display_only",
+                "ambiguous_open_profile_reference",
+                "open_profile_surface_display_only",
+            ],
+        )
+        self.assertEqual(result["objects"]["Pad2"]["status"], "ok")
+        self.assertEqual(result["objects"]["PadPreview"]["profileResolveMode"], "feature_local")
+        self.assertEqual(result["objects"]["PadPreview"]["profileOwner"], "Pad2")
+        self.assertEqual(result["objects"]["PadPreview"]["requestedSubname"], "Face1")
+        self.assertEqual(result["objects"]["PadPreview"]["currentSubname"], "Face1")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "ok")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["display_only_features"], ["Pad", "Pad2"])
+        self.assertEqual(pad2_face1_bbox["min"][2], 522.0)
+        self.assertEqual(pad2_face1_bbox["max"][2], 907.0)
+        self.assert_bbox_close(inherited_bbox, pad2_face1_bbox["min"], pad2_face1_bbox["max"])
+        self.assertNotEqual(inherited_bbox["min"][2], 0.0)
+        self.assertNotEqual(inherited_bbox["max"][2], 522.0)
+        self.assertEqual(inherited_pad2_face["stableSubname"], "Pad2.Face1")
+
+    def test_p7_plain_topological_stable_subname_does_not_override_current_face(self) -> None:
+        result = self.run_recompute("partdesign-face-profile-current-subname-over-plain-stable", "p7")
+        diagnostic_codes = [item["code"] for item in result["diagnostics"]]
+        preview = result["objects"]["PadPreview"]
+
+        self.assertEqual(diagnostic_codes, ["open_profile_surface_display_only", "invalid_direction"])
+        self.assertEqual(result["objects"]["Pad2"]["currentSubname"], "Face1")
+        self.assertEqual(result["objects"]["Pad3"]["currentSubname"], "Face6")
+        self.assertEqual(preview["status"], "error")
+        self.assertNotEqual(preview.get("currentSubname"), "Face4")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "skipped")
 
     def test_p7_pad_open_wire_profile_from_existing_pad_edge(self) -> None:
         result = self.run_recompute("partdesign-pad-open-wire-from-pad-edge", "p7")
@@ -2186,7 +2426,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(hole["status"], "ok")
         self.assertEqual(hole["method"], "Dimension")
         self.assertEqual(body["tip"], "Hole")
-        self.assertEqual(body["refined_features"], ["Hole"])
+        self.assertEqual(body["refined_features"], ["Pad", "Hole"])
         self.assert_refine_model_history(
             body_named_shape,
             {"SketchPad"},
@@ -2448,7 +2688,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("known_gap", expected)
         self.assertEqual(expected["topology_counts"], {"edges": 106, "faces": 50, "vertices": 60})
-        self.assertAlmostEqual(expected["volume"], 434.05359569539525, delta=1e-9)
+        self.assertAlmostEqual(expected["volume"], 419.816869495695, delta=1e-9)
         self.assert_object_matches_expected(result, "p7", "hole-supported-model-thread-counterbore")
         self.assertEqual(hole["threaded"], True)
         self.assertEqual(hole["model_thread"], True)
@@ -3252,6 +3492,18 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Mirrored.Transform1",
         )
         self.assert_object_matches_expected(result, "p7", "mirrored-dressup-chain-support-transform")
+
+    def test_c3m5_transformed_features_rejects_dressup_empty_addsub_cache(self) -> None:
+        result = self.run_recompute("transformed-dressup-empty-cache-original", "c3m5")
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual(diagnostic["code"], "missing_addsub_cache")
+        self.assertEqual(diagnostic["object"], "Mirrored")
+        self.assertEqual(diagnostic["property"], "Originals")
+        self.assertEqual(diagnostic["target"], "Draft")
+        self.assertEqual(result["objects"]["Draft"]["status"], "ok")
+        self.assertEqual(result["objects"]["Draft"]["add_sub_cache"], "empty")
+        self.assertEqual(result["objects"]["Mirrored"]["status"], "error")
 
     def test_p7_mirrored_whole_shape_fuses_transformed_support(self) -> None:
         result = self.run_recompute("mirrored-whole-shape", "p7")

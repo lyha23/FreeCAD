@@ -11,12 +11,14 @@
 #include <GC_MakeArcOfHyperbola.hxx>
 #include <GC_MakeArcOfParabola.hxx>
 #include <GC_MakeHyperbola.hxx>
+#include <GeomAPI_Interpolate.hxx>
 #include <Geom_BezierCurve.hxx>
 #include <Geom_BSplineCurve.hxx>
 #include <Geom_TrimmedCurve.hxx>
 #include <Standard_Failure.hxx>
 #include <TColStd_Array1OfInteger.hxx>
 #include <TColStd_Array1OfReal.hxx>
+#include <TColgp_HArray1OfPnt.hxx>
 #include <TColgp_Array1OfPnt.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp_Explorer.hxx>
@@ -102,6 +104,9 @@ SketchProfileEdge profileEdgeWithIdentity(SketchProfileEdgeKind kind,
         case SketchProfileEdgeKind::BSpline:
             geometryKind = "BSpline";
             break;
+        case SketchProfileEdgeKind::InterpolatedSpline:
+            geometryKind = "InterpolatedSpline";
+            break;
         case SketchProfileEdgeKind::Bezier:
             geometryKind = "Bezier";
             break;
@@ -117,6 +122,7 @@ std::vector<SketchProfileEdge> profileEdges(
     const std::vector<SketchHyperbolaArc>& hyperbolaArcs,
     const std::vector<SketchParabolaArc>& parabolaArcs,
     const std::vector<SketchBSpline>& bsplines,
+    const std::vector<SketchInterpolatedSpline>& interpolatedSplines,
     const std::vector<SketchBezier>& beziers
 )
 {
@@ -206,6 +212,23 @@ std::vector<SketchProfileEdge> profileEdges(
         edge.poles = bspline.poles;
         edges.push_back(std::move(edge));
     }
+    for (const auto& spline : interpolatedSplines) {
+        if (spline.points.size() < 2U || (spline.periodic && spline.points.size() < 3U)) {
+            continue;
+        }
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::InterpolatedSpline,
+            spline.geometryIndex,
+            spline.geometryId
+        );
+        edge.start = spline.points.front();
+        edge.end = spline.periodic ? spline.points.front() : spline.points.back();
+        edge.poles = spline.points;
+        edge.periodic = spline.periodic;
+        edge.startTangent = spline.startTangent;
+        edge.endTangent = spline.endTangent;
+        edges.push_back(std::move(edge));
+    }
     for (const auto& bezier : beziers) {
         // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/Geometry.cpp
         // ::GeomBezierCurve::Restore() reads "PolesCount" and each Pole's
@@ -258,6 +281,111 @@ std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std:
         return Handle(Geom_BSplineCurve)(
             new Geom_BSplineCurve(poleArray, knotArray, multiplicities, degree, Standard_False)
         );
+    }
+    catch (const Standard_Failure&) {
+        return std::nullopt;
+    }
+}
+
+gp_Vec hermiteTangentAt(const std::vector<gp_Pnt>& points,
+                        std::size_t index,
+                        const gp_Vec& startTangent,
+                        const gp_Vec& endTangent)
+{
+    if (index == 0U) {
+        return startTangent;
+    }
+    if (index + 1U == points.size()) {
+        return endTangent;
+    }
+
+    const gp_Pnt& previous = index > 0U ? points.at(index - 1U) : points.at(index);
+    const gp_Pnt& next = index + 1U < points.size() ? points.at(index + 1U) : points.at(index);
+    return gp_Vec(previous, next).Multiplied(0.5);
+}
+
+std::optional<Handle(Geom_BSplineCurve)> makeEndpointHermiteSplineCurve(
+    const std::vector<gp_Pnt>& points,
+    const gp_Vec& startTangent,
+    const gp_Vec& endTangent
+)
+{
+    if (points.size() < 2U) {
+        return std::nullopt;
+    }
+
+    const std::size_t segmentCount = points.size() - 1U;
+    const int degree = 3;
+    const int poleCount = static_cast<int>(segmentCount * 3U + 1U);
+    const int knotCount = static_cast<int>(segmentCount + 1U);
+
+    TColgp_Array1OfPnt poleArray(1, poleCount);
+    int poleIndex = 1;
+    for (std::size_t segment = 0; segment < segmentCount; ++segment) {
+        const gp_Pnt& p0 = points.at(segment);
+        const gp_Pnt& p1 = points.at(segment + 1U);
+        const gp_Vec m0 = hermiteTangentAt(points, segment, startTangent, endTangent);
+        const gp_Vec m1 = hermiteTangentAt(points, segment + 1U, startTangent, endTangent);
+
+        if (segment == 0U) {
+            poleArray.SetValue(poleIndex++, p0);
+        }
+        poleArray.SetValue(poleIndex++, p0.Translated(m0.Multiplied(1.0 / 3.0)));
+        poleArray.SetValue(poleIndex++, p1.Translated(m1.Multiplied(-1.0 / 3.0)));
+        poleArray.SetValue(poleIndex++, p1);
+    }
+
+    TColStd_Array1OfReal knotArray(1, knotCount);
+    TColStd_Array1OfInteger multiplicities(1, knotCount);
+    for (int index = 1; index <= knotCount; ++index) {
+        knotArray.SetValue(index, static_cast<double>(index - 1));
+        multiplicities.SetValue(index, index == 1 || index == knotCount ? degree + 1 : degree);
+    }
+
+    try {
+        return Handle(Geom_BSplineCurve)(
+            new Geom_BSplineCurve(poleArray, knotArray, multiplicities, degree, Standard_False)
+        );
+    }
+    catch (const Standard_Failure&) {
+        return std::nullopt;
+    }
+}
+
+std::optional<Handle(Geom_BSplineCurve)> makeInterpolatedSplineCurve(
+    const std::vector<gp_Pnt>& points,
+    bool periodic,
+    const std::optional<gp_Vec>& startTangent,
+    const std::optional<gp_Vec>& endTangent
+)
+{
+    if (points.size() < 2U || (periodic && points.size() < 3U)) {
+        return std::nullopt;
+    }
+    if (startTangent.has_value() != endTangent.has_value()) {
+        return std::nullopt;
+    }
+
+    if (!periodic && startTangent && endTangent) {
+        return makeEndpointHermiteSplineCurve(points, *startTangent, *endTangent);
+    }
+
+    Handle(TColgp_HArray1OfPnt) pointArray =
+        new TColgp_HArray1OfPnt(1, static_cast<int>(points.size()));
+    for (int index = 1; index <= static_cast<int>(points.size()); ++index) {
+        pointArray->SetValue(index, points[static_cast<std::size_t>(index - 1)]);
+    }
+
+    try {
+        GeomAPI_Interpolate interpolator(pointArray, periodic ? Standard_True : Standard_False, 1e-7);
+        if (startTangent && endTangent) {
+            interpolator.Load(*startTangent, *endTangent, Standard_True);
+        }
+        interpolator.Perform();
+        if (!interpolator.IsDone()) {
+            return std::nullopt;
+        }
+        return interpolator.Curve();
     }
     catch (const Standard_Failure&) {
         return std::nullopt;
@@ -382,6 +510,18 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
         // GeomBSplineCurve stores "Poles", "Knots", "Multiplicity" and "Degree"; this P5
         // subset rebuilds a non-periodic clamped curve from fixture poles and degree.
         const auto curve = makeBSplineCurve(edge.degree, edge.poles);
+        if (!curve) {
+            return std::nullopt;
+        }
+        edgeBuilder = BRepBuilderAPI_MakeEdge(*curve);
+    }
+    else if (edge.kind == SketchProfileEdgeKind::InterpolatedSpline) {
+        const auto curve = makeInterpolatedSplineCurve(
+            edge.poles,
+            edge.periodic,
+            edge.startTangent,
+            edge.endTangent
+        );
         if (!curve) {
             return std::nullopt;
         }
@@ -578,6 +718,25 @@ std::vector<std::size_t> appendSourceEdgesFromWire(
     return sourceEdgeIndices;
 }
 
+void appendWireSourcesInPublishedOrder(
+    const SketchProfileWires& profileWires,
+    const std::vector<std::vector<std::size_t>>& sourceIndexGroups,
+    std::vector<TopoDS_Edge>& sourceEdges,
+    std::vector<SketchGeometryIdentity>& sourceEdgeIdentities
+)
+{
+    for (const auto& sourceIndices : sourceIndexGroups) {
+        for (const std::size_t sourceIndex : sourceIndices) {
+            if (sourceIndex >= profileWires.sourceEdges.size()
+                || sourceIndex >= profileWires.sourceEdgeIdentities.size()) {
+                continue;
+            }
+            sourceEdges.push_back(profileWires.sourceEdges[sourceIndex]);
+            sourceEdgeIdentities.push_back(profileWires.sourceEdgeIdentities[sourceIndex]);
+        }
+    }
+}
+
 TopoDS_Shape compoundOrSingleShape(const std::vector<TopoDS_Shape>& shapes)
 {
     if (shapes.empty()) {
@@ -647,15 +806,17 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
         }
         shapes.insert(shapes.end(), profileWires->closedWires.begin(), profileWires->closedWires.end());
         shapes.insert(shapes.end(), profileWires->openWires.begin(), profileWires->openWires.end());
-        sourceEdges.insert(
-            sourceEdges.end(),
-            profileWires->sourceEdges.begin(),
-            profileWires->sourceEdges.end()
+        appendWireSourcesInPublishedOrder(
+            *profileWires,
+            profileWires->closedWireSourceEdgeIndices,
+            sourceEdges,
+            sourceEdgeIdentities
         );
-        sourceEdgeIdentities.insert(
-            sourceEdgeIdentities.end(),
-            profileWires->sourceEdgeIdentities.begin(),
-            profileWires->sourceEdgeIdentities.end()
+        appendWireSourcesInPublishedOrder(
+            *profileWires,
+            profileWires->openWireSourceEdgeIndices,
+            sourceEdges,
+            sourceEdgeIdentities
         );
         if (shapes.empty()) {
             runtime::addDiagnostic(
@@ -741,6 +902,7 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
         compoundOrSingleShape(shapes),
         std::move(sourceEdges),
         std::move(sourceEdgeIdentities),
+        true,
     };
 }
 

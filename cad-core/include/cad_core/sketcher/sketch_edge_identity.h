@@ -43,7 +43,8 @@ std::string stableSubnameForGeometryId(long geometryId);
 RawSketchEdgeIdentityLedger buildRawSketchEdgeIdentityLedger(
     const TopoDS_Shape& rawShape,
     const std::vector<TopoDS_Edge>& sourceEdges,
-    const std::vector<SketchGeometryIdentity>& sourceIdentities);
+    const std::vector<SketchGeometryIdentity>& sourceIdentities,
+    bool sourceOrderMatchesPublishedShape = false);
 
 part::NamedShape namedShapeForSketchRawEdgeIdentity(
     const std::string& owner,

@@ -643,6 +643,16 @@ std::optional<part::NamedShape> namedShapeForDisplayOnlyFeature(
     return namedShapeIt->second;
 }
 
+bool displayOnlyFeatureAugmentsExistingBodyDisplay(
+    const std::string& feature,
+    const runtime::ComputeContext& context)
+{
+    const auto documentIt = context.documentObjects.find(feature);
+    return documentIt != context.documentObjects.end()
+        && documentIt->second != nullptr
+        && documentIt->second->typeId == "PartDesign::Pad";
+}
+
 std::optional<BooleanBuild> compoundDisplayOnlyChildren(
     const app::DocumentObject& body,
     runtime::ComputeContext& context,
@@ -687,6 +697,45 @@ part::NamedShapeSource sourceForCurrentBody(const std::string& bodyName,
                                             const std::optional<part::NamedShape>& namedShape)
 {
     return part::NamedShapeSource{namedShape ? namedShape->owner : bodyName, shape, namedShape ? &*namedShape : nullptr};
+}
+
+std::optional<BooleanBuild> compoundCurrentBodyWithDisplayOnlyChildren(
+    const app::DocumentObject& body,
+    runtime::ComputeContext& context,
+    const TopoDS_Shape& currentBodyShape,
+    const std::optional<part::NamedShape>& currentBodyNamedShape,
+    const std::vector<DisplayOnlyChild>& children)
+{
+    std::vector<part::NamedShapeSource> sources;
+    sources.reserve(children.size() + 1U);
+    sources.push_back(sourceForCurrentBody(body.name, currentBodyShape, currentBodyNamedShape));
+    for (const DisplayOnlyChild& child : children) {
+        if (child.shape.IsNull()) {
+            continue;
+        }
+        sources.push_back({
+            child.namedShape ? child.namedShape->owner : child.feature,
+            child.shape,
+            child.namedShape ? &*child.namedShape : nullptr,
+        });
+    }
+
+    const auto build = part::makeElementCompoundFromSources(body.name, sources, true);
+    if (!build.error.empty()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Body could not build final display-only compound: " + build.error,
+                               body.name);
+        return std::nullopt;
+    }
+
+    part::NamedShape namedShape = build.namedShape
+        ? *build.namedShape
+        : part::indexedNamedShapeForObject(body.name, build.shape);
+    addDistinctString(namedShape.elementHistoryStatus, "partdesign_body:display_only_compound");
+    addDistinctString(namedShape.elementHistoryStatus, "partdesign_body:solid_with_display_only_tip");
+    return BooleanBuild{build.shape, std::move(namedShape)};
 }
 
 part::NamedShapeSource sourceForFeature(const std::string& feature,
@@ -923,6 +972,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
     std::vector<std::string> appliedReplacementFeatures;
     std::vector<std::string> displayOnlyFeatures;
     std::vector<DisplayOnlyChild> displayOnlyChildren;
+    std::vector<DisplayOnlyChild> trailingDisplayOnlyChildren;
     bool bodyAdoptedDisplayOnlyCompound = false;
     if (body.properties.contains("BaseFeature")) {
         const auto baseLink = app::readLink(body, "BaseFeature");
@@ -971,6 +1021,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
             bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
             refinedFeatures.clear();
             appliedReplacementFeatures.push_back(feature);
+            trailingDisplayOnlyChildren.clear();
             if (feature == resolvedStopFeature) {
                 break;
             }
@@ -988,6 +1039,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
                 refinedFeatures.clear();
                 appliedReplacementFeatures.push_back(feature);
+                trailingDisplayOnlyChildren.clear();
                 if (feature == resolvedStopFeature) {
                     break;
                 }
@@ -999,15 +1051,21 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                 // says Pad/Pocket open-wire surface extrusion publishes feature geometry but
                 // "默认 surface extrusion 是 display_only" for Body fuse/cut participation.
                 displayOnlyFeatures.push_back(feature);
-                if (shapeIt != context.shapes.end() && !shapeIt->second.shape.IsNull()) {
-                    displayOnlyChildren.push_back(DisplayOnlyChild{
+                if (options.includeDisplayOnlyGeometry
+                    && shapeIt != context.shapes.end() && !shapeIt->second.shape.IsNull()) {
+                    DisplayOnlyChild child {
                         feature,
                         shapeIt->second.shape,
                         namedShapeForDisplayOnlyFeature(feature, context),
-                    });
+                    };
+                    displayOnlyChildren.push_back(child);
+                    if (displayOnlyFeatureAugmentsExistingBodyDisplay(feature, context)) {
+                        trailingDisplayOnlyChildren.push_back(std::move(child));
+                    }
                 }
                 if (feature == resolvedStopFeature) {
-                    if (!bodyShape && shapeIt != context.shapes.end()) {
+                    if (options.includeDisplayOnlyGeometry
+                        && !bodyShape && shapeIt != context.shapes.end()) {
                         if (displayOnlyChildren.size() > 1U) {
                             const auto build = compoundDisplayOnlyChildren(body, context, displayOnlyChildren);
                             if (!build) {
@@ -1054,12 +1112,14 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         }
 
         const runtime::AddSubShape& addSubShape = addSubIt->second;
+        bool bodyShapeChanged = false;
         if (addSubShape.addShape) {
             appliedAdditiveFeatures.push_back(feature);
             if (!bodyShape) {
                 bodyShape = *addSubShape.addShape;
                 bodyUsesPreciseBoundingBox = addSubShape.addUsesPreciseBoundingBox;
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+                bodyShapeChanged = true;
             }
             else {
                 const auto build = fuseShapes(*bodyShape,
@@ -1074,6 +1134,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                     bodyShape = build->shape;
                     bodyUsesPreciseBoundingBox = false;
                     bodyNamedShape = build->namedShape;
+                    bodyShapeChanged = true;
                 }
                 else {
                     bodyShape = std::nullopt;
@@ -1090,6 +1151,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                 bodyShape = *addSubShape.subShape;
                 bodyUsesPreciseBoundingBox = addSubShape.subUsesPreciseBoundingBox;
                 bodyNamedShape = namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+                bodyShapeChanged = true;
             }
             else {
                 const auto build = cutShapes(*bodyShape,
@@ -1103,6 +1165,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                     bodyShape = build->shape;
                     bodyUsesPreciseBoundingBox = false;
                     bodyNamedShape = build->namedShape;
+                    bodyShapeChanged = true;
                 }
                 else {
                     bodyShape = std::nullopt;
@@ -1112,6 +1175,9 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
 
         if (!bodyShape) {
             return std::nullopt;
+        }
+        if (bodyShapeChanged) {
+            trailingDisplayOnlyChildren.clear();
         }
         const std::size_t refinedFeatureCount = refinedFeatures.size();
         if (!applyFinalResultRefineForFeature(body, feature, context, bodyShape, bodyNamedShape, refinedFeatures)) {
@@ -1133,6 +1199,26 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                                body.name,
                                "Tip");
         return std::nullopt;
+    }
+
+    if (options.includeDisplayOnlyGeometry
+        && !trailingDisplayOnlyChildren.empty()
+        && !bodyAdoptedDisplayOnlyTip
+        && !bodyAdoptedDisplayOnlyCompound) {
+        const auto build = compoundCurrentBodyWithDisplayOnlyChildren(
+            body,
+            context,
+            *bodyShape,
+            bodyNamedShape,
+            trailingDisplayOnlyChildren);
+        if (!build) {
+            return std::nullopt;
+        }
+        bodyShape = build->shape;
+        bodyShapeKind = runtime::ShapeValue::Kind::PartPrimitive;
+        bodyUsesPreciseBoundingBox = false;
+        bodyNamedShape = build->namedShape;
+        bodyAdoptedDisplayOnlyCompound = true;
     }
 
     TopoDS_Shape resultShape = *bodyShape;

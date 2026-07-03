@@ -3,6 +3,7 @@ from __future__ import annotations
 import ctypes
 import hashlib
 import json
+import math
 import tempfile
 from collections import Counter
 from pathlib import Path
@@ -148,6 +149,85 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for subshape in sketch["subshapes"]
             if "sourceGeometryId" in subshape
         }
+
+    def assert_segment_matches_geometry(self, segment: dict, geometry: dict) -> None:
+        expected = {
+            (float(geometry["start"][0]), float(geometry["start"][1]), 0.0),
+            (float(geometry["end"][0]), float(geometry["end"][1]), 0.0),
+        }
+        actual = {tuple(point) for point in segment["points"]}
+        self.assertEqual(actual, expected)
+
+    def point_segment_distance(self, point: list[float], start: list[float], end: list[float]) -> float:
+        px, py = point[:2]
+        ax, ay = start[:2]
+        bx, by = end[:2]
+        dx = bx - ax
+        dy = by - ay
+        length_squared = dx * dx + dy * dy
+        if length_squared == 0:
+            return math.hypot(px - ax, py - ay)
+        t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / length_squared))
+        return math.hypot(px - (ax + t * dx), py - (ay + t * dy))
+
+    def point_polyline_distance(self, point: list[float], polyline: list[list[float]]) -> float:
+        return min(
+            self.point_segment_distance(point, start, end)
+            for start, end in zip(polyline, polyline[1:])
+        )
+
+    def max_polyline_distance(self, points: list[list[float]], reference: list[list[float]]) -> float:
+        return max(self.point_polyline_distance(point, reference) for point in points)
+
+    def frontend_hermite_spline_samples(
+        self,
+        points: list[list[float]],
+        start_tangent: list[float],
+        end_tangent: list[float],
+        samples_per_segment: int = 100,
+    ) -> list[list[float]]:
+        tangents: list[list[float]] = []
+        for index, point in enumerate(points):
+            if index == 0:
+                tangents.append(start_tangent)
+            elif index == len(points) - 1:
+                tangents.append(end_tangent)
+            else:
+                previous = points[index - 1]
+                next_point = points[index + 1]
+                tangents.append(
+                    [
+                        (next_point[0] - previous[0]) * 0.5,
+                        (next_point[1] - previous[1]) * 0.5,
+                    ]
+                )
+
+        sampled: list[list[float]] = []
+        for segment_index in range(len(points) - 1):
+            p0 = points[segment_index]
+            p1 = points[segment_index + 1]
+            m0 = tangents[segment_index]
+            m1 = tangents[segment_index + 1]
+            samples = (
+                samples_per_segment + 1
+                if segment_index == len(points) - 2
+                else samples_per_segment
+            )
+            for sample_index in range(samples):
+                t = sample_index / samples_per_segment
+                t2 = t * t
+                t3 = t2 * t
+                h00 = 2 * t3 - 3 * t2 + 1
+                h10 = t3 - 2 * t2 + t
+                h01 = -2 * t3 + 3 * t2
+                h11 = t3 - t2
+                sampled.append(
+                    [
+                        h00 * p0[0] + h10 * m0[0] + h01 * p1[0] + h11 * m1[0],
+                        h00 * p0[1] + h10 * m0[1] + h01 * p1[1] + h11 * m1[1],
+                    ]
+                )
+        return sampled
 
     def assert_internal_history_publication_surface(self, result: dict[str, object]) -> dict:
         sketch = result["objects"]["Sketch"]
@@ -1798,9 +1878,32 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for item in result["results"][0]["subshapes"]
         }
 
-        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "Edge1")
+        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "")
         self.assertEqual(subshapes["InternalVertex1"]["stableSubname"], "Vertex1")
         self.assertEqual(subshapes["InternalFace1"]["stableSubname"], "")
+
+    def test_p5_sketch_internal_edge_stable_subname_uses_raw_geometry_identity(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 100001, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "id": 100002, "start": [10, 0], "end": [10, 5]},
+            {"kind": "LineSegment", "id": 100003, "start": [10, 5], "end": [0, 5]},
+            {"kind": "LineSegment", "id": 100004, "start": [0, 5], "end": [0, 0]},
+        ]
+        result = self.run_recompute_ffi_payload(self.open_wire_identity_payload(geometry))
+        subshapes = {
+            item["indexed"]: item
+            for item in result["results"][0]["subshapes"]
+        }
+
+        self.assertEqual(subshapes["InternalEdge1"]["subname"], "InternalEdge1")
+        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "g100001")
+        self.assertFalse(
+            any(
+                item["indexed"].startswith("InternalEdge")
+                and item.get("stableSubname", "").startswith("Edge")
+                for item in result["results"][0]["subshapes"]
+            )
+        )
 
     def test_p5_sketch_internal_shape_named_shape_keeps_face_unstable(self) -> None:
         result = self.run_recompute("sketch-internal-face", "p5")
@@ -1833,8 +1936,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         }
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "Edge1")
-        self.assertEqual(subshapes["InternalEdge2"]["stableSubname"], "Edge2")
+        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "")
+        self.assertEqual(subshapes["InternalEdge2"]["stableSubname"], "")
         self.assertEqual(subshapes["InternalFace1"]["stableSubname"], "")
 
     def test_p5_split_line_builds_multiple_internal_faces(self) -> None:
@@ -3069,6 +3172,37 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(result["objects"]["Sketch"]["raw_edge_identity"]["byStableSubname"]["g102"], "Edge3")
 
+    def test_p5_mixed_internal_open_edge_identity_matches_source_geometry(self) -> None:
+        fixture = ROOT / "fixtures" / "p7" / "sketch-mixed-internal-open-edge-stable-identity.json"
+        payload = json.loads(fixture.read_text(encoding="utf-8"))
+        geometry_by_id = {
+            item["id"]: item
+            for item in payload["Objects"][0]["Properties"]["Geometry"]
+        }
+
+        result = self.run_recompute("sketch-mixed-internal-open-edge-stable-identity", "p7")
+        segments_by_source_id = {
+            segment["sourceGeometryId"]: segment
+            for segment in result["mesh"]["Sketch"]["edgeSegments"]
+            if "sourceGeometryId" in segment
+        }
+        subshapes_by_source_id = {
+            subshape["sourceGeometryId"]: subshape
+            for subshape in result["subshapes"]["Sketch"].values()
+            if "sourceGeometryId" in subshape
+        }
+        sketch = result["objects"]["Sketch"]
+        named_shape = result["named_shapes"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(sketch["raw_edge_identity"]["byStableSubname"]["g100001"], "Edge5")
+        self.assertEqual(sketch["raw_edge_identity"]["byStableSubname"]["g100005"], "Edge4")
+        self.assertEqual(named_shape["element_map"]["g100001"], "Edge5")
+        self.assertEqual(named_shape["element_map"]["g100005"], "Edge4")
+        for geometry_id, geometry in geometry_by_id.items():
+            self.assert_segment_matches_geometry(segments_by_source_id[geometry_id], geometry)
+            self.assertEqual(subshapes_by_source_id[geometry_id]["stableSubname"], f"g{geometry_id}")
+
     def test_p5_open_wire_reference_shadow_refreshes_geometry_id_update(self) -> None:
         geometry = [
             {"kind": "LineSegment", "id": 100, "start": [-5, 0], "end": [0, 0]},
@@ -3229,6 +3363,108 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             result["objects"]["Sketch"]["raw_edge_identity"]["byStableSubname"],
             {"g101": "Edge1", "g103": "Edge2"},
         )
+
+    def test_p5_interpolated_spline_endpoint_tangents_do_not_explode_curve(self) -> None:
+        points = [
+            [-745.5370278429033, 814.5745110688185],
+            [-974.2193617783748, 127.28250695127144],
+            [-585.8711554431895, -452.7023454750904],
+            [-550.3556104447262, -1182.613842028811],
+        ]
+        geometry_id = 600001
+        result = self.run_payload(
+            {
+                "Objects": [
+                    {
+                        "Name": "Sketch",
+                        "ID": 1783071026137000,
+                        "TypeId": "Sketcher::SketchObject",
+                        "Properties": {
+                            "Constraints": [],
+                            "Geometry": [
+                                {
+                                    "id": geometry_id,
+                                    "kind": "InterpolatedSpline",
+                                    "points": points,
+                                    "startTangent": [-15.785603764019813, -47.44275196281683],
+                                    "endTangent": [2.4299916845203597, -49.94091649552661],
+                                }
+                            ],
+                        },
+                    }
+                ],
+                "recompute": {"objs": ["Sketch"]},
+            }
+        )
+        segment = result["mesh"]["Sketch"]["edgeSegments"][0]
+        segment_points = segment["points"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(segment["sourceGeometryId"], geometry_id)
+        self.assertEqual(segment["sourceGeometryKind"], "InterpolatedSpline")
+        for point in points:
+            self.assertLess(self.point_polyline_distance(point, segment_points), 5.0)
+
+        input_min_x = min(point[0] for point in points)
+        input_max_x = max(point[0] for point in points)
+        input_min_y = min(point[1] for point in points)
+        input_max_y = max(point[1] for point in points)
+        max_chord = max(
+            math.hypot(end[0] - start[0], end[1] - start[1])
+            for start, end in zip(points, points[1:])
+        )
+        output_xs = [point[0] for point in segment_points]
+        output_ys = [point[1] for point in segment_points]
+        self.assertGreaterEqual(min(output_xs), input_min_x - max_chord)
+        self.assertLessEqual(max(output_xs), input_max_x + max_chord)
+        self.assertGreaterEqual(min(output_ys), input_min_y - max_chord)
+        self.assertLessEqual(max(output_ys), input_max_y + max_chord)
+
+    def test_p5_interpolated_spline_matches_frontend_handle_hermite_shape(self) -> None:
+        points = [
+            [-1036.1701435485124, 976.2435095462613],
+            [-1154.0937759400308, 399.4205385562723],
+            [-646.1326042550277, -156.63218965458782],
+            [-667.1513707772679, -720.674225046828],
+        ]
+        start_tangent = [-10.014685749444425, -48.98679484656941]
+        end_tangent = [-1.861934623146567, -49.965319967544815]
+        geometry_id = 600001
+
+        result = self.run_payload(
+            {
+                "Objects": [
+                    {
+                        "Name": "Sketch",
+                        "ID": 1783071958875000,
+                        "TypeId": "Sketcher::SketchObject",
+                        "Properties": {
+                            "Constraints": [],
+                            "Geometry": [
+                                {
+                                    "id": geometry_id,
+                                    "kind": "InterpolatedSpline",
+                                    "points": points,
+                                    "startTangent": start_tangent,
+                                    "endTangent": end_tangent,
+                                }
+                            ],
+                        },
+                    }
+                ],
+                "recompute": {"objs": ["Sketch"]},
+            }
+        )
+
+        segment = result["mesh"]["Sketch"]["edgeSegments"][0]
+        expected = self.frontend_hermite_spline_samples(points, start_tangent, end_tangent)
+        max_output_to_frontend = self.max_polyline_distance(segment["points"], expected)
+        max_frontend_to_output = self.max_polyline_distance(expected, segment["points"])
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(segment["sourceGeometryId"], geometry_id)
+        self.assertLess(max_output_to_frontend, 3.0)
+        self.assertLess(max_frontend_to_output, 3.0)
 
     def test_p5_sketch_rejects_duplicate_geometry_id(self) -> None:
         geometry = [
