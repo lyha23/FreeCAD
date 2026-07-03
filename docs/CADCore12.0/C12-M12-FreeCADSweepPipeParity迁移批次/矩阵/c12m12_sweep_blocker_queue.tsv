@@ -1,7 +1,7 @@
 id	blocker	owner_step	status	close_condition	next_action
 C12M12-BLOCKER-001	Package entry and matrix not validated	入口	closed	Queue and TSV checks passed; entry file renamed to implemented	Proceed to S0 live baseline and dirty boundary freeze.
 C12M12-BLOCKER-101	Live baseline and dirty boundary not frozen	S0	closed	HEAD=2677f140ed, baseline status clean, dirty boundary and existing sweep/pipe fixture/test surface recorded	Proceed to S1 FreeCAD source authority review.
-C12M12-BLOCKER-201	FreeCAD source authority incomplete	S1	open	FeaturePipe, TopoShapeExpansion, PartFeatures and PipeShellPy source rows reviewed	Complete source matrix.
+C12M12-BLOCKER-201	FreeCAD source authority incomplete	S1	closed	FeaturePipe, TopoShapeExpansion, PartFeatures and PipeShellPy source rows reviewed	S1 reviewed source rows C12M12-SRC-001..005; proceed to S2 cad-core drift audit.
 C12M12-BLOCKER-301	cad-core drift not classified	S2	open	Each drift row has owner step, required evidence and close condition	Complete drift audit before oracle work.
 C12M12-BLOCKER-401	User failure oracle not minimized	S3	open	User input/output converted to source-backed fixture or explicitly blocked	Build native/current red loop.
 C12M12-BLOCKER-402	Native expected unavailable for critical row	S3	open	FreeCADCmd expected exists or row is classified blocked_by_missing_native_oracle	Do not enter S4/S5 for blocked rows.

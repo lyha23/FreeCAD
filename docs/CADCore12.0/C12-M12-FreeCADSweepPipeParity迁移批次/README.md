@@ -11,7 +11,8 @@ C12-M12 是用户点名打开的 FreeCAD Sweep / Pipe 迁移方案包，目标�
 - 创建时 `git status --short --untracked-files=all` 对 `cad-core` 与 `docs/CADCore12.0` 无既有改动输出；本包只新增 `docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/` 并更新 `docs/CADCore12.0/README.md`。
 - C12-M12 是用户单独要求的 implementation migration 方案包；它不继承 C12-M10 CopyOnChange pending 语义，也不重开 C12-M11 closed internal edge backend contract。
 - 工作步骤总入口已关闭：`工作步骤细分/7-3-20-17-【已实现】C12-M12工作步骤总入口.md` 已确认包结构、S0-S6 队列顺序和 TSV 字段数。
-- S0 live 基线已关闭：`工作步骤细分/7-3-20-18-【已实现】C12-M12-S0-live基线与dirty边界冻结.md` 记录 `HEAD=2677f140ed`（`2677f140ed 文档：关闭 C12-M12 工作步骤总入口`）、baseline status clean、dirty boundary、现有 sweep/pipe fixture/test surface 与本轮允许写入范围；后续队列从 S1 `FreeCAD source authority 复核` 继续。
+- S0 live 基线已关闭：`工作步骤细分/7-3-20-18-【已实现】C12-M12-S0-live基线与dirty边界冻结.md` 记录 `HEAD=2677f140ed`（`2677f140ed 文档：关闭 C12-M12 工作步骤总入口`）、baseline status clean、dirty boundary、现有 sweep/pipe fixture/test surface 与本轮允许写入范围。
+- S1 FreeCAD source authority 已关闭：`工作步骤细分/7-3-20-19-【已实现】C12-M12-S1-FreeCAD-source-authority复核.md` 已复核 `Pipe::execute()`、`Pipe::setupAlgorithm()`、`TopoShape::makeElementPipeShell()`、`Sweep::execute()` 和 `BRepOffsetAPI_MakePipeShellPyImp.cpp` public helper API；后续队列从 S2 `cad-core drift 审计` 继续。
 - S0 dirty boundary：baseline 时 `docs`、`cad-core/src`、`cad-core/tests`、`cad-core/fixtures` 和其它未跟踪文件均无 dirty 输出；本轮只允许写入本包 README、总入口、S0 步骤文件和矩阵状态。
 - S0 现有 sweep/pipe surface：fixtures 命中 `cad-core/fixtures/c3m4`、`c4m1`、`c4m2`、`c5m3`、`c5m10`、`c5m12`、`c51m4`、`c6m1`、`c6m3`、`c6m4`；focused code/test 命中 `cad-core/src/part/part_sweep.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part_design/feature_pipe.cpp`、`cad-core/src/runtime/feature_registry.cpp`、`cad-core/src/runtime/capability_contract.cpp`、`cad-core/tests/test_p7_features.py`、`cad-core/tests/test_p8_features.py`、`cad-core/tests/test_adapters.py`、`cad-core/tests/test_expected_fixtures.py` 与 `cad-core/tests/c6m3_pipe_interpolation_law_probe.cpp`。
 
@@ -33,6 +34,8 @@ C12-M12 是用户点名打开的 FreeCAD Sweep / Pipe 迁移方案包，目标�
 | Part Sweep wrapper | `src/Mod/Part/App/PartFeatures.cpp::Sweep::execute()` | Workbench `Part::Sweep` 的 section list、solid、frenet、transition 和 `makeElementPipeShell` 调用。 |
 | TopoShape PipeShell | `src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementPipeShell()` | `BRepOffsetAPI_MakePipeShell` 调用顺序、`Add` / `SetLaw` / `Build` / `MakeSolid` / history 生成。 |
 | Python helper contract | `src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp` | advanced helper 的 public API：frenet、trihedron、binormal、spine support、auxiliary spine、tolerance、transition、simulate。 |
+
+S1 复核结论：FreeCAD source-backed 范围只覆盖上述五类权威；`cad-core/src/part_design/feature_pipe.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part/part_sweep.cpp` 与 focused tests 的当前实现差异留给 S2/S3，不在 S1 裁决。
 
 ## cad-core 落点
 
