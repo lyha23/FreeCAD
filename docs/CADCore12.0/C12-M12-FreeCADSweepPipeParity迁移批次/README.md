@@ -14,6 +14,7 @@ C12-M12 是用户点名打开的 FreeCAD Sweep / Pipe 迁移方案包，目标�
 - S0 live 基线已关闭：`工作步骤细分/7-3-20-18-【已实现】C12-M12-S0-live基线与dirty边界冻结.md` 记录 `HEAD=2677f140ed`（`2677f140ed 文档：关闭 C12-M12 工作步骤总入口`）、baseline status clean、dirty boundary、现有 sweep/pipe fixture/test surface 与本轮允许写入范围。
 - S1 FreeCAD source authority 已关闭：`工作步骤细分/7-3-20-19-【已实现】C12-M12-S1-FreeCAD-source-authority复核.md` 已复核 `Pipe::execute()`、`Pipe::setupAlgorithm()`、`TopoShape::makeElementPipeShell()`、`Sweep::execute()` 和 `BRepOffsetAPI_MakePipeShellPyImp.cpp` public helper API。
 - S2 cad-core drift 审计已关闭：`工作步骤细分/7-3-20-20-【已实现】C12-M12-S2-cad-core-drift审计.md` 已对照 S1 审计 `feature_pipe.cpp`、`topo_shape_expansion.cpp`、`part_sweep.cpp` 与 P7/P8 focused tests；DRIFT-001..008 已归类为 `current_covered`、`needs_oracle`、`implementation_candidate_after_s3` 或 `product_contract_or_non_goal`，C12M12-BLOCKER-301 已关闭，后续队列从 S3 `oracle fixture 与红灯闭环` 继续。
+- S3 oracle fixture 与红灯闭环已关闭：`工作步骤细分/7-3-20-21-【已实现】C12-M12-S3-oracle-fixture与红灯闭环.md` 未找到仓库内已记录的用户失败 input/output，ORACLE-001 已标为 `blocked_missing_user_input` / `waiting_user_repro`；代表性 FreeCAD expected 已复用 `c51m4/partdesign-pipe-fixed-round-body`，current `cad-core` 稳定红灯为 Body volume `0.72` expected vs `0.336` current、topology edges `20` expected vs `28` current、vertices `12` expected vs `15` current。S4 仅授权 PartDesign Pipe fixed/round selected-spine cap/sewing mismatch；P8 Part Sweep wrapper / advanced helper controls 已通过，S5 未授权。
 - S0 dirty boundary：baseline 时 `docs`、`cad-core/src`、`cad-core/tests`、`cad-core/fixtures` 和其它未跟踪文件均无 dirty 输出；本轮只允许写入本包 README、总入口、S0 步骤文件和矩阵状态。
 - S0 现有 sweep/pipe surface：fixtures 命中 `cad-core/fixtures/c3m4`、`c4m1`、`c4m2`、`c5m3`、`c5m10`、`c5m12`、`c51m4`、`c6m1`、`c6m3`、`c6m4`；focused code/test 命中 `cad-core/src/part/part_sweep.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part_design/feature_pipe.cpp`、`cad-core/src/runtime/feature_registry.cpp`、`cad-core/src/runtime/capability_contract.cpp`、`cad-core/tests/test_p7_features.py`、`cad-core/tests/test_p8_features.py`、`cad-core/tests/test_adapters.py`、`cad-core/tests/test_expected_fixtures.py` 与 `cad-core/tests/c6m3_pipe_interpolation_law_probe.cpp`。
 
@@ -38,7 +39,7 @@ C12-M12 是用户点名打开的 FreeCAD Sweep / Pipe 迁移方案包，目标�
 
 S1 复核结论：FreeCAD source-backed 范围只覆盖上述五类权威；`cad-core/src/part_design/feature_pipe.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part/part_sweep.cpp` 与 focused tests 的当前实现差异留给 S2/S3，不在 S1 裁决。
 
-S2 审计结论：当前 `cad-core` 已有 Standard/Frenet、Auxiliary/Binormal、cap/sewing、Part Sweep wrapper 与 advanced helper 的若干 source-backed 控制用例；profile relocation、invalid planar rebuild、mesh-only repair 与 Part Sweep / PartDesign 混线不能作为 FreeCAD parity 结论。S3 必须先最小化用户失败样例并补 native/current 证据，再决定 S4/S5 是否改代码。
+S2 审计结论：当前 `cad-core` 已有 Standard/Frenet、Auxiliary/Binormal、cap/sewing、Part Sweep wrapper 与 advanced helper 的若干 source-backed 控制用例；profile relocation、invalid planar rebuild、mesh-only repair 与 Part Sweep / PartDesign 混线不能作为 FreeCAD parity 结论。S3 已证明一个代表性 PartDesign Pipe native/current mismatch，S4 只可围绕该红灯展开；缺失的用户失败样例继续等待用户提供 input/output，不得编造 fixture。
 
 ## cad-core 落点
 

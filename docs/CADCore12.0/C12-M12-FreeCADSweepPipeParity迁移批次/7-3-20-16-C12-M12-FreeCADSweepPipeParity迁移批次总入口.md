@@ -24,7 +24,7 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 2. `7-3-20-18-【已实现】C12-M12-S0-live基线与dirty边界冻结.md`
 3. `7-3-20-19-【已实现】C12-M12-S1-FreeCAD-source-authority复核.md`
 4. `7-3-20-20-【已实现】C12-M12-S2-cad-core-drift审计.md`
-5. `7-3-20-21-C12-M12-S3-oracle-fixture与红灯闭环.md`
+5. `7-3-20-21-【已实现】C12-M12-S3-oracle-fixture与红灯闭环.md`
 6. `7-3-20-22-C12-M12-S4-PartDesignPipe主路径迁移.md`
 7. `7-3-20-23-C12-M12-S5-PartSweep-wrapper与response收口.md`
 8. `7-3-20-24-C12-M12-S6-发布闸门.md`
@@ -35,11 +35,12 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 - S0 `live 基线与 dirty 边界冻结` 已关闭：当前 live baseline 为 `HEAD=2677f140ed`，baseline status clean，已记录 dirty boundary、现有 sweep/pipe fixture/test surface 和本轮允许写入范围。
 - S1 `FreeCAD source authority 复核` 已关闭：source matrix 中 C12M12-SRC-001..005 已标记 reviewed，C12M12-BLOCKER-201 已关闭，VAL-101 已记录通过。
 - S2 `cad-core drift 审计` 已关闭：source matrix 中 C12M12-SRC-006..010 已标记 reviewed，DRIFT-001..008 已写入 status、owner_step、required_evidence 和 close_condition；C12M12-BLOCKER-301 已关闭，VAL-201 已记录通过，后续队列从 S3 `oracle fixture 与红灯闭环` 继续。
+- S3 `oracle fixture 与红灯闭环` 已关闭：ORACLE-001 未找到用户失败 input/output，已保留为 `blocked_missing_user_input`；ORACLE-003 复用 checked-in FreeCADCmd expected `c51m4/partdesign-pipe-fixed-round-body` 形成 current red evidence，expected Body volume `0.72` / edges `20` / vertices `12`，current Body volume `0.336` / edges `28` / vertices `15`。C12M12-BLOCKER-501 已改为 `authorized`，但只授权 S4 PartDesign Pipe fixed/round selected-spine cap/sewing mismatch；C12M12-BLOCKER-601 仍 open，S5 未授权。
 
 ## 执行规则
 
 - 每次只处理队列中的第一个未实现步骤，完成后刷新队列。
-- 如果 S1/S2/S3 任一闸门无法证明 source-backed current mismatch，停止在 blocker，不进入 S4/S5 代码实现。
+- 如果 S1/S2/S3 任一闸门无法证明 source-backed current mismatch，停止在 blocker，不进入 S4/S5 代码实现；当前仅 S4 由 ORACLE-003 授权，S5 仍未授权。
 - S4 只允许修改 PartDesign Pipe 主路径所需最小文件。
 - S5 只允许修改 Part Sweep wrapper / response / diagnostics 所需最小文件。
 - S6 必须同时更新 README、矩阵、focused tests 和 release wording。
