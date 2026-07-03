@@ -23,7 +23,7 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 1. `7-3-20-17-【已实现】C12-M12工作步骤总入口.md`
 2. `7-3-20-18-【已实现】C12-M12-S0-live基线与dirty边界冻结.md`
 3. `7-3-20-19-【已实现】C12-M12-S1-FreeCAD-source-authority复核.md`
-4. `7-3-20-20-C12-M12-S2-cad-core-drift审计.md`
+4. `7-3-20-20-【已实现】C12-M12-S2-cad-core-drift审计.md`
 5. `7-3-20-21-C12-M12-S3-oracle-fixture与红灯闭环.md`
 6. `7-3-20-22-C12-M12-S4-PartDesignPipe主路径迁移.md`
 7. `7-3-20-23-C12-M12-S5-PartSweep-wrapper与response收口.md`
@@ -33,7 +33,8 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 
 - 工作步骤总入口已关闭，已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数。
 - S0 `live 基线与 dirty 边界冻结` 已关闭：当前 live baseline 为 `HEAD=2677f140ed`，baseline status clean，已记录 dirty boundary、现有 sweep/pipe fixture/test surface 和本轮允许写入范围。
-- S1 `FreeCAD source authority 复核` 已关闭：source matrix 中 C12M12-SRC-001..005 已标记 reviewed，C12M12-BLOCKER-201 已关闭，VAL-101 已记录通过；后续队列从 S2 `cad-core drift 审计` 继续。
+- S1 `FreeCAD source authority 复核` 已关闭：source matrix 中 C12M12-SRC-001..005 已标记 reviewed，C12M12-BLOCKER-201 已关闭，VAL-101 已记录通过。
+- S2 `cad-core drift 审计` 已关闭：source matrix 中 C12M12-SRC-006..010 已标记 reviewed，DRIFT-001..008 已写入 status、owner_step、required_evidence 和 close_condition；C12M12-BLOCKER-301 已关闭，VAL-201 已记录通过，后续队列从 S3 `oracle fixture 与红灯闭环` 继续。
 
 ## 执行规则
 
