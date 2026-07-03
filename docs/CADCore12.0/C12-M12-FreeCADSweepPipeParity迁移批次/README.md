@@ -10,7 +10,10 @@ C12-M12 是用户点名打开的 FreeCAD Sweep / Pipe 迁移方案包，目标�
 - 创建基线：`HEAD=3c5ccff1fe`（`3c5ccff1fe feat: 补齐 PartDesign 开放轮廓与 Thicken 语义`）。
 - 创建时 `git status --short --untracked-files=all` 对 `cad-core` 与 `docs/CADCore12.0` 无既有改动输出；本包只新增 `docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/` 并更新 `docs/CADCore12.0/README.md`。
 - C12-M12 是用户单独要求的 implementation migration 方案包；它不继承 C12-M10 CopyOnChange pending 语义，也不重开 C12-M11 closed internal edge backend contract。
-- 工作步骤总入口已关闭：`工作步骤细分/7-3-20-17-【已实现】C12-M12工作步骤总入口.md` 已确认包结构、S0-S6 队列顺序和 TSV 字段数；后续队列从 S0 `live 基线与 dirty 边界冻结` 继续。
+- 工作步骤总入口已关闭：`工作步骤细分/7-3-20-17-【已实现】C12-M12工作步骤总入口.md` 已确认包结构、S0-S6 队列顺序和 TSV 字段数。
+- S0 live 基线已关闭：`工作步骤细分/7-3-20-18-【已实现】C12-M12-S0-live基线与dirty边界冻结.md` 记录 `HEAD=2677f140ed`（`2677f140ed 文档：关闭 C12-M12 工作步骤总入口`）、baseline status clean、dirty boundary、现有 sweep/pipe fixture/test surface 与本轮允许写入范围；后续队列从 S1 `FreeCAD source authority 复核` 继续。
+- S0 dirty boundary：baseline 时 `docs`、`cad-core/src`、`cad-core/tests`、`cad-core/fixtures` 和其它未跟踪文件均无 dirty 输出；本轮只允许写入本包 README、总入口、S0 步骤文件和矩阵状态。
+- S0 现有 sweep/pipe surface：fixtures 命中 `cad-core/fixtures/c3m4`、`c4m1`、`c4m2`、`c5m3`、`c5m10`、`c5m12`、`c51m4`、`c6m1`、`c6m3`、`c6m4`；focused code/test 命中 `cad-core/src/part/part_sweep.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part_design/feature_pipe.cpp`、`cad-core/src/runtime/feature_registry.cpp`、`cad-core/src/runtime/capability_contract.cpp`、`cad-core/tests/test_p7_features.py`、`cad-core/tests/test_p8_features.py`、`cad-core/tests/test_adapters.py`、`cad-core/tests/test_expected_fixtures.py` 与 `cad-core/tests/c6m3_pipe_interpolation_law_probe.cpp`。
 
 ## 问题定义
 

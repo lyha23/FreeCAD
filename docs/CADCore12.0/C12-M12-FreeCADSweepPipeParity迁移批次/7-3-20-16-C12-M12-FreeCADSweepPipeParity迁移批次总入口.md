@@ -21,7 +21,7 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 ## 队列顺序
 
 1. `7-3-20-17-【已实现】C12-M12工作步骤总入口.md`
-2. `7-3-20-18-C12-M12-S0-live基线与dirty边界冻结.md`
+2. `7-3-20-18-【已实现】C12-M12-S0-live基线与dirty边界冻结.md`
 3. `7-3-20-19-C12-M12-S1-FreeCAD-source-authority复核.md`
 4. `7-3-20-20-C12-M12-S2-cad-core-drift审计.md`
 5. `7-3-20-21-C12-M12-S3-oracle-fixture与红灯闭环.md`
@@ -32,7 +32,8 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 ## 当前状态
 
 - 工作步骤总入口已关闭，已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数。
-- 后续队列从 S0 `live 基线与 dirty 边界冻结` 继续；本入口不执行 S0-S6 实质裁决。
+- S0 `live 基线与 dirty 边界冻结` 已关闭：当前 live baseline 为 `HEAD=2677f140ed`，baseline status clean，已记录 dirty boundary、现有 sweep/pipe fixture/test surface 和本轮允许写入范围。
+- 后续队列从 S1 `FreeCAD source authority 复核` 继续；本入口不执行 S1-S6 实质裁决。
 
 ## 执行规则
 
