@@ -36,6 +36,8 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 用户随后要求为首选的 `C12-M11-StableGeometryIdMappedNameLedger设计批次` 出方案到 `docs/CADCore12.0`。C12-M15 是 Sketch stable geometry id / mapped-name ledger 设计批次：它不重开 C12-M11 closed internal profile backend response，也不继承 C12-M14 helper lifecycle，而是专门把 FreeCAD `SketchObject::updateGeoHistory()` / `generateId()` / `convertSubName()` / `getEdge()` 的 geometry id 与 mapped-name 语义，映射成 cad-core request-local `geometryId -> g<ID> -> current EdgeN/InternalEdgeN` 账本。S2 已发布 `SketchGeometryIdentityLedger` 产品契约：`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 共享同一账本来源，`stable` / `index_fallback` / `deleted_stable_subname` / `geometry_kind_changed` / `split_requires_reselect` 均有明确产品语义；前端只消费后端字段，不靠 prefix guessing 或 mesh 顺序发明长期 identity。S3 已完成 current coverage 与最小实现边界裁决：001..008、011、012 为 `current_supported`，009 split fragment durable identity 与 010 frontend consumer boundary 为 `design_only`，当前 coverage 足够 no-code 收口，不授权 C++ implementation package。S4 已发布 final status `design_published_no_code_current_sufficient`；C12-M15 队列关闭后只输出表头，blocker queue 无悬空 open row。
 
+用户随后明确指出需要写代码实现 split fragment 缺口，并批准打开 C12-M16。C12-M16 是 Sketch split fragment geometry identity ledger 实现批次：它只重开 C12-M15 `CONTRACT-009 split_fragment_boundary`，把 source one-to-many current fragments 从 `design_only` 推进为 request-local C++ implementation。目标是实现 `g<ID>:splitN` fragment ledger，并贯通 `mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 和 reference resolution；不重做普通 `g<ID>` raw edge identity，不处理 my-chili3d frontend sync，不处理 open wire mesh 产品契约，也不引入 persistent backend sketch session。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -98,6 +100,10 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M15 方案：`C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/7-4-15-44-C12-M15-SketchStableGeometryIdMappedNameLedger设计批次方案.md`
 - C12-M15 工作步骤：`C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/工作步骤细分/`
 - C12-M15 矩阵：`C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/矩阵/`
+- C12-M16 总入口：`C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/7-4-19-52-C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次总入口.md`
+- C12-M16 方案：`C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/7-4-19-52-C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次方案.md`
+- C12-M16 工作步骤：`C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/工作步骤细分/`
+- C12-M16 矩阵：`C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/矩阵/`
 
 ## 当前基线
 
@@ -175,6 +181,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M13 已创建为 FreeCAD Sweep / Pipe 剩余语义迁移批次，且 S0-S6 已关闭：`pwd=/Users/li/Chili3DProject/FreeCAD`，S0 `HEAD=592ee9f5b2`（`592ee9f5b2 feat: 支持 PartDesign Pipe 多线截面缝合`），S6 `HEAD=5be5b2f486`（`5be5b2f486 文档：关闭 C12-M13 S5 helper blocker`）。S3 关闭 unequal-inner-wire diagnostic；S4 关闭 AdditivePipe / SubtractivePipe feature `Shape` lifecycle mismatch，AddSubShape 仍作为 pre-boolean tool cache 被 Body replay 消费。S5 关闭为 `blocked_partial_helper_oracle`：Part Sweep helper 只覆盖 collected subset，`remove/firstShape/lastShape/generated/simulate` 等待 dedicated native helper probe 或 approved product-contract artifact；ORACLE-001 继续 `waiting_user_repro_non_blocking`。S6 focused release gate 通过并发布 `partial_implementation_with_named_followups`。
 - C12-M14 已完成 Part Sweep helper mutable lifecycle 证据解锁批次。创建基线为 `HEAD=8ef7a10b6a`（`8ef7a10b6a 文档：关闭 C12-M13 S6 发布闸门`），S5 执行基线为 `HEAD=6be8764a2d`（`6be8764a2d 实现 C12-M14 S4 helper 生命周期契约`），起点 worktree clean。本包只处理 C12-M13 `ORACLE-301` 留下的 helper uncollected methods：`remove/firstShape/lastShape/generated/simulate`；S0-S3 做 live/source/native probe/product-contract/current mismatch gate。S4 已实现 opt-in `HelperLifecycle` request DTO 与 per-operation response，新增 `cad-core/fixtures/c12m14/part-sweep-helper-mutable-lifecycle.json`、expected 和 focused P8 test；S5 已补 capability / adapter public wording 并通过 release checks。最终状态为 `implementation_unlocked_helper_lifecycle` + `product_contract_published_helper_lifecycle`：`ORACLE-101..104` 是 source-backed current-supported，`ORACLE-105` 仍为 request-local product contract only，response 带 `native_parity=false` 与 `contract_provenance=cad_core_product_contract_non_parity`；C12-M14 队列关闭后应只输出表头。
 - C12-M15 已创建并关闭为 Sketch stable geometry id / mapped-name ledger 设计批次。创建基线为 `HEAD=dff911d299`（`dff911d299 实现 SubShapeBinder CopyOnChange request-local 支持`），创建前 worktree clean；S0 live 基线已关闭于 `HEAD=b3d2df945a`（`b3d2df945a docs: 关闭 C12-M15 工作步骤总入口`），起点 worktree clean。C12-M11 与 C12-M14 队列均为空，live capability 递归检查确认所有 `remaining_gaps=[]` 且 `known_gaps` 为空数组 / 空对象；本包承接 C12-M11 的 stable geometry id ledger follow-up，不重开 C12-M11 closed internal profile response，不继承 C12-M14 helper lifecycle，也不是 capability remaining gap。S1 source/current 复核已关闭于 `HEAD=5a5464fb96` 起点：FreeCAD authority 确认为 `GeometryFacade` extension id + mapped `g<ID>` / `e<ID>`，cad-core current landing 已定位到 parser、raw ledger、response publisher 与 reference resolution consumer。S2 ledger interface 产品契约已关闭于 `HEAD=499616ab4c` 起点：`SketchGeometryIdentityLedger` 定义为 request-local ledger，输入当前请求 geometry/source edge/internal alias/old reference shadow，输出 `byIndexed`、`byStableSubname`、stable/fallback/diagnostic 状态和 response fields；`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 共享同一账本来源。S3 current gap 与最小实现边界裁决已关闭于 `HEAD=86749f91cb` 起点：001..008、011、012 为 `current_supported`，009 split fragment durable identity 与 010 frontend consumer boundary 为 `design_only`；当前 coverage 足够 no-code 收口，不授权 C++ implementation package。S4 设计发布闸门已关闭于 `HEAD=c4c0d19fed` 起点，final status 为 `design_published_no_code_current_sufficient`，C12-M15 队列关闭后只输出表头，blocker queue 无悬空 open row。
+- C12-M16 已创建为 Sketch split fragment geometry identity ledger 实现批次。创建基线为 `HEAD=decfc267a2`（`decfc267a2 docs: 关闭 C12-M15 S4 设计发布闸门`），创建前 worktree clean；本包是用户明确授权的 C++ implementation lane，只重开 C12-M15 `CONTRACT-009 split_fragment_boundary`。目标是实现 source one-to-many fragment ledger：把 split history / internal alias / current fragment edge 映射为 `g<ID>:splitN`，并让 response 和 reference resolution 共享同一账本。C12-M16 初始队列为入口、S0 live 基线与 C12-M15 继承冻结、S1 FreeCAD split history 与 current reselect 复核、S2 red fixture 与 focused test、S3 fragment ledger C++ 实现、S4 response/reference/adapter 接入验证、S5 实现发布闸门。
 
 ## 重开条件
 
@@ -189,6 +196,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 | Groove UpTo product diagnostic | C12-M7 已关闭为 `product_diagnostic_contract_published`；仅当同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。 |
 | Sketch internal edge response | C12-M11 已关闭为 `contract_current_supported/current_supported`；closed internal profile backend implementation 不重开。后续仅在前端 consumer sync、stable geometry id ledger 设计或 open wire raw `EdgeN` product contract 各自证据成立时另行开包；不得从前端 prefix guessing 或 open wire `mesh=null` 反推 closed `InternalEdgeN` backend 缺口。 |
 | Sketch stable geometry id ledger | C12-M15 已发布 S2 产品契约并在 S3 完成 current coverage 裁决：`geometryId -> g<ID> -> current EdgeN/InternalEdgeN` request-local ledger、fallback 和 diagnostics 当前足够 no-code 收口；不把 `EdgeN` 顺序写成 FreeCAD-grade stable id。`deleted_stable_subname` / needs-reselect 与 `geometry_kind_changed` 当前支持，split fragment durable identity 保留为 design-only 边界，前端 consumer sync 仍是外部包；本包不授权 C++ implementation package。 |
+| Sketch split fragment geometry identity ledger | C12-M16 已作为 implementation lane 打开：只实现 C12-M15 `CONTRACT-009` 的 source one-to-many split fragment ledger。重开条件是 S0-S4 任一步发现 FreeCAD split history / cad-core history bridge 不足、fragment ownership ambiguous 且无法诊断、或 focused red tests 不能落到 request-local C++ seam。 |
 | FreeCAD Sweep / Pipe parity | C12-M12 当前状态为 `partial_implementation_multiwire_pipe_sewing`：已迁移 PartDesign Pipe multi-wire shell lane + shared cap/sewing 子路径，但不能视为完整迁移。C12-M13 S6 已发布 `partial_implementation_with_named_followups`：101/102 current-supported，103 diagnostic closed，201/202 lifecycle closed，301 collected helper subset current-supported；`remove/firstShape/lastShape/generated/simulate` 未采证方法已进入 C12-M14。C12-M14 S5 已发布 opt-in HelperLifecycle mixed closeout：`ORACLE-101..104` 因 stable native evidence + source/current audit mismatch 关闭为 source-backed current-supported；`ORACLE-105` 因 `NCollection_Sequence::ChangeValue` native instability 仅按 CAD Core request-local product contract 关闭，不能称为 FreeCAD native parity。只有同一 FreeCAD / LibPack / OCCT baseline 产出 stable native expected 且不再触发该异常时，才重开 ORACLE-105 native parity。 |
 
 ## 队列检查
@@ -212,6 +220,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M13-FreeCADSweepPipe剩余语义迁移批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -235,6 +244,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M13-FreeCADSweepPipe剩余语义迁移批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```

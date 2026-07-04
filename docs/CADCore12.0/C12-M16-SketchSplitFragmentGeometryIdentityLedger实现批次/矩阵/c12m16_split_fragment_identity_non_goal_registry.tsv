@@ -1,0 +1,8 @@
+id	non_goal	reason	owner_step	status	reopen_condition
+C12M16-NONGOAL-001	Reimplement normal g<ID> raw edge identity	C12-M15 already published current_supported coverage for non-split raw edges	All	active	Reopen only if focused regression proves normal identity broke.
+C12M16-NONGOAL-002	Use mesh/bbox/output order to assign split fragments	Fragment ownership must come from split history / alias ledger, not display geometry ordering	S2/S3/S4	active	Never reopen without explicit user-approved product fallback.
+C12M16-NONGOAL-003	Implement my-chili3d frontend consumer sync	Frontend token persistence belongs to a separate repo/package	All	active	Switch repos and open my-chili3d package if user asks.
+C12M16-NONGOAL-004	Decide open wire mesh product contract	C12-M11 open wire mesh/null decision is separate from split fragment identity	S0/S1	active	Open C12-M11 open wire product package if needed.
+C12M16-NONGOAL-005	Introduce persistent backend sketch session	CAD Core remains stateless and request-local	All	active	Never reopen unless root CAD Core architecture changes.
+C12M16-NONGOAL-006	Implement full Sketcher solver / constraint identity	Solver constraint persistence is outside fragment topology token design	S2/S3	active	Open a solver-facing package if constraints require it.
+C12M16-NONGOAL-007	Replace FaceMaker/WireJoiner state machines with fixture-specific patch	Repo rules require FreeCAD-grade history / ledger path for split semantics	S3	active	Only temporary fallback may be allowed with explicit comments/docs and deletion condition.
