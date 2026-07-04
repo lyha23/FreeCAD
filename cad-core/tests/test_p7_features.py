@@ -2053,30 +2053,36 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("known_gap", expected)
         self.assertEqual(expected["s3_resolution"]["closed_blocker"], "C12M13-BLOCKER-401")
 
-    def test_c12m13_partdesign_pipe_lifecycle_expected_marks_s4_shape_gap(self) -> None:
+    def test_c12m13_partdesign_pipe_lifecycle_matches_native_oracle(self) -> None:
         additive = self.run_recompute("partdesign-pipe-additive-lifecycle", "c12m13")
         additive_expected = self.expected_freecad("c12m13", "partdesign-pipe-additive-lifecycle")
 
-        self.assertIn("known_gap", additive_expected)
+        self.assertNotIn("known_gap", additive_expected)
         self.assertEqual(additive["diagnostics"], [])
         self.assertAlmostEqual(
             additive["objects"]["AdditivePipeNoBase"]["volume"],
             additive_expected["objects"]["AdditivePipeNoBase"]["volume"],
         )
+        self.assertAlmostEqual(additive["objects"]["AdditivePipeFuse"]["volume"], 36.0)
         self.assertAlmostEqual(additive["objects"]["BodyFuse"]["volume"], 36.0)
-        self.assertAlmostEqual(additive_expected["objects"]["AdditivePipeFuse"]["volume"], 36.0)
-        self.assertAlmostEqual(additive["objects"]["AdditivePipeFuse"]["volume"], 1.96)
-        self.assertIn("C12M13-BLOCKER-501", additive_expected["known_gap"]["backendGap"]["ids"])
+        self.assertEqual(
+            additive["objects"]["BodyFuse"]["replayed_additive_features"],
+            ["BasePadFuse", "AdditivePipeFuse"],
+        )
+        self.assertEqual(additive_expected["s4_resolution"]["closed_blocker"], "C12M13-BLOCKER-501")
+        self.assert_object_matches_expected(additive, "c12m13", "partdesign-pipe-additive-lifecycle")
 
         subtractive = self.run_recompute("partdesign-pipe-subtractive-lifecycle", "c12m13")
         subtractive_expected = self.expected_freecad("c12m13", "partdesign-pipe-subtractive-lifecycle")
 
-        self.assertIn("known_gap", subtractive_expected)
+        self.assertNotIn("known_gap", subtractive_expected)
         self.assertEqual(subtractive["diagnostics"], [])
         self.assertAlmostEqual(subtractive["objects"]["Body"]["volume"], 75.0)
         self.assertAlmostEqual(subtractive_expected["objects"]["SubtractivePipe"]["volume"], 75.0)
-        self.assertAlmostEqual(subtractive["objects"]["SubtractivePipe"]["volume"], 5.0)
-        self.assertIn("C12M13-BLOCKER-501", subtractive_expected["known_gap"]["backendGap"]["ids"])
+        self.assertAlmostEqual(subtractive["objects"]["SubtractivePipe"]["volume"], 75.0)
+        self.assertEqual(subtractive["objects"]["Body"]["replayed_subtractive_features"], ["SubtractivePipe"])
+        self.assertEqual(subtractive_expected["s4_resolution"]["closed_blocker"], "C12M13-BLOCKER-501")
+        self.assert_object_matches_expected(subtractive, "c12m13", "partdesign-pipe-subtractive-lifecycle")
 
     def test_c5m3_partdesign_pipe_transition_and_frenet_match_native_oracle(self) -> None:
         result = self.run_recompute("partdesign-pipe-transition-variants", "c5m3")

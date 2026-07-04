@@ -23,7 +23,7 @@
 3. `7-4-10-38-【已实现】C12-M13-S1-source与current-landing批量复核.md`
 4. `7-4-10-39-【已实现】C12-M13-S2-oracle批量采集与用户复现分流.md`
 5. `7-4-10-40-【已实现】C12-M13-S3-multisection-vertex细节迁移.md`
-6. `7-4-10-41-C12-M13-S4-Boolean-AddSubShape-rawShape生命周期迁移.md`
+6. `7-4-10-41-【已实现】C12-M13-S4-Boolean-AddSubShape-rawShape生命周期迁移.md`
 7. `7-4-10-42-C12-M13-S5-PartSweep-mutable-helper生命周期迁移.md`
 8. `7-4-10-43-C12-M13-S6-集成回归与发布闸门.md`
 
@@ -34,6 +34,7 @@
 - S1 已关闭：source/current landing 已复核，`C12M13-BLOCKER-201` 已关闭；下一步队列应从 S2 `oracle 批量采集与用户复现分流` 继续。
 - S2 已关闭：`c12m13` expected / focused tests 已落地；S3 只处理 diagnostic mismatch，S4 处理 AddSubShape/rawShape/Boolean lifecycle red evidence，S5 对未采证 helper methods 保持 blocked。
 - S3 已关闭：unequal-inner-wire diagnostic 已按 FreeCAD `Pipe::execute()` catch-all fatal 行为 red-to-green，`ORACLE-103` expected 不再保留 `known_gap`；下一步队列应从 S4 `Boolean / AddSubShape / rawShape 生命周期迁移` 继续。
+- S4 已关闭：PartDesign Pipe AddSubShape 保持 pre-boolean tool cache，base Fuse/Cut 后的 feature `Shape` / mesh / subshapes / named shape 与 FreeCAD expected 对齐，Body replay 仍消费 AddSubShape add/sub slots；下一步队列应从 S5 `Part Sweep mutable helper 生命周期迁移` 继续。
 - C12-M12 final status 为 `partial_implementation_multiwire_pipe_sewing`，不是完整 Sweep / Pipe 迁移完成。
 - ORACLE-001 当前仍是 `waiting_user_repro`；没有用户 request/result 时不得编造 fixture，但也不阻塞本包其它 source-backed 剩余项。
 

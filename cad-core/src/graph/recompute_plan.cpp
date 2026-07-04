@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <map>
+#include <optional>
 #include <sstream>
 #include <string>
 
@@ -20,6 +21,52 @@ std::map<std::string, const app::DocumentObject*> buildDocumentObjectMap(const a
         objects[object.name] = &object;
     }
     return objects;
+}
+
+bool isPartDesignPipe(const app::DocumentObject& object)
+{
+    return object.typeId == "PartDesign::AdditivePipe" || object.typeId == "PartDesign::SubtractivePipe";
+}
+
+bool isPartDesignBodyFeature(const app::DocumentObject& object)
+{
+    return object.typeId.rfind("PartDesign::", 0U) == 0U && object.typeId != "PartDesign::Body";
+}
+
+std::optional<std::string> previousPartDesignBodyFeature(const std::string& name,
+                                                         const app::Document& document)
+{
+    const auto parentIt = document.parentGroupByObject.find(name);
+    if (parentIt == document.parentGroupByObject.end()) {
+        return std::nullopt;
+    }
+    const auto bodyIt = document.indexByName.find(parentIt->second);
+    if (bodyIt == document.indexByName.end()) {
+        return std::nullopt;
+    }
+    const app::DocumentObject& body = document.objects.at(bodyIt->second);
+    if (body.typeId != "PartDesign::Body") {
+        return std::nullopt;
+    }
+    const std::vector<app::Link> groupLinks = app::readLinks(body, "Group");
+    const auto groupIt = std::find_if(groupLinks.begin(), groupLinks.end(), [&](const app::Link& link) {
+        return link.object == name;
+    });
+    if (groupIt == groupLinks.end() || groupIt == groupLinks.begin()) {
+        return std::nullopt;
+    }
+    for (auto it = groupIt; it != groupLinks.begin();) {
+        --it;
+        const auto objectIt = document.indexByName.find(it->object);
+        if (objectIt == document.indexByName.end()) {
+            continue;
+        }
+        const app::DocumentObject& candidate = document.objects.at(objectIt->second);
+        if (isPartDesignBodyFeature(candidate)) {
+            return candidate.name;
+        }
+    }
+    return std::nullopt;
 }
 
 void visitObject(const std::string& name,
@@ -89,6 +136,19 @@ void visitObject(const std::string& name,
         }
         plan.dependencies[name].push_back(link.object);
         visitObject(link.object, document, lifecycleView, plan, diagnostics, visiting, visited);
+    }
+
+    if (isPartDesignPipe(object)) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+        // ::Pipe::execute(), "getBaseTopoShape()" supplies the same-Body base before
+        // "Part::OpCodes::Fuse/Cut"; cad-core's stateless graph must therefore execute the
+        // previous Body.Group solid feature before publishing the Pipe feature Shape.
+        if (const auto previousFeature = previousPartDesignBodyFeature(name, document);
+            previousFeature && seenDependencies.count(*previousFeature) == 0U) {
+            seenDependencies.insert(*previousFeature);
+            plan.dependencies[name].push_back(*previousFeature);
+            visitObject(*previousFeature, document, lifecycleView, plan, diagnostics, visiting, visited);
+        }
     }
 
     visiting.pop_back();

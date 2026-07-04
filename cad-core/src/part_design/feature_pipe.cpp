@@ -1,8 +1,10 @@
 #include "cad_core/part_design/feature_pipe.h"
 
 #include "cad_core/app/property.h"
+#include "cad_core/part_design/body_topo_shape.h"
 #include "cad_core/part/property_topo_shape.h"
 #include "cad_core/part/shape_exporter.h"
+#include "cad_core/part/topo_shape.h"
 #include "cad_core/part/topo_shape_expansion.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/feature_executor.h"
@@ -53,6 +55,14 @@ struct PipeInterpolationSamplesResolution {
     std::string message;
 };
 
+struct PipeBodyPrefix {
+    const app::DocumentObject* body = nullptr;
+    TopoDS_Shape shape;
+    std::optional<part::NamedShape> namedShape;
+};
+
+int solidCount(const TopoDS_Shape& shape);
+
 void addPipeDiagnostic(const app::DocumentObject& object,
                        runtime::ComputeContext& context,
                        const std::string& code,
@@ -79,6 +89,13 @@ void addHistoryStatus(part::NamedShape& namedShape, const std::string& status)
     if (std::find(namedShape.elementHistoryStatus.begin(), namedShape.elementHistoryStatus.end(), status)
         == namedShape.elementHistoryStatus.end()) {
         namedShape.elementHistoryStatus.push_back(status);
+    }
+}
+
+void addHistoryStatuses(part::NamedShape& target, const part::NamedShape& source)
+{
+    for (const std::string& status : source.elementHistoryStatus) {
+        addHistoryStatus(target, status);
     }
 }
 
@@ -228,6 +245,62 @@ const app::DocumentObject* owningBody(const app::DocumentObject& object,
     return bodyIt->second;
 }
 
+std::optional<std::vector<std::string>> owningBodyGroupNames(const app::DocumentObject& object,
+                                                            const runtime::ComputeContext& context)
+{
+    const app::DocumentObject* body = owningBody(object, context);
+    if (body == nullptr) {
+        return std::nullopt;
+    }
+    const std::vector<app::Link> groupLinks = app::readLinks(*body, "Group");
+    if (groupLinks.empty()) {
+        return std::nullopt;
+    }
+    std::vector<std::string> names;
+    for (const app::Link& link : groupLinks) {
+        names.push_back(link.object);
+    }
+    return names;
+}
+
+std::optional<PipeBodyPrefix> previousBodyPrefix(const app::DocumentObject& object,
+                                                 runtime::ComputeContext& context)
+{
+    const app::DocumentObject* body = owningBody(object, context);
+    const auto groupNames = owningBodyGroupNames(object, context);
+    if (body == nullptr || !groupNames) {
+        return std::nullopt;
+    }
+    const auto featureIt = std::find(groupNames->begin(), groupNames->end(), object.name);
+    if (featureIt == groupNames->end() || featureIt == groupNames->begin()) {
+        return std::nullopt;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::execute(), calls "getBaseTopoShape()" before "makeElementBoolean" so the feature's
+    // own Shape can be the Fuse/Cut result while AddSubShape still keeps the pre-boolean tool.
+    const BodyTopoShapeOptions options {
+        false,
+        false,
+        false,
+    };
+    for (auto it = featureIt; it != groupNames->begin();) {
+        --it;
+        const std::size_t diagnosticCount = context.diagnostics.size();
+        const auto bodyTopoShape = getBodyTopoShapeAtFeature(*body, context, *it, options);
+        context.diagnostics.resize(diagnosticCount);
+        if (!bodyTopoShape || bodyTopoShape->shape.IsNull() || solidCount(bodyTopoShape->shape) == 0) {
+            continue;
+        }
+        std::optional<part::NamedShape> namedShape = bodyTopoShape->namedShape;
+        if (!namedShape) {
+            namedShape = part::indexedNamedShapeForObject(body->name, bodyTopoShape->shape);
+        }
+        return PipeBodyPrefix{body, bodyTopoShape->shape, namedShape};
+    }
+    return std::nullopt;
+}
+
 bool owningBodyAllowsCompound(const app::DocumentObject& object,
                               const runtime::ComputeContext& context)
 {
@@ -256,6 +329,31 @@ TopoDS_Shape firstSolid(const TopoDS_Shape& shape)
         return explorer.Current();
     }
     return shape;
+}
+
+std::string shapeKind(const TopoDS_Shape& shape)
+{
+    switch (shape.ShapeType()) {
+        case TopAbs_COMPOUND:
+            return "occt_compound";
+        case TopAbs_COMPSOLID:
+            return "occt_compsolid";
+        case TopAbs_SOLID:
+            return "occt_solid";
+        case TopAbs_SHELL:
+            return "occt_shell";
+        case TopAbs_FACE:
+            return "occt_face";
+        case TopAbs_WIRE:
+            return "occt_wire";
+        case TopAbs_EDGE:
+            return "occt_edge";
+        case TopAbs_VERTEX:
+            return "occt_vertex";
+        case TopAbs_SHAPE:
+            break;
+    }
+    return "occt_shape";
 }
 
 std::string firstLinkTarget(const app::DocumentObject& object, const std::string& property)
@@ -1124,29 +1222,108 @@ void executePipeFeature(const app::DocumentObject& object,
     if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
     }
+
+    const bool additive = addSubMode == PipeAddSubMode::Additive;
+    const TopoDS_Shape toolShape = solid;
+    const std::optional<part::NamedShape> toolNamedShape = namedShape;
+    TopoDS_Shape featureShape = toolShape;
+    std::optional<part::NamedShape> featureNamedShape = toolNamedShape;
+    bool featureShapeRefined = shapeResult.applied;
+    const auto bodyPrefix = previousBodyPrefix(object, context);
+    if (bodyPrefix) {
+        const auto boolBuild = part::makeElementBooleanFromSources(
+            object.name,
+            {
+                part::NamedShapeSource{
+                    bodyPrefix->namedShape ? bodyPrefix->namedShape->owner : bodyPrefix->body->name,
+                    bodyPrefix->shape,
+                    bodyPrefix->namedShape ? &*bodyPrefix->namedShape : nullptr,
+                },
+                part::NamedShapeSource{
+                    toolNamedShape ? toolNamedShape->owner : object.name,
+                    toolShape,
+                    toolNamedShape ? &*toolNamedShape : nullptr,
+                },
+            },
+            additive ? part::BooleanOperation::Fuse : part::BooleanOperation::Cut
+        );
+        if (!boolBuild.error.empty() || boolBuild.shape.IsNull()) {
+            addPipeDiagnostic(object,
+                              context,
+                              "execution_failed",
+                              boolBuild.error.empty() ? "Pipe boolean operation could not be built"
+                                                      : boolBuild.error);
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+        // ::Pipe::execute(), after AddSubShape.setValue(...), runs "Part::OpCodes::Fuse/Cut",
+        // stores "this->rawShape = boolOp", then "Shape.setValue(getSolid(boolOp))".
+        auto refined = runtime::applyPartDesignFeatureRefineProperty(object,
+                                                                     context,
+                                                                     boolBuild.shape,
+                                                                     boolBuild.namedShape);
+        if (!refined) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        const int finalSolids = solidCount(refined->shape);
+        if (!allowCompound && finalSolids != 1) {
+            const app::DocumentObject* body = owningBody(object, context);
+            runtime::addDiagnostic(context.diagnostics,
+                                   "error",
+                                   "multiple_solids_disallowed",
+                                   "Result has multiple solids: enable 'Allow Compound' in the active body.",
+                                   object.name,
+                                   "AllowCompound",
+                                   "part_design.single_solid_rule",
+                                   body == nullptr ? std::string {} : body->name);
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        featureShape = (!allowCompound && finalSolids == 1) ? firstSolid(refined->shape) : refined->shape;
+        featureNamedShape = refined->namedShape;
+        featureShapeRefined = refined->applied;
+        if (featureNamedShape) {
+            featureNamedShape->owner = object.name;
+            featureNamedShape->shape = featureShape;
+            if (toolNamedShape) {
+                addHistoryStatuses(*featureNamedShape, *toolNamedShape);
+            }
+        }
+    }
+
+    if (featureNamedShape) {
+        context.namedShapes[object.name] = *featureNamedShape;
+    }
     if (runtime::shouldBuildDisplayTopology(object, context)) {
         context.mesh[object.name] = cad_core::part::meshForShape(
-            solid,
+            featureShape,
             "Face",
             "Edge",
             "Vertex",
             context.displayMeshDeflection
         );
-        context.subshapes[object.name] = part::subshapeMapForShape(solid);
+        context.subshapes[object.name] = part::subshapeMapForShape(featureShape);
     }
 
-    const bool additive = addSubMode == PipeAddSubMode::Additive;
     if (additive) {
-        context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
-        context.addSubShapes[object.name] = runtime::AddSubShape{solid, std::nullopt, namedShape, std::nullopt};
+        context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, featureShape};
+        context.addSubShapes[object.name] =
+            runtime::AddSubShape{toolShape, std::nullopt, toolNamedShape, std::nullopt};
     }
     else {
-        context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, solid, std::nullopt, namedShape};
+        if (bodyPrefix) {
+            context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, featureShape};
+        }
+        context.addSubShapes[object.name] =
+            runtime::AddSubShape{std::nullopt, toolShape, std::nullopt, toolNamedShape};
     }
 
     nlohmann::json result = {
         {"status", "ok"},
-        {"shape", "occt_solid"},
+        {"shape", shapeKind(featureShape)},
         {"feature", "partdesign_pipe"},
         {"add_sub", additive ? "add" : "sub"},
         {"source_profile", profile->objectName},
@@ -1156,9 +1333,9 @@ void executePipeFeature(const app::DocumentObject& object,
         {"transition", transitionLabel(*transition)},
         {"sections", nlohmann::json::array()},
         {"cap_sewing", "mapper_history:part_design_pipe"},
-        {"solid_count", solids},
-        {"bbox", cad_core::part::objectBBoxForShape(solid)},
-        {"volume", cad_core::part::volumeForShape(solid)},
+        {"solid_count", solidCount(featureShape)},
+        {"bbox", cad_core::part::objectBBoxForShape(featureShape)},
+        {"volume", cad_core::part::volumeForShape(featureShape)},
         {"topo_naming_history", "maker_history:partdesign_pipe"},
         {"kernel", cad_core::part::kernelVersion()},
     };
@@ -1182,7 +1359,7 @@ void executePipeFeature(const app::DocumentObject& object,
     for (const PipeInput& section : sections) {
         result["sections"].push_back(section.objectName);
     }
-    if (shapeResult.applied) {
+    if (featureShapeRefined) {
         result["refine"] = "applied";
     }
     context.objects[object.name] = result;

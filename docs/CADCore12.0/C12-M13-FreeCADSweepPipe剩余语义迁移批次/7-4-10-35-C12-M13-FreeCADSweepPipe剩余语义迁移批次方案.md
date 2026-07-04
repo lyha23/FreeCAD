@@ -44,7 +44,7 @@ S2 已关闭：
 
 - `profile-point-to-wire-section` 与 `last-section-vertex` 已有 FreeCADCmd expected 和 current-focused green，不进入 S3 implementation。
 - `invalid-middle-section-vertex-diagnostic` 的 S3 red evidence 已关闭：two-vertex diagnostic current-supported，unequal-inner-wire diagnostic 已对齐 FreeCADCmd catch-all 输出。
-- AdditivePipe / SubtractivePipe lifecycle 已有 S4 red evidence：FreeCAD feature `Shape` 为 post-boolean body，current feature 输出仍为 pre-boolean / removed tool；Body final shape green 不能替代 `AddSubShape` / `rawShape` parity。
+- AdditivePipe / SubtractivePipe lifecycle 已由 S4 red-to-green：FreeCAD feature `Shape` 为 post-boolean body，current feature 输出已对齐；Body final shape green 之外，focused test 还验证 replayed add/sub features 继续通过 AddSubShape tool cache 消费。
 - Part Sweep helper 只采到 `add/isReady/getStatus/build/shape/makeSolid` subset，`remove/firstShape/lastShape/generated/simulate` 仍阻塞 S5。
 - ORACLE-001 未收到用户 request/result，继续 `waiting_user_repro_non_blocking`。
 
@@ -60,6 +60,8 @@ S3 已完成：`cad-core/src/part/topo_shape_expansion.cpp::preparePipeShellProf
 - vertex / wire mixed lane 的 `Add` / `SetLaw`、Simulate、cap/sewing、history 不靠后处理猜测。
 
 ### S4 Boolean / AddSubShape / rawShape 生命周期迁移
+
+S4 已完成：`cad-core/src/part_design/feature_pipe.cpp` 现在把 Pipe producer 的 AddSubShape add/sub slot 保留为 pre-boolean tool cache；`cad-core/src/graph/recompute_plan.cpp` 为同一 Body 内的 Pipe 增加最近前序 PartDesign feature 依赖，使 Pipe executor 能在自身发布 feature `Shape` 时拿到 base 前缀并执行 Fuse/Cut。`partdesign-pipe-additive-lifecycle` 与 `partdesign-pipe-subtractive-lifecycle` expected 已移除 `known_gap`，`test_c12m13_partdesign_pipe_lifecycle_matches_native_oracle` 约束 feature Shape / Body final parity 以及 Body AddSubShape consumer replay。
 
 允许修改 PartDesign Pipe executor 与 runtime cache，目标是锁定：
 
@@ -112,7 +114,7 @@ git diff --check
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD/cad-core
 cmake --build build
-python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_c5m3_partdesign_pipe_multisection_matches_native_oracle tests.test_p7_features.CadCoreP7FeatureTest.test_c51m4_partdesign_pipe_selected_spine_multisection_matches_native_oracle tests.test_p7_features.CadCoreP7FeatureTest.test_c12m12_partdesign_pipe_multiwire_sewing_matches_native_oracle
+python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_c12m13_partdesign_pipe_lifecycle_matches_native_oracle tests.test_p7_features.CadCoreP7FeatureTest.test_c12m13_partdesign_pipe_vertex_success_paths_match_native_oracle tests.test_p7_features.CadCoreP7FeatureTest.test_c12m13_partdesign_pipe_vertex_wire_diagnostics_are_s3_red_evidence tests.test_p7_features.CadCoreP7FeatureTest.test_c12m12_partdesign_pipe_multiwire_sewing_matches_native_oracle
 python3 -m unittest tests.test_p8_features
 ```
 

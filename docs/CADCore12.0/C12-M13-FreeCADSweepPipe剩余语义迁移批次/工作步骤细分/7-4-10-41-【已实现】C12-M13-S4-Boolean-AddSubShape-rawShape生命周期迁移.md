@@ -25,6 +25,13 @@
 - downstream consumer 不再只比较 final shape。
 - C12-M12 / S3 focused tests 不回归。
 
+## 关闭记录
+
+- `cad-core/src/part_design/feature_pipe.cpp::executePipeFeature()` 已按 FreeCAD `FeaturePipe.cpp::Pipe::execute()` 的 `AddSubShape.setValue(...)`、`Part::OpCodes::Fuse/Cut`、`this->rawShape = boolOp`、`Shape.setValue(getSolid(boolOp))` 顺序拆分：AddSubShape add/sub slot 保留 pre-boolean tool，base Fuse/Cut 后的 feature `Shape` / mesh / subshapes / named shape 发布 post-boolean 结果。
+- `cad-core/src/graph/recompute_plan.cpp` 为同一 Body 内的 Pipe 增加最近前序 PartDesign feature 依赖，使 Pipe producer 能在自身执行时拿到 request-local Body 前缀；Body replay 仍通过 `context.addSubShapes` 消费 add/sub tool，没有重写 Body replay family。
+- `cad-core/fixtures/c12m13/expected/partdesign-pipe-additive-lifecycle.freecad.json` 与 `partdesign-pipe-subtractive-lifecycle.freecad.json` 已移除 `known_gap` 并记录 `s4_resolution`；`test_c12m13_partdesign_pipe_lifecycle_matches_native_oracle` 验证 ORACLE-201/202 red-to-green 和 Body AddSubShape consumer replay。
+- S4 focused regression 已覆盖 C12-M13 lifecycle、S3 diagnostic、C12-M12 multi-wire sewing，以及 C4-M2 additive/subtractive Pipe body oracle；Part Sweep helper lifecycle 仍留给 S5。
+
 ## 非目标
 
 - 不实现完整 topological naming。
