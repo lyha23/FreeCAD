@@ -269,3 +269,63 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 
 › 你给我出一个 /goal prompt , 他的任务是根据 '/Users/li/Chili3DProject/FreeCAD/docs/CADCore4.0/6-19-23-52-CADCore4.0总览方案.md', 挨个用 $goal-step-runner 执行'/Users/
   li/Chili3DProject/FreeCAD/docs/CADCore4.0' 里面的各个主线的工作步奏细分
+
+---
+
+我希望你给我出一个 /goal prompt , 把  3c5ccff1fe2b1dea8a143a15755069ee33151913 这次提交以来, '/Users/li/Chili3DProject/FreeCAD/cad-core' 的所有改动, merge到 /Users/li/Chili3DProject/cad-web-background/cad-core
+
+---
+
+
+ 将 /Users/li/Chili3DProject/FreeCAD 中从 3c5ccff1fe2b1dea8a143a15755069ee33151913 到当前 HEAD 的
+  cad-core/** 全部改动，迁移/merge 到 /Users/li/Chili3DProject/cad-web-background/cad-core，并完成验证与中
+  文提交。
+
+  背景：本 prompt 生成时源仓 HEAD 是 5c54f3c5a2903596ab45973a09627d91dfd688bb，目标仓 HEAD 是
+  a95648e9d8b116992265950975d7fdedb8f3fbbf。执行时先重新确认两边 git status/HEAD。源仓当前只有 DESIGN.md 非
+  cad-core 修改；若执行时源侧 cad-core/** 有未提交改动，也要纳入迁移范围并说明。目标仓当前有无关未跟踪文件
+  docs/接口规定/7-4-21-04-Body-Tip-dress-up引用接口规定.md，保护它，不修改、不提交，除非它被本轮真实需要且
+  先说明原因。
+
+  范围：
+
+- 只迁移源仓 /Users/li/Chili3DProject/FreeCAD/cad-core/** 自 3c5ccff1fe2b1dea8a143a15755069ee33151913 以
+  来的改动。
+- 包括新增 fixtures、expected、headers、src、tests、CMake/source list/capability/adapter 相关 cad-core 改
+  动。
+- 不迁移 FreeCAD 仓 cad-core 外的文档或源码。
+- 不改目标仓无关 Rust/HTTP 代码，除非 cad-core FFI/build/test 必须同步；如必须改 crates/cad-core-sys、
+  crates/cad-core、crates/cad-server 等适配层，保持 JSON/HTTP adapter 边界，不把几何语义搬到 Rust Web 层。
+
+  建议步骤：
+
+1. 在源仓执行：
+   git -C /Users/li/Chili3DProject/FreeCAD diff --name-status
+   3c5ccff1fe2b1dea8a143a15755069ee33151913..HEAD -- cad-core
+   git -C /Users/li/Chili3DProject/FreeCAD diff --binary 3c5ccff1fe2b1dea8a143a15755069ee33151913..HEAD
+   -- cad-core
+2. 在目标仓检查同名文件当前状态，优先用 patch/三方思路迁移；如果目录结构已分叉，逐文件手工移植，不要直接
+   整目录覆盖。
+3. 特别确认这些源侧新增/变更族完整落入目标 cad-core：c12m12/c12m13/c12m14/c12m16/c5m1 fixtures，
+   part_sweep/topo_shape_expansion/shape_exporter/body/feature_pipe/shape_binder，runtime recompute/
+   reference/element update/capability，sketch edge identity/internal/external，以及相关 Python tests。
+4. 处理冲突时以目标仓当前后端产品语义为运行环境，以 FreeCAD/cad-core 源侧 diff 为语义来源；不要新增
+   fixture 名称特判或输出端修剪。
+5. 不提交 build/、__pycache__/、临时 patch 文件、日志或本地生成物。
+
+  验证：
+
+- git -C /Users/li/Chili3DProject/cad-web-background diff --check
+- cd /Users/li/Chili3DProject/cad-web-background/cad-core && cmake -S . -B build && cmake --build build
+- 在目标仓运行本轮相关 Python 测试，至少覆盖变更触达的 test_adapters.py、test_p5_sketch.py、
+  test_p7_features.py、test_p8_features.py、test_c8_shapebinder.py；若测试命令或 build 目录约定不同，先读取
+  目标仓现有测试说明后调整。
+- 如改动影响 FFI/HTTP 输出，从 /Users/li/Chili3DProject/cad-web-background 根目录补跑 cargo check 或相关
+  cargo test，并说明是否需要重启 cad-server 才能验证 HTTP 运行态。
+
+  完成标准：
+
+- 目标 cad-core 包含源侧自 3c5ccff1...以来所有 cad-core 改动，无遗漏新增/删除/重命名。
+- 目标无关未跟踪文件仍保持未被纳入。
+- 验证命令结果清楚记录；若某项因环境失败，给出具体失败原因和后续最小命令。
+- 按中文提交工作流提交本轮相关变更，提交前展示变更边界，提交后证明工作区只剩用户原有无关改动或完全干净。

@@ -184,6 +184,67 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertAlmostEqual(stable_distance, no_stable_distance, delta=0.1)
         self.assertAlmostEqual(stable_distance, qualified_stable_distance, delta=0.1)
 
+    def test_p6_same_body_fillet_accepts_revolution_body_tip_edge_reference(self) -> None:
+        payload = self.p6_payload("body-revolution-filletpreview-tip-edge")
+        body_only_payload = json.loads(json.dumps(payload))
+        body_only_payload["Objects"] = [
+            item for item in body_only_payload["Objects"] if item["Name"] != "FilletPreview"
+        ]
+        for item in body_only_payload["Objects"]:
+            if item["Name"] == "RevolutionBody":
+                item["Properties"]["Group"]["values"] = [
+                    value
+                    for value in item["Properties"]["Group"]["values"]
+                    if value != "FilletPreview"
+                ]
+                item["Properties"]["Tip"]["value"] = "Revolution"
+
+        body_only_result = self.run_response_payload(body_only_payload)
+        revolution_body = next(item for item in body_only_result["results"] if item["object"] == "RevolutionBody")
+        edge23 = next(item for item in revolution_body["subshapes"] if item["indexed"] == "Edge23")
+
+        self.assertEqual(body_only_result["diagnostics"], [])
+        self.assertEqual(edge23["id"], "RevolutionBody:Edge23")
+        self.assertEqual(edge23["subname"], "Revolution.Edge23")
+        self.assertEqual(edge23["stableSubname"], "Revolution.Fillet.Edge11")
+        self.assertEqual(edge23["fullSubname"], "RevolutionBody.Revolution.Edge23")
+
+        result = self.run_response_payload(payload)
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
+        self.assertIsNotNone(next(item for item in result["results"] if item["object"] == "RevolutionBody")["mesh"])
+
+    def test_p6_same_body_fillet_ignores_stable_candidate_that_moves_current_edge(self) -> None:
+        payload = self.p6_payload("body-revolution-filletpreview-stable-collision")
+        body_only_payload = json.loads(json.dumps(payload))
+        body_only_payload["Objects"] = [
+            item for item in body_only_payload["Objects"] if item["Name"] != "FilletPreview"
+        ]
+        for item in body_only_payload["Objects"]:
+            if item["Name"] == "RevolutionBody":
+                item["Properties"]["Group"]["values"] = [
+                    value
+                    for value in item["Properties"]["Group"]["values"]
+                    if value != "FilletPreview"
+                ]
+                item["Properties"]["Tip"]["value"] = "Revolution"
+
+        body_only_result = self.run_response_payload(body_only_payload)
+        revolution_body = next(item for item in body_only_result["results"] if item["object"] == "RevolutionBody")
+        edge3 = next(item for item in revolution_body["subshapes"] if item["indexed"] == "Edge3")
+
+        self.assertEqual(body_only_result["diagnostics"], [])
+        self.assertEqual(edge3["subname"], "Revolution.Edge3")
+        self.assertEqual(edge3["stableSubname"], "Revolution.草图 12:01:23 PM.Edge1")
+        self.assertEqual(edge3["fullSubname"], "RevolutionBody.Revolution.Edge3")
+
+        result = self.run_response_payload(payload)
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
+        self.assertIsNotNone(next(item for item in result["results"] if item["object"] == "RevolutionBody")["mesh"])
+
     def test_p6_body_result_publishes_revolution_tip_face_path(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
         payload["Objects"] = payload["Objects"][:3] + [

@@ -250,6 +250,7 @@ add_library(cad-core-lib STATIC
   src/graph/recompute_plan.cpp
   src/mesh/feature_mesh_import.cpp
   src/part/brep_snapshot.cpp
+  src/part/edge_axis.cpp
   src/part/extrusion_helper.cpp
   src/part/face_maker.cpp
   src/part/internal_shape_history_ledger.cpp

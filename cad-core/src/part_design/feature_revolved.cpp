@@ -1,6 +1,7 @@
 #include "cad_core/part_design/feature_revolved.h"
 
 #include "cad_core/app/property.h"
+#include "cad_core/part/edge_axis.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/topo_shape_expansion.h"
@@ -9,7 +10,6 @@
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/feature_executor.h"
 
-#include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepGProp.hxx>
@@ -17,7 +17,6 @@
 #include <BRepBuilderAPI_Transform.hxx>
 #include <Geom_Circle.hxx>
 #include <GeomAdaptor_Curve.hxx>
-#include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <GProp_GProps.hxx>
 #include <Precision.hxx>
@@ -424,38 +423,16 @@ std::optional<AxisSelection> axisFromEdge(const TopoDS_Edge& edge,
                                           const std::string& target,
                                           const std::string& subname)
 {
-    try {
-        BRepAdaptor_Curve curve(edge);
-        AxisSelection axis;
-        if (curve.GetType() == GeomAbs_Line) {
-            axis.base = curve.Line().Location();
-            axis.direction = curve.Line().Direction();
-        }
-        else if (curve.GetType() == GeomAbs_Circle) {
-            axis.base = curve.Circle().Location();
-            axis.direction = curve.Circle().Axis().Direction();
-        }
-        else {
-            runtime::addDiagnostic(context.diagnostics,
-                                   "error",
-                                   "invalid_axis",
-                                   "ReferenceAxis edge must be a straight line, circle or arc of circle",
-                                   object.name,
-                                   "ReferenceAxis",
-                                   "runtime",
-                                   target,
-                                   subname);
-            return std::nullopt;
-        }
-        return axis;
-    }
-    catch (const Standard_Failure& failure) {
-        const char* message = failure.GetMessageString();
+    part::EdgeAxisOptions options;
+    options.allowCircleAxis = true;
+    options.allowGeometricallyLinearCurve = true;
+    const auto resolved = part::resolveEdgeAxis(edge, options);
+    if (!resolved.axis) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
                                "invalid_axis",
-                               std::string("ReferenceAxis edge could not be read: ")
-                                   + (message != nullptr ? message : "unknown OCCT error"),
+                               "ReferenceAxis edge must be a straight/geometrically linear edge, circle or arc of circle: "
+                                   + resolved.message,
                                object.name,
                                "ReferenceAxis",
                                "runtime",
@@ -463,6 +440,7 @@ std::optional<AxisSelection> axisFromEdge(const TopoDS_Edge& edge,
                                subname);
         return std::nullopt;
     }
+    return AxisSelection {resolved.axis->base, resolved.axis->direction};
 }
 
 std::optional<TopoDS_Shape> resolveSameSketchInternalEdgeAxis(const runtime::ShapeValue& shapeValue,

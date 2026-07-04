@@ -2,13 +2,13 @@
 
 #include "cad_core/part_design/profile_resolver.h"
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/part/edge_axis.h"
 #include "cad_core/part/extrusion_helper.h"
 #include "cad_core/part/part_extrusion.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/property_topo_shape.h"
 
-#include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepExtrema_DistShapeShape.hxx>
@@ -19,7 +19,6 @@
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <BRep_Builder.hxx>
 #include <Bnd_Box.hxx>
-#include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <GProp_GProps.hxx>
 #include <Precision.hxx>
@@ -30,7 +29,6 @@
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
-#include <gp_Circ.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
@@ -1107,18 +1105,20 @@ std::optional<gp_Dir> edgeAxisDirection(const TopoDS_Edge& edge,
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
     // ::ProfileBased::getAxis(), "getAxisFromEdge" accepts straight line, circle or arc of circle.
-    BRepAdaptor_Curve curve(edge);
-    if (curve.GetType() == GeomAbs_Line) {
-        return curve.Line().Direction();
-    }
-    if (curve.GetType() == GeomAbs_Circle) {
-        return curve.Circle().Axis().Direction();
+    // CAD Core also accepts non-Line curves proven geometrically linear by the shared part helper.
+    part::EdgeAxisOptions options;
+    options.allowCircleAxis = true;
+    options.allowGeometricallyLinearCurve = true;
+    const auto resolved = part::resolveEdgeAxis(edge, options);
+    if (resolved.axis) {
+        return resolved.axis->direction;
     }
 
     runtime::addDiagnostic(context.diagnostics,
                            "error",
                            "unsupported_subshape_kind",
-                           "ReferenceAxis edge must be a straight line, circle or arc of circle",
+                           "ReferenceAxis edge must be a straight/geometrically linear edge, circle or arc of circle: "
+                               + resolved.message,
                            object.name,
                            property,
                            "runtime");

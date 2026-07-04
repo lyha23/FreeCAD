@@ -128,6 +128,8 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "pocket-custom-vector": [],
             "pad-reference-axis": [],
             "pad-reference-axis-edge": [],
+            "pad-reference-axis-linear-bspline-edge": [],
+            "pad-reference-axis-nonlinear-bspline-rejected": ["unsupported_subshape_kind"],
             "pad-sketch-placement": [],
             "pad-custom-direction-placement": [],
             "pad-custom-direction-sketch-rotation": [],

@@ -4,19 +4,19 @@
 #include "cad_core/part_design/feature_polar_pattern.h"
 #include "cad_core/part_design/feature_scaled.h"
 
+#include "datum_plane_reference.h"
 #include "feature_transformed_support.h"
 
+#include "cad_core/part/edge_axis.h"
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/property_topo_shape.h"
 
 #include <BRepGProp.hxx>
-#include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <GProp_GProps.hxx>
-#include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <Precision.hxx>
 #include <Standard_Failure.hxx>
@@ -27,9 +27,7 @@
 #include <TopoDS_Face.hxx>
 #include <gp_Ax1.hxx>
 #include <gp_Ax2.hxx>
-#include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
-#include <gp_Lin.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
@@ -1092,19 +1090,22 @@ std::optional<gp_Dir> directionFromShape(
 {
     if (shape.ShapeType() == TopAbs_EDGE) {
         const TopoDS_Edge edge = TopoDS::Edge(shape);
-        BRepAdaptor_Curve curve(edge);
-        if (curve.GetType() != GeomAbs_Line) {
+        // FreeCAD FeatureLinearPattern accepts only GeomAbs_Line for direction references.
+        // Keep that strict boundary while sharing the low-level line extraction helper.
+        part::EdgeAxisOptions options;
+        const auto resolved = part::resolveEdgeAxis(edge, options);
+        if (!resolved.axis) {
             runtime::addDiagnostic(
                 context.diagnostics,
                 "error",
                 "invalid_direction",
-                property + " edge must be a straight line",
+                property + " edge must be a straight line: " + resolved.message,
                 object.name,
                 property
             );
             return std::nullopt;
         }
-        return curve.Line().Direction();
+        return resolved.axis->direction;
     }
     if (shape.ShapeType() == TopAbs_FACE) {
         const TopoDS_Face face = TopoDS::Face(shape);
@@ -1154,21 +1155,20 @@ std::optional<RotationAxis> axisFromShape(
     }
 
     const TopoDS_Edge edge = TopoDS::Edge(shape);
-    BRepAdaptor_Curve curve(edge);
-    if (curve.GetType() == GeomAbs_Line) {
-        const gp_Lin line = curve.Line();
-        return RotationAxis {line.Location(), line.Direction()};
-    }
-    if (curve.GetType() == GeomAbs_Circle) {
-        const gp_Circ circle = curve.Circle();
-        return RotationAxis {circle.Location(), circle.Axis().Direction()};
+    part::EdgeAxisOptions options;
+    options.allowCircleAxis = true;
+    options.allowGeometricallyLinearCurve = true;
+    const auto resolved = part::resolveEdgeAxis(edge, options);
+    if (resolved.axis) {
+        return RotationAxis {resolved.axis->base, resolved.axis->direction};
     }
 
     runtime::addDiagnostic(
         context.diagnostics,
         "error",
         "invalid_axis",
-        property + " edge must be a straight line, circle, or arc of circle",
+        property + " edge must be a straight/geometrically linear edge, circle, or arc of circle: "
+            + resolved.message,
         object.name,
         property
     );
@@ -1354,6 +1354,29 @@ std::optional<gp_Dir> resolveLinearPatternDirection(
     }
 
     const auto shapeIt = context.shapes.find(link->object);
+    if (shapeIt != context.shapes.end()) {
+        if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch && link->subnames.size() == 1U
+            && isSketchAxisSubname(link->subnames.front())) {
+            const auto sketchAxis = resolveSketchAxis(*link, object, context, property);
+            if (!sketchAxis) {
+                return std::nullopt;
+            }
+            return sketchAxis->direction;
+        }
+
+        if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumLine && link->subnames.empty()) {
+            for (TopExp_Explorer explorer(shapeIt->second.shape, TopAbs_EDGE); explorer.More();
+                 explorer.Next()) {
+                return directionFromShape(explorer.Current(), object, context, property);
+            }
+        }
+    }
+
+    if (const auto planeFrame = detail::referencePlaneProviderFrame(link->object, context);
+        planeFrame && link->subnames.empty()) {
+        return planeFrame->normal;
+    }
+
     if (shapeIt == context.shapes.end()) {
         runtime::addDiagnostic(
             context.diagnostics,
@@ -1366,28 +1389,6 @@ std::optional<gp_Dir> resolveLinearPatternDirection(
             link->object
         );
         return std::nullopt;
-    }
-
-    if (shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch && link->subnames.size() == 1U
-        && isSketchAxisSubname(link->subnames.front())) {
-        const auto sketchAxis = resolveSketchAxis(*link, object, context, property);
-        if (!sketchAxis) {
-            return std::nullopt;
-        }
-        return sketchAxis->direction;
-    }
-
-    if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumLine && link->subnames.empty()) {
-        for (TopExp_Explorer explorer(shapeIt->second.shape, TopAbs_EDGE); explorer.More();
-             explorer.Next()) {
-            return directionFromShape(explorer.Current(), object, context, property);
-        }
-    }
-    if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumPlane && link->subnames.empty()) {
-        for (TopExp_Explorer explorer(shapeIt->second.shape, TopAbs_FACE); explorer.More();
-             explorer.Next()) {
-            return directionFromShape(explorer.Current(), object, context, property);
-        }
     }
 
     const auto subshape = resolveDirectionSubshape(*link, object, context, property);

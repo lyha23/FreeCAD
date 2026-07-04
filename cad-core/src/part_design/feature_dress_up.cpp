@@ -206,33 +206,98 @@ std::optional<BodyLocalFeatureContext> sameBodyEarlierFeatureContext(
     return target;
 }
 
-std::string stripObjectPrefix(const std::string& value, const std::string& objectName)
+std::string objectLocalSubnameOrOriginal(const std::string& value, const std::string& objectName)
 {
     const std::string prefix = objectName + ".";
     if (value.rfind(prefix, 0U) == 0U) {
         return value.substr(prefix.size());
     }
+    const std::string nestedPrefix = "." + objectName + ".";
+    const std::size_t nestedIndex = value.rfind(nestedPrefix);
+    if (nestedIndex != std::string::npos) {
+        return value.substr(nestedIndex + nestedPrefix.size());
+    }
     return value;
 }
 
-app::Link bodyTopoShapeLink(const app::Link& link)
+void addDistinctCandidate(std::vector<std::string>& candidates, const std::string& candidate)
+{
+    if (candidate.empty()) {
+        return;
+    }
+    if (std::find(candidates.begin(), candidates.end(), candidate) == candidates.end()) {
+        candidates.push_back(candidate);
+    }
+}
+
+std::string stableSubnameForBodyTopoShapeLink(
+    const app::Link& link,
+    std::size_t index,
+    const std::string& targetFeature,
+    const std::string& currentSubname,
+    const part::NamedShape& bodyNamedShape
+)
+{
+    const std::string stableSubname =
+        index < link.stableSubnames.size() ? link.stableSubnames.at(index) : std::string {};
+    if (stableSubname.empty()) {
+        return stableSubname;
+    }
+
+    std::vector<std::string> candidates;
+
+    const auto addTargetQualifiedCandidate = [&](const std::string& value) {
+        if (value.empty()) {
+            return;
+        }
+        const std::string local = objectLocalSubnameOrOriginal(value, targetFeature);
+        if (local.empty()) {
+            return;
+        }
+        if (local != value || local.find('.') != std::string::npos || local != currentSubname) {
+            addDistinctCandidate(candidates, targetFeature + "." + local);
+        }
+    };
+
+    addTargetQualifiedCandidate(stableSubname);
+    if (index < link.fullSubnames.size() && !link.fullSubnames.at(index).empty()) {
+        addTargetQualifiedCandidate(link.fullSubnames.at(index));
+    }
+    addDistinctCandidate(candidates, stableSubname);
+
+    bool resolvedDifferentElement = false;
+    for (const std::string& candidate : candidates) {
+        const auto resolved = part::resolveElementReference(bodyNamedShape, currentSubname, candidate);
+        if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
+            if (*resolved.element == currentSubname) {
+                return candidate;
+            }
+            resolvedDifferentElement = true;
+        }
+    }
+    return resolvedDifferentElement ? std::string {} : stableSubname;
+}
+
+app::Link bodyTopoShapeLink(const app::Link& link, const part::NamedShape& bodyNamedShape)
 {
     app::Link result = link;
     for (std::size_t index = 0; index < result.subnames.size(); ++index) {
-        result.subnames[index] = stripObjectPrefix(result.subnames[index], link.object);
+        result.subnames[index] = objectLocalSubnameOrOriginal(result.subnames[index], link.object);
     }
     for (std::size_t index = 0; index < result.stableSubnames.size(); ++index) {
         std::string& stableSubname = result.stableSubnames[index];
-        if (stableSubname.empty() || stableSubname.find('.') != std::string::npos) {
+        if (stableSubname.empty()) {
             continue;
         }
         const std::string currentSubname =
             index < result.subnames.size() ? result.subnames[index] : std::string {};
-        if (stableSubname == currentSubname) {
-            // Omitted StableSubList decodes to SubList as a current-name fallback, not target-owner evidence.
-            continue;
-        }
-        stableSubname = link.object + "." + stableSubname;
+        stableSubname = stableSubnameForBodyTopoShapeLink(
+            link,
+            index,
+            link.object,
+            currentSubname,
+            bodyNamedShape
+        );
     }
     return result;
 }
@@ -657,25 +722,22 @@ std::optional<DressUpBase> resolveDressUpBase(
     }
 
     if (const auto bodyContext = sameBodyEarlierFeatureContext(object, link->object, context)) {
-        app::Link targetLocalLink = *link;
-        for (std::string& stableSubname : targetLocalLink.stableSubnames) {
-            stableSubname = stripObjectPrefix(stableSubname, link->object);
-        }
-        if (!validateTargetStableSubnames(targetLocalLink, namedShape, object, context)) {
-            return std::nullopt;
-        }
         if (const auto bodyTopoShape = bodyTopoShapeAtFeature(*bodyContext, context)) {
-            if (!bodyTopoShape->shape.IsSame(shapeIt->second.shape)) {
-                return DressUpBase {
-                    bodyTopoShapeLink(*link),
-                    bodyTopoShape->shape,
-                    bodyTopoShape->namedShape
-                        ? bodyTopoShape->namedShape
-                        : std::optional<part::NamedShape> {
-                              part::indexedNamedShapeForObject(bodyContext->body->name, bodyTopoShape->shape)
-                          }
-                };
+            std::optional<part::NamedShape> bodyNamedShape =
+                bodyTopoShape->namedShape
+                    ? bodyTopoShape->namedShape
+                    : std::optional<part::NamedShape> {
+                          part::indexedNamedShapeForObject(bodyContext->body->name, bodyTopoShape->shape)
+                      };
+            app::Link bodyLink = bodyTopoShapeLink(*link, *bodyNamedShape);
+            if (!validateTargetStableSubnames(bodyLink, bodyNamedShape, object, context)) {
+                return std::nullopt;
             }
+            return DressUpBase {
+                std::move(bodyLink),
+                bodyTopoShape->shape,
+                std::move(bodyNamedShape)
+            };
         }
     }
 

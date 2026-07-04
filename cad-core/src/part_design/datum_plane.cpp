@@ -3,11 +3,8 @@
 #include "datum_attachment.h"
 
 #include "cad_core/runtime/feature_executor.h"
-#include "cad_core/base/placement.h"
 
-#include <BRepBuilderAPI_MakeFace.hxx>
 #include <gp_Dir.hxx>
-#include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Trsf.hxx>
 
@@ -31,12 +28,8 @@ nlohmann::json directionToJson(const gp_Dir& direction)
 
 void executeDatumPlane(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/DatumPlane.cpp
-    // ::Plane::Plane() creates a planar face on gp_Pln(..., gp_Dir(0,0,1)) and
-    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/DatumFeature.cpp::Datum::getShape()
-    // applies the object's Placement to that datum shape.
-    // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Datums.cpp::DatumElement::DatumElement()
-    // adds "Role" for lookup by LocalCoordinateSystem::getDatumElement().
+    // DatumPlane is a reference plane provider: Length/Width are display-only compatibility
+    // inputs, while attachment consumers use the placement/frame below.
     if (!runtime::rejectUnsupportedProperties(object,
                                               context,
                                               {"ResizeMode",
@@ -58,21 +51,7 @@ void executeDatumPlane(const app::DocumentObject& object, runtime::ComputeContex
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-
-    BRepBuilderAPI_MakeFace builder(gp_Pln(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)));
-    if (!builder.IsDone()) {
-        runtime::addDiagnostic(context.diagnostics,
-                               "error",
-                               "execution_failed",
-                               "OCCT could not build DatumPlane face",
-                               object.name);
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
-
-    TopoDS_Shape shape = builder.Shape();
     const gp_Trsf placement = attachment->placement;
-    shape = base::transformShape(shape, placement);
     gp_Pnt origin(0.0, 0.0, 0.0);
     gp_Dir xAxis(1.0, 0.0, 0.0);
     gp_Dir normal(0.0, 0.0, 1.0);
@@ -81,7 +60,6 @@ void executeDatumPlane(const app::DocumentObject& object, runtime::ComputeContex
     normal.Transform(placement);
     context.globalPlacements[object.name] = placement;
 
-    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::DatumPlane, shape};
     nlohmann::json result = {
         {"status", "ok"},
         {"datum", "plane"},

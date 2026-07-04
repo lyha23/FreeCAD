@@ -695,6 +695,19 @@ std::string responseSubnameFor(const std::string& indexed,
     return currentSubnameForStable(indexed, stableSubname);
 }
 
+std::string responseFullSubnameFor(const std::string& objectName,
+                                   const std::string& subname)
+{
+    if (subname.empty() || subname.find('.') == std::string::npos) {
+        return {};
+    }
+    const std::string objectPrefix = objectName + ".";
+    if (subname.rfind(objectPrefix, 0U) == 0U) {
+        return subname;
+    }
+    return objectPrefix + subname;
+}
+
 nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json& mesh)
 {
     if (!mesh.is_object()) {
@@ -868,6 +881,10 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             {"subname", subname},
             {"stableSubname", stableSubname},
         };
+        if (const std::string fullSubname = responseFullSubnameFor(objectName, subname);
+            !fullSubname.empty()) {
+            responseSubshape["fullSubname"] = fullSubname;
+        }
         for (const std::string& field :
              {"sourceStableSubname",
               "fragmentStableSubname",
@@ -889,6 +906,34 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         subshapes.push_back(std::move(responseSubshape));
     }
     return subshapes;
+}
+
+void appendDatumFrameResultFields(nlohmann::json& result,
+                                  const std::string& objectName,
+                                  const ComputeContext& context)
+{
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return;
+    }
+
+    const nlohmann::json& objectResult = objectIt->second;
+    const auto datumIt = objectResult.find("datum");
+    if (datumIt == objectResult.end() || !datumIt->is_string()) {
+        return;
+    }
+
+    result["datum"] = *datumIt;
+    nlohmann::json frame = nlohmann::json::object();
+    for (const std::string& field : {"origin", "x_axis", "normal"}) {
+        const auto fieldIt = objectResult.find(field);
+        if (fieldIt != objectResult.end()) {
+            frame[field] = *fieldIt;
+        }
+    }
+    if (!frame.empty()) {
+        result["frame"] = std::move(frame);
+    }
 }
 
 }  // namespace
@@ -985,11 +1030,13 @@ nlohmann::json recomputeResultJson(const app::Document& document,
             continue;
         }
         const auto meshIt = context.mesh.find(target);
-        results.push_back({
+        nlohmann::json result = {
             {"object", target},
             {"mesh", meshIt == context.mesh.end() ? nlohmann::json(nullptr) : responseMesh(target, meshIt->second)},
             {"subshapes", responseSubshapes(target, context)},
-        });
+        };
+        appendDatumFrameResultFields(result, target, context);
+        results.push_back(std::move(result));
     }
 
     return {

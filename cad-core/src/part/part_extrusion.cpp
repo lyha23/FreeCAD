@@ -3,18 +3,17 @@
 
 #include "part_feature_support.h"
 
+#include "cad_core/part/edge_axis.h"
 #include "cad_core/part/extrusion_helper.h"
 #include "cad_core/part/face_maker.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/runtime/feature_executor.h"
 
-#include <BRepAdaptor_Curve.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepLib_FindSurface.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
-#include <GeomAbs_CurveType.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <GeomAdaptor_Surface.hxx>
 #include <Precision.hxx>
@@ -474,37 +473,34 @@ std::optional<PartExtrusionDirection> partExtrusionDirectionFromEdge(
     }
 
     const TopoDS_Edge edge = TopoDS::Edge(axisShape);
-    BRepAdaptor_Curve curve(edge);
-    if (curve.GetType() != GeomAbs_Line) {
+    // FreeCAD Part::Extrusion::fetchAxisLink() explicitly accepts only GeomAbs_Line here. Unlike
+    // PartDesign ProfileBased axes, DirLink is kept strict and does not accept linear BSplines.
+    EdgeAxisOptions options;
+    options.orientLinearByEdge = true;
+    const auto resolved = resolveEdgeAxis(edge, options);
+    if (!resolved.axis) {
+        if (resolved.rejectReason == EdgeAxisRejectReason::ZeroLength) {
+            addPartExtrusionDiagnostic(
+                object,
+                context,
+                "invalid_direction",
+                "Part::Extrusion DirLink edge must not be zero-length",
+                "DirLink",
+                axisLink->object
+            );
+            return std::nullopt;
+        }
         addPartExtrusionDiagnostic(
             object,
             context,
             "unsupported_subshape_kind",
-            "Part::Extrusion DirLink edge must be a line",
+            "Part::Extrusion DirLink edge must be a line: " + resolved.message,
             "DirLink",
             axisLink->object
         );
         return std::nullopt;
     }
-
-    gp_Pnt start = curve.Value(curve.FirstParameter());
-    gp_Pnt end = curve.Value(curve.LastParameter());
-    if (edge.Orientation() == TopAbs_REVERSED) {
-        std::swap(start, end);
-    }
-    const gp_Vec vector(start, end);
-    if (vector.Magnitude() < Precision::Confusion()) {
-        addPartExtrusionDiagnostic(
-            object,
-            context,
-            "invalid_direction",
-            "Part::Extrusion DirLink edge must not be zero-length",
-            "DirLink",
-            axisLink->object
-        );
-        return std::nullopt;
-    }
-    return PartExtrusionDirection {gp_Dir(vector), vector.Magnitude()};
+    return PartExtrusionDirection {resolved.axis->direction, resolved.axis->length};
 }
 
 std::optional<gp_Dir> partExtrusionNormalForShape(

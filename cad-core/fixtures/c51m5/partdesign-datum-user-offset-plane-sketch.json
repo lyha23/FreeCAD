@@ -1,0 +1,127 @@
+{
+  "Objects": [
+    {
+      "Name": "BasePlane",
+      "ID": 1,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {}
+    },
+    {
+      "Name": "OffsetPlane",
+      "ID": 2,
+      "TypeId": "PartDesign::Plane",
+      "Properties": {
+        "Length": {
+          "PropertyType": "App::PropertyLength",
+          "value": 0
+        },
+        "Width": {
+          "PropertyType": "App::PropertyLength",
+          "value": 0
+        },
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "BasePlane",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "ObjectXY"
+        },
+        "AttachmentOffset": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 3],
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "SketchOnOffsetPlane",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [0, 0],
+            "end": [10, 0]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 0],
+            "end": [10, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 5],
+            "end": [0, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [0, 5],
+            "end": [0, 0]
+          }
+        ],
+        "Constraints": [],
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "OffsetPlane",
+          "SubList": []
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FlatFace"
+        }
+      }
+    },
+    {
+      "Name": "PadOnOffsetPlane",
+      "ID": 4,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchOnOffsetPlane",
+              "SubList": ["InternalFace1"],
+              "StableSubList": [""]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 5,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "BasePlane",
+            "OffsetPlane",
+            "SketchOnOffsetPlane",
+            "PadOnOffsetPlane"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "PadOnOffsetPlane"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "BasePlane",
+      "OffsetPlane",
+      "SketchOnOffsetPlane",
+      "Body"
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 #include "cad_core/part_design/feature_mirrored.h"
 
+#include "datum_plane_reference.h"
 #include "feature_transformed_support.h"
 
 #include "cad_core/runtime/feature_executor.h"
@@ -80,8 +81,12 @@ std::optional<MirrorPlane> resolveMirrorPlane(
         return std::nullopt;
     }
 
-    const auto shapeIt = context.shapes.find(link->object);
-    if (shapeIt == context.shapes.end()) {
+    if (const auto planeFrame = detail::referencePlaneProviderFrame(link->object, context);
+        planeFrame && link->subnames.empty()) {
+        return MirrorPlane {planeFrame->origin, planeFrame->normal};
+    }
+
+    if (context.shapes.count(link->object) == 0U) {
         runtime::addDiagnostic(
             context.diagnostics,
             "error",
@@ -93,13 +98,6 @@ std::optional<MirrorPlane> resolveMirrorPlane(
             link->object
         );
         return std::nullopt;
-    }
-
-    if (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumPlane && link->subnames.empty()) {
-        for (TopExp_Explorer explorer(shapeIt->second.shape, TopAbs_FACE); explorer.More();
-             explorer.Next()) {
-            return planeFromFace(TopoDS::Face(explorer.Current()), object, context, "MirrorPlane");
-        }
     }
 
     const auto face = resolvePlanarFaceLink(*link, object, context, "MirrorPlane");

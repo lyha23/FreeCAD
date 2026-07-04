@@ -1418,6 +1418,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertIn("PartDesign::CoordinateSystem", datum_attachment["type_ids"])
         self.assertIn("DatumLine Placement direction", datum_attachment["supported"])
+        self.assertIn("DatumPlane reference frame / plane provider", datum_attachment["supported"])
         self.assertIn("Body Origin datum role relink", datum_attachment["supported"])
         self.assertIn("FlatFace selected MapMode", datum_attachment["supported"])
         self.assertIn("NormalToEdge selected MapMode", datum_attachment["supported"])
@@ -1454,6 +1455,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("c4m2/partdesign-datum-attachment-deferred-diagnostics", datum_attachment["fixtures"])
         self.assertIn("c5m4/partdesign-datum-attachment-mapmode-diagnostics", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-selected-mapmodes", datum_attachment["fixtures"])
+        self.assertIn("c51m5/partdesign-datum-user-offset-plane-sketch", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-offset-reverse-writeback", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-point-single-input-modes", datum_attachment["fixtures"])
         self.assertIn("c51m5/partdesign-datum-point-proximity-modes", datum_attachment["fixtures"])
@@ -4814,6 +4816,26 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIsNone(metadata)
         self.assertEqual(data, b"")
         self.assertIn("server file path", error)
+
+    def test_c_api_export_reports_no_computed_shape_for_datum_plane_provider(self) -> None:
+        document = json.loads(
+            (ROOT / "fixtures" / "c51m5" / "partdesign-datum-user-offset-plane-sketch.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+        status, metadata, data, error = self.call_export_ffi(
+            {"document": document, "object": "OffsetPlane", "format": "step"}
+        )
+
+        self.assertEqual(status, 0, error)
+        self.assertEqual(data, b"")
+        self.assertIsNotNone(metadata)
+        assert metadata is not None
+        self.assertEqual(metadata["object"], "OffsetPlane")
+        self.assertEqual(metadata["bytes"], 0)
+        self.assertEqual([item["code"] for item in metadata["diagnostics"]], ["execution_failed"])
+        self.assertIn("no computed shape", metadata["diagnostics"][0]["message"])
 
     def test_p8_cli_exports_recomputed_shape_files(self) -> None:
         cases = {

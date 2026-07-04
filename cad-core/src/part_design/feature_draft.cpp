@@ -1,7 +1,9 @@
 #include "cad_core/part_design/feature_draft.h"
 
+#include "datum_plane_reference.h"
 #include "feature_dress_up_support.h"
 
+#include "cad_core/part/edge_axis.h"
 #include "cad_core/runtime/feature_executor.h"
 
 #include <BRepAdaptor_Curve.hxx>
@@ -73,19 +75,22 @@ std::optional<gp_Dir> lineDirectionFromEdge(
     const std::string& property
 )
 {
-    BRepAdaptor_Curve curve(edge);
-    if (curve.GetType() != GeomAbs_Line) {
+    // FreeCAD FeatureDraft::execute() checks BRepAdaptor_Curve::GetType() == GeomAbs_Line for
+    // PullDirection references, so this path deliberately does not accept geometric-line BSplines.
+    part::EdgeAxisOptions options;
+    const auto resolved = part::resolveEdgeAxis(edge, options);
+    if (!resolved.axis) {
         runtime::addDiagnostic(
             context.diagnostics,
             "error",
             "unsupported_subshape_kind",
-            property + " reference edge must be linear",
+            property + " reference edge must be linear: " + resolved.message,
             object.name,
             property
         );
         return std::nullopt;
     }
-    return curve.Line().Direction();
+    return resolved.axis->direction;
 }
 
 std::optional<gp_Dir> resolveDraftPullDirection(
@@ -290,6 +295,12 @@ std::optional<DraftNeutralPlane> resolveDraftNeutralPlane(
         return std::nullopt;
     }
 
+    TopoDS_Face face;
+    if (const auto planeFrame = detail::referencePlaneProviderFrame(link->object, context);
+        planeFrame && link->subnames.empty()) {
+        return DraftNeutralPlane {gp_Pln(planeFrame->origin, planeFrame->normal), "explicit_reference"};
+    }
+
     const auto shapeIt = context.shapes.find(link->object);
     if (shapeIt == context.shapes.end()) {
         runtime::addDiagnostic(
@@ -305,10 +316,7 @@ std::optional<DraftNeutralPlane> resolveDraftNeutralPlane(
         return std::nullopt;
     }
 
-    TopoDS_Face face;
-    if (link->subnames.empty()
-        && (shapeIt->second.kind == runtime::ShapeValue::Kind::DatumPlane
-            || shapeIt->second.kind == runtime::ShapeValue::Kind::PartPrimitive)) {
+    if (link->subnames.empty() && shapeIt->second.kind == runtime::ShapeValue::Kind::PartPrimitive) {
         const auto directFace = firstFace(shapeIt->second.shape);
         if (!directFace) {
             runtime::addDiagnostic(

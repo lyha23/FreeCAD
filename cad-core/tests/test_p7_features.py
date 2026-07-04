@@ -326,6 +326,24 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}},
         )
 
+    def test_p3b_pad_reference_axis_accepts_geometrically_linear_bspline_edge(self) -> None:
+        result = self.run_recompute("pad-reference-axis-linear-bspline-edge", "p3b")
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["source_profile"], "Sketch")
+        self.assertGreater(pad["volume"], 0.0)
+        self.assertAlmostEqual(abs(pad["bbox"]["max"][2] - pad["bbox"]["min"][2]), 4.0, delta=1e-9)
+
+    def test_p3b_pad_reference_axis_rejects_nonlinear_bspline_edge(self) -> None:
+        result = self.run_recompute("pad-reference-axis-nonlinear-bspline-rejected", "p3b")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+        self.assertEqual([item["code"] for item in diagnostics], ["unsupported_subshape_kind"])
+        self.assertIn("not geometrically linear", diagnostics[0]["message"])
+
     def test_p7_refine_true_uses_refinemodel_path(self) -> None:
         result = self.run_recompute("pad-refine-true", "p7")
         pad = result["objects"]["Pad"]
@@ -1128,6 +1146,55 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
         self.assert_object_matches_expected(result, "c51m5", "partdesign-datum-selected-mapmodes")
 
+    def test_c51m5_datum_user_offset_plane_publishes_frame_and_drives_sketch(self) -> None:
+        result = self.run_recompute("partdesign-datum-user-offset-plane-sketch", "c51m5")
+        base_plane = result["objects"]["BasePlane"]
+        offset_plane = result["objects"]["OffsetPlane"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(base_plane["status"], "ok")
+        self.assertEqual(base_plane["datum"], "plane")
+        self.assertEqual(base_plane["origin"], [0.0, 0.0, 0.0])
+        self.assertNotIn("length", base_plane)
+        self.assertNotIn("width", base_plane)
+        self.assertEqual(offset_plane["status"], "ok")
+        self.assertEqual(offset_plane["datum"], "plane")
+        self.assertEqual(offset_plane["attached"], True)
+        self.assertEqual(offset_plane["map_mode"], "ObjectXY")
+        self.assertEqual(offset_plane["origin"], [0.0, 0.0, 3.0])
+        self.assertNotIn("length", offset_plane)
+        self.assertNotIn("width", offset_plane)
+        self.assertEqual(result["objects"]["SketchOnOffsetPlane"]["status"], "ok")
+        self.assertEqual(body["status"], "ok")
+        self.assertAlmostEqual(body["bbox"]["min"][2], 3.0)
+        self.assertAlmostEqual(body["bbox"]["max"][2], 8.0)
+        self.assertNotIn("BasePlane", result["mesh"])
+        self.assertNotIn("OffsetPlane", result["mesh"])
+        self.assertNotIn("BasePlane", result["subshapes"])
+        self.assertNotIn("OffsetPlane", result["subshapes"])
+        self.assertNotIn("BasePlane", result["named_shapes"])
+        self.assertNotIn("OffsetPlane", result["named_shapes"])
+
+        response = self.run_recompute_response("partdesign-datum-user-offset-plane-sketch", "c51m5")
+        response_base_plane = self.response_result(response, "BasePlane")
+        response_plane = self.response_result(response, "OffsetPlane")
+        response_body = self.response_result(response, "Body")
+
+        self.assertEqual(response["diagnostics"], [])
+        self.assertEqual(response_base_plane["datum"], "plane")
+        self.assertEqual(response_base_plane["frame"]["origin"], [0.0, 0.0, 0.0])
+        self.assertEqual(response_base_plane["frame"]["normal"], [0.0, 0.0, 1.0])
+        self.assertIsNone(response_base_plane["mesh"])
+        self.assertEqual(response_base_plane["subshapes"], [])
+        self.assertEqual(response_plane["datum"], "plane")
+        self.assertEqual(response_plane["frame"]["origin"], [0.0, 0.0, 3.0])
+        self.assertEqual(response_plane["frame"]["normal"], [0.0, 0.0, 1.0])
+        self.assertEqual(response_plane["frame"]["x_axis"], [1.0, 0.0, 0.0])
+        self.assertIsNone(response_plane["mesh"])
+        self.assertEqual(response_plane["subshapes"], [])
+        self.assertIsNotNone(response_body["mesh"])
+
     def test_c51x_datum_point_single_input_modes_match_expected(self) -> None:
         result = self.run_recompute("partdesign-datum-point-single-input-modes", "c51m5")
 
@@ -1599,6 +1666,22 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(revolution["status"], "ok")
         self.assertEqual(revolution["source_profile"], "SketchRevolution")
         self.assertEqual([abs(component) for component in revolution["axis_direction"]], [1.0, 0.0, 0.0])
+        self.assertGreater(revolution["volume"], 0.0)
+
+    def test_c51m1_revolution_accepts_linear_bspline_pipe_axis(self) -> None:
+        result = self.run_recompute("partdesign-revolution-pipe-linear-bspline-axis", "c51m1")
+        revolution = result["objects"]["Revolution"]
+        body = result["objects"]["Body"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(revolution["status"], "ok")
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(revolution["method"], "Angle")
+        self.assertEqual(revolution["source_profile"], "AdditivePipe")
+        self.assertEqual(
+            [round(abs(component), 9) for component in revolution["axis_direction"]],
+            [0.0, 1.0, 0.0],
+        )
         self.assertGreater(revolution["volume"], 0.0)
 
     def test_c51m1_revolution_upto_body_paths_use_brepfeat_history(self) -> None:
@@ -3295,15 +3378,20 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(preview["volume"], 0)
 
     def test_c3m5_body_dressup_rejects_invalid_target_stable_subname(self) -> None:
-        result = self.run_recompute("body-dressup-invalid-stable-subname", "c3m5")
+        fixture_path = ROOT / "fixtures" / "c3m5" / "body-dressup-invalid-stable-subname.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        for item in payload["Objects"]:
+            if item["Name"] == "Fillet3":
+                item["Properties"]["Base"]["StableSubList"] = ["Missing.Edge30"]
+        result = self.run_recompute_payload(payload)
         diagnostic = result["diagnostics"][0]
 
         self.assertEqual(diagnostic["code"], "unsupported_stable_subname")
         self.assertEqual(diagnostic["object"], "Fillet3")
         self.assertEqual(diagnostic["property"], "Base")
         self.assertEqual(diagnostic["target"], "Pad5")
-        self.assertEqual(diagnostic["subname"], "Fillet2.Edge30")
-        self.assertIn("Fillet2.Edge30", diagnostic["message"])
+        self.assertEqual(diagnostic["subname"], "Missing.Edge30")
+        self.assertIn("Missing.Edge30", diagnostic["message"])
         self.assertEqual(result["objects"]["Fillet3"]["status"], "error")
         self.assertNotIn("FilletPreview", {item["object"] for item in result["diagnostics"]})
 

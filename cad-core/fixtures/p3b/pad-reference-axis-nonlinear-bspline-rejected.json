@@ -1,0 +1,100 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [0, 0],
+            "end": [10, 0]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 0],
+            "end": [10, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [10, 5],
+            "end": [0, 5]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [0, 5],
+            "end": [0, 0]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "AxisSketch",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "id": 700002,
+            "kind": "BSpline",
+            "degree": 2,
+            "poles": [
+              [0, 0],
+              [5, 2],
+              [10, 0]
+            ]
+          }
+        ],
+        "Constraints": [],
+        "Placement": {
+          "Base": [0, 0, 0],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+        }
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 3,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 4,
+        "Reversed": false,
+        "SideType": "One side",
+        "ReferenceAxis": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "AxisSketch",
+          "SubList": [
+            "Edge1"
+          ],
+          "StableSubList": [
+            "g700002"
+          ]
+        },
+        "AlongSketchNormal": true
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
+}

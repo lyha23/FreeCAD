@@ -1,5 +1,7 @@
 #pragma once
 
+#include "datum_plane_reference.h"
+
 #include "cad_core/app/document.h"
 #include "cad_core/base/placement.h"
 #include "cad_core/part/property_topo_shape.h"
@@ -82,6 +84,7 @@ struct SupportResolution
     std::string subname;
     TopoDS_Shape shape;
     gp_Trsf placement;
+    bool referencePlaneProvider = false;
     bool recovered = false;
     std::string shadowOldName;
 };
@@ -384,19 +387,14 @@ inline std::optional<SupportResolution> resolveAttachmentSupport(const app::Docu
                                                                  bool requireSubshape)
 {
     const auto shapeIt = context.shapes.find(support.object);
-    if (shapeIt == context.shapes.end()) {
-        addDatumAttachmentDiagnostic(context,
-                                     object,
-                                     support,
-                                     "AttachmentSupport",
-                                     "Datum AttachmentSupport target " + support.object + " has no computed shape",
-                                     "missing_link_target");
-        return std::nullopt;
-    }
 
     SupportResolution resolution;
     resolution.link = support;
     resolution.placement = placementForObject(support.object, context);
+    if (const auto planeFrame = referencePlaneProviderFrame(support.object, context)) {
+        resolution.placement = planeFrame->placement;
+        resolution.referencePlaneProvider = true;
+    }
 
     const part::NamedShape* namedShape = nullptr;
     const auto namedShapeIt = context.namedShapes.find(support.object);
@@ -436,6 +434,19 @@ inline std::optional<SupportResolution> resolveAttachmentSupport(const app::Docu
                                     [](const std::string& item) { return item.empty(); }),
                      candidates.end());
     candidates.erase(std::unique(candidates.begin(), candidates.end()), candidates.end());
+
+    if (shapeIt == context.shapes.end()) {
+        if (resolution.referencePlaneProvider && candidates.empty()) {
+            return resolution;
+        }
+        addDatumAttachmentDiagnostic(context,
+                                     object,
+                                     support,
+                                     "AttachmentSupport",
+                                     "Datum AttachmentSupport target " + support.object + " has no computed shape",
+                                     "missing_link_target");
+        return std::nullopt;
+    }
 
     if (!requireSubshape && candidates.empty()) {
         resolution.shape = shapeIt->second.shape;
@@ -641,6 +652,10 @@ inline std::optional<gp_Trsf> flatFacePlacement(const SupportResolution& support
                                                 runtime::ComputeContext& context,
                                                 const app::DocumentObject& object)
 {
+    if (support.referencePlaneProvider && support.shape.IsNull()) {
+        return placementFromObjectMode("ObjectXY", support.placement, mapReverse);
+    }
+
     TopoDS_Face face;
     gp_Pln plane;
     bool reversed = false;

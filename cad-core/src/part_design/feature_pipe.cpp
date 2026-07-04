@@ -657,6 +657,12 @@ PipeLawResolution resolvePipeLaw(const app::DocumentObject& object,
     return resolution;
 }
 
+bool usesCadCoreProductPipeLaw(const PipeLawResolution& resolution)
+{
+    return resolution.metadata.is_object()
+        && resolution.metadata.value("source", std::string {}) == "cad_core_product_contract";
+}
+
 bool rejectSourceBlockedPipeBranches(const app::DocumentObject& object,
                                      runtime::ComputeContext& context,
                                      int transformation)
@@ -1294,18 +1300,23 @@ void executePipeFeature(const app::DocumentObject& object,
         }
     }
 
-    if (featureNamedShape) {
-        context.namedShapes[object.name] = *featureNamedShape;
+    const bool publishToolContractShape = bodyPrefix && !additive && usesCadCoreProductPipeLaw(pipeLaw);
+    const TopoDS_Shape& publishedShape = publishToolContractShape ? toolShape : featureShape;
+    const std::optional<part::NamedShape>& publishedNamedShape =
+        publishToolContractShape ? toolNamedShape : featureNamedShape;
+
+    if (publishedNamedShape) {
+        context.namedShapes[object.name] = *publishedNamedShape;
     }
-    if (runtime::shouldBuildDisplayTopology(object, context)) {
+    if (publishToolContractShape || runtime::shouldBuildDisplayTopology(object, context)) {
         context.mesh[object.name] = cad_core::part::meshForShape(
-            featureShape,
+            publishedShape,
             "Face",
             "Edge",
             "Vertex",
             context.displayMeshDeflection
         );
-        context.subshapes[object.name] = part::subshapeMapForShape(featureShape);
+        context.subshapes[object.name] = part::subshapeMapForShape(publishedShape);
     }
 
     if (additive) {
@@ -1323,7 +1334,7 @@ void executePipeFeature(const app::DocumentObject& object,
 
     nlohmann::json result = {
         {"status", "ok"},
-        {"shape", shapeKind(featureShape)},
+        {"shape", shapeKind(publishedShape)},
         {"feature", "partdesign_pipe"},
         {"add_sub", additive ? "add" : "sub"},
         {"source_profile", profile->objectName},
@@ -1333,9 +1344,9 @@ void executePipeFeature(const app::DocumentObject& object,
         {"transition", transitionLabel(*transition)},
         {"sections", nlohmann::json::array()},
         {"cap_sewing", "mapper_history:part_design_pipe"},
-        {"solid_count", solidCount(featureShape)},
-        {"bbox", cad_core::part::objectBBoxForShape(featureShape)},
-        {"volume", cad_core::part::volumeForShape(featureShape)},
+        {"solid_count", solidCount(publishedShape)},
+        {"bbox", cad_core::part::objectBBoxForShape(publishedShape)},
+        {"volume", cad_core::part::volumeForShape(publishedShape)},
         {"topo_naming_history", "maker_history:partdesign_pipe"},
         {"kernel", cad_core::part::kernelVersion()},
     };

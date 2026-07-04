@@ -1,0 +1,158 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "TypeId": "Sketcher::SketchObject",
+      "ID": 1,
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [-1159.2030710329814, 505.6791233964473],
+            "id": 100001,
+            "kind": "LineSegment",
+            "start": [-576.8599910448104, 505.6791233964473]
+          },
+          {
+            "end": [-1159.2030710329814, 177.90738250277218],
+            "id": 100002,
+            "kind": "LineSegment",
+            "start": [-1159.2030710329814, 505.6791233964473]
+          },
+          {
+            "end": [-576.8599910448104, 177.90738250277218],
+            "id": 100003,
+            "kind": "LineSegment",
+            "start": [-1159.2030710329814, 177.90738250277218]
+          },
+          {
+            "end": [-576.8599910448104, 505.6791233964473],
+            "id": 100004,
+            "kind": "LineSegment",
+            "start": [-576.8599910448104, 177.90738250277218]
+          }
+        ],
+        "Placement": {
+          "Base": [0, 0, 0],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [0, 0, 0, 1]
+        }
+      }
+    },
+    {
+      "Name": "SketchPipeSpine",
+      "TypeId": "Sketcher::SketchObject",
+      "ID": 2,
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "endTangent": [-21.51502514978904, -45.13428511457721],
+            "id": 600001,
+            "kind": "InterpolatedSpline",
+            "points": [
+              [392.6107826879536, 450.32623967833206],
+              [771.9201355514127, -94.30988559694116],
+              [511.8191212394367, -639.9505835192742]
+            ],
+            "startTangent": [28.575154107353796, -41.02999595102324]
+          }
+        ],
+        "Placement": {
+          "Base": [0, 0, 0],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [0.5, 0.5, 0.5, 0.5]
+        }
+      }
+    },
+    {
+      "Name": "AdditivePipe",
+      "TypeId": "PartDesign::AdditivePipe",
+      "ID": 3,
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Mode": "Fixed",
+        "Profile": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [],
+          "SubList": [],
+          "value": "SketchPipeProfile"
+        },
+        "Refine": false,
+        "Spine": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": ["g600001"],
+          "SubList": ["Edge1"],
+          "value": "SketchPipeSpine"
+        },
+        "Transformation": "Constant",
+        "Transition": "Transformed"
+      }
+    },
+    {
+      "Name": "Revolution",
+      "TypeId": "PartDesign::Revolution",
+      "ID": 4,
+      "Properties": {
+        "Angle": 360,
+        "FuseOrder": "BaseFirst",
+        "FuzzyTolerance": 0,
+        "Midplane": false,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": ["AdditivePipe.FrontFace.Face1"],
+              "SubList": ["Face5"],
+              "value": "AdditivePipe"
+            }
+          ]
+        },
+        "ReferenceAxis": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": ["AdditivePipe.BackFace.Edge2"],
+          "SubList": ["Edge7"],
+          "value": "AdditivePipe"
+        },
+        "Refine": false,
+        "Reversed": false,
+        "Type": "Angle"
+      }
+    },
+    {
+      "Name": "Body",
+      "TypeId": "PartDesign::Body",
+      "ID": 5,
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile",
+            "SketchPipeSpine",
+            "AdditivePipe",
+            "Revolution"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Revolution"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Body"]
+  }
+}
