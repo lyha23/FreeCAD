@@ -19,7 +19,7 @@
 
 ## 队列顺序
 
-1. `7-4-19-53-C12-M16工作步骤总入口.md`
+1. `7-4-19-53-【已实现】C12-M16工作步骤总入口.md`
 2. `7-4-19-54-C12-M16-S0-live基线与C12-M15继承冻结.md`
 3. `7-4-19-55-C12-M16-S1-FreeCAD-split-history与current-reselect复核.md`
 4. `7-4-19-56-C12-M16-S2-red-fixture与focused-test设计.md`
@@ -29,7 +29,7 @@
 
 ## 当前状态
 
-- 包结构、矩阵和 S0-S5 队列文件已创建。
+- 包结构、矩阵和 S0-S5 队列文件已创建；工作步骤总入口已关闭，下一步进入 S0。
 - C12-M16 是实现批次：用户明确要求写代码实现 C12-M15 没有授权的 split fragment 缺口。
 - 后续 worker 必须先关闭 S0/S1，证明 FreeCAD split history source 与 cad-core current gap，然后按 S2 red tests -> S3 C++ -> S4 integration -> S5 release 顺序推进。
 
