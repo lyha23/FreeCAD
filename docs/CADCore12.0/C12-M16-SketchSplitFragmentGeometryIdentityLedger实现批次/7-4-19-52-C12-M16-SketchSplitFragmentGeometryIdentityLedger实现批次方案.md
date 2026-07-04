@@ -44,6 +44,13 @@ C12-M15 已发布 `SketchGeometryIdentityLedger` 产品契约，并证明普通 
 - S4：接入 response / reference resolution / adapter capability wording，并跑 focused validation。
 - S5：发布实现闸门，更新 root README、矩阵和验收记录。
 
+## 发布状态
+
+- Final status：`implemented_current_supported`。
+- S0-S4 均已 `【已实现】`：S3 实现 `g<ID>:splitN` request-local fragment ledger，S4 验证 response / reference resolution / adapter / capability public wording 共享同一 fragment token。
+- S5 关闭 blocker queue 和 validation matrix；C12-M16 队列关闭后只输出 markdown 表头。
+- 后续只在 focused regression、new checked-in expected/current mismatch、adapter/capability contract drift，或用户明确要求 persistent FreeCAD session parity 时重开。
+
 ## 验收分层
 
 本轮短跑：

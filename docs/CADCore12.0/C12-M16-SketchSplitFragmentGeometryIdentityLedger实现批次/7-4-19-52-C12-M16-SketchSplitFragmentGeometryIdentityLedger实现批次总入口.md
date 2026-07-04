@@ -21,18 +21,19 @@
 
 1. `7-4-19-53-【已实现】C12-M16工作步骤总入口.md`
 2. `7-4-19-54-【已实现】C12-M16-S0-live基线与C12-M15继承冻结.md`
-3. `7-4-19-55-C12-M16-S1-FreeCAD-split-history与current-reselect复核.md`
-4. `7-4-19-56-C12-M16-S2-red-fixture与focused-test设计.md`
-5. `7-4-19-57-C12-M16-S3-fragment-ledger-C++实现.md`
-6. `7-4-19-58-C12-M16-S4-response-reference-adapter接入验证.md`
-7. `7-4-19-59-C12-M16-S5-实现发布闸门.md`
+3. `7-4-19-55-【已实现】C12-M16-S1-FreeCAD-split-history与current-reselect复核.md`
+4. `7-4-19-56-【已实现】C12-M16-S2-red-fixture与focused-test设计.md`
+5. `7-4-19-57-【已实现】C12-M16-S3-fragment-ledger-C++实现.md`
+6. `7-4-19-58-【已实现】C12-M16-S4-response-reference-adapter接入验证.md`
+7. `7-4-19-59-【已实现】C12-M16-S5-实现发布闸门.md`
 
 ## 当前状态
 
-- 包结构、矩阵和 S0-S5 队列文件已创建；工作步骤总入口与 S0 live 基线已关闭，下一步进入 S1。
 - C12-M16 是实现批次：用户明确要求写代码实现 C12-M15 没有授权的 split fragment 缺口。
 - S0 live 冻结为 `HEAD=a4375f45a5`（`a4375f45a5 文档：关闭 C12-M16 工作步骤总入口`），起点 worktree clean；C12-M15 队列只输出 markdown 表头。
-- 后续 worker 必须先关闭 S1，证明 FreeCAD split history source 与 cad-core current gap，然后按 S2 red tests -> S3 C++ -> S4 integration -> S5 release 顺序推进。
+- S3 已实现 source one-to-many request-local fragment ledger，`g<ID>:splitN` 来自 split history / internal alias / current fragment edge 映射，不靠 mesh、bbox 或 response order 猜。
+- S4 已验证 response、reference resolution、adapter public result 和 `sketcher.split_fragment_identity_ledger` capability wording 共享同一 fragment ledger，并明确不发布 persistent FreeCAD session parity。
+- S5 发布 final status：`implemented_current_supported`；blocker queue 无悬空 open row，C12-M16 队列关闭后只输出 markdown 表头。
 
 ## 执行规则
 
@@ -44,7 +45,7 @@
 
 ## 关闭条件
 
-- 队列可由 `step_goal_queue.py` 读出入口 + S0-S5，并按文件名顺序推进。
+- 队列可由 `step_goal_queue.py` 读出入口 + S0-S5；S5 关闭后只输出 markdown 表头。
 - TSV 字段数检查通过。
 - README、方案、总入口、矩阵与 root README 均指向 C12-M16 implementation scope。
 - blocker queue 中每个未关闭 blocker 都有明确 next action。

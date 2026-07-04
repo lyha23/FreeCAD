@@ -11,8 +11,16 @@ C12-M16 承接 C12-M15 的唯一代码缺口：`C12M15-CONTRACT-009 split_fragme
 - 创建前 `git -c core.quotepath=false status --short -uall` 无输出。
 - S0 live 冻结：`HEAD=a4375f45a5`（`a4375f45a5 文档：关闭 C12-M16 工作步骤总入口`），`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 `git -c core.quotepath=false status --short -uall` 无输出。
 - C12-M15 队列已关闭且当前只输出 markdown 表头，final status 为 `design_published_no_code_current_sufficient`；C12-M16 显式重开其中 `CONTRACT-009` 的 implementation lane。
-- S0 已冻结非目标：不重开普通 `g<ID>` raw edge identity，不处理 my-chili3d frontend sync，不处理 C12-M11 open wire mesh contract，不引入 persistent backend sketch session；下一步进入 S1。
-- S4 接入验证：`HEAD=7c5ce46eca`（`7c5ce46eca 实现 C12-M16 S3 split fragment ledger`），起点 worktree clean；`raw_edge_identity`、`mesh.edgeSegments[]`、`subshapes[]` 和 `elementReferenceUpdates` 已复核共享 `g701:split1..3`，`StableSubList=["g701:split1"]` 解析到当前 `InternalEdge3`；capability / adapter 公开口径发布 request-local split fragment ledger support，并明确不声称 persistent FreeCAD session parity；下一步进入 S5 发布闸门。
+- S0 已冻结非目标：不重开普通 `g<ID>` raw edge identity，不处理 my-chili3d frontend sync，不处理 C12-M11 open wire mesh contract，不引入 persistent backend sketch session。
+- S4 接入验证：`HEAD=7c5ce46eca`（`7c5ce46eca 实现 C12-M16 S3 split fragment ledger`），起点 worktree clean；`raw_edge_identity`、`mesh.edgeSegments[]`、`subshapes[]` 和 `elementReferenceUpdates` 已复核共享 `g701:split1..3`，`StableSubList=["g701:split1"]` 解析到当前 `InternalEdge3`；capability / adapter 公开口径发布 request-local split fragment ledger support，并明确不声称 persistent FreeCAD session parity。
+- S5 发布闸门：`HEAD=cf4849ce9a`（`cf4849ce9a 验证 C12-M16 S4 adapter 接入`），起点 worktree clean；S0-S4 均已 `【已实现】`，最终状态发布为 `implemented_current_supported`，`C12M16-BLOCKER-601` 关闭，C12-M16 队列关闭后只输出 markdown 表头。
+
+## 发布状态
+
+- Final status：`implemented_current_supported`。
+- 当前支持：source one-to-many split fragment request-local ledger，`g<ID>:splitN` 在 `mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 与 reference resolution 中共享同一账本。
+- 保留边界：不声称 persistent FreeCAD session parity，不保存 backend sketch session / TopoDS / NamedShape / ElementMap / BREP / mesh 跨请求状态，不处理 my-chili3d frontend consumer sync 或 C12-M11 open wire mesh 产品契约。
+- 重开条件：未来 checked-in focused regression 证明 `g<ID>:splitN` 不能解析到当前 fragment、response/reference/adapter 不再共享同一 fragment ledger、`split_fragment_missing` / `split_requires_reselect` 诊断丢失，或新增需求要求跨请求 FreeCAD session parity。
 
 ## 问题定义
 
