@@ -91,6 +91,8 @@ S5 已完成为 blocked/partial closure，未修改 `cad-core/src/part/part_swee
 - capability / adapter wording 如有状态变化已同步。
 - root README、package README、方案、矩阵都写明 final status、剩余 blocker 和下一步。
 
+S6 已完成：release-gate validation 通过，`C12M13-BLOCKER-701` 关闭，最终发布状态为 `partial_implementation_with_named_followups`。S3/S4 为实现完成项；S5 helper uncollected methods 与 ORACLE-001 作为命名 follow-up 保留。S6 未补新功能，未改 `cad-core/src`、fixtures、expected、tests、adapter 或 capability source。
+
 ## 实现顺序
 
 1. 先采集 S2 oracle，不从 current fixture 输出倒推业务逻辑。

@@ -23,6 +23,15 @@ C12-M13 承接 C12-M12 的 `partial_implementation_multiwire_pipe_sewing` 出口
 - S3 multisection vertex 细节迁移已关闭：`preparePipeShellProfileLanes()` 已对齐 FreeCAD `Pipe::execute()` 中后续 section 比 base 多 wire 时由 outer `catch (...)` 发布的 `A fatal error occurred when making the pipe`；`ORACLE-103` expected 移除 `known_gap`，`ORACLE-101/102` 和 `c5m3`、`c51m4`、`c12m12` focused regression 保持 green。下一步队列应从 S4 `Boolean / AddSubShape / rawShape 生命周期迁移` 继续。
 - S4 Boolean / AddSubShape / rawShape 生命周期迁移已关闭：`feature_pipe.cpp` 现在把 AddSubShape 保留为 pre-boolean tool cache，同时对同一 Body 前序 PartDesign feature 建立 graph 依赖并在 Pipe producer 内发布 base Fuse/Cut 后的 feature `Shape` / mesh / subshapes / named shape；`ORACLE-201/202` expected 已移除 `known_gap`，Body replay 仍通过 AddSubShape add/sub slot 消费 tool。
 - S5 Part Sweep mutable helper 生命周期迁移已关闭为 `blocked_partial_helper_oracle`：`ORACLE-301` 的 collected subset 继续 current-supported，`remove/firstShape/lastShape/generated/simulate` 没有 checked-in native expected 或 approved product-contract artifact；本步未改 C++，保持 Part Sweep wrapper 与 helper product contract 不混线。下一步队列应从 S6 `集成回归与发布闸门` 继续。
+- S6 集成回归与发布闸门已关闭：S6 live 基线为 `HEAD=5be5b2f486`（`5be5b2f486 文档：关闭 C12-M13 S5 helper blocker`），起点 worktree clean，队列第一项确认为 S6。`cmake --build build`、focused P7 6 tests、focused P8 helper subset、c12m13 JSON、TSV、whitespace 与 `git diff --check` 均通过。最终状态发布为 `partial_implementation_with_named_followups`。
+
+## 最终发布状态
+
+- Final status：`partial_implementation_with_named_followups`。
+- 已完成：S3 multisection vertex / wiresection diagnostic closure；S4 PartDesign Pipe AddSubShape pre-boolean cache、base Fuse/Cut 后 feature `Shape` / Body Tip 生命周期 parity；S5 collected helper subset `add/isReady/getStatus/build/shape/makeSolid` current-supported。
+- 保留 follow-up：`C12M13-ORACLE-301` 的 `remove/firstShape/lastShape/generated/simulate` 仍缺 checked-in native expected 或 approved product-contract artifact；重开条件是 dedicated native helper probe 或 product-contract artifact 覆盖方法集合、调用顺序、diagnostics 和 current response 字段。
+- 保留 follow-up：`C12M13-ORACLE-001` 仍等待用户 failing request JSON 加 current result / preview payload 或 exact fixture path；拿到证据后先回到 S2 最小复现，再按语义分流到 S3/S4。
+- 本发布闸门不修改 `cad-core/src`、fixtures、expected、tests、adapter 或 capability source；当前 capability / adapter source wording 没有因 S6 closeout 产生状态漂移。
 
 ## 问题定义
 
@@ -71,6 +80,8 @@ S1 复核后的当前 landing 口径：PartDesign Pipe 的 current path 已落�
 1. `implementation_complete_for_remainder_batch`：multisection vertex、AddSubShape/rawShape/Boolean lifecycle、Part Sweep helper lifecycle 均有 source-backed oracle、focused tests 和 current green。
 2. `partial_implementation_with_named_followups`：某一子项被 FreeCADCmd / OCCT / user repro 阻塞，其余子项完成并留下精确 reopen condition。
 3. `blocked_by_oracle_or_helper_visibility`：native helper 生命周期或用户失败样例无法稳定采集，不补 C++，只保留 blocker。
+
+本包实际出口为 `partial_implementation_with_named_followups`：S3/S4 完成，S5 helper uncollected methods 与 ORACLE-001 保留明确 follow-up / blocker。
 
 ## S2 oracle 结论
 

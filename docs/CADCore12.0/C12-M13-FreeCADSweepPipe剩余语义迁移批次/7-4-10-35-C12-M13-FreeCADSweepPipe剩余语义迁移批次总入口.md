@@ -25,7 +25,7 @@
 5. `7-4-10-40-【已实现】C12-M13-S3-multisection-vertex细节迁移.md`
 6. `7-4-10-41-【已实现】C12-M13-S4-Boolean-AddSubShape-rawShape生命周期迁移.md`
 7. `7-4-10-42-【已实现】C12-M13-S5-PartSweep-mutable-helper生命周期迁移.md`
-8. `7-4-10-43-C12-M13-S6-集成回归与发布闸门.md`
+8. `7-4-10-43-【已实现】C12-M13-S6-集成回归与发布闸门.md`
 
 ## 当前状态
 
@@ -35,7 +35,8 @@
 - S2 已关闭：`c12m13` expected / focused tests 已落地；S3 只处理 diagnostic mismatch，S4 处理 AddSubShape/rawShape/Boolean lifecycle red evidence，S5 对未采证 helper methods 保持 blocked。
 - S3 已关闭：unequal-inner-wire diagnostic 已按 FreeCAD `Pipe::execute()` catch-all fatal 行为 red-to-green，`ORACLE-103` expected 不再保留 `known_gap`；下一步队列应从 S4 `Boolean / AddSubShape / rawShape 生命周期迁移` 继续。
 - S4 已关闭：PartDesign Pipe AddSubShape 保持 pre-boolean tool cache，base Fuse/Cut 后的 feature `Shape` / mesh / subshapes / named shape 与 FreeCAD expected 对齐，Body replay 仍消费 AddSubShape add/sub slots。
-- S5 已关闭为 `blocked_partial_helper_oracle`：collected helper subset current-supported，`remove/firstShape/lastShape/generated/simulate` 缺 checked-in native expected 或 approved product-contract artifact，不授权 C++ helper lifecycle 扩展；下一步队列应从 S6 `集成回归与发布闸门` 继续。
+- S5 已关闭为 `blocked_partial_helper_oracle`：collected helper subset current-supported，`remove/firstShape/lastShape/generated/simulate` 缺 checked-in native expected 或 approved product-contract artifact，不授权 C++ helper lifecycle 扩展。
+- S6 已关闭：release-gate focused build / P7 / P8 / docs hygiene 通过，最终状态为 `partial_implementation_with_named_followups`；C12-M13 队列预期只输出表头。
 - C12-M12 final status 为 `partial_implementation_multiwire_pipe_sewing`，不是完整 Sweep / Pipe 迁移完成。
 - ORACLE-001 当前仍是 `waiting_user_repro`；没有用户 request/result 时不得编造 fixture，但也不阻塞本包其它 source-backed 剩余项。
 
@@ -50,7 +51,7 @@
 ## 关闭条件
 
 - 队列、矩阵、README 与根 `docs/CADCore12.0/README.md` 均指向 C12-M13。
-- `step_goal_queue.py` 能读出 S0-S6。
+- `step_goal_queue.py` 在 S6 重命名后只输出表头。
 - TSV 字段数检查通过。
 - whitespace 与 `git diff --check` 通过。
 
