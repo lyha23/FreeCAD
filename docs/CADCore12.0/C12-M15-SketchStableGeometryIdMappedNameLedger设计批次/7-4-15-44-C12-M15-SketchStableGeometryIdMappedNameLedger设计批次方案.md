@@ -79,8 +79,17 @@ C12-M15 只做 stable geometry id / mapped-name ledger 设计。它不是继续 
 - S0：冻结 live 基线、C12-M11 / C12-M14 队列状态、capability remaining gap 为空的事实。
 - S1：复核 FreeCAD `updateGeoHistory()` / `generateId()` / `convertSubName()` / `getEdge()` 和 cad-core current identity 管线。
 - S2：发布 ledger interface、字段契约、fallback / diagnostic 规则和 non-goal。已关闭：`SketchGeometryIdentityLedger` 定义为 request-local 产品账本，`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 共享同一来源。
-- S3：比较 current coverage 与 S2 契约，裁决是否需要后续 C++ implementation package。
+- S3：比较 current coverage 与 S2 契约，裁决是否需要后续 C++ implementation package。已关闭：C12M15-CONTRACT-001..008、011、012 为 `current_supported`，009 split fragment durable identity 与 010 frontend consumer boundary 为 `design_only`；当前 coverage 足够 no-code 收口，不授权后续 C++ implementation package。
 - S4：发布设计结果，更新 root README、矩阵和验证记录。
+
+## S3 current-gap 裁决
+
+S3 选择 `design_published_no_code_current_sufficient` 出口：当前 parser、raw ledger、response publisher、internal alias normalization 与 reference resolution consumer 已覆盖 S2 账本契约需要的后端字段与 diagnostics。后续不创建最小 C++ implementation package，不新增 fixtures / expected / tests / adapters。
+
+S3 保留两个设计边界：
+
+- split one-source-to-many fragment 不自动继承 durable stable identity；当前只接受现有 mapper / reference-shadow split reselect 诊断，若未来需要 durable fragment identity，另开 fragment ledger / ElementMap 包。
+- my-chili3d frontend consumer sync 不属于本 FreeCAD repo 设计批次；前端只能消费后端字段，但实现同步另包处理。
 
 ## 验收分层
 
@@ -98,7 +107,7 @@ git diff --check
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD/cad-core
-python3 -m unittest tests.test_p5_features
+python3 -m unittest tests.test_p5_sketch
 python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_exposes_web_contract_facts
 ```
 
