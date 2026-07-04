@@ -18,6 +18,7 @@ C12-M15 承接 C12-M11 S4/S5 发布的 `C12-M11-StableGeometryIdMappedNameLedger
 - S1 source/current 复核已关闭：执行基线 `HEAD=5a5464fb96`（`5a5464fb96 文档：关闭 C12-M15 S0 基线冻结`），起点 worktree clean；FreeCAD authority 确认为 `GeometryFacade` extension id + mapped `g<ID>` / `e<ID>`，不是 `GeoId` 列表索引或当前 `EdgeN`。cad-core current landing 已定位到 `readGeometryIdField()`、`SketchGeometryIdentity` / `RawSketchEdgeIdentityLedger`、`stableSubnameForGeometryId()`、response field publisher、`raw_edge_identity.byStableSubname` 和 reference resolution consumer；S1 不修改 C++，并把 ledger interface 产品契约交给 S2。
 - S2 ledger interface 产品契约已关闭：执行基线 `HEAD=499616ab4c`（`499616ab4c docs: 关闭 C12-M15 S1 identity 管线复核`），起点 worktree clean；`SketchGeometryIdentityLedger` 发布为 request-local 产品账本，输入为当前请求 geometry/source edge/internal alias/old reference shadow，输出为 `byIndexed`、`byStableSubname`、stable/fallback/diagnostic 状态和 response fields。`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 必须消费同一账本；前端只消费后端字段，不靠 prefix guessing、mesh 顺序或当前 `EdgeN` 发明长期 identity。
 - S3 current gap 与最小实现边界裁决已关闭：执行基线 `HEAD=86749f91cb`（`86749f91cb 文档：发布 C12-M15 S2 ledger 产品契约`），起点 worktree clean；C12M15-CONTRACT-001..008、011、012 裁决为 `current_supported`，C12M15-CONTRACT-009 split fragment durable identity 与 C12M15-CONTRACT-010 frontend consumer boundary 裁决为 `design_only`。当前 coverage 足够 no-code 收口，不授权 C++ implementation package、fixtures、expected、tests 或 adapters；S4 只做设计发布闸门。
+- S4 设计发布闸门已关闭：执行基线 `HEAD=c4c0d19fed`（`c4c0d19fed docs: 关闭 C12-M15 S3 实现边界裁决`），起点 worktree clean；final status 为 `design_published_no_code_current_sufficient`。C12-M15 队列关闭后只输出表头，blocker queue 无悬空 open row；本包不授权 C++ implementation package、fixtures、expected、tests 或 adapters。
 
 ## 问题定义
 
@@ -30,7 +31,7 @@ FreeCAD 的更稳定路径是：
 3. `SketchObject::convertSubName()` 把 `EdgeN` 转为 `g<ID>` / `e<ID>` 这类 mapped name。
 4. `SketchObject::getEdge()` 仍能从 mapped name 回到当前实际 edge shape。
 
-CAD Core 当前已有 `geometryId`、`sourceGeometryId`、`sourceStableSubname`、`identityStatus`、`rawSketchEdgeIdentity` 和 reference resolution 管线，但还缺一份明确产品契约：哪些场景可以称为 stable，哪些只能降级为 `index_fallback`，以及未来实现应把账本的 seam 放在哪里。
+CAD Core 当前已有 `geometryId`、`sourceGeometryId`、`sourceStableSubname`、`identityStatus`、`rawSketchEdgeIdentity` 和 reference resolution 管线；C12-M15 已把这些字段收敛为明确产品契约：哪些场景可以称为 stable，哪些只能降级为 `index_fallback`，以及未来实现应把账本的 seam 放在哪里。
 
 ## 设计目标
 
@@ -77,10 +78,10 @@ CAD Core 当前已有 `geometryId`、`sourceGeometryId`、`sourceStableSubname`�
 ## 预期出口
 
 1. `design_published_implementation_ready`：source/current 复核证明 seam 已清晰，S2/S3 发布账本 interface 与最小 implementation 批次。
-2. `design_published_no_code_current_sufficient`：当前实现已经满足 C12-M11 follow-up，只需补文档和 capability wording。S3 当前选择此出口。
+2. `design_published_no_code_current_sufficient`：当前实现已经满足 C12-M11 follow-up，只需补文档发布记录。S4 已发布此出口。
 3. `design_blocked_need_oracle_or_product_decision`：FreeCAD source/current 仍不足以裁决 stable-id 语义，保留 blocker。
 
-S2 只发布产品契约，不裁决 current coverage。S3 已逐行比较上述契约与当前 parser、raw ledger、response publisher、internal alias normalization 和 reference resolution consumer：当前不需要后续 C++ package；split fragment durable identity 只保留为 design-only 边界，frontend consumer sync 仍是外部包。
+S2 只发布产品契约，不裁决 current coverage。S3 已逐行比较上述契约与当前 parser、raw ledger、response publisher、internal alias normalization 和 reference resolution consumer：当前不需要后续 C++ package；split fragment durable identity 只保留为 design-only 边界，frontend consumer sync 仍是外部包。S4 已把最终状态发布为 `design_published_no_code_current_sufficient`，C12-M15 队列闭合。
 
 ## 非目标
 

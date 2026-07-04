@@ -80,7 +80,7 @@ C12-M15 只做 stable geometry id / mapped-name ledger 设计。它不是继续 
 - S1：复核 FreeCAD `updateGeoHistory()` / `generateId()` / `convertSubName()` / `getEdge()` 和 cad-core current identity 管线。
 - S2：发布 ledger interface、字段契约、fallback / diagnostic 规则和 non-goal。已关闭：`SketchGeometryIdentityLedger` 定义为 request-local 产品账本，`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 共享同一来源。
 - S3：比较 current coverage 与 S2 契约，裁决是否需要后续 C++ implementation package。已关闭：C12M15-CONTRACT-001..008、011、012 为 `current_supported`，009 split fragment durable identity 与 010 frontend consumer boundary 为 `design_only`；当前 coverage 足够 no-code 收口，不授权后续 C++ implementation package。
-- S4：发布设计结果，更新 root README、矩阵和验证记录。
+- S4：发布设计结果，更新 root README、矩阵和验证记录。已关闭：final status 为 `design_published_no_code_current_sufficient`，C12-M15 队列闭合，blocker queue 无悬空 open row。
 
 ## S3 current-gap 裁决
 
@@ -90,6 +90,12 @@ S3 保留两个设计边界：
 
 - split one-source-to-many fragment 不自动继承 durable stable identity；当前只接受现有 mapper / reference-shadow split reselect 诊断，若未来需要 durable fragment identity，另开 fragment ledger / ElementMap 包。
 - my-chili3d frontend consumer sync 不属于本 FreeCAD repo 设计批次；前端只能消费后端字段，但实现同步另包处理。
+
+## S4 设计发布闸门
+
+S4 发布最终状态 `design_published_no_code_current_sufficient`。依据是 S3 已将 C12M15-CONTRACT-001..008、011、012 裁决为 `current_supported`，C12M15-CONTRACT-009 / 010 裁决为 `design_only`，且矩阵中无 `implementation_needed` / `blocked` 行。
+
+本包关闭后不打开后续 implementation package，不改 C++、fixtures、expected、tests、adapters 或 capability source。未来若要 durable split fragment identity，需另开 fragment ledger / ElementMap 包；my-chili3d frontend consumer sync 仍在 FreeCAD repo 外处理。
 
 ## 验收分层
 

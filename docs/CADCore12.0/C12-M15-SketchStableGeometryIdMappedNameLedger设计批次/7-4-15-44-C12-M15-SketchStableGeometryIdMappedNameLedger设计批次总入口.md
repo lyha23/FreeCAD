@@ -18,12 +18,12 @@
 
 ## 队列顺序
 
-1. `7-4-15-45-C12-M15工作步骤总入口.md`
+1. `7-4-15-45-【已实现】C12-M15工作步骤总入口.md`
 2. `7-4-15-46-【已实现】C12-M15-S0-live基线与C12-M11继承冻结.md`
 3. `7-4-15-47-【已实现】C12-M15-S1-FreeCAD-source与current-identity管线复核.md`
 4. `7-4-15-48-【已实现】C12-M15-S2-ledger-interface产品契约设计.md`
 5. `7-4-15-49-【已实现】C12-M15-S3-current-gap与最小实现边界裁决.md`
-6. `7-4-15-50-C12-M15-S4-设计发布闸门.md`
+6. `7-4-15-50-【已实现】C12-M15-S4-设计发布闸门.md`
 
 ## 当前状态
 
@@ -34,7 +34,7 @@
 - S1 FreeCAD source 与 current identity 管线复核已关闭：FreeCAD authority 是 `GeometryFacade` extension id 与 mapped `g<ID>` / `e<ID>`，`GeoId` / `EdgeN` 只代表当前索引；cad-core current landing 已定位到 parser、raw ledger、response publisher 和 reference resolution consumer。
 - S2 ledger interface 产品契约已关闭：`SketchGeometryIdentityLedger` 是 request-local 产品账本，输入当前请求 geometry/source edge/internal alias/old reference shadow，输出 `byIndexed`、`byStableSubname`、stable/fallback/diagnostic 状态和 response fields；`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 必须共享同一账本来源。
 - S3 current gap 与最小实现边界裁决已关闭：001..008、011、012 为 `current_supported`，009 split fragment durable identity 与 010 frontend consumer boundary 为 `design_only`；当前 coverage 足够 no-code 收口，不授权后续 C++ implementation package。
-- 后续 worker 从 S4 继续，只做设计发布闸门，不把前端 consumer sync 或 open wire mesh contract 塞回本包。
+- S4 设计发布闸门已关闭：final status 为 `design_published_no_code_current_sufficient`，blocker queue 无悬空 open row；C12-M15 队列关闭后只输出表头。
 
 ## 执行规则
 
@@ -48,10 +48,10 @@
 
 ## 关闭条件
 
-- 队列可由 `step_goal_queue.py` 读出 S0-S4，并按文件名顺序推进。
+- 队列关闭后 `step_goal_queue.py` 只输出 markdown 表头。
 - TSV 字段数检查通过。
 - README、方案、总入口、矩阵与 root README 均指向同一 C12-M15 设计范围。
-- blocker queue 中每个未关闭 blocker 都有明确 reopen / next action。
+- blocker queue 无悬空 open row；后续只按明确 reopen condition 另开包。
 
 ## 非目标
 
