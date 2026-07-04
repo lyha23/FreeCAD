@@ -25,6 +25,7 @@ C12-M14 承接 C12-M13 的 `partial_implementation_with_named_followups` 出口�
 - S2 dedicated native helper probe schema 与采集：`HEAD=0251a16d10`（`0251a16d10 文档：关闭 C12-M14 S1 source landing 复核`），起点 worktree clean。已新增 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-schema.md`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe.py`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json` 与 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-freecadcmd-version.txt`。FreeCAD baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`；`remove/firstShape/lastShape/generated/simulate` 均有 stable payload 或 stable diagnostic，组合 `remove/readd/simulate/build` 记录 `NCollection_Sequence::ChangeValue` 为 `native_instability_blocker`。
 - S3 product contract 与 current mismatch 准入裁决：`HEAD=fa3fde076d`（`fa3fde076d 文档：关闭 C12-M14 S2 helper native probe`），起点 worktree clean。S2 artifact + source/current audit 确认 `ORACLE-101..104` 是 `implementation_authorized`：native stable expected/diagnostic 成立，当前 `part_sweep.cpp` 缺 helper lifecycle response 字段。`ORACLE-105` 是 `product_contract_only`：native `NCollection_Sequence::ChangeValue` 不稳定不能称为 FreeCAD parity，只能按本包 `7-4-13-26-C12-M14-helper-lifecycle-request-local产品契约.md` 作为 CAD Core request-local product contract 推进；S4 后续只执行这些授权/契约行，不重开 PartDesign Pipe 或 plain `Part::Sweep` wrapper。
 - S4 helper lifecycle 实现收口：`HEAD=c80329d633`（`c80329d633 文档：关闭 C12-M14 S3 helper 契约裁决`），起点 worktree clean。已在 `cad-core/src/part/part_sweep.cpp` 新增 opt-in `HelperLifecycle` request DTO 与 per-operation response，覆盖 remove、firstShape/lastShape、generated、standalone simulate 和 request-local remove/readd/simulate/build 产品契约；`ORACLE-105` 明确输出 `native_parity=false` 与 `contract_provenance=cad_core_product_contract_non_parity`，不称为 FreeCAD native parity。plain `Part::Sweep` wrapper 输出保持不变，`topo_shape_expansion.cpp` cap/sewing 内部 `Simulate(2)` 未混入 helper simulate。
+- S5 发布闸门：`HEAD=6be8764a2d`（`6be8764a2d 实现 C12-M14 S4 helper 生命周期契约`），起点 worktree clean。最终发布 `implementation_unlocked_helper_lifecycle` + `product_contract_published_helper_lifecycle` 混合状态：`ORACLE-101..104` 是 source-backed helper lifecycle current-supported rows，`ORACLE-105` 只按 CAD Core request-local product contract 关闭，保留 `native_parity=false` 与 `contract_provenance=cad_core_product_contract_non_parity`。Capability / adapter 公开口径已补 `HelperLifecycle` DTO、C12-M14 fixture、source-backed fields 与 ORACLE-105 non-parity contract；队列关闭后应只输出表头。
 - C12-M13 已发布 `partial_implementation_with_named_followups`：S3/S4 已完成，S5 保持 `blocked_partial_helper_oracle`。
 - C12-M13 `ORACLE-301` 已证明 helper collected subset `add/isReady/getStatus/build/shape/makeSolid` current-supported；`remove/firstShape/lastShape/generated/simulate` 缺 checked-in native expected 或 approved product-contract artifact。
 - C12-M13 S5 的临时 FreeCADCmd 调查只能证明单独调用可观察，组合 `remove/readd/simulate/build` 会触发 `NCollection_Sequence::ChangeValue`，不能作为稳定 expected。
@@ -72,6 +73,13 @@ C12-M14 承接 C12-M13 的 `partial_implementation_with_named_followups` 出口�
 2. `product_contract_published_helper_lifecycle`：native helper parity 不稳定，但 CAD Core request-local lifecycle DTO 被明确批准并有 focused tests。
 3. `no_code_retained_helper_blocker`：native probe / product contract 仍不成立，继续保留 blocker，不改 C++。
 
+## 最终出口
+
+- 已发布混合状态：`implementation_unlocked_helper_lifecycle` + `product_contract_published_helper_lifecycle`。
+- `ORACLE-101..104`：source-backed helper lifecycle rows，已由 S4 fixture/expected/focused P8 test 关闭为 current-supported。
+- `ORACLE-105`：仅为 CAD Core request-local product contract，不能称为 FreeCAD native parity；只有同一 FreeCAD / LibPack / OCCT baseline 产出 stable native expected 且不再触发 `NCollection_Sequence::ChangeValue` 时才重开 native parity。
+- S5 后 blocker queue 无 dangling open row；`C12M14-BLOCKER-302` 保留明确 reopen condition，`C12M14-BLOCKER-601` 已关闭。
+
 ## 非目标
 
 - 不重开 PartDesign Pipe S3/S4。
@@ -86,6 +94,6 @@ C12-M14 承接 C12-M13 的 `partial_implementation_with_named_followups` 出口�
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/矩阵/*.tsv
-rg -n '[ \t]$' docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次 docs/CADCore12.0/README.md
+rg -n '[ \t]$' docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次 docs/temp docs/CADCore12.0/README.md
 git diff --check
 ```

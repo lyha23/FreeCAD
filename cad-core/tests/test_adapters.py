@@ -3494,6 +3494,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "Objects[].Properties.Tolerance.tol3d",
                 "Objects[].Properties.Tolerance.boundTol",
                 "Objects[].Properties.Tolerance.tolAngular",
+                "Objects[].Properties.HelperLifecycle.cases",
+                "Objects[].Properties.HelperLifecycle.cases[].operations",
+                "Objects[].Properties.HelperLifecycle.operations",
                 "recompute.objs",
             ],
         )
@@ -3512,6 +3515,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "BiNormal",
             "SectionOptions",
             "Tolerance",
+            "HelperLifecycle",
         ):
             self.assertIn(prop, sweep["properties"])
         for prop in ("LocationMode",):
@@ -3550,6 +3554,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c5m11_wrapper_expected_capability_promotion",
             "c5m12_support_wrapper_expected_recovery",
             "c5m10_capability_docs_closeout",
+            "c12m14_helper_lifecycle_source_backed_request_local",
+            "c12m14_helper_lifecycle_product_contract_non_parity",
             "c6m4_capability_docs_publication",
         ):
             self.assertIn(covered, sweep["covered"])
@@ -3575,6 +3581,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "c6m4/part-sweep-located-profile-diagnostics",
             "c6m4/part-sweep-located-profile-bool-diagnostics",
             "c6m4/part-sweep-advanced-combined-product",
+            "c12m14/part-sweep-helper-mutable-lifecycle",
         ):
             self.assertIn(fixture, sweep["fixtures"])
         self.assertEqual(
@@ -3601,6 +3608,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "c6m4/part-sweep-located-profile-diagnostics",
                 "c6m4/part-sweep-located-profile-bool-diagnostics",
                 "c6m4/part-sweep-advanced-combined-product",
+                "c12m14/part-sweep-helper-mutable-lifecycle",
             ],
         )
         for diagnostic in (
@@ -3645,6 +3653,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "advanced_combination_c6m4_product_contract_non_parity",
             sweep["request_local_boundaries"],
         )
+        self.assertIn(
+            "helper_lifecycle_request_local_replay_source_backed",
+            sweep["request_local_boundaries"],
+        )
+        self.assertIn(
+            "helper_lifecycle_oracle105_product_contract_non_parity",
+            sweep["request_local_boundaries"],
+        )
         self.assertIn("freecadcmd_location_overload_status_not_collected", sweep["request_local_boundaries"])
         self.assertIn(
             "c5m10_known_gap_fixtures_retained_as_wrapper_evidence",
@@ -3669,6 +3685,11 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "Tolerance.tol3d",
                 "Tolerance.boundTol",
                 "Tolerance.tolAngular",
+                "HelperLifecycle.remove",
+                "HelperLifecycle.firstShape",
+                "HelperLifecycle.lastShape",
+                "HelperLifecycle.generated",
+                "HelperLifecycle.simulate standalone",
             ],
         )
         self.assertEqual(
@@ -3679,13 +3700,19 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "SectionOptions[].WithContact",
                 "SectionOptions[].WithCorrection",
                 "AuxiliarySpine + Tolerance + Transition + located section combined",
+                "HelperLifecycle add/remove/add/simulate/build/shape request-local replay",
             ],
         )
         self.assertEqual(sweep["field_boundaries"]["narrowed_gap"], [])
         self.assertEqual(sweep["field_boundaries"]["source_backed_known_gap"], [])
         self.assertIn("invalid SupportMode", sweep["field_boundaries"]["diagnostic_backed"])
+        self.assertIn("HelperLifecycle native diagnostics", sweep["field_boundaries"]["diagnostic_backed"])
         self.assertIn(
             "persistent Python BRepOffsetAPI_MakePipeShell lifecycle",
+            sweep["field_boundaries"]["non_goal"],
+        )
+        self.assertIn(
+            "FreeCAD native parity for HelperLifecycle ORACLE-105",
             sweep["field_boundaries"]["non_goal"],
         )
         self.assertEqual(sweep["source_backed_known_gaps"], {})
@@ -3758,6 +3785,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "gui_sweep_pipe_task_panels",
             "part_design_pipe_hole_product_support",
             "persistent_python_pipeshell_wrapper_lifecycle",
+            "helper_lifecycle_oracle105_native_parity",
             "output_order_bbox_fixture_name_pipeshell_fixups",
             "hole_model_thread_internal_pipeshell",
         ):
@@ -3769,6 +3797,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "gui_sweep_pipe_task_panels",
                 "part_design_pipe_hole_product_support",
                 "persistent_python_pipeshell_wrapper_lifecycle",
+                "helper_lifecycle_oracle105_native_parity",
                 "output_order_bbox_fixture_name_pipeshell_fixups",
                 "hole_model_thread_internal_pipeshell",
             ],

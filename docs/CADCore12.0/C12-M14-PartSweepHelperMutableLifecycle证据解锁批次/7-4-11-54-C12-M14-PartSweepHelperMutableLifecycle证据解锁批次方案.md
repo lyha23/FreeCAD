@@ -49,6 +49,10 @@
 
 发布最终状态：`implementation_unlocked_helper_lifecycle`、`product_contract_published_helper_lifecycle` 或 `no_code_retained_helper_blocker`。同步 root README、package README、矩阵和 capability / adapter wording 评估结论。
 
+S5 已发布混合最终状态：`implementation_unlocked_helper_lifecycle` + `product_contract_published_helper_lifecycle`。`ORACLE-101..104` 已作为 source-backed helper lifecycle rows current-supported；`ORACLE-105` 仅按 CAD Core request-local product contract current-supported，必须保留 `native_parity=false` 与 `contract_provenance=cad_core_product_contract_non_parity`，不得称为 FreeCAD native parity。
+
+Native parity 重开条件：同一 FreeCAD / LibPack / OCCT baseline 产出 stable native expected，并证明 `remove/readd/simulate/build` 不再触发 `NCollection_Sequence::ChangeValue`。
+
 ## 实现顺序
 
 1. 先锁 source/current landing，不从 current output 倒推 helper semantics。
@@ -75,6 +79,7 @@ cd /Users/li/Chili3DProject/FreeCAD/cad-core
 cmake --build build
 python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c12m13_part_sweep_helper_mutable_sequence_supported_subset_matches_native_oracle
 python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c12m14_part_sweep_helper_mutable_lifecycle_matches_native_or_product_contract
+python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c_api_capabilities_exposes_web_contract_facts
 ```
 
 ## 非目标
