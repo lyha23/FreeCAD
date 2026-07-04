@@ -1,7 +1,7 @@
 id	blocker	owner_step	status	close_condition	next_action
 C12M13-BLOCKER-001	Package entry and matrix not validated	入口	closed	Package files, S0-S6 step files and TSV headers created	Proceed to S0 live baseline and C12-M12 inheritance freeze.
 C12M13-BLOCKER-101	Live baseline and dirty boundary not frozen	S0	closed	HEAD/status/dirty boundary, C12-M12 empty queue, C12-M13 S0-first queue, inheritance boundary and focused surface recorded	Proceed to S1 source/current landing复核 before collecting oracle.
-C12M13-BLOCKER-201	Source authority and current landing incomplete	S1	pending	Source/current rows reviewed and each scope row has owner step	Proceed to S2 oracle only after source rows are reviewed.
+C12M13-BLOCKER-201	Source authority and current landing incomplete	S1	closed	C12M13-SRC-001..010 reviewed; every open/waiting scope row has source authority, current landing, S2 oracle owner and S3/S4/S5 implementation owner	Proceed to S2 oracle batch and keep ORACLE-001 as non-blocking waiting_user_repro until user input exists.
 C12M13-BLOCKER-301	Oracle batch missing stable native/current evidence	S2	pending	Each implementation scope row has expected/current result or explicit blocker	Open S3/S4/S5 only for rows with evidence.
 C12M13-BLOCKER-401	Multisection vertex code gate not authorized	S3	pending	S2 proves multisection vertex mismatch or current-supported gap	Implement only source-backed vertex/wiresection rules.
 C12M13-BLOCKER-501	AddSubShape/rawShape lifecycle code gate not authorized	S4	pending	S2 proves lifecycle mismatch or missing request-local cache channel	Implement only PartDesign Pipe lifecycle and consumer cache scope.

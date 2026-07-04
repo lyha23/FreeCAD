@@ -19,8 +19,8 @@
 ## 队列顺序
 
 1. `7-4-10-36-【已实现】C12-M13工作步骤总入口.md`
-2. `7-4-10-37-C12-M13-S0-live基线与C12-M12继承冻结.md`
-3. `7-4-10-38-C12-M13-S1-source与current-landing批量复核.md`
+2. `7-4-10-37-【已实现】C12-M13-S0-live基线与C12-M12继承冻结.md`
+3. `7-4-10-38-【已实现】C12-M13-S1-source与current-landing批量复核.md`
 4. `7-4-10-39-C12-M13-S2-oracle批量采集与用户复现分流.md`
 5. `7-4-10-40-C12-M13-S3-multisection-vertex细节迁移.md`
 6. `7-4-10-41-C12-M13-S4-Boolean-AddSubShape-rawShape生命周期迁移.md`
@@ -30,7 +30,8 @@
 ## 当前状态
 
 - 工作步骤总入口已关闭：包结构、矩阵字段和队列文件已创建。
-- S0 已关闭：已冻结 live baseline、dirty boundary、C12-M12 继承口径和现有 Pipe/Sweep focused surface；下一步队列应从 S1 `source 与 current landing 批量复核` 继续。
+- S0 已关闭：已冻结 live baseline、dirty boundary、C12-M12 继承口径和现有 Pipe/Sweep focused surface。
+- S1 已关闭：source/current landing 已复核，`C12M13-BLOCKER-201` 已关闭；下一步队列应从 S2 `oracle 批量采集与用户复现分流` 继续。
 - C12-M12 final status 为 `partial_implementation_multiwire_pipe_sewing`，不是完整 Sweep / Pipe 迁移完成。
 - ORACLE-001 当前仍是 `waiting_user_repro`；没有用户 request/result 时不得编造 fixture，但也不阻塞本包其它 source-backed 剩余项。
 

@@ -12,7 +12,7 @@
 
 冻结当前 `HEAD`、dirty boundary、C12-M12 final status、现有 Pipe/Sweep fixture/test surface。S0 只允许写文档矩阵，不改代码。
 
-S0 已关闭：live 基线为 `HEAD=592ee9f5b2`（`592ee9f5b2 feat: 支持 PartDesign Pipe 多线截面缝合`），dirty boundary 只有 root `docs/CADCore12.0/README.md` 与 C12-M13 docs/package；`cad-core/src`、tests、fixtures、other 均无 dirty。C12-M12 队列为空，C12-M13 关闭前从 S0 开始；关闭后下一步是 S1。继承口径为：multi-wire cap/sewing、fixed/round selected-spine current-supported、Part Sweep wrapper regression 可继承；vertex / wiresection diagnostics、AddSubShape/rawShape/Boolean lifecycle、Part Sweep mutable helper lifecycle 与 ORACLE-001 不能继承为完成。
+S0 已关闭：live 基线为 `HEAD=592ee9f5b2`（`592ee9f5b2 feat: 支持 PartDesign Pipe 多线截面缝合`），dirty boundary 只有 root `docs/CADCore12.0/README.md` 与 C12-M13 docs/package；`cad-core/src`、tests、fixtures、other 均无 dirty。C12-M12 队列为空。继承口径为：multi-wire cap/sewing、fixed/round selected-spine current-supported、Part Sweep wrapper regression 可继承；vertex / wiresection diagnostics、AddSubShape/rawShape/Boolean lifecycle、Part Sweep mutable helper lifecycle 与 ORACLE-001 不能继承为完成。
 
 ### S1 source 与 current landing 批量复核
 
@@ -23,6 +23,8 @@ S0 已关闭：live 基线为 `HEAD=592ee9f5b2`（`592ee9f5b2 feat: 支持 PartD
 - `FeatureAddSub.cpp::FeatureAddSub::getAddSubShape()` 对 downstream consumer 的 additive/subtractive cache 语义。
 - `PartFeatures.cpp::Sweep::execute()` 与 `BRepOffsetAPI_MakePipeShellPyImp.cpp` 的 wrapper/helper mutable sequence。
 - `cad-core` 当前落点：`feature_pipe.cpp`、`topo_shape_expansion.cpp`、`part_sweep.cpp`、`ComputeContext`、P7/P8 tests。
+
+S1 已关闭：`C12M13-SRC-001..010` 均为 `reviewed`，open / waiting scope row 已绑定 source authority、current landing、S2 oracle owner 与 S3/S4/S5 implementation owner；`C12M13-BLOCKER-201` 已关闭。后续从 S2 oracle 批量采集继续，不等待 ORACLE-001 才推进 source-backed rows。
 
 ### S2 oracle 批量采集与用户复现分流
 

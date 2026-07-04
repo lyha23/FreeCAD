@@ -18,6 +18,7 @@ C12-M13 承接 C12-M12 的 `partial_implementation_multiwire_pipe_sewing` 出口
 - C12-M12 可继承结论：final status 只能继承为 `partial_implementation_multiwire_pipe_sewing`；`cad-core/src/part/topo_shape_expansion.cpp` 的 multi-wire shell lane + shared cap/sewing 已有 `c12m12/partdesign-pipe-multiwire-sewing` fixture 和 P7 focused regression；fixed / round selected-spine 红灯已归因为 stale / wrong CMake cache 且刷新后 current-supported；Part Sweep wrapper / response regression 已由 P8 controls 证明 current-supported。
 - C12-M12 不可继承为完成的结论：完整 FreeCAD Sweep / Pipe 迁移仍未关闭；profile vertex、last section vertex、inner wire count diagnostic、`AddSubShape` / `rawShape` / Boolean / Body Tip 生命周期、Part Sweep mutable helper lifecycle、ORACLE-001 用户失败复现仍归 C12-M13 后续步骤。
 - 现有 focused surface：P7 PartDesign Pipe 覆盖 `c4m2` Additive/Subtractive Pipe、`c5m3` multisection / transition / diagnostics、`c51m4` selected-spine multisection / fixed-round / auxiliary-binormal、`c12m12` multi-wire sewing、`c6m3` interpolation law；P8 Part Sweep 覆盖 `c3m4` sweep shell/solid/transition/subedge/diagnostics、`c5m10` auxiliary/binormal/tolerance/advanced wrapper contracts、`c5m12` support surface normal、`c6m4` located-profile product/diagnostics controls。后续新增 `c12m13` 前必须复用这些作为回归面。
+- S1 source / current landing 复核已关闭：`C12M13-SRC-001..010` 均为 `reviewed`，`C12M13-BLOCKER-201` 已关闭；open / waiting scope row 已写明 S2 oracle owner 与 S3/S4/S5 implementation owner。下一步从 S2 oracle 批量采集与用户复现分流继续，`ORACLE-001` 仍是非阻塞 `waiting_user_repro`。
 
 ## 问题定义
 
@@ -51,6 +52,8 @@ C12-M13 承接 C12-M12 的 `partial_implementation_multiwire_pipe_sewing` 出口
 | `cad-core/tests/test_p7_features.py` | PartDesign Pipe focused oracle 和 AddSubShape / rawShape lifecycle tests。 |
 | `cad-core/tests/test_p8_features.py` | Part Sweep helper lifecycle focused tests。 |
 | `cad-core/fixtures/c12m13/` | 本包新增 FreeCADCmd expected 和用户失败最小复现。 |
+
+S1 复核后的当前 landing 口径：PartDesign Pipe 的 current path 已落在 `feature_pipe.cpp` 与 `topo_shape_expansion.cpp`，但 AddSubShape / rawShape / final Shape 是否需要拆成 FreeCAD 等价通道必须由 S2/S4 oracle 决定；Part Sweep wrapper 已由 `part_sweep.cpp::executePartSweep` 覆盖，mutable helper lifecycle 只准在 S2/S5 证据成立后单独处理。
 
 ## 入口
 
