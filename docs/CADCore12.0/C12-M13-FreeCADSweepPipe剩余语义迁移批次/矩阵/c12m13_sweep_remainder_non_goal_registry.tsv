@@ -1,0 +1,7 @@
+id	non_goal	reason	owner_step	status	reopen_condition
+C12M13-NONGOAL-001	Full Topological Naming	Sweep/Pipe remainder only needs local history/cache response for this batch	All	closed	Open separate topo naming package if ElementMap-wide semantics are requested.
+C12M13-NONGOAL-002	Rewrite all Part Workbench surface features	C12-M13 scope is Sweep/Pipe remainder only	All	closed	New package required for Loft/Filling/GeomPlate/ProjectOnSurface.
+C12M13-NONGOAL-003	Use mesh response as BRep parity proof	Mesh quality does not prove PipeShell or lifecycle correctness	S2/S6	closed	Only inspect mesh after BRep/source/history parity is established.
+C12M13-NONGOAL-004	Reopen C12-M12 fixed-round selected-spine as a gap	C12-M12 proved stale build cache and current source green	S0	closed	Reopen only with fresh current-source mismatch and build cache proof.
+C12M13-NONGOAL-005	Block all implementation on ORACLE-001	ORACLE-001 is user-repro dependent while other source-backed gaps can proceed	S2	closed	If user repro arrives, insert it into S2 without blocking unrelated rows.
+C12M13-NONGOAL-006	Mix Part Sweep helper product contract into PartDesign Pipe	FreeCAD wrapper/helper and PartDesign Pipe have different source authority	S5	closed	Reopen only if source review proves shared lifecycle semantics.

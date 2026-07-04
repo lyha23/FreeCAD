@@ -28,6 +28,8 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 
 用户随后要求为“把 FreeCAD 的 sweep 迁移到 `/Users/li/Chili3DProject/FreeCAD/cad-core`”出方案。C12-M12 是新的 FreeCAD Sweep / Pipe parity 迁移批次：它以 FreeCAD `PartDesign::Pipe`、`TopoShape::makeElementPipeShell()`、`Part::Sweep` 和 `BRepOffsetAPI_MakePipeShell` wrapper 为 source authority，先做 drift audit 与 oracle red loop，再授权 `cad-core` 实现；旧 `chili3d` always-Frenet sweep、profile 自动吸附、invalid face rebuild 或 mesh normal 修补都不能直接当作 FreeCAD parity。
 
+用户随后要求继续实现完整 FreeCAD Sweep / Pipe 剩余项，并把方案写入 `docs/CADCore12.0`。C12-M13 承接 C12-M12 `partial_implementation_multiwire_pipe_sewing` 出口，专门规划后续 implementation 批次：multisection vertex 细节、`Pipe::execute()` 的 `rawShape` / `AddSubShape` / Boolean 生命周期、Part Workbench mutable helper 生命周期，以及 ORACLE-001 用户失败复现分流。C12-M13 不重开 C12-M12 已 current-supported 的 fixed/round selected-spine、Part Sweep wrapper regression 或 multi-wire cap/sewing 子路径。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -78,6 +80,10 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M12 方案：`C12-M12-FreeCADSweepPipeParity迁移批次/7-3-20-16-C12-M12-FreeCADSweepPipeParity迁移批次方案.md`
 - C12-M12 工作步骤：`C12-M12-FreeCADSweepPipeParity迁移批次/工作步骤细分/`
 - C12-M12 矩阵：`C12-M12-FreeCADSweepPipeParity迁移批次/矩阵/`
+- C12-M13 总入口：`C12-M13-FreeCADSweepPipe剩余语义迁移批次/7-4-10-35-C12-M13-FreeCADSweepPipe剩余语义迁移批次总入口.md`
+- C12-M13 方案：`C12-M13-FreeCADSweepPipe剩余语义迁移批次/7-4-10-35-C12-M13-FreeCADSweepPipe剩余语义迁移批次方案.md`
+- C12-M13 工作步骤：`C12-M13-FreeCADSweepPipe剩余语义迁移批次/工作步骤细分/`
+- C12-M13 矩阵：`C12-M13-FreeCADSweepPipe剩余语义迁移批次/矩阵/`
 
 ## 当前基线
 
@@ -148,6 +154,7 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 - C12-M12 工作步骤总入口已关闭：执行基线为 `pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=3c5ccff1fe`（`3c5ccff1fe feat: 补齐 PartDesign 开放轮廓与 Thicken 语义`），起点 dirty boundary 仅包含 `docs/CADCore12.0/README.md` 与 C12-M12 包目录。已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；后续队列从 S0 `live 基线与 dirty 边界冻结` 继续。
 - C12-M12 S0-S5 已关闭：S3 未找到用户失败 input/output，ORACLE-001 保留 `blocked_missing_user_input`；代表性 checked-in expected `c51m4/partdesign-pipe-fixed-round-body` 曾给出 PartDesign Pipe fixed/round selected-spine cap/sewing 红灯。S4 复核确认红灯来自本地 `cad-core/build` CMake cache 错绑到 `cad-web-background/cad-core`，`cmake --fresh -S . -B build` 后 current source 输出 Body volume `0.7199999999999999`、edges `20`、vertices `12`，与 expected 一致；本步无 C++ / tests / fixtures / expected 改动。S5 关闭为 `no_code_regression_closeout`：8 个 Part Sweep focused controls 与完整 P8 均通过，现有 response 覆盖 `spine`、`sections`、mode / `frenet`、`transition`、`solid`、`advanced`、history、`subshapes` 和 `mesh`，且 `mesh` 只作为 quality gate，不作为 BRep parity 证据。
 - C12-M12 S6 发布闸门已完成，随后按用户反馈追加真实代码迁移子批次：最终状态为 `partial_implementation_multiwire_pipe_sewing`。新增 `c12m12/partdesign-pipe-multiwire-sewing` FreeCADCmd expected，迁移 `cad-core/src/part/topo_shape_expansion.cpp` 的 multi-wire PartDesign Pipe shell lane + shared cap/sewing 路径，并通过 4 个 focused tests。完整 FreeCAD Sweep / Pipe 仍未全量迁完；ORACLE-001 继续作为 `waiting_user_repro` 重开条件。
+- C12-M13 已创建为 FreeCAD Sweep / Pipe 剩余语义迁移批次，且 S0 live 基线与 C12-M12 继承冻结已关闭：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=592ee9f5b2`（`592ee9f5b2 feat: 支持 PartDesign Pipe 多线截面缝合`）。S0 dirty boundary 只有 `docs/CADCore12.0/README.md` 与 C12-M13 docs/package；未发现 `cad-core/src`、tests、fixtures、other dirty。C12-M12 队列为空，C12-M13 关闭前从 S0 开始，关闭后下一步为 S1。C12-M13 继承 C12-M12 multi-wire cap/sewing、fixed/round selected-spine current-supported 和 Part Sweep wrapper regression；不继承完整 Sweep / Pipe 迁移、vertex / wiresection diagnostics、AddSubShape/rawShape/Boolean lifecycle、Part Sweep mutable helper lifecycle 或 ORACLE-001 为完成。
 
 ## 重开条件
 
@@ -161,7 +168,7 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 | RuledSurface wire/wire | C12-M6 已关闭为 `wire_wire_admitted_current_supported`；旧 C3M4 `PARTSURF-BLOCK-005` / `PARTSURF-SCOPE-007` / `PARTSURF-FIX-005` 为 historical closed / superseded by C12-M6 evidence。仅当未来 checked-in expected 与 current output 出现真实 mismatch，并定位到 Part executor / TopoShapeExpansion / topo provenance 时，才另开 implementation package。 |
 | Groove UpTo product diagnostic | C12-M7 已关闭为 `product_diagnostic_contract_published`；仅当同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。 |
 | Sketch internal edge response | C12-M11 已关闭为 `contract_current_supported/current_supported`；closed internal profile backend implementation 不重开。后续仅在前端 consumer sync、stable geometry id ledger 设计或 open wire raw `EdgeN` product contract 各自证据成立时另行开包；不得从前端 prefix guessing 或 open wire `mesh=null` 反推 closed `InternalEdgeN` backend 缺口。 |
-| FreeCAD Sweep / Pipe parity | C12-M12 当前状态为 `partial_implementation_multiwire_pipe_sewing`：已迁移 PartDesign Pipe multi-wire shell lane + shared cap/sewing 子路径，但不能视为完整迁移。后续完整迁移应继续拆批覆盖 `Pipe::execute()` vertex / rawShape / AddSubShape 生命周期、Part Sweep mutable helper lifecycle 和 ORACLE-001 用户失败样例。 |
+| FreeCAD Sweep / Pipe parity | C12-M12 当前状态为 `partial_implementation_multiwire_pipe_sewing`：已迁移 PartDesign Pipe multi-wire shell lane + shared cap/sewing 子路径，但不能视为完整迁移。C12-M13 已创建为下一轮剩余语义 implementation 批次，覆盖 `Pipe::execute()` vertex / rawShape / AddSubShape 生命周期、Part Sweep mutable helper lifecycle 和 ORACLE-001 用户失败样例分流；后续从 C12-M13 live queue 推进。 |
 
 ## 队列检查
 
@@ -179,6 +186,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M13-FreeCADSweepPipe剩余语义迁移批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -197,6 +205,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M11-SketchInternalEdgeSubshapeMeshContract批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M13-FreeCADSweepPipe剩余语义迁移批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```
