@@ -67,6 +67,14 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 - `C12M10-CONTRACT-001..003` 保持 deferred / output-suggestions-only，`C12M10-CONTRACT-004` 保留 current diagnostic，`C12M10-CONTRACT-005` 仅作 App::Link `documentObjectUpdates` reference vocabulary，`C12M10-CONTRACT-006` 保持 forbidden session/geometry state rejection。
 - `C12M10-CAT-002` 已关闭为 `dto_not_reviewed_due_to_native_blocker`，current mismatch 仍 `not comparable`；`C12M10-BLOCKER-301` 已关闭，`C12M10-VAL-301=passed_s3_dto_not_reviewed_due_to_native_blocker`。S4 不得在没有 approved execution DTO 的情况下认定 current mismatch。
 
+## S4 current mismatch 准入
+
+- S4 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=73a0c52afc`（`73a0c52afc 文档：关闭 C12-M10 S3 DTO 契约裁决`），起点 worktree clean。
+- S4 继承 S2=`native_oracle_blocked_retained` 与 S3=`dto_not_reviewed_due_to_native_blocker`。当前没有 approved copied graph execution DTO 或产品契约，因此不得构造 mismatch。
+- current landing 仍一致：`cad-core/src/part_design/feature_shape_binder.cpp` 对 `BindCopyOnChange=Enabled|Mutated` 或 `PartialLoad=True` 发布 `copy_on_change_full_temporary_document_cache_not_supported`；`cad-core/tests/test_c8_shapebinder.py` 和 `cad-core/src/runtime/capability_contract.cpp` 继续把该项作为 known gap / oracle_blocked retained diagnostic。
+- S4 裁决：`C12M10-CAT-003=not_comparable` / `no_current_mismatch_retained_diagnostic`；`C12M10-CONTRACT-004=retained_diagnostic_s4_not_comparable`；`C12M10-BLOCKER-401=closed_s4_not_comparable_retained_diagnostic`；`C12M10-VAL-401=passed_s4_not_comparable_retained_diagnostic`。
+- `C12M10-CAT-004/005` 只接收 S4 的 no mismatch input：S5 不得从 S4 授权 implementation package，后续只能按 retained diagnostic、oracle blocker 或 product-contract follow-up 分流。
+
 ## 解锁目标
 
 C12-M10 只有在以下三项同时成立时，才允许后续 implementation package：
@@ -95,7 +103,7 @@ C12-M10 只有在以下三项同时成立时，才允许后续 implementation pa
 - S1：FreeCAD source、current diagnostic、old artifacts 和 native probe schema 复核（已完成，下一步从 S2 继续）。
 - S2：native copied graph oracle collection / evidence gate（已完成，`native_oracle_blocked_retained`）。
 - S3：request-local DTO / product contract boundary 裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
-- S4：current mismatch 与 implementation candidate gate。
+- S4：current mismatch 与 implementation candidate gate（已完成，`not_comparable` / `no_current_mismatch_retained_diagnostic`）。
 - S5：implementation package authorization、oracle/product-contract 分流或 no-code retained 裁决。
 - S6：发布闸门、root README 更新和后续分流。
 
