@@ -19,6 +19,7 @@ C12-M13 承接 C12-M12 的 `partial_implementation_multiwire_pipe_sewing` 出口
 - C12-M12 不可继承为完成的结论：完整 FreeCAD Sweep / Pipe 迁移仍未关闭；profile vertex、last section vertex、inner wire count diagnostic、`AddSubShape` / `rawShape` / Boolean / Body Tip 生命周期、Part Sweep mutable helper lifecycle、ORACLE-001 用户失败复现仍归 C12-M13 后续步骤。
 - 现有 focused surface：P7 PartDesign Pipe 覆盖 `c4m2` Additive/Subtractive Pipe、`c5m3` multisection / transition / diagnostics、`c51m4` selected-spine multisection / fixed-round / auxiliary-binormal、`c12m12` multi-wire sewing、`c6m3` interpolation law；P8 Part Sweep 覆盖 `c3m4` sweep shell/solid/transition/subedge/diagnostics、`c5m10` auxiliary/binormal/tolerance/advanced wrapper contracts、`c5m12` support surface normal、`c6m4` located-profile product/diagnostics controls。后续新增 `c12m13` 前必须复用这些作为回归面。
 - S1 source / current landing 复核已关闭：`C12M13-SRC-001..010` 均为 `reviewed`，`C12M13-BLOCKER-201` 已关闭；open / waiting scope row 已写明 S2 oracle owner 与 S3/S4/S5 implementation owner。下一步从 S2 oracle 批量采集与用户复现分流继续，`ORACLE-001` 仍是非阻塞 `waiting_user_repro`。
+- S2 oracle 批量采集已关闭：新增 `cad-core/fixtures/c12m13/` expected 与 focused tests。`ORACLE-101/102` 为 current-supported；`ORACLE-103` 的 unequal-inner-wire diagnostic 为 S3 red evidence；`ORACLE-201/202` 证明 PartDesign Pipe feature `Shape` lifecycle 与 current pre-boolean/pre-cut tool 输出不一致，授权 S4；`ORACLE-301` 只覆盖 helper `add/isReady/getStatus/build/shape/makeSolid` 子集，`remove/firstShape/lastShape/generated/simulate` 阻塞 S5；`ORACLE-001` 仍是非阻塞 waiting row。下一步队列应从 S3 `multisection vertex 细节迁移` 继续。
 
 ## 问题定义
 
@@ -67,6 +68,13 @@ S1 复核后的当前 landing 口径：PartDesign Pipe 的 current path 已落�
 1. `implementation_complete_for_remainder_batch`：multisection vertex、AddSubShape/rawShape/Boolean lifecycle、Part Sweep helper lifecycle 均有 source-backed oracle、focused tests 和 current green。
 2. `partial_implementation_with_named_followups`：某一子项被 FreeCADCmd / OCCT / user repro 阻塞，其余子项完成并留下精确 reopen condition。
 3. `blocked_by_oracle_or_helper_visibility`：native helper 生命周期或用户失败样例无法稳定采集，不补 C++，只保留 blocker。
+
+## S2 oracle 结论
+
+- `cad-core/fixtures/c12m13/partdesign-pipe-profile-point-to-wire-section.json` 与 `partdesign-pipe-last-section-vertex.json` 已有 FreeCADCmd expected，focused P7 证明 current-supported，不授权 S3 修改这两条成功路径。
+- `partdesign-pipe-vertex-wire-diagnostics.json` 保留 diagnostic-only known gap：两 vertex section 诊断与 FreeCAD 一致；unequal inner wire 在 FreeCADCmd 输出为 catch-all fatal，current 为更具体的 inner-wire message，进入 S3 处理或产品边界确认。
+- `partdesign-pipe-additive-lifecycle.json` 与 `partdesign-pipe-subtractive-lifecycle.json` 已有 FreeCADCmd expected 和 known gap：native feature `Shape` 是 post-boolean body，current feature 输出仍是 pre-boolean / removed tool；Body final geometry 当前可绿，但不能证明 `AddSubShape` / `rawShape` lifecycle，进入 S4。
+- `part-sweep-helper-mutable-sequence.json` 已证明 helper collected subset current-supported；未覆盖 `remove`、`firstShape`、`lastShape`、`generated`、`simulate`，S5 不应实现这些未采证方法。
 
 ## 非目标
 

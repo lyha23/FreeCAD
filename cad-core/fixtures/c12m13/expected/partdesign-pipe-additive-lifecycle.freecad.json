@@ -1,0 +1,130 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "c12m13_partdesign_pipe_additive_lifecycle_current_feature_shape_gap",
+    "reason": "FreeCADCmd expected shows AdditivePipeFuse.Shape and BodyFuse both carry the post-boolean fused body volume 36.0, while current cad-core keeps AdditivePipeFuse as the pre-boolean pipe tool volume 1.96 and only BodyFuse exposes the fused body. No-base AdditivePipeNoBase remains current-supported. This is S4 red evidence for separating pre-boolean AddSubShape/rawShape from post-boolean Shape.",
+    "freecad_source_authority": [
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute(), AddSubShape.setValue(...) before result.makeElementFuse(...)",
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute(), this->rawShape = boolOp; Shape.setValue(getSolid(boolOp))"
+    ],
+    "current_evidence": {
+      "command": "CAD_CORE_TEST_LEGACY_OUTPUT=1 cad-core/build/cad-core recompute cad-core/fixtures/c12m13/partdesign-pipe-additive-lifecycle.json --output /tmp/c12m13-additive-lifecycle.current.json",
+      "AdditivePipeNoBase": "current_supported",
+      "AdditivePipeFuse": "current_feature_shape_is_pre_boolean_tool",
+      "BodyFuse": "current_body_shape_matches_native_post_boolean_result"
+    },
+    "backendGap": {
+      "ids": ["C12M13-BLOCKER-501"],
+      "route": "S4",
+      "delete_condition": "S4 publishes distinct request-local AddSubShape/rawShape/post-boolean Shape channels, AdditivePipeFuse expected parity passes, and this known_gap is removed."
+    }
+  },
+  "objects": {
+    "AdditivePipeFuse": {
+      "bbox": {
+        "max": [
+          1.5,
+          1.5,
+          4.0
+        ],
+        "min": [
+          -1.5,
+          -1.5,
+          0.0
+        ]
+      },
+      "object_fields": {
+        "add_sub": "add",
+        "feature": "partdesign_pipe",
+        "mode": "Standard",
+        "shape": "occt_compound",
+        "source_profile": "SketchPipeProfileFuse",
+        "spine": "SketchPipeSpineFuse",
+        "status": "ok",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "transformation": "Constant",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 20,
+        "faces": 8,
+        "vertices": 16
+      },
+      "volume": 36.0
+    },
+    "AdditivePipeNoBase": {
+      "bbox": {
+        "max": [
+          0.45,
+          0.4500000000000009,
+          4.0
+        ],
+        "min": [
+          -0.45,
+          -0.45,
+          0.0
+        ]
+      },
+      "object_fields": {
+        "add_sub": "add",
+        "feature": "partdesign_pipe",
+        "mode": "Standard",
+        "shape": "occt_solid",
+        "source_profile": "SketchPipeProfileNoBase",
+        "spine": "SketchPipeSpineNoBase",
+        "status": "ok",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "transformation": "Constant",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 3.24
+    },
+    "BodyFuse": {
+      "bbox": {
+        "max": [
+          1.5,
+          1.5,
+          4.0
+        ],
+        "min": [
+          -1.5,
+          -1.5,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 20,
+        "faces": 8,
+        "vertices": 16
+      },
+      "volume": 36.0
+    },
+    "BodyNoBase": {
+      "bbox": {
+        "max": [
+          0.45,
+          0.4500000000000009,
+          4.0
+        ],
+        "min": [
+          -0.45,
+          -0.45,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 3.24
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-pipe-additive-lifecycle.json; objects: Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::AdditivePipe, PartDesign::Body, Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::AdditivePipe, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

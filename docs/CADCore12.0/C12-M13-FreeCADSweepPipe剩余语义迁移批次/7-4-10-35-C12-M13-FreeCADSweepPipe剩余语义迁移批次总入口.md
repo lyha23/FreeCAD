@@ -32,6 +32,7 @@
 - 工作步骤总入口已关闭：包结构、矩阵字段和队列文件已创建。
 - S0 已关闭：已冻结 live baseline、dirty boundary、C12-M12 继承口径和现有 Pipe/Sweep focused surface。
 - S1 已关闭：source/current landing 已复核，`C12M13-BLOCKER-201` 已关闭；下一步队列应从 S2 `oracle 批量采集与用户复现分流` 继续。
+- S2 已关闭：`c12m13` expected / focused tests 已落地；下一步队列应从 S3 `multisection vertex 细节迁移` 继续。S3 只处理 diagnostic mismatch，S4 处理 AddSubShape/rawShape/Boolean lifecycle red evidence，S5 对未采证 helper methods 保持 blocked。
 - C12-M12 final status 为 `partial_implementation_multiwire_pipe_sewing`，不是完整 Sweep / Pipe 迁移完成。
 - ORACLE-001 当前仍是 `waiting_user_repro`；没有用户 request/result 时不得编造 fixture，但也不阻塞本包其它 source-backed 剩余项。
 

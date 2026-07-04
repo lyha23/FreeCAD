@@ -1,0 +1,153 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.4, -0.4], "end": [0.4, -0.4] },
+          { "kind": "LineSegment", "start": [0.4, -0.4], "end": [0.4, 0.4] },
+          { "kind": "LineSegment", "start": [0.4, 0.4], "end": [-0.4, 0.4] },
+          { "kind": "LineSegment", "start": [-0.4, 0.4], "end": [-0.4, -0.4] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "MiddleSectionPoint",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 2
+      }
+    },
+    {
+      "Name": "LastSectionPoint",
+      "ID": 3,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 4
+      }
+    },
+    {
+      "Name": "SketchTwoWireSection",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 4],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.8, -0.8], "end": [0.8, -0.8] },
+          { "kind": "LineSegment", "start": [0.8, -0.8], "end": [0.8, 0.8] },
+          { "kind": "LineSegment", "start": [0.8, 0.8], "end": [-0.8, 0.8] },
+          { "kind": "LineSegment", "start": [-0.8, 0.8], "end": [-0.8, -0.8] },
+          { "kind": "LineSegment", "start": [-0.2, -0.2], "end": [0.2, -0.2] },
+          { "kind": "LineSegment", "start": [0.2, -0.2], "end": [0.2, 0.2] },
+          { "kind": "LineSegment", "start": [0.2, 0.2], "end": [-0.2, 0.2] },
+          { "kind": "LineSegment", "start": [-0.2, 0.2], "end": [-0.2, -0.2] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeSpine",
+      "ID": 5,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [0, 4] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "AdditivePipeTwoVertexSections",
+      "ID": 6,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": [],
+          "StableSubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeSpine",
+          "SubList": ["Edge1"],
+          "StableSubList": ["Edge1"]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "MiddleSectionPoint",
+              "SubList": ["Vertex1"],
+              "StableSubList": ["Vertex1"]
+            },
+            {
+              "value": "LastSectionPoint",
+              "SubList": ["Vertex1"],
+              "StableSubList": ["Vertex1"]
+            }
+          ]
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Multisection",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    },
+    {
+      "Name": "AdditivePipeUnequalInnerWires",
+      "ID": 7,
+      "TypeId": "PartDesign::AdditivePipe",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeProfile",
+          "SubList": [],
+          "StableSubList": []
+        },
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchPipeSpine",
+          "SubList": ["Edge1"],
+          "StableSubList": ["Edge1"]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchTwoWireSection",
+              "SubList": [],
+              "StableSubList": []
+            }
+          ]
+        },
+        "Mode": "Standard",
+        "Transition": "Transformed",
+        "Transformation": "Multisection",
+        "Refine": false,
+        "FuzzyTolerance": 0.0
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["AdditivePipeTwoVertexSections", "AdditivePipeUnequalInnerWires"]
+  }
+}

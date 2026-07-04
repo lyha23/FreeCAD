@@ -1,0 +1,77 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": {
+    "kind": "c12m13_partdesign_pipe_subtractive_lifecycle_current_feature_shape_gap",
+    "reason": "FreeCADCmd expected shows SubtractivePipe.Shape and Body both carry the post-cut body volume 75.0, while current cad-core exposes SubtractivePipe as the removed pipe tool volume 5.0 and only Body exposes the cut body. This is S4 red evidence for keeping removed-tool AddSubShape separate from post-boolean feature Shape and Body Tip.",
+    "freecad_source_authority": [
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute(), AddSubShape.setValue(...) stores the pre-boolean tool",
+      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute(), Part::OpCodes::Cut updates boolOp and Shape.setValue(boolOp)"
+    ],
+    "current_evidence": {
+      "command": "CAD_CORE_TEST_LEGACY_OUTPUT=1 cad-core/build/cad-core recompute cad-core/fixtures/c12m13/partdesign-pipe-subtractive-lifecycle.json --output /tmp/c12m13-subtractive-lifecycle.current.json",
+      "SubtractivePipe": "current_feature_shape_is_removed_tool",
+      "Body": "current_body_shape_matches_native_post_cut_result"
+    },
+    "backendGap": {
+      "ids": ["C12M13-BLOCKER-501"],
+      "route": "S4",
+      "delete_condition": "S4 publishes distinct removed-tool AddSubShape/rawShape/post-cut Shape channels, SubtractivePipe expected parity passes, and this known_gap is removed."
+    }
+  },
+  "objects": {
+    "Body": {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          5.0
+        ],
+        "min": [
+          -2.0,
+          -2.0,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 24,
+        "faces": 10,
+        "vertices": 16
+      },
+      "volume": 75.00000000000001
+    },
+    "SubtractivePipe": {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          5.0
+        ],
+        "min": [
+          -2.0,
+          -2.0,
+          0.0
+        ]
+      },
+      "object_fields": {
+        "add_sub": "sub",
+        "feature": "partdesign_pipe",
+        "mode": "Standard",
+        "shape": "occt_compound",
+        "source_profile": "SketchPipeProfile",
+        "spine": "SketchPipeSpine",
+        "status": "ok",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "transformation": "Constant",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 24,
+        "faces": 10,
+        "vertices": 16
+      },
+      "volume": 75.00000000000001
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-pipe-subtractive-lifecycle.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::SubtractivePipe, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

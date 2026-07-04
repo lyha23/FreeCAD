@@ -1340,6 +1340,23 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("combined_aux_tolerance_add", evidence["failing_combined_call_orders"])
         self.assertIn("combined_no_location_control", evidence["successful_controls"])
 
+    def test_c12m13_part_sweep_helper_mutable_sequence_supported_subset_matches_native_oracle(self) -> None:
+        fixture = "part-sweep-helper-mutable-sequence"
+        result = self.run_recompute(fixture, "c12m13")
+        sweep = result["objects"]["MutableHelperSweep"]
+        expected = self.expected_freecad("c12m13", fixture)
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["object_fields"]["advanced"], sweep["advanced"])
+        self.assertEqual(expected["wrapper_oracle"]["builder_status"]["is_ready"], True)
+        self.assertEqual(expected["wrapper_oracle"]["builder_status"]["status_before_build"], 0)
+        self.assertEqual(expected["wrapper_oracle"]["builder_status"]["status_after_build"], 0)
+        self.assertEqual(expected["wrapper_oracle"]["builder_status"]["build_ok"], True)
+        self.assertIn("simulate", expected["oracle_boundary"]["uncollected_methods"])
+        self.assertIn("generated", expected["oracle_boundary"]["uncollected_methods"])
+        self.assert_object_matches_expected(result, "c12m13", fixture)
+
     def assert_part_filling_history(
         self,
         result: dict,

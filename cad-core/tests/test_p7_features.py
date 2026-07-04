@@ -2001,6 +2001,82 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_design_pipe:sewing", pipe_named_shape["element_history_status"])
         self.assert_object_matches_expected(result, "c12m12", "partdesign-pipe-multiwire-sewing")
 
+    def test_c12m13_partdesign_pipe_vertex_success_paths_match_native_oracle(self) -> None:
+        cases = [
+            (
+                "partdesign-pipe-profile-point-to-wire-section",
+                "AdditivePipeProfilePoint",
+                "ProfilePoint",
+                ["SketchPipeSection"],
+            ),
+            (
+                "partdesign-pipe-last-section-vertex",
+                "AdditivePipeLastVertex",
+                "SketchPipeProfile",
+                ["LastSectionPoint"],
+            ),
+        ]
+        for fixture, object_name, source_profile, sections in cases:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "c12m13")
+                pipe = result["objects"][object_name]
+                named_shape = result["named_shapes"][object_name]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(pipe["status"], "ok")
+                self.assertEqual(pipe["feature"], "partdesign_pipe")
+                self.assertEqual(pipe["source_profile"], source_profile)
+                self.assertEqual(pipe["sections"], sections)
+                self.assertEqual(pipe["transformation"], "Multisection")
+                self.assertIn("part_design_pipe:sewing", named_shape["element_history_status"])
+                self.assert_object_matches_expected(result, "c12m13", fixture)
+
+    def test_c12m13_partdesign_pipe_vertex_wire_diagnostics_are_s3_red_evidence(self) -> None:
+        fixture = "partdesign-pipe-vertex-wire-diagnostics"
+        result = self.run_recompute(fixture, "c12m13")
+        expected = self.expected_freecad("c12m13", fixture)
+        diagnostics = {item["object"]: item for item in result["diagnostics"]}
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], expected["diagnostic_codes"])
+        self.assertEqual(
+            diagnostics["AdditivePipeTwoVertexSections"]["message"],
+            "Pipe: Only the profile and last section can be vertices",
+        )
+        self.assertEqual(
+            diagnostics["AdditivePipeUnequalInnerWires"]["message"],
+            "Pipe: Sections need to have the same amount of inner wires",
+        )
+        self.assertEqual(
+            expected["known_gap"]["freecadcmd_evidence"]["AdditivePipeUnequalInnerWires"],
+            "A fatal error occurred when making the pipe",
+        )
+        self.assertIn("C12M13-BLOCKER-401", expected["known_gap"]["backendGap"]["ids"])
+
+    def test_c12m13_partdesign_pipe_lifecycle_expected_marks_s4_shape_gap(self) -> None:
+        additive = self.run_recompute("partdesign-pipe-additive-lifecycle", "c12m13")
+        additive_expected = self.expected_freecad("c12m13", "partdesign-pipe-additive-lifecycle")
+
+        self.assertIn("known_gap", additive_expected)
+        self.assertEqual(additive["diagnostics"], [])
+        self.assertAlmostEqual(
+            additive["objects"]["AdditivePipeNoBase"]["volume"],
+            additive_expected["objects"]["AdditivePipeNoBase"]["volume"],
+        )
+        self.assertAlmostEqual(additive["objects"]["BodyFuse"]["volume"], 36.0)
+        self.assertAlmostEqual(additive_expected["objects"]["AdditivePipeFuse"]["volume"], 36.0)
+        self.assertAlmostEqual(additive["objects"]["AdditivePipeFuse"]["volume"], 1.96)
+        self.assertIn("C12M13-BLOCKER-501", additive_expected["known_gap"]["backendGap"]["ids"])
+
+        subtractive = self.run_recompute("partdesign-pipe-subtractive-lifecycle", "c12m13")
+        subtractive_expected = self.expected_freecad("c12m13", "partdesign-pipe-subtractive-lifecycle")
+
+        self.assertIn("known_gap", subtractive_expected)
+        self.assertEqual(subtractive["diagnostics"], [])
+        self.assertAlmostEqual(subtractive["objects"]["Body"]["volume"], 75.0)
+        self.assertAlmostEqual(subtractive_expected["objects"]["SubtractivePipe"]["volume"], 75.0)
+        self.assertAlmostEqual(subtractive["objects"]["SubtractivePipe"]["volume"], 5.0)
+        self.assertIn("C12M13-BLOCKER-501", subtractive_expected["known_gap"]["backendGap"]["ids"])
+
     def test_c5m3_partdesign_pipe_transition_and_frenet_match_native_oracle(self) -> None:
         result = self.run_recompute("partdesign-pipe-transition-variants", "c5m3")
         pipe = result["objects"]["AdditivePipeRightFrenet"]

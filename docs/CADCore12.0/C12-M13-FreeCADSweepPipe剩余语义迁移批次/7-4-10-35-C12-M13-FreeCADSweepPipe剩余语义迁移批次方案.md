@@ -40,6 +40,14 @@ S1 已关闭：`C12M13-SRC-001..010` 均为 `reviewed`，open / waiting scope ro
 
 S2 关闭条件是每个实现子项都有 native/current 对照，或有明确 blocker；没有 current mismatch 的子项不进入 S3-S5 代码 gate。
 
+S2 已关闭：
+
+- `profile-point-to-wire-section` 与 `last-section-vertex` 已有 FreeCADCmd expected 和 current-focused green，不进入 S3 implementation。
+- `invalid-middle-section-vertex-diagnostic` 保留 S3 red evidence：two-vertex diagnostic current-supported，unequal-inner-wire diagnostic 与 FreeCADCmd catch-all 输出不一致。
+- AdditivePipe / SubtractivePipe lifecycle 已有 S4 red evidence：FreeCAD feature `Shape` 为 post-boolean body，current feature 输出仍为 pre-boolean / removed tool；Body final shape green 不能替代 `AddSubShape` / `rawShape` parity。
+- Part Sweep helper 只采到 `add/isReady/getStatus/build/shape/makeSolid` subset，`remove/firstShape/lastShape/generated/simulate` 仍阻塞 S5。
+- ORACLE-001 未收到用户 request/result，继续 `waiting_user_repro_non_blocking`。
+
 ### S3 multisection vertex 细节迁移
 
 允许修改 `cad-core/src/part_design/feature_pipe.cpp` 与 `cad-core/src/part/topo_shape_expansion.cpp`，目标是对齐 FreeCAD：
