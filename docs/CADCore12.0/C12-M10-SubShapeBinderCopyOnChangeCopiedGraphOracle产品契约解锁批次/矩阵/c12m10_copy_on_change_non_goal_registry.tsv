@@ -7,3 +7,6 @@ C12M10-NG-005	frontend-only prefix or support guessing	DTO must come from source
 C12M10-NG-006	broad SubShapeBinder family rewrite	This batch only handles CopyOnChange full temporary-document gap	S5	active
 C12M10-NG-007	property_session_shape_count_or_bbox_proof	Need copied graph identity and dependency evidence, not geometry-only hints	S2	active
 C12M10-NG-008	Groove RuledSurface ProjectOnSurface PartWorkbench Assembly reopen	These rows have separate C12-M2..M9 exits and are outside C12-M10	S0	active
+C12M10-NG-009	native pointer or temporary object handle DTO	Native handles and pointers are process/session state and cannot be CAD Core request contract	S3	active
+C12M10-NG-010	post_request _tmp_binder or _CopiedObjs state	FreeCAD hidden/session state cannot be persisted across backend requests	S3	active
+C12M10-NG-011	backend Cache_* persistence	Cache_* is observed as dynamic PropertyMatrix optimization, not semantic copied graph state	S3	active

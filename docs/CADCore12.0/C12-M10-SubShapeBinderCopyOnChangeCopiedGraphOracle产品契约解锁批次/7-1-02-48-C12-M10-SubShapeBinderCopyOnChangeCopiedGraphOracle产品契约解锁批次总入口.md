@@ -52,6 +52,7 @@ live capability baseline
 - S0 live 基线与继承口径冻结已关闭：已确认 HEAD、dirty boundary、C12-M1..M9 队列、SubShapeBinder capability snapshot、C12-M8 retained diagnostic 和 C12-M9 no-code backlog；后续队列从 S1 继续。
 - S1 source 与 native oracle schema 复核已关闭：`ShapeBinder.cpp`、`ShapeBinder.h`、`Document.cpp`、`Link.cpp` 与 current `cad-core` retained diagnostic 已复核；`C12M10-PROBE-001..011` 已固定为 S2 artifact schema requirements，`C12M10-BLOCKER-101` 已关闭，后续队列从 S2 继续。
 - S2 native copied graph oracle 采集已关闭：FreeCADCmd artifact 覆盖 `C12M10-PROBE-001..011`，但 `_CopiedObjs` stored identity/order、`copyObject()` dependency order/mapping、`recomputeFeature(true)` lifecycle 和 ElementMap / NamedShape lifecycle 仍未导出；裁决为 `native_oracle_blocked_retained`，后续队列从 S3 继续且必须继承 blocker。
+- S3 DTO 与产品契约边界裁决已关闭：`C12M10-DTO-001..004` 与 `C12M10-DTO-006` deferred，`C12M10-DTO-005` 仅 input-only，`C12M10-DTO-007..012` rejected；App::Link `documentObjectUpdates` 仅作 reference vocabulary；`C12M10-CAT-002=dto_not_reviewed_due_to_native_blocker`，current mismatch 仍 not comparable，后续队列从 S4 继续。
 
 ## 产物索引
 
@@ -63,7 +64,7 @@ live capability baseline
 | S0 | `工作步骤细分/7-1-02-50-【已实现】C12-M10-S0-live基线与继承口径冻结.md` | 冻结 live baseline 和 C12-M8/C12-M9 继承口径，已关闭。 |
 | S1 | `工作步骤细分/7-1-02-51-【已实现】C12-M10-S1-source与native-oracle-schema复核.md` | 复核 source/current evidence 并固定 probe schema，已关闭。 |
 | S2 | `工作步骤细分/7-1-02-52-【已实现】C12-M10-S2-native-copied-graph-oracle采集.md` | 采集 native copied graph artifact 并做 evidence gate，已关闭为 `native_oracle_blocked_retained`。 |
-| S3 | `工作步骤细分/7-1-02-53-C12-M10-S3-DTO与产品契约边界裁决.md` | 裁决 DTO / product contract 字段。 |
+| S3 | `工作步骤细分/7-1-02-53-【已实现】C12-M10-S3-DTO与产品契约边界裁决.md` | 裁决 DTO / product contract 字段，已关闭为 `dto_not_reviewed_due_to_native_blocker`。 |
 | S4 | `工作步骤细分/7-1-02-54-C12-M10-S4-current-mismatch准入.md` | 判断 current mismatch。 |
 | S5 | `工作步骤细分/7-1-02-55-C12-M10-S5-implementation-authorization裁决.md` | 授权 implementation package 或 no-code / follow-up 分流。 |
 | S6 | `工作步骤细分/7-1-02-56-C12-M10-S6-发布闸门与后续分流.md` | 发布最终状态。 |

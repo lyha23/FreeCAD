@@ -57,6 +57,16 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 - S2 裁决：`native_oracle_blocked_retained`。Artifact 可观察 `_tmp_binder` 文档/object order、`_CopiedLink` target/subvalues、`PartialLoad` property 和 `Cache_*` dynamic matrix cache，但仍不能稳定导出 `_CopiedObjs` stored identity/order、`Document::copyObject()` dependency list 与 source-to-import mapping、first/second `recomputeFeature(true)` lifecycle、ElementMap / NamedShape per-stage lifecycle。
 - `C12M10-BLOCKER-201` 已关闭为 retained blocker；`C12M10-VAL-201=passed_s2_native_oracle_blocked_retained`。S3 必须继承该 blocker，不得从 property/session 状态、temporary document name、label/bbox/shape count 或 `_CopiedLink` target 单独批准 DTO / implementation。
 
+## S3 DTO 与产品契约边界裁决
+
+- S3 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=acb2457753`（`acb2457753 文档：关闭 C12-M10 S2 native oracle`），起点 worktree clean。
+- S3 继承 S2 裁决：`native_oracle_blocked_retained`。S2 artifact 覆盖 `C12M10-PROBE-001..011`，但 `_CopiedObjs` stored identity/order、`copyObject()` dependency order/mapping、内部 `recomputeFeature(true)` lifecycle、ElementMap / NamedShape 分阶段 lifecycle 仍未稳定导出。
+- `C12M10-DTO-001..004` 和 `C12M10-DTO-006` 关闭为 `deferred_native_oracle_blocked`：copied object create、property writeback、link rewrite、support sublist rewrite 与 `PartialLoad` 不能从 property/session evidence 或 `_CopiedLink` target 单独批准为执行 DTO。
+- `C12M10-DTO-005` 只批准为 `allowed_input_only_no_execution_support`：`BindCopyOnChange` 可保留为 input-only request field，但不表示 CopyOnChange execution、temporary document 或 copied graph 支持。
+- `C12M10-DTO-007..012` 关闭为 `rejected_product_boundary`：temporary document handle、native pointer、full BREP / TopoDS、persistent `NamedShape` / `ElementMap` cache、post-request `_tmp_binder` / `_CopiedObjs` state、backend `Cache_*` persistence 均不得进入产品契约。
+- `C12M10-CONTRACT-001..003` 保持 deferred / output-suggestions-only，`C12M10-CONTRACT-004` 保留 current diagnostic，`C12M10-CONTRACT-005` 仅作 App::Link `documentObjectUpdates` reference vocabulary，`C12M10-CONTRACT-006` 保持 forbidden session/geometry state rejection。
+- `C12M10-CAT-002` 已关闭为 `dto_not_reviewed_due_to_native_blocker`，current mismatch 仍 `not comparable`；`C12M10-BLOCKER-301` 已关闭，`C12M10-VAL-301=passed_s3_dto_not_reviewed_due_to_native_blocker`。S4 不得在没有 approved execution DTO 的情况下认定 current mismatch。
+
 ## 解锁目标
 
 C12-M10 只有在以下三项同时成立时，才允许后续 implementation package：
@@ -84,7 +94,7 @@ C12-M10 只有在以下三项同时成立时，才允许后续 implementation pa
 - S0：live 基线、C12-M1..M9 关闭口径、capability snapshot 与 C12-M8/C12-M9 继承口径冻结（已完成，下一步从 S1 继续）。
 - S1：FreeCAD source、current diagnostic、old artifacts 和 native probe schema 复核（已完成，下一步从 S2 继续）。
 - S2：native copied graph oracle collection / evidence gate（已完成，`native_oracle_blocked_retained`）。
-- S3：request-local DTO / product contract boundary 裁决。
+- S3：request-local DTO / product contract boundary 裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate。
 - S5：implementation package authorization、oracle/product-contract 分流或 no-code retained 裁决。
 - S6：发布闸门、root README 更新和后续分流。
