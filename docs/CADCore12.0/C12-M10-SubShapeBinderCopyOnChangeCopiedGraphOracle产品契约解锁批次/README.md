@@ -17,6 +17,10 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 - C12-M8 最终事实继续有效：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`。
 - C12-M9 最终事实继续有效：`no_code_backlog_gate`，没有 admitted mismatch-confirmed row，没有 implementation source / landing / validation surface。
 
+## 入口关闭
+
+- 工作步骤总入口已关闭：`工作步骤细分/7-1-02-49-【已实现】C12-M10工作步骤总入口.md`。已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；后续队列从 S0 继续。
+
 ## 解锁目标
 
 C12-M10 只有在以下三项同时成立时，才允许后续 implementation package：

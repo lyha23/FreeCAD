@@ -34,13 +34,17 @@ live capability baseline
   -> implementation package authorization or retained no-code publication
 ```
 
+## 当前执行状态
+
+- 工作步骤总入口已关闭：已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；后续队列从 S0 继续。
+
 ## 产物索引
 
 | 类型 | 路径 | 用途 |
 | --- | --- | --- |
 | README | `README.md` | 当前定位、口径和入口。 |
 | 方案 | `7-1-02-48-C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次方案.md` | 批次规则、证据链和验收分层。 |
-| 工作步骤总入口 | `工作步骤细分/7-1-02-49-C12-M10工作步骤总入口.md` | goal 队列索引。 |
+| 工作步骤总入口 | `工作步骤细分/7-1-02-49-【已实现】C12-M10工作步骤总入口.md` | goal 队列索引，已关闭。 |
 | S0 | `工作步骤细分/7-1-02-50-C12-M10-S0-live基线与继承口径冻结.md` | 冻结 live baseline 和 C12-M8/C12-M9 继承口径。 |
 | S1 | `工作步骤细分/7-1-02-51-C12-M10-S1-source与native-oracle-schema复核.md` | 复核 source/current evidence 并固定 probe schema。 |
 | S2 | `工作步骤细分/7-1-02-52-C12-M10-S2-native-copied-graph-oracle采集.md` | 采集 native copied graph artifact 并做 evidence gate。 |
