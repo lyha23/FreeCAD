@@ -1,0 +1,9 @@
+id	command	scope	owner_step	status	expected_result	record
+C12M14-VAL-001	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/工作步骤细分 --format markdown	Package queue	入口	passed	Queue first open step is S0	2026-07-04 package validation: command returned S0-S5 pending, first open step S0.
+C12M14-VAL-002	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/矩阵/*.tsv	TSV schema	入口/S5	passed	No field-count errors	2026-07-04 package validation: no field-count output.
+C12M14-VAL-003	rg -n '[ \t]$' docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次 docs/CADCore12.0/README.md	Whitespace docs	入口/S5	passed	No trailing whitespace output	2026-07-04 package validation: no matches; rg exit 1 is expected.
+C12M14-VAL-004	git diff --check	Patch hygiene	入口/S5	passed	No whitespace errors	2026-07-04 package validation: no whitespace errors.
+C12M14-VAL-101	rg -n 'BRepOffsetAPI_MakePipeShellPy|firstShape|lastShape|generated|simulate|remove|Sweep::execute' src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp src/Mod/Part/App/PartFeatures.cpp	Source authority	S1	pending	Relevant FreeCAD source symbols located	S1 records exact source evidence.
+C12M14-VAL-201	python3 docs/temp/<c12m14-helper-probe>.py	Native helper probe	S2	pending	Probe artifact produced or blocker recorded	S2 fills exact script/output path.
+C12M14-VAL-301	python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c12m13_part_sweep_helper_mutable_sequence_supported_subset_matches_native_oracle	Helper baseline regression	S0/S4/S5	pending	Collected subset stays green	Run before and after helper implementation/no-code closeout.
+C12M14-VAL-401	cmake --build build	cad-core build	S4/S5	pending	Build succeeds	Required only if S4 changes C++.

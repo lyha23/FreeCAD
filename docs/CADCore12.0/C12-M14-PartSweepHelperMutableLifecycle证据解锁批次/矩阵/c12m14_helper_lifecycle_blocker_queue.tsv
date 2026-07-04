@@ -1,0 +1,8 @@
+id	blocker	owner_step	status	close_condition	next_action
+C12M14-BLOCKER-001	Package entry and matrix not validated	入口	closed	Package files, S0-S5 step files and TSV headers created	Proceed to S0 live baseline and C12-M13 inheritance freeze.
+C12M14-BLOCKER-101	Live baseline and C12-M13 inheritance not frozen	S0	open	HEAD/status/dirty boundary and C12-M13 ORACLE-301 inheritance recorded	Freeze baseline before reading source or collecting helper probes.
+C12M14-BLOCKER-201	Source authority and current helper landing incomplete	S1	pending	Source/current rows reviewed and each scope row has owner step	Proceed to S2 helper probe only after source rows are reviewed.
+C12M14-BLOCKER-301	Dedicated native helper probe missing	S2	pending	Native helper probe artifact covers remove/firstShape/lastShape/generated/simulate or records stable blocker	Proceed to S3 product-contract/current-mismatch gate.
+C12M14-BLOCKER-401	Product contract/current mismatch gate not decided	S3	pending	Each helper scope row is implementation_authorized, product_contract_only or no_code_retained_blocker	S4 follows only authorized rows.
+C12M14-BLOCKER-501	Helper lifecycle implementation/no-code closeout pending	S4	pending	Code implemented and tested, or no-code blocker closed with reopen condition	Proceed to S5 release gate.
+C12M14-BLOCKER-601	Release gate not closed	S5	pending	S0-S4 complete or blocked with explicit reopen condition	Publish final status and update root README.

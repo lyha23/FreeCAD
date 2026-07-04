@@ -1,0 +1,6 @@
+id	non_goal	reason	owner_step	status	reopen_condition
+C12M14-NONGOAL-001	Reopen PartDesign Pipe S3/S4 lifecycle	C12-M13 already closed diagnostic and AddSubShape/rawShape lifecycle	S0	closed	Reopen only with fresh source-backed mismatch outside C12-M14 helper scope.
+C12M14-NONGOAL-002	Mix helper product contract into PartDesign Pipe	Part Sweep helper and PartDesign Pipe have different FreeCAD source authority	All	closed	Reopen only if source review proves shared lifecycle semantics.
+C12M14-NONGOAL-003	Use mesh response as helper parity proof	Helper methods expose mutable builder state and history, not only final display mesh	S2/S3	closed	Never reopen without BRep/native/product-contract evidence.
+C12M14-NONGOAL-004	Rewrite plain Part::Sweep wrapper	Wrapper path is current-supported and separate from helper lifecycle	S4	closed	Reopen only with focused wrapper regression and source authority.
+C12M14-NONGOAL-005	Block on ORACLE-001 user repro	ORACLE-001 is PartDesign Pipe user failure replay, not helper lifecycle	S0/S5	closed	If user repro arrives, route through C12-M13/C12-M12 follow-up, not C12-M14 helper probe.
