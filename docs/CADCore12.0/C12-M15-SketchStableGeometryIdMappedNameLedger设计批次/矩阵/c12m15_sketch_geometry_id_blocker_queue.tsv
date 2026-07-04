@@ -1,5 +1,5 @@
 id	blocker	owner_step	status	close_condition	next_action
-C12M15-BLOCKER-001	Package entry and matrix not validated	入口	open	Package files, S0-S4 step files and TSV headers created	Run entry validation, then proceed to S0.
+C12M15-BLOCKER-001	Package entry and matrix not validated	入口	closed	Package files, S0-S4 step files and TSV headers validated	Proceed to S0 live baseline and C12-M11 inheritance freeze.
 C12M15-BLOCKER-101	Live baseline and predecessor inheritance not frozen	S0	open	HEAD, dirty boundary, C12-M11/C12-M14 queue state and capability remaining gap snapshot recorded	Proceed to S1 source/current identity pipeline review.
 C12M15-BLOCKER-201	FreeCAD source and cad-core current identity pipeline not reviewed	S1	open	updateGeoHistory/generateId/convertSubName/getEdge and cad-core sketch_edge_identity/recompute/reference_resolution reviewed	Proceed to S2 ledger interface contract design.
 C12M15-BLOCKER-301	Ledger interface contract not designed	S2	open	SketchGeometryIdentityLedger interface, field contract, fallback and diagnostics published	Proceed to S3 current gap and implementation boundary decision.
