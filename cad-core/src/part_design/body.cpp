@@ -1315,7 +1315,13 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
     runtime::ShapeValue bodyValue{bodyTopoShape->shapeValueKind, resultShape};
     bodyValue.usePreciseBoundingBox = bodyTopoShape->usesPreciseBoundingBox;
     context.shapes[object.name] = bodyValue;
-    context.mesh[object.name] = cad_core::part::meshForShape(resultShape);
+    context.mesh[object.name] = cad_core::part::meshForShape(
+        resultShape,
+        "Face",
+        "Edge",
+        "Vertex",
+        context.displayMeshDeflection
+    );
     context.subshapes[object.name] = part::subshapeMapForShape(resultShape);
     const double volume = bodyTopoShape->shapeValueKind == runtime::ShapeValue::Kind::Solid
         ? cad_core::part::volumeForShape(resultShape)

@@ -894,6 +894,8 @@ ComputeContext recomputeContext(const app::Document& document,
     context.dependencies = plan.dependencies;
     context.documentObjects = buildDocumentObjectMap(document);
     context.parentGroupByObject = document.parentGroupByObject;
+    context.targetObjects = std::set<std::string>(document.targets.begin(), document.targets.end());
+    context.displayMeshDeflection = document.displayMeshDeflection.value_or(context.displayMeshDeflection);
     context.transformationTemplateObjects = findTransformationTemplateObjects(document);
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
     // ::GeoFeature::getGlobalPlacement() returns parent GeoFeatureGroup::globalGroupPlacement()

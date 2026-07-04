@@ -6,6 +6,7 @@
 
 #include <cstddef>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
@@ -27,6 +28,7 @@ struct Document {
     std::vector<std::string> targets;
     std::map<std::string, std::size_t> indexByName;
     std::map<std::string, std::string> parentGroupByObject;
+    std::optional<double> displayMeshDeflection;
 };
 
 }  // namespace cad_core::app

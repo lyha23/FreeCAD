@@ -35,7 +35,8 @@ double volumeForShape(const TopoDS_Shape& shape);
 nlohmann::json meshForShape(const TopoDS_Shape& shape,
                             const std::string& faceIdPrefix = "Face",
                             const std::string& edgeIdPrefix = "Edge",
-                            const std::string& vertexIdPrefix = "Vertex");
+                            const std::string& vertexIdPrefix = "Vertex",
+                            double deflection = 0.1);
 ShapeFileFormat shapeFileFormatFromString(const std::string& format);
 std::string shapeFileFormatName(ShapeFileFormat format);
 std::string shapeFileFormatExtension(ShapeFileFormat format);

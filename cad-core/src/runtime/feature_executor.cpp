@@ -121,6 +121,14 @@ bool isFeatureGroupedByBody(const app::DocumentObject& object, const ComputeCont
         && parentObjectIt->second->typeId == "PartDesign::Body";
 }
 
+bool shouldBuildDisplayTopology(const app::DocumentObject& object, const ComputeContext& context)
+{
+    if (context.targetObjects.count(object.name) != 0U) {
+        return true;
+    }
+    return !isFeatureGroupedByBody(object, context);
+}
+
 std::optional<RefineShapeResult> applyRefineProperty(
     const app::DocumentObject& object,
     ComputeContext& context,

@@ -11,6 +11,7 @@
 
 #include <map>
 #include <optional>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -110,8 +111,10 @@ struct ComputeContext
     std::map<std::string, std::vector<std::string>> dependencies;
     std::map<std::string, const app::DocumentObject*> documentObjects;
     std::map<std::string, std::string> parentGroupByObject;
+    std::set<std::string> targetObjects;
     std::set<std::string> transformationTemplateObjects;
     std::map<std::string, gp_Trsf> globalPlacements;
+    double displayMeshDeflection = 0.1;
     std::vector<std::string> executionOrder;
 };
 

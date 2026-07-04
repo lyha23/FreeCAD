@@ -80,6 +80,15 @@ S2 输出 drift rows 与 code landing，不直接修。
 - S4/S5 focused tests 与 expected 通过。
 - root README、package README、矩阵、capability / adapter wording 已同步。
 
+实际发布结论：
+
+- final status：`partial_implementation_multiwire_pipe_sewing`。
+- S3 的代表性红灯在 S4 证明为 stale / wrong CMake cache；刷新当前源码 build 后 `c51m4/partdesign-pipe-fixed-round-body` 与 FreeCAD expected 一致。
+- S5/S6 focused regression 通过，只能证明现有 Part Sweep wrapper、advanced helper DTO、history、subshapes 和 mesh response contract 未回归；`mesh` 仍只是 response quality gate。
+- 用户反馈后，本批次追加迁移 FreeCAD `Pipe::execute()` 的 inner-wire shell 分组与 shared front/back face sewing 子路径：新增 `c12m12/partdesign-pipe-multiwire-sewing` native expected 与 focused test。
+- 仍未完成完整 FreeCAD `Pipe::execute()` / `Part::Sweep` 迁移；剩余差异需要继续拆 implementation 批次。
+- `C12M12-ORACLE-001` 保留 `waiting_user_repro`，不编造用户失败 fixture，也不因此修改 `cad-core/src`、fixtures、expected、response schema 或 capability wording。
+
 ## 代码落点候选
 
 ```text
@@ -108,10 +117,8 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD/cad-core
-python3 -m unittest tests.test_p7_features.CadCoreP7FeaturesTest.test_c12m12_partdesign_pipe_freecad_standard_user_regression
-python3 -m unittest tests.test_p7_features.CadCoreP7FeaturesTest.test_c12m12_partdesign_pipe_freecad_cap_sewing_history
-python3 -m unittest tests.test_p8_features.CadCoreP8FeaturesTest.test_c12m12_part_sweep_make_element_pipe_shell_parity
-python3 -m unittest tests.test_p8_features.CadCoreP8FeaturesTest.test_c12m12_part_sweep_advanced_helper_response_contract
+python3 -m unittest tests.test_p7_features.CadCoreP7FeatureTest.test_c51m4_partdesign_pipe_fixed_round_selected_spine_matches_native_oracle
+python3 -m unittest tests.test_p8_features.CadCoreP8FeatureTest.test_c3m4_part_sweep_right_corner_surface_uses_pipeshell_history tests.test_p8_features.CadCoreP8FeatureTest.test_c3m4_part_sweep_solid_builds_solid_not_surface_only tests.test_p8_features.CadCoreP8FeatureTest.test_c3m4_part_sweep_frenet_false_routes_set_mode_false tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_auxiliary_spine_contract_is_expected_backed tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_binormal_contract_is_expected_backed tests.test_p8_features.CadCoreP8FeatureTest.test_c5m12_part_sweep_spine_support_surface_normal_is_expected_backed tests.test_p8_features.CadCoreP8FeatureTest.test_c5m10_part_sweep_combined_advanced_contract_and_diagnostic_priority tests.test_p8_features.CadCoreP8FeatureTest.test_c6m4_part_sweep_advanced_combined_product_contract_builds_shape
 ```
 
 ## 非目标

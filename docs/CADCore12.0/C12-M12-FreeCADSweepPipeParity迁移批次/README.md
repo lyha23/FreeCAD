@@ -17,8 +17,19 @@ C12-M12 是用户点名打开的 FreeCAD Sweep / Pipe 迁移方案包，目标�
 - S3 oracle fixture 与红灯闭环已关闭：`工作步骤细分/7-3-20-21-【已实现】C12-M12-S3-oracle-fixture与红灯闭环.md` 未找到仓库内已记录的用户失败 input/output，ORACLE-001 已标为 `blocked_missing_user_input` / `waiting_user_repro`；代表性 FreeCAD expected 已复用 `c51m4/partdesign-pipe-fixed-round-body`，pre-refresh `cad-core/build` 红灯为 Body volume `0.72` expected vs `0.336` current、topology edges `20` expected vs `28` current、vertices `12` expected vs `15` current。S4 仅授权复核 PartDesign Pipe fixed/round selected-spine cap/sewing mismatch；P8 Part Sweep wrapper / advanced helper controls 已通过，S5 未授权。
 - S4 PartDesign Pipe 主路径迁移已关闭：`工作步骤细分/7-3-20-22-【已实现】C12-M12-S4-PartDesignPipe主路径迁移.md` 确认 S3 红灯来自本地 `cad-core/build` CMake cache 错绑到 `/Users/li/Chili3DProject/cad-web-background/cad-core`，而不是当前源码缺失。执行 `cmake --fresh -S . -B build` 与 `cmake --build build` 后，`c51m4/partdesign-pipe-fixed-round-body` current Body volume `0.7199999999999999`、edges `20`、vertices `12`，与 FreeCAD expected 一致；本步未修改 `cad-core/src`、tests、fixtures 或 expected。ORACLE-001 仍等待用户 repro；S5 仍未授权实现，只剩按队列做 Part Sweep wrapper / response 回归收口判断。
 - S5 Part Sweep wrapper 与 response 收口已关闭：`工作步骤细分/7-3-20-23-【已实现】C12-M12-S5-PartSweep-wrapper与response收口.md` 确认 S4 没有 shared-builder source delta，ORACLE-005/006 仍为 Part Sweep no mismatch。指定 8 个 focused controls 通过（`Ran 8 tests in 1.109s OK`），完整 `python3 -m unittest tests.test_p8_features` 通过（`Ran 219 tests in 44.917s OK`）。现有 P8 controls 已覆盖 `spine`、`sections`、mode / `frenet`、`transition`、`solid`、`advanced`、history、`subshapes` 与 `mesh` response；`mesh` 仅作为 quality gate，不作为 BRep parity 证据。本步未修改 Part Sweep wrapper、response schema、C++、fixtures、expected 或 capability wording，关闭为 `no_code_regression_closeout`。
+- S6 发布闸门已关闭：`工作步骤细分/7-3-20-24-【已实现】C12-M12-S6-发布闸门.md` 最初只做发布闸门，后续按用户反馈补入真实代码迁移子批次。当前发布口径为 `partial_implementation_multiwire_pipe_sewing`：`cad-core/src/part/topo_shape_expansion.cpp` 已按 FreeCAD `Pipe::execute()` 的 `wiresections` lane 规则补 multi-wire profile / section 的多 shell 共用 front/back cap face 和 `BRepBuilderAPI_Sewing` 流程；新增 `c12m12/partdesign-pipe-multiwire-sewing` fixture 与 FreeCADCmd expected。完整 FreeCAD Sweep / Pipe 仍未全量迁完，ORACLE-001 继续保留 `waiting_user_repro` 重开条件。
 - S0 dirty boundary：baseline 时 `docs`、`cad-core/src`、`cad-core/tests`、`cad-core/fixtures` 和其它未跟踪文件均无 dirty 输出；本轮只允许写入本包 README、总入口、S0 步骤文件和矩阵状态。
 - S0 现有 sweep/pipe surface：fixtures 命中 `cad-core/fixtures/c3m4`、`c4m1`、`c4m2`、`c5m3`、`c5m10`、`c5m12`、`c51m4`、`c6m1`、`c6m3`、`c6m4`；focused code/test 命中 `cad-core/src/part/part_sweep.cpp`、`cad-core/src/part/topo_shape_expansion.cpp`、`cad-core/src/part_design/feature_pipe.cpp`、`cad-core/src/runtime/feature_registry.cpp`、`cad-core/src/runtime/capability_contract.cpp`、`cad-core/tests/test_p7_features.py`、`cad-core/tests/test_p8_features.py`、`cad-core/tests/test_adapters.py`、`cad-core/tests/test_expected_fixtures.py` 与 `cad-core/tests/c6m3_pipe_interpolation_law_probe.cpp`。
+
+## 发布结论
+
+- final status：`partial_implementation_multiwire_pipe_sewing`。
+- source authority：C12M12-SRC-001..010 均 reviewed，FreeCAD `Pipe::execute()`、`Pipe::setupAlgorithm()`、`TopoShape::makeElementPipeShell()`、`Sweep::execute()` 与 PipeShell helper API 已形成本包权威。
+- current evidence：S4 证明代表性 PartDesign Pipe 红灯来自 stale / wrong CMake cache；刷新当前源码 build 后 `c51m4/partdesign-pipe-fixed-round-body` 与 FreeCAD expected 一致。用户反馈后新增的 C12-M12 multi-wire fixture 用 FreeCADCmd 1.2.0 revision 20260519 采集 expected，native volume `7.666666666666668`、faces `10`、edges `24`、vertices `16`；当前 `cad-core` 输出匹配且 diagnostics 为空。
+- implementation delta：`cad-core/src/part/topo_shape_expansion.cpp::makeElementPipeShellFromSources()` 现在在 `sewCaps=true` 时支持 multi-wire PartDesign Pipe lanes：每条 wire lane 单独 `BRepOffsetAPI_MakePipeShell` build shell，再把所有 shell 的 simulated front/back wires 合成 cap face 并通过 `BRepBuilderAPI_Sewing` solidify。
+- remaining implementation gap：完整 FreeCAD Sweep / Pipe 迁移仍未关闭，尤其是完整 multisection vertex 细节、Boolean rawShape / AddSubShape 生命周期逐项 parity、Part Workbench mutable helper lifecycle，以及用户实际失败样例 ORACLE-001 仍需继续批次化。
+- retained blocker：`C12M12-ORACLE-001` 仍为 `blocked_missing_user_input` / `waiting_user_repro`。只有用户提供 failing request JSON、current result / preview payload 或明确 fixture 路径时，才重开新的 oracle / implementation 包。
+- release scope：本包未修改 `cad-core/src`、fixtures、expected、response schema 或 capability wording；本轮发布只更新 C12-M12 文档、矩阵和步骤状态。
 
 ## 问题定义
 
@@ -76,6 +87,8 @@ S2 审计结论：当前 `cad-core` 已有 Standard/Frenet、Auxiliary/Binormal�
 2. `current_supported_with_regression_added`：用户失败样例经 native/current 验证不是 backend mismatch，只补 regression 或说明。S4 实际关闭为 `current_source_supported_after_build_refresh`，未产生源码或 expected delta。
 3. `blocked_by_missing_native_oracle`：FreeCADCmd 或 native expected 无法稳定产出，先保留 blocker，不写 C++。
 4. `split_frontend_consumer_followup`：后端 BRep/response 已对齐，问题落在 `my-chili3d` consumer 或 preview。
+
+本包当前出口为 `partial_implementation_multiwire_pipe_sewing`：已经补入一个真实 FreeCAD source-backed 代码迁移子批次，但仍不是完整 FreeCAD Sweep / Pipe 迁移；缺失的用户失败样例只作为 `waiting_user_repro` 重开条件保留。
 
 ## 非目标
 

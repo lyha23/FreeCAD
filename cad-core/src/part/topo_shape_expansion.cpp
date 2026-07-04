@@ -1135,6 +1135,143 @@ std::optional<std::vector<TopoDS_Shape>> prepareLoftProfiles(
     return profiles;
 }
 
+std::vector<TopoDS_Shape> pipeSectionElements(const TopoDS_Shape& input, std::string& error)
+{
+    if (input.IsNull()) {
+        error = "Null input shape";
+        return {};
+    }
+
+    std::vector<TopoDS_Shape> wires;
+    for (TopExp_Explorer explorer(input, TopAbs_WIRE); explorer.More(); explorer.Next()) {
+        wires.push_back(explorer.Current());
+    }
+    if (!wires.empty()) {
+        return wires;
+    }
+
+    if (subshapeCount(input, TopAbs_EDGE) > 0) {
+        const auto wire = wireFromEdges(input);
+        if (!wire) {
+            error = "Profile shape is not a single vertex, edge, wire nor face.";
+            return {};
+        }
+        return {TopoDS_Shape(*wire)};
+    }
+
+    std::vector<TopoDS_Shape> vertices;
+    for (TopExp_Explorer explorer(input, TopAbs_VERTEX); explorer.More(); explorer.Next()) {
+        vertices.push_back(explorer.Current());
+    }
+    if (!vertices.empty()) {
+        return vertices;
+    }
+
+    error = "Profile shape is not a single vertex, edge, wire nor face.";
+    return {};
+}
+
+bool allPipeSectionElementsAreVertices(const std::vector<TopoDS_Shape>& elements)
+{
+    return !elements.empty()
+        && std::all_of(elements.begin(), elements.end(), [](const TopoDS_Shape& shape) {
+               return shape.ShapeType() == TopAbs_VERTEX;
+           });
+}
+
+std::optional<std::vector<std::vector<TopoDS_Shape>>> preparePipeShellProfileLanes(
+    const std::vector<NamedShapeSource>& sources,
+    std::string& error
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::execute(), local "addWiresToWireSections" groups matching inner wires into
+    // parallel lanes, while a single point profile is prepended to every first section lane.
+    if (sources.size() < 2U) {
+        error = "No profile";
+        return std::nullopt;
+    }
+
+    std::vector<std::vector<TopoDS_Shape>> lanes;
+    const auto profileElements = pipeSectionElements(sources.at(1).shape, error);
+    if (!error.empty()) {
+        return std::nullopt;
+    }
+
+    std::optional<TopoDS_Shape> profilePoint;
+    if (allPipeSectionElementsAreVertices(profileElements)) {
+        if (profileElements.size() != 1U) {
+            error = "Pipe: Only one isolated point is needed if using a sketch with isolated points for section";
+            return std::nullopt;
+        }
+        profilePoint = profileElements.front();
+        if (sources.size() == 2U) {
+            error = "Pipe: At least one section is needed when using a single point for profile";
+            return std::nullopt;
+        }
+    }
+    else {
+        lanes.reserve(profileElements.size());
+        for (const TopoDS_Shape& profile : profileElements) {
+            lanes.push_back({profile});
+        }
+    }
+
+    bool lastSectionWasVertex = false;
+    for (std::size_t sourceIndex = 2U; sourceIndex < sources.size(); ++sourceIndex) {
+        const auto sectionElements = pipeSectionElements(sources.at(sourceIndex).shape, error);
+        if (!error.empty()) {
+            return std::nullopt;
+        }
+
+        if (allPipeSectionElementsAreVertices(sectionElements)) {
+            if (lastSectionWasVertex) {
+                error = "Pipe: Only the profile and last section can be vertices";
+                return std::nullopt;
+            }
+            if (sectionElements.size() != 1U) {
+                error = "Pipe: Only the profile and last section can be vertices";
+                return std::nullopt;
+            }
+            lastSectionWasVertex = true;
+            if (lanes.empty() && profilePoint) {
+                lanes.push_back({*profilePoint, sectionElements.front()});
+            }
+            else {
+                for (auto& lane : lanes) {
+                    lane.push_back(sectionElements.front());
+                }
+            }
+            continue;
+        }
+
+        if (lastSectionWasVertex) {
+            error = "Pipe: Only the profile and last section can be vertices";
+            return std::nullopt;
+        }
+        if (lanes.empty() && profilePoint) {
+            lanes.reserve(sectionElements.size());
+            for (const TopoDS_Shape& section : sectionElements) {
+                lanes.push_back({*profilePoint, section});
+            }
+            continue;
+        }
+        if (sectionElements.size() != lanes.size()) {
+            error = "Pipe: Sections need to have the same amount of inner wires";
+            return std::nullopt;
+        }
+        for (std::size_t laneIndex = 0; laneIndex < lanes.size(); ++laneIndex) {
+            lanes.at(laneIndex).push_back(sectionElements.at(laneIndex));
+        }
+    }
+
+    if (lanes.empty()) {
+        error = "No profile";
+        return std::nullopt;
+    }
+    return lanes;
+}
+
 BRepBuilderAPI_TransitionMode pipeShellTransitionMode(int transition)
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
@@ -1918,10 +2055,11 @@ NamedShapeBuild makeElementPipeShellFromSources(
     if (!spine) {
         return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
     }
-    const auto profiles = prepareLoftProfiles(sources, error, 1U);
-    if (!profiles) {
+    const auto profileLanes = preparePipeShellProfileLanes(sources, error);
+    if (!profileLanes) {
         return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, error};
     }
+    const std::vector<TopoDS_Shape>& profiles = profileLanes->front();
     std::vector<NamedShapeSource> makerSources = sources;
     bool usedLocationProductContract = false;
 
@@ -1938,6 +2076,194 @@ NamedShapeBuild makeElementPipeShellFromSources(
                 };
             }
             effectiveOptions.auxiliarySpine = *auxiliaryWire;
+        }
+
+        if (profileLanes->size() > 1U) {
+            if (!effectiveOptions.sewCaps) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "Multi-wire PipeShell lanes require PartDesign cap/sewing flow"
+                };
+            }
+            if (!effectiveOptions.sectionOptions.empty()) {
+                return NamedShapeBuild {
+                    TopoDS_Shape {},
+                    std::nullopt,
+                    "Multi-wire PartDesign Pipe does not support per-section PipeShell options"
+                };
+            }
+
+            std::vector<TopoDS_Shape> shellShapes;
+            std::vector<TopoDS_Wire> frontWires;
+            std::vector<TopoDS_Wire> backWires;
+            std::vector<NamedShape> ownedSources;
+            std::vector<NamedShapeSource> sewingSources;
+            shellShapes.reserve(profileLanes->size());
+            ownedSources.reserve(profileLanes->size() + 2U);
+            sewingSources.reserve(profileLanes->size() + 2U);
+
+            Handle(Law_Function) scalingLaw;
+            if (effectiveOptions.scalingLaw) {
+                const PipeScalingLawBuild scalingLawBuild
+                    = makePipeScalingLaw(*effectiveOptions.scalingLaw);
+                if (!scalingLawBuild.error.empty() || scalingLawBuild.function.IsNull()) {
+                    return NamedShapeBuild {
+                        TopoDS_Shape {},
+                        std::nullopt,
+                        scalingLawBuild.error.empty()
+                            ? "Pipe scaling law did not produce an executable OCCT law"
+                            : scalingLawBuild.error
+                    };
+                }
+                scalingLaw = scalingLawBuild.function;
+            }
+
+            for (std::size_t laneIndex = 0; laneIndex < profileLanes->size(); ++laneIndex) {
+                const std::vector<TopoDS_Shape>& laneProfiles = profileLanes->at(laneIndex);
+                BRepOffsetAPI_MakePipeShell lanePipeShell(*spine);
+                if (effectiveOptions.tolerance) {
+                    const PipeShellTolerance& tolerance = *effectiveOptions.tolerance;
+                    lanePipeShell.SetTolerance(tolerance.tol3d, tolerance.boundTol, tolerance.tolAngular);
+                }
+                else {
+                    lanePipeShell.SetTolerance(Precision::Confusion());
+                }
+                const std::string modeError = configurePipeShellMode(lanePipeShell, effectiveOptions);
+                if (!modeError.empty()) {
+                    return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, modeError};
+                }
+                lanePipeShell.SetTransitionMode(pipeShellTransitionMode(effectiveOptions.transition));
+                for (const TopoDS_Shape& laneProfile : laneProfiles) {
+                    if (!scalingLaw.IsNull()) {
+                        lanePipeShell.SetLaw(laneProfile, scalingLaw);
+                    }
+                    else {
+                        lanePipeShell.Add(laneProfile);
+                    }
+                }
+
+                if (!lanePipeShell.IsReady()) {
+                    return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "shape is not ready to build"};
+                }
+                lanePipeShell.Build();
+                if (!lanePipeShell.IsDone() || lanePipeShell.Shape().IsNull()) {
+                    return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Part::Sweep failed"};
+                }
+
+                TopoDS_Shape shell = lanePipeShell.Shape();
+                shellShapes.push_back(shell);
+                ownedSources.push_back(namedShapeForMakerHistory(
+                    owner + ".Shell" + std::to_string(laneIndex + 1U),
+                    shell,
+                    makerSources,
+                    lanePipeShell
+                ));
+                addDistinct(ownedSources.back().elementHistoryStatus, "part_sweep:pipeshell_history");
+                addDistinct(ownedSources.back().elementHistoryStatus, "part_design_pipe:multi_wire_lane");
+                sewingSources.push_back(NamedShapeSource {
+                    ownedSources.back().owner,
+                    shell,
+                    &ownedSources.back(),
+                });
+
+                if (!shapeIsClosed(shell)) {
+                    TopTools_ListOfShape simulated;
+                    lanePipeShell.Simulate(2, simulated);
+                    if (laneProfiles.front().ShapeType() != TopAbs_VERTEX) {
+                        std::string frontError;
+                        const auto wire = simulatedPipeEndWire(simulated, true, frontError);
+                        if (!wire) {
+                            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, frontError};
+                        }
+                        frontWires.push_back(*wire);
+                    }
+                    if (laneProfiles.back().ShapeType() != TopAbs_VERTEX) {
+                        std::string backError;
+                        const auto wire = simulatedPipeEndWire(simulated, false, backError);
+                        if (!wire) {
+                            return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, backError};
+                        }
+                        backWires.push_back(*wire);
+                    }
+                }
+            }
+
+            const std::optional<TopoDS_Shape> frontFace = pipeCapFaceFromWires(frontWires);
+            const std::optional<TopoDS_Shape> backFace = pipeCapFaceFromWires(backWires);
+
+            TopoDS_Shape sewed;
+            std::optional<NamedShape> sewedNamedShape;
+            if (frontFace || backFace) {
+                BRepBuilderAPI_Sewing sewing;
+                sewing.SetTolerance(Precision::Confusion());
+                for (const TopoDS_Shape& shell : shellShapes) {
+                    sewing.Add(shell);
+                }
+                if (frontFace) {
+                    sewing.Add(*frontFace);
+                    ownedSources.push_back(namedShapeForPreservedSources(
+                        owner + ".FrontFace",
+                        *frontFace,
+                        {sources.at(1)}
+                    ));
+                    sewingSources.push_back(NamedShapeSource {
+                        ownedSources.back().owner,
+                        *frontFace,
+                        &ownedSources.back(),
+                    });
+                }
+                if (backFace) {
+                    sewing.Add(*backFace);
+                    ownedSources.push_back(namedShapeForPreservedSources(
+                        owner + ".BackFace",
+                        *backFace,
+                        {sources.back()}
+                    ));
+                    sewingSources.push_back(NamedShapeSource {
+                        ownedSources.back().owner,
+                        *backFace,
+                        &ownedSources.back(),
+                    });
+                }
+                sewing.Perform();
+                sewed = sewing.SewedShape();
+                if (sewed.IsNull()) {
+                    return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Pipe: Failed to create shell"};
+                }
+                sewedNamedShape = namedShapeForSewingHistory(owner + ".Sewing", sewed, sewingSources, sewing);
+                addDistinct(sewedNamedShape->elementHistoryStatus, "part_design_pipe:sewing");
+                addDistinct(sewedNamedShape->elementHistoryStatus, "part_design_pipe:multi_wire_sections");
+            }
+            else {
+                sewed = shellShapes.size() == 1U ? shellShapes.front() : compoundOfShapes(shellShapes);
+                sewedNamedShape = namedShapeForPreservedSources(owner + ".Shells", sewed, sewingSources);
+                addDistinct(sewedNamedShape->elementHistoryStatus, "part_design_pipe:multi_wire_sections");
+            }
+
+            if (effectiveOptions.solid) {
+                const NamedShapeSource solidSource {owner + ".Sewing", sewed, &*sewedNamedShape};
+                NamedShapeBuild solidBuild = makeElementSolidFromSource(owner, solidSource);
+                if (!solidBuild.error.empty() || solidBuild.shape.IsNull() || !solidBuild.namedShape) {
+                    return NamedShapeBuild {
+                        TopoDS_Shape {},
+                        std::nullopt,
+                        solidBuild.error.empty() ? "Pipe: Failed to build solid" : solidBuild.error
+                    };
+                }
+                solidBuild.namedShape->owner = owner;
+                solidBuild.namedShape->shape = solidBuild.shape;
+                addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_design_pipe:sewing");
+                addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_design_pipe:solidification");
+                addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_design_pipe:multi_wire_sections");
+                addDistinct(solidBuild.namedShape->elementHistoryStatus, "part_sweep:pipeshell_history");
+                return solidBuild;
+            }
+
+            sewedNamedShape->owner = owner;
+            sewedNamedShape->shape = sewed;
+            addDistinct(sewedNamedShape->elementHistoryStatus, "part_sweep:pipeshell_history");
+            return NamedShapeBuild {sewed, std::move(*sewedNamedShape), {}};
         }
 
         BRepOffsetAPI_MakePipeShell pipeShell(*spine);
@@ -1968,7 +2294,7 @@ NamedShapeBuild makeElementPipeShellFromSources(
             }
             scalingLaw = scalingLawBuild.function;
         }
-        for (std::size_t index = 0; index < profiles->size(); ++index) {
+        for (std::size_t index = 0; index < profiles.size(); ++index) {
             // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
             // BRepOffsetAPI_MakePipeShellPyImp.cpp::add(), accepts either
             // "add(Profile, WithContact=False, WithCorrection=False)" or
@@ -1977,7 +2303,7 @@ NamedShapeBuild makeElementPipeShellFromSources(
                 = index < effectiveOptions.sectionOptions.size()
                 ? &effectiveOptions.sectionOptions.at(index)
                 : nullptr;
-            TopoDS_Shape profileForAdd = profiles->at(index);
+            TopoDS_Shape profileForAdd = profiles.at(index);
             if (option != nullptr && usesProductProfilePlacement(*option)) {
                 std::string placementError;
                 const auto placedProfile = profilePlacedAtLocationForPipeShell(
@@ -2071,7 +2397,7 @@ NamedShapeBuild makeElementPipeShellFromSources(
             if (!shapeIsClosed(resultShape)) {
                 TopTools_ListOfShape simulated;
                 pipeShell.Simulate(2, simulated);
-                if (profiles->front().ShapeType() != TopAbs_VERTEX) {
+                if (profiles.front().ShapeType() != TopAbs_VERTEX) {
                     std::string frontError;
                     const auto wire = simulatedPipeEndWire(simulated, true, frontError);
                     if (!wire) {
@@ -2079,7 +2405,7 @@ NamedShapeBuild makeElementPipeShellFromSources(
                     }
                     frontWires.push_back(*wire);
                 }
-                if (profiles->back().ShapeType() != TopAbs_VERTEX) {
+                if (profiles.back().ShapeType() != TopAbs_VERTEX) {
                     std::string backError;
                     const auto wire = simulatedPipeEndWire(simulated, false, backError);
                     if (!wire) {

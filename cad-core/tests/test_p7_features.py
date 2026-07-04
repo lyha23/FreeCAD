@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import subprocess
 import tempfile
@@ -45,6 +46,82 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def response_result(self, response: dict, object_name: str) -> dict:
         return next(item for item in response["results"] if item["object"] == object_name)
+
+    def assert_mesh_has_no_zero_face_render_normals(self, response: dict, object_name: str) -> None:
+        mesh = self.response_result(response, object_name)["mesh"]
+        vertices = mesh["vertices"]
+        source_index = mesh["indices"] if mesh["indices"] else list(range((len(vertices) // 3) * 3))
+        self.assertEqual(len(source_index) // 3, len(mesh["faceIds"]))
+        source_normals = (
+            mesh["normals"]
+            if isinstance(mesh.get("normals"), list) and len(mesh["normals"]) == len(vertices)
+            else None
+        )
+
+        def face_normal(triangle: list[int]) -> tuple[float, float, float]:
+            a = vertices[triangle[0]]
+            b = vertices[triangle[1]]
+            c = vertices[triangle[2]]
+            ux = b[0] - a[0]
+            uy = b[1] - a[1]
+            uz = b[2] - a[2]
+            vx = c[0] - a[0]
+            vy = c[1] - a[1]
+            vz = c[2] - a[2]
+            nx = uy * vz - uz * vy
+            ny = uz * vx - ux * vz
+            nz = ux * vy - uy * vx
+            length = math.hypot(nx, ny, nz)
+            self.assertGreater(length, 1e-12, "CAD mesh triangle normal is zero length")
+            return nx / length, ny / length, nz / length
+
+        render_vertex_by_source: dict[tuple[int, int], int] = {}
+        render_normals: list[list[float]] = []
+        render_sources: list[int] = []
+        render_faces: list[str] = []
+        face_segment_index = -1
+        current_face_id: str | None = None
+
+        for triangle_start in range(0, len(source_index), 3):
+            triangle_index = triangle_start // 3
+            face_id = mesh["faceIds"][triangle_index]
+            if face_id != current_face_id:
+                current_face_id = face_id
+                face_segment_index += 1
+
+            triangle = source_index[triangle_start : triangle_start + 3]
+            normal = None if source_normals is not None else face_normal(triangle)
+            for source_vertex_index in triangle:
+                key = (face_segment_index, source_vertex_index)
+                render_vertex_index = render_vertex_by_source.get(key)
+                if render_vertex_index is None:
+                    render_vertex_index = len(render_normals)
+                    render_vertex_by_source[key] = render_vertex_index
+                    render_normals.append([0.0, 0.0, 0.0])
+                    render_sources.append(source_vertex_index)
+                    render_faces.append(face_id)
+
+                if source_normals is not None:
+                    source_normal = source_normals[source_vertex_index]
+                    self.assertGreater(
+                        math.hypot(source_normal[0], source_normal[1], source_normal[2]),
+                        1e-12,
+                        f"CAD mesh source normal at index {source_vertex_index} is zero length",
+                    )
+                    render_normals[render_vertex_index] = list(source_normal)
+                else:
+                    render_normals[render_vertex_index][0] += normal[0]
+                    render_normals[render_vertex_index][1] += normal[1]
+                    render_normals[render_vertex_index][2] += normal[2]
+
+        for normal_index, normal in enumerate(render_normals):
+            self.assertGreater(
+                math.hypot(normal[0], normal[1], normal[2]),
+                1e-12,
+                "CAD mesh face render normal at index "
+                f"{normal_index} is zero length: face={render_faces[normal_index]} "
+                f"sourceVertex={render_sources[normal_index]}",
+            )
 
     def response_subshape_by_stable_subname(self, response: dict, object_name: str, stable_subname: str) -> dict:
         return next(
@@ -1396,6 +1473,14 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}},
         )
 
+    def test_c5m1_revolve_preview_body_mesh_has_no_zero_render_normals(self) -> None:
+        response = self.run_recompute_response("revolve-preview-body-render-normal", "c5m1")
+        body = self.response_result(response, "RevolvePreviewBody")
+
+        self.assertEqual(response["diagnostics"], [])
+        self.assertIsNotNone(body["mesh"])
+        self.assert_mesh_has_no_zero_face_render_normals(response, "RevolvePreviewBody")
+
     def test_c5m1_revolved_zero_sum_angles_are_diagnostic(self) -> None:
         result = self.run_recompute("partdesign-revolved-zero-sum-diagnostic", "c5m1")
 
@@ -1899,6 +1984,22 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("part_sweep:pipeshell_history", pipe_named_shape["element_history_status"])
         self.assertIn("part_design_pipe:pipeshell_history", pipe_named_shape["element_history_status"])
         self.assert_object_matches_expected(result, "c5m3", "partdesign-pipe-sections-transformation")
+
+    def test_c12m12_partdesign_pipe_multiwire_sewing_matches_native_oracle(self) -> None:
+        result = self.run_recompute("partdesign-pipe-multiwire-sewing", "c12m12")
+        pipe = result["objects"]["AdditivePipeMultiWire"]
+        body = result["objects"]["Body"]
+        pipe_named_shape = result["named_shapes"]["AdditivePipeMultiWire"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pipe["status"], "ok")
+        self.assertEqual(pipe["feature"], "partdesign_pipe")
+        self.assertEqual(pipe["transformation"], "Multisection")
+        self.assertEqual(pipe["solid_count"], 1)
+        self.assertEqual(body["tip"], "AdditivePipeMultiWire")
+        self.assertIn("part_design_pipe:multi_wire_sections", pipe_named_shape["element_history_status"])
+        self.assertIn("part_design_pipe:sewing", pipe_named_shape["element_history_status"])
+        self.assert_object_matches_expected(result, "c12m12", "partdesign-pipe-multiwire-sewing")
 
     def test_c5m3_partdesign_pipe_transition_and_frenet_match_native_oracle(self) -> None:
         result = self.run_recompute("partdesign-pipe-transition-variants", "c5m3")

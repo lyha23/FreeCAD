@@ -76,6 +76,63 @@ void addMaterializedLinkElementDependencies(Document& document)
     }
 }
 
+std::optional<double> readDisplayMeshDeflection(const nlohmann::json& raw,
+                                                std::vector<runtime::Diagnostic>& diagnostics)
+{
+    const nlohmann::json* value = nullptr;
+    std::string property;
+    const auto adapterIt = raw.find("adapter");
+    if (adapterIt != raw.end() && adapterIt->is_object()) {
+        const auto directIt = adapterIt->find("displayMeshDeflection");
+        if (directIt != adapterIt->end()) {
+            value = &*directIt;
+            property = "adapter.displayMeshDeflection";
+        }
+        const auto displayMeshIt = adapterIt->find("displayMesh");
+        if (value == nullptr && displayMeshIt != adapterIt->end() && displayMeshIt->is_object()) {
+            const auto deflectionIt = displayMeshIt->find("deflection");
+            if (deflectionIt != displayMeshIt->end()) {
+                value = &*deflectionIt;
+                property = "adapter.displayMesh.deflection";
+            }
+        }
+    }
+    const auto snakeIt = raw.find("display_mesh_deflection");
+    if (value == nullptr && snakeIt != raw.end()) {
+        value = &*snakeIt;
+        property = "display_mesh_deflection";
+    }
+    if (value == nullptr || value->is_null()) {
+        return std::nullopt;
+    }
+    if (!value->is_number()) {
+        addDiagnostic(
+            diagnostics,
+            "error",
+            "parse_error",
+            property + " must be a positive number",
+            {},
+            property,
+            "parse"
+        );
+        return std::nullopt;
+    }
+    const double deflection = value->get<double>();
+    if (deflection <= 0.0) {
+        addDiagnostic(
+            diagnostics,
+            "error",
+            "parse_error",
+            property + " must be a positive number",
+            {},
+            property,
+            "parse"
+        );
+        return std::nullopt;
+    }
+    return deflection;
+}
+
 }  // namespace
 
 std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohmann::json& raw)
@@ -93,6 +150,7 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
         addDiagnostic(diagnostics, "error", "parse_error", "Document field 'Objects' must be a list", {}, {}, "parse");
         return {document, diagnostics};
     }
+    document.displayMeshDeflection = readDisplayMeshDeflection(raw, diagnostics);
 
     std::set<std::string> seenNames;
     std::set<long long> seenIds;

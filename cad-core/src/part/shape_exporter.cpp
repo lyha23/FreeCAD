@@ -30,6 +30,7 @@
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_XYZ.hxx>
 
 #if __has_include(<TopTools_FormatVersion.hxx>)
 #include <TopTools_FormatVersion.hxx>
@@ -310,6 +311,25 @@ std::vector<gp_Pnt> edgeDisplayPoints(const TopoDS_Edge& edge)
     return points.size() < 2 ? std::vector<gp_Pnt> {} : points;
 }
 
+gp_XYZ normalizedTriangleNormal(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3)
+{
+    gp_XYZ u = p2.XYZ() - p1.XYZ();
+    gp_XYZ v = p3.XYZ() - p1.XYZ();
+    gp_XYZ normal = u.Crossed(v);
+    constexpr double tolerance = 1e-12;
+    const double modulus = normal.Modulus();
+    if (modulus <= tolerance) {
+        return gp_XYZ(0.0, 0.0, 0.0);
+    }
+    normal.Divide(modulus);
+    return normal;
+}
+
+struct FaceVertexNormalCluster {
+    int vertexIndex = 0;
+    gp_XYZ normalSum;
+};
+
 nlohmann::json edgeSegmentsForShape(const TopoDS_Shape& shape, const std::string& edgeIdPrefix)
 {
     nlohmann::json segments = nlohmann::json::array();
@@ -366,9 +386,10 @@ nlohmann::json vertexPointsForShape(const TopoDS_Shape& shape, const std::string
 nlohmann::json meshForShape(const TopoDS_Shape& shape,
                             const std::string& faceIdPrefix,
                             const std::string& edgeIdPrefix,
-                            const std::string& vertexIdPrefix)
+                            const std::string& vertexIdPrefix,
+                            double deflection)
 {
-    BRepMesh_IncrementalMesh mesher(shape, 0.1);
+    BRepMesh_IncrementalMesh mesher(shape, deflection);
     mesher.Perform();
 
     nlohmann::json vertices = nlohmann::json::array();
@@ -377,17 +398,41 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape,
     nlohmann::json edgeSegments = edgeSegmentsForShape(shape, edgeIdPrefix);
     nlohmann::json vertexPoints = vertexPointsForShape(shape, vertexIdPrefix);
     std::map<std::string, int> vertexIndexByPoint;
+    std::map<std::pair<int, std::string>, std::vector<FaceVertexNormalCluster>>
+        faceVertexClusters;
+
+    auto appendVertex = [&](const gp_Pnt& point) {
+        const int index = static_cast<int>(vertices.size());
+        vertices.push_back({point.X(), point.Y(), point.Z()});
+        return index;
+    };
 
     auto addVertex = [&](const gp_Pnt& point) {
-        const auto key = pointKey(point);
+        const std::string key = pointKey(point);
         const auto it = vertexIndexByPoint.find(key);
         if (it != vertexIndexByPoint.end()) {
             return it->second;
         }
-        const int index = static_cast<int>(vertices.size());
-        vertices.push_back({point.X(), point.Y(), point.Z()});
+        const int index = appendVertex(point);
         vertexIndexByPoint[key] = index;
         return index;
+    };
+
+    auto addFaceVertex = [&](int faceIndex, const gp_Pnt& point, const gp_XYZ& normal) {
+        const std::string pointClusterKey = pointKey(point);
+        auto& clusters = faceVertexClusters[{faceIndex, pointClusterKey}];
+        for (FaceVertexNormalCluster& cluster : clusters) {
+            if (cluster.normalSum.Dot(normal) >= -1e-9) {
+                cluster.normalSum += normal;
+                return cluster.vertexIndex;
+            }
+        }
+
+        // The frontend accumulates normals per face/source vertex. Keep global point reuse, but
+        // split a point inside one face when local folded triangles would cancel each other.
+        const int vertexIndex = clusters.empty() ? addVertex(point) : appendVertex(point);
+        clusters.push_back({vertexIndex, normal});
+        return vertexIndex;
     };
 
     int faceIndex = 0;
@@ -405,10 +450,21 @@ nlohmann::json meshForShape(const TopoDS_Shape& shape,
             int n2 = 0;
             int n3 = 0;
             triangulation->Triangle(triangleIndex).Get(n1, n2, n3);
+            if (face.Orientation() != TopAbs_FORWARD) {
+                std::swap(n1, n2);
+            }
             gp_Pnt p1 = triangulation->Node(n1).Transformed(location.Transformation());
             gp_Pnt p2 = triangulation->Node(n2).Transformed(location.Transformation());
             gp_Pnt p3 = triangulation->Node(n3).Transformed(location.Transformation());
-            triangles.push_back({addVertex(p1), addVertex(p2), addVertex(p3)});
+            const gp_XYZ normal = normalizedTriangleNormal(p1, p2, p3);
+            if (normal.Modulus() <= 0.0) {
+                continue;
+            }
+            triangles.push_back({
+                addFaceVertex(faceIndex, p1, normal),
+                addFaceVertex(faceIndex, p2, normal),
+                addFaceVertex(faceIndex, p3, normal),
+            });
             faceIds.push_back(faceIdPrefix + std::to_string(faceIndex));
         }
     }

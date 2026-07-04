@@ -20,6 +20,7 @@ bool rejectUnsupportedProperties(const app::DocumentObject& object,
                                  const std::set<std::string>& allowed);
 bool rejectActiveRefineProperty(const app::DocumentObject& object, ComputeContext& context);
 bool isFeatureGroupedByBody(const app::DocumentObject& object, const ComputeContext& context);
+bool shouldBuildDisplayTopology(const app::DocumentObject& object, const ComputeContext& context);
 
 struct RefineShapeResult
 {

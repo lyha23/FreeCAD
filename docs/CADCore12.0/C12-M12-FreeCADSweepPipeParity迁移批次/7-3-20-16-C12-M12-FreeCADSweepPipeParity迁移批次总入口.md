@@ -27,7 +27,7 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 5. `7-3-20-21-【已实现】C12-M12-S3-oracle-fixture与红灯闭环.md`
 6. `7-3-20-22-【已实现】C12-M12-S4-PartDesignPipe主路径迁移.md`
 7. `7-3-20-23-【已实现】C12-M12-S5-PartSweep-wrapper与response收口.md`
-8. `7-3-20-24-C12-M12-S6-发布闸门.md`
+8. `7-3-20-24-【已实现】C12-M12-S6-发布闸门.md`
 
 ## 当前状态
 
@@ -38,6 +38,7 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 - S3 `oracle fixture 与红灯闭环` 已关闭：ORACLE-001 未找到用户失败 input/output，已保留为 `blocked_missing_user_input`；ORACLE-003 复用 checked-in FreeCADCmd expected `c51m4/partdesign-pipe-fixed-round-body` 形成 pre-refresh red evidence，expected Body volume `0.72` / edges `20` / vertices `12`，pre-refresh Body volume `0.336` / edges `28` / vertices `15`。C12M12-BLOCKER-501 曾授权 S4 复核 PartDesign Pipe fixed/round selected-spine cap/sewing mismatch；S3 未授权 S5 实现，后续 S5 只能做 wrapper / response 回归收口。
 - S4 `PartDesign Pipe 主路径迁移` 已关闭：S3 红灯复现后定位到本地 `cad-core/build` CMake cache 错绑 `cad-web-background/cad-core`；`cmake --fresh -S . -B build` 重新绑定当前源码后，`partdesign-pipe-fixed-round-body` focused case 通过，current Body volume `0.7199999999999999`、edges `20`、vertices `12` 与 FreeCAD expected 一致。本步无 C++ / tests / fixtures / expected 改动；C12M12-BLOCKER-501 关闭为 `closed_current_supported_after_build_refresh`。ORACLE-001 继续等待用户 repro，S5 仍未授权实现。
 - S5 `Part Sweep wrapper 与 response 收口` 已关闭：S4 没有 shared-builder source delta，S5 仅执行 no-code regression closeout。指定 8 个 Part Sweep focused controls 通过（`Ran 8 tests in 1.109s OK`），完整 P8 通过（`Ran 219 tests in 44.917s OK`）。`spine`、`sections`、mode / `frenet`、`transition`、`solid`、`advanced`、history、`subshapes` 与 `mesh` response 已由既有 P8 controls 覆盖；`mesh` 只作为 response quality gate。本步未改 C++、fixtures、expected、response schema 或 capability wording，C12M12-BLOCKER-601 关闭为 `closed_no_code_regression_closeout`。
+- S6 `发布闸门` 已关闭，随后按用户反馈补入真实代码迁移子批次：final status 为 `partial_implementation_multiwire_pipe_sewing`。`cad-core/src/part/topo_shape_expansion.cpp` 已迁移 FreeCAD `Pipe::execute()` 的 multi-wire shell lane + shared cap/sewing 路径；新增 `c12m12/partdesign-pipe-multiwire-sewing` fixture、FreeCADCmd expected 和 focused test。完整 Sweep / Pipe 仍未全量迁完，ORACLE-001 保留 `waiting_user_repro` 重开条件。
 
 ## 执行规则
 
@@ -45,7 +46,7 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 - 如果 S1/S2/S3 任一闸门无法证明 source-backed current mismatch，停止在 blocker，不进入 S4/S5 代码实现；当前仅 S4 曾由 ORACLE-003 授权，S5 未授权实现且已按回归收口关闭。
 - S4 已关闭；若未来再次出现 fixed/round selected-spine mismatch，应先确认 `cad-core/build` 是否绑定当前源码树。
 - S5 已关闭为 no-code regression closeout；没有新的 Part Sweep current mismatch 前不得补实现或修改 response schema。
-- S6 必须同时更新 README、矩阵、focused tests 和 release wording。
+- S6 已关闭为发布闸门，并已追加 multi-wire Pipe sewing 代码迁移；后续完整迁移仍应继续拆批，从剩余 `Pipe::execute()` vertex / rawShape / AddSubShape 生命周期和 `Part::Sweep` mutable helper lifecycle 差异继续。
 
 ## 关闭条件
 
@@ -66,4 +67,6 @@ C12-M12 的核心判断是：先证明 FreeCAD source、当前 `cad-core` 行为
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/矩阵/*.tsv
+rg -n '[ \t]$' docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次 docs/CADCore12.0/README.md
+git diff --check
 ```

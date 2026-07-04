@@ -1124,8 +1124,16 @@ void executePipeFeature(const app::DocumentObject& object,
     if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
     }
-    context.mesh[object.name] = cad_core::part::meshForShape(solid);
-    context.subshapes[object.name] = part::subshapeMapForShape(solid);
+    if (runtime::shouldBuildDisplayTopology(object, context)) {
+        context.mesh[object.name] = cad_core::part::meshForShape(
+            solid,
+            "Face",
+            "Edge",
+            "Vertex",
+            context.displayMeshDeflection
+        );
+        context.subshapes[object.name] = part::subshapeMapForShape(solid);
+    }
 
     const bool additive = addSubMode == PipeAddSubMode::Additive;
     if (additive) {

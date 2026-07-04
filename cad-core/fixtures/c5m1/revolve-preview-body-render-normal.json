@@ -1,0 +1,229 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "草图 12:44:01 AM",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              -237.92818666236985,
+              229.97974123878225
+            ],
+            "id": 100001,
+            "kind": "LineSegment",
+            "start": [
+              -762.8745161151837,
+              229.97974123878225
+            ]
+          },
+          {
+            "end": [
+              -237.9281866623699,
+              -468.9087669601356
+            ],
+            "id": 100002,
+            "kind": "LineSegment",
+            "start": [
+              -237.92818666236985,
+              229.97974123878225
+            ]
+          },
+          {
+            "end": [
+              -762.8745161151837,
+              -468.9087669601356
+            ],
+            "id": 100003,
+            "kind": "LineSegment",
+            "start": [
+              -237.9281866623699,
+              -468.9087669601356
+            ]
+          },
+          {
+            "end": [
+              -762.8745161151837,
+              229.97974123878225
+            ],
+            "id": 100004,
+            "kind": "LineSegment",
+            "start": [
+              -762.8745161151837,
+              -468.9087669601356
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 2,
+      "Name": "草图 12:44:06 AM",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "endTangent": [
+              -28.41352402206576,
+              -41.14209100966421
+            ],
+            "id": 600001,
+            "kind": "InterpolatedSpline",
+            "points": [
+              [
+                401.73459074369106,
+                919.3485443951248
+              ],
+              [
+                632.4001969695471,
+                411.8498972632752
+              ],
+              [
+                331.08323516141564,
+                -24.449727374569193
+              ]
+            ],
+            "startTangent": [
+              20.68898781599904,
+              -45.51885085488698
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 3,
+      "Name": "Sweep",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Mode": "Fixed",
+        "Profile": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [],
+          "SubList": [],
+          "value": "草图 12:44:01 AM"
+        },
+        "Refine": false,
+        "Spine": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "g600001"
+          ],
+          "SubList": [
+            "Edge1"
+          ],
+          "value": "草图 12:44:06 AM"
+        },
+        "Transformation": "Constant",
+        "Transition": "Transformed"
+      },
+      "TypeId": "PartDesign::AdditivePipe"
+    },
+    {
+      "ID": 4,
+      "Name": "RevolvePreview",
+      "Properties": {
+        "Angle": 360,
+        "FuseOrder": "BaseFirst",
+        "FuzzyTolerance": 0,
+        "Midplane": false,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Sweep.FrontFace.Face1"
+              ],
+              "SubList": [
+                "Face5"
+              ],
+              "value": "Sweep"
+            }
+          ]
+        },
+        "ReferenceAxis": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "g100004"
+          ],
+          "SubList": [
+            "Edge4"
+          ],
+          "value": "草图 12:44:01 AM"
+        },
+        "Refine": false,
+        "Reversed": false,
+        "Type": "Angle"
+      },
+      "TypeId": "PartDesign::Revolution"
+    },
+    {
+      "ID": 5,
+      "Name": "RevolvePreviewBody",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "草图 12:44:01 AM",
+            "草图 12:44:06 AM",
+            "Sweep",
+            "RevolvePreview"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "RevolvePreview"
+        }
+      },
+      "TypeId": "PartDesign::Body"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "RevolvePreviewBody"
+    ]
+  }
+}
