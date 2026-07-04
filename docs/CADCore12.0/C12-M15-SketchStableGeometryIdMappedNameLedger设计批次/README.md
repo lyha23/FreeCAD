@@ -15,6 +15,7 @@ C12-M15 承接 C12-M11 S4/S5 发布的 `C12-M11-StableGeometryIdMappedNameLedger
 - S0 dirty boundary：docs=`<none>`；`cad-core/src`=`<none>`；tests=`<none>`；fixtures / expected=`<none>`；adapters=`<none>`；other=`<none>`。非本包 dirty 未发现。
 - S0 队列冻结：C12-M11 与 C12-M14 `工作步骤细分` 队列均只输出表头；C12-M15 队列从 S0 开始，S0 关闭后下一步进入 S1 FreeCAD source 与 current identity 管线复核。
 - S0 capability gap 递归检查：所有 live `remaining_gaps` 均为 `[]`，root `known_gaps=[]`，`part_design.sub_shape_binder.known_gaps={}`；C12-M15 是 C12-M11 stable geometry id ledger follow-up，不是 capability remaining gap / known gap，也不是 C12-M14 helper lifecycle 后续。
+- S1 source/current 复核已关闭：执行基线 `HEAD=5a5464fb96`（`5a5464fb96 文档：关闭 C12-M15 S0 基线冻结`），起点 worktree clean；FreeCAD authority 确认为 `GeometryFacade` extension id + mapped `g<ID>` / `e<ID>`，不是 `GeoId` 列表索引或当前 `EdgeN`。cad-core current landing 已定位到 `readGeometryIdField()`、`SketchGeometryIdentity` / `RawSketchEdgeIdentityLedger`、`stableSubnameForGeometryId()`、response field publisher、`raw_edge_identity.byStableSubname` 和 reference resolution consumer；S1 不修改 C++，后续从 S2 ledger interface 产品契约设计继续。
 
 ## 问题定义
 

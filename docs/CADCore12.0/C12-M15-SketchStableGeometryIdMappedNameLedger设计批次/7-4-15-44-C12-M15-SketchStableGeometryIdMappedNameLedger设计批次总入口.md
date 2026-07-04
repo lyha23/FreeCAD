@@ -20,7 +20,7 @@
 
 1. `7-4-15-45-C12-M15工作步骤总入口.md`
 2. `7-4-15-46-【已实现】C12-M15-S0-live基线与C12-M11继承冻结.md`
-3. `7-4-15-47-C12-M15-S1-FreeCAD-source与current-identity管线复核.md`
+3. `7-4-15-47-【已实现】C12-M15-S1-FreeCAD-source与current-identity管线复核.md`
 4. `7-4-15-48-C12-M15-S2-ledger-interface产品契约设计.md`
 5. `7-4-15-49-C12-M15-S3-current-gap与最小实现边界裁决.md`
 6. `7-4-15-50-C12-M15-S4-设计发布闸门.md`
@@ -31,7 +31,8 @@
 - S0 live 基线与 C12-M11 继承冻结已关闭：`HEAD=b3d2df945a`（`b3d2df945a docs: 关闭 C12-M15 工作步骤总入口`），起点 worktree clean。
 - C12-M11 与 C12-M14 队列均为空；live capability 递归检查确认所有 `remaining_gaps` 均为空，`known_gaps` 为空数组 / 空对象。
 - C12-M15 起点是 C12-M11 stable geometry id ledger 设计 follow-up，不是 capability remaining gap，也不是 C12-M14 helper lifecycle 后续；不在总入口直接修改 C++。
-- 后续 worker 从 S1 继续，先复核 FreeCAD source authority 与 cad-core current identity 管线，再进入 ledger interface 设计。
+- S1 FreeCAD source 与 current identity 管线复核已关闭：FreeCAD authority 是 `GeometryFacade` extension id 与 mapped `g<ID>` / `e<ID>`，`GeoId` / `EdgeN` 只代表当前索引；cad-core current landing 已定位到 parser、raw ledger、response publisher 和 reference resolution consumer。
+- 后续 worker 从 S2 继续，设计 ledger interface、字段契约、fallback / diagnostics，不把 S1 current coverage 直接宣称为完整闭环。
 
 ## 执行规则
 
