@@ -277,8 +277,10 @@ nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
         !sourceGeometryKind.empty() ? sourceGeometryKind : shadow.sourceGeometryKind;
     const std::string effectiveSourceStableSubname =
         !sourceStableSubname.empty() ? sourceStableSubname : shadow.sourceStableSubname;
-    const std::string stableSubname =
-        !effectiveSourceStableSubname.empty() ? effectiveSourceStableSubname : shadow.stableSubname;
+    std::string stableSubname = shadow.stableSubname;
+    if (stableSubname.empty() || requestLocalInternalSubname(stableSubname)) {
+        stableSubname = effectiveSourceStableSubname;
+    }
     nlohmann::json update = {
         {"target", link.object},
         {"targetId", shadow.targetId},

@@ -6,6 +6,8 @@
 #include <TopoDS.hxx>
 
 #include <algorithm>
+#include <map>
+#include <set>
 #include <utility>
 
 namespace cad_core::sketcher
@@ -32,14 +34,43 @@ std::string identityStatus(const SketchGeometryIdentity& identity)
     return identity.geometryId ? "stable" : "index_fallback";
 }
 
+std::string stableSubnameForIdentity(const RawSketchEdgeIdentity& identity)
+{
+    if (identity.stableSubname) {
+        return *identity.stableSubname;
+    }
+    if (identity.source.geometryId) {
+        return stableSubnameForGeometryId(*identity.source.geometryId);
+    }
+    return {};
+}
+
+std::string identityStatusForEntry(const RawSketchEdgeIdentity& identity)
+{
+    if (!identity.explicitIdentityStatus.empty()) {
+        return identity.explicitIdentityStatus;
+    }
+    return identityStatus(identity.source);
+}
+
 nlohmann::json edgeIdentityJson(const RawSketchEdgeIdentity& identity)
 {
     nlohmann::json value {
         {"indexed", identity.indexed},
         {"sourceGeometryIndex", identity.source.geometryIndex},
         {"sourceStableSubname", sourceStableSubname(identity.source)},
-        {"identityStatus", identityStatus(identity.source)},
+        {"identityStatus", identityStatusForEntry(identity)},
     };
+    const std::string stableSubname = stableSubnameForIdentity(identity);
+    if (!stableSubname.empty()) {
+        value["stableSubname"] = stableSubname;
+    }
+    if (identity.fragmentStableSubname) {
+        value["fragmentStableSubname"] = *identity.fragmentStableSubname;
+    }
+    if (!identity.sourceIndexed.empty()) {
+        value["sourceIndexed"] = identity.sourceIndexed;
+    }
     if (identity.source.geometryId) {
         value["sourceGeometryId"] = *identity.source.geometryId;
     }
@@ -53,11 +84,19 @@ void applyIdentityFields(nlohmann::json& value, const RawSketchEdgeIdentity& ide
 {
     value["sourceStableSubname"] = sourceStableSubname(identity.source);
     value["sourceGeometryIndex"] = identity.source.geometryIndex;
-    value["identityStatus"] = identityStatus(identity.source);
+    value["identityStatus"] = identityStatusForEntry(identity);
+    const std::string stableSubname = stableSubnameForIdentity(identity);
+    if (!stableSubname.empty()) {
+        value["stableSubname"] = stableSubname;
+    }
+    if (identity.fragmentStableSubname) {
+        value["fragmentStableSubname"] = *identity.fragmentStableSubname;
+    }
+    if (!identity.sourceIndexed.empty()) {
+        value["sourceIndexed"] = identity.sourceIndexed;
+    }
     if (identity.source.geometryId) {
-        const std::string stable = stableSubnameForGeometryId(*identity.source.geometryId);
         value["sourceGeometryId"] = *identity.source.geometryId;
-        value["stableSubname"] = stable;
     }
     if (!identity.source.geometryKind.empty()) {
         value["sourceGeometryKind"] = identity.source.geometryKind;
@@ -147,6 +186,76 @@ RawSketchEdgeIdentityLedger buildRawSketchEdgeIdentityLedger(
     return ledger;
 }
 
+void addSplitFragmentIdentitiesFromInternalHistory(
+    RawSketchEdgeIdentityLedger& ledger,
+    const part::NamedShape& internalNamedShape)
+{
+    std::map<std::string, const RawSketchEdgeIdentity*> sourcesByIndexed;
+    for (const RawSketchEdgeIdentity& identity : ledger.edges) {
+        if (identity.source.geometryId) {
+            sourcesByIndexed[identity.indexed] = &identity;
+        }
+    }
+
+    std::map<std::string, std::vector<std::string>> candidateTargetsBySource;
+    std::map<std::string, std::set<std::string>> candidateSourcesByTarget;
+    for (const part::ElementHistory& history : internalNamedShape.history) {
+        if (history.kind != part::ElementHistoryKind::Split || history.sources.size() != 1U) {
+            continue;
+        }
+        const std::string& source = history.sources.front();
+        if (sourcesByIndexed.find(source) == sourcesByIndexed.end()) {
+            continue;
+        }
+        if (internalNamedShape.elements.find(history.element) == internalNamedShape.elements.end()) {
+            continue;
+        }
+        std::vector<std::string>& targets = candidateTargetsBySource[source];
+        if (std::find(targets.begin(), targets.end(), history.element) == targets.end()) {
+            targets.push_back(history.element);
+        }
+        candidateSourcesByTarget[history.element].insert(source);
+    }
+
+    for (const auto& [source, targets] : candidateTargetsBySource) {
+        if (targets.size() <= 1U) {
+            continue;
+        }
+        const RawSketchEdgeIdentity sourceIdentity = *sourcesByIndexed.at(source);
+        std::size_t fragmentIndex = 0;
+        for (const std::string& target : targets) {
+            const auto targetSourcesIt = candidateSourcesByTarget.find(target);
+            if (targetSourcesIt == candidateSourcesByTarget.end()
+                || targetSourcesIt->second.size() != 1U) {
+                continue;
+            }
+            if (std::any_of(
+                    ledger.edges.begin(),
+                    ledger.edges.end(),
+                    [&target](const RawSketchEdgeIdentity& identity) {
+                        return identity.indexed == target;
+                    })) {
+                continue;
+            }
+            ++fragmentIndex;
+            const std::string fragmentStableSubname =
+                stableSubnameForGeometryId(*sourceIdentity.source.geometryId) + ":split"
+                + std::to_string(fragmentIndex);
+            RawSketchEdgeIdentity fragment {
+                target,
+                sourceIdentity.source,
+                source,
+                fragmentStableSubname,
+                fragmentStableSubname,
+                "stable_split_fragment",
+            };
+            ledger.edges.push_back(std::move(fragment));
+            ++ledger.stableCount;
+            ++ledger.splitFragmentCount;
+        }
+    }
+}
+
 part::NamedShape namedShapeForSketchRawEdgeIdentity(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
@@ -209,9 +318,9 @@ nlohmann::json rawSketchEdgeIdentityObject(const RawSketchEdgeIdentityLedger& le
     nlohmann::json byStableSubname = nlohmann::json::object();
     for (const RawSketchEdgeIdentity& identity : ledger.edges) {
         byIndexed[identity.indexed] = edgeIdentityJson(identity);
-        if (identity.source.geometryId) {
-            byStableSubname[stableSubnameForGeometryId(*identity.source.geometryId)] =
-                identity.indexed;
+        const std::string stableSubname = stableSubnameForIdentity(identity);
+        if (!stableSubname.empty()) {
+            byStableSubname[stableSubname] = identity.indexed;
         }
     }
 
@@ -220,6 +329,7 @@ nlohmann::json rawSketchEdgeIdentityObject(const RawSketchEdgeIdentityLedger& le
         {"byStableSubname", byStableSubname},
         {"stable_count", ledger.stableCount},
         {"index_fallback_count", ledger.fallbackCount},
+        {"split_fragment_count", ledger.splitFragmentCount},
     };
 }
 

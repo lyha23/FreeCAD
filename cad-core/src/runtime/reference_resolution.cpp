@@ -122,12 +122,36 @@ bool sketchGeometryStableSubname(const std::string& stableSubname)
                        [](unsigned char value) { return std::isdigit(value) != 0; });
 }
 
+bool sketchGeometrySplitFragmentStableSubname(const std::string& stableSubname)
+{
+    const std::string marker = ":split";
+    const std::size_t markerPosition = stableSubname.find(marker);
+    if (markerPosition == std::string::npos || markerPosition == 0U) {
+        return false;
+    }
+    const std::string sourceStableSubname = stableSubname.substr(0, markerPosition);
+    if (!sketchGeometryStableSubname(sourceStableSubname)) {
+        return false;
+    }
+    const std::string fragment = stableSubname.substr(markerPosition + marker.size());
+    return !fragment.empty()
+        && std::all_of(fragment.begin(), fragment.end(), [](unsigned char value) {
+               return std::isdigit(value) != 0;
+           });
+}
+
+bool sketchGeometryIdentityStableSubname(const std::string& stableSubname)
+{
+    return sketchGeometryStableSubname(stableSubname)
+        || sketchGeometrySplitFragmentStableSubname(stableSubname);
+}
+
 std::string sourceStableSubnameForReference(const app::Link& link,
                                             std::size_t index,
                                             const app::ReferenceShadow& shadow)
 {
     const auto choose = [](const std::string& stableSubname) {
-        return sketchGeometryStableSubname(stableSubname) ? stableSubname : std::string {};
+        return sketchGeometryIdentityStableSubname(stableSubname) ? stableSubname : std::string {};
     };
     if (index < link.stableSubnames.size()) {
         if (const std::string stableSubname = choose(link.stableSubnames.at(index));
@@ -480,12 +504,25 @@ ReferenceResolutionResult resolveReferenceShadow(const app::Link& link,
     std::optional<ReferenceSubshapeResolution> currentSubshape;
     bool resolvedBySketchGeometryId = false;
     const std::string sourceStableSubname = sourceStableSubnameForReference(link, index, shadow);
-    const bool rawSketchEdgeReference = shadow.property == "Shape" && shadow.shapeType == "Edge";
+    const bool rawSketchEdgeReference =
+        (shadow.property == "Shape" || shadow.property == "InternalShape")
+        && shadow.shapeType == "Edge";
     if (rawSketchEdgeReference && !sourceStableSubname.empty()
         && objectPublishesRawSketchEdgeIdentity(view, link.object)) {
         const auto sourceIdentity =
             rawSketchSourceIdentityForStable(view, link.object, sourceStableSubname);
         if (!sourceIdentity) {
+            if (sketchGeometrySplitFragmentStableSubname(sourceStableSubname)) {
+                result.requestedSubname = sourceStableSubname;
+                result.requestedStableSubname = sourceStableSubname;
+                result.status = ReferenceResolutionStatus::Missing;
+                result.recoveryStatus = part::ReferenceMatchStatus::Missing;
+                result.diagnosticCode = "split_fragment_missing";
+                result.diagnosticReason =
+                    "split fragment " + sourceStableSubname
+                    + " is missing from current Sketch raw edge identity";
+                return result;
+            }
             result.status = ReferenceResolutionStatus::Deleted;
             result.recoveryStatus = part::ReferenceMatchStatus::Deleted;
             result.diagnosticCode = "deleted_stable_subname";
@@ -501,7 +538,10 @@ ReferenceResolutionResult resolveReferenceShadow(const app::Link& link,
                 + shadow.sourceGeometryKind + " to " + sourceIdentity->sourceGeometryKind;
             return result;
         }
-        const auto namedShapeIt = view.namedShapes.find(link.object);
+        const std::string namedShapeKey =
+            part::parseInternalSubshapeName(sourceIdentity->indexed) ? link.object + ".InternalShape"
+                                                                     : link.object;
+        const auto namedShapeIt = view.namedShapes.find(namedShapeKey);
         const auto subshape = namedShapeIt == view.namedShapes.end()
             ? std::nullopt
             : part::subshapeByName(namedShapeIt->second, sourceIdentity->indexed);

@@ -746,7 +746,11 @@ nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json&
                 {"points", *pointsIt},
             };
             for (const std::string& field :
-                 {"stableSubname", "sourceStableSubname", "sourceGeometryKind", "identityStatus"}) {
+                 {"stableSubname",
+                  "sourceStableSubname",
+                  "fragmentStableSubname",
+                  "sourceGeometryKind",
+                  "identityStatus"}) {
                 const auto fieldIt = segment.find(field);
                 if (fieldIt != segment.end() && fieldIt->is_string()) {
                     responseSegment[field] = fieldIt->get<std::string>();
@@ -842,6 +846,9 @@ nlohmann::json responseSubshapes(const std::string& objectName,
                 stableSubname = sourceStableSubname;
             }
         }
+        else if (identityStatus == "stable_split_fragment") {
+            stableSubname = subshape.value("stableSubname", "");
+        }
         else if (identityStatus == "index_fallback") {
             stableSubname.clear();
         }
@@ -862,7 +869,10 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             {"stableSubname", stableSubname},
         };
         for (const std::string& field :
-             {"sourceStableSubname", "sourceGeometryKind", "identityStatus"}) {
+             {"sourceStableSubname",
+              "fragmentStableSubname",
+              "sourceGeometryKind",
+              "identityStatus"}) {
             const auto fieldIt = subshape.find(field);
             if (fieldIt != subshape.end() && fieldIt->is_string()) {
                 responseSubshape[field] = fieldIt->get<std::string>();

@@ -30,6 +30,7 @@
 #include <gp_Vec.hxx>
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <initializer_list>
 #include <map>
@@ -354,6 +355,70 @@ std::string internalSubnameFromStableElementMap(
     return currentInternal;
 }
 
+bool sketchGeometryIdStableSubname(const std::string& stableSubname)
+{
+    if (stableSubname.size() < 2U || stableSubname.front() != 'g') {
+        return false;
+    }
+    return std::all_of(stableSubname.begin() + 1,
+                       stableSubname.end(),
+                       [](unsigned char value) { return std::isdigit(value) != 0; });
+}
+
+bool sketchGeometrySplitFragmentStableSubname(const std::string& stableSubname)
+{
+    const std::string marker = ":split";
+    const std::size_t markerPosition = stableSubname.find(marker);
+    if (markerPosition == std::string::npos || markerPosition == 0U) {
+        return false;
+    }
+    if (!sketchGeometryIdStableSubname(stableSubname.substr(0, markerPosition))) {
+        return false;
+    }
+    const std::string fragment = stableSubname.substr(markerPosition + marker.size());
+    return !fragment.empty()
+        && std::all_of(fragment.begin(), fragment.end(), [](unsigned char value) {
+               return std::isdigit(value) != 0;
+           });
+}
+
+std::string internalSubnameFromRawSketchSplitFragmentIdentity(
+    const runtime::ComputeContext& context,
+    const std::string& objectName,
+    const std::string& stableSubname
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectExternal.cpp
+    // ::SketchObject::rebuildExternalGeometry() resolves current external geometry before
+    // refreshing references; /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+    // ::FaceMaker::postBuild() feeds split MapperHistory into ElementMap. cad-core consumes the
+    // Sketch object's request-local raw_edge_identity ledger here instead of matching geometry.
+    if (!sketchGeometrySplitFragmentStableSubname(stableSubname)) {
+        return {};
+    }
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return {};
+    }
+    const auto identityIt = objectIt->second.find("raw_edge_identity");
+    if (identityIt == objectIt->second.end() || !identityIt->is_object()) {
+        return {};
+    }
+    const auto byStableIt = identityIt->find("byStableSubname");
+    if (byStableIt == identityIt->end() || !byStableIt->is_object()) {
+        return {};
+    }
+    const auto indexedIt = byStableIt->find(stableSubname);
+    if (indexedIt == byStableIt->end() || !indexedIt->is_string()) {
+        return {};
+    }
+    const std::string indexed = indexedIt->get<std::string>();
+    if (indexed.rfind("InternalEdge", 0) != 0 && indexed.rfind("InternalVertex", 0) != 0) {
+        return {};
+    }
+    return indexed;
+}
+
 std::vector<std::string> stableNameCandidatesForExternal(
     const app::Link& link,
     const app::ReferenceShadow& shadow
@@ -635,36 +700,50 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(
         }
     }
     if (!resolvedViaBodyOldName && namedShapeIt != context.namedShapes.end()) {
-        const auto resolved
-            = part::resolveElementReference(namedShapeIt->second, subname, stableSubname);
-        if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
-            currentSubname = *resolved.element;
+        bool resolvedViaSplitFragmentLedger = false;
+        if (const std::string fragmentSubname =
+                internalSubnameFromRawSketchSplitFragmentIdentity(context, link.object, stableSubname);
+            !fragmentSubname.empty()) {
+            currentSubname = fragmentSubname;
+            resolvedViaSplitFragmentLedger = true;
         }
-        else if (!stableSubname.empty() && stableSubname != subname) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                stableSubnameDiagnosticCode(resolved.status),
-                stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
-                object.name,
-                "ExternalGeometry",
-                "runtime",
-                link.object,
-                stableSubname
-            );
+        else if (sketchGeometrySplitFragmentStableSubname(stableSubname)) {
             return std::nullopt;
+        }
+
+        if (!resolvedViaSplitFragmentLedger) {
+            const auto resolved
+                = part::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+            if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
+                currentSubname = *resolved.element;
+            }
+            else if (!stableSubname.empty() && stableSubname != subname) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    stableSubnameDiagnosticCode(resolved.status),
+                    stableSubnameDiagnosticMessage(link.object, stableSubname, resolved.status),
+                    object.name,
+                    "ExternalGeometry",
+                    "runtime",
+                    link.object,
+                    stableSubname
+                );
+                return std::nullopt;
+            }
         }
     }
 
     if (!subname.empty()) {
-        std::string internalSubname = subname;
+        std::string internalSubname =
+            part::parseInternalSubshapeName(currentSubname) ? currentSubname : subname;
         if (const std::string shadowSubInternal
             = internalSubnameFromShadowSub(link, shapeIt->second, context);
             !shadowSubInternal.empty()) {
             internalSubname = shadowSubInternal;
         }
-        if (part::parseInternalSubshapeName(subname)
-            && !hasSketchInternalSubshape(shapeIt->second, subname)) {
+        if (part::parseInternalSubshapeName(internalSubname)
+            && !hasSketchInternalSubshape(shapeIt->second, internalSubname)) {
             const std::string stableInternal
                 = internalSubnameFromStableElementMap(context, link.object, stableSubname);
             if (!stableInternal.empty()) {
@@ -675,7 +754,8 @@ std::optional<std::vector<ExternalSubshape>> resolveExternalGeometryLink(
             = resolveSketchInternalSubshape(link, object, shapeIt->second, context, internalSubname)) {
             return std::vector<ExternalSubshape> {*internal};
         }
-        if (part::parseInternalSubshapeName(subname)) {
+        if (part::parseInternalSubshapeName(subname)
+            || part::parseInternalSubshapeName(currentSubname)) {
             return std::nullopt;
         }
     }
