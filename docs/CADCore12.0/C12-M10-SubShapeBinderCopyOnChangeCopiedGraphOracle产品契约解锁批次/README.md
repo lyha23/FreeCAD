@@ -36,6 +36,17 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 - C12-M9 最终事实继续有效：`no_code_backlog_gate`，没有 admitted mismatch-confirmed row，没有 implementation source / landing / validation surface。
 - S0 不运行 FreeCADCmd，不做 source schema、native oracle、DTO approval、current mismatch 或 implementation authorization，不修改 production code、fixtures、expected、tests、adapters 或 capability source。
 
+## S1 source 与 native oracle schema 复核
+
+- S1 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=acf501ab6b`（`acf501ab6b 文档：冻结 C12-M10 S0 live 基线`），起点 worktree clean。
+- FreeCAD `SubShapeBinder::setupCopyOnChange()` 在 `BindCopyOnChange.getValue() == 0 || support.size() != 1` 时清理 CopyOnChange dynamic property 并返回；只有 exactly one support 且非 Disabled 时才接入 `LinkBaseExtension::setupCopyOnChange()`。
+- FreeCAD `SubShapeBinder::update()` 的 Mutated 路径会创建 temporary `_tmp_binder`，执行 `copyObject({obj}, true, true)`，填充 `_CopiedObjs`，先 `recomputeFeature(true)` 生成 geometry element map，再 copy property、必要时再次 recompute，并写 `_CopiedLink`。
+- `ShapeBinder.h` 明确定义 `PartialLoad`、`BindCopyOnChange`、`_CopiedLink`、`_CopiedObjs`；S3 必须区分可持久化输入字段和禁止跨 request 保存的 hidden/session state。
+- `Document::copyObject()` 通过 dependency list、exportObjects/importObjects 复制对象；`Document::recomputeFeature(feature, true)` 递归 recompute 并返回有效性。
+- `LinkBaseExtension` 与 cad-core `app/copy_on_change` 只是 App::Link / `documentObjectUpdates` 参考词汇，不证明 SubShapeBinder `_tmp_binder` / `_CopiedObjs` 已支持。
+- current cad-core 对 `BindCopyOnChange=Enabled|Mutated` 或 `PartialLoad=True` 仍保留 `copy_on_change_full_temporary_document_cache_not_supported`；S4 只有在 S2/S3 给出 approved request-local DTO 后才比较 mismatch。
+- S1 已关闭 `C12M10-BLOCKER-101`，`C12M10-VAL-101=passed_s1_source_schema_fixed`；S2 继续采集 native copied graph oracle，不能把 schema fixed 当作 native evidence ready。
+
 ## 解锁目标
 
 C12-M10 只有在以下三项同时成立时，才允许后续 implementation package：
@@ -61,7 +72,7 @@ C12-M10 只有在以下三项同时成立时，才允许后续 implementation pa
 
 - 入口：确认 C12-M10 包结构、矩阵和队列入口。
 - S0：live 基线、C12-M1..M9 关闭口径、capability snapshot 与 C12-M8/C12-M9 继承口径冻结（已完成，下一步从 S1 继续）。
-- S1：FreeCAD source、current diagnostic、old artifacts 和 native probe schema 复核。
+- S1：FreeCAD source、current diagnostic、old artifacts 和 native probe schema 复核（已完成，下一步从 S2 继续）。
 - S2：native copied graph oracle collection / evidence gate。
 - S3：request-local DTO / product contract boundary 裁决。
 - S4：current mismatch 与 implementation candidate gate。

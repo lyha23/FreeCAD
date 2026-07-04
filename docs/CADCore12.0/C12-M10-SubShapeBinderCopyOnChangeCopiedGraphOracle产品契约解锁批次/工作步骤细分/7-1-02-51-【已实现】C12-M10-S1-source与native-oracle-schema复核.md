@@ -1,4 +1,4 @@
-# C12-M10 S1 source 与 native oracle schema 复核
+# C12-M10 S1 source 与 native oracle schema 复核（已实现）
 
 ## 目标
 
@@ -36,6 +36,12 @@
 - 不运行 FreeCADCmd。
 - 不采 native oracle。
 - 不改 production code、fixtures、expected、tests、adapters 或 capability source。
+
+## S1 结论
+
+- `C12M10-SRC-001..008` 已记录 live/source/current evidence；S1 新增核心依据集中在 `ShapeBinder.cpp`、`ShapeBinder.h`、`Document.cpp`、`Link.cpp` 与 current `cad-core` retained diagnostic。
+- `C12M10-PROBE-001..011` 已固定为 S2 artifact schema requirements；S2 仍需采 native oracle，不得把 schema fixed 视为 evidence ready。
+- `C12M10-BLOCKER-101` 已关闭；`C12M10-VAL-101` 记录为 `passed_s1_source_schema_fixed`。
 
 ## 验收
 

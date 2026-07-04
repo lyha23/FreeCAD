@@ -2,7 +2,7 @@ id	validation	owner_step	status	command_or_evidence	expected_result
 C12M10-VAL-001	C12-M10 queue check	入口	passed_s0_queue_advanced_to_s1	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次/工作步骤细分 --format markdown	Queue skips implemented entry and S0, then starts at S1 after S0 closure.
 C12M10-VAL-002	prior C12 queue checks	S0	passed_s0_prior_queues_empty	C12-M1..C12-M9 step_goal_queue commands	Each prior queue output only the markdown table header at S0.
 C12M10-VAL-003	live capability snapshot	S0	passed_s0_capability_snapshot_recorded	cad-core/build/cad-core capabilities > /tmp/c12m10-s0-capabilities.json	SubShapeBinder status, remaining gap, known gap route, diagnostic, delete condition and reopen condition recorded.
-C12M10-VAL-101	source and oracle schema review	S1	pending	FreeCAD source and c12m10 probe schema review	Source rows and probe rows are complete.
+C12M10-VAL-101	source and oracle schema review	S1	passed_s1_source_schema_fixed	FreeCAD source, current cad-core diagnostic, App::Link vocabulary and c12m10 probe schema review	Source rows and probe rows are complete; C12M10-PROBE-001..011 are fixed as S2 artifact schema requirements.
 C12M10-VAL-201	native oracle artifact	S2	pending	FreeCADCmd file-backed native probe	Artifact records native evidence ready or retained blocker.
 C12M10-VAL-301	DTO product contract decision	S3	pending	DTO and product contract matrices	Every field has allowed, deferred or rejected decision.
 C12M10-VAL-401	current mismatch gate	S4	pending	focused comparison or documented blocker	Current comparison status recorded.

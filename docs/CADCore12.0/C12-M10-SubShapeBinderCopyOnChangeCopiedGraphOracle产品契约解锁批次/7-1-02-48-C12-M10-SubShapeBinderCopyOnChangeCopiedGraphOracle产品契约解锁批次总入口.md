@@ -50,6 +50,7 @@ live capability baseline
 
 - 工作步骤总入口已关闭：已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；入口关闭时队列从 S0 继续，当前 S0 已关闭。
 - S0 live 基线与继承口径冻结已关闭：已确认 HEAD、dirty boundary、C12-M1..M9 队列、SubShapeBinder capability snapshot、C12-M8 retained diagnostic 和 C12-M9 no-code backlog；后续队列从 S1 继续。
+- S1 source 与 native oracle schema 复核已关闭：`ShapeBinder.cpp`、`ShapeBinder.h`、`Document.cpp`、`Link.cpp` 与 current `cad-core` retained diagnostic 已复核；`C12M10-PROBE-001..011` 已固定为 S2 artifact schema requirements，`C12M10-BLOCKER-101` 已关闭，后续队列从 S2 继续。
 
 ## 产物索引
 
@@ -59,7 +60,7 @@ live capability baseline
 | 方案 | `7-1-02-48-C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次方案.md` | 批次规则、证据链和验收分层。 |
 | 工作步骤总入口 | `工作步骤细分/7-1-02-49-【已实现】C12-M10工作步骤总入口.md` | goal 队列索引，已关闭。 |
 | S0 | `工作步骤细分/7-1-02-50-【已实现】C12-M10-S0-live基线与继承口径冻结.md` | 冻结 live baseline 和 C12-M8/C12-M9 继承口径，已关闭。 |
-| S1 | `工作步骤细分/7-1-02-51-C12-M10-S1-source与native-oracle-schema复核.md` | 复核 source/current evidence 并固定 probe schema。 |
+| S1 | `工作步骤细分/7-1-02-51-【已实现】C12-M10-S1-source与native-oracle-schema复核.md` | 复核 source/current evidence 并固定 probe schema，已关闭。 |
 | S2 | `工作步骤细分/7-1-02-52-C12-M10-S2-native-copied-graph-oracle采集.md` | 采集 native copied graph artifact 并做 evidence gate。 |
 | S3 | `工作步骤细分/7-1-02-53-C12-M10-S3-DTO与产品契约边界裁决.md` | 裁决 DTO / product contract 字段。 |
 | S4 | `工作步骤细分/7-1-02-54-C12-M10-S4-current-mismatch准入.md` | 判断 current mismatch。 |
