@@ -1,4 +1,4 @@
-# C12-M10 S2 native copied graph oracle 采集
+# C12-M10 S2 native copied graph oracle 采集（已实现）
 
 ## 目标
 
@@ -31,6 +31,19 @@
 - 不刷新 checked-in expected。
 - 不改 `cad-core/src`、tests、adapters 或 capability source。
 - 不把 property/session 状态、label、bbox、shape count、temporary document name 或 `_CopiedLink` target 单独当作 copied graph success。
+
+## S2 结论
+
+- S2 baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=965915be73`（`965915be73 文档：关闭 C12-M10 S1 source schema 复核`），起点 worktree clean。
+- FreeCADCmd：`/Users/li/.cargo/bin/freecadcmd`；FreeCAD baseline 为 `1.2.0 revision 20260519`，OCCT 为 `7.8.1`。
+- Probe 脚本：`docs/temp/c12m10-subshapebinder-copy-on-change-native-copied-graph-probe.py`。
+- Raw artifact：`docs/temp/c12m10-subshapebinder-copy-on-change-native-copied-graph.raw.freecad.json`。
+- Gate artifact：`docs/temp/c12m10-subshapebinder-copy-on-change-native-copied-graph-evidence-gate.json`。
+- Schema：`c12m10.copy-on-change-native-copied-graph.v1`。
+- `C12M10-PROBE-001..011` 已全部写入 observed_status / decision / artifact_or_note；S2 裁决为 `native_oracle_blocked_retained`。
+- 可观察证据包括 runtime baseline、mode matrix、zero/one/multi support gate、`_tmp_binder` document/object order、`_CopiedLink` target/subvalues、`PartialLoad` property state 和 `Cache_*` dynamic matrix cache creation/hit/rewrite。
+- retained blocker 原因：`_CopiedObjs` stored identity/order、`Document::copyObject()` dependency list 与 source-to-imported mapping、first/second copied `recomputeFeature(true)` lifecycle、ElementMap / NamedShape per-stage lifecycle 仍未从 FreeCADCmd artifact 稳定导出。
+- `C12M10-BLOCKER-201` 已关闭为 `closed_s2_native_oracle_blocked_retained`；`C12M10-VAL-201=passed_s2_native_oracle_blocked_retained`。S3 必须继承该 blocker，不得由 property/session 状态或 `_CopiedLink` target 单独批准 DTO / implementation。
 
 ## 验收
 

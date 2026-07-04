@@ -47,6 +47,16 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 - current cad-core 对 `BindCopyOnChange=Enabled|Mutated` 或 `PartialLoad=True` 仍保留 `copy_on_change_full_temporary_document_cache_not_supported`；S4 只有在 S2/S3 给出 approved request-local DTO 后才比较 mismatch。
 - S1 已关闭 `C12M10-BLOCKER-101`，`C12M10-VAL-101=passed_s1_source_schema_fixed`；S2 继续采集 native copied graph oracle，不能把 schema fixed 当作 native evidence ready。
 
+## S2 native copied graph oracle 采集
+
+- S2 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=965915be73`（`965915be73 文档：关闭 C12-M10 S1 source schema 复核`），起点 worktree clean。
+- 本轮使用 `/Users/li/.cargo/bin/freecadcmd` 运行 file-backed probe；FreeCAD / OCCT baseline 为 FreeCAD `1.2.0 revision 20260519`、OCCT `7.8.1`。
+- 新增 native probe 脚本：`docs/temp/c12m10-subshapebinder-copy-on-change-native-copied-graph-probe.py`。
+- Raw artifact：`docs/temp/c12m10-subshapebinder-copy-on-change-native-copied-graph.raw.freecad.json`；gate artifact：`docs/temp/c12m10-subshapebinder-copy-on-change-native-copied-graph-evidence-gate.json`，schema 均为 `c12m10.copy-on-change-native-copied-graph.v1`。
+- Artifact 覆盖 `C12M10-PROBE-001..011`：baseline、mode matrix、single support gate、tmp binder lifecycle、`_CopiedObjs` identity 尝试、copyObject dependency order 尝试、support rewrite / `_CopiedLink`、recompute lifecycle 尝试、ElementMap / NamedShape lifecycle 尝试、`PartialLoad` 与 `Cache_*` boundary。
+- S2 裁决：`native_oracle_blocked_retained`。Artifact 可观察 `_tmp_binder` 文档/object order、`_CopiedLink` target/subvalues、`PartialLoad` property 和 `Cache_*` dynamic matrix cache，但仍不能稳定导出 `_CopiedObjs` stored identity/order、`Document::copyObject()` dependency list 与 source-to-import mapping、first/second `recomputeFeature(true)` lifecycle、ElementMap / NamedShape per-stage lifecycle。
+- `C12M10-BLOCKER-201` 已关闭为 retained blocker；`C12M10-VAL-201=passed_s2_native_oracle_blocked_retained`。S3 必须继承该 blocker，不得从 property/session 状态、temporary document name、label/bbox/shape count 或 `_CopiedLink` target 单独批准 DTO / implementation。
+
 ## 解锁目标
 
 C12-M10 只有在以下三项同时成立时，才允许后续 implementation package：
@@ -73,7 +83,7 @@ C12-M10 只有在以下三项同时成立时，才允许后续 implementation pa
 - 入口：确认 C12-M10 包结构、矩阵和队列入口。
 - S0：live 基线、C12-M1..M9 关闭口径、capability snapshot 与 C12-M8/C12-M9 继承口径冻结（已完成，下一步从 S1 继续）。
 - S1：FreeCAD source、current diagnostic、old artifacts 和 native probe schema 复核（已完成，下一步从 S2 继续）。
-- S2：native copied graph oracle collection / evidence gate。
+- S2：native copied graph oracle collection / evidence gate（已完成，`native_oracle_blocked_retained`）。
 - S3：request-local DTO / product contract boundary 裁决。
 - S4：current mismatch 与 implementation candidate gate。
 - S5：implementation package authorization、oracle/product-contract 分流或 no-code retained 裁决。
