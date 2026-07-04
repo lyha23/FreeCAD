@@ -21,7 +21,7 @@
 1. `7-4-15-45-C12-M15工作步骤总入口.md`
 2. `7-4-15-46-【已实现】C12-M15-S0-live基线与C12-M11继承冻结.md`
 3. `7-4-15-47-【已实现】C12-M15-S1-FreeCAD-source与current-identity管线复核.md`
-4. `7-4-15-48-C12-M15-S2-ledger-interface产品契约设计.md`
+4. `7-4-15-48-【已实现】C12-M15-S2-ledger-interface产品契约设计.md`
 5. `7-4-15-49-C12-M15-S3-current-gap与最小实现边界裁决.md`
 6. `7-4-15-50-C12-M15-S4-设计发布闸门.md`
 
@@ -32,7 +32,8 @@
 - C12-M11 与 C12-M14 队列均为空；live capability 递归检查确认所有 `remaining_gaps` 均为空，`known_gaps` 为空数组 / 空对象。
 - C12-M15 起点是 C12-M11 stable geometry id ledger 设计 follow-up，不是 capability remaining gap，也不是 C12-M14 helper lifecycle 后续；不在总入口直接修改 C++。
 - S1 FreeCAD source 与 current identity 管线复核已关闭：FreeCAD authority 是 `GeometryFacade` extension id 与 mapped `g<ID>` / `e<ID>`，`GeoId` / `EdgeN` 只代表当前索引；cad-core current landing 已定位到 parser、raw ledger、response publisher 和 reference resolution consumer。
-- 后续 worker 从 S2 继续，设计 ledger interface、字段契约、fallback / diagnostics，不把 S1 current coverage 直接宣称为完整闭环。
+- S2 ledger interface 产品契约已关闭：`SketchGeometryIdentityLedger` 是 request-local 产品账本，输入当前请求 geometry/source edge/internal alias/old reference shadow，输出 `byIndexed`、`byStableSubname`、stable/fallback/diagnostic 状态和 response fields；`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 必须共享同一账本来源。
+- 后续 worker 从 S3 继续，对照 S2 契约裁决 current coverage 与最小 implementation 边界，不把 S2 产品契约本身当成代码已完整覆盖。
 
 ## 执行规则
 
@@ -40,6 +41,8 @@
 - `EdgeN` / `InternalEdgeN` 只作为当前请求 indexed name；不能把顺序稳定性写成 FreeCAD-grade stable id。
 - `geometryId` / `sourceGeometryId` / `sourceStableSubname` / `identityStatus` 必须作为同一账本的字段统一裁决。
 - 如果没有合法 geometry id，只能发布 `index_fallback` 或空 `stableSubname`，不得让前端误以为引用可跨编辑稳定。
+- `deleted_stable_subname` 必须等价于 needs-reselect；`geometry_kind_changed` 必须显式返回；缺少 fragment ledger / ElementMap 证据时 split 场景不能自动继承 stable identity，应输出 `split_requires_reselect` 或进入 S3 implementation target。
+- 前端只能消费后端发布字段，不得靠 `Edge` / `InternalEdge` prefix、mesh 顺序、subshape 顺序或当前 `EdgeN` 发明长期 topology identity。
 - 不修改 `my-chili3d`；前端消费同步另包处理。
 
 ## 关闭条件

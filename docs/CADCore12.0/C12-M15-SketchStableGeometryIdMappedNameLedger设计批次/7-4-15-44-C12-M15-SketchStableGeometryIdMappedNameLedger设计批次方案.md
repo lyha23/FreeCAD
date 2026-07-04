@@ -14,8 +14,8 @@ C12-M15 只做 stable geometry id / mapped-name ledger 设计。它不是继续 
 | --- | --- |
 | Module | `SketchGeometryIdentityLedger` |
 | Seam | sketch raw/internal edge 生成完成后、`NamedShape` / `mesh.edgeSegments[]` / `subshapes[]` 发布前 |
-| Interface | 输入当前 raw shape、source edges、source geometry identities；输出 indexed edge 到 source geometry id / stable mapped name / fallback status 的账本 |
-| Implementation | 内部处理 TopExp edge 枚举、source edge matching、geometry id mapping、fallback、diagnostics 和 response field materialization |
+| Interface | 输入当前请求 Geometry list、source geometry identity、raw/source edge、internal alias、旧 reference shadow；输出 indexed edge 到 source geometry id / mapped stable name / fallback / diagnostic status 的账本 |
+| Implementation | 内部处理 TopExp edge 枚举、source edge matching、internal alias normalization、geometry id mapping、fallback、diagnostics 和 response field materialization |
 | Callers | sketch executor、runtime response、reference resolution、future frontend consumer |
 
 对调用方来说，账本只回答：
@@ -24,6 +24,18 @@ C12-M15 只做 stable geometry id / mapped-name ledger 设计。它不是继续 
 2. 是否能发布 FreeCAD-grade `stableSubname=g<ID>`。
 3. 如果不能稳定，为什么只能 `index_fallback`。
 4. 旧 `StableSubList` / `ReferenceShadow.sourceGeometryId` 在本次请求中应该更新到哪个 current indexed edge。
+
+## S2 产品 interface
+
+`SketchGeometryIdentityLedger` 只在一次 recompute 请求内有效。FreeCAD `generateId()` / `updateGeoHistory()` 说明 id 的来源和复用语义，但 cad-core 当前不保存 FreeCAD document 内的 `geoHistory` session，也不自动生成跨请求 id。
+
+| 类别 | 契约 |
+| --- | --- |
+| Inputs | 当前请求的 sketch Geometry list；`geometryIndex`、`geometryKind`、合法唯一 `geometryId` 或缺失 id；raw source edge 与当前 raw `EdgeN`；`InternalEdgeN` 到 raw edge 的 alias；旧 `StableSubList` / `ReferenceShadow.stableSubname` / `sourceStableSubname` / `sourceGeometryId` / `sourceGeometryKind`。 |
+| Outputs | `byIndexed`、`byStableSubname`、`sourceGeometryIndex`、`sourceGeometryId`、`sourceGeometryKind`、`sourceStableSubname`、durable `stableSubname`、`identityStatus`、reference update diagnostic / needs-reselect 状态。 |
+| Invariants | `EdgeN` / `InternalEdgeN` 不可持久化；只有 `identityStatus=stable` 才能发布 durable mapped name；fallback 和 diagnostics 必须显式，不得用 bbox、mesh 顺序、prefix 或当前 indexed name 推断长期身份。 |
+| Shared source | `mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 必须来自同一个 ledger snapshot；不能各自重新匹配或补猜。 |
+| Non-state | 不保存 TopoDS、NamedShape、ElementMap、BREP、mesh 或 backend sketch session；`ReferenceShadow.brep` 仍只沿用仓库已有的单 subshape 旧快照例外，不是本 ledger 的输入。 |
 
 ## 字段契约草案
 
@@ -34,7 +46,7 @@ C12-M15 只做 stable geometry id / mapped-name ledger 设计。它不是继续 
 | `sourceGeometryId` | FreeCAD-style geometry extension id | input 有合法唯一 id 且 edge 能映射回 source geometry 时发布。 |
 | `sourceStableSubname` | `g<ID>` 或 fallback token | 有 `sourceGeometryId` 时为 `g<ID>`；无 id 时只能是 `index:N` 这类非稳定证据。 |
 | `stableSubname` | 对外可持久引用的稳定名 | 只有 `identityStatus=stable` 时发布 `g<ID>`；fallback 时必须为空或不用于持久引用。 |
-| `identityStatus` | `stable` / `index_fallback` / 后续 diagnostic status | 表示引用是否能跨编辑延续。 |
+| `identityStatus` | `stable` / `index_fallback` / `deleted_stable_subname` / `geometry_kind_changed` / `split_requires_reselect` 等 | 表示引用是否能跨编辑延续，或是否需要调用方重新选择。 |
 | `sourceGeometryKind` | 源 geometry 类型 | 用于检测 Line -> Arc 等语义漂移。 |
 
 ## 行为规则
@@ -42,9 +54,11 @@ C12-M15 只做 stable geometry id / mapped-name ledger 设计。它不是继续 
 - 有唯一合法 `geometryId` 且 source edge 能映射到 current edge：发布 `stableSubname=g<ID>`，`identityStatus=stable`。
 - 没有 `geometryId`：发布 `identityStatus=index_fallback`，不得把 `EdgeN` 作为长期 stable id。
 - `geometryId` 重复或非法：输入解析阶段报 diagnostic，不进入 stable ledger。
-- 旧引用的 `sourceGeometryId` 还存在但 current `sourceGeometryKind` 变化：reference resolution 输出 `geometry_kind_changed`。
-- 旧引用的 `sourceStableSubname=g<ID>` 在当前账本中找不到：输出 deleted / needs reselect，不靠 bbox 或 mesh 顺序猜。
-- raw edge 与 source edge 一对多、一对零或 split 场景必须显式分类；未设计清楚前不得把 split 后任一 fragment 自动声明为原 edge 的稳定延续。
+- 旧引用的 `sourceGeometryId` 还存在但 current `sourceGeometryKind` 变化：reference resolution 输出 `geometry_kind_changed`，调用方应确认或重选。
+- 旧引用的 `sourceStableSubname=g<ID>` 在当前账本中找不到：输出 `deleted_stable_subname` / `needs_reselect`，不靠 bbox 或 mesh 顺序猜。
+- raw edge 与 source edge 一对多、一对零或 split 场景必须显式分类；缺少 fragment ledger / ElementMap 证据时输出 `split_requires_reselect` 或保留 implementation target，不得把 split 后任一 fragment 自动声明为原 edge 的稳定延续。
+- `InternalEdgeN` 只有在 `internal_element_map` 可追溯到 source-backed raw `EdgeN` 时继承 raw identity；否则只发布 fallback / diagnostic，不把 internal indexed name 本身当 stable id。
+- 前端只消费后端字段，不根据 `Edge` / `InternalEdge` prefix、mesh edge segment 顺序或 subshape 顺序发明长期 identity。
 
 ## 最小完整语义批次
 
@@ -64,7 +78,7 @@ C12-M15 只做 stable geometry id / mapped-name ledger 设计。它不是继续 
 - 入口：核对包结构、矩阵、步骤队列。
 - S0：冻结 live 基线、C12-M11 / C12-M14 队列状态、capability remaining gap 为空的事实。
 - S1：复核 FreeCAD `updateGeoHistory()` / `generateId()` / `convertSubName()` / `getEdge()` 和 cad-core current identity 管线。
-- S2：发布 ledger interface、字段契约、fallback / diagnostic 规则和 non-goal。
+- S2：发布 ledger interface、字段契约、fallback / diagnostic 规则和 non-goal。已关闭：`SketchGeometryIdentityLedger` 定义为 request-local 产品账本，`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 共享同一来源。
 - S3：比较 current coverage 与 S2 契约，裁决是否需要后续 C++ implementation package。
 - S4：发布设计结果，更新 root README、矩阵和验证记录。
 

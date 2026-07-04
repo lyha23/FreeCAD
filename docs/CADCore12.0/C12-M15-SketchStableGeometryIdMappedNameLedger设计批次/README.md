@@ -15,7 +15,8 @@ C12-M15 承接 C12-M11 S4/S5 发布的 `C12-M11-StableGeometryIdMappedNameLedger
 - S0 dirty boundary：docs=`<none>`；`cad-core/src`=`<none>`；tests=`<none>`；fixtures / expected=`<none>`；adapters=`<none>`；other=`<none>`。非本包 dirty 未发现。
 - S0 队列冻结：C12-M11 与 C12-M14 `工作步骤细分` 队列均只输出表头；C12-M15 队列从 S0 开始，S0 关闭后下一步进入 S1 FreeCAD source 与 current identity 管线复核。
 - S0 capability gap 递归检查：所有 live `remaining_gaps` 均为 `[]`，root `known_gaps=[]`，`part_design.sub_shape_binder.known_gaps={}`；C12-M15 是 C12-M11 stable geometry id ledger follow-up，不是 capability remaining gap / known gap，也不是 C12-M14 helper lifecycle 后续。
-- S1 source/current 复核已关闭：执行基线 `HEAD=5a5464fb96`（`5a5464fb96 文档：关闭 C12-M15 S0 基线冻结`），起点 worktree clean；FreeCAD authority 确认为 `GeometryFacade` extension id + mapped `g<ID>` / `e<ID>`，不是 `GeoId` 列表索引或当前 `EdgeN`。cad-core current landing 已定位到 `readGeometryIdField()`、`SketchGeometryIdentity` / `RawSketchEdgeIdentityLedger`、`stableSubnameForGeometryId()`、response field publisher、`raw_edge_identity.byStableSubname` 和 reference resolution consumer；S1 不修改 C++，后续从 S2 ledger interface 产品契约设计继续。
+- S1 source/current 复核已关闭：执行基线 `HEAD=5a5464fb96`（`5a5464fb96 文档：关闭 C12-M15 S0 基线冻结`），起点 worktree clean；FreeCAD authority 确认为 `GeometryFacade` extension id + mapped `g<ID>` / `e<ID>`，不是 `GeoId` 列表索引或当前 `EdgeN`。cad-core current landing 已定位到 `readGeometryIdField()`、`SketchGeometryIdentity` / `RawSketchEdgeIdentityLedger`、`stableSubnameForGeometryId()`、response field publisher、`raw_edge_identity.byStableSubname` 和 reference resolution consumer；S1 不修改 C++，并把 ledger interface 产品契约交给 S2。
+- S2 ledger interface 产品契约已关闭：执行基线 `HEAD=499616ab4c`（`499616ab4c docs: 关闭 C12-M15 S1 identity 管线复核`），起点 worktree clean；`SketchGeometryIdentityLedger` 发布为 request-local 产品账本，输入为当前请求 geometry/source edge/internal alias/old reference shadow，输出为 `byIndexed`、`byStableSubname`、stable/fallback/diagnostic 状态和 response fields。`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 必须消费同一账本；前端只消费后端字段，不靠 prefix guessing、mesh 顺序或当前 `EdgeN` 发明长期 identity。
 
 ## 问题定义
 
@@ -36,6 +37,19 @@ CAD Core 当前已有 `geometryId`、`sourceGeometryId`、`sourceStableSubname`�
 - 把 `geometryId -> stableSubname(g<ID>) -> current EdgeN/InternalEdgeN` 的账本设计成 request-local 输出，不引入 persistent backend document、TopoDS cache、NamedShape cache 或 BREP cache。
 - 明确 response contract：`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 必须使用同一套 identity。
 - 明确前端边界：前端只消费后端返回的 `id`、`subname`、`stableSubname`、`sourceGeometryId`、`sourceStableSubname`、`identityStatus`，不得靠 prefix guessing 或 mesh 顺序发明长期拓扑身份。
+
+## S2 产品契约
+
+`SketchGeometryIdentityLedger` 是一次 recompute 请求内的深模块 seam，位于 sketch raw/internal edge 生成完成后、response fields 与 reference update 发布前。它可以沿用或包装当前 `RawSketchEdgeIdentityLedger`，但产品契约按以下边界理解：
+
+| 类别 | 契约 |
+| --- | --- |
+| Inputs | 当前请求的 sketch Geometry list、`geometryIndex`、`geometryKind`、合法唯一 `geometryId` / 缺失 id 状态、raw source edge、raw `EdgeN`、internal `InternalEdgeN` alias、旧引用中的 `stableSubname` / `sourceStableSubname` / `sourceGeometryId` / `sourceGeometryKind`。 |
+| Outputs | `byIndexed`、`byStableSubname`、`sourceGeometryIndex`、`sourceGeometryId`、`sourceGeometryKind`、`sourceStableSubname`、durable `stableSubname`、`identityStatus`、reference update diagnostic / needs-reselect 状态。 |
+| Invariants | `EdgeN` / `InternalEdgeN` 只表示 current indexed name；只有 `identityStatus=stable` 且 mapped name 为 `g<ID>` / 后续 `e<ID>` 时才能持久化；`index_fallback` 不发布 durable `stableSubname`；response publisher 与 reference resolution 必须消费同一 ledger。 |
+| Lifetime | request-local；不保存 backend sketch session、TopoDS、NamedShape、ElementMap、BREP 或 FreeCAD `geoHistory` state。 |
+
+状态语义固定为：`stable` 发布 `stableSubname=g<ID>`；`index_fallback` 只保留当前请求 / 调试证据并要求前端重选；`deleted_stable_subname` 对应 `needs_reselect`；`geometry_kind_changed` 表示同 id 类型漂移；`split_requires_reselect` 表示缺少 fragment ledger / ElementMap 证据时不得自动继承稳定身份。
 
 ## FreeCAD source authority
 
@@ -64,6 +78,8 @@ CAD Core 当前已有 `geometryId`、`sourceGeometryId`、`sourceStableSubname`�
 1. `design_published_implementation_ready`：source/current 复核证明 seam 已清晰，S2/S3 发布账本 interface 与最小 implementation 批次。
 2. `design_published_no_code_current_sufficient`：当前实现已经满足 C12-M11 follow-up，只需补文档和 capability wording。
 3. `design_blocked_need_oracle_or_product_decision`：FreeCAD source/current 仍不足以裁决 stable-id 语义，保留 blocker。
+
+S2 只发布产品契约，不裁决 current coverage。S3 需要逐行比较上述契约与当前 parser、raw ledger、response publisher、internal alias normalization 和 reference resolution consumer，决定是 `current_supported`、`implementation_needed`、`design_only` 还是 `blocked`。
 
 ## 非目标
 
