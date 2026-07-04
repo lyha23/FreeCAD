@@ -1,0 +1,267 @@
+{
+  "schema_version": "cad-core.freecad-expected.v1",
+  "reference": "C12-M14 Part Sweep helper lifecycle expected: ORACLE-101..104 use S2 native probe semantics; ORACLE-105 is CAD Core request-local product contract only.",
+  "oracle_evidence": {
+    "source_artifact": "docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json",
+    "freecad_version": "1.2.0 revision 20260519",
+    "occt_version": "7.8.1",
+    "product_contract_oracle": "C12M14-ORACLE-105",
+    "product_contract_native_parity": false,
+    "product_contract_provenance": "cad_core_product_contract_non_parity"
+  },
+  "object": "LifecycleSweep",
+  "object_fields": {
+    "status": "ok",
+    "feature": "part_sweep",
+    "shape": "occt_shell",
+    "spine": "PipeSpine",
+    "sections": ["SketchPipeProfile"],
+    "solid": false,
+    "frenet": false,
+    "transition": "Transformed",
+    "linearize": false,
+    "topo_naming_history": "maker_history:pipeshell",
+    "helper_lifecycle": {
+      "schema_version": "cad-core.part-sweep-helper-lifecycle.v1",
+      "dto": "PartSweepHelperLifecycleDTO",
+      "source_artifact": "docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json",
+      "status": "completed_with_diagnostics",
+      "case_ids": [
+        "remove_before_add",
+        "remove_after_add_before_build",
+        "remove_after_build",
+        "remove_readd_ordering",
+        "first_last_unbuilt",
+        "first_last_build_fail",
+        "first_last_build_success",
+        "generated_before_build",
+        "generated_after_build",
+        "generated_unknown_profile",
+        "simulate_pre_build",
+        "simulate_post_build",
+        "simulate_unready",
+        "simulate_count_zero",
+        "product_contract_remove_readd_simulate_build"
+      ],
+      "cases": [
+        {
+          "case_id": "remove_before_add",
+          "oracle_id": "C12M14-ORACLE-101",
+          "status": "stable_native_diagnostic",
+          "native_parity": true,
+          "operation_order": ["remove(profile) before add", "isReady()", "getStatus()", "build()"],
+          "diagnostics": [{"type": "OCCError", "message": "PipeShell"}],
+          "operations": [
+            {"op": "remove", "ok": true, "args": {"profile": "SketchPipeProfile"}, "return": {"return_kind": "none"}},
+            {"op": "isReady", "ok": true, "return": {"return_kind": "bool", "value": false}},
+            {"op": "getStatus", "ok": true, "return": {"return_kind": "int", "value": 0}},
+            {"op": "build", "ok": false, "exception": {"type": "OCCError", "message": "PipeShell"}}
+          ]
+        },
+        {
+          "case_id": "remove_after_add_before_build",
+          "oracle_id": "C12M14-ORACLE-101",
+          "status": "stable_native_diagnostic",
+          "native_parity": true,
+          "operation_order": ["add(profile)", "remove(profile) before build", "isReady()", "getStatus()", "build()"],
+          "diagnostics": [{"type": "OCCError", "message": "PipeShell"}],
+          "operations": [
+            {"op": "add", "ok": true, "args": {"profile": "SketchPipeProfile"}, "return": {"return_kind": "none"}},
+            {"op": "remove", "ok": true, "args": {"profile": "SketchPipeProfile"}, "return": {"return_kind": "none"}},
+            {"op": "isReady", "ok": true, "return": {"return_kind": "bool", "value": false}},
+            {"op": "getStatus", "ok": true, "return": {"return_kind": "int", "value": 0}},
+            {"op": "build", "ok": false, "exception": {"type": "OCCError", "message": "PipeShell"}}
+          ]
+        },
+        {
+          "case_id": "remove_after_build",
+          "oracle_id": "C12M14-ORACLE-101",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "operation_order": ["add(profile)", "build()", "shape()", "remove(profile) after build", "isReady()", "getStatus()"],
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "args": {"profile": "SketchPipeProfile"}, "return": {"return_kind": "none"}},
+            {"op": "build", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "shape", "ok": true, "return": {"return_kind": "shape", "shape": {"shape_type": "Shell"}}},
+            {"op": "remove", "ok": true, "args": {"profile": "SketchPipeProfile"}, "return": {"return_kind": "none"}},
+            {"op": "isReady", "ok": true, "return": {"return_kind": "bool", "value": false}},
+            {"op": "getStatus", "ok": true, "return": {"return_kind": "int", "value": 0}}
+          ]
+        },
+        {
+          "case_id": "remove_readd_ordering",
+          "oracle_id": "C12M14-ORACLE-101",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "operation_order": ["add(profile)", "remove(profile)", "add(profile) again", "isReady()", "build()", "shape()"],
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "remove", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "isReady", "ok": true, "return": {"return_kind": "bool", "value": true}},
+            {"op": "build", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "shape", "ok": true, "return": {"return_kind": "shape", "shape": {"shape_type": "Shell"}}}
+          ]
+        },
+        {
+          "case_id": "first_last_unbuilt",
+          "oracle_id": "C12M14-ORACLE-102",
+          "status": "stable_native_diagnostic",
+          "native_parity": true,
+          "diagnostics": [
+            {"type": "FreeCADError", "message": "cannot determine type of null shape"},
+            {"type": "FreeCADError", "message": "cannot determine type of null shape"}
+          ],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "firstShape", "ok": false, "exception": {"type": "FreeCADError", "message": "cannot determine type of null shape"}},
+            {"op": "lastShape", "ok": false, "exception": {"type": "FreeCADError", "message": "cannot determine type of null shape"}}
+          ]
+        },
+        {
+          "case_id": "first_last_build_fail",
+          "oracle_id": "C12M14-ORACLE-102",
+          "status": "stable_native_diagnostic",
+          "native_parity": true,
+          "diagnostics": [
+            {"type": "OCCError", "message": "PipeShell"},
+            {"type": "FreeCADError", "message": "cannot determine type of null shape"},
+            {"type": "FreeCADError", "message": "cannot determine type of null shape"}
+          ],
+          "operations": [
+            {"op": "isReady", "ok": true, "return": {"return_kind": "bool", "value": false}},
+            {"op": "build", "ok": false, "exception": {"type": "OCCError", "message": "PipeShell"}},
+            {"op": "firstShape", "ok": false, "exception": {"type": "FreeCADError", "message": "cannot determine type of null shape"}},
+            {"op": "lastShape", "ok": false, "exception": {"type": "FreeCADError", "message": "cannot determine type of null shape"}}
+          ]
+        },
+        {
+          "case_id": "first_last_build_success",
+          "oracle_id": "C12M14-ORACLE-102",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "build", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "firstShape", "ok": true, "return": {"return_kind": "shape", "shape": {"shape_type": "Wire"}}},
+            {"op": "lastShape", "ok": true, "return": {"return_kind": "shape", "shape": {"shape_type": "Wire"}}}
+          ]
+        },
+        {
+          "case_id": "generated_before_build",
+          "oracle_id": "C12M14-ORACLE-103",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "generated", "ok": true, "return": {"return_kind": "list", "length": 0}}
+          ]
+        },
+        {
+          "case_id": "generated_after_build",
+          "oracle_id": "C12M14-ORACLE-103",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "build", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "generated", "ok": true, "return": {"return_kind": "list", "length": 0}}
+          ]
+        },
+        {
+          "case_id": "generated_unknown_profile",
+          "oracle_id": "C12M14-ORACLE-103",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "build", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "generated", "ok": true, "args": {"profile": "SketchPipeProfileUnknown"}, "return": {"return_kind": "list", "length": 0}}
+          ]
+        },
+        {
+          "case_id": "simulate_pre_build",
+          "oracle_id": "C12M14-ORACLE-104",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "simulate", "ok": true, "args": {"count": 2}, "return": {"return_kind": "list", "length": 2}}
+          ]
+        },
+        {
+          "case_id": "simulate_post_build",
+          "oracle_id": "C12M14-ORACLE-104",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "build", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "simulate", "ok": true, "args": {"count": 2}, "return": {"return_kind": "list", "length": 2}}
+          ]
+        },
+        {
+          "case_id": "simulate_unready",
+          "oracle_id": "C12M14-ORACLE-104",
+          "status": "stable_native_diagnostic",
+          "native_parity": true,
+          "diagnostics": [{"type": "OCCError", "message": "PipeShell"}],
+          "operations": [
+            {"op": "simulate", "ok": false, "args": {"count": 2}, "exception": {"type": "OCCError", "message": "PipeShell"}}
+          ]
+        },
+        {
+          "case_id": "simulate_count_zero",
+          "oracle_id": "C12M14-ORACLE-104",
+          "status": "stable_native_payload",
+          "native_parity": true,
+          "diagnostics": [],
+          "operations": [
+            {"op": "add", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "simulate", "ok": true, "args": {"count": 0}, "return": {"return_kind": "list", "length": 2}}
+          ]
+        },
+        {
+          "case_id": "product_contract_remove_readd_simulate_build",
+          "oracle_id": "C12M14-ORACLE-105",
+          "status": "cad_core_product_contract",
+          "classification": "product_contract_only",
+          "native_parity": false,
+          "contract_provenance": "cad_core_product_contract_non_parity",
+          "freecad_native_instability": {
+            "error": "NCollection_Sequence::ChangeValue",
+            "source_artifact": "docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json"
+          },
+          "diagnostics": [],
+          "operation_order": ["add(profile)", "remove(profile)", "add(profile_alt)", "simulate(2) after remove/readd before build", "build()", "shape()"],
+          "operations": [
+            {"op": "add", "ok": true, "args": {"profile": "SketchPipeProfile"}, "return": {"return_kind": "none"}},
+            {"op": "remove", "ok": true, "args": {"profile": "SketchPipeProfile"}, "return": {"return_kind": "none"}},
+            {"op": "add", "ok": true, "args": {"profile": "SketchPipeProfileAlt"}, "return": {"return_kind": "none"}},
+            {"op": "simulate", "ok": true, "isolated": true, "args": {"count": 2}, "return": {"return_kind": "list", "length": 2}},
+            {"op": "build", "ok": true, "return": {"return_kind": "none"}},
+            {"op": "shape", "ok": true, "return": {"return_kind": "shape", "shape": {"shape_type": "Shell"}}}
+          ]
+        }
+      ]
+    }
+  },
+  "bbox": {
+    "min": [-1.0, -1.0, 0.0],
+    "max": [1.0, 1.0, 8.0]
+  },
+  "topology_counts": {
+    "faces": 4,
+    "edges": 12,
+    "vertices": 8
+  },
+  "volume": 21.333333333333332
+}

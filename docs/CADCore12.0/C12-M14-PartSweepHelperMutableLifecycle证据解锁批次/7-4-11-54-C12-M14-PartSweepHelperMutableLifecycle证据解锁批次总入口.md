@@ -23,7 +23,7 @@
 3. `7-4-11-57-【已实现】C12-M14-S1-source与current-helper-landing复核.md`
 4. `7-4-11-58-【已实现】C12-M14-S2-dedicated-native-helper-probe-schema与采集.md`
 5. `7-4-11-59-【已实现】C12-M14-S3-product-contract与current-mismatch准入裁决.md`
-6. `7-4-12-00-C12-M14-S4-helper-lifecycle实现或no-code收口.md`
+6. `7-4-12-00-【已实现】C12-M14-S4-helper-lifecycle实现或no-code收口.md`
 7. `7-4-12-01-C12-M14-S5发布闸门.md`
 
 ## 当前状态
@@ -34,8 +34,9 @@
 - C12-M13 队列为空，最终状态为 `partial_implementation_with_named_followups`；`ORACLE-301` collected subset 继承为 current-supported，未采证 helper methods 已进入 S2/S3。
 - S2 dedicated native helper probe schema 与采集已关闭：`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json` 覆盖 baseline subset、remove、firstShape/lastShape、generated、simulate 和 remove/readd/simulate/build 组合；FreeCAD `1.2.0 revision 20260519` / OCCT `7.8.1`。组合 case 记录 `NCollection_Sequence::ChangeValue` 为 `native_instability_blocker`，`can_enter_s4=false`。
 - S3 product contract 与 current mismatch 准入裁决已关闭：`ORACLE-101..104` 因 stable native evidence + source/current audit mismatch 标为 `implementation_authorized`；`ORACLE-105` 因 native instability 标为 `product_contract_only`，产品路径见 `7-4-13-26-C12-M14-helper-lifecycle-request-local产品契约.md`，不得称为 FreeCAD native parity。
-- C12-M14 下一步应从 S4 helper lifecycle 实现或 no-code 收口开始。
-- S4 已按 S3 裁决解锁：只允许处理 `implementation_authorized` / `product_contract_only` 行，不得改写 plain `Part::Sweep` wrapper 或 PartDesign Pipe。
+- S4 helper lifecycle 实现收口已关闭：`cad-core/src/part/part_sweep.cpp` 新增 opt-in `HelperLifecycle` request DTO、per-operation response、C12-M14 fixture/expected 和 focused P8 test；plain `Part::Sweep` wrapper no-mix guard 保持不变。
+- `ORACLE-105` 仍是 request-local product contract only：实现输出 `native_parity=false` 与 `contract_provenance=cad_core_product_contract_non_parity`，不得称为 FreeCAD native parity。
+- C12-M14 下一步应从 S5 发布闸门开始。
 
 ## 执行规则
 

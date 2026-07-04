@@ -1,0 +1,248 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPipeProfile",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-1, -1], "end": [1, -1] },
+          { "kind": "LineSegment", "start": [1, -1], "end": [1, 1] },
+          { "kind": "LineSegment", "start": [1, 1], "end": [-1, 1] },
+          { "kind": "LineSegment", "start": [-1, 1], "end": [-1, -1] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeProfileAlt",
+      "ID": 2,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 4],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.65, -0.65], "end": [0.65, -0.65] },
+          { "kind": "LineSegment", "start": [0.65, -0.65], "end": [0.65, 0.65] },
+          { "kind": "LineSegment", "start": [0.65, 0.65], "end": [-0.65, 0.65] },
+          { "kind": "LineSegment", "start": [-0.65, 0.65], "end": [-0.65, -0.65] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SketchPipeProfileUnknown",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [5, 0, 0],
+          "Rotation": [0, 0, 0, 1]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [-0.35, -0.35], "end": [0.35, -0.35] },
+          { "kind": "LineSegment", "start": [0.35, -0.35], "end": [0.35, 0.35] },
+          { "kind": "LineSegment", "start": [0.35, 0.35], "end": [-0.35, 0.35] },
+          { "kind": "LineSegment", "start": [-0.35, 0.35], "end": [-0.35, -0.35] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "PipeSpine",
+      "ID": 4,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [0, 0, 0],
+          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+        },
+        "Geometry": [
+          { "kind": "LineSegment", "start": [0, 0], "end": [0, 8] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "LifecycleSweep",
+      "ID": 5,
+      "TypeId": "Part::Sweep",
+      "Properties": {
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": ["Edge1"],
+          "StableSubList": ["Edge1"]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": ["SketchPipeProfile"]
+        },
+        "Solid": false,
+        "Frenet": false,
+        "Transition": "Transformed",
+        "HelperLifecycle": {
+          "source_artifact": "docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json",
+          "cases": [
+            {
+              "case_id": "remove_before_add",
+              "oracle_id": "C12M14-ORACLE-101",
+              "operations": [
+                { "op": "remove", "label": "remove(profile) before add", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "isReady", "label": "isReady()" },
+                { "op": "getStatus", "label": "getStatus()" },
+                { "op": "build", "label": "build()" }
+              ]
+            },
+            {
+              "case_id": "remove_after_add_before_build",
+              "oracle_id": "C12M14-ORACLE-101",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "remove", "label": "remove(profile) before build", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "isReady", "label": "isReady()" },
+                { "op": "getStatus", "label": "getStatus()" },
+                { "op": "build", "label": "build()" }
+              ]
+            },
+            {
+              "case_id": "remove_after_build",
+              "oracle_id": "C12M14-ORACLE-101",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "build", "label": "build()" },
+                { "op": "shape", "label": "shape()" },
+                { "op": "remove", "label": "remove(profile) after build", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "isReady", "label": "isReady()" },
+                { "op": "getStatus", "label": "getStatus()" }
+              ]
+            },
+            {
+              "case_id": "remove_readd_ordering",
+              "oracle_id": "C12M14-ORACLE-101",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "remove", "label": "remove(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "add", "label": "add(profile) again", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "isReady", "label": "isReady()" },
+                { "op": "build", "label": "build()" },
+                { "op": "shape", "label": "shape()" }
+              ]
+            },
+            {
+              "case_id": "first_last_unbuilt",
+              "oracle_id": "C12M14-ORACLE-102",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "firstShape", "label": "firstShape() unbuilt" },
+                { "op": "lastShape", "label": "lastShape() unbuilt" }
+              ]
+            },
+            {
+              "case_id": "first_last_build_fail",
+              "oracle_id": "C12M14-ORACLE-102",
+              "operations": [
+                { "op": "isReady", "label": "isReady() without add" },
+                { "op": "build", "label": "build() without add" },
+                { "op": "firstShape", "label": "firstShape() after failed build" },
+                { "op": "lastShape", "label": "lastShape() after failed build" }
+              ]
+            },
+            {
+              "case_id": "first_last_build_success",
+              "oracle_id": "C12M14-ORACLE-102",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "build", "label": "build()" },
+                { "op": "firstShape", "label": "firstShape() after build" },
+                { "op": "lastShape", "label": "lastShape() after build" }
+              ]
+            },
+            {
+              "case_id": "generated_before_build",
+              "oracle_id": "C12M14-ORACLE-103",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "generated", "label": "generated(profile) before build", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } }
+              ]
+            },
+            {
+              "case_id": "generated_after_build",
+              "oracle_id": "C12M14-ORACLE-103",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "build", "label": "build()" },
+                { "op": "generated", "label": "generated(profile) after build", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } }
+              ]
+            },
+            {
+              "case_id": "generated_unknown_profile",
+              "oracle_id": "C12M14-ORACLE-103",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "build", "label": "build()" },
+                { "op": "generated", "label": "generated(profile_unknown) after build", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfileUnknown" } }
+              ]
+            },
+            {
+              "case_id": "simulate_pre_build",
+              "oracle_id": "C12M14-ORACLE-104",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "simulate", "label": "simulate(2) before build", "count": 2 }
+              ]
+            },
+            {
+              "case_id": "simulate_post_build",
+              "oracle_id": "C12M14-ORACLE-104",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "build", "label": "build()" },
+                { "op": "simulate", "label": "simulate(2) after build", "count": 2 }
+              ]
+            },
+            {
+              "case_id": "simulate_unready",
+              "oracle_id": "C12M14-ORACLE-104",
+              "operations": [
+                { "op": "simulate", "label": "simulate(2) without add", "count": 2 }
+              ]
+            },
+            {
+              "case_id": "simulate_count_zero",
+              "oracle_id": "C12M14-ORACLE-104",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "simulate", "label": "simulate(0)", "count": 0 }
+              ]
+            },
+            {
+              "case_id": "product_contract_remove_readd_simulate_build",
+              "oracle_id": "C12M14-ORACLE-105",
+              "native_parity": false,
+              "contract_provenance": "cad_core_product_contract_non_parity",
+              "operations": [
+                { "op": "add", "label": "add(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "remove", "label": "remove(profile)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfile" } },
+                { "op": "add", "label": "add(profile_alt)", "profile": { "PropertyType": "App::PropertyLink", "value": "SketchPipeProfileAlt" } },
+                { "op": "simulate", "label": "simulate(2) after remove/readd before build", "count": 2, "isolated": true },
+                { "op": "build", "label": "build()" },
+                { "op": "shape", "label": "shape()" }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "LifecycleSweep"
+    ]
+  }
+}

@@ -1357,6 +1357,41 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("generated", expected["oracle_boundary"]["uncollected_methods"])
         self.assert_object_matches_expected(result, "c12m13", fixture)
 
+    def test_c12m14_part_sweep_helper_mutable_lifecycle_matches_native_or_product_contract(self) -> None:
+        fixture = "part-sweep-helper-mutable-lifecycle"
+        result = self.run_recompute(fixture, "c12m14")
+        sweep = result["objects"]["LifecycleSweep"]
+        lifecycle = sweep["helper_lifecycle"]
+        expected = self.expected_freecad("c12m14", fixture)
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(lifecycle["source_artifact"], expected["oracle_evidence"]["source_artifact"])
+        self.assertEqual(lifecycle["status"], "completed_with_diagnostics")
+        self.assert_nested_matches_expected(
+            lifecycle,
+            expected["object_fields"]["helper_lifecycle"],
+            "helper_lifecycle",
+        )
+
+        cases = {case["case_id"]: case for case in lifecycle["cases"]}
+        self.assertEqual(cases["remove_before_add"]["diagnostics"][0]["message"], "PipeShell")
+        self.assertEqual(
+            cases["first_last_unbuilt"]["operations"][1]["exception"]["message"],
+            "cannot determine type of null shape",
+        )
+        self.assertEqual(cases["generated_after_build"]["operations"][2]["return"]["length"], 0)
+        self.assertEqual(cases["simulate_count_zero"]["operations"][1]["return"]["length"], 2)
+        self.assertEqual(cases["simulate_unready"]["operations"][0]["exception"]["message"], "PipeShell")
+
+        product = cases["product_contract_remove_readd_simulate_build"]
+        self.assertFalse(product["native_parity"])
+        self.assertEqual(product["contract_provenance"], "cad_core_product_contract_non_parity")
+        self.assertEqual(product["freecad_native_instability"]["error"], "NCollection_Sequence::ChangeValue")
+        self.assertTrue(product["operations"][3]["isolated"])
+        self.assertTrue(product["operations"][4]["ok"])
+        self.assertTrue(product["operations"][5]["ok"])
+        self.assert_object_matches_expected(result, "c12m14", fixture)
+
     def assert_part_filling_history(
         self,
         result: dict,

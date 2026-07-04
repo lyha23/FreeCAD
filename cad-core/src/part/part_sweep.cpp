@@ -3,17 +3,29 @@
 #include "part_feature_support.h"
 
 #include "cad_core/part/property_topo_shape.h"
+#include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape_expansion.h"
 #include "cad_core/runtime/feature_executor.h"
 
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <BRepBuilderAPI_TransitionMode.hxx>
+#include <BRepLib.hxx>
 #include <BRep_Builder.hxx>
+#include <BRepOffsetAPI_MakePipeShell.hxx>
+#include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopTools_ListIteratorOfListOfShape.hxx>
+#include <TopTools_ListOfShape.hxx>
 #include <TopoDS_Compound.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Wire.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Vertex.hxx>
 
 #include <array>
 #include <cmath>
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>
@@ -52,6 +64,12 @@ struct AdvancedSweepOptions
     std::optional<AdvancedLinkShape> auxiliarySpine;
     std::optional<AdvancedLinkShape> spineSupport;
     std::string binormalProperty = "Binormal";
+};
+
+struct HelperLifecycleProfile
+{
+    std::string objectName;
+    TopoDS_Shape shape;
 };
 
 void addSweepDiagnostic(
@@ -111,6 +129,225 @@ std::optional<bool> readJsonBool(const nlohmann::json& value)
         return std::nullopt;
     }
     return payload.get<bool>();
+}
+
+int countSubshapes(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    int count = 0;
+    for (TopExp_Explorer explorer(shape, kind); explorer.More(); explorer.Next()) {
+        ++count;
+    }
+    return count;
+}
+
+std::string helperShapeTypeName(const TopoDS_Shape& shape)
+{
+    switch (shape.ShapeType()) {
+        case TopAbs_COMPOUND:
+            return "Compound";
+        case TopAbs_COMPSOLID:
+            return "CompSolid";
+        case TopAbs_SOLID:
+            return "Solid";
+        case TopAbs_SHELL:
+            return "Shell";
+        case TopAbs_FACE:
+            return "Face";
+        case TopAbs_WIRE:
+            return "Wire";
+        case TopAbs_EDGE:
+            return "Edge";
+        case TopAbs_VERTEX:
+            return "Vertex";
+        default:
+            return "Shape";
+    }
+}
+
+nlohmann::json helperShapeSummary(const TopoDS_Shape& shape)
+{
+    return {
+        {"is_null", shape.IsNull()},
+        {"shape_type", shape.IsNull() ? "Null" : helperShapeTypeName(shape)},
+        {"bbox", shape.IsNull() ? nlohmann::json::object() : cad_core::part::objectBBoxForShape(shape)},
+        {"topology_counts",
+         {
+             {"solids", shape.IsNull() ? 0 : countSubshapes(shape, TopAbs_SOLID)},
+             {"shells", shape.IsNull() ? 0 : countSubshapes(shape, TopAbs_SHELL)},
+             {"faces", shape.IsNull() ? 0 : countSubshapes(shape, TopAbs_FACE)},
+             {"wires", shape.IsNull() ? 0 : countSubshapes(shape, TopAbs_WIRE)},
+             {"edges", shape.IsNull() ? 0 : countSubshapes(shape, TopAbs_EDGE)},
+             {"vertices", shape.IsNull() ? 0 : countSubshapes(shape, TopAbs_VERTEX)},
+         }},
+        {"volume", shape.IsNull() ? 0.0 : cad_core::part::volumeForShape(shape)},
+    };
+}
+
+nlohmann::json helperReturnNone()
+{
+    return {{"return_kind", "none"}, {"value", nullptr}};
+}
+
+nlohmann::json helperReturnBool(bool value)
+{
+    return {{"return_kind", "bool"}, {"value", value}};
+}
+
+nlohmann::json helperReturnInt(int value)
+{
+    return {{"return_kind", "int"}, {"value", value}};
+}
+
+nlohmann::json helperReturnShape(const TopoDS_Shape& shape)
+{
+    return {{"return_kind", "shape"}, {"shape", helperShapeSummary(shape)}};
+}
+
+nlohmann::json helperReturnShapeList(const TopTools_ListOfShape& shapes)
+{
+    nlohmann::json items = nlohmann::json::array();
+    for (TopTools_ListIteratorOfListOfShape it(shapes); it.More(); it.Next()) {
+        items.push_back(helperReturnShape(it.Value()));
+    }
+    return {{"return_kind", "list"}, {"length", items.size()}, {"items", std::move(items)}};
+}
+
+void failHelperOperation(
+    nlohmann::json& operation,
+    nlohmann::json& diagnostics,
+    const std::string& type,
+    const std::string& message
+)
+{
+    nlohmann::json exception = {{"type", type}, {"message", message}};
+    operation["ok"] = false;
+    operation["exception"] = exception;
+    diagnostics.push_back(std::move(exception));
+}
+
+void succeedHelperOperation(nlohmann::json& operation, nlohmann::json result)
+{
+    operation["ok"] = true;
+    operation["return"] = std::move(result);
+}
+
+std::string standardFailureMessage(const Standard_Failure& failure)
+{
+    const char* message = failure.GetMessageString();
+    return message != nullptr && *message != '\0' ? std::string(message) : std::string("OCCError");
+}
+
+BRepBuilderAPI_TransitionMode helperTransitionMode(int transition)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+    // ::Sweep::TransitionEnums order is "Transformed", "Right corner", "Round corner".
+    switch (transition) {
+        case 1:
+            return BRepBuilderAPI_RightCorner;
+        case 2:
+            return BRepBuilderAPI_RoundCorner;
+        default:
+            return BRepBuilderAPI_Transformed;
+    }
+}
+
+std::optional<TopoDS_Wire> wireFromShapeForHelper(
+    const TopoDS_Shape& shape,
+    const std::string& label,
+    std::string& error
+)
+{
+    if (shape.IsNull()) {
+        error = label + " is null";
+        return std::nullopt;
+    }
+    if (shape.ShapeType() == TopAbs_WIRE) {
+        return TopoDS::Wire(shape);
+    }
+
+    std::optional<TopoDS_Wire> singleWire;
+    for (TopExp_Explorer explorer(shape, TopAbs_WIRE); explorer.More(); explorer.Next()) {
+        if (singleWire) {
+            error = label + " must resolve to one wire";
+            return std::nullopt;
+        }
+        singleWire = TopoDS::Wire(explorer.Current());
+    }
+    if (singleWire) {
+        return singleWire;
+    }
+
+    BRepBuilderAPI_MakeWire wireBuilder;
+    bool hasEdge = false;
+    for (TopExp_Explorer explorer(shape, TopAbs_EDGE); explorer.More(); explorer.Next()) {
+        wireBuilder.Add(TopoDS::Edge(explorer.Current()));
+        hasEdge = true;
+    }
+    if (!hasEdge) {
+        error = label + " cannot form a wire";
+        return std::nullopt;
+    }
+    wireBuilder.Build();
+    if (!wireBuilder.IsDone() || wireBuilder.Wire().IsNull()) {
+        error = label + " cannot form a wire";
+        return std::nullopt;
+    }
+    TopoDS_Wire wire = wireBuilder.Wire();
+    BRepLib::BuildCurves3d(wire);
+    BRepLib::SameParameter(wire);
+    return wire;
+}
+
+TopoDS_Shape profileShapeForHelper(const TopoDS_Shape& shape)
+{
+    std::string unused;
+    if (const auto wire = wireFromShapeForHelper(shape, "profile", unused)) {
+        return *wire;
+    }
+    return shape;
+}
+
+std::string configureHelperPipeShell(
+    BRepOffsetAPI_MakePipeShell& helper,
+    const PipeShellOptions& options
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp::setFrenetMode(), setTransitionMode() and
+    // setTolerance() expose request-local helper state before add/remove/build calls.
+    if (options.tolerance) {
+        const PipeShellTolerance& tolerance = *options.tolerance;
+        helper.SetTolerance(tolerance.tol3d, tolerance.boundTol, tolerance.tolAngular);
+    }
+    helper.SetTransitionMode(helperTransitionMode(options.transition));
+    if (options.mode == PipeShellMode::Frenet) {
+        helper.SetMode(Standard_True);
+    }
+    else if (options.mode == PipeShellMode::Standard) {
+        helper.SetMode(Standard_False);
+    }
+    else {
+        return "Part::Sweep HelperLifecycle currently supports Standard/Frenet helper replay only";
+    }
+    return {};
+}
+
+std::unique_ptr<BRepOffsetAPI_MakePipeShell> makeHelperForLifecycle(
+    const TopoDS_Wire& spine,
+    const PipeShellOptions& options,
+    const std::vector<HelperLifecycleProfile>& activeProfiles,
+    std::string& error
+)
+{
+    auto helper = std::make_unique<BRepOffsetAPI_MakePipeShell>(spine);
+    error = configureHelperPipeShell(*helper, options);
+    if (!error.empty()) {
+        return nullptr;
+    }
+    for (const HelperLifecycleProfile& profile : activeProfiles) {
+        helper->Add(profile.shape);
+    }
+    return helper;
 }
 
 std::optional<PipeShellProfilePlacement> readProfilePlacementMode(
@@ -184,6 +421,422 @@ std::optional<TopoDS_Shape> linkSubShape(
         return part::subshapeByName(sourceShape, stable);
     }
     return std::nullopt;
+}
+
+std::optional<std::string> jsonStringField(const nlohmann::json& value, const std::string& field)
+{
+    const auto it = value.find(field);
+    if (it == value.end() || !it->is_string()) {
+        return std::nullopt;
+    }
+    return it->get<std::string>();
+}
+
+std::optional<bool> jsonBoolField(const nlohmann::json& value, const std::string& field)
+{
+    const auto it = value.find(field);
+    if (it == value.end() || !it->is_boolean()) {
+        return std::nullopt;
+    }
+    return it->get<bool>();
+}
+
+std::optional<int> jsonIntField(const nlohmann::json& value, const std::string& field)
+{
+    const auto it = value.find(field);
+    if (it == value.end() || !it->is_number_integer()) {
+        return std::nullopt;
+    }
+    return it->get<int>();
+}
+
+std::string helperOperationMethod(const nlohmann::json& operation)
+{
+    if (const auto value = jsonStringField(operation, "op")) {
+        return *value;
+    }
+    if (const auto value = jsonStringField(operation, "method")) {
+        return *value;
+    }
+    return {};
+}
+
+std::string helperOperationLabel(const nlohmann::json& operation, const std::string& method)
+{
+    if (const auto value = jsonStringField(operation, "label")) {
+        return *value;
+    }
+    return method.empty() ? "unknown()" : method + "()";
+}
+
+std::optional<HelperLifecycleProfile> resolveHelperLifecycleProfile(
+    const nlohmann::json& operation,
+    runtime::ComputeContext& context,
+    std::string& error
+)
+{
+    const auto profileIt = operation.find("profile");
+    if (profileIt == operation.end()) {
+        error = "HelperLifecycle operation requires profile";
+        return std::nullopt;
+    }
+
+    app::Link link;
+    if (profileIt->is_string()) {
+        link.object = profileIt->get<std::string>();
+    }
+    else if (const auto parsed = app::readLink(*profileIt)) {
+        link = *parsed;
+    }
+    else {
+        error = "HelperLifecycle profile must be an object name or App::PropertyLink payload";
+        return std::nullopt;
+    }
+
+    const auto shapeIt = context.shapes.find(link.object);
+    if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+        error = "HelperLifecycle profile target " + link.object + " did not produce a shape";
+        return std::nullopt;
+    }
+
+    const auto namedShapeIt = context.namedShapes.find(link.object);
+    const part::NamedShape* namedShape = namedShapeIt != context.namedShapes.end()
+        ? &namedShapeIt->second
+        : nullptr;
+    TopoDS_Shape profile = shapeIt->second.shape;
+    if (!link.subnames.empty()) {
+        const auto subshape = linkSubShape(shapeIt->second.shape, namedShape, link, 0U);
+        if (!subshape || subshape->IsNull()) {
+            error = "HelperLifecycle profile subshape " + link.object + "." + link.subnames.front()
+                + " is invalid";
+            return std::nullopt;
+        }
+        profile = *subshape;
+    }
+
+    return HelperLifecycleProfile {link.object, profileShapeForHelper(profile)};
+}
+
+void removeActiveHelperProfile(
+    std::vector<HelperLifecycleProfile>& activeProfiles,
+    const TopoDS_Shape& profile
+)
+{
+    for (auto it = activeProfiles.begin(); it != activeProfiles.end(); ++it) {
+        if (it->shape.IsSame(profile)) {
+            activeProfiles.erase(it);
+            return;
+        }
+    }
+}
+
+bool helperCaseIsProductContract(const nlohmann::json& helperCase)
+{
+    if (const auto nativeParity = jsonBoolField(helperCase, "native_parity"); nativeParity && !*nativeParity) {
+        return true;
+    }
+    return jsonStringField(helperCase, "contract_provenance").has_value();
+}
+
+void appendHelperOperationArgs(
+    nlohmann::json& operationResult,
+    const nlohmann::json& operation,
+    const std::optional<HelperLifecycleProfile>& profile,
+    const std::optional<int>& count
+)
+{
+    nlohmann::json args = nlohmann::json::object();
+    if (profile) {
+        args["profile"] = profile->objectName;
+    }
+    if (count) {
+        args["count"] = *count;
+    }
+    if (!args.empty()) {
+        operationResult["args"] = std::move(args);
+    }
+    if (const auto isolated = jsonBoolField(operation, "isolated"); isolated && *isolated) {
+        operationResult["isolated"] = true;
+    }
+}
+
+void publishShapeOrNullDiagnostic(nlohmann::json& operation, nlohmann::json& diagnostics, const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        failHelperOperation(operation, diagnostics, "FreeCADError", "cannot determine type of null shape");
+        return;
+    }
+    succeedHelperOperation(operation, helperReturnShape(shape));
+}
+
+nlohmann::json executeHelperLifecycleCase(
+    const nlohmann::json& helperCase,
+    const TopoDS_Wire& spine,
+    const PipeShellOptions& options,
+    runtime::ComputeContext& context
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // BRepOffsetAPI_MakePipeShellPyImp.cpp exposes "add/remove/isReady/getStatus/build/shape/
+    // firstShape/lastShape/generated/simulate/makeSolid"; C12-M14 replays those calls only when
+    // the request supplies the CAD Core HelperLifecycle DTO.
+    nlohmann::json result = {
+        {"case_id", jsonStringField(helperCase, "case_id").value_or("helper_lifecycle")},
+        {"operations", nlohmann::json::array()},
+        {"operation_order", nlohmann::json::array()},
+        {"diagnostics", nlohmann::json::array()},
+    };
+    if (const auto oracle = jsonStringField(helperCase, "oracle_id")) {
+        result["oracle_id"] = *oracle;
+    }
+    const bool productContract = helperCaseIsProductContract(helperCase);
+    if (productContract) {
+        result["native_parity"] = false;
+        result["contract_provenance"] = jsonStringField(helperCase, "contract_provenance")
+            .value_or("cad_core_product_contract_non_parity");
+        result["freecad_native_instability"] = {
+            {"error", "NCollection_Sequence::ChangeValue"},
+            {"source_artifact", "docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json"},
+        };
+    }
+    else {
+        result["native_parity"] = true;
+    }
+
+    const auto operationsIt = helperCase.find("operations");
+    if (operationsIt == helperCase.end() || !operationsIt->is_array()) {
+        result["status"] = "stable_native_diagnostic";
+        result["diagnostics"].push_back(
+            {{"type", "ValueError"}, {"message", "HelperLifecycle case requires operations array"}}
+        );
+        return result;
+    }
+
+    std::vector<HelperLifecycleProfile> activeProfiles;
+    std::string helperError;
+    auto helper = makeHelperForLifecycle(spine, options, activeProfiles, helperError);
+    if (!helper) {
+        result["status"] = "stable_native_diagnostic";
+        result["diagnostics"].push_back({{"type", "ValueError"}, {"message", helperError}});
+        return result;
+    }
+
+    for (const auto& operation : *operationsIt) {
+        const std::string method = helperOperationMethod(operation);
+        nlohmann::json operationResult = {
+            {"index", result["operations"].size()},
+            {"op", method},
+            {"label", helperOperationLabel(operation, method)},
+        };
+        result["operation_order"].push_back(operationResult["label"]);
+
+        std::optional<HelperLifecycleProfile> profile;
+        if (method == "add" || method == "remove" || method == "generated") {
+            std::string profileError;
+            profile = resolveHelperLifecycleProfile(operation, context, profileError);
+            if (!profile) {
+                appendHelperOperationArgs(operationResult, operation, std::nullopt, std::nullopt);
+                failHelperOperation(operationResult, result["diagnostics"], "ValueError", profileError);
+                result["operations"].push_back(std::move(operationResult));
+                continue;
+            }
+        }
+        const std::optional<int> count = method == "simulate" ? jsonIntField(operation, "count")
+                                                              : std::nullopt;
+        appendHelperOperationArgs(operationResult, operation, profile, count);
+
+        try {
+            if (method == "add") {
+                helper->Add(profile->shape);
+                activeProfiles.push_back(*profile);
+                succeedHelperOperation(operationResult, helperReturnNone());
+            }
+            else if (method == "remove") {
+                helper->Delete(profile->shape);
+                removeActiveHelperProfile(activeProfiles, profile->shape);
+                succeedHelperOperation(operationResult, helperReturnNone());
+            }
+            else if (method == "isReady") {
+                succeedHelperOperation(operationResult, helperReturnBool(helper->IsReady() == Standard_True));
+            }
+            else if (method == "getStatus") {
+                succeedHelperOperation(operationResult, helperReturnInt(static_cast<int>(helper->GetStatus())));
+            }
+            else if (method == "build") {
+                helper->Build();
+                succeedHelperOperation(operationResult, helperReturnNone());
+            }
+            else if (method == "shape") {
+                publishShapeOrNullDiagnostic(operationResult, result["diagnostics"], helper->Shape());
+            }
+            else if (method == "firstShape") {
+                publishShapeOrNullDiagnostic(operationResult, result["diagnostics"], helper->FirstShape());
+            }
+            else if (method == "lastShape") {
+                publishShapeOrNullDiagnostic(operationResult, result["diagnostics"], helper->LastShape());
+            }
+            else if (method == "generated") {
+                const TopTools_ListOfShape& shapes = helper->Generated(profile->shape);
+                succeedHelperOperation(operationResult, helperReturnShapeList(shapes));
+            }
+            else if (method == "simulate") {
+                if (!count) {
+                    failHelperOperation(
+                        operationResult,
+                        result["diagnostics"],
+                        "ValueError",
+                        "HelperLifecycle simulate operation requires integer count"
+                    );
+                }
+                else {
+                    TopTools_ListOfShape shapes;
+                    const bool isolated = jsonBoolField(operation, "isolated").value_or(false);
+                    if (isolated) {
+                        std::string isolatedError;
+                        auto isolatedHelper = makeHelperForLifecycle(
+                            spine,
+                            options,
+                            activeProfiles,
+                            isolatedError
+                        );
+                        if (!isolatedHelper) {
+                            failHelperOperation(
+                                operationResult,
+                                result["diagnostics"],
+                                "ValueError",
+                                isolatedError
+                            );
+                        }
+                        else {
+                            isolatedHelper->Simulate(*count, shapes);
+                            operationResult["isolated"] = true;
+                            succeedHelperOperation(operationResult, helperReturnShapeList(shapes));
+                        }
+                    }
+                    else {
+                        helper->Simulate(*count, shapes);
+                        succeedHelperOperation(operationResult, helperReturnShapeList(shapes));
+                    }
+                }
+            }
+            else if (method == "makeSolid") {
+                succeedHelperOperation(operationResult, helperReturnBool(helper->MakeSolid() == Standard_True));
+            }
+            else {
+                failHelperOperation(
+                    operationResult,
+                    result["diagnostics"],
+                    "ValueError",
+                    "Unsupported HelperLifecycle operation: " + method
+                );
+            }
+        }
+        catch (const Standard_Failure& failure) {
+            failHelperOperation(
+                operationResult,
+                result["diagnostics"],
+                "OCCError",
+                standardFailureMessage(failure)
+            );
+        }
+        catch (const std::exception& exception) {
+            failHelperOperation(operationResult, result["diagnostics"], "RuntimeError", exception.what());
+        }
+
+        result["operations"].push_back(std::move(operationResult));
+    }
+
+    if (productContract) {
+        result["status"] = "cad_core_product_contract";
+        result["classification"] = "product_contract_only";
+    }
+    else {
+        result["status"] = result["diagnostics"].empty() ? "stable_native_payload"
+                                                         : "stable_native_diagnostic";
+        result["classification"] = result["status"];
+    }
+    return result;
+}
+
+std::optional<nlohmann::json> executeHelperLifecycle(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const SweepInput& spineInput,
+    const PipeShellOptions& options
+)
+{
+    const auto* value = app::propertyValue(object, "HelperLifecycle");
+    if (value == nullptr) {
+        return std::nullopt;
+    }
+    const nlohmann::json& payload = propertyPayload(value->raw);
+    if (!payload.is_object()) {
+        return nlohmann::json {
+            {"status", "invalid"},
+            {"diagnostics",
+             {{{"type", "ValueError"}, {"message", "HelperLifecycle must be an object"}}}},
+        };
+    }
+
+    std::string spineError;
+    const auto helperSpine = wireFromShapeForHelper(spineInput.shape, "HelperLifecycle spine", spineError);
+    if (!helperSpine) {
+        return nlohmann::json {
+            {"status", "invalid"},
+            {"diagnostics", {{{"type", "ValueError"}, {"message", spineError}}}},
+        };
+    }
+
+    nlohmann::json helperLifecycle = {
+        {"schema_version", "cad-core.part-sweep-helper-lifecycle.v1"},
+        {"dto", "PartSweepHelperLifecycleDTO"},
+        {"helper", "Part.BRepOffsetAPI_MakePipeShell"},
+        {"runtime_helper", "Part.BRepOffsetAPI.MakePipeShell"},
+        {"source_authority",
+         "src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp::"
+         "add/remove/isReady/getStatus/build/shape/firstShape/lastShape/generated/simulate/makeSolid"},
+        {"source_artifact",
+         jsonStringField(payload, "source_artifact")
+             .value_or("docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json")},
+        {"cases", nlohmann::json::array()},
+    };
+
+    const auto casesIt = payload.find("cases");
+    if (casesIt != payload.end() && casesIt->is_array()) {
+        for (const auto& helperCase : *casesIt) {
+            helperLifecycle["cases"].push_back(
+                executeHelperLifecycleCase(helperCase, *helperSpine, options, context)
+            );
+        }
+    }
+    else if (const auto operationsIt = payload.find("operations");
+             operationsIt != payload.end() && operationsIt->is_array()) {
+        helperLifecycle["cases"].push_back(
+            executeHelperLifecycleCase(
+                nlohmann::json {{"case_id", "helper_lifecycle"}, {"operations", *operationsIt}},
+                *helperSpine,
+                options,
+                context
+            )
+        );
+    }
+    else {
+        helperLifecycle["status"] = "invalid";
+        helperLifecycle["diagnostics"] = {
+            {{"type", "ValueError"}, {"message", "HelperLifecycle requires cases or operations"}}
+        };
+        return helperLifecycle;
+    }
+
+    nlohmann::json caseIds = nlohmann::json::array();
+    bool hasDiagnostics = false;
+    for (const auto& helperCase : helperLifecycle["cases"]) {
+        caseIds.push_back(helperCase.value("case_id", ""));
+        hasDiagnostics = hasDiagnostics || !helperCase.value("diagnostics", nlohmann::json::array()).empty();
+    }
+    helperLifecycle["case_ids"] = std::move(caseIds);
+    helperLifecycle["status"] = hasDiagnostics ? "completed_with_diagnostics" : "completed";
+    return helperLifecycle;
 }
 
 std::optional<SweepInput> resolveSweepSpine(
@@ -1211,7 +1864,8 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
              "BiNormal",
              "LocationMode",
              "SectionOptions",
-             "Tolerance"}
+             "Tolerance",
+             "HelperLifecycle"}
         )) {
         context.objects[object.name] = {{"status", "error"}, {"feature", "part_sweep"}};
         return;
@@ -1254,6 +1908,10 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
     };
     if (!advanced->metadata.empty()) {
         metadata["advanced"] = advanced->metadata;
+    }
+    if (const auto helperLifecycle
+        = executeHelperLifecycle(object, context, *spine, advanced->pipeOptions)) {
+        metadata["helper_lifecycle"] = *helperLifecycle;
     }
     const bool productContractLocation = hasProductContractSectionLocation(advanced->pipeOptions);
     if (productContractLocation) {

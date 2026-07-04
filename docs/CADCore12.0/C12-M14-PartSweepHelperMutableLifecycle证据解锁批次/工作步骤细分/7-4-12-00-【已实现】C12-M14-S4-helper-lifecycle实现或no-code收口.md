@@ -1,4 +1,4 @@
-# C12-M14 S4 helper lifecycle 实现或 no-code 收口
+# 【已实现】C12-M14 S4 helper lifecycle 实现或 no-code 收口
 
 ## 目标
 
@@ -25,6 +25,13 @@
 - implementation path：helper lifecycle expected/product contract 与 current 对齐，focused P8 green。
 - no-code path：blocker 有明确 reopen condition，不改 C++。
 - wrapper no-mix guard 不回归。
+
+## 实现结论
+
+- S4 选择 implementation path：`cad-core/src/part/part_sweep.cpp` 新增 opt-in `HelperLifecycle` request DTO 与 per-operation response，plain `Part::Sweep` wrapper 不携带该 property 时输出不变。
+- `cad-core/fixtures/c12m14/part-sweep-helper-mutable-lifecycle.json` 和 expected 覆盖 remove diagnostics/payload、firstShape/lastShape unbuilt/fail/success、generated before/after/unknown、standalone simulate pre/post/count=0/unready，以及产品契约 add/remove/add/isolated simulate/build/shape。
+- `ORACLE-105` 只按 CAD Core request-local 产品契约关闭：response 带 `native_parity=false` 和 `contract_provenance=cad_core_product_contract_non_parity`，不声明 FreeCAD native parity。
+- `topo_shape_expansion.cpp` 未改动；helper simulate 与 shared cap/sewing 内部 `Simulate(2)` 保持分离。
 
 ## 非目标
 
