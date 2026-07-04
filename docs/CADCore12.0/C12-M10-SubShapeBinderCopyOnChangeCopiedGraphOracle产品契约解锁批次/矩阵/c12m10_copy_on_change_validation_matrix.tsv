@@ -7,7 +7,7 @@ C12M10-VAL-201	native oracle artifact	S2	passed_s2_native_oracle_blocked_retaine
 C12M10-VAL-301	DTO product contract decision	S3	passed_s3_dto_not_reviewed_due_to_native_blocker	DTO/product contract/backend gap matrices plus S2 raw/gate artifacts	Every DTO and contract row has a decision; copied graph execution DTO is deferred, forbidden state is rejected, App::Link is reference-only, and S4 current mismatch remains not comparable.
 C12M10-VAL-401	current mismatch gate	S4	passed_s4_not_comparable_retained_diagnostic	S2/S3 results, S2 gate artifact, current feature_shape_binder/test/capability diagnostic review	Current comparison recorded as not_comparable; no mismatch-confirmed row is admitted; copy_on_change_full_temporary_document_cache_not_supported remains retained.
 C12M10-VAL-501	final authorization	S5	passed_s5_oracle_blocked_retained_no_code_retained_diagnostic	S2/S3/S4 results, backend classification, blocker queue and product contract gate	S5 final decision is oracle_blocked_retained plus no_code_retained_diagnostic; no implementation package is authorized and the retained diagnostic remains.
-C12M10-VAL-601	final queue closure	S6	pending	step_goal_queue for C12-M10	Only table header after S6 closes.
-C12M10-VAL-701	TSV field count	每步	pending	awk -F '\t' over C12-M10 matrices	No field count mismatch.
-C12M10-VAL-702	trailing whitespace check	S6	pending	rg -n '[ \t]$' docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次 docs/CADCore12.0/README.md	No output.
-C12M10-VAL-703	diff whitespace check	每步	pending	git diff --check	No output.
+C12M10-VAL-601	final queue closure	S6	passed_s6_queue_closed	step_goal_queue for C12-M10	Only table header after S6 closes.
+C12M10-VAL-701	TSV field count	每步	passed_s6_tsv_field_count	awk -F '\t' over C12-M10 matrices	No field count mismatch.
+C12M10-VAL-702	trailing whitespace check	S6	passed_s6_no_trailing_whitespace	rg -n '[ \t]$' docs/CADCore12.0/C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次 docs/CADCore12.0/README.md	No output.
+C12M10-VAL-703	diff whitespace check	每步	passed_s6_diff_check_clean	git diff --check	No output.

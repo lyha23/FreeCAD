@@ -4,6 +4,8 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 
 本包不是 C++ implementation 包。它只重新打开 CopyOnChange 的证据链：先采集更强 FreeCAD native copied graph artifact，再裁决哪些内容能进入前端持久化 DocumentObject graph / `documentObjectUpdates` 产品契约，最后才判断 current `cad-core` retained diagnostic 是否形成真实 mismatch。
 
+S6 已发布最终状态：S2=`native_oracle_blocked_retained`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`not_comparable` / `no_current_mismatch_retained_diagnostic`，S5=`oracle_blocked_retained` + `no_code_retained_diagnostic`。C12-M10 不授权 implementation package，不创建后续实现包，不删除 known gap；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
+
 ## 当前基线
 
 - 创建基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
@@ -84,6 +86,15 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 - `C12M10-CAT-004=not_authorized_oracle_blocked_retained_no_code_retained_diagnostic`；`C12M10-CAT-005=no_code_retained_diagnostic`；`C12M10-BLOCKER-501=closed_s5_oracle_blocked_retained_no_code_retained_diagnostic`；`C12M10-VAL-501=passed_s5_oracle_blocked_retained_no_code_retained_diagnostic`。
 - Delete / reopen condition：只有新的 FreeCAD native artifact 稳定暴露 `_CopiedObjs` identity/order、`copyObject()` dependency mapping、support rewrite、`recomputeFeature(true)` lifecycle 与 ElementMap / NamedShape lifecycle，且产品批准 request-local copied graph DTO / contract 并形成 current mismatch-confirmed row 后，才允许重开 implementation authorization 并替换 retained diagnostic。
 
+## S6 发布闸门与后续分流
+
+- S6 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=dab16bcc2d`（`dab16bcc2d 文档：关闭 C12-M10 S5 授权裁决`），起点 worktree clean。
+- C12-M10 final publication：S2=`native_oracle_blocked_retained`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`not_comparable` / `no_current_mismatch_retained_diagnostic`，S5=`oracle_blocked_retained` + `no_code_retained_diagnostic`。
+- C12-M10 不授权 implementation package，不创建后续实现包，不补 C++、fixtures、expected、tests、adapters 或 capability source，不删除 known gap。
+- `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 diagnostic `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
+- Reopen / delete condition：必须先有新的 stable native copied graph evidence（`_CopiedObjs` identity/order、`copyObject()` dependency mapping、support rewrite、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle）+ approved request-local copied graph DTO / product contract + mismatch-confirmed row。
+- `C12M10-BLOCKER-601` 已关闭；`C12M10-VAL-601/701/702/703` 发布验证闭环。C12-M10 队列在 S6 step 重命名后预期只输出 markdown 表头。
+
 ## 解锁目标
 
 C12-M10 只有在以下三项同时成立时，才允许后续 implementation package：
@@ -114,7 +125,7 @@ C12-M10 只有在以下三项同时成立时，才允许后续 implementation pa
 - S3：request-local DTO / product contract boundary 裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate（已完成，`not_comparable` / `no_current_mismatch_retained_diagnostic`）。
 - S5：implementation package authorization、oracle/product-contract 分流或 no-code retained 裁决（已完成，`oracle_blocked_retained` + `no_code_retained_diagnostic`）。
-- S6：发布闸门、root README 更新和后续分流。
+- S6：发布闸门、root README 更新和后续分流（已完成，final publication 保留 oracle blocker 与 no-code retained diagnostic）。
 
 ## 入口
 

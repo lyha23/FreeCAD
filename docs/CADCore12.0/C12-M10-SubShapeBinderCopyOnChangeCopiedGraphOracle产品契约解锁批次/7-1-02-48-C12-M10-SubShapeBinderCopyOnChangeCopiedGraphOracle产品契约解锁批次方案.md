@@ -11,6 +11,12 @@ C12-M10 用 oracle-first / product-contract-first 的方式回答“CopyOnChange
 - App::Link `documentObjectUpdates` transport 只能作为词汇参考，不能单独证明 SubShapeBinder `_tmp_binder` / `_CopiedObjs` lifecycle。
 - current `cad-core` 对 `BindCopyOnChange=Enabled/Mutated` 和 `PartialLoad=True` 的 retained diagnostic 是否在 approved DTO 后形成 mismatch。
 
+## 最终发布
+
+C12-M10 S6 已发布 no-code retained 出口：S2=`native_oracle_blocked_retained`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`not_comparable` / `no_current_mismatch_retained_diagnostic`，S5=`oracle_blocked_retained` + `no_code_retained_diagnostic`。本批次不授权 implementation package，不创建后续实现包，不删除 known gap；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
+
+重开 / 删除条件固定为：新的 stable native copied graph evidence（`_CopiedObjs` identity/order、`copyObject()` mapping、support rewrite、`recomputeFeature(true)` lifecycle、ElementMap / NamedShape lifecycle）+ approved request-local copied graph DTO / product contract + mismatch-confirmed row 同时成立。
+
 ## 批次边界
 
 本包只做 oracle、product-contract 和 implementation authorization 准入，不直接改 C++。

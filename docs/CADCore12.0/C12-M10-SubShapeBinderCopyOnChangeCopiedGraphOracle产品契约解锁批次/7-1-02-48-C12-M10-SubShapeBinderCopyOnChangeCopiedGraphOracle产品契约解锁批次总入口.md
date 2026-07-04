@@ -55,6 +55,7 @@ live capability baseline
 - S3 DTO 与产品契约边界裁决已关闭：`C12M10-DTO-001..004` 与 `C12M10-DTO-006` deferred，`C12M10-DTO-005` 仅 input-only，`C12M10-DTO-007..012` rejected；App::Link `documentObjectUpdates` 仅作 reference vocabulary；`C12M10-CAT-002=dto_not_reviewed_due_to_native_blocker`，current mismatch 仍 not comparable，并作为 S4 输入继承。
 - S4 current mismatch 准入已关闭：继承 S2=`native_oracle_blocked_retained` 与 S3=`dto_not_reviewed_due_to_native_blocker`，没有 approved copied graph execution DTO 或产品契约可比较；`C12M10-CAT-003=not_comparable` / `no_current_mismatch_retained_diagnostic`，`C12M10-CONTRACT-004=retained_diagnostic_s4_not_comparable`，`C12M10-BLOCKER-401` 已关闭，后续队列从 S5 继续且不得从 S4 授权 implementation package。
 - S5 implementation authorization 裁决已关闭：S2/S3/S4 三闸门未同时成立，final decision=`oracle_blocked_retained` + `no_code_retained_diagnostic`；`C12M10-CAT-004/005`、`C12M10-BLOCKER-501`、`C12M10-VAL-501` 已写入 no-code retained 出口；不授权 implementation package，不创建后续实现包，不删除 known gap，后续队列从 S6 继续。
+- S6 发布闸门与后续分流已关闭：final publication 继承 S2=`native_oracle_blocked_retained`、S3=`dto_not_reviewed_due_to_native_blocker`、S4=`not_comparable` / `no_current_mismatch_retained_diagnostic`、S5=`oracle_blocked_retained` + `no_code_retained_diagnostic`；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 diagnostic `copy_on_change_full_temporary_document_cache_not_supported` 继续保留；`C12M10-BLOCKER-601` 与 `C12M10-VAL-601/701/702/703` 已关闭，C12-M10 队列预期只输出表头。
 
 ## 产物索引
 
@@ -69,7 +70,7 @@ live capability baseline
 | S3 | `工作步骤细分/7-1-02-53-【已实现】C12-M10-S3-DTO与产品契约边界裁决.md` | 裁决 DTO / product contract 字段，已关闭为 `dto_not_reviewed_due_to_native_blocker`。 |
 | S4 | `工作步骤细分/7-1-02-54-【已实现】C12-M10-S4-current-mismatch准入.md` | 判断 current mismatch，已关闭为 `not_comparable` / `no_current_mismatch_retained_diagnostic`。 |
 | S5 | `工作步骤细分/7-1-02-55-【已实现】C12-M10-S5-implementation-authorization裁决.md` | 授权 implementation package 或 no-code / follow-up 分流，已关闭为 `oracle_blocked_retained` + `no_code_retained_diagnostic`。 |
-| S6 | `工作步骤细分/7-1-02-56-C12-M10-S6-发布闸门与后续分流.md` | 发布最终状态。 |
+| S6 | `工作步骤细分/7-1-02-56-【已实现】C12-M10-S6-发布闸门与后续分流.md` | 发布最终状态，已关闭为 `oracle_blocked_retained` + `no_code_retained_diagnostic`。 |
 | 矩阵 | `矩阵/` | source、scope、probe、DTO、contract、blocker、validation。 |
 
 ## 执行规则
