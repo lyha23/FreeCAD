@@ -40,6 +40,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         "sketch-internal-face-arc-lens",
         "part-extrusion-facemaker-bullseye-intersected-holes",
     )
+    C12M16_SPLIT_SOURCE_STABLE = "g701"
+    C12M16_SPLIT_FRAGMENTS = {
+        "g701:split1": "InternalEdge3",
+        "g701:split2": "InternalEdge8",
+        "g701:split3": "InternalEdge9",
+    }
 
     def run_payload(self, payload: dict) -> dict:
         temp_path: Path | None = None
@@ -149,6 +155,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for subshape in sketch["subshapes"]
             if "sourceGeometryId" in subshape
         }
+
+    def c12m16_split_fragment_reference_payload(self) -> dict:
+        fixture_path = ROOT / "fixtures" / "c12m16" / "sketch-split-fragment-line-reference.json"
+        return json.loads(fixture_path.read_text(encoding="utf-8"))
 
     def assert_segment_matches_geometry(self, segment: dict, geometry: dict) -> None:
         expected = {
@@ -2044,6 +2054,102 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertTrue(
             all(event["evidence"].get("producer") in {"FaceMakerBuildFace", "WireJoiner"} for event in edge5_events)
         )
+
+    def test_c12m16_split_fragment_identity_publishes_response_ledger(self) -> None:
+        result = self.run_recompute("sketch-split-fragment-line-identity", "c12m16")
+        sketch = result["objects"]["Sketch"]
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        raw_identity = sketch["raw_edge_identity"]
+        edge_segments = {
+            item["indexed"]: item
+            for item in result["mesh"]["Sketch"]["edgeSegments"]
+        }
+        subshapes = result["subshapes"]["Sketch"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(
+            [
+                item["element"]
+                for item in named_shape["history"]
+                if item["kind"] == "split" and item["sources"] == ["Edge5"]
+            ],
+            list(self.C12M16_SPLIT_FRAGMENTS.values()),
+        )
+        self.assertEqual(
+            {
+                token: raw_identity["byStableSubname"].get(token)
+                for token in self.C12M16_SPLIT_FRAGMENTS
+            },
+            self.C12M16_SPLIT_FRAGMENTS,
+        )
+        for token, indexed in self.C12M16_SPLIT_FRAGMENTS.items():
+            with self.subTest(token=token, indexed=indexed):
+                raw_entry = raw_identity["byIndexed"][indexed]
+                segment = edge_segments[indexed]
+                subshape = subshapes[indexed]
+                for entry in (raw_entry, segment, subshape):
+                    self.assertEqual(entry["sourceGeometryId"], 701)
+                    self.assertEqual(entry["sourceGeometryKind"], "LineSegment")
+                    self.assertEqual(entry["sourceStableSubname"], self.C12M16_SPLIT_SOURCE_STABLE)
+                    self.assertEqual(entry["stableSubname"], token)
+                    self.assertEqual(entry["fragmentStableSubname"], token)
+                    self.assertEqual(entry["identityStatus"], "stable_split_fragment")
+
+    def test_c12m16_split_fragment_missing_id_fallback_has_no_durable_token(self) -> None:
+        result = self.run_recompute("sketch-split-fragment-line-identity", "c12m16")
+        named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        edge_segments = {
+            item["indexed"]: item
+            for item in result["mesh"]["Sketch"]["edgeSegments"]
+        }
+        subshapes = result["subshapes"]["Sketch"]
+        anonymous_split_edges = {
+            item["element"]
+            for item in named_shape["history"]
+            if item["kind"] == "split" and item["sources"] in (["Edge1"], ["Edge3"])
+        }
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertGreaterEqual(len(anonymous_split_edges), 4)
+        for indexed in anonymous_split_edges:
+            with self.subTest(indexed=indexed):
+                for entry in (edge_segments[indexed], subshapes[indexed]):
+                    self.assertNotIn("sourceGeometryId", entry)
+                    self.assertNotIn("fragmentStableSubname", entry)
+                    self.assertNotRegex(entry.get("stableSubname", ""), r"^g\d+:split\d+$")
+
+    def test_c12m16_split_fragment_stable_sublist_resolves_current_fragment(self) -> None:
+        result = self.run_recompute("sketch-split-fragment-line-reference", "c12m16")
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(len(result["elementReferenceUpdates"]), 1)
+        update = result["elementReferenceUpdates"][0]["SubSet"][0]
+        shadow = update["ReferenceShadow"][0]
+        self.assertEqual(update["SubList"], ["InternalEdge3"])
+        self.assertEqual(update["StableSubList"], ["g701:split1"])
+        self.assertEqual(update["ShadowSub"], [{"newName": "g701:split1", "oldName": "InternalEdge3"}])
+        self.assertEqual(shadow["stableSubname"], "g701:split1")
+        self.assertEqual(shadow["sourceStableSubname"], self.C12M16_SPLIT_SOURCE_STABLE)
+        self.assertEqual(shadow["sourceGeometryId"], 701)
+        self.assertEqual(shadow["sourceGeometryKind"], "LineSegment")
+
+    def test_c12m16_split_fragment_missing_stable_sublist_reports_reselect(self) -> None:
+        payload = self.c12m16_split_fragment_reference_payload()
+        external = payload["Objects"][1]["Properties"]["ExternalGeometry"]["SubSet"][0]
+        external["SubList"] = ["InternalEdge99"]
+        external["StableSubList"] = ["g701:split99"]
+        external["ReferenceShadow"][0]["stableSubname"] = "g701:split99"
+
+        result = self.run_payload(payload)
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["split_fragment_missing"])
+        self.assertEqual(diagnostic["object"], "Consumer")
+        self.assertEqual(diagnostic["property"], "ExternalGeometry")
+        self.assertEqual(diagnostic["target"], "BaseSketch")
+        self.assertEqual(diagnostic["subname"], "g701:split99")
+        self.assertIn("split fragment", diagnostic["message"])
+        self.assertEqual(result["elementReferenceUpdates"], [])
 
     def test_p5_deleted_no_original_purge_is_diagnostic_not_unique_map(self) -> None:
         result = self.run_recompute("sketch-internal-face-dangling-line", "p5")
