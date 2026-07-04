@@ -11,6 +11,10 @@ C12-M15 承接 C12-M11 S4/S5 发布的 `C12-M11-StableGeometryIdMappedNameLedger
 - 创建前 `git -c core.quotepath=false status --short -uall` 无输出。
 - 本轮只新增 `docs/CADCore12.0/C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/` 并更新 `docs/CADCore12.0/README.md`。
 - C12-M14 `工作步骤细分` 队列为空；live capability 递归检查到的 `remaining_gaps` 均为空，因此 C12-M15 不是 capability remaining gap，而是 C12-M11 明确拆出的 stable-id 设计 follow-up。
+- S0 live 冻结：`HEAD=b3d2df945a`（`b3d2df945a docs: 关闭 C12-M15 工作步骤总入口`），`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 `git -c core.quotepath=false status --short -uall` 无输出。
+- S0 dirty boundary：docs=`<none>`；`cad-core/src`=`<none>`；tests=`<none>`；fixtures / expected=`<none>`；adapters=`<none>`；other=`<none>`。非本包 dirty 未发现。
+- S0 队列冻结：C12-M11 与 C12-M14 `工作步骤细分` 队列均只输出表头；C12-M15 队列从 S0 开始，S0 关闭后下一步进入 S1 FreeCAD source 与 current identity 管线复核。
+- S0 capability gap 递归检查：所有 live `remaining_gaps` 均为 `[]`，root `known_gaps=[]`，`part_design.sub_shape_binder.known_gaps={}`；C12-M15 是 C12-M11 stable geometry id ledger follow-up，不是 capability remaining gap / known gap，也不是 C12-M14 helper lifecycle 后续。
 
 ## 问题定义
 

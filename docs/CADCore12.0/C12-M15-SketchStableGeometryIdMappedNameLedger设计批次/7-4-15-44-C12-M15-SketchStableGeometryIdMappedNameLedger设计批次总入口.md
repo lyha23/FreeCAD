@@ -19,7 +19,7 @@
 ## 队列顺序
 
 1. `7-4-15-45-C12-M15工作步骤总入口.md`
-2. `7-4-15-46-C12-M15-S0-live基线与C12-M11继承冻结.md`
+2. `7-4-15-46-【已实现】C12-M15-S0-live基线与C12-M11继承冻结.md`
 3. `7-4-15-47-C12-M15-S1-FreeCAD-source与current-identity管线复核.md`
 4. `7-4-15-48-C12-M15-S2-ledger-interface产品契约设计.md`
 5. `7-4-15-49-C12-M15-S3-current-gap与最小实现边界裁决.md`
@@ -27,9 +27,11 @@
 
 ## 当前状态
 
-- 包结构、矩阵和 S0-S4 队列文件已创建。
-- C12-M15 起点是设计批次，不在总入口直接修改 C++。
-- 后续 worker 必须先关闭 S0/S1，复核 FreeCAD source authority 与 cad-core current identity 管线，再进入 ledger interface 设计。
+- 包结构、矩阵和 S0-S4 队列文件已创建；工作步骤总入口已关闭。
+- S0 live 基线与 C12-M11 继承冻结已关闭：`HEAD=b3d2df945a`（`b3d2df945a docs: 关闭 C12-M15 工作步骤总入口`），起点 worktree clean。
+- C12-M11 与 C12-M14 队列均为空；live capability 递归检查确认所有 `remaining_gaps` 均为空，`known_gaps` 为空数组 / 空对象。
+- C12-M15 起点是 C12-M11 stable geometry id ledger 设计 follow-up，不是 capability remaining gap，也不是 C12-M14 helper lifecycle 后续；不在总入口直接修改 C++。
+- 后续 worker 从 S1 继续，先复核 FreeCAD source authority 与 cad-core current identity 管线，再进入 ledger interface 设计。
 
 ## 执行规则
 
