@@ -21,7 +21,8 @@ C12-M13 承接 C12-M12 的 `partial_implementation_multiwire_pipe_sewing` 出口
 - S1 source / current landing 复核已关闭：`C12M13-SRC-001..010` 均为 `reviewed`，`C12M13-BLOCKER-201` 已关闭；open / waiting scope row 已写明 S2 oracle owner 与 S3/S4/S5 implementation owner。下一步从 S2 oracle 批量采集与用户复现分流继续，`ORACLE-001` 仍是非阻塞 `waiting_user_repro`。
 - S2 oracle 批量采集已关闭：新增 `cad-core/fixtures/c12m13/` expected 与 focused tests。`ORACLE-101/102` 为 current-supported；`ORACLE-103` 的 unequal-inner-wire diagnostic 曾作为 S3 red evidence；`ORACLE-201/202` 证明 PartDesign Pipe feature `Shape` lifecycle 与 current pre-boolean/pre-cut tool 输出不一致，授权 S4；`ORACLE-301` 只覆盖 helper `add/isReady/getStatus/build/shape/makeSolid` 子集，`remove/firstShape/lastShape/generated/simulate` 阻塞 S5；`ORACLE-001` 仍是非阻塞 waiting row。
 - S3 multisection vertex 细节迁移已关闭：`preparePipeShellProfileLanes()` 已对齐 FreeCAD `Pipe::execute()` 中后续 section 比 base 多 wire 时由 outer `catch (...)` 发布的 `A fatal error occurred when making the pipe`；`ORACLE-103` expected 移除 `known_gap`，`ORACLE-101/102` 和 `c5m3`、`c51m4`、`c12m12` focused regression 保持 green。下一步队列应从 S4 `Boolean / AddSubShape / rawShape 生命周期迁移` 继续。
-- S4 Boolean / AddSubShape / rawShape 生命周期迁移已关闭：`feature_pipe.cpp` 现在把 AddSubShape 保留为 pre-boolean tool cache，同时对同一 Body 前序 PartDesign feature 建立 graph 依赖并在 Pipe producer 内发布 base Fuse/Cut 后的 feature `Shape` / mesh / subshapes / named shape；`ORACLE-201/202` expected 已移除 `known_gap`，Body replay 仍通过 AddSubShape add/sub slot 消费 tool。下一步队列应从 S5 `Part Sweep mutable helper 生命周期迁移` 继续。
+- S4 Boolean / AddSubShape / rawShape 生命周期迁移已关闭：`feature_pipe.cpp` 现在把 AddSubShape 保留为 pre-boolean tool cache，同时对同一 Body 前序 PartDesign feature 建立 graph 依赖并在 Pipe producer 内发布 base Fuse/Cut 后的 feature `Shape` / mesh / subshapes / named shape；`ORACLE-201/202` expected 已移除 `known_gap`，Body replay 仍通过 AddSubShape add/sub slot 消费 tool。
+- S5 Part Sweep mutable helper 生命周期迁移已关闭为 `blocked_partial_helper_oracle`：`ORACLE-301` 的 collected subset 继续 current-supported，`remove/firstShape/lastShape/generated/simulate` 没有 checked-in native expected 或 approved product-contract artifact；本步未改 C++，保持 Part Sweep wrapper 与 helper product contract 不混线。下一步队列应从 S6 `集成回归与发布闸门` 继续。
 
 ## 问题定义
 
@@ -30,7 +31,7 @@ C12-M13 承接 C12-M12 的 `partial_implementation_multiwire_pipe_sewing` 出口
 1. multisection 中 profile point、last section vertex、wire count 对齐和 error message 只被粗略覆盖。
 2. `AddSubShape.setValue(...)`、pre-boolean tool、post-boolean `boolOp` 与 refine 后 `Shape` 生命周期已由 S4 expected/test 锁住；剩余风险集中在 S5 helper mutable sequence。
 3. AdditivePipe 与 SubtractivePipe 的 raw tool、fuse/cut owner、Body Tip 和 downstream AddSubShape consumer 已由 S4 focused test 约束；DressUp / Transformed 旧 consumer surface 不在 S4 重开。
-4. Part Workbench helper 的 `add/remove/isReady/status/build/shape/firstShape/lastShape/generated/simulate/makeSolid` 这类 mutable sequence 还没有作为 request-local 生命周期模型验证。
+4. Part Workbench helper 的 `add/isReady/getStatus/build/shape/makeSolid` collected subset 已验证 current-supported；`remove/firstShape/lastShape/generated/simulate` 因缺 stable artifact 保持 blocked。
 5. ORACLE-001 仍缺用户 request/result；它可以随时插入 S2/S3，但不能阻塞无关的 source-backed 剩余项。
 
 ## FreeCAD source authority
@@ -76,7 +77,7 @@ S1 复核后的当前 landing 口径：PartDesign Pipe 的 current path 已落�
 - `cad-core/fixtures/c12m13/partdesign-pipe-profile-point-to-wire-section.json` 与 `partdesign-pipe-last-section-vertex.json` 已有 FreeCADCmd expected，focused P7 证明 current-supported，不授权 S3 修改这两条成功路径。
 - `partdesign-pipe-vertex-wire-diagnostics.json` 的 diagnostic-only S3 gap 已关闭：两 vertex section 诊断与 FreeCAD 一致；unequal inner wire 已对齐 FreeCADCmd catch-all fatal，expected 不再保留 `known_gap`。
 - `partdesign-pipe-additive-lifecycle.json` 与 `partdesign-pipe-subtractive-lifecycle.json` 已由 S4 关闭：native feature `Shape` 是 post-boolean body，current feature 输出已 red-to-green；Body final geometry 继续 green，且 replayed add/sub feature 列表证明仍通过 AddSubShape tool cache 消费。
-- `part-sweep-helper-mutable-sequence.json` 已证明 helper collected subset current-supported；未覆盖 `remove`、`firstShape`、`lastShape`、`generated`、`simulate`，S5 不应实现这些未采证方法。
+- `part-sweep-helper-mutable-sequence.json` 已证明 helper collected subset current-supported；未覆盖 `remove`、`firstShape`、`lastShape`、`generated`、`simulate`。S5 已按 blocked/partial closure 收口，重开条件是 dedicated native helper probe 或 approved product-contract artifact 覆盖方法集合、调用顺序、diagnostics 和 current response 字段。
 
 ## 非目标
 

@@ -45,7 +45,7 @@ S2 已关闭：
 - `profile-point-to-wire-section` 与 `last-section-vertex` 已有 FreeCADCmd expected 和 current-focused green，不进入 S3 implementation。
 - `invalid-middle-section-vertex-diagnostic` 的 S3 red evidence 已关闭：two-vertex diagnostic current-supported，unequal-inner-wire diagnostic 已对齐 FreeCADCmd catch-all 输出。
 - AdditivePipe / SubtractivePipe lifecycle 已由 S4 red-to-green：FreeCAD feature `Shape` 为 post-boolean body，current feature 输出已对齐；Body final shape green 之外，focused test 还验证 replayed add/sub features 继续通过 AddSubShape tool cache 消费。
-- Part Sweep helper 只采到 `add/isReady/getStatus/build/shape/makeSolid` subset，`remove/firstShape/lastShape/generated/simulate` 仍阻塞 S5。
+- Part Sweep helper 只采到 `add/isReady/getStatus/build/shape/makeSolid` subset；S5 已关闭为 `blocked_partial_helper_oracle`，`remove/firstShape/lastShape/generated/simulate` 仍需 dedicated native helper probe 或 approved product-contract artifact 才能重开。
 - ORACLE-001 未收到用户 request/result，继续 `waiting_user_repro_non_blocking`。
 
 ### S3 multisection vertex 细节迁移
@@ -72,7 +72,9 @@ S4 已完成：`cad-core/src/part_design/feature_pipe.cpp` 现在把 Pipe produc
 
 ### S5 Part Workbench mutable helper 生命周期迁移
 
-允许修改 `cad-core/src/part/part_sweep.cpp` 与 shared builder DTO，目标是把 helper mutable API 作为 request-local 生命周期表达：
+S5 已完成为 blocked/partial closure，未修改 `cad-core/src/part/part_sweep.cpp` 或 shared builder DTO。原因是 S2 只证明 `add/isReady/getStatus/build/shape/makeSolid` subset current-supported，未采证方法没有 checked-in native expected 或 approved product-contract artifact；临时 FreeCADCmd 调查还显示 helper 方法顺序敏感，组合 `remove/readd/simulate/build` 会触发 `NCollection_Sequence::ChangeValue`，不能作为稳定实现依据。
+
+原 S5 目标保留为重开条件，必须先形成 dedicated native helper probe 或 product-contract artifact，再讨论 C++：
 
 - constructor 必须接收 wire；invalid spine/wire 产生 FreeCAD 对齐 diagnostic。
 - mode setters、tolerance、transition、profile `add/remove` 按顺序影响同一个 builder state。
