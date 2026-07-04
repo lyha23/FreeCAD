@@ -34,6 +34,8 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 用户随后要求为 C12-M13 helper follow-up 出方案到 `docs/CADCore12.0`。C12-M14 是 Part Sweep helper mutable lifecycle 证据解锁批次：它不重开 PartDesign Pipe S3/S4，也不重写 `Part::Sweep` wrapper，而是专门为 `BRepOffsetAPI_MakePipeShellPy.remove/firstShape/lastShape/generated/simulate` 设计 dedicated native helper probe、product-contract 准入和 current mismatch gate。S5 已完成发布闸门并发布 `implementation_unlocked_helper_lifecycle` + `product_contract_published_helper_lifecycle` 混合状态：`ORACLE-101..104` 按 stable native evidence/source audit 关闭为 source-backed current-supported；`ORACLE-105` 仅按 CAD Core request-local 产品契约关闭，并在 response 和 public capability wording 中保留 `native_parity=false` 与 `contract_provenance=cad_core_product_contract_non_parity`，不能称为 FreeCAD native parity。C12-M14 队列预期只输出表头。
 
+用户随后要求为首选的 `C12-M11-StableGeometryIdMappedNameLedger设计批次` 出方案到 `docs/CADCore12.0`。C12-M15 是 Sketch stable geometry id / mapped-name ledger 设计批次：它不重开 C12-M11 closed internal profile backend response，也不继承 C12-M14 helper lifecycle，而是专门把 FreeCAD `SketchObject::updateGeoHistory()` / `generateId()` / `convertSubName()` / `getEdge()` 的 geometry id 与 mapped-name 语义，映射成 cad-core request-local `geometryId -> g<ID> -> current EdgeN/InternalEdgeN` 账本。C12-M15 初始队列从 S0 live 基线与 C12-M11 继承冻结开始；本包是设计批次，不直接授权 C++ 实现。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -92,6 +94,10 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M14 方案：`C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/7-4-11-54-C12-M14-PartSweepHelperMutableLifecycle证据解锁批次方案.md`
 - C12-M14 工作步骤：`C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/工作步骤细分/`
 - C12-M14 矩阵：`C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/矩阵/`
+- C12-M15 总入口：`C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/7-4-15-44-C12-M15-SketchStableGeometryIdMappedNameLedger设计批次总入口.md`
+- C12-M15 方案：`C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/7-4-15-44-C12-M15-SketchStableGeometryIdMappedNameLedger设计批次方案.md`
+- C12-M15 工作步骤：`C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/工作步骤细分/`
+- C12-M15 矩阵：`C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/矩阵/`
 
 ## 当前基线
 
@@ -168,6 +174,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M12 S6 发布闸门已完成，随后按用户反馈追加真实代码迁移子批次：最终状态为 `partial_implementation_multiwire_pipe_sewing`。新增 `c12m12/partdesign-pipe-multiwire-sewing` FreeCADCmd expected，迁移 `cad-core/src/part/topo_shape_expansion.cpp` 的 multi-wire PartDesign Pipe shell lane + shared cap/sewing 路径，并通过 4 个 focused tests。完整 FreeCAD Sweep / Pipe 仍未全量迁完；ORACLE-001 继续作为 `waiting_user_repro` 重开条件。
 - C12-M13 已创建为 FreeCAD Sweep / Pipe 剩余语义迁移批次，且 S0-S6 已关闭：`pwd=/Users/li/Chili3DProject/FreeCAD`，S0 `HEAD=592ee9f5b2`（`592ee9f5b2 feat: 支持 PartDesign Pipe 多线截面缝合`），S6 `HEAD=5be5b2f486`（`5be5b2f486 文档：关闭 C12-M13 S5 helper blocker`）。S3 关闭 unequal-inner-wire diagnostic；S4 关闭 AdditivePipe / SubtractivePipe feature `Shape` lifecycle mismatch，AddSubShape 仍作为 pre-boolean tool cache 被 Body replay 消费。S5 关闭为 `blocked_partial_helper_oracle`：Part Sweep helper 只覆盖 collected subset，`remove/firstShape/lastShape/generated/simulate` 等待 dedicated native helper probe 或 approved product-contract artifact；ORACLE-001 继续 `waiting_user_repro_non_blocking`。S6 focused release gate 通过并发布 `partial_implementation_with_named_followups`。
 - C12-M14 已完成 Part Sweep helper mutable lifecycle 证据解锁批次。创建基线为 `HEAD=8ef7a10b6a`（`8ef7a10b6a 文档：关闭 C12-M13 S6 发布闸门`），S5 执行基线为 `HEAD=6be8764a2d`（`6be8764a2d 实现 C12-M14 S4 helper 生命周期契约`），起点 worktree clean。本包只处理 C12-M13 `ORACLE-301` 留下的 helper uncollected methods：`remove/firstShape/lastShape/generated/simulate`；S0-S3 做 live/source/native probe/product-contract/current mismatch gate。S4 已实现 opt-in `HelperLifecycle` request DTO 与 per-operation response，新增 `cad-core/fixtures/c12m14/part-sweep-helper-mutable-lifecycle.json`、expected 和 focused P8 test；S5 已补 capability / adapter public wording 并通过 release checks。最终状态为 `implementation_unlocked_helper_lifecycle` + `product_contract_published_helper_lifecycle`：`ORACLE-101..104` 是 source-backed current-supported，`ORACLE-105` 仍为 request-local product contract only，response 带 `native_parity=false` 与 `contract_provenance=cad_core_product_contract_non_parity`；C12-M14 队列关闭后应只输出表头。
+- C12-M15 已创建为 Sketch stable geometry id / mapped-name ledger 设计批次。创建基线为 `HEAD=dff911d299`（`dff911d299 实现 SubShapeBinder CopyOnChange request-local 支持`），创建前 worktree clean；本包承接 C12-M11 的 stable geometry id ledger follow-up，不重开 C12-M11 closed internal profile response，不继承 C12-M14 helper lifecycle。初始队列为入口、S0 live 基线、S1 FreeCAD/current identity 管线复核、S2 ledger interface 产品契约设计、S3 current gap 与最小实现边界裁决、S4 设计发布闸门。
 
 ## 重开条件
 
@@ -181,6 +188,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 | RuledSurface wire/wire | C12-M6 已关闭为 `wire_wire_admitted_current_supported`；旧 C3M4 `PARTSURF-BLOCK-005` / `PARTSURF-SCOPE-007` / `PARTSURF-FIX-005` 为 historical closed / superseded by C12-M6 evidence。仅当未来 checked-in expected 与 current output 出现真实 mismatch，并定位到 Part executor / TopoShapeExpansion / topo provenance 时，才另开 implementation package。 |
 | Groove UpTo product diagnostic | C12-M7 已关闭为 `product_diagnostic_contract_published`；仅当同一 FreeCAD / LibPack / OCCT oracle baseline 证明 Groove UpToFirst 与 UpToFace native success，且 current CAD Core 与 stable expected mismatch 时，才另开 geometry implementation candidate。 |
 | Sketch internal edge response | C12-M11 已关闭为 `contract_current_supported/current_supported`；closed internal profile backend implementation 不重开。后续仅在前端 consumer sync、stable geometry id ledger 设计或 open wire raw `EdgeN` product contract 各自证据成立时另行开包；不得从前端 prefix guessing 或 open wire `mesh=null` 反推 closed `InternalEdgeN` backend 缺口。 |
+| Sketch stable geometry id ledger | C12-M15 已创建为设计批次：只裁决 `geometryId -> g<ID> -> current EdgeN/InternalEdgeN` request-local ledger、fallback 和 diagnostics；不把 `EdgeN` 顺序写成 FreeCAD-grade stable id。后续只有 S3 明确发布 implementation_needed 或 current_supported 后，才进入代码实现或 no-code 收口。 |
 | FreeCAD Sweep / Pipe parity | C12-M12 当前状态为 `partial_implementation_multiwire_pipe_sewing`：已迁移 PartDesign Pipe multi-wire shell lane + shared cap/sewing 子路径，但不能视为完整迁移。C12-M13 S6 已发布 `partial_implementation_with_named_followups`：101/102 current-supported，103 diagnostic closed，201/202 lifecycle closed，301 collected helper subset current-supported；`remove/firstShape/lastShape/generated/simulate` 未采证方法已进入 C12-M14。C12-M14 S5 已发布 opt-in HelperLifecycle mixed closeout：`ORACLE-101..104` 因 stable native evidence + source/current audit mismatch 关闭为 source-backed current-supported；`ORACLE-105` 因 `NCollection_Sequence::ChangeValue` native instability 仅按 CAD Core request-local product contract 关闭，不能称为 FreeCAD native parity。只有同一 FreeCAD / LibPack / OCCT baseline 产出 stable native expected 且不再触发该异常时，才重开 ORACLE-105 native parity。 |
 
 ## 队列检查
@@ -203,6 +211,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M13-FreeCADSweepPipe剩余语义迁移批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
@@ -225,6 +234,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M12-FreeCADSweepPipeParity迁移批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M13-FreeCADSweepPipe剩余语义迁移批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M14-PartSweepHelperMutableLifecycle证据解锁批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```
