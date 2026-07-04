@@ -712,6 +712,40 @@ nlohmann::json capabilityContractJson()
                     "no_wire_joiner_fallback_candidate_fields"}},
                   {"remaining_gaps", nlohmann::json::array()},
               }},
+             {"split_fragment_identity_ledger",
+              {
+                  // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+                  // ::FaceMakerBuildFace::splitSelfIntersecting(), records source-to-fragment
+                  // evidence with "myPreSplitHistory->AddModified(edge, fragment)".
+                  // FaceMaker.cpp::postBuild() consumes "MapperHistory(myPreSplitHistory)" and
+                  // "MapperMaker(mySplitter)"; SketchObject.cpp::getInternalElementMap() maps
+                  // InternalEdge names back through the request-local InternalShape map.
+                  {"status", "supported_request_local"},
+                  {"token_format", "g<ID>:splitN"},
+                  {"producer", "InternalShape NamedShape split history -> RawSketchEdgeIdentityLedger"},
+                  {"response_fields",
+                   {"objects.raw_edge_identity.byStableSubname",
+                    "objects.raw_edge_identity.byIndexed[].fragmentStableSubname",
+                    "results[].mesh.edgeSegments[].fragmentStableSubname",
+                    "results[].subshapes[].fragmentStableSubname"}},
+                  {"reference_fields",
+                   {"elementReferenceUpdates[].SubSet[].StableSubList",
+                    "elementReferenceUpdates[].SubSet[].ShadowSub",
+                    "elementReferenceUpdates[].SubSet[].ReferenceShadow[].stableSubname",
+                    "elementReferenceUpdates[].SubSet[].ReferenceShadow[].sourceStableSubname"}},
+                  {"identity_statuses", {"stable_split_fragment"}},
+                  {"diagnostics", {"split_fragment_missing"}},
+                  {"request_local_boundaries",
+                   {"ledger_derived_from_current_recompute_internal_shape_history",
+                    "no_backend_sketch_session",
+                    "no_persistent_freecad_session_parity",
+                    "no_mesh_bbox_or_output_order_fragment_guess"}},
+                  {"non_goals",
+                   {"persistent_freecad_session_parity",
+                    "cross_request_namedshape_cache",
+                    "frontend_consumer_sync"}},
+                  {"remaining_gaps", nlohmann::json::array()},
+              }},
          }},
         {"part_workbench",
          {

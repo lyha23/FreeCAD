@@ -282,6 +282,44 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(raw_edge["stableSubname"], "")
         self.assertEqual(raw_edge["identityStatus"], "index_fallback")
 
+    def test_c_api_returns_c12m16_split_fragment_ledger_fields(self) -> None:
+        result = self.run_recompute_ffi("sketch-split-fragment-line-reference", "c12m16")
+        sketch = next(item for item in result["results"] if item["object"] == "BaseSketch")
+
+        self.assertEqual(result["diagnostics"], [])
+        split_segments = {
+            item["fragmentStableSubname"]: item
+            for item in sketch["mesh"]["edgeSegments"]
+            if item.get("identityStatus") == "stable_split_fragment"
+        }
+        split_subshapes = {
+            item["fragmentStableSubname"]: item
+            for item in sketch["subshapes"]
+            if item.get("identityStatus") == "stable_split_fragment"
+        }
+        self.assertEqual(set(split_segments), {"g701:split1", "g701:split2", "g701:split3"})
+        self.assertEqual(set(split_subshapes), set(split_segments))
+        for token, segment in split_segments.items():
+            with self.subTest(token=token):
+                subshape = split_subshapes[token]
+                self.assertEqual(segment["stableSubname"], token)
+                self.assertEqual(subshape["stableSubname"], token)
+                self.assertEqual(segment["sourceStableSubname"], "g701")
+                self.assertEqual(subshape["sourceStableSubname"], "g701")
+                self.assertEqual(segment["sourceGeometryId"], 701)
+                self.assertEqual(subshape["sourceGeometryId"], 701)
+                self.assertEqual(segment["indexed"], subshape["indexed"])
+
+        update = result["elementReferenceUpdates"][0]["SubSet"][0]
+        shadow = update["ReferenceShadow"][0]
+        self.assertEqual(update["SubList"], ["InternalEdge3"])
+        self.assertEqual(update["StableSubList"], ["g701:split1"])
+        self.assertEqual(update["ShadowSub"], [{"newName": "g701:split1", "oldName": "InternalEdge3"}])
+        self.assertEqual(shadow["stableSubname"], "g701:split1")
+        self.assertEqual(shadow["sourceStableSubname"], "g701")
+        self.assertEqual(shadow["sourceGeometryId"], 701)
+        self.assertEqual(shadow["sourceGeometryKind"], "LineSegment")
+
     def test_c_api_matches_cli_for_p3b_recompute(self) -> None:
         ffi_result = self.run_recompute_ffi("pocket-custom-vector", "p3b")
 
@@ -1040,6 +1078,30 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             ],
         )
         self.assertEqual(pressure["remaining_gaps"], [])
+        split_ledger = capabilities["sketcher"]["split_fragment_identity_ledger"]
+        self.assertEqual(split_ledger["status"], "supported_request_local")
+        self.assertEqual(split_ledger["token_format"], "g<ID>:splitN")
+        self.assertIn(
+            "results[].mesh.edgeSegments[].fragmentStableSubname",
+            split_ledger["response_fields"],
+        )
+        self.assertIn("results[].subshapes[].fragmentStableSubname", split_ledger["response_fields"])
+        self.assertIn(
+            "elementReferenceUpdates[].SubSet[].StableSubList",
+            split_ledger["reference_fields"],
+        )
+        self.assertIn("stable_split_fragment", split_ledger["identity_statuses"])
+        self.assertEqual(split_ledger["diagnostics"], ["split_fragment_missing"])
+        self.assertIn(
+            "ledger_derived_from_current_recompute_internal_shape_history",
+            split_ledger["request_local_boundaries"],
+        )
+        self.assertIn(
+            "no_persistent_freecad_session_parity",
+            split_ledger["request_local_boundaries"],
+        )
+        self.assertIn("persistent_freecad_session_parity", split_ledger["non_goals"])
+        self.assertEqual(split_ledger["remaining_gaps"], [])
         self.assertEqual(
             capabilities["part_design"]["body_chain"]["document_object_updates"],
             [
