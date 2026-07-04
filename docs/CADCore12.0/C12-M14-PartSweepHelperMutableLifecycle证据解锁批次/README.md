@@ -21,7 +21,8 @@ C12-M14 承接 C12-M13 的 `partial_implementation_with_named_followups` 出口�
 - S0 live 冻结：`HEAD=09e2f66c73`（`09e2f66c73 文档：新增 C12-M14 helper 生命周期证据方案`），`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 `git -c core.quotepath=false status --short -uall` 无输出。
 - S0 dirty boundary：docs=`<none>`；`cad-core/src`=`<none>`；tests=`<none>`；fixtures=`<none>`；other=`<none>`。非本包 dirty 未发现，本包后续不覆盖或回退非本包改动。
 - S0 队列冻结：C12-M13 `工作步骤细分` 队列为空；C12-M14 队列从 S0 开始，S0 关闭后下一步进入 S1 source 与 current helper landing 复核。
-- S1 source/current landing 复核：`HEAD=055237df6c`（`055237df6c 文档：关闭 C12-M14 S0 基线冻结`），起点 worktree clean。已复核 FreeCAD helper binding、plain `Sweep::execute()` no-mix 边界、`part_sweep.cpp` current response 字段、`topo_shape_expansion.cpp` 内部 `Simulate(2)` 用途和 C12-M13 focused subset；下一步进入 S2 dedicated native helper probe schema。
+- S1 source/current landing 复核：`HEAD=055237df6c`（`055237df6c 文档：关闭 C12-M14 S0 基线冻结`），起点 worktree clean。已复核 FreeCAD helper binding、plain `Sweep::execute()` no-mix 边界、`part_sweep.cpp` current response 字段、`topo_shape_expansion.cpp` 内部 `Simulate(2)` 用途和 C12-M13 focused subset。
+- S2 dedicated native helper probe schema 与采集：`HEAD=0251a16d10`（`0251a16d10 文档：关闭 C12-M14 S1 source landing 复核`），起点 worktree clean。已新增 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-schema.md`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe.py`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json` 与 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-freecadcmd-version.txt`。FreeCAD baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`；`remove/firstShape/lastShape/generated/simulate` 均有 stable payload 或 stable diagnostic，组合 `remove/readd/simulate/build` 记录 `NCollection_Sequence::ChangeValue` 为 `native_instability_blocker`。下一步进入 S3 product contract 与 current mismatch 准入裁决，S4 仍未解锁。
 - C12-M13 已发布 `partial_implementation_with_named_followups`：S3/S4 已完成，S5 保持 `blocked_partial_helper_oracle`。
 - C12-M13 `ORACLE-301` 已证明 helper collected subset `add/isReady/getStatus/build/shape/makeSolid` current-supported；`remove/firstShape/lastShape/generated/simulate` 缺 checked-in native expected 或 approved product-contract artifact。
 - C12-M13 S5 的临时 FreeCADCmd 调查只能证明单独调用可观察，组合 `remove/readd/simulate/build` 会触发 `NCollection_Sequence::ChangeValue`，不能作为稳定 expected。
@@ -52,7 +53,7 @@ C12-M14 承接 C12-M13 的 `partial_implementation_with_named_followups` 出口�
 | `cad-core/src/part/part_sweep.cpp` | Part Sweep wrapper parser、advanced helper DTO、未来 helper lifecycle response。 |
 | `cad-core/src/part/topo_shape_expansion.cpp` | request-local PipeShell builder 和 OCCT `BRepOffsetAPI_MakePipeShell` 调用点。 |
 | `cad-core/tests/test_p8_features.py` | Part Sweep wrapper/helper focused tests。 |
-| `cad-core/fixtures/c12m14/` | 若 S2/S3 准入成立，本包新增 native helper probe / product-contract fixture。 |
+| `cad-core/fixtures/c12m14/` | 仅当 S3/S4 明确授权时才新增 product-contract fixture；S2 已明确不新增 fixture/expected。 |
 | `docs/temp/` | 临时 FreeCADCmd helper probe 脚本与输出；只有稳定 schema 输出才可升级为 expected。 |
 
 ## 入口

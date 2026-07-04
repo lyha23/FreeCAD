@@ -21,7 +21,7 @@
 1. `7-4-11-55-【已实现】C12-M14工作步骤总入口.md`
 2. `7-4-11-56-【已实现】C12-M14-S0-live基线与C12-M13继承冻结.md`
 3. `7-4-11-57-【已实现】C12-M14-S1-source与current-helper-landing复核.md`
-4. `7-4-11-58-C12-M14-S2-dedicated-native-helper-probe-schema与采集.md`
+4. `7-4-11-58-【已实现】C12-M14-S2-dedicated-native-helper-probe-schema与采集.md`
 5. `7-4-11-59-C12-M14-S3-product-contract与current-mismatch准入裁决.md`
 6. `7-4-12-00-C12-M14-S4-helper-lifecycle实现或no-code收口.md`
 7. `7-4-12-01-C12-M14-S5发布闸门.md`
@@ -31,9 +31,10 @@
 - 工作步骤总入口已关闭：包结构、矩阵字段和 S0-S5 队列文件已创建。
 - S0 live 基线与 C12-M13 继承冻结已关闭：`HEAD=09e2f66c73`（`09e2f66c73 文档：新增 C12-M14 helper 生命周期证据方案`），起点 worktree clean。
 - S1 source 与 current helper landing 复核已关闭：FreeCAD helper binding、plain `Sweep::execute()` wrapper no-mix、cad-core current response 字段、shared builder 内部 `Simulate(2)` 和 C12-M13 focused subset 已记录；`C12M14-BLOCKER-201` 已关闭。
-- C12-M13 队列为空，最终状态为 `partial_implementation_with_named_followups`；`ORACLE-301` collected subset 继承为 current-supported，未采证 helper methods 继续进入 S2/S3。
-- C12-M14 下一步应从 S2 dedicated native helper probe schema 与采集开始。
-- 当前不授权 C++ 实现；S2/S3 证据未成立前，S4 只能 no-code 收口。
+- C12-M13 队列为空，最终状态为 `partial_implementation_with_named_followups`；`ORACLE-301` collected subset 继承为 current-supported，未采证 helper methods 已进入 S2/S3。
+- S2 dedicated native helper probe schema 与采集已关闭：`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json` 覆盖 baseline subset、remove、firstShape/lastShape、generated、simulate 和 remove/readd/simulate/build 组合；FreeCAD `1.2.0 revision 20260519` / OCCT `7.8.1`。组合 case 记录 `NCollection_Sequence::ChangeValue` 为 `native_instability_blocker`，`can_enter_s4=false`。
+- C12-M14 下一步应从 S3 product contract 与 current mismatch 准入裁决开始。
+- 当前不授权 C++ 实现；S3 裁决前，S4 只能 no-code 收口。
 
 ## 执行规则
 

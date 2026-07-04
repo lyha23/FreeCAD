@@ -1,0 +1,17 @@
+FreeCADCmd=/Users/li/.cargo/bin/freecadcmd
+command=/Users/li/.cargo/bin/freecadcmd -c import sys; sys.argv = ['/Users/li/Chili3DProject/FreeCAD/docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe.py']; exec(compile(open('/Users/li/Chili3DProject/FreeCAD/docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe.py', encoding='utf-8').read(), 'c12m14_helper_lifecycle_native_probe.py', 'exec'))
+returncode=0
+shell_exit=0
+classification=expected_ready
+status=stable_native_payload
+freecad_version=1.2.0 revision 20260519
+freecad_version_tuple=['1', '2', '0', '20260519 (Git shallow)', 'Unknown', '2026/05/19 20:59:45', '(HEAD detached at 5a5d8d042)', '5a5d8d0425fdb440fb5dcb47f1c48422d07d3267']
+build_revision=20260519 (Git shallow)
+build_revision_date=2026/05/19 20:59:45
+occt_version=7.8.1
+config_occt_version=7.8.1
+libpack=
+libpack_version=
+freecad_libs=
+app_home_path=/Applications/FreeCAD.app/Contents/Resources//
+run_mode=Cmd
