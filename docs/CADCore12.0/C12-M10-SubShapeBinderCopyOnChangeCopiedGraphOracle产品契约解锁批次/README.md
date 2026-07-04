@@ -75,6 +75,15 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 - S4 裁决：`C12M10-CAT-003=not_comparable` / `no_current_mismatch_retained_diagnostic`；`C12M10-CONTRACT-004=retained_diagnostic_s4_not_comparable`；`C12M10-BLOCKER-401=closed_s4_not_comparable_retained_diagnostic`；`C12M10-VAL-401=passed_s4_not_comparable_retained_diagnostic`。
 - `C12M10-CAT-004/005` 只接收 S4 的 no mismatch input：S5 不得从 S4 授权 implementation package，后续只能按 retained diagnostic、oracle blocker 或 product-contract follow-up 分流。
 
+## S5 implementation authorization 裁决
+
+- S5 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=160c4104de`（`160c4104de 文档：关闭 C12-M10 S4 current mismatch 准入`），起点 worktree clean。
+- S2/S3/S4 三闸门未同时成立：S2=`native_oracle_blocked_retained`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`not_comparable` / `no_current_mismatch_retained_diagnostic`。
+- S5 final decision：`oracle_blocked_retained` + `no_code_retained_diagnostic`。本包不授权 implementation package，不创建后续实现包，不删除 known gap。
+- `copy_on_change_full_temporary_document_cache_not_supported` 继续作为 known gap / oracle_blocked retained diagnostic；App::Link reference vocabulary 不作为 SubShapeBinder CopyOnChange support evidence。
+- `C12M10-CAT-004=not_authorized_oracle_blocked_retained_no_code_retained_diagnostic`；`C12M10-CAT-005=no_code_retained_diagnostic`；`C12M10-BLOCKER-501=closed_s5_oracle_blocked_retained_no_code_retained_diagnostic`；`C12M10-VAL-501=passed_s5_oracle_blocked_retained_no_code_retained_diagnostic`。
+- Delete / reopen condition：只有新的 FreeCAD native artifact 稳定暴露 `_CopiedObjs` identity/order、`copyObject()` dependency mapping、support rewrite、`recomputeFeature(true)` lifecycle 与 ElementMap / NamedShape lifecycle，且产品批准 request-local copied graph DTO / contract 并形成 current mismatch-confirmed row 后，才允许重开 implementation authorization 并替换 retained diagnostic。
+
 ## 解锁目标
 
 C12-M10 只有在以下三项同时成立时，才允许后续 implementation package：
@@ -104,7 +113,7 @@ C12-M10 只有在以下三项同时成立时，才允许后续 implementation pa
 - S2：native copied graph oracle collection / evidence gate（已完成，`native_oracle_blocked_retained`）。
 - S3：request-local DTO / product contract boundary 裁决（已完成，`dto_not_reviewed_due_to_native_blocker`）。
 - S4：current mismatch 与 implementation candidate gate（已完成，`not_comparable` / `no_current_mismatch_retained_diagnostic`）。
-- S5：implementation package authorization、oracle/product-contract 分流或 no-code retained 裁决。
+- S5：implementation package authorization、oracle/product-contract 分流或 no-code retained 裁决（已完成，`oracle_blocked_retained` + `no_code_retained_diagnostic`）。
 - S6：发布闸门、root README 更新和后续分流。
 
 ## 入口

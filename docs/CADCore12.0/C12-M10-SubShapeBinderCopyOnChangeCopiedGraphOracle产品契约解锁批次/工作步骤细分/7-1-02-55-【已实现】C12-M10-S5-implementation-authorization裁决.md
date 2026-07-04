@@ -35,6 +35,17 @@
 - 不刷新 expected。
 - 不删除已发布 known gap，除非 S5 明确授权后续 implementation package。
 
+## S5 结论
+
+- S5 baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=160c4104de`（`160c4104de 文档：关闭 C12-M10 S4 current mismatch 准入`），起点 worktree clean。
+- S2 继承为 `native_oracle_blocked_retained`：S2 gate artifact 仍缺 `_CopiedObjs` stored identity/order、`Document::copyObject()` dependency order/mapping、内部 `recomputeFeature(true)` lifecycle 与 ElementMap / NamedShape 分阶段 lifecycle。
+- S3 继承为 `dto_not_reviewed_due_to_native_blocker`：没有 approved copied graph execution DTO 或产品契约；App::Link `documentObjectUpdates` 仍仅作 reference vocabulary。
+- S4 继承为 `not_comparable` / `no_current_mismatch_retained_diagnostic`：没有 admitted mismatch-confirmed row，current diagnostic `copy_on_change_full_temporary_document_cache_not_supported` 继续作为 known gap / oracle_blocked retained diagnostic。
+- S5 final decision：`oracle_blocked_retained` + `no_code_retained_diagnostic`。三闸门未同时成立，因此不授权 implementation package，不创建后续实现包，不删除 known gap。
+- `C12M10-CAT-004` 已关闭为 `not_authorized_oracle_blocked_retained_no_code_retained_diagnostic`；`C12M10-CAT-005` 已关闭为 `no_code_retained_diagnostic`。
+- `C12M10-BLOCKER-501=closed_s5_oracle_blocked_retained_no_code_retained_diagnostic`；`C12M10-VAL-501=passed_s5_oracle_blocked_retained_no_code_retained_diagnostic`。
+- Delete / reopen condition：只有新的 FreeCAD native artifact 稳定暴露 copied graph 核心证据，产品批准 request-local copied graph DTO / contract，且 current comparison 形成 mismatch-confirmed row 后，才允许重开 implementation authorization 并替换 retained diagnostic。
+
 ## 验收
 
 ```bash
