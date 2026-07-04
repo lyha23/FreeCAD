@@ -4,6 +4,8 @@
 
 C12-M10 不直接落 C++。它只处理当前唯一 live `remaining_gaps`：`part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`，并且必须继承 C12-M8 / C12-M9 的限制：旧 native evidence 只到 property / session 层，尚未证明 `_CopiedObjs` identity、`copyObject()` dependency order、support rewrite map、`recomputeFeature(true)` lifecycle 或 ElementMap / NamedShape lifecycle 可稳定转成 request-local DTO。
 
+Post-S6 implementation note：用户随后明确要求直接解决代码问题。当前 `cad-core` 已把 SubShapeBinder `BindCopyOnChange=Enabled/Mutated` 与 `PartialLoad=True` 迁为 request-local support recompute subset；不再发布 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic，也不再把该项列为 `part_design.sub_shape_binder.remaining_gaps`。FreeCAD 原生 `_tmp_binder` / `_CopiedObjs` 跨请求 session cache 仍不作为 CAD Core 持久状态保存。
+
 ## 主线目标
 
 - 冻结 C12-M9 后的 live capability 和 dirty boundary。
@@ -18,8 +20,8 @@ C12-M10 不直接落 C++。它只处理当前唯一 live `remaining_gaps`：`par
 - 创建基线：`HEAD=3c50dfccd8`（`3c50dfccd8 fix: 修复 Body 回放面引用法线解析`）。
 - 创建时 worktree clean。
 - C12-M1..M9 队列均只输出表头。
-- live capability 仍发布 `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
-- known gap 仍是 `known_gap_diagnostic` / `oracle_blocked` / `copy_on_change_full_temporary_document_cache_not_supported`。
+- post-S6 implementation 后，live capability 发布 `part_design.sub_shape_binder.remaining_gaps=[]`。
+- post-S6 implementation 后，`copy_on_change_full_temporary_document_cache_not_supported` 不再作为当前 SubShapeBinder request-local 子集 diagnostic。
 - C12-M8 / C12-M9 未授权 implementation package。
 
 ## S0 live 冻结

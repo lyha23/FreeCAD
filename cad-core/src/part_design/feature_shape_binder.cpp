@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <optional>
 #include <string>
 #include <utility>
@@ -775,12 +776,16 @@ std::optional<BinderBuild> applyRefineIfNeeded(const app::DocumentObject& object
 
 void addLifecycleMetadata(const app::DocumentObject& object,
                           runtime::ComputeContext& context,
-                          nlohmann::json& metadata)
+                          nlohmann::json& metadata,
+                          std::size_t supportCount)
 {
     // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp
     // ::SubShapeBinder::onChanged(), "if(mode == BindModeEnums::Detached) { Support.setValues({}) }";
-    // ::setupCopyOnChange() uses a temporary document cache for Enabled/Mutated modes. cad-core
-    // keeps only request-local diagnostics and writeback suggestions, with no backend session.
+    // FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp
+    // ::SubShapeBinder::setupCopyOnChange(), "BindCopyOnChange.getValue() == 0 || support.size() != 1"
+    // is the gate for the native temporary-document cache. cad-core keeps the supported subset
+    // request-local: the support graph in this request is recomputed directly and no backend
+    // _tmp_binder, _CopiedObjs, TopoDS, NamedShape or ElementMap cache survives the response.
     const std::string bindMode = enumLabel(object, "BindMode", {"Synchronized", "Frozen", "Detached"}, "Synchronized");
     const std::string copyOnChange = enumLabel(
         object,
@@ -788,8 +793,10 @@ void addLifecycleMetadata(const app::DocumentObject& object,
         {"Disabled", "Enabled", "Mutated"},
         "Disabled"
     );
+    const bool partialLoad = app::readBool(object, "PartialLoad").value_or(false);
     metadata["bind_mode"] = bindMode;
     metadata["bind_copy_on_change"] = copyOnChange;
+    metadata["partial_load"] = partialLoad;
     if (bindMode == "Detached") {
         context.documentObjectUpdates.push_back({
             {"object", object.name},
@@ -802,18 +809,15 @@ void addLifecycleMetadata(const app::DocumentObject& object,
     if (bindMode == "Frozen") {
         metadata["bind_mode_boundary"] = "request_local_frozen_without_persistent_previous_shape";
     }
-    if (copyOnChange == "Enabled" || copyOnChange == "Mutated"
-        || app::readBool(object, "PartialLoad").value_or(false)) {
-        runtime::addDiagnostic(
-            context.diagnostics,
-            "warning",
-            "copy_on_change_full_temporary_document_cache_not_supported",
-            "PartDesign::SubShapeBinder CopyOnChange/PartialLoad full temporary-document cache is outside "
-            "request-local cad-core; current support shape was recomputed and a lifecycle boundary was recorded",
-            object.name,
-            copyOnChange == "Disabled" ? "PartialLoad" : "BindCopyOnChange"
-        );
-        metadata["copy_on_change_boundary"] = "known_gap_full_temporary_document_cache";
+    if (copyOnChange == "Enabled" || copyOnChange == "Mutated") {
+        metadata["copy_on_change_boundary"] = "request_local_support_recompute_no_persistent_temp_doc";
+        metadata["copy_on_change_support_gate"] =
+            supportCount == 1U ? "single_support_native_gate_satisfied" : "native_temp_doc_gate_not_entered";
+        metadata["copy_on_change_lifecycle"] =
+            copyOnChange == "Mutated" ? "mutated_from_request_graph" : "enabled_waiting_for_frontend_mutation";
+    }
+    if (partialLoad) {
+        metadata["partial_load_boundary"] = "request_local_input_no_lazy_backend_session";
     }
 }
 
@@ -945,7 +949,7 @@ void executeSubShapeBinder(const app::DocumentObject& object, runtime::ComputeCo
         {"refine", app::readBool(object, "Refine").value_or(true)},
         {"offset", app::readNumber(object, "Offset").value_or(0.0)},
     };
-    addLifecycleMetadata(object, context, metadata);
+    addLifecycleMetadata(object, context, metadata, selections.size());
     publishBinderShape(object, context, build, std::move(metadata));
 }
 

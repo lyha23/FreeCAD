@@ -169,13 +169,22 @@ class CadCoreC8ShapeBinderTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase
         )
 
         copy = self.run_recompute("subshape-binder-copy-on-change-disabled-enabled-mutated-partialload", "c8m1")
+        self.assertEqual(copy["diagnostics"], [])
         self.assertEqual(
-            [item["code"] for item in copy["diagnostics"]],
-            [
-                "copy_on_change_full_temporary_document_cache_not_supported",
-                "copy_on_change_full_temporary_document_cache_not_supported",
-                "copy_on_change_full_temporary_document_cache_not_supported",
-            ],
+            copy["objects"]["CopyOnChangeEnabled"]["copy_on_change_boundary"],
+            "request_local_support_recompute_no_persistent_temp_doc",
+        )
+        self.assertEqual(
+            copy["objects"]["CopyOnChangeEnabled"]["copy_on_change_lifecycle"],
+            "enabled_waiting_for_frontend_mutation",
+        )
+        self.assertEqual(
+            copy["objects"]["CopyOnChangeMutated"]["copy_on_change_lifecycle"],
+            "mutated_from_request_graph",
+        )
+        self.assertEqual(
+            copy["objects"]["PartialLoadEnabled"]["partial_load_boundary"],
+            "request_local_input_no_lazy_backend_session",
         )
         for object_name in (
             "CopyOnChangeDisabled",
@@ -219,17 +228,17 @@ class CadCoreC8ShapeBinderTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase
         sub_shape_binder = capabilities["part_design"]["sub_shape_binder"]
         self.assertEqual(
             sub_shape_binder["status"],
-            "supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap",
+            "supported_c8m1_expected_backed_request_local",
         )
         self.assertIn("MakeFace from support edges", sub_shape_binder["covered"])
         self.assertIn("BindMode Synchronized/Frozen/Detached request-local subset", sub_shape_binder["covered"])
-        self.assertEqual(sub_shape_binder["remaining_gaps"], ["copy_on_change_full_temporary_document_cache"])
-        copy_on_change = sub_shape_binder["known_gaps"]["copy_on_change_full_temporary_document_cache"]
-        self.assertEqual(copy_on_change["status"], "known_gap_diagnostic")
-        self.assertEqual(copy_on_change["route"], "oracle_blocked")
-        self.assertEqual(copy_on_change["diagnostic"], "copy_on_change_full_temporary_document_cache_not_supported")
-        self.assertIn("delete_condition", copy_on_change)
-        self.assertIn("reopen_condition", copy_on_change)
+        self.assertIn(
+            "BindCopyOnChange Enabled/Mutated request-local support recompute metadata",
+            sub_shape_binder["covered"],
+        )
+        self.assertIn("PartialLoad request-local input boundary", sub_shape_binder["covered"])
+        self.assertEqual(sub_shape_binder["remaining_gaps"], [])
+        self.assertEqual(sub_shape_binder["known_gaps"], {})
 
         topo_history = capabilities["topo_history"]
         self.assertIn("shapebinder", topo_history["maker_history"])

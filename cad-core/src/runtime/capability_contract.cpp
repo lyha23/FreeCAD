@@ -25,7 +25,6 @@ nlohmann::json diagnosticCodeList()
     return nlohmann::json::array({
         "approximation_failed",
         "conflicting_property",
-        "copy_on_change_full_temporary_document_cache_not_supported",
         "cycle_dependency",
         "cycle_rejected_by_property_link",
         "deleted_stable_subname",
@@ -2138,11 +2137,14 @@ nlohmann::json capabilityContractJson()
                   // ShapeBinder.cpp::SubShapeBinder::update(), calls Part::Feature::getTopoShape
                   // with "Transform", then makeElementCompound/Fuse/makeElementWires/
                   // makeElementFace/makeElementOffset2D/makeElementRefine. onChanged() clears
-                  // Support for BindMode "Detached"; setupCopyOnChange() uses temporary docs.
-                  {"status", "supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap"},
+                  // Support for BindMode "Detached"; setupCopyOnChange() gates the native
+                  // temporary-document path to non-Disabled exactly-one-support binders.
+                  // cad-core supports that path as request-local support recompute metadata and
+                  // never stores FreeCAD's _tmp_binder/_CopiedObjs session cache.
+                  {"status", "supported_c8m1_expected_backed_request_local"},
                   {"type_ids", {"PartDesign::SubShapeBinder", "PartDesign::SubShapeBinderPython"}},
-                  {"blocker_ids_closed", {"C8M1-BG-201", "C8M1-BG-301"}},
-                  {"blocker_ids_diagnostic", {"C8M1-BG-401"}},
+                  {"blocker_ids_closed", {"C8M1-BG-201", "C8M1-BG-301", "C8M1-BG-401"}},
+                  {"blocker_ids_diagnostic", nlohmann::json::array()},
                   {"supported",
                    {"whole_support",
                     "selected Face/Edge/Vertex support",
@@ -2156,7 +2158,9 @@ nlohmann::json capabilityContractJson()
                     "profile consumer",
                     "ElementMap/NamedShape propagation",
                     "Body replay",
-                    "BindMode Synchronized/Frozen/Detached request-local subset"}},
+                    "BindMode Synchronized/Frozen/Detached request-local subset",
+                    "BindCopyOnChange Enabled/Mutated request-local support recompute metadata",
+                    "PartialLoad request-local input boundary"}},
                   {"covered",
                    {"whole_support",
                     "selected Face/Edge/Vertex support",
@@ -2170,22 +2174,10 @@ nlohmann::json capabilityContractJson()
                     "profile consumer",
                     "ElementMap/NamedShape propagation",
                     "Body replay",
-                    "BindMode Synchronized/Frozen/Detached request-local subset"}},
-                  {"known_gaps",
-                   {{"copy_on_change_full_temporary_document_cache",
-                     {{"blocker_id", "C8M1-BG-401"},
-                      {"status", "known_gap_diagnostic"},
-                      {"route", "oracle_blocked"},
-                      {"diagnostic", "copy_on_change_full_temporary_document_cache_not_supported"},
-                      {"boundary",
-                       "No backend session, persistent temporary document, cross-request BREP, "
-                       "TopoDS_Shape, NamedShape, ElementMap or cache is stored."},
-                      {"delete_condition",
-                       "Replace only after FreeCADCmd exposes stable request-local CopyOnChange copied-object "
-                       "evidence that does not require a persistent backend session."},
-                      {"reopen_condition",
-                       "Reopen only if product approves a request-local CopyOnChange DTO backed by a stronger "
-                       "native oracle."}}}}},
+                    "BindMode Synchronized/Frozen/Detached request-local subset",
+                    "BindCopyOnChange Enabled/Mutated request-local support recompute metadata",
+                    "PartialLoad request-local input boundary"}},
+                  {"known_gaps", nlohmann::json::object()},
                   {"fixtures",
                    {"c8m1/subshape-binder-basic-support-whole-face-edge-list",
                     "c8m1/subshape-binder-makeface-offset-fuse-refine",
@@ -2201,9 +2193,8 @@ nlohmann::json capabilityContractJson()
                     "invalid_subshape",
                     "execution_failed",
                     "refine_failed",
-                    "cycle_rejected_by_property_link",
-                    "copy_on_change_full_temporary_document_cache_not_supported"}},
-                  {"remaining_gaps", {"copy_on_change_full_temporary_document_cache"}},
+                    "cycle_rejected_by_property_link"}},
+                  {"remaining_gaps", nlohmann::json::array()},
               }},
              {"revolution_groove",
               {

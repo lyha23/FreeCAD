@@ -4,7 +4,7 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 
 本包不是 C++ implementation 包。它只重新打开 CopyOnChange 的证据链：先采集更强 FreeCAD native copied graph artifact，再裁决哪些内容能进入前端持久化 DocumentObject graph / `documentObjectUpdates` 产品契约，最后才判断 current `cad-core` retained diagnostic 是否形成真实 mismatch。
 
-S6 已发布最终状态：S2=`native_oracle_blocked_retained`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`not_comparable` / `no_current_mismatch_retained_diagnostic`，S5=`oracle_blocked_retained` + `no_code_retained_diagnostic`。C12-M10 不授权 implementation package，不创建后续实现包，不删除 known gap；`part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`、`known_gap_diagnostic` / `oracle_blocked` 和 `copy_on_change_full_temporary_document_cache_not_supported` 继续保留。
+S6 的历史发布状态是：S2=`native_oracle_blocked_retained`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`not_comparable` / `no_current_mismatch_retained_diagnostic`，S5=`oracle_blocked_retained` + `no_code_retained_diagnostic`。随后用户明确要求解决代码问题，本包追加 post-S6 implementation：`cad-core` 已支持 SubShapeBinder `BindCopyOnChange=Enabled/Mutated` 与 `PartialLoad=True` 的 request-local support recompute subset，不再发布 `copy_on_change_full_temporary_document_cache_not_supported` diagnostic，capability 中 `part_design.sub_shape_binder.remaining_gaps=[]`。FreeCAD 原生 `_tmp_binder` / `_CopiedObjs` 跨请求 session cache 仍不进入 CAD Core 持久状态。
 
 ## 当前基线
 
@@ -13,9 +13,9 @@ S6 已发布最终状态：S2=`native_oracle_blocked_retained`，S3=`dto_not_rev
 - 创建时 `git -c core.quotepath=false status --short -uall` 无输出，worktree clean。
 - C12-M1..M9 工作步骤队列均只输出 markdown 表头。
 - live capability snapshot 保存到 `/tmp/c12m10-capabilities.json`。
-- `part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`。
-- `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
-- known gap 继续是 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- post-S6 implementation 后，`part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local`。
+- post-S6 implementation 后，`part_design.sub_shape_binder.remaining_gaps=[]`，`known_gaps={}`。
+- `copy_on_change_full_temporary_document_cache_not_supported` diagnostic 已从当前 `cad-core` capability 和 SubShapeBinder focused behavior 中删除。
 - C12-M8 最终事实继续有效：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`。
 - C12-M9 最终事实继续有效：`no_code_backlog_gate`，没有 admitted mismatch-confirmed row，没有 implementation source / landing / validation surface。
 
