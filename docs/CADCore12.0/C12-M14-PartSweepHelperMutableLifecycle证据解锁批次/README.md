@@ -22,7 +22,8 @@ C12-M14 承接 C12-M13 的 `partial_implementation_with_named_followups` 出口�
 - S0 dirty boundary：docs=`<none>`；`cad-core/src`=`<none>`；tests=`<none>`；fixtures=`<none>`；other=`<none>`。非本包 dirty 未发现，本包后续不覆盖或回退非本包改动。
 - S0 队列冻结：C12-M13 `工作步骤细分` 队列为空；C12-M14 队列从 S0 开始，S0 关闭后下一步进入 S1 source 与 current helper landing 复核。
 - S1 source/current landing 复核：`HEAD=055237df6c`（`055237df6c 文档：关闭 C12-M14 S0 基线冻结`），起点 worktree clean。已复核 FreeCAD helper binding、plain `Sweep::execute()` no-mix 边界、`part_sweep.cpp` current response 字段、`topo_shape_expansion.cpp` 内部 `Simulate(2)` 用途和 C12-M13 focused subset。
-- S2 dedicated native helper probe schema 与采集：`HEAD=0251a16d10`（`0251a16d10 文档：关闭 C12-M14 S1 source landing 复核`），起点 worktree clean。已新增 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-schema.md`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe.py`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json` 与 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-freecadcmd-version.txt`。FreeCAD baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`；`remove/firstShape/lastShape/generated/simulate` 均有 stable payload 或 stable diagnostic，组合 `remove/readd/simulate/build` 记录 `NCollection_Sequence::ChangeValue` 为 `native_instability_blocker`。下一步进入 S3 product contract 与 current mismatch 准入裁决，S4 仍未解锁。
+- S2 dedicated native helper probe schema 与采集：`HEAD=0251a16d10`（`0251a16d10 文档：关闭 C12-M14 S1 source landing 复核`），起点 worktree clean。已新增 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-schema.md`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe.py`、`docs/temp/7-4-12-15-c12m14-helper-lifecycle-native-probe-output.json` 与 `docs/temp/7-4-12-15-c12m14-helper-lifecycle-freecadcmd-version.txt`。FreeCAD baseline 为 `1.2.0 revision 20260519` / OCCT `7.8.1`；`remove/firstShape/lastShape/generated/simulate` 均有 stable payload 或 stable diagnostic，组合 `remove/readd/simulate/build` 记录 `NCollection_Sequence::ChangeValue` 为 `native_instability_blocker`。
+- S3 product contract 与 current mismatch 准入裁决：`HEAD=fa3fde076d`（`fa3fde076d 文档：关闭 C12-M14 S2 helper native probe`），起点 worktree clean。S2 artifact + source/current audit 确认 `ORACLE-101..104` 是 `implementation_authorized`：native stable expected/diagnostic 成立，当前 `part_sweep.cpp` 缺 helper lifecycle response 字段。`ORACLE-105` 是 `product_contract_only`：native `NCollection_Sequence::ChangeValue` 不稳定不能称为 FreeCAD parity，只能按本包 `7-4-13-26-C12-M14-helper-lifecycle-request-local产品契约.md` 作为 CAD Core request-local product contract 推进。S4 可继续实现授权/契约行，但仍不得重开 PartDesign Pipe 或 plain `Part::Sweep` wrapper。
 - C12-M13 已发布 `partial_implementation_with_named_followups`：S3/S4 已完成，S5 保持 `blocked_partial_helper_oracle`。
 - C12-M13 `ORACLE-301` 已证明 helper collected subset `add/isReady/getStatus/build/shape/makeSolid` current-supported；`remove/firstShape/lastShape/generated/simulate` 缺 checked-in native expected 或 approved product-contract artifact。
 - C12-M13 S5 的临时 FreeCADCmd 调查只能证明单独调用可观察，组合 `remove/readd/simulate/build` 会触发 `NCollection_Sequence::ChangeValue`，不能作为稳定 expected。
@@ -62,6 +63,7 @@ C12-M14 承接 C12-M13 的 `partial_implementation_with_named_followups` 出口�
 - 方案：`7-4-11-54-C12-M14-PartSweepHelperMutableLifecycle证据解锁批次方案.md`
 - 工作步骤：`工作步骤细分/`
 - 矩阵：`矩阵/`
+- S3 request-local product contract：`7-4-13-26-C12-M14-helper-lifecycle-request-local产品契约.md`
 
 ## 预期出口
 
