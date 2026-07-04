@@ -43,12 +43,14 @@ S2 关闭条件是每个实现子项都有 native/current 对照，或有明确 
 S2 已关闭：
 
 - `profile-point-to-wire-section` 与 `last-section-vertex` 已有 FreeCADCmd expected 和 current-focused green，不进入 S3 implementation。
-- `invalid-middle-section-vertex-diagnostic` 保留 S3 red evidence：two-vertex diagnostic current-supported，unequal-inner-wire diagnostic 与 FreeCADCmd catch-all 输出不一致。
+- `invalid-middle-section-vertex-diagnostic` 的 S3 red evidence 已关闭：two-vertex diagnostic current-supported，unequal-inner-wire diagnostic 已对齐 FreeCADCmd catch-all 输出。
 - AdditivePipe / SubtractivePipe lifecycle 已有 S4 red evidence：FreeCAD feature `Shape` 为 post-boolean body，current feature 输出仍为 pre-boolean / removed tool；Body final shape green 不能替代 `AddSubShape` / `rawShape` parity。
 - Part Sweep helper 只采到 `add/isReady/getStatus/build/shape/makeSolid` subset，`remove/firstShape/lastShape/generated/simulate` 仍阻塞 S5。
 - ORACLE-001 未收到用户 request/result，继续 `waiting_user_repro_non_blocking`。
 
 ### S3 multisection vertex 细节迁移
+
+S3 已完成：`cad-core/src/part/topo_shape_expansion.cpp::preparePipeShellProfileLanes()` 仅在 shared PipeShell lane 准备层对齐 FreeCAD `Pipe::execute()` 的 unequal-inner-wire diagnostic boundary；后续 section wire 数多于 base lane 时返回 `A fatal error occurred when making the pipe`，不改 AddSubShape/rawShape 生命周期、不处理 Part Sweep helper、不引入 fixture-name 分支。
 
 允许修改 `cad-core/src/part_design/feature_pipe.cpp` 与 `cad-core/src/part/topo_shape_expansion.cpp`，目标是对齐 FreeCAD：
 

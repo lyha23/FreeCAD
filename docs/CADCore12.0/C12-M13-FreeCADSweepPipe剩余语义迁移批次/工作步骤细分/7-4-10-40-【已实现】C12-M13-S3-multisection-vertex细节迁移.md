@@ -1,4 +1,4 @@
-# C12-M13 S3 multisection vertex 细节迁移
+# 【已实现】C12-M13 S3 multisection vertex 细节迁移
 
 ## 目标
 
@@ -24,6 +24,12 @@
 - S2 中 multisection vertex 相关 mismatch red-to-green。
 - 现有 `c5m3`、`c51m4`、`c12m12` Pipe focused tests 不回归。
 - 没有新增 fixture 特判或按 fixture 名称分支。
+
+## 关闭记录
+
+- `cad-core/src/part/topo_shape_expansion.cpp::preparePipeShellProfileLanes()` 已按 FreeCAD `FeaturePipe.cpp::Pipe::execute()` 的 `addWiresToWireSections` / outer `catch (...)` 路径对齐 unequal-inner-wire diagnostic：后续 multisection section 比 base lane 多 wire 时返回 `A fatal error occurred when making the pipe`。
+- `cad-core/fixtures/c12m13/expected/partdesign-pipe-vertex-wire-diagnostics.freecad.json` 已移除 `known_gap`，记录 S3 关闭证据；P7 focused test 断言 ORACLE-103 诊断与 FreeCADCmd evidence 一致。
+- `ORACLE-101/102` success paths 与继承的 `c5m3`、`c51m4`、`c12m12` Pipe regression 已通过 focused tests；未修改 AddSubShape/rawShape lifecycle、Part Sweep helper 或 fixture-name 分支。
 
 ## 非目标
 

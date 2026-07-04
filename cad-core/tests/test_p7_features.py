@@ -2044,13 +2044,14 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             diagnostics["AdditivePipeUnequalInnerWires"]["message"],
-            "Pipe: Sections need to have the same amount of inner wires",
+            expected["diagnostic_messages"]["AdditivePipeUnequalInnerWires"],
         )
         self.assertEqual(
-            expected["known_gap"]["freecadcmd_evidence"]["AdditivePipeUnequalInnerWires"],
+            diagnostics["AdditivePipeUnequalInnerWires"]["message"],
             "A fatal error occurred when making the pipe",
         )
-        self.assertIn("C12M13-BLOCKER-401", expected["known_gap"]["backendGap"]["ids"])
+        self.assertNotIn("known_gap", expected)
+        self.assertEqual(expected["s3_resolution"]["closed_blocker"], "C12M13-BLOCKER-401")
 
     def test_c12m13_partdesign_pipe_lifecycle_expected_marks_s4_shape_gap(self) -> None:
         additive = self.run_recompute("partdesign-pipe-additive-lifecycle", "c12m13")

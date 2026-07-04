@@ -1256,8 +1256,20 @@ std::optional<std::vector<std::vector<TopoDS_Shape>>> preparePipeShellProfileLan
             }
             continue;
         }
-        if (sectionElements.size() != lanes.size()) {
-            error = "Pipe: Sections need to have the same amount of inner wires";
+        if (sectionElements.size() > lanes.size()) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+            // FeaturePipe.cpp::Pipe::execute(), addWiresToWireSections throws
+            // "Pipe: Sections need to have the same amount of inner wires (...)" and the
+            // outer catch publishes "A fatal error occurred when making the pipe".
+            error = "A fatal error occurred when making the pipe";
+            return std::nullopt;
+        }
+        if (sectionElements.size() < lanes.size()) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+            // FeaturePipe.cpp::Pipe::execute(), after addWiresToWireSections returns fewer
+            // wires, reports "Multisections need to have the same amount of inner wires as
+            // the base section".
+            error = "Multisections need to have the same amount of inner wires as the base section";
             return std::nullopt;
         }
         for (std::size_t laneIndex = 0; laneIndex < lanes.size(); ++laneIndex) {

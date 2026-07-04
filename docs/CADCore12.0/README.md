@@ -30,6 +30,8 @@ C12-M7 已完成 PartDesign Groove UpTo 产品契约准入批次并发布 `produ
 
 用户随后要求继续实现完整 FreeCAD Sweep / Pipe 剩余项，并把方案写入 `docs/CADCore12.0`。C12-M13 承接 C12-M12 `partial_implementation_multiwire_pipe_sewing` 出口，专门规划后续 implementation 批次：multisection vertex 细节、`Pipe::execute()` 的 `rawShape` / `AddSubShape` / Boolean 生命周期、Part Workbench mutable helper 生命周期，以及 ORACLE-001 用户失败复现分流。C12-M13 不重开 C12-M12 已 current-supported 的 fixed/round selected-spine、Part Sweep wrapper regression 或 multi-wire cap/sewing 子路径。
 
+C12-M13 S3 已关闭：PartDesign Pipe unequal-inner-wire diagnostic 已按 FreeCAD `Pipe::execute()` outer `catch (...)` 的 `A fatal error occurred when making the pipe` 对齐，`ORACLE-103` expected 移除 `known_gap`；S4 仍负责 AddSubShape/rawShape/Boolean lifecycle red evidence，S5 对未采证 Part Sweep helper methods 保持 blocked。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
