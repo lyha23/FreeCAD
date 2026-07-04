@@ -22,6 +22,18 @@ C12-M10 不直接落 C++。它只处理当前唯一 live `remaining_gaps`：`par
 - known gap 仍是 `known_gap_diagnostic` / `oracle_blocked` / `copy_on_change_full_temporary_document_cache_not_supported`。
 - C12-M8 / C12-M9 未授权 implementation package。
 
+## S0 live 冻结
+
+- S0 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=75f7c231e2`（`75f7c231e2 文档：关闭 C12-M10 工作步骤总入口`），起点 worktree clean。
+- S0 确认 C12-M1..M9 队列均只输出 markdown 表头；C12-M10 队列关闭 S0 后应从 S1 继续。
+- live capability snapshot 保存到 `/tmp/c12m10-s0-capabilities.json`。
+- `part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`。
+- `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`。
+- known gap 继续是 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- delete condition：只有 FreeCADCmd 暴露不依赖 persistent backend session 的 stable request-local CopyOnChange copied-object evidence 后，才能替换该 diagnostic。
+- reopen condition：只有产品批准由更强 native oracle 支撑的 request-local CopyOnChange DTO 后，才重新打开实现判断。
+- C12-M8 retained diagnostic 与 C12-M9 `no_code_backlog_gate` 继续作为 S1-S5 的输入约束；S0 不运行 FreeCADCmd，不授权 C++。
+
 ## 证明链条
 
 ```text
@@ -36,7 +48,8 @@ live capability baseline
 
 ## 当前执行状态
 
-- 工作步骤总入口已关闭：已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；后续队列从 S0 继续。
+- 工作步骤总入口已关闭：已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；入口关闭时队列从 S0 继续，当前 S0 已关闭。
+- S0 live 基线与继承口径冻结已关闭：已确认 HEAD、dirty boundary、C12-M1..M9 队列、SubShapeBinder capability snapshot、C12-M8 retained diagnostic 和 C12-M9 no-code backlog；后续队列从 S1 继续。
 
 ## 产物索引
 
@@ -45,7 +58,7 @@ live capability baseline
 | README | `README.md` | 当前定位、口径和入口。 |
 | 方案 | `7-1-02-48-C12-M10-SubShapeBinderCopyOnChangeCopiedGraphOracle产品契约解锁批次方案.md` | 批次规则、证据链和验收分层。 |
 | 工作步骤总入口 | `工作步骤细分/7-1-02-49-【已实现】C12-M10工作步骤总入口.md` | goal 队列索引，已关闭。 |
-| S0 | `工作步骤细分/7-1-02-50-C12-M10-S0-live基线与继承口径冻结.md` | 冻结 live baseline 和 C12-M8/C12-M9 继承口径。 |
+| S0 | `工作步骤细分/7-1-02-50-【已实现】C12-M10-S0-live基线与继承口径冻结.md` | 冻结 live baseline 和 C12-M8/C12-M9 继承口径，已关闭。 |
 | S1 | `工作步骤细分/7-1-02-51-C12-M10-S1-source与native-oracle-schema复核.md` | 复核 source/current evidence 并固定 probe schema。 |
 | S2 | `工作步骤细分/7-1-02-52-C12-M10-S2-native-copied-graph-oracle采集.md` | 采集 native copied graph artifact 并做 evidence gate。 |
 | S3 | `工作步骤细分/7-1-02-53-C12-M10-S3-DTO与产品契约边界裁决.md` | 裁决 DTO / product contract 字段。 |

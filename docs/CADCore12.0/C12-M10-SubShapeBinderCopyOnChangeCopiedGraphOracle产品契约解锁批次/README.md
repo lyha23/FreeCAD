@@ -19,7 +19,22 @@ C12-M10 承接 C12-M9 的 `no_code_backlog_gate`，专门为当前唯一 live `r
 
 ## 入口关闭
 
-- 工作步骤总入口已关闭：`工作步骤细分/7-1-02-49-【已实现】C12-M10工作步骤总入口.md`。已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；后续队列从 S0 继续。
+- 工作步骤总入口已关闭：`工作步骤细分/7-1-02-49-【已实现】C12-M10工作步骤总入口.md`。已确认包结构、S0-S6 队列顺序、矩阵入口和 TSV 字段数；入口关闭时队列从 S0 继续，当前 S0 状态见下节。
+
+## S0 live 冻结
+
+- S0 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=75f7c231e2`（`75f7c231e2 文档：关闭 C12-M10 工作步骤总入口`）。
+- S0 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 worktree clean。
+- S0 执行前 C12-M10 队列第一项为 `7-1-02-50-C12-M10-S0-live基线与继承口径冻结.md`，后续为 S1-S6；S0 关闭后队列应从 S1 继续。
+- C12-M1..M9 `工作步骤细分` 队列均只输出 markdown 表头，继承口径可作为 closed release gate 输入。
+- live capability snapshot 保存到 `/tmp/c12m10-s0-capabilities.json`；`part_design.sub_shape_binder.status=supported_c8m1_expected_backed_request_local_with_copy_on_change_known_gap`。
+- `part_design.sub_shape_binder.remaining_gaps=["copy_on_change_full_temporary_document_cache"]`，仍是唯一需要 C12-M10 处理的 CopyOnChange live gap。
+- known gap 继续是 `status=known_gap_diagnostic`、`route=oracle_blocked`、`diagnostic=copy_on_change_full_temporary_document_cache_not_supported`。
+- delete condition 继续继承 capability：只有 FreeCADCmd 暴露不依赖 persistent backend session 的 stable request-local CopyOnChange copied-object evidence 后，才能替换该 diagnostic。
+- reopen condition 继续继承 capability：只有产品批准由更强 native oracle 支撑的 request-local CopyOnChange DTO 后，才重新打开实现判断。
+- C12-M8 最终事实继续有效：S2=`native_evidence_retained_blocker`，S3=`dto_not_reviewed_due_to_native_blocker`，S4=`no_current_mismatch_retained_diagnostic`，S5=`no_code_retained_diagnostic`。
+- C12-M9 最终事实继续有效：`no_code_backlog_gate`，没有 admitted mismatch-confirmed row，没有 implementation source / landing / validation surface。
+- S0 不运行 FreeCADCmd，不做 source schema、native oracle、DTO approval、current mismatch 或 implementation authorization，不修改 production code、fixtures、expected、tests、adapters 或 capability source。
 
 ## 解锁目标
 
@@ -45,7 +60,7 @@ C12-M10 只有在以下三项同时成立时，才允许后续 implementation pa
 ## 工作步骤
 
 - 入口：确认 C12-M10 包结构、矩阵和队列入口。
-- S0：live 基线、C12-M1..M9 关闭口径、capability snapshot 与 C12-M8/C12-M9 继承口径冻结。
+- S0：live 基线、C12-M1..M9 关闭口径、capability snapshot 与 C12-M8/C12-M9 继承口径冻结（已完成，下一步从 S1 继续）。
 - S1：FreeCAD source、current diagnostic、old artifacts 和 native probe schema 复核。
 - S2：native copied graph oracle collection / evidence gate。
 - S3：request-local DTO / product contract boundary 裁决。
