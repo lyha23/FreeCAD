@@ -2,7 +2,7 @@
 
 C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 C++ implementation 目标，而是重新从当前 `cad-core` capability、C12-M1..M17 release gate、`narrowed_gaps`、非原生产品扩展边界和当前测试面中筛选是否存在新的可实现项。
 
-当前 live 结论是：C12-M17 队列已关闭，当前 capability 中没有非空 `remaining_gaps` 或 `known_gaps`。仍存在的 `narrowed_gaps` 是历史 native-hidden、helper-blocked、oracle-blocked、product-contract non-parity 或 current-covered 记录；S2 三闸门复审未发现 `mismatch_confirmed` 行，不能直接升级为实现包。C12-M18 的任务是把这个事实结构化冻结，并定义下一轮可开包的准入闸门。
+当前 live 结论是：C12-M17 队列已关闭，当前 capability 中没有非空 `remaining_gaps` 或 `known_gaps`。仍存在的 `narrowed_gaps` 是历史 native-hidden、helper-blocked、oracle-blocked、product-contract non-parity 或 current-covered 记录；S2 三闸门复审未发现 `mismatch_confirmed` 行，不能直接升级为实现包。S3 已确认 PartDesign 几何共线 BSpline / 非 Line 轴引用继续作为 product extension 保留，C12-M11 / C12-M15 / C12-M16 sketch token 后端状态 current-supported，剩余消费问题只作为 `my-chili3d` frontend sync candidate。
 
 ## 当前基线
 
@@ -35,6 +35,8 @@ C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 
 - S2 三闸门复审：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=60da049164`（`60da049164 文档：关闭 C12-M18 S1 capability 抽取`），起点 worktree clean。
 - S2 已对 Groove、Sweep、Filling、GeomPlate、Loft、ProjectOnSurface、Assembly、Sketch/topo 和 SubShapeBinder family 写明 expected/contract、request-local boundary 与 current comparison status。
 - S2 结论：没有 `current_comparison=mismatch_confirmed` 行。Groove 保留 C12-M7 product diagnostic non-parity；Sweep/Filling/GeomPlate/Loft/ProjectOnSurface 保留 helper-blocked、native-hidden、oracle-blocked、product-contract non-parity、non-goal 或 current-covered 分类；Assembly、Sketch/topo、SubShapeBinder 为 request-local current-supported 或外部/非目标边界，均不进入 S4 implementation authorization。
+- S3 产品扩展与 frontend sync 分流：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=bcd6569a6c`（`bcd6569a6c 文档：关闭 C12-M18 S2 三闸门复审`），起点 worktree clean。
+- S3 结论：`docs/capability/7-5-00-14-cad-web-background非FreeCAD原生语义边界.md` 当前只把 PartDesign 几何共线 BSpline / 非 Line 轴引用列为保留的 current non-native product extension；SubtractivePipe product PipeLaw 主 `Shape` lifecycle 已在 C12-M17 后列为已整改。C12-M11 open wire raw `EdgeN`、C12-M15 stable geometry id ledger、C12-M16 split fragment ledger 均为 backend current-supported；若产品侧仍有 token / writeback 消费问题，只记录为 `my-chili3d` frontend package candidate，不创建 FreeCAD/cad-core C++ work。
 
 ## 批次目标
 
@@ -70,7 +72,7 @@ C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 
 - S0：已关闭；冻结 live HEAD、dirty boundary、C12-M17 队列闭合状态和 C12-M17 后的 capability 空 gap 事实。
 - S1：已关闭；抽取 current `remaining_gaps`、`known_gaps`、`narrowed_gaps` path/key、非原生产品扩展和 publication authority，只建立输入清单。
 - S2：已关闭；对历史 `narrowed_gaps` family 与 Assembly / Sketch-topo / SubShapeBinder 做 stable expected / product contract、request-local boundary、current mismatch 三闸门复审，未产生 mismatch-confirmed 行。
-- S3：裁决 product extension 与 frontend consumer sync：保留 axis extension，分离 my-chili3d consumer work，不把前端缺口误写成后端 C++ gap。
+- S3：已关闭；保留 axis extension，分离 my-chili3d consumer work，不把前端缺口误写成后端 C++ gap。
 - S4：授权下一包或 no-code gate：若存在 mismatch-confirmed 行，写清最小完整语义批次；否则输出 oracle/product-contract/frontend/no-code 分流。
 - S5：发布闸门，更新 root README、矩阵和队列状态。
 
