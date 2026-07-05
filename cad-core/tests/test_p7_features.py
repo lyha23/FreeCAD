@@ -2330,7 +2330,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(pipe["status"], "ok")
                 self.assertEqual(pipe["feature"], "partdesign_pipe")
                 self.assertEqual(pipe["add_sub"], add_sub)
-                self.assertEqual(pipe["shape"], "occt_solid")
+                self.assertEqual(pipe["shape"], "occt_solid" if add_sub == "add" else "occt_compound")
                 self.assertEqual(pipe["transformation"], "Interpolation")
                 self.assertEqual(pipe["pipe_law"]["kind"], "Interpolation")
                 self.assertEqual(pipe["pipe_law"]["source"], "cad_core_product_contract")
@@ -2345,6 +2345,23 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertEqual(body["tip"], object_name)
                     self.assertEqual(body["replayed_subtractive_features"], [object_name])
                 self.assert_object_matches_expected(result, "c6m3", fixture)
+                if add_sub == "sub":
+                    body = result["objects"]["Body"]
+                    self.assertEqual(pipe["shape"], body["shape"])
+                    self.assertEqual(pipe["bbox"], body["bbox"])
+                    self.assertAlmostEqual(pipe["volume"], body["volume"])
+                    self.assertEqual(
+                        set(result["subshapes"][object_name]),
+                        set(result["subshapes"]["Body"]),
+                    )
+                    self.assertEqual(
+                        result["mesh"][object_name]["summary"]["vertex_count"],
+                        result["mesh"]["Body"]["summary"]["vertex_count"],
+                    )
+                    self.assertEqual(
+                        result["mesh"][object_name]["summary"]["triangle_count"],
+                        result["mesh"]["Body"]["summary"]["triangle_count"],
+                    )
 
     def test_c6m3_partdesign_pipe_interpolation_law_samples_diagnostics_are_locatable(self) -> None:
         cases = {

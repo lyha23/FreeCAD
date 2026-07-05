@@ -1360,6 +1360,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             pipe["supported"],
         )
         self.assertIn(
+            "SubtractivePipe product PipeLaw main Shape lifecycle: FreeCAD-compatible post-cut feature Shape",
+            pipe["supported"],
+        )
+        self.assertIn(
             "CAD Core product extension: SpineTangent selected EdgeN continuous ledger",
             pipe["supported"],
         )

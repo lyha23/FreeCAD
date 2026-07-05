@@ -47,14 +47,14 @@ FreeCAD SketchObject source authority
 - S1 FreeCAD 与 `cad-core` source 复核已关闭：`C12M11-BLOCKER-101` closed，`C12M11-VAL-101` passed；已记录 closed internal profile 与 open wire profile 的 source 差异、`edgeSegments` / `subshapes` 同一 topology source 要求，以及 FreeCAD-grade geometry id stability 仅作为 S3/S4 follow-up 候选。
 - S2 current response contract 复核已关闭：`C12M11-BLOCKER-201` closed，`C12M11-VAL-201..203` passed。closed `p5/sketch-internal-face` 当前 response 发布 `Sketch:InternalEdge1..4` mesh `edgeSegments`、同名 edge `subshapes` 和 request-local `stableSubname=Edge1..4`；open `p5/sketch-open-wire-internal-empty` 单独记录为 raw `Sketch:Edge1..3` subshapes 可见且 `mesh=null`。
 - S3 contract gap 分流裁决已关闭：`C12M11-BLOCKER-301` closed，`C12M11-VAL-301` passed。closed internal edge backend response 为 `current_supported`，alignment 为 `mismatch_absent`，request-local stableSubname 已 passed；FreeCAD-grade geometry id stability、前端 consumer sync 和 open wire mesh/null 产品契约分别进入 S4 后续输入，不打开 closed profile backend C++ implementation。
-- S4 后续最小语义批次已关闭：`C12M11-BLOCKER-401` closed，`C12M11-VAL-401` passed。后续最小完整语义批次定义为 `my-chili3d-C12M11-SketchEdgeTokenConsumerSync批次`、`C12-M11-StableGeometryIdMappedNameLedger设计批次` 和 `C12-M11-OpenWireRawEdgeMeshProductContract裁决批次`；S5 只发布 current-supported backend contract 与三条 follow-up 分流，不重开 closed profile backend C++ implementation。
+- S4 后续最小语义批次已关闭：`C12M11-BLOCKER-401` closed，`C12M11-VAL-401` passed。历史后续最小完整语义批次定义为 `my-chili3d-C12M11-SketchEdgeTokenConsumerSync批次`、`C12-M11-StableGeometryIdMappedNameLedger设计批次` 和 `C12-M11-OpenWireRawEdgeMeshProductContract裁决批次`；S5 只发布 current-supported backend contract 与三条 follow-up 分流，不重开 closed profile backend C++ implementation。2026-07-05 live audit 已确认 open-wire raw `EdgeN` mesh 当前支持，因此 open-wire 裁决包不再作为默认下一步。
 - S5 发布闸门已关闭：`C12M11-BLOCKER-501` closed，`C12M11-VAL-501` passed。Final decision 为 `contract_current_supported/current_supported`：S2 三条 focused tests 已通过，edgeSegments/subshapes alignment 为 `mismatch_absent`，request-local stableSubname 已 passed。C12-M11 不授权 closed profile backend C++ implementation，不修改 C12-M10 pending 队列。
 
 ## 后续分流
 
 1. `my-chili3d-C12M11-SketchEdgeTokenConsumerSync批次`：前端 response consume / selection persistence / sketch commit writeback / pick token storage；禁止 prefix guessing。
 2. `C12-M11-StableGeometryIdMappedNameLedger设计批次`：FreeCAD-style geometry id / mapped-name ledger 设计；先设计账本再升级 stableSubname。
-3. `C12-M11-OpenWireRawEdgeMeshProductContract裁决批次`：open sketch raw `EdgeN` mesh `edgeSegments` 产品契约；独立于 closed `InternalEdgeN`。
+3. `C12-M11-OpenWireRawEdgeMeshProductContract裁决批次`：历史分流项，2026-07-05 live audit 已证明当前 `cad-core` 对 open sketch raw `EdgeN` mesh `edgeSegments` / `subshapes[]` / identity 字段 current-supported；不再默认创建该包。
 
 ## 执行规则
 

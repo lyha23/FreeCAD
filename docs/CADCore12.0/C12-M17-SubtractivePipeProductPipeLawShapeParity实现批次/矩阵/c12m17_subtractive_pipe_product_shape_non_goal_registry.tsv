@@ -1,0 +1,8 @@
+id	non_goal	reason	owner_step	status	reopen_condition
+C12M17-NONGOAL-001	Disable geometrically linear BSpline/non-Line PartDesign axes	User explicitly wants this product extension retained; S1 confirmed allowGeometricallyLinearCurve=true current landing remains a CAD Core product extension	All	retained_s5_documented	Reopen only if user asks for strict FreeCAD axis parity.
+C12M17-NONGOAL-002	Delete CAD Core product PipeLaw support	The selected fix is main Shape lifecycle, not removing LawSamples/Linear/S-shape extensions	All	retained_s5_capability_guarded	Reopen only if product PipeLaw itself is rejected.
+C12M17-NONGOAL-003	Change AddSubShape into final feature shape	FreeCAD uses AddSubShape as additive/subtractive tool cache	S1/S3	retained_s5_source_guarded	Never reopen for this package; use separate source-backed design if downstream cache semantics change.
+C12M17-NONGOAL-004	Reopen Part Sweep helper lifecycle	C12-M14 owns HelperLifecycle and ORACLE-105 boundaries	All	retained_s5_out_of_scope	Open a C12-M14 follow-up only with stable native expected or approved product-contract change.
+C12M17-NONGOAL-005	Add frontend or my-chili3d consumer work	This package is cad-core backend/docs only	All	retained_s5_out_of_scope	Switch repos and open frontend package if user asks.
+C12M17-NONGOAL-006	Introduce persistent backend document/session/cache	CAD Core remains request-local/stateless	All	retained_s5_architecture_guarded	Never reopen unless root architecture changes.
+C12M17-NONGOAL-007	Fix by fixture name, bbox, volume constant, or output order	Repo rules require FreeCAD source-backed semantic path	S2/S3	retained_s5_semantic_guarded	Never reopen without explicit temporary fallback documentation and deletion condition.

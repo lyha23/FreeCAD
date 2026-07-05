@@ -88,7 +88,7 @@ S2 只发布产品契约，不裁决 current coverage。S3 已逐行比较上述
 - 不重开 C12-M11 closed internal profile response contract。
 - 不把 request-local `EdgeN` 顺序说成 FreeCAD-grade stable id。
 - 不修改 `my-chili3d` 前端消费；前端同步属于 `my-chili3d-C12M11-SketchEdgeTokenConsumerSync批次`。
-- 不裁决 open wire raw edge mesh 产品契约；它属于 `C12-M11-OpenWireRawEdgeMeshProductContract裁决批次`。
+- 本包执行时不裁决 open wire raw edge mesh 产品契约；2026-07-05 live audit 已确认该契约在当前 `cad-core` 中 current-supported，不再作为后续默认包。
 - 不引入 persistent backend sketch session、TopoDS cache、NamedShape cache、ElementMap cache 或完整 BREP cache。
 - 不用 mesh triangle / polyline 顺序倒推 topology identity。
 

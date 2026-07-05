@@ -19,7 +19,7 @@ C12-M16 承接 C12-M15 的唯一代码缺口：`C12M15-CONTRACT-009 split_fragme
 
 - Final status：`implemented_current_supported`。
 - 当前支持：source one-to-many split fragment request-local ledger，`g<ID>:splitN` 在 `mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 与 reference resolution 中共享同一账本。
-- 保留边界：不声称 persistent FreeCAD session parity，不保存 backend sketch session / TopoDS / NamedShape / ElementMap / BREP / mesh 跨请求状态，不处理 my-chili3d frontend consumer sync 或 C12-M11 open wire mesh 产品契约。
+- 保留边界：不声称 persistent FreeCAD session parity，不保存 backend sketch session / TopoDS / NamedShape / ElementMap / BREP / mesh 跨请求状态，不处理 my-chili3d frontend consumer sync。C12-M16 执行时未处理 C12-M11 open wire mesh 产品契约；2026-07-05 live audit 已确认该契约当前由 `cad-core` 支持。
 - 重开条件：未来 checked-in focused regression 证明 `g<ID>:splitN` 不能解析到当前 fragment、response/reference/adapter 不再共享同一 fragment ledger、`split_fragment_missing` / `split_requires_reselect` 诊断丢失，或新增需求要求跨请求 FreeCAD session parity。
 
 ## 问题定义
@@ -68,7 +68,7 @@ C12-M16 要补的是这层证据：
 - 不重开 C12-M15 已 current-supported 的普通 `g<ID>` raw edge identity。
 - 不用 mesh polyline / bbox / output order 猜 fragment ownership。
 - 不实现 my-chili3d frontend consumer sync。
-- 不裁决 C12-M11 open wire raw edge mesh 产品契约。
+- 本包不裁决 C12-M11 open wire raw edge mesh 产品契约；该历史 follow-up 已在 2026-07-05 live audit 中确认为 current-supported。
 - 不扩展到完整 Sketcher solver constraint identity。
 - 不引入 persistent backend document/session/cache。
 

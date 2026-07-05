@@ -4,37 +4,40 @@
 
 本文记录 `3c5ccff1fe2b1dea8a143a15755069ee33151913` 之后，`/Users/li/Chili3DProject/FreeCAD/cad-core` 迁移到 `/Users/li/Chili3DProject/cad-web-background/cad-core` 后仍保留的差异中，不能声明为 FreeCAD 原生语义的部分。
 
-这些差异可以作为 `cad-web-background` 的产品契约或前端体验修复存在，但能力声明、fixture expected、roadmap 文档和后续迁移任务中必须标成 `cad_core_product_contract` / `non_native_parity`，不能写成 FreeCAD native parity。
+当前仍保留的差异可以作为 `cad-web-background` 的产品契约或前端体验修复存在，但能力声明、fixture expected、roadmap 文档和后续迁移任务中必须标成 `cad_core_product_contract` / `non_native_parity`，不能写成 FreeCAD native parity。
 
 ## 结论
 
-当前确认有三类差异不符合 FreeCAD 原生语义：
+当前仍确认有一类差异不符合 FreeCAD 原生语义：
 
-1. `SubtractivePipe` product PipeLaw 分支发布工具体，而不是 FreeCAD feature `Shape`。
-2. PartDesign 轴引用接受几何共线的 BSpline / 非 Line 曲线作为轴。
-3. `DatumPlane` 用 `Length` / `Width` 构造有限平面 shape，而不是 FreeCAD 原生的 infinite datum plane shape。
+1. PartDesign 轴引用接受几何共线的 BSpline / 非 Line 曲线作为轴。
+
+C12-M17 S3/S4 已将 Body 内 `SubtractivePipe` product PipeLaw 主 `Shape` lifecycle 收敛为 FreeCAD-compatible post-cut feature `Shape`。`Transformation=Linear`、`Transformation=S-shape`、`Transformation=Interpolation LawSamples` 仍是 CAD Core product extensions，不代表 FreeCAD native PipeLaw support。
+
+`DatumPlane` 用 `Length` / `Width` 构造有限平面 shape 的历史偏差已经在目标仓整改：当前 `PartDesign::Plane` / `App::Plane` 被实现为 reference plane provider，`Length` / `Width` 只作为 display-only 兼容输入，不再参与 native shape、bbox、mesh、subshape、export 或 stable subname 语义。该项不再列为当前 `non_native_parity`。
 
 `fullSubname`、Datum frame 响应、无法解析 `StableSubList` 时返回结构化 diagnostic、Body 内 dress-up 链接到早期特征时的 Body-local 子路径解析，属于 cad-core Web DTO / 无状态后端契约或 FreeCAD-compatible 修复；它们不在本文的“不符合 FreeCAD 原生语义”范围内。
 
 本文只记录需要在 capability、fixture expected 或 roadmap 中标成 `cad_core_product_contract` / `non_native_parity` 的行为差异。源码结构重排、helper 抽取、严格复现 FreeCAD 判断的诊断改进、以及 `cad-core/build` / `Testing/Temporary` 这类生成物不作为语义边界。
 
-## 1. SubtractivePipe product PipeLaw 发布工具体
+## 已整改：SubtractivePipe product PipeLaw 主 Shape 生命周期
 
-### 目标仓行为
+### 当前口径
 
 目标仓：
 
 - `/Users/li/Chili3DProject/cad-web-background/cad-core/src/part_design/feature_pipe.cpp`
 - 函数：`executePipeFeature()`
-- 差异点：`publishToolContractShape = bodyPrefix && !additive && usesCadCoreProductPipeLaw(pipeLaw)`
+- 关键口径：PipeLaw product extension 不改变 PartDesign feature `Shape` lifecycle。
 
-该分支在 `SubtractivePipe` 位于 Body 内、且 PipeLaw 来源是 `cad_core_product_contract` 时，把响应中的 `mesh`、`subshapes`、`shape`、`bbox`、`volume` 和 `namedShape` 发布为 `toolShape`，而不是布尔切割后的 `featureShape`。
+C12-M17 S3 后，Body 内 `SubtractivePipe` 使用 CAD Core product PipeLaw 时，主响应中的 `mesh`、`subshapes`、`shape`、`bbox`、`volume` 和 `namedShape` 均跟随布尔切割后的 `featureShape`。`toolShape` 只保留为 `AddSubShape` pre-boolean removed-tool cache，供 Body replay / downstream AddSubShape consumer 使用。
 
-目标仓已有 expected 也明确把该分支标成非 FreeCAD 原生：
+当前 C6-M3 expected 明确把该 fixture 归为 product PipeLaw fixture，同时把主 `Shape` lifecycle 标为 FreeCAD-compatible：
 
 - `/Users/li/Chili3DProject/cad-web-background/cad-core/fixtures/c6m3/expected/partdesign-pipe-interpolation-law-subtractive-product.freecad.json`
-- 关键字段：`"reference": "CAD Core C6-M3 SubtractivePipe Interpolation LawSamples product-contract oracle; not FreeCAD native parity."`
-- 关键字段：`"freecad_native_parity": false`
+- 关键字段：`"reference": "CAD Core C6-M3 SubtractivePipe Interpolation LawSamples PipeLaw product extension; SubtractivePipe main Shape lifecycle should be FreeCAD-compatible post-cut feature Shape."`
+- 关键字段：`"pipe_law": "cad_core_product_extension"`
+- 关键字段：`"main_shape_lifecycle": "freecad_compatible_post_cut_feature_shape"`
 
 ### FreeCAD 原生依据
 
@@ -64,15 +67,15 @@ FreeCAD 源码：
 
 ### 判定
 
-目标仓把 `SubtractivePipe` product PipeLaw 分支的响应主形状发布成 `toolShape`，不等同于 FreeCAD 的 feature `Shape` 语义。
+C12-M17 后，`SubtractivePipe` product PipeLaw 主 `Shape` lifecycle 不再归入当前 `non_native_parity`。
 
-这可以作为 `cad-web-background` 产品契约保留，前提是：
+当前公开口径是：
 
-- capability / expected / docs 必须标成 `cad_core_product_contract` 或 `non_native_parity`。
-- 不得把该分支作为 FreeCAD native expected。
-- 若后续目标是 FreeCAD parity，响应主形状必须回到 `featureShape`，`toolShape` 只能保留在 AddSubShape / preview / product-only 字段中。
+- `Transformation=Linear`、`Transformation=S-shape`、`Transformation=Interpolation LawSamples` 是 CAD Core product extensions，fixture 列表中 `c6m3/partdesign-pipe-interpolation-law-subtractive-product` 也只代表 product PipeLaw fixture。
+- Body 内 `SubtractivePipe` product PipeLaw 的主 `Shape`、mesh、subshapes、bbox、volume 和 namedShape lifecycle 是 FreeCAD-compatible post-cut feature `Shape`。
+- removed tool 只能保留在 `AddSubShape` / preview / product-only 字段中，不作为主响应口径。
 
-## 2. PartDesign 轴引用接受几何共线 BSpline / 非 Line 曲线
+## 1. PartDesign 轴引用接受几何共线 BSpline / 非 Line 曲线
 
 ### 目标仓行为
 
@@ -126,20 +129,20 @@ FreeCAD 源码：
 - 相关诊断文案应避免暗示 FreeCAD 本身接受这类轴。
 - 若后续目标是严格 FreeCAD parity，应只接受 `GeomAbs_Line`、`GeomAbs_Circle`，并拒绝 BSpline 轴，即使它几何共线。
 
-## 3. DatumPlane 用 Length / Width 构造有限平面 shape
+## 已整改：DatumPlane 参考平面语义
 
-### 目标仓行为
+### 历史偏差
 
-目标仓：
+旧目标仓曾存在如下行为：
 
 - `/Users/li/Chili3DProject/cad-web-background/cad-core/src/part_design/datum_plane.cpp`
 - 函数：`executeDatumPlane()`
-- 差异点：
+- 旧差异点：
   - `datumPlaneSize(object, "Length")`
   - `datumPlaneSize(object, "Width")`
   - `BRepBuilderAPI_MakeFace(plane, -length / 2.0, length / 2.0, -width / 2.0, width / 2.0, Precision::Confusion())`
 
-该路径把 `Length` / `Width` 读成实际建模参数，并构造一个有限矩形平面 face。返回结果中还发布：
+该路径把 `Length` / `Width` 读成实际建模参数，并构造一个有限矩形平面 face。历史返回结果中还发布：
 
 - `length`
 - `width`
@@ -147,11 +150,37 @@ FreeCAD 源码：
 - `x_axis`
 - `normal`
 
-其中 `origin` / `x_axis` / `normal` 是 cad-core Web DTO 需要的 datum frame 响应字段；单独发布 frame 字段不是 FreeCAD 原生几何差异。真正不符合 FreeCAD 原生语义的是：目标仓把 `Length` / `Width` 用进了 `DatumPlane` 的 shape 构造、bbox / mesh / subshape 结果和相关 fixture expected。
+其中 `origin` / `x_axis` / `normal` 是 cad-core Web DTO 需要的 datum frame 响应字段；单独发布 frame 字段不是 FreeCAD 原生几何差异。历史上真正不符合 FreeCAD 原生语义的是：目标仓把 `Length` / `Width` 用进了 `DatumPlane` 的 shape 构造、bbox / mesh / subshape 结果和相关 fixture expected。
 
 目标仓相关回归包括：
 
 - `partdesign-datum-user-offset-plane-sketch`
+
+### 当前目标仓行为
+
+当前目标仓已经按 reference plane provider 语义整改：
+
+- `/Users/li/Chili3DProject/cad-web-background/cad-core/src/part_design/datum_plane.cpp::executeDatumPlane()`
+  - 继续允许 `Length` / `Width` 作为兼容输入；
+  - 注释明确 `Length` / `Width` 是 display-only compatibility inputs；
+  - 不再读取 `Length` / `Width` 构造有限矩形 face；
+  - 不再把 `ShapeValue::Kind::DatumPlane` 或任何 DatumPlane shape 写入 `context.shapes`；
+  - 只发布 `datum = "plane"`、`attached`、`origin`、`x_axis`、`normal` 和必要的 `map_mode` / `alias_source_mode`。
+- `/Users/li/Chili3DProject/cad-web-background/cad-core/src/part_design/datum_plane_reference.h`
+  - 新增 `ReferencePlaneProviderFrame`；
+  - `isReferencePlaneProviderType()` 将 `PartDesign::Plane` / `App::Plane` 统一识别为 reference plane provider；
+  - 下游 attachment / plane consumer 通过 frame / placement 读取基准平面，不依赖有限 face。
+- `/Users/li/Chili3DProject/cad-web-background/docs/接口规定/01-cad-recompute全量输入输出接口.md`
+  - 明确 `Length` / `Width` 只是前端显示尺寸兼容输入；
+  - 后端 native recompute 忽略它们，不用它们构造 shape / bbox / mesh / subshape，也不因缺失或为 0 返回 `invalid_length`；
+  - `PartDesign::Plane` 作为 recompute target 时返回 frame，`mesh = null`，`subshapes = []`。
+- `/Users/li/Chili3DProject/cad-web-background/cad-core/src/runtime/capability_contract.cpp`
+  - capability 表述已从旧的 placement face 改为 `DatumPlane reference frame / plane provider`。
+- `/Users/li/Chili3DProject/cad-web-background/cad-core/tests/test_p7_features.py::CadCoreP7FeatureTest::test_c51m5_datum_user_offset_plane_publishes_frame_and_drives_sketch`
+  - 断言 BasePlane / OffsetPlane 不发布 `length` / `width`；
+  - 断言 BasePlane / OffsetPlane 不进入 `mesh`、`subshapes`、`named_shapes`；
+  - 断言 recompute response 中 datum plane `mesh` 为 `null`、`subshapes` 为空；
+  - 同时验证 offset plane 仍能驱动 sketch 和 Body recompute。
 
 ### FreeCAD 原生依据
 
@@ -177,17 +206,19 @@ FreeCAD 源码：
 
 ### 判定
 
-目标仓用 `Length` / `Width` 构造有限 `DatumPlane` shape，是 cad-core Web / product display contract，不等同于 FreeCAD 原生 DatumPlane shape。
+当前目标仓不再用 `Length` / `Width` 构造有限 `DatumPlane` shape，历史上的有限面偏差已经关闭。
 
-这可以作为前端展示和无状态后端 DTO 便利保留，前提是：
+当前判定：
 
-- capability / expected / docs 必须把有限平面 shape、bbox、mesh、subshape 结果标成 product extension 或 `non_native_parity`。
-- `origin` / `x_axis` / `normal` 这类 frame 响应字段可以标成 Web DTO 扩展，但不能用它们掩盖有限 shape 与 FreeCAD native 的差异。
-- 若后续目标是严格 FreeCAD parity，应保持 DatumPlane shape 的 infinite plane 语义；`Length` / `Width` 只能影响显示或 product-only preview 字段，不应作为 native shape expected。
+- `PartDesign::Plane` / `App::Plane` 当前按 reference plane provider 处理，和标准平面同类。
+- `Length` / `Width` 当前只是 display-only 兼容输入，不构成后端建模语义。
+- Datum frame 响应字段仍是 Web DTO 扩展，但它承载的是 FreeCAD-compatible 平面引用语义，不是有限 shape product contract。
+- 该项不再归入当前 `non_native_parity`。
+- 若未来重新引入有限矩形 preview mesh / display shape，必须放在明确的 product-only / display-only 字段中；不得重新作为 native `Shape`、bbox、mesh、subshape、stable subname 或 export 语义发布。
 
 ## 已核查但不归入非原生语义
 
-以下差异在目标仓存在，但不要归入本文前三类 `non_native_parity`。它们要么是 Web DTO / 无状态后端契约，要么是为了更接近 FreeCAD Body / Tip / 引用解析语义的修复。
+以下差异在目标仓存在，但不要归入当前保留的 `non_native_parity`。它们要么是 Web DTO / 无状态后端契约，要么是为了更接近 FreeCAD Body / Tip / 引用解析语义的修复。
 
 ### 1. `fullSubname`、结构化 diagnostic 和响应字段扩展
 
@@ -207,7 +238,8 @@ FreeCAD 源码：
 需要特别区分：
 
 - Datum frame 字段 = DTO 扩展，不归入非原生几何语义。
-- DatumPlane 有限 shape = 几何 shape 语义差异，归入本文第 3 类。
+- 当前 DatumPlane reference plane provider 语义 = 已整改后的 FreeCAD-compatible 平面引用语义。
+- 若未来重新把 DatumPlane 有限 shape 当作 native shape / bbox / mesh / subshape 发布，则会重新构成几何 shape 语义差异。
 
 ### 2. Body 内 dress-up 链接早期特征的 Body-local 子路径解析
 
@@ -251,7 +283,7 @@ FreeCAD 依据：
 
 归类规则：
 
-- `EdgeAxisOptions::allowGeometricallyLinearCurve = true` 的 PartDesign ReferenceAxis 使用点，归入本文第 2 类非原生产品扩展。
+- `EdgeAxisOptions::allowGeometricallyLinearCurve = true` 的 PartDesign ReferenceAxis 使用点，归入当前保留的非原生产品扩展。
 - 未开启 `allowGeometricallyLinearCurve` 的使用点仍按 `GeomAbs_Line` / `GeomAbs_Circle` 严格判断，不归入非原生语义。
 
 已核查的严格使用点包括：
@@ -261,17 +293,17 @@ FreeCAD 依据：
 - `/Users/li/Chili3DProject/cad-web-background/cad-core/src/part_design/feature_draft.cpp`
   - `Draft` 的 `PullDirection` 仍应按 FreeCAD 直线方向语义处理。
 - `/Users/li/Chili3DProject/cad-web-background/cad-core/src/part_design/feature_transformed.cpp`
-  - 只有开启几何共线曲线容忍的 axis 路径属于第 2 类；其它 direction / linear-pattern 类严格路径不属于第 2 类。
+  - 只有开启几何共线曲线容忍的 axis 路径属于当前保留的非原生产品扩展；其它 direction / linear-pattern 类严格路径不属于该扩展。
 
 ## 文档维护规则
 
-后续如果继续保留上述三类目标仓扩展，应同步维护：
+后续如果继续保留目标仓产品扩展，应同步维护：
 
-- `cad-web-background/cad-core/fixtures/**/expected/*.freecad.json` 中的 `freecad_native_parity=false` 或等价说明。
+- `cad-web-background/cad-core/fixtures/**/expected/*.freecad.json` 中的 product-extension owner / boundary 说明；其中 C12-M17 后的 `SubtractivePipe` product PipeLaw fixture 只把 PipeLaw 本身标成 product extension，主 `Shape` lifecycle 不再标成非原生差异。
 - `cad-web-background/cad-core/src/runtime/capability_contract.cpp` 的 capability 描述。
 - `cad-web-background/docs/接口规定` 或 `docs/BUG处理` 中的产品契约说明。
 
-后续如果要把它们升级为 FreeCAD parity，必须先补可复现的 FreeCADCmd native oracle。没有 native oracle 前，不得仅凭目标仓运行结果或用户可见显示效果把这些行为归类为 FreeCAD 原生语义。
+后续如果要把当前保留的产品扩展升级为 FreeCAD parity，必须先补可复现的 FreeCADCmd native oracle。没有 native oracle 前，不得仅凭目标仓运行结果或用户可见显示效果把这些行为归类为 FreeCAD 原生语义。
 
 维护时还要避免两类误判：
 

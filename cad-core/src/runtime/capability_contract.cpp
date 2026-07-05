@@ -2493,6 +2493,7 @@ nlohmann::json capabilityContractJson()
                     "CAD Core product extension: Transformation=Linear PipeLaw",
                     "CAD Core product extension: Transformation=S-shape PipeLaw",
                     "CAD Core product extension: Transformation=Interpolation LawSamples product contract",
+                    "SubtractivePipe product PipeLaw main Shape lifecycle: FreeCAD-compatible post-cut feature Shape",
                     "CAD Core product extension: SpineTangent selected EdgeN continuous ledger",
                     "CAD Core product extension: AuxiliarySpineTangent selected EdgeN continuous ledger",
                     "Transition=Transformed",

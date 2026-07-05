@@ -657,12 +657,6 @@ PipeLawResolution resolvePipeLaw(const app::DocumentObject& object,
     return resolution;
 }
 
-bool usesCadCoreProductPipeLaw(const PipeLawResolution& resolution)
-{
-    return resolution.metadata.is_object()
-        && resolution.metadata.value("source", std::string {}) == "cad_core_product_contract";
-}
-
 bool rejectSourceBlockedPipeBranches(const app::DocumentObject& object,
                                      runtime::ComputeContext& context,
                                      int transformation)
@@ -678,6 +672,12 @@ bool rejectSourceBlockedPipeBranches(const app::DocumentObject& object,
             && ok;
     }
     return ok;
+}
+
+bool shouldForcePipeLawDisplayTopology(const PipeLawResolution& resolution)
+{
+    return resolution.metadata.is_object()
+        && resolution.metadata.value("source", std::string {}) == "cad_core_product_contract";
 }
 
 part::PipeShellMode pipeShellMode(int mode)
@@ -1300,15 +1300,18 @@ void executePipeFeature(const app::DocumentObject& object,
         }
     }
 
-    const bool publishToolContractShape = bodyPrefix && !additive && usesCadCoreProductPipeLaw(pipeLaw);
-    const TopoDS_Shape& publishedShape = publishToolContractShape ? toolShape : featureShape;
-    const std::optional<part::NamedShape>& publishedNamedShape =
-        publishToolContractShape ? toolNamedShape : featureNamedShape;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
+    // ::Pipe::execute(), "Shape.setValue(getSolid(boolOp))" publishes the post-boolean feature
+    // Shape; AddSubShape below keeps the pre-boolean pipe tool for Body replay.
+    const TopoDS_Shape& publishedShape = featureShape;
+    const std::optional<part::NamedShape>& publishedNamedShape = featureNamedShape;
 
     if (publishedNamedShape) {
         context.namedShapes[object.name] = *publishedNamedShape;
     }
-    if (publishToolContractShape || runtime::shouldBuildDisplayTopology(object, context)) {
+    const bool forceProductPipeLawDisplayTopology =
+        bodyPrefix && !additive && shouldForcePipeLawDisplayTopology(pipeLaw);
+    if (forceProductPipeLawDisplayTopology || runtime::shouldBuildDisplayTopology(object, context)) {
         context.mesh[object.name] = cad_core::part::meshForShape(
             publishedShape,
             "Face",
