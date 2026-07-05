@@ -1,9 +1,9 @@
 id	validation	owner_step	status	command_or_evidence	expected_result
 C12M18-VAL-001	queue_check	入口	passed_entry	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M18-CADCoreLiveBacklogReAudit批次/工作步骤细分 --format markdown	Entry check confirmed initial queue listed entry and S0-S5 pending; after entry rename queue starts at S0.
 C12M18-VAL-002	tsv_field_count	入口/S5	passed_entry	awk -F '\t' over C12-M18 matrices	Entry check found no inconsistent TSV field counts.
-C12M18-VAL-003	c12m17_queue	S0	pending	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次/工作步骤细分 --format markdown	Only markdown table header.
-C12M18-VAL-004	empty_remaining_gaps	S0/S1	pending	jq query for non-empty remaining_gaps over /tmp/c12m18-capabilities.json	No output.
-C12M18-VAL-005	empty_known_gaps	S0/S1	pending	jq query for non-empty known_gaps over /tmp/c12m18-capabilities.json	No output.
+C12M18-VAL-003	c12m17_queue	S0	passed_s0	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次/工作步骤细分 --format markdown	Only markdown table header on HEAD e29b6351c5.
+C12M18-VAL-004	empty_remaining_gaps	S0/S1	passed_s0	jq query for non-empty remaining_gaps over /tmp/c12m18-capabilities.json	No output on HEAD e29b6351c5 snapshot.
+C12M18-VAL-005	empty_known_gaps	S0/S1	passed_s0	jq query for non-empty known_gaps over /tmp/c12m18-capabilities.json	No output on HEAD e29b6351c5 snapshot.
 C12M18-VAL-006	narrowed_gap_presence	S1	pending	jq narrowed_gaps path query over /tmp/c12m18-capabilities.json	Paths listed for revolution_groove, filling, geomplate, loft, project_on_surface and sweep.
 C12M18-VAL-201	three_gate_matrix	S2	pending	c12m18_live_backlog_narrowed_gap_gate.tsv review	Every family has expected/contract, request-local boundary and current comparison status.
 C12M18-VAL-301	product_extension_split	S3	pending	product_extension_split and non_goal matrices	PartDesign axis product extension retained; frontend sync not classified as backend C++.

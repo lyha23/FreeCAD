@@ -8,6 +8,8 @@ C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 
 
 - 创建基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=14bbd0ceb9`（`14bbd0ceb9 feat: 修复 SubtractivePipe product PipeLaw 主 Shape 生命周期`）。
 - 创建时 worktree clean。
+- S0 live 冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=e29b6351c5`（`e29b6351c5 文档：关闭 C12-M18 工作步骤总入口`）。
+- S0 起点 `git -c core.quotepath=false status --short -uall` 输出为空。
 - C12-M17 队列只输出 markdown 表头。
 - `cad-core/build/cad-core capabilities` 当前没有任何非空 `remaining_gaps`。
 - `cad-core/build/cad-core capabilities` 当前没有任何非空 `known_gaps`。
@@ -51,7 +53,7 @@ C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 
 ## 工作步骤
 
 - 入口：已关闭；确认包结构、队列顺序和矩阵字段，后续队列从 S0 开始。
-- S0：冻结 live HEAD、dirty boundary、C12-M1..M17 队列闭合状态和 C12-M17 后的 capability 空 gap 事实。
+- S0：已关闭；冻结 live HEAD、dirty boundary、C12-M17 队列闭合状态和 C12-M17 后的 capability 空 gap 事实。
 - S1：抽取 current `remaining_gaps`、`known_gaps`、`narrowed_gaps`、非原生产品扩展和 publication authority。
 - S2：对历史 `narrowed_gaps` family 做 stable expected / product contract、request-local boundary、current mismatch 三闸门复审。
 - S3：裁决 product extension 与 frontend consumer sync：保留 axis extension，分离 my-chili3d consumer work，不把前端缺口误写成后端 C++ gap。

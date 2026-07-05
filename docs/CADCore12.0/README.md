@@ -197,6 +197,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M17 已关闭为 SubtractivePipe product PipeLaw Shape parity 实现批次。创建基线为 `HEAD=474097e0f6`（`474097e0f6 feat: 补齐引用轴和基准平面契约`）；S0 live 基线同为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=474097e0f6`。S0 已确认 C12-M1..M16 队列均只输出 markdown 表头，并冻结起点 dirty boundary：既有 C12-M11/M15/M16 历史状态修正文档、`docs/capability/7-5-00-14-cad-web-background非FreeCAD原生语义边界.md`、root README dirty 与未跟踪 C12-M17 package 文件并存。S1 source/current audit 已关闭：FreeCAD `Pipe::execute()` 发布 post-boolean feature `Shape`，current cad-core 红路径定位到 `publishToolContractShape` 把 product subtractive body 主响应改选 `toolShape`；capability/adapters 仅公开 PipeLaw product extension 和 fixture 列表；`allowGeometricallyLinearCurve=true` 作为产品扩展保留。S2 red expected 已关闭：复用 C6-M3 subtractive product fixture，把 expected wording/shape surface 迁移为 product PipeLaw extension + FreeCAD-compatible post-cut main Shape。S3 已让 main product SubtractivePipe response、mesh、subshapes、bbox、volume 和 namedShape 跟随 post-cut `featureShape` / `featureNamedShape`，同时让 `AddSubShape` subtractive cache 继续保存 pre-boolean `toolShape` / `toolNamedShape`；S4 已同步 capability、adapter、expected wording 和 capability 边界文档。S5 发布 final status `implemented_freecad_main_shape_parity_product_law_retained`，`C12M17-BLOCKER-601` 已关闭，C12-M17 队列关闭后只输出 markdown 表头。
 - C12-M18 已创建为 CAD Core live backlog re-audit 批次。创建基线为 `HEAD=14bbd0ceb9`（`14bbd0ceb9 feat: 修复 SubtractivePipe product PipeLaw 主 Shape 生命周期`），创建前 worktree clean；C12-M17 队列只输出 markdown 表头。创建审计确认当前 capability 没有非空 `remaining_gaps` 或 `known_gaps`，但仍有 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface` 和 `part_workbench.sweep` 的 `narrowed_gaps` 记录。C12-M18 S0-S5 将重新应用 stable expected / approved product contract、request-local boundary、current mismatch 三闸门；PartDesign 几何共线 BSpline / 非 Line axis 按用户决定继续保留为 product extension；C12-M11/M15/M16 的 sketch token consumer 工作若仍有产品问题，应分流到 my-chili3d frontend sync，不在 FreeCAD/cad-core 内发明 C++ gap。
 - C12-M18 工作步骤总入口已关闭：`C12-M18-CADCoreLiveBacklogReAudit批次/工作步骤细分/7-5-12-29-【已实现】C12-M18工作步骤总入口.md` 已确认包结构、入口与 S0-S5 初始队列顺序、矩阵入口和 TSV 字段数；入口关闭后队列从 S0 `live 基线与 C12 关闭口径冻结` 继续。
+- C12-M18 S0 live 基线与 C12 关闭口径已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=e29b6351c5`（`e29b6351c5 文档：关闭 C12-M18 工作步骤总入口`），起点 worktree clean；C12-M17 队列只输出 markdown 表头；`/tmp/c12m18-capabilities.json` 上的非空 `remaining_gaps` 与非空 `known_gaps` jq 查询均无输出。S0 同步冻结 C12-M17 后边界：SubtractivePipe product PipeLaw 主 `Shape` lifecycle 已整改为 FreeCAD-compatible post-cut feature `Shape`，PartDesign 几何共线 BSpline / 非 Line axis 继续作为 product extension 保留；S0 关闭后队列从 S1 继续。
 
 ## 重开条件
 
@@ -217,7 +218,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 ## 队列检查
 
-C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M18 创建后，本包队列应显示入口与 S0-S5 pending。
+C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M18 S0 关闭后，本包队列应从 S1 继续。
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
