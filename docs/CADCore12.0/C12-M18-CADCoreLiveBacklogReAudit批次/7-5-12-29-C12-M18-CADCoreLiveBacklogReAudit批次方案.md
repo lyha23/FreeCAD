@@ -16,6 +16,15 @@ C12-M18 回答“C12-M17 之后 FreeCAD/cad-core 还应该实现什么”。本�
 
 因此，本包默认不授权 C++。只有 S2/S4 证明 stable expected 或 approved product contract、request-local boundary 与 current mismatch 同时成立，才创建后续 implementation package。
 
+## Final status
+
+S5 发布 `frontend_sync_package_recommended` + backend `no_code_backlog_gate`：
+
+- `implementation_package_authorized=false`：S2/S4 没有 `mismatch_confirmed` 后端行。
+- `oracle_or_product_contract_package_required=false`：没有新的 stable expected 或 approved product-contract 输入候选。
+- `frontend_sync_package_recommended=true`：若产品侧仍有 sketch token / writeback 消费问题，应在外部 `my-chili3d` 建包处理。
+- backend `no_code_backlog_gate=published`：FreeCAD/cad-core 不改 C++、fixtures、expected、tests 或 adapters；后端重开条件仍是 stable expected / approved product contract、request-local boundary 与 current mismatch 同时成立。
+
 ## S0 live 基线与 C12 关闭口径冻结
 
 冻结：
@@ -89,8 +98,8 @@ S4 不允许因为“想继续 C12 编号”而授权实现包。
 - C12-M18 队列关闭后只输出表头。
 - TSV 字段数、尾随空白和 `git diff --check` 通过。
 - root README 记录 C12-M18 的最终出口和下一步分流。
-- 若 S4 授权 implementation package，必须把后续包范围写成最小完整语义批次，而不是单 fixture 修补。
-- 若 S4 不授权实现，必须明确保留哪些重开条件，避免下一轮再次从 stale memory 重开。
+- S4/S5 未授权 implementation package，也未授权 oracle/product-contract package。
+- 后续只推荐外部 `my-chili3d` frontend sync package；FreeCAD/cad-core backend 发布 no-code gate 和重开条件，避免下一轮再次从 stale memory 重开。
 
 ## 非目标
 
@@ -122,4 +131,3 @@ jq -c 'paths as $p | select(($p[-1]? == "remaining_gaps") and ((getpath($p)|type
 jq -c 'paths as $p | select(($p[-1]? == "known_gaps") and (((getpath($p)|type)=="array" and (getpath($p)|length)>0) or ((getpath($p)|type)=="object" and (getpath($p)|length)>0))) | {path:($p|join(".")), value:getpath($p)}' /tmp/c12m18-capabilities.json
 jq -c 'paths as $p | select($p[-1]? == "narrowed_gaps") | {path:($p|join(".")), keys:(getpath($p)|keys)}' /tmp/c12m18-capabilities.json
 ```
-

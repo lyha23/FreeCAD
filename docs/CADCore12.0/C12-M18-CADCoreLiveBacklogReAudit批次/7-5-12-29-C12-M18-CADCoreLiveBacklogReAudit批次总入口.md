@@ -6,6 +6,10 @@
 
 在 C12-M17 关闭后重新判断 FreeCAD/cad-core 是否存在下一轮可实现 backend gap。若没有，发布 no-code backlog gate 或把收益明确分流到 oracle/product-contract / my-chili3d frontend sync。
 
+## 发布出口
+
+S5 final status：`implementation_package_authorized=false`，`oracle_or_product_contract_package_required=false`，`frontend_sync_package_recommended=true`，backend `no_code_backlog_gate=published`。C12-M18 不创建 FreeCAD/cad-core implementation 包，也不创建 oracle/product-contract 包；唯一后续建议是外部 `my-chili3d` frontend sync package。后端重开条件是 stable expected / approved product contract、request-local boundary 与 current mismatch 同时成立，或未来 focused regression / product contract conflict 直接证明现有 current-supported 结论失效。
+
 ## 队列
 
 | step | file | status |
@@ -15,8 +19,8 @@
 | S1 | `7-5-12-31-【已实现】C12-M18-S1-capability零缺口与narrowed-gaps抽取.md` | implemented |
 | S2 | `7-5-12-32-【已实现】C12-M18-S2-历史narrowed-gap三闸门复审.md` | implemented |
 | S3 | `7-5-12-33-【已实现】C12-M18-S3-产品扩展与frontend-sync分流裁决.md` | implemented |
-| S4 | `7-5-12-34-C12-M18-S4-next-package-authorization裁决.md` | pending |
-| S5 | `7-5-12-35-C12-M18-S5-发布闸门与后续分流.md` | pending |
+| S4 | `7-5-12-34-【已实现】C12-M18-S4-next-package-authorization裁决.md` | implemented |
+| S5 | `7-5-12-35-【已实现】C12-M18-S5-发布闸门与后续分流.md` | implemented |
 
 ## 必读文件
 
