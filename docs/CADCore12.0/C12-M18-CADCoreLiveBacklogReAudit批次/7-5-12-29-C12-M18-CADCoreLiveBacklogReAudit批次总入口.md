@@ -11,9 +11,9 @@
 | step | file | status |
 | --- | --- | --- |
 | 入口 | `工作步骤细分/7-5-12-29-【已实现】C12-M18工作步骤总入口.md` | implemented |
-| S0 | `7-5-12-30-C12-M18-S0-live基线与C12关闭口径冻结.md` | pending |
-| S1 | `7-5-12-31-C12-M18-S1-capability零缺口与narrowed-gaps抽取.md` | pending |
-| S2 | `7-5-12-32-C12-M18-S2-历史narrowed-gap三闸门复审.md` | pending |
+| S0 | `7-5-12-30-【已实现】C12-M18-S0-live基线与C12关闭口径冻结.md` | implemented |
+| S1 | `7-5-12-31-【已实现】C12-M18-S1-capability零缺口与narrowed-gaps抽取.md` | implemented |
+| S2 | `7-5-12-32-【已实现】C12-M18-S2-历史narrowed-gap三闸门复审.md` | implemented |
 | S3 | `7-5-12-33-C12-M18-S3-产品扩展与frontend-sync分流裁决.md` | pending |
 | S4 | `7-5-12-34-C12-M18-S4-next-package-authorization裁决.md` | pending |
 | S5 | `7-5-12-35-C12-M18-S5-发布闸门与后续分流.md` | pending |

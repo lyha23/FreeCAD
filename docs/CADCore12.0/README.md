@@ -2,7 +2,7 @@
 
 CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规划。当前不直接重开 C11-M1 Sweep Location overload 或 C11-M2 Filling native helper：这两条线都已关闭为 no-code retained non-parity gate，且 live capability 中 `part_workbench.sweep.remaining_gaps=[]`、`part_workbench.filling.remaining_gaps=[]`。
 
-当前最新 C12-M18 S1 live 抽取确认：`cad-core/build/cad-core capabilities` 没有任何非空 `remaining_gaps` 或 `known_gaps`；仍存在的 6 个 `narrowed_gaps` path / 15 个 key 只作为 S2/S3 三闸门输入，不在 S1 判成实现项或 current mismatch。
+当前最新 C12-M18 S2 三闸门复审确认：`cad-core/build/cad-core capabilities` 没有任何非空 `remaining_gaps` 或 `known_gaps`；仍存在的 6 个 `narrowed_gaps` path / 15 个 key 只保留为 helper-blocked、native-hidden、oracle-blocked、product-contract non-parity 或 current-covered 分类。Groove、Sweep、Filling、GeomPlate、Loft、ProjectOnSurface、Assembly、Sketch/topo 与 SubShapeBinder 均未产生 `mismatch_confirmed` 后端实现授权行。
 
 C12-M1 创建时 live capability 唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C9-M5 与 C10-M4 已多轮复审并保留为 `known_gap_diagnostic` / `oracle_blocked`，不是默认 C++ 实现入口。CADCore12.0 的第一包因此先做全局候选盘点：从 live capability、CADCore9/10/11 的 release gate 和 current tests 中筛出下一批真正可实现的 backend gap。C12-M1 S6 已完成该发布闸门并选择 `no_code_backlog_gate`：本轮无代码落点，不授权 C++、fixtures、expected、oracle 采集、capability wording 或 adapter/test 改动。
 
@@ -42,7 +42,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 用户随后要求处理 `docs/capability/7-5-00-14-cad-web-background非FreeCAD原生语义边界.md` 中第一类偏差，并明确保留第二类 PartDesign axis 产品扩展。C12-M17 是 SubtractivePipe product PipeLaw Shape parity 实现批次：它只修复 Body 内 `SubtractivePipe` 使用 product PipeLaw 时主响应发布 `toolShape` 的偏差，目标是让主 `Shape` / mesh / subshapes / namedShape / bbox / volume 回到 FreeCAD post-cut feature `Shape`；`AddSubShape` 继续保存 pre-boolean removed tool cache，PipeLaw LawSamples 仍是 CAD Core product extension。PartDesign 轴引用接受几何共线 BSpline / 非 Line 曲线按用户选择继续支持，不作为 C12-M17 修复目标。S5 已发布 final status `implemented_freecad_main_shape_parity_product_law_retained`，C12-M17 队列关闭后只输出 markdown 表头。
 
-用户随后要求为 C12-M17 之后的下一步出方案到 `docs/CADCore12.0`。C12-M18 是 CAD Core live backlog re-audit 批次：它不预设下一个 C++ implementation 目标，而是重新从当前 `cad-core` capability、C12-M1..M17 release gate、历史 `narrowed_gaps`、非原生产品扩展边界和当前测试面中筛选是否存在新的可实现项。创建时 live capability 没有任何非空 `remaining_gaps` 或 `known_gaps`；仍存在的 `narrowed_gaps` 只作为历史 native-hidden、helper-blocked、oracle-blocked、product-contract non-parity 或 current-covered 记录进入三闸门复审。C12-M18 默认不授权 C++，只有 stable expected / approved product contract、request-local boundary 与 current mismatch 同时成立时才输出后续 implementation package；否则分流到 oracle/product-contract、my-chili3d frontend sync 或 no-code backlog gate。
+用户随后要求为 C12-M17 之后的下一步出方案到 `docs/CADCore12.0`。C12-M18 是 CAD Core live backlog re-audit 批次：它不预设下一个 C++ implementation 目标，而是重新从当前 `cad-core` capability、C12-M1..M17 release gate、历史 `narrowed_gaps`、非原生产品扩展边界和当前测试面中筛选是否存在新的可实现项。创建时 live capability 没有任何非空 `remaining_gaps` 或 `known_gaps`；仍存在的 `narrowed_gaps` 只作为历史 native-hidden、helper-blocked、oracle-blocked、product-contract non-parity 或 current-covered 记录进入三闸门复审。C12-M18 S2 已完成 Groove、Sweep、Filling、GeomPlate、Loft、ProjectOnSurface、Assembly、Sketch/topo 与 SubShapeBinder 三闸门复审，未发现 `mismatch_confirmed` 行。C12-M18 默认不授权 C++，只有 stable expected / approved product contract、request-local boundary 与 current mismatch 同时成立时才输出后续 implementation package；否则分流到 oracle/product-contract、my-chili3d frontend sync 或 no-code backlog gate。
 
 ## 入口
 
@@ -221,7 +221,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 ## 队列检查
 
-C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M18 S1 关闭后，本包队列应从 S2 继续。
+C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M18 S2 关闭后，本包队列应从 S3 继续。
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
