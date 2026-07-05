@@ -2,7 +2,9 @@
 
 CADCore12.0 承接 CADCore11.0 队列关闭后的下一轮 capability-first 规划。当前不直接重开 C11-M1 Sweep Location overload 或 C11-M2 Filling native helper：这两条线都已关闭为 no-code retained non-parity gate，且 live capability 中 `part_workbench.sweep.remaining_gaps=[]`、`part_workbench.filling.remaining_gaps=[]`。
 
-当前 live capability 唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C9-M5 与 C10-M4 已多轮复审并保留为 `known_gap_diagnostic` / `oracle_blocked`，不是默认 C++ 实现入口。CADCore12.0 的第一包因此先做全局候选盘点：从 live capability、CADCore9/10/11 的 release gate 和 current tests 中筛出下一批真正可实现的 backend gap。C12-M1 S6 已完成该发布闸门并选择 `no_code_backlog_gate`：本轮无代码落点，不授权 C++、fixtures、expected、oracle 采集、capability wording 或 adapter/test 改动。
+当前最新 C12-M18 S1 live 抽取确认：`cad-core/build/cad-core capabilities` 没有任何非空 `remaining_gaps` 或 `known_gaps`；仍存在的 6 个 `narrowed_gaps` path / 15 个 key 只作为 S2/S3 三闸门输入，不在 S1 判成实现项或 current mismatch。
+
+C12-M1 创建时 live capability 唯一非空 `remaining_gaps` 仍是 `part_design.sub_shape_binder.copy_on_change_full_temporary_document_cache`。C9-M5 与 C10-M4 已多轮复审并保留为 `known_gap_diagnostic` / `oracle_blocked`，不是默认 C++ 实现入口。CADCore12.0 的第一包因此先做全局候选盘点：从 live capability、CADCore9/10/11 的 release gate 和 current tests 中筛出下一批真正可实现的 backend gap。C12-M1 S6 已完成该发布闸门并选择 `no_code_backlog_gate`：本轮无代码落点，不授权 C++、fixtures、expected、oracle 采集、capability wording 或 adapter/test 改动。
 
 用户已在 C12-M1 之后单独批准打开 C12-M2 oracle collection / native probe 包。C12-M2 不推翻 C12-M1 的 no-code 结论，也不直接打开 C++ gate；它只针对 Part Workbench historical rows 采集或阻断 stable native expected，作为后续是否能另开 implementation 包的前置证据。
 
@@ -198,6 +200,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M18 已创建为 CAD Core live backlog re-audit 批次。创建基线为 `HEAD=14bbd0ceb9`（`14bbd0ceb9 feat: 修复 SubtractivePipe product PipeLaw 主 Shape 生命周期`），创建前 worktree clean；C12-M17 队列只输出 markdown 表头。创建审计确认当前 capability 没有非空 `remaining_gaps` 或 `known_gaps`，但仍有 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface` 和 `part_workbench.sweep` 的 `narrowed_gaps` 记录。C12-M18 S0-S5 将重新应用 stable expected / approved product contract、request-local boundary、current mismatch 三闸门；PartDesign 几何共线 BSpline / 非 Line axis 按用户决定继续保留为 product extension；C12-M11/M15/M16 的 sketch token consumer 工作若仍有产品问题，应分流到 my-chili3d frontend sync，不在 FreeCAD/cad-core 内发明 C++ gap。
 - C12-M18 工作步骤总入口已关闭：`C12-M18-CADCoreLiveBacklogReAudit批次/工作步骤细分/7-5-12-29-【已实现】C12-M18工作步骤总入口.md` 已确认包结构、入口与 S0-S5 初始队列顺序、矩阵入口和 TSV 字段数；入口关闭后队列从 S0 `live 基线与 C12 关闭口径冻结` 继续。
 - C12-M18 S0 live 基线与 C12 关闭口径已冻结：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=e29b6351c5`（`e29b6351c5 文档：关闭 C12-M18 工作步骤总入口`），起点 worktree clean；C12-M17 队列只输出 markdown 表头；`/tmp/c12m18-capabilities.json` 上的非空 `remaining_gaps` 与非空 `known_gaps` jq 查询均无输出。S0 同步冻结 C12-M17 后边界：SubtractivePipe product PipeLaw 主 `Shape` lifecycle 已整改为 FreeCAD-compatible post-cut feature `Shape`，PartDesign 几何共线 BSpline / 非 Line axis 继续作为 product extension 保留；S0 关闭后队列从 S1 继续。
+- C12-M18 S1 capability 零缺口与 narrowed-gaps 抽取已完成：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=09c7dad8ed`（`09c7dad8ed 文档：冻结 C12-M18 S0 live 基线`），起点 worktree clean；`/tmp/c12m18-capabilities.json` 上的非空 `remaining_gaps` 与非空 `known_gaps` jq 查询均无输出。S1 抽取 6 个 `narrowed_gaps` path / 15 个 key：`part_design.revolution_groove` 1、`part_workbench.filling` 6、`part_workbench.geomplate` 4、`part_workbench.loft` 1、`part_workbench.project_on_surface` 1、`part_workbench.sweep` 2。Publication authority 记录为 `cad-core/src/runtime/capability_contract.cpp::capabilityContractJson()` 与本地 capability helpers；focused adapter assertions 记录为 `cad-core/tests/test_adapters.py::CadCoreAdapterTest.test_c_api_capabilities_publication_smoke` 和 `test_c_api_capabilities_exposes_web_contract_facts`。S1 只建立输入清单，不做 current mismatch 判断，不把 `narrowed_gaps` 判成实现项；S1 关闭后队列从 S2 继续。
 
 ## 重开条件
 
@@ -218,7 +221,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 ## 队列检查
 
-C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M18 S0 关闭后，本包队列应从 S1 继续。
+C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M18 S1 关闭后，本包队列应从 S2 继续。
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD

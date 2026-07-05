@@ -13,6 +13,8 @@ C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 
 - C12-M17 队列只输出 markdown 表头。
 - `cad-core/build/cad-core capabilities` 当前没有任何非空 `remaining_gaps`。
 - `cad-core/build/cad-core capabilities` 当前没有任何非空 `known_gaps`。
+- S1 live 抽取：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=09c7dad8ed`（`09c7dad8ed 文档：冻结 C12-M18 S0 live 基线`），起点 worktree clean。
+- S1 regenerated `/tmp/c12m18-capabilities.json`；非空 `remaining_gaps` 与非空 `known_gaps` jq 查询均无输出。
 - live `narrowed_gaps` 仍存在于：
   - `part_design.revolution_groove`
   - `part_workbench.filling`
@@ -20,6 +22,15 @@ C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 
   - `part_workbench.loft`
   - `part_workbench.project_on_surface`
   - `part_workbench.sweep`
+- S1 narrowed-gaps key count is 15:
+  - `part_design.revolution_groove.narrowed_gaps`: `partdesign_groove_upto_brepfeat_cut_native_failure`
+  - `part_workbench.filling.narrowed_gaps`: `filling_non_boundary_support_order_native_helper_blocker`, `filling_params_all_native_helper_blocker`, `filling_params_pts_anisotropy_tol_g1_g2_max_segments_blocker`, `filling_support_order_g1_native_helper_blocker`, `filling_support_order_g2_native_helper_blocker`, `filling_surface_native_helper_blocker`
+  - `part_workbench.geomplate.narrowed_gaps`: `curve_constraint_criteria_setters_not_implemented`, `g1_curve_on_surface_native_hidden_diagnostic_only`, `platesurface_curves_wrapper_lifecycle`, `projected_curve2d_no_initial_surface_v1_v2_native_oracle_blocker`
+  - `part_workbench.loft.narrowed_gaps`: `part_loft_subelement_assignment_native_hidden`
+  - `part_workbench.project_on_surface.narrowed_gaps`: `native_project_on_surface_mapper_history_oracle_unavailable`
+  - `part_workbench.sweep.narrowed_gaps`: `part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker`, `part_sweep_located_profile_freecadcmd_wrapper_build_blocker`
+- Publication authority is `cad-core/src/runtime/capability_contract.cpp::capabilityContractJson()` plus local capability helpers; focused adapter assertions are in `cad-core/tests/test_adapters.py::CadCoreAdapterTest.test_c_api_capabilities_publication_smoke` and `test_c_api_capabilities_exposes_web_contract_facts`.
+- S1 only establishes the input list. It does not judge current mismatch and does not turn `narrowed_gaps` into implementation items.
 - `docs/capability/7-5-00-14-cad-web-background非FreeCAD原生语义边界.md` 当前只保留 PartDesign 几何共线 BSpline / 非 Line 轴引用产品扩展为当前非原生差异；C12-M17 已整改 SubtractivePipe product PipeLaw 主 `Shape` lifecycle。
 
 ## 批次目标
@@ -54,7 +65,7 @@ C12-M18 是 C12-M17 关闭后的 live backlog 复审包。它不预设下一个 
 
 - 入口：已关闭；确认包结构、队列顺序和矩阵字段，后续队列从 S0 开始。
 - S0：已关闭；冻结 live HEAD、dirty boundary、C12-M17 队列闭合状态和 C12-M17 后的 capability 空 gap 事实。
-- S1：抽取 current `remaining_gaps`、`known_gaps`、`narrowed_gaps`、非原生产品扩展和 publication authority。
+- S1：已关闭；抽取 current `remaining_gaps`、`known_gaps`、`narrowed_gaps` path/key、非原生产品扩展和 publication authority，只建立输入清单。
 - S2：对历史 `narrowed_gaps` family 做 stable expected / product contract、request-local boundary、current mismatch 三闸门复审。
 - S3：裁决 product extension 与 frontend consumer sync：保留 axis extension，分离 my-chili3d consumer work，不把前端缺口误写成后端 C++ gap。
 - S4：授权下一包或 no-code gate：若存在 mismatch-confirmed 行，写清最小完整语义批次；否则输出 oracle/product-contract/frontend/no-code 分流。
