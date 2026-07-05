@@ -3,5 +3,5 @@ C12M18-BLOCKER-001	live baseline not frozen	S0	closed_s0	HEAD e29b6351c5, clean 
 C12M18-BLOCKER-101	capability input list incomplete	S1	closed_s1	remaining_gaps, known_gaps, narrowed_gaps and publication authority extracted	S2 consumed the input list; do not infer implementation work from S1 presence alone.
 C12M18-BLOCKER-201	narrowed gap three-gate review incomplete	S2	closed_s2	Every family has expected/contract, request-local boundary and current comparison status; no mismatch_confirmed row	Proceed to S3 product extension and frontend split.
 C12M18-BLOCKER-301	product extension/frontend split undecided	S3	closed_s3	Axis extension retained and frontend consumer candidates separated from backend gaps	Proceed to S4 authorization.
-C12M18-BLOCKER-401	next package route undecided	S4	open	S4 chooses implementation, oracle/product-contract, frontend sync or no-code backlog gate	Proceed to S5 publication.
+C12M18-BLOCKER-401	next package route undecided	S4	closed_s4	S4 selected external my-chili3d frontend sync recommendation; no mismatch_confirmed backend row and no oracle/product-contract package route	Proceed to S5 publication with FreeCAD/cad-core no-code closure wording.
 C12M18-BLOCKER-501	publication gate open	S5	open	Queue, matrices, whitespace, root README and final status published	Close C12-M18 queue.
