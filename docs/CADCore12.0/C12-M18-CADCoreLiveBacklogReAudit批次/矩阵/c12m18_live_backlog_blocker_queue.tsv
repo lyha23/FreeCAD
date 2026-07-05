@@ -1,0 +1,7 @@
+id	blocker	owner_step	status	close_condition	next_action
+C12M18-BLOCKER-001	live baseline not frozen	S0	open	HEAD, dirty boundary, C12-M17 queue and empty capability gap evidence recorded	Proceed to S1 capability extraction.
+C12M18-BLOCKER-101	capability input list incomplete	S1	open	remaining_gaps, known_gaps, narrowed_gaps and publication authority extracted	Proceed to S2 three-gate review.
+C12M18-BLOCKER-201	narrowed gap three-gate review incomplete	S2	open	Every family has expected/contract, request-local boundary and current comparison status	Proceed to S3 product extension and frontend split.
+C12M18-BLOCKER-301	product extension/frontend split undecided	S3	open	Axis extension retained and frontend consumer candidates separated from backend gaps	Proceed to S4 authorization.
+C12M18-BLOCKER-401	next package route undecided	S4	open	S4 chooses implementation, oracle/product-contract, frontend sync or no-code backlog gate	Proceed to S5 publication.
+C12M18-BLOCKER-501	publication gate open	S5	open	Queue, matrices, whitespace, root README and final status published	Close C12-M18 queue.

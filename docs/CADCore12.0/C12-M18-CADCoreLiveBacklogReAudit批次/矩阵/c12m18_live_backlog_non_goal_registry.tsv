@@ -1,0 +1,8 @@
+id	non_goal	reason	owner_step	status	reopen_condition
+C12M18-NONGOAL-001	Direct C++ implementation during re-audit	This package is a candidate gate and routing package, not an implementation package	All	active	S4 must explicitly authorize a follow-up implementation package.
+C12M18-NONGOAL-002	Promote narrowed_gaps by name	narrowed_gaps include native-hidden, helper-blocked, oracle-blocked, product-contract non-parity and current-covered rows	S1/S2	active	Only reopen when three gates prove mismatch-confirmed row.
+C12M18-NONGOAL-003	Remove PartDesign BSpline / non-Line axis product extension	User explicitly chose to keep this behavior as product extension	S3	active	Only reopen if user asks for strict FreeCAD parity or product contract conflicts.
+C12M18-NONGOAL-004	Reopen C12-M17 without new evidence	C12-M17 final status is implemented and queue is closed	S0/S4	active	Only future focused regression, expected/current mismatch, or explicit product contract conflict.
+C12M18-NONGOAL-005	Patch frontend consumer behavior inside FreeCAD/cad-core	Frontend token consumption belongs in my-chili3d; backend should publish stable fields, not guess consumer behavior	S3	active	Create separate frontend package if needed.
+C12M18-NONGOAL-006	Persistent backend session or cache	CAD Core remains stateless request-local and cannot depend on FreeCAD session cache	S2	active	Only architecture decision can reopen.
+C12M18-NONGOAL-007	Full BREP / TopoDS persistent state	Only ReferenceShadow.brep single-subshape snapshot exception is allowed	S2	active	Only approved protocol exception can reopen.

@@ -1,0 +1,6 @@
+id	item	current_status	owner_step	backend_route	frontend_route	decision_rule
+C12M18-EXT-001	PartDesign geometrically linear BSpline / non-Line axis	product_extension_retained	S3	no strict FreeCAD parity work unless user reverses product decision	none	Capability and expected must say product extension, not native parity.
+C12M18-EXT-002	SubtractivePipe product PipeLaw main Shape lifecycle	closed_freecad_compatible_post_cut_shape	S0/S3	reopen only with regression or expected/current mismatch	none	C12-M17 fixed main response; PipeLaw itself remains product extension.
+C12M18-EXT-003	PipeLaw Linear / S-shape / LawSamples	product_extension_retained	S3	no native parity claim	none	Keep product-extension wording and do not use it to alter feature Shape lifecycle.
+C12M18-EXT-004	Sketch raw EdgeN / InternalEdgeN response	current_supported_backend	S3	no backend package without regression	my-chili3d consumer sync candidate if UI still does not consume tokens	Frontend issue cannot be patched by backend prefix guessing.
+C12M18-EXT-005	Sketch split fragment g<ID>:splitN ledger	current_supported_backend	S3	reopen only if response/reference/adapter token sharing regresses	my-chili3d consumer sync candidate	Do not implement persistent backend sketch session.

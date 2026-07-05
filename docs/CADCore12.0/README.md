@@ -40,6 +40,8 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 用户随后要求处理 `docs/capability/7-5-00-14-cad-web-background非FreeCAD原生语义边界.md` 中第一类偏差，并明确保留第二类 PartDesign axis 产品扩展。C12-M17 是 SubtractivePipe product PipeLaw Shape parity 实现批次：它只修复 Body 内 `SubtractivePipe` 使用 product PipeLaw 时主响应发布 `toolShape` 的偏差，目标是让主 `Shape` / mesh / subshapes / namedShape / bbox / volume 回到 FreeCAD post-cut feature `Shape`；`AddSubShape` 继续保存 pre-boolean removed tool cache，PipeLaw LawSamples 仍是 CAD Core product extension。PartDesign 轴引用接受几何共线 BSpline / 非 Line 曲线按用户选择继续支持，不作为 C12-M17 修复目标。S5 已发布 final status `implemented_freecad_main_shape_parity_product_law_retained`，C12-M17 队列关闭后只输出 markdown 表头。
 
+用户随后要求为 C12-M17 之后的下一步出方案到 `docs/CADCore12.0`。C12-M18 是 CAD Core live backlog re-audit 批次：它不预设下一个 C++ implementation 目标，而是重新从当前 `cad-core` capability、C12-M1..M17 release gate、历史 `narrowed_gaps`、非原生产品扩展边界和当前测试面中筛选是否存在新的可实现项。创建时 live capability 没有任何非空 `remaining_gaps` 或 `known_gaps`；仍存在的 `narrowed_gaps` 只作为历史 native-hidden、helper-blocked、oracle-blocked、product-contract non-parity 或 current-covered 记录进入三闸门复审。C12-M18 默认不授权 C++，只有 stable expected / approved product contract、request-local boundary 与 current mismatch 同时成立时才输出后续 implementation package；否则分流到 oracle/product-contract、my-chili3d frontend sync 或 no-code backlog gate。
+
 ## 入口
 
 - C12-M1 总入口：`C12-M1-CADCoreCapabilityImplementationCandidate盘点批次/6-29-16-26-C12-M1-CADCoreCapabilityImplementationCandidate盘点批次总入口.md`
@@ -110,6 +112,10 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M17 方案：`C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次/7-5-01-56-C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次方案.md`
 - C12-M17 工作步骤：`C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次/工作步骤细分/`
 - C12-M17 矩阵：`C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次/矩阵/`
+- C12-M18 总入口：`C12-M18-CADCoreLiveBacklogReAudit批次/7-5-12-29-C12-M18-CADCoreLiveBacklogReAudit批次总入口.md`
+- C12-M18 方案：`C12-M18-CADCoreLiveBacklogReAudit批次/7-5-12-29-C12-M18-CADCoreLiveBacklogReAudit批次方案.md`
+- C12-M18 工作步骤：`C12-M18-CADCoreLiveBacklogReAudit批次/工作步骤细分/`
+- C12-M18 矩阵：`C12-M18-CADCoreLiveBacklogReAudit批次/矩阵/`
 
 ## 当前基线
 
@@ -189,6 +195,8 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 - C12-M15 已创建并关闭为 Sketch stable geometry id / mapped-name ledger 设计批次。创建基线为 `HEAD=dff911d299`（`dff911d299 实现 SubShapeBinder CopyOnChange request-local 支持`），创建前 worktree clean；S0 live 基线已关闭于 `HEAD=b3d2df945a`（`b3d2df945a docs: 关闭 C12-M15 工作步骤总入口`），起点 worktree clean。C12-M11 与 C12-M14 队列均为空，live capability 递归检查确认所有 `remaining_gaps=[]` 且 `known_gaps` 为空数组 / 空对象；本包承接 C12-M11 的 stable geometry id ledger follow-up，不重开 C12-M11 closed internal profile response，不继承 C12-M14 helper lifecycle，也不是 capability remaining gap。S1 source/current 复核已关闭于 `HEAD=5a5464fb96` 起点：FreeCAD authority 确认为 `GeometryFacade` extension id + mapped `g<ID>` / `e<ID>`，cad-core current landing 已定位到 parser、raw ledger、response publisher 与 reference resolution consumer。S2 ledger interface 产品契约已关闭于 `HEAD=499616ab4c` 起点：`SketchGeometryIdentityLedger` 定义为 request-local ledger，输入当前请求 geometry/source edge/internal alias/old reference shadow，输出 `byIndexed`、`byStableSubname`、stable/fallback/diagnostic 状态和 response fields；`mesh.edgeSegments[]`、`subshapes[]`、`rawSketchEdgeIdentity`、`elementReferenceUpdates` 共享同一账本来源。S3 current gap 与最小实现边界裁决已关闭于 `HEAD=86749f91cb` 起点：001..008、011、012 为 `current_supported`，009 split fragment durable identity 与 010 frontend consumer boundary 为 `design_only`；当前 coverage 足够 no-code 收口，不授权 C++ implementation package。S4 设计发布闸门已关闭于 `HEAD=c4c0d19fed` 起点，final status 为 `design_published_no_code_current_sufficient`，C12-M15 队列关闭后只输出表头，blocker queue 无悬空 open row。
 - C12-M16 已完成 Sketch split fragment geometry identity ledger 实现批次。创建基线为 `HEAD=decfc267a2`（`decfc267a2 docs: 关闭 C12-M15 S4 设计发布闸门`），创建前 worktree clean；S0 live 基线已关闭于 `HEAD=a4375f45a5`（`a4375f45a5 文档：关闭 C12-M16 工作步骤总入口`），起点 worktree clean，C12-M15 队列只输出 markdown 表头。本包是用户明确授权的 C++ implementation lane，只重开 C12-M15 `CONTRACT-009 split_fragment_boundary`；不重开普通 `g<ID>` raw edge identity，不处理 my-chili3d frontend sync，不处理 C12-M11 open wire mesh contract。S3 已实现 source one-to-many fragment ledger：把 split history / internal alias / current fragment edge 映射为 `g<ID>:splitN`。S4 已验证 response、reference resolution 和 adapter public surface 共享同一 request-local split fragment token，并补 `sketcher.split_fragment_identity_ledger` capability wording，明确不发布 persistent FreeCAD session parity。S5 发布 final status `implemented_current_supported`，关闭 `C12M16-BLOCKER-601`；C12-M16 队列关闭后只输出 markdown 表头。
 - C12-M17 已关闭为 SubtractivePipe product PipeLaw Shape parity 实现批次。创建基线为 `HEAD=474097e0f6`（`474097e0f6 feat: 补齐引用轴和基准平面契约`）；S0 live 基线同为 `pwd=/Users/li/Chili3DProject/FreeCAD`、`HEAD=474097e0f6`。S0 已确认 C12-M1..M16 队列均只输出 markdown 表头，并冻结起点 dirty boundary：既有 C12-M11/M15/M16 历史状态修正文档、`docs/capability/7-5-00-14-cad-web-background非FreeCAD原生语义边界.md`、root README dirty 与未跟踪 C12-M17 package 文件并存。S1 source/current audit 已关闭：FreeCAD `Pipe::execute()` 发布 post-boolean feature `Shape`，current cad-core 红路径定位到 `publishToolContractShape` 把 product subtractive body 主响应改选 `toolShape`；capability/adapters 仅公开 PipeLaw product extension 和 fixture 列表；`allowGeometricallyLinearCurve=true` 作为产品扩展保留。S2 red expected 已关闭：复用 C6-M3 subtractive product fixture，把 expected wording/shape surface 迁移为 product PipeLaw extension + FreeCAD-compatible post-cut main Shape。S3 已让 main product SubtractivePipe response、mesh、subshapes、bbox、volume 和 namedShape 跟随 post-cut `featureShape` / `featureNamedShape`，同时让 `AddSubShape` subtractive cache 继续保存 pre-boolean `toolShape` / `toolNamedShape`；S4 已同步 capability、adapter、expected wording 和 capability 边界文档。S5 发布 final status `implemented_freecad_main_shape_parity_product_law_retained`，`C12M17-BLOCKER-601` 已关闭，C12-M17 队列关闭后只输出 markdown 表头。
+- C12-M18 已创建为 CAD Core live backlog re-audit 批次。创建基线为 `HEAD=14bbd0ceb9`（`14bbd0ceb9 feat: 修复 SubtractivePipe product PipeLaw 主 Shape 生命周期`），创建前 worktree clean；C12-M17 队列只输出 markdown 表头。创建审计确认当前 capability 没有非空 `remaining_gaps` 或 `known_gaps`，但仍有 `part_design.revolution_groove`、`part_workbench.filling`、`part_workbench.geomplate`、`part_workbench.loft`、`part_workbench.project_on_surface` 和 `part_workbench.sweep` 的 `narrowed_gaps` 记录。C12-M18 S0-S5 将重新应用 stable expected / approved product contract、request-local boundary、current mismatch 三闸门；PartDesign 几何共线 BSpline / 非 Line axis 按用户决定继续保留为 product extension；C12-M11/M15/M16 的 sketch token consumer 工作若仍有产品问题，应分流到 my-chili3d frontend sync，不在 FreeCAD/cad-core 内发明 C++ gap。
+- C12-M18 工作步骤总入口已关闭：`C12-M18-CADCoreLiveBacklogReAudit批次/工作步骤细分/7-5-12-29-【已实现】C12-M18工作步骤总入口.md` 已确认包结构、入口与 S0-S5 初始队列顺序、矩阵入口和 TSV 字段数；入口关闭后队列从 S0 `live 基线与 C12 关闭口径冻结` 继续。
 
 ## 重开条件
 
@@ -209,7 +217,7 @@ C12-M13 S6 已完成发布闸门并发布 `partial_implementation_with_named_fol
 
 ## 队列检查
 
-C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M17 当前只应输出表头。
+C12-M17 S5 关闭后，C12-M1..M17 队列预期只输出 markdown 表头；C12-M18 创建后，本包队列应显示入口与 S0-S5 pending。
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
@@ -230,11 +238,12 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/工作步骤细分 --format markdown
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次/工作步骤细分 --format markdown
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore12.0/C12-M18-CADCoreLiveBacklogReAudit批次/工作步骤细分 --format markdown
 ```
 
 ## 文档验收
 
-C12-M17 发布验证由 `C12M17-VAL-001..004/201/301/401` 记录；root 验收继续保留各 C12 包 TSV 字段数、尾随空白和 `git diff --check`。
+C12-M18 创建验证由 `C12M18-VAL-001..006/201/301/401/501` 规划；root 验收继续保留各 C12 包 TSV 字段数、尾随空白和 `git diff --check`。
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
@@ -255,6 +264,7 @@ awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " f
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M15-SketchStableGeometryIdMappedNameLedger设计批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M16-SketchSplitFragmentGeometryIdentityLedger实现批次/矩阵/*.tsv
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M17-SubtractivePipeProductPipeLawShapeParity实现批次/矩阵/*.tsv
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore12.0/C12-M18-CADCoreLiveBacklogReAudit批次/矩阵/*.tsv
 rg -n '[ \t]$' docs/CADCore12.0
 git diff --check
 ```
