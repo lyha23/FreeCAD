@@ -7,6 +7,7 @@
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/property_topo_shape.h"
+#include "cad_core/topo/subshape_identity.h"
 
 #include <BRepBuilderAPI_GTransform.hxx>
 #include <BRep_Builder.hxx>
@@ -1192,7 +1193,7 @@ std::optional<LinkShapeBuild> linkedSubshapeAt(const app::DocumentObject& object
     const std::string rawStableSubname =
         index < link.stableSubnames.size() && !link.stableSubnames.at(index).empty()
         ? link.stableSubnames.at(index)
-        : rawSubname;
+        : std::string {};
     const std::string rawFullSubname =
         index < link.fullSubnames.size() ? link.fullSubnames.at(index) : rawSubname;
     const std::string subname = stripLinkedObjectPrefix(rawSubname, link, context);
@@ -1208,19 +1209,39 @@ std::optional<LinkShapeBuild> linkedSubshapeAt(const app::DocumentObject& object
         return selected;
     }
     const auto namedShapeIt = context.namedShapes.find(link.object);
+    const part::NamedShape* namedShape =
+        namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
     std::string resolvedElement = subname;
     std::optional<TopoDS_Shape> shape;
     if (subname.empty()) {
         return LinkShapeBuild{sourceShape, std::nullopt, std::nullopt, {}};
     }
-    if (namedShapeIt != context.namedShapes.end()) {
+    const topo::SubshapeIdentityDecision identity =
+        topo::resolveDurableSubshapeReference({
+            object.name,
+            "LinkedObject",
+            link.object,
+            subname,
+            stableSubname,
+            rawFullSubname,
+            namedShape,
+            link.stableSubnamesExplicit,
+        });
+    if (!identity.diagnostics.empty()) {
+        context.diagnostics.insert(context.diagnostics.end(),
+                                   identity.diagnostics.begin(),
+                                   identity.diagnostics.end());
+        context.objects[object.name] = {{"status", "error"}};
+        return std::nullopt;
+    }
+    if (namedShape != nullptr) {
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
         // ::LinkBaseExtension::parseSubName() stores PropertyXLink subvalues and
         // getTrueLinkedObject() resolves them through getSubObject().
-        const auto resolved = part::resolveElementReference(namedShapeIt->second, subname, stableSubname);
+        const auto resolved = part::resolveElementReference(*namedShape, subname, stableSubname);
         if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
             resolvedElement = *resolved.element;
-            shape = part::subshapeByName(namedShapeIt->second, resolvedElement);
+            shape = part::subshapeByName(*namedShape, resolvedElement);
         }
         else if (stableSubname != subname) {
             runtime::addDiagnostic(context.diagnostics,

@@ -328,6 +328,7 @@ add_library(cad-core-lib STATIC
   src/sketcher/sketch_object.cpp
   src/sketcher/sketch_internal_builder.cpp
   src/sketcher/sketch_internal_result.cpp
+  src/topo/subshape_identity.cpp
 )
 
 set_target_properties(cad-core-lib PROPERTIES POSITION_INDEPENDENT_CODE ON)

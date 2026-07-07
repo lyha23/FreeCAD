@@ -8,6 +8,7 @@
 #include "cad_core/runtime/reference_lifecycle.h"
 #include "cad_core/runtime/reference_resolution.h"
 #include "cad_core/part/topo_shape.h"
+#include "cad_core/topo/subshape_identity.h"
 
 #include <Standard_Failure.hxx>
 #include <TopAbs_ShapeEnum.hxx>
@@ -235,7 +236,7 @@ bool namedShapeHasCurrentElementEvidence(const std::string& indexed,
                        namedShape->elementMap.end(),
                        [&](const auto& item) {
                            return item.second == indexed
-                               && stableSubnameKindMatchesIndexed(indexed, item.first);
+                               && topo::hasStableElementMapEvidence(namedShape, indexed, item.first);
                        });
 }
 
@@ -258,34 +259,13 @@ std::string stableSubnameFor(const std::string& indexed,
     const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
         || indexed.rfind("InternalEdge", 0) == 0
         || indexed.rfind("InternalVertex", 0) == 0;
-    if (namedShape == nullptr) {
-        return internalIndexed ? std::string{} : indexed;
-    }
-
-    std::string bestStableSubname;
-    int bestPriority = -1;
-    for (const auto& [stableSubname, currentSubname] : namedShape->elementMap) {
-        if (currentSubname != indexed) {
-            continue;
-        }
-        if (!stableSubnameKindMatchesIndexed(indexed, stableSubname)) {
-            continue;
-        }
-        const int priority = stableSubnamePriority(indexed, stableSubname);
-        if (priority > bestPriority) {
-            bestStableSubname = stableSubname;
-            bestPriority = priority;
-        }
-    }
-    if (!bestStableSubname.empty()) {
-        if (bestPriority == 0 || (internalIndexed && bestStableSubname == indexed)) {
-            return {};
-        }
-        return bestStableSubname;
+    const std::string stableSubname = topo::stableSubnameFromNamedShape(indexed, namedShape);
+    if (!stableSubname.empty()) {
+        return internalIndexed && stableSubname == indexed ? std::string{} : stableSubname;
     }
     // Sketch Internal* names are request-local until the sketch InternalShape has a real
     // NamedShape/ElementMap. Do not synthesize a stable name from the current indexed name.
-    return internalIndexed ? std::string{} : indexed;
+    return {};
 }
 
 std::string internalElementStableSubnameFor(const std::string& objectName,
@@ -529,7 +509,7 @@ std::string bodyTipBodyLocalStableSubnameFor(
     if (!tipContext || !isPlainTopologicalElementName(indexed)) {
         return {};
     }
-    return namedShapeMapsStableToCurrent(stableSource, indexed, indexed) ? indexed : std::string {};
+    return topo::hasStableElementMapEvidence(stableSource, indexed, indexed) ? indexed : std::string {};
 }
 
 std::optional<TopologicalElementToken> parseTopologicalElementToken(const std::string& indexed)
@@ -969,9 +949,6 @@ bool hasStableEdgeIdentityEvidence(const std::string& indexed,
     if (!stableSubname.empty()) {
         return true;
     }
-    if (!subname.empty() && subname.find('.') != std::string::npos) {
-        return true;
-    }
     return namedShapeHasCurrentElementEvidence(indexed, stableSource);
 }
 
@@ -1152,16 +1129,24 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         }
         stableSubname = bodyDisplayCompoundQualifiedStableSubname(indexed, stableSubname, displayContext);
         const std::string subname = responseSubnameFor(indexed, stableSubname, namedShape, tipContext, displayContext);
-        std::string responseIdentityStatus = rawIdentityStatus;
+        const std::string fullSubname = responseFullSubnameFor(objectName, indexed, subname, tipContext);
+        topo::SubshapeIdentityDecision identityDecision = topo::decideDisplayPublication({
+            objectName,
+            indexed,
+            subname,
+            fullSubname,
+            stableSubname,
+            rawIdentityStatus,
+            stableSource,
+            bodyTipDisplayOnlySubname,
+        });
+        stableSubname = identityDecision.stableSubname;
+        std::string responseIdentityStatus = topo::identityStatusName(identityDecision.status);
         if (displayKind(subshape) == "Edge"
             && stableEdgeIdentityContract
-            && responseIdentityStatus.empty()
             && !bodyTipDisplayOnlySubname
             && hasStableEdgeIdentityEvidence(indexed, stableSubname, subname, stableSource)) {
             responseIdentityStatus = "stable";
-        }
-        if (bodyTipDisplayOnlySubname && responseIdentityStatus.empty()) {
-            responseIdentityStatus = "body_display_only";
         }
         nlohmann::json responseSubshape {
             {"id", objectName + ":" + indexed},
@@ -1172,9 +1157,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             {"ShadowSub", nlohmann::json::array()},
             {"ReferenceShadow", nlohmann::json::array()},
         };
-        if (const std::string fullSubname =
-                responseFullSubnameFor(objectName, indexed, subname, tipContext);
-            !fullSubname.empty()) {
+        if (!fullSubname.empty()) {
             responseSubshape["fullSubname"] = fullSubname;
         }
         for (const std::string& field :

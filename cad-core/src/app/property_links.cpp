@@ -350,9 +350,6 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
 
     const bool stableSubnamesExplicit = value.contains("StableSubList");
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
-    if (!stableSubnamesExplicit && stableSubnames.empty()) {
-        stableSubnames = subnames;
-    }
     std::vector<ShadowSub> shadowSubs;
     const auto shadowSubIt = value.find("ShadowSub");
     if (shadowSubIt != value.end()) {
@@ -378,7 +375,7 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
     const bool fullSubnamesExplicit = value.contains("FullSubList");
     std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
     if (!fullSubnamesExplicit && fullSubnames.empty()) {
-        fullSubnames = stableSubnames;
+        fullSubnames = subnames;
     }
     Link link{objectIt->get<std::string>(),
               std::move(subnames),
@@ -420,9 +417,6 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
 
     const bool stableSubnamesExplicit = value.contains("StableSubList");
     std::vector<std::string> stableSubnames = readOptionalStringList(value, "StableSubList");
-    if (!stableSubnamesExplicit && stableSubnames.empty()) {
-        stableSubnames = subnames;
-    }
     std::vector<ShadowSub> shadowSubs;
     const auto shadowSubIt = value.find("ShadowSub");
     if (shadowSubIt != value.end()) {
@@ -448,7 +442,7 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
     const bool fullSubnamesExplicit = value.contains("FullSubList");
     std::vector<std::string> fullSubnames = readOptionalStringList(value, "FullSubList");
     if (!fullSubnamesExplicit && fullSubnames.empty()) {
-        fullSubnames = stableSubnames;
+        fullSubnames = subnames;
     }
     Link link{objectIt->get<std::string>(),
               std::move(subnames),
@@ -972,10 +966,7 @@ void normalizeLabelReferencesForLink(Link& link,
             }
         }
     }
-    if (stableDefaulted) {
-        link.stableSubnames = link.subnames;
-    }
-    else {
+    if (!stableDefaulted) {
         for (std::size_t index = 0; index < link.stableSubnames.size(); ++index) {
             normalizeExternalDocumentPrefix(link.stableSubnames, index, link);
             (void)renameNestedLabelReference(link.stableSubnames, index, link, document, labelOwners);
@@ -989,7 +980,7 @@ void normalizeLabelReferencesForLink(Link& link,
         }
     }
     if (fullDefaulted) {
-        link.fullSubnames = link.stableSubnames;
+        link.fullSubnames = link.subnames;
     }
     else {
         for (std::size_t index = 0; index < link.fullSubnames.size(); ++index) {

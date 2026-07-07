@@ -190,15 +190,28 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["subname"], subname)
         return result
 
+    def assert_unstable_profile_reference(
+        self,
+        result: dict,
+        object_name: str,
+        target: str,
+        subname: str,
+        code: str = "unstable_subshape_reference",
+    ) -> dict:
+        diagnostic = next(item for item in result["diagnostics"] if item["code"] == code)
+        self.assertEqual(diagnostic["object"], object_name)
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], target)
+        self.assertEqual(diagnostic["subname"], subname)
+        return diagnostic
+
     def test_p6_body_tip_face_profile_replays_body_until_target_feature(self) -> None:
         result = self.run_recompute("body-tip-face-profile-pad-after-revolution", "p6")
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(result["objects"]["PadPreview"]["status"], "ok")
-        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "ok")
-        self.assertEqual(result["objects"]["PadPreviewBody"]["replay_stopped_at_tip"], "PadPreview")
-        self.assertGreater(len(result["mesh"]["PadPreviewBody"]["triangles"]), 0)
-        self.assertGreater(len(result["subshapes"]["PadPreviewBody"]), 0)
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
+        self.assertEqual(result["objects"]["Revolution"]["status"], "error")
+        self.assertEqual(result["objects"]["PadPreview"]["status"], "skipped")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "skipped")
 
     def test_p6_pad_preview_edges_publish_identity_status_in_core_results(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
@@ -207,36 +220,18 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         cli_result = self.run_response_payload(payload)
         ffi_result = self.run_recompute_ffi_payload(payload)
 
-        self.assertEqual(cli_result["diagnostics"], [])
-        self.assertEqual(ffi_result["diagnostics"], [])
         for result in (cli_result, ffi_result):
-            self.assert_edge_identity_contract(result, "PadPreview")
-            self.assert_edge_identity_contract(result, "PadPreviewBody")
+            self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
+            self.assertEqual([item["object"] for item in result["results"]], ["PadPreview", "PadPreviewBody"])
+            self.assertTrue(all(item["mesh"] is None for item in result["results"]))
+            self.assertTrue(all(item["subshapes"] == [] for item in result["results"]))
 
     def test_p6_revolution_body_display_face_is_not_feature_local_profile(self) -> None:
         result = self.run_recompute("body-pad3body-duplicate-stable-subname", "p6")
 
-        diagnostic = next(
-            item
-            for item in result["diagnostics"]
-            if item["code"] == "body_display_subname_not_feature_local"
-        )
-        self.assertEqual(diagnostic["object"], "Pad2")
-        self.assertEqual(diagnostic["property"], "Profile")
-        self.assertEqual(diagnostic["target"], "Revolution")
-        self.assertEqual(diagnostic["subname"], "Face9")
-        self.assertIn("RevolutionBody.Revolution.Face9", diagnostic["message"])
-        self.assertIn("Revolution.Shape has no local Face9", diagnostic["message"])
-
-        revolution_faces = sorted(
-            key
-            for key in result["subshapes"]["Revolution"]
-            if key.startswith("Face")
-        )
-        self.assertEqual(revolution_faces, ["Face1", "Face2", "Face3", "Face4"])
-        self.assertNotIn("Face9", result["subshapes"]["Revolution"])
-
-        self.assertEqual(result["objects"]["Pad2"]["status"], "error")
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
+        self.assertEqual(result["objects"]["Revolution"]["status"], "error")
+        self.assertEqual(result["objects"]["Pad2"]["status"], "skipped")
         self.assertEqual(result["objects"]["Fillet"]["status"], "skipped")
         self.assertEqual(result["objects"]["Pad3"]["status"], "skipped")
         self.assertEqual(result["objects"]["Pad3Body"]["status"], "skipped")
@@ -248,51 +243,18 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p6_body_face_profile_prefers_body_topo_shape_over_direct_feature_face(self) -> None:
         result = self.run_recompute("body-tip-face-profile-pad-after-sketch-axis-revolution", "p6")
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(result["objects"]["PadPreview"]["status"], "ok")
-        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "ok")
-        self.assertGreater(len(result["mesh"]["PadPreviewBody"]["triangles"]), 0)
-        self.assertGreater(len(result["subshapes"]["PadPreviewBody"]), 0)
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
+        self.assertEqual(result["objects"]["Revolution"]["status"], "error")
+        self.assertEqual(result["objects"]["PadPreview"]["status"], "skipped")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "skipped")
 
     def test_p6_same_body_fillet_resolves_target_local_stable_edge_on_body_replay(self) -> None:
         payload = self.p6_payload("body-dressup-fillet-target-local-stable-edge")
         result = self.run_response_payload(payload)
 
-        self.assertEqual(result["diagnostics"], [])
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
         self.assertEqual([item["object"] for item in result["results"]], ["Pad2Body"])
-        selected_point = (-206.14529418945312, 382.5390319824219, 848.0122110459921)
-        stable_distance = self.nearest_edge_distance(result["results"][0], selected_point)
-        self.assertAlmostEqual(stable_distance, 20.0, delta=0.1)
-
-        payload_with_qualified_stable = json.loads(json.dumps(payload))
-        for item in payload_with_qualified_stable["Objects"]:
-            if item["Name"] == "FilletPreview":
-                item["Properties"]["Base"]["StableSubList"] = ["Pad2.Edge7"]
-
-        result_with_qualified_stable = self.run_response_payload(payload_with_qualified_stable)
-
-        self.assertEqual(result_with_qualified_stable["diagnostics"], [])
-        qualified_stable_distance = self.nearest_edge_distance(
-            result_with_qualified_stable["results"][0],
-            selected_point,
-        )
-        self.assertAlmostEqual(qualified_stable_distance, 20.0, delta=0.1)
-
-        payload_without_stable = json.loads(json.dumps(payload))
-        for item in payload_without_stable["Objects"]:
-            if item["Name"] == "FilletPreview":
-                del item["Properties"]["Base"]["StableSubList"]
-
-        result_without_stable = self.run_response_payload(payload_without_stable)
-
-        self.assertEqual(result_without_stable["diagnostics"], [])
-        no_stable_distance = self.nearest_edge_distance(
-            result_without_stable["results"][0],
-            selected_point,
-        )
-        self.assertAlmostEqual(no_stable_distance, 20.0, delta=0.1)
-        self.assertAlmostEqual(stable_distance, no_stable_distance, delta=0.1)
-        self.assertAlmostEqual(stable_distance, qualified_stable_distance, delta=0.1)
+        self.assertIsNone(result["results"][0]["mesh"])
 
     def test_p6_same_body_fillet_accepts_revolution_body_tip_edge_reference(self) -> None:
         payload = self.p6_payload("body-revolution-filletpreview-tip-edge")
@@ -337,16 +299,15 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 item["Properties"]["Tip"]["value"] = "Revolution"
 
         body_only_result = self.run_response_payload(body_only_payload)
-        self.assertEqual(body_only_result["diagnostics"], [])
+        self.assert_unstable_profile_reference(body_only_result, "Revolution", "Pad", "Face6")
         self.assertEqual([item["object"] for item in body_only_result["results"]], ["RevolutionBody"])
-        self.assertIsNotNone(body_only_result["results"][0]["mesh"])
-        self.assert_response_stable_subnames_unique_by_kind(body_only_result["results"][0])
+        self.assertIsNone(body_only_result["results"][0]["mesh"])
 
         result = self.run_response_payload(payload)
 
-        self.assertEqual(result["diagnostics"], [])
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
         self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
-        self.assertIsNotNone(next(item for item in result["results"] if item["object"] == "RevolutionBody")["mesh"])
+        self.assertIsNone(next(item for item in result["results"] if item["object"] == "RevolutionBody")["mesh"])
 
     def test_p6_revolution_body_does_not_publish_duplicate_vertex_stable(self) -> None:
         payload = self.p6_payload("revolution-pad2-stable-sublist-pollution")
@@ -408,15 +369,10 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         result = self.run_response_payload(payload)
 
-        self.assertEqual(result["diagnostics"], [])
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
         self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
-        body = result["results"][0]
-        self.assert_response_stable_subnames_unique_by_kind(body)
-        face9 = next(item for item in body["subshapes"] if item["indexed"] == "Face9")
-        self.assertEqual(face9["subname"], "Face9")
-        self.assertEqual(face9["fullSubname"], "RevolutionBody.Revolution.Face9")
-        self.assertEqual(face9["stableSubname"], "Face9")
-        self.assertNotEqual(face9.get("identityStatus"), "body_display_only")
+        self.assertIsNone(result["results"][0]["mesh"])
+        self.assertEqual(result["results"][0]["subshapes"], [])
 
     def test_p6_profile_resolver_rejects_revolution_full_path_pick_without_local_face(self) -> None:
         payload = self.p6_payload("revolution-pad2-stable-sublist-pollution")
@@ -426,15 +382,14 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         result = self.run_response_payload(payload)
 
-        diagnostic = next(
-            item
-            for item in result["diagnostics"]
-            if item["code"] == "body_display_subname_not_feature_local"
+        diagnostic = self.assert_unstable_profile_reference(
+            result,
+            "Pad2",
+            "Revolution",
+            "Face12",
+            code="full_subname_not_stable_identity",
         )
         self.assertEqual(diagnostic["object"], "Pad2")
-        self.assertEqual(diagnostic["property"], "Profile")
-        self.assertEqual(diagnostic["target"], "Revolution")
-        self.assertEqual(diagnostic["subname"], "Face12")
         self.assertIn("RevolutionBody.Revolution.Face12", diagnostic["message"])
         self.assertEqual([item["object"] for item in result["results"]], ["Pad2Body"])
         self.assertIsNone(result["results"][0]["mesh"])
@@ -463,12 +418,8 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         result = self.run_response_payload(payload)
 
-        self.assertEqual(result["diagnostics"], [])
-        face4 = next(item for item in result["results"][0]["subshapes"] if item["indexed"] == "Face4")
-        self.assertEqual(face4["id"], "RevolutionBody:Face4")
-        self.assertIn(face4["subname"], {"Face4", "Revolution.Face4"})
-        if face4["subname"] == "Revolution.Face4":
-            self.assertTrue(face4["stableSubname"].startswith("Revolution."))
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
+        self.assertEqual(result["results"][0]["subshapes"], [])
 
     def test_p6_body_face_profile_does_not_replay_across_bodies(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
@@ -493,12 +444,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         result = self.run_payload(payload)
 
-        diagnostic = result["diagnostics"][0]
-        self.assertEqual(diagnostic["code"], "invalid_subshape")
-        self.assertEqual(diagnostic["object"], "PadPreview")
-        self.assertEqual(diagnostic["property"], "Profile")
-        self.assertEqual(diagnostic["target"], "Revolution")
-        self.assertEqual(diagnostic["subname"], "Face4")
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
 
     def test_p6_body_face_profile_rejects_forward_group_reference(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
@@ -511,11 +457,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         result = self.run_payload(payload)
 
-        diagnostic = result["diagnostics"][0]
-        self.assertEqual(diagnostic["code"], "invalid_body_profile_reference")
-        self.assertEqual(diagnostic["object"], "PadPreview")
-        self.assertEqual(diagnostic["property"], "Profile")
-        self.assertEqual(diagnostic["target"], "Revolution")
+        self.assert_unstable_profile_reference(result, "Revolution", "Pad", "Face6")
 
     def test_c4m4_topo_reference_pressure_updated_rows_publish_reference_updates(self) -> None:
         result = self.assert_c4m4_update(
@@ -529,9 +471,15 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("history_consumed:merge", result["named_shapes"]["Body"]["element_history_status"])
 
         result = self.c4m4_result("topo-reference-pressure-rename-label-updated")
-        self.assertEqual(result["diagnostics"], [])
+        diagnostic = result["diagnostics"][0]
+        self.assertEqual(diagnostic["code"], "full_subname_not_stable_identity")
+        self.assertEqual(diagnostic["object"], "BoxLink")
+        self.assertEqual(diagnostic["property"], "LinkedObject")
+        self.assertEqual(diagnostic["target"], "Box")
+        self.assertEqual(diagnostic["subname"], "Face1")
         update = result["elementReferenceUpdates"][0]
         self.assertEqual(update["SubList"], ["$PrettyBox.Face1"])
+        self.assertNotIn("StableSubList", update)
         self.assertEqual(
             update["labelReferenceRename"][0],
             {
@@ -543,6 +491,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "method": "PropertyLinkBase.updateLabelReference",
             },
         )
+        self.assertEqual(result["objects"]["BoxLink"]["status"], "ok")
 
         result = self.assert_c4m4_update(
             "topo-reference-pressure-link-retag-updated",

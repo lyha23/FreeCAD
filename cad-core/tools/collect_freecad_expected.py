@@ -1260,6 +1260,20 @@ def shape_mapped_subname(shape: Any | None, indexed: str) -> str:
     return mapped
 
 
+def plain_topological_subname(value: str) -> bool:
+    for prefix in ("Face", "Edge", "Vertex"):
+        if value.startswith(prefix) and value[len(prefix):].isdigit():
+            return True
+    return False
+
+
+def stable_mapped_subname(shape: Any | None, indexed: str) -> str:
+    mapped = shape_mapped_subname(shape, indexed)
+    if mapped == indexed and plain_topological_subname(mapped):
+        return ""
+    return mapped
+
+
 def object_tip(obj: Any) -> Any | None:
     if getattr(obj, "TypeId", "") != "PartDesign::Body":
         return None
@@ -1290,16 +1304,18 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
         for index, _ in enumerate(getattr(shape, attr, []), start=1):
             indexed = f"{prefix}{index}"
             subname = indexed
-            stable_subname = shape_mapped_subname(shape, indexed)
+            stable_subname = stable_mapped_subname(shape, indexed)
             full_subname = f"{owner}.{indexed}"
+            identity_status = "stable" if stable_subname else "current_only"
 
             if tip_name:
                 full_subname = f"{owner}.{tip_name}.{indexed}"
                 tip_local_subname = f"{tip_name}.{indexed}"
                 if shape_has_indexed_element(tip_shape, indexed):
-                    tip_stable_subname = shape_mapped_subname(tip_shape, indexed)
+                    tip_stable_subname = stable_mapped_subname(tip_shape, indexed)
                     subname = tip_local_subname
                     stable_subname = f"{tip_name}.{tip_stable_subname}" if tip_stable_subname else ""
+                    identity_status = "stable" if stable_subname else "body_display_only"
 
             entries.append(
                 {
@@ -1308,6 +1324,7 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
                     "indexed": indexed,
                     "subname": subname,
                     "stableSubname": stable_subname,
+                    "identityStatus": identity_status,
                     "fullSubname": full_subname,
                     "ShadowSub": [],
                     "ReferenceShadow": [],

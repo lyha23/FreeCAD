@@ -5,6 +5,7 @@
 #include "cad_core/part/topo_shape_reference.h"
 #include "cad_core/part_design/body_topo_shape.h"
 #include "cad_core/runtime/diagnostics.h"
+#include "cad_core/topo/subshape_identity.h"
 
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepAdaptor_Surface.hxx>
@@ -992,14 +993,9 @@ std::optional<std::string> bodyDisplayFullSubnameForTarget(
 
 bool linkHasStrongSubshapeEvidenceAt(const app::Link& profileLink, std::size_t index)
 {
-    if (index < profileLink.referenceShadows.size()) {
-        return true;
-    }
-    if (index < profileLink.shadowSubs.size()) {
-        return true;
-    }
-    return index < profileLink.fullSubnames.size()
-        && ownerPrefixFromQualifiedSubshape(profileLink.fullSubnames.at(index)).has_value();
+    (void)profileLink;
+    (void)index;
+    return false;
 }
 
 std::string stableSubnameForElementReference(const app::Link& profileLink,
@@ -1076,6 +1072,8 @@ app::Link bodyTopoShapeLink(const app::Link& profileLink,
     return link;
 }
 
+ResolveAttempt resolveAttemptFromIdentityDecision(const topo::SubshapeIdentityDecision& decision);
+
 ResolveAttempt resolveFaceOnSource(const app::DocumentObject& object,
                                    const app::Link& profileLink,
                                    const TopoDS_Shape& sourceShape,
@@ -1094,22 +1092,23 @@ ResolveAttempt resolveFaceOnSource(const app::DocumentObject& object,
     const std::string& subname = profileLink.subnames.front();
     const std::string rawStableSubname =
         profileLink.stableSubnames.size() == 1U ? profileLink.stableSubnames.front() : std::string {};
-    bool currentSubnameIsResolvable = false;
-    if (namedShape != nullptr) {
-        const auto currentResolved = part::resolveElementReference(*namedShape, subname, {});
-        currentSubnameIsResolvable =
-            currentResolved.status == part::ElementResolveStatus::Resolved && currentResolved.element.has_value();
+    const std::string rawFullSubname =
+        profileLink.fullSubnames.size() == 1U ? profileLink.fullSubnames.front() : std::string {};
+    const topo::SubshapeIdentityDecision identity =
+        topo::resolveDurableSubshapeReference({
+            object.name,
+            "Profile",
+            profileLink.object,
+            subname,
+            rawStableSubname,
+            rawFullSubname,
+            namedShape,
+            profileLink.stableSubnamesExplicit,
+        });
+    if (!identity.diagnostics.empty()) {
+        return resolveAttemptFromIdentityDecision(identity);
     }
-    else {
-        const auto currentSubshape = part::subshapeByName(sourceShape, subname);
-        currentSubnameIsResolvable = currentSubshape.has_value() && !currentSubshape->IsNull();
-    }
-    const std::string stableSubname =
-        stableSubnameForElementReference(profileLink,
-                                         0U,
-                                         subname,
-                                         rawStableSubname,
-                                         currentSubnameIsResolvable);
+    const std::string stableSubname = identity.stableSubname;
     const bool downgradedStableSubname = !rawStableSubname.empty() && stableSubname.empty();
     std::string currentSubname = subname;
     if (namedShape != nullptr) {
@@ -1245,25 +1244,26 @@ ResolveAttempt resolveEdgesOnSource(const app::DocumentObject& object,
     for (std::size_t index = 0; index < profileLink.subnames.size(); ++index) {
         const std::string subname = stripObjectPrefix(profileLink.subnames.at(index), profileLink.object);
         const std::string rawStableSubname = index < profileLink.stableSubnames.size()
-            ? stripObjectPrefix(profileLink.stableSubnames.at(index), profileLink.object)
+            ? profileLink.stableSubnames.at(index)
             : std::string {};
-        bool currentSubnameIsResolvable = false;
-        if (namedShape != nullptr) {
-            const auto currentResolved = part::resolveElementReference(*namedShape, subname, {});
-            currentSubnameIsResolvable =
-                currentResolved.status == part::ElementResolveStatus::Resolved && currentResolved.element.has_value();
-        }
-        else {
-            const auto currentSubshape = part::subshapeByName(sourceShape, subname);
-            currentSubnameIsResolvable = currentSubshape.has_value() && !currentSubshape->IsNull();
-        }
-        const std::string stableSubname =
-            stableSubnameForElementReference(
-                profileLink,
-                index,
+        const std::string rawFullSubname = index < profileLink.fullSubnames.size()
+            ? profileLink.fullSubnames.at(index)
+            : std::string {};
+        const topo::SubshapeIdentityDecision identity =
+            topo::resolveDurableSubshapeReference({
+                object.name,
+                "Profile",
+                profileLink.object,
                 subname,
                 rawStableSubname,
-                currentSubnameIsResolvable);
+                rawFullSubname,
+                namedShape,
+                profileLink.stableSubnamesExplicit,
+            });
+        if (!identity.diagnostics.empty()) {
+            return resolveAttemptFromIdentityDecision(identity);
+        }
+        const std::string stableSubname = identity.stableSubname;
 
         std::string currentSubname = subname;
         if (namedShape != nullptr) {
@@ -1403,6 +1403,20 @@ void addResolveDiagnostic(runtime::ComputeContext& context,
                            "runtime",
                            profileLink.object,
                            attempt.subname);
+}
+
+ResolveAttempt resolveAttemptFromIdentityDecision(const topo::SubshapeIdentityDecision& decision)
+{
+    if (decision.diagnostics.empty()) {
+        return {};
+    }
+    const runtime::Diagnostic& diagnostic = decision.diagnostics.front();
+    return {
+        std::nullopt,
+        diagnostic.code,
+        diagnostic.message,
+        diagnostic.subname,
+    };
 }
 
 ProfileBasedProfileSelection selectionFromInternalFaceCandidate(const app::Link& profileLink,
