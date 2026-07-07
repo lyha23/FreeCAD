@@ -8,7 +8,11 @@
         "Geometry": [
           {
             "kind": "ArcOfHyperbola",
-            "center": [0, 0],
+            "id": 1,
+            "center": [
+              0,
+              0
+            ],
             "majorRadius": 4,
             "minorRadius": 2,
             "angle": 0.2,
@@ -17,7 +21,11 @@
           },
           {
             "kind": "ArcOfParabola",
-            "center": [8, 0],
+            "id": 2,
+            "center": [
+              8,
+              0
+            ],
             "focal": 1.5,
             "angle": 0.1,
             "startAngle": -1,
@@ -33,21 +41,80 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, -3], "end": [12, -3]},
-          {"kind": "LineSegment", "start": [12, -3], "end": [12, 3]},
-          {"kind": "LineSegment", "start": [12, 3], "end": [0, 3]},
-          {"kind": "LineSegment", "start": [0, 3], "end": [0, -3]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              -3
+            ],
+            "end": [
+              12,
+              -3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              12,
+              -3
+            ],
+            "end": [
+              12,
+              3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              12,
+              3
+            ],
+            "end": [
+              0,
+              3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              3
+            ],
+            "end": [
+              0,
+              -3
+            ]
+          }
         ],
         "ExternalGeometry": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
-            {"value": "SourceSketch", "SubList": ["Edge1"]},
-            {"value": "SourceSketch", "SubList": ["Edge2"]}
+            {
+              "value": "SourceSketch",
+              "SubList": [
+                "Edge1"
+              ]
+            },
+            {
+              "value": "SourceSketch",
+              "SubList": [
+                "Edge2"
+              ]
+            }
           ]
         },
         "Constraints": []
       }
     }
   ],
-  "recompute": {"objs": ["SourceSketch", "Sketch"]}
+  "recompute": {
+    "objs": [
+      "SourceSketch",
+      "Sketch"
+    ]
+  }
 }

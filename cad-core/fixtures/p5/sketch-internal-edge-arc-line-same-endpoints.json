@@ -6,10 +6,25 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [-2, 0], "end": [2, 0]},
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -2,
+              0
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
           {
             "kind": "ArcOfCircle",
-            "center": [0, 0],
+            "id": 2,
+            "center": [
+              0,
+              0
+            ],
             "radius": 2,
             "startAngle": 0,
             "endAngle": 3.141592653589793
@@ -19,5 +34,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
 }

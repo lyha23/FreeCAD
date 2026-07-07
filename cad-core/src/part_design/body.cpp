@@ -632,6 +632,39 @@ void addDistinctString(std::vector<std::string>& values, const std::string& valu
     }
 }
 
+bool isLocalTopologicalElementName(const std::string& value)
+{
+    return value.find('.') == std::string::npos && part::parseSubshapeName(value).has_value();
+}
+
+void addDirectTipSubshapeAliases(part::NamedShape& namedShape, const std::string& tipOwner)
+{
+    if (tipOwner.empty()) {
+        return;
+    }
+
+    std::map<std::string, std::string> aliases;
+    const std::string tipPrefix = tipOwner + ".";
+    for (const auto& [stableName, currentName] : namedShape.elementMap) {
+        if (!isLocalTopologicalElementName(stableName) || !isLocalTopologicalElementName(currentName)) {
+            continue;
+        }
+        const std::string alias = tipPrefix + stableName;
+        const auto existing = namedShape.elementMap.find(alias);
+        if (existing != namedShape.elementMap.end() && existing->second != currentName) {
+            continue;
+        }
+        aliases[alias] = currentName;
+    }
+
+    for (const auto& [alias, currentName] : aliases) {
+        namedShape.elementMap[alias] = currentName;
+    }
+    if (!aliases.empty()) {
+        addDistinctString(namedShape.elementHistoryStatus, "partdesign_body:direct_tip_aliases");
+    }
+}
+
 std::optional<part::NamedShape> namedShapeForDisplayOnlyFeature(
     const std::string& feature,
     const runtime::ComputeContext& context)
@@ -1113,6 +1146,27 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
 
         const runtime::AddSubShape& addSubShape = addSubIt->second;
         bool bodyShapeChanged = false;
+        if (addSubShape.replacementShape) {
+            if (addSubShape.addShape) {
+                appliedAdditiveFeatures.push_back(feature);
+            }
+            else if (addSubShape.subShape) {
+                appliedSubtractiveFeatures.push_back(feature);
+            }
+            bodyShape = *addSubShape.replacementShape;
+            bodyUsesPreciseBoundingBox = addSubShape.replacementUsesPreciseBoundingBox;
+            bodyNamedShape = addSubShape.replacementNamedShape
+                ? addSubShape.replacementNamedShape
+                : namedShapeForFeatureOrIndexed(feature, *bodyShape, context);
+            trailingDisplayOnlyChildren.clear();
+            if (addSubShape.replacementRefined) {
+                addDistinctString(refinedFeatures, feature);
+            }
+            if (feature == resolvedStopFeature) {
+                break;
+            }
+            continue;
+        }
         if (addSubShape.addShape) {
             appliedAdditiveFeatures.push_back(feature);
             if (!bodyShape) {
@@ -1249,6 +1303,9 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
     const bool directTipSubshapeStablePrefix = directTipSubshapeOwner
         && (appliedFeatureCount > 1U
             || (!appliedReplacementFeatures.empty() && appliedReplacementFeatures.back() == resolvedStopFeature));
+    if (bodyNamedShape && directTipSubshapeOwner) {
+        addDirectTipSubshapeAliases(*bodyNamedShape, *directTipSubshapeOwner);
+    }
 
     return BodyTopoShapeResult {
         resultShape,

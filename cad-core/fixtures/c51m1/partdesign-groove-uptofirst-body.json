@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               0,
               0
@@ -19,6 +20,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               6,
               0
@@ -30,6 +32,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               6,
               4
@@ -41,6 +44,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               0,
               4
@@ -64,11 +68,9 @@
           "SubSet": [
             {
               "value": "SketchPad",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]
@@ -89,6 +91,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               1,
               0.5
@@ -100,6 +103,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               2,
               0.5
@@ -111,6 +115,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               2,
               3.5
@@ -122,6 +127,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               1,
               3.5

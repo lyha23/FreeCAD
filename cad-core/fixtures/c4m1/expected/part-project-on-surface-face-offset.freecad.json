@@ -35,7 +35,7 @@
     "source_support": "SupportPlane",
     "status": "ok",
     "support_face": "Face1",
-    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+    "topo_naming_history": "source_backed_projection_item_mapper_history_request_local"
   },
   "reference": "FreeCADCmd oracle from part-project-on-surface-face-offset.json; objects: Part::Plane, Part::Plane, Part::ProjectOnSurface",
   "schema_version": "cad-core.freecad-expected.v1",

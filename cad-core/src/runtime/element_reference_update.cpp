@@ -4,6 +4,8 @@
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/topo_shape_reference.h"
 
+#include <TopAbs_ShapeEnum.hxx>
+
 #include <algorithm>
 
 namespace cad_core::runtime
@@ -33,6 +35,20 @@ nlohmann::json shadowSubToJson(const app::ShadowSub& shadowSub)
 bool requestLocalInternalSubname(const std::string& subname)
 {
     return part::parseInternalSubshapeName(subname).has_value();
+}
+
+bool requestLocalInternalFaceSubname(const std::string& subname)
+{
+    const auto parsed = part::parseInternalSubshapeName(subname);
+    return parsed && parsed->kind == TopAbs_FACE;
+}
+
+bool legacyInternalFaceProfileLink(const std::string& propertyName, const app::Link& link)
+{
+    return propertyName == "Profile"
+        && std::any_of(link.subnames.begin(),
+                       link.subnames.end(),
+                       requestLocalInternalFaceSubname);
 }
 
 std::optional<std::vector<std::string>> stableSubnamesForReferenceUpdate(
@@ -333,6 +349,9 @@ void appendElementReferenceUpdate(const app::DocumentObject& object,
     if (propertyValue.kind != app::PropertyKind::LinkSub || referenceShadows.empty()) {
         return;
     }
+    if (legacyInternalFaceProfileLink(propertyName, link)) {
+        return;
+    }
 
     nlohmann::json update = {
         {"object", object.name},
@@ -381,19 +400,27 @@ void appendElementReferenceSubListUpdate(const app::DocumentObject& object,
     }
 
     nlohmann::json subSet = nlohmann::json::array();
+    bool changed = false;
     for (std::size_t index = 0; index < propertyValue.links.size(); ++index) {
         const auto updated = referenceShadowUpdates.find(index);
         const auto& link = propertyValue.links.at(index);
+        if (legacyInternalFaceProfileLink(propertyName, link)) {
+            continue;
+        }
         std::vector<std::string> subnames = link.subnames;
         const auto updatedSubnames = subnameUpdates.find(index);
         if (updatedSubnames != subnameUpdates.end()) {
             subnames = updatedSubnames->second;
         }
+        changed = changed || updated != referenceShadowUpdates.end() || updatedSubnames != subnameUpdates.end();
         subSet.push_back(linkSubListItemUpdateJson(link,
                                                    subnames,
                                                    updated == referenceShadowUpdates.end()
                                                        ? nlohmann::json::array()
                                                        : updated->second));
+    }
+    if (!changed) {
+        return;
     }
     updates.push_back({
         {"object", object.name},
@@ -410,6 +437,9 @@ void appendReferenceMetadataUpdates(const app::DocumentObject& object,
     for (const auto& [propertyName, propertyValue] : object.propertyValues) {
         if (propertyValue.kind == app::PropertyKind::LinkSub) {
             for (const auto& link : propertyValue.links) {
+                if (legacyInternalFaceProfileLink(propertyName, link)) {
+                    continue;
+                }
                 const auto lifecycle =
                     classifyReferenceLifecycle(object, propertyValue, link, lifecycleView);
                 if (!lifecycle.shouldPublishElementReferenceUpdate) {
@@ -430,6 +460,10 @@ void appendReferenceMetadataUpdates(const app::DocumentObject& object,
         bool changed = false;
         nlohmann::json subSet = nlohmann::json::array();
         for (const auto& link : propertyValue.links) {
+            if (legacyInternalFaceProfileLink(propertyName, link)) {
+                subSet.push_back(referenceMetadataLinkUpdateJson(link, ReferenceLifecycleDecision {}));
+                continue;
+            }
             const auto lifecycle =
                 classifyReferenceLifecycle(object, propertyValue, link, lifecycleView);
             changed = changed || lifecycle.shouldPublishElementReferenceUpdate;

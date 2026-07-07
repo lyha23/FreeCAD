@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5]},
-          {"kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5]},
-          {"kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5]},
-          {"kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              -0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              -0.5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -21,11 +65,31 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              4
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,11 +101,31 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              4
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -60,8 +144,19 @@
       "ID": 5,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "SupportMode": "SurfaceNormal",
         "Solid": false
       }
@@ -71,8 +166,19 @@
       "ID": 6,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "SupportMode": "Sideways",
         "Solid": false
       }
@@ -82,14 +188,29 @@
       "ID": 7,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "SupportMode": "SurfaceNormal",
         "SpineSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face99"],
-          "StableSubList": ["Face99"]
+          "SubList": [
+            "Face99"
+          ],
+          "StableSubList": [
+            "Face99"
+          ]
         },
         "Solid": false
       }
@@ -99,12 +220,25 @@
       "ID": 8,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "AuxiliarySpine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "MissingAuxiliary",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "Solid": false
       }
@@ -114,13 +248,28 @@
       "ID": 9,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "AuxiliarySpine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face99"],
-          "StableSubList": ["Face99"]
+          "SubList": [
+            "Face99"
+          ],
+          "StableSubList": [
+            "Face99"
+          ]
         },
         "Solid": false
       }
@@ -130,9 +279,26 @@
       "ID": 10,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
-        "AuxiliarySpine": {"PropertyType": "App::PropertyLinkSub", "value": "AuxiliarySpine", "SubList": ["Edge1"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "AuxiliarySpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
         "AuxiliaryCurvilinear": "yes",
         "Solid": false
       }
@@ -142,9 +308,24 @@
       "ID": 11,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
-        "Binormal": [0, 0, 0],
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
+        "Binormal": [
+          0,
+          0,
+          0
+        ],
         "Solid": false
       }
     },
@@ -153,9 +334,24 @@
       "ID": 12,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
-        "BiNormal": [1, "bad", 0],
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
+        "BiNormal": [
+          1,
+          "bad",
+          0
+        ],
         "Solid": false
       }
     }

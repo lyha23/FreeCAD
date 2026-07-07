@@ -9,26 +9,50 @@
           {
             "kind": "LineSegment",
             "id": 101,
-            "start": [0, 0],
-            "end": [10, 0]
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
           },
           {
             "kind": "LineSegment",
             "id": 102,
-            "start": [10, 0],
-            "end": [10, 5]
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
           },
           {
             "kind": "LineSegment",
             "id": 103,
-            "start": [10, 5],
-            "end": [0, 5]
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
           },
           {
             "kind": "LineSegment",
             "id": 104,
-            "start": [0, 5],
-            "end": [0, 0]
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
           }
         ],
         "Constraints": []
@@ -43,20 +67,38 @@
           {
             "kind": "LineSegment",
             "id": 201,
-            "start": [2, 1],
-            "end": [8, 1]
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              8,
+              1
+            ]
           },
           {
             "kind": "LineSegment",
             "id": 202,
-            "start": [8, 1],
-            "end": [8, 4]
+            "start": [
+              8,
+              1
+            ],
+            "end": [
+              8,
+              4
+            ]
           },
           {
             "kind": "LineSegment",
             "id": 203,
-            "start": [8, 4],
-            "end": [2, 4]
+            "start": [
+              8,
+              4
+            ],
+            "end": [
+              2,
+              4
+            ]
           }
         ],
         "Constraints": []
@@ -72,8 +114,10 @@
           "SubSet": [
             {
               "value": "SketchPad",
-              "SubList": ["InternalFace1"],
-              "StableSubList": [""]
+              "SubList": [],
+              "StableSubList": [
+                "g101;SKT;FAC"
+              ]
             }
           ]
         },
@@ -93,7 +137,11 @@
           "SubSet": [
             {
               "value": "SketchPocket",
-              "StableSubList": ["g201", "g202", "g203"]
+              "StableSubList": [
+                "g201",
+                "g202",
+                "g203"
+              ]
             }
           ]
         },
@@ -110,7 +158,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchPad", "Pad", "SketchPocket", "Pocket"]
+          "values": [
+            "SketchPad",
+            "Pad",
+            "SketchPocket",
+            "Pocket"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -120,6 +173,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

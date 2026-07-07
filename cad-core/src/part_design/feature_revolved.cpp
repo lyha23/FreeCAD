@@ -164,6 +164,31 @@ std::optional<PreviousSolidSource> previousSolidSource(const runtime::ComputeCon
     return std::nullopt;
 }
 
+std::optional<PreviousSolidSource> solidSourceForLink(const runtime::ComputeContext& context,
+                                                      const std::string& owner)
+{
+    const auto shapeIt = context.shapes.find(owner);
+    if (shapeIt == context.shapes.end() || shapeIt->second.kind != runtime::ShapeValue::Kind::Solid) {
+        return std::nullopt;
+    }
+    std::optional<part::NamedShape> namedShape;
+    const auto namedShapeIt = context.namedShapes.find(owner);
+    if (namedShapeIt != context.namedShapes.end()) {
+        namedShape = namedShapeIt->second;
+    }
+    return PreviousSolidSource {owner, shapeIt->second.shape, std::move(namedShape)};
+}
+
+std::optional<PreviousSolidSource> baseShapeForRevolvedFeature(const app::DocumentObject& object,
+                                                               const runtime::ComputeContext& context)
+{
+    if (const auto baseFeature = app::readLink(object, "BaseFeature");
+        baseFeature && !baseFeature->object.empty()) {
+        return solidSourceForLink(context, baseFeature->object);
+    }
+    return std::nullopt;
+}
+
 std::optional<TopoDS_Face> firstFaceOf(const TopoDS_Shape& shape)
 {
     for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
@@ -443,11 +468,12 @@ std::optional<AxisSelection> axisFromEdge(const TopoDS_Edge& edge,
     return AxisSelection {resolved.axis->base, resolved.axis->direction};
 }
 
-std::optional<TopoDS_Shape> resolveSameSketchInternalEdgeAxis(const runtime::ShapeValue& shapeValue,
-                                                              const app::DocumentObject& object,
-                                                              runtime::ComputeContext& context,
-                                                              const std::string& target,
-                                                              const std::string& subname)
+std::optional<TopoDS_Shape> resolveSketchInternalEdgeAxis(const runtime::ShapeValue& shapeValue,
+                                                          const app::DocumentObject& object,
+                                                          runtime::ComputeContext& context,
+                                                          const std::string& target,
+                                                          const std::string& subname,
+                                                          const std::optional<std::string>& stableSubname)
 {
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
     // ::ProfileBased::getAxis(), after "AxisN" sketch-axis handling, reads selected Part::Feature
@@ -457,6 +483,30 @@ std::optional<TopoDS_Shape> resolveSameSketchInternalEdgeAxis(const runtime::Sha
     if (!parsed || parsed->kind != TopAbs_EDGE) {
         return std::nullopt;
     }
+
+    if (stableSubname && !stableSubname->empty()) {
+        const auto namedShapeIt = context.namedShapes.find(target);
+        if (namedShapeIt != context.namedShapes.end()) {
+            const auto resolved = part::resolveElementReference(namedShapeIt->second, {}, *stableSubname);
+            if (resolved.status == part::ElementResolveStatus::Resolved && resolved.element) {
+                if (const auto stableSubshape = part::subshapeByName(shapeValue.shape, *resolved.element)) {
+                    return *stableSubshape;
+                }
+            }
+        }
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "unsupported_stable_subname",
+                               "ReferenceAxis StableSubList cannot resolve " + *stableSubname
+                                   + " to a current sketch edge on " + target,
+                               object.name,
+                               "ReferenceAxis",
+                               "runtime",
+                               target,
+                               *stableSubname);
+        return std::nullopt;
+    }
+
     if (!shapeValue.internalShape || shapeValue.internalShape->IsNull()) {
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -579,11 +629,21 @@ std::optional<AxisSelection> resolveReferenceAxis(const app::DocumentObject& obj
         axisShape = shapeIt->second.shape;
     }
     else if (const auto parsed = part::parseInternalSubshapeName(subname);
-             referenceAxis->object == profile.link.object
-             && shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch
+             shapeIt->second.kind == runtime::ShapeValue::Kind::Sketch
              && parsed
              && parsed->kind == TopAbs_EDGE) {
-        const auto subshape = resolveSameSketchInternalEdgeAxis(shapeIt->second, object, context, referenceAxis->object, subname);
+        const std::optional<std::string> stableSubname =
+            referenceAxis->stableSubnamesExplicit && !referenceAxis->stableSubnames.empty()
+            ? std::make_optional(referenceAxis->stableSubnames.front())
+            : std::nullopt;
+        const auto subshape = resolveSketchInternalEdgeAxis(
+            shapeIt->second,
+            object,
+            context,
+            referenceAxis->object,
+            subname,
+            stableSubname
+        );
         if (!subshape) {
             return std::nullopt;
         }
@@ -912,6 +972,40 @@ std::optional<part::NamedShapeBuild> buildRevolvedTool(const app::DocumentObject
     return part::makeElementRevolveFromSource(object.name, source, axis, angleRadians);
 }
 
+std::optional<part::NamedShapeBuild> buildFinalAdditiveRevolvedShape(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context,
+    const PreviousSolidSource& base,
+    const TopoDS_Shape& tool,
+    const std::optional<part::NamedShape>& toolNamedShape,
+    runtime::AddSubShape::AdditiveFuseOrder fuseOrder)
+{
+    std::vector<part::NamedShapeSource> sources {
+        {base.owner, base.shape, base.namedShape ? &*base.namedShape : nullptr},
+        {object.name, tool, toolNamedShape ? &*toolNamedShape : nullptr},
+    };
+    if (fuseOrder == runtime::AddSubShape::AdditiveFuseOrder::FeatureFirst) {
+        // FreeCAD FeatureRevolution::makeShape(): FeatureFirst calls
+        // revolve.makeElementFuse(base); BaseFirst calls base.makeElementFuse(revolve).
+        std::swap(sources[0], sources[1]);
+    }
+
+    auto build = part::makeElementBooleanFromSources(object.name, sources, part::BooleanOperation::Fuse);
+    if (!build.error.empty() || build.shape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               build.error.empty() ? "Revolution could not fuse with BaseFeature"
+                                                   : "Revolution could not fuse with base: " + build.error,
+                               object.name,
+                               "BaseFeature",
+                               "runtime",
+                               base.owner);
+        return std::nullopt;
+    }
+    return build;
+}
+
 std::optional<part::NamedShapeBuild> buildRevolvedUntil(const app::DocumentObject& object,
                                                         runtime::ComputeContext& context,
                                                         const ProfileBasedProfileSelection& profile,
@@ -1150,24 +1244,58 @@ void executeRevolvedFeature(const app::DocumentObject& object,
     }
 
     const TopoDS_Shape tool = shapeResult.shape;
-    namedShape = shapeResult.namedShape;
-    if (namedShape) {
-        context.namedShapes[object.name] = *namedShape;
+    const std::optional<part::NamedShape> toolNamedShape = shapeResult.namedShape;
+
+    TopoDS_Shape featureShape = tool;
+    std::optional<part::NamedShape> featureNamedShape = toolNamedShape;
+    bool featureRefined = shapeResult.applied;
+    std::optional<PreviousSolidSource> base;
+    if (!upToMethod && mode == RevolvedAddSubMode::Additive) {
+        base = baseShapeForRevolvedFeature(object, context);
     }
-    context.mesh[object.name] = cad_core::part::meshForShape(tool);
-    context.subshapes[object.name] = part::subshapeMapForShape(tool);
+    if (base) {
+        const auto fused = buildFinalAdditiveRevolvedShape(
+            object,
+            context,
+            *base,
+            tool,
+            toolNamedShape,
+            additiveFuseOrder);
+        if (!fused) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        auto refined = runtime::applyRefineProperty(object, context, fused->shape, fused->namedShape);
+        if (!refined) {
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
+        featureShape = refined->shape;
+        featureNamedShape = refined->namedShape;
+        featureRefined = shapeResult.applied || refined->applied;
+    }
+    if (featureNamedShape) {
+        context.namedShapes[object.name] = *featureNamedShape;
+    }
+    context.mesh[object.name] = cad_core::part::meshForShape(featureShape);
+    context.subshapes[object.name] = part::subshapeMapForShape(featureShape);
 
     if (upToMethod) {
         context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, tool};
     }
     else if (mode == RevolvedAddSubMode::Additive) {
-        context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, tool};
-        runtime::AddSubShape addSubShape{tool, std::nullopt, namedShape, std::nullopt};
+        context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, featureShape};
+        runtime::AddSubShape addSubShape{tool, std::nullopt, toolNamedShape, std::nullopt};
         addSubShape.additiveFuseOrder = additiveFuseOrder;
+        if (base) {
+            addSubShape.replacementShape = featureShape;
+            addSubShape.replacementNamedShape = featureNamedShape;
+            addSubShape.replacementRefined = featureRefined;
+        }
         context.addSubShapes[object.name] = std::move(addSubShape);
     }
     else {
-        context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, tool, std::nullopt, namedShape};
+        context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, tool, std::nullopt, toolNamedShape};
     }
 
     nlohmann::json result = {
@@ -1180,11 +1308,16 @@ void executeRevolvedFeature(const app::DocumentObject& object,
         {"angle_total", angleRadians * 180.0 / kPi},
         {"axis_base", pointToJson(axis->base)},
         {"axis_direction", directionToJson(axis->direction)},
-        {"bbox", cad_core::part::objectBBoxForShape(tool)},
-        {"volume", cad_core::part::volumeForShape(tool)},
+        {"bbox", cad_core::part::objectBBoxForShape(featureShape)},
+        {"volume", cad_core::part::volumeForShape(featureShape)},
         {"topo_naming_history", upToMethod ? "maker_history:brepfeat_revolution" : "maker_history:revolve"},
         {"kernel", cad_core::part::kernelVersion()},
     };
+    if (base) {
+        result["base"] = base->owner;
+        result["feature_shape"] = "base_fused_revolution";
+        result["add_sub_shape"] = "revolved_tool";
+    }
     if (upToMethod) {
         result["body_mode"] = "replace";
         if (upToFace && !upToFace->target.empty()) {
@@ -1205,7 +1338,7 @@ void executeRevolvedFeature(const app::DocumentObject& object,
         result["angle2"] = angle2Degrees;
         result["angle_offset"] = angleOffsetRadians * 180.0 / kPi;
     }
-    if (shapeResult.applied) {
+    if (featureRefined) {
         result["refine"] = "applied";
     }
     context.objects[object.name] = result;

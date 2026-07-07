@@ -8,13 +8,24 @@
         "Geometry": [
           {
             "kind": "LineSegment",
-            "start": [0, -2],
-            "end": [0, 2],
+            "id": 1,
+            "start": [
+              0,
+              -2
+            ],
+            "end": [
+              0,
+              2
+            ],
             "construction": true
           },
           {
             "kind": "ArcOfCircle",
-            "center": [0, 0],
+            "id": 2,
+            "center": [
+              0,
+              0
+            ],
             "radius": 1,
             "startAngle": 0,
             "endAngle": 1.5707963267948966
@@ -41,7 +52,11 @@
           "PropertyType": "App::PropertyLink",
           "value": "Sketch"
         },
-        "Dir": [0, 0, 1],
+        "Dir": [
+          0,
+          0,
+          1
+        ],
         "LengthFwd": 1,
         "LengthRev": 0,
         "Solid": false
@@ -49,6 +64,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Extrude"]
+    "objs": [
+      "Extrude"
+    ]
   }
 }

@@ -8,14 +8,28 @@
         "Geometry": [
           {
             "kind": "LineSegment",
-            "start": [0, -2],
-            "end": [0, 2],
+            "id": 1,
+            "start": [
+              0,
+              -2
+            ],
+            "end": [
+              0,
+              2
+            ],
             "construction": true
           },
           {
             "kind": "LineSegment",
-            "start": [-1, 1],
-            "end": [3, 1]
+            "id": 2,
+            "start": [
+              -1,
+              1
+            ],
+            "end": [
+              3,
+              1
+            ]
           }
         ],
         "Constraints": [
@@ -39,7 +53,11 @@
           "PropertyType": "App::PropertyLink",
           "value": "Sketch"
         },
-        "Dir": [0, 0, 1],
+        "Dir": [
+          0,
+          0,
+          1
+        ],
         "LengthFwd": 1,
         "LengthRev": 0,
         "Solid": false
@@ -47,6 +65,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Extrude"]
+    "objs": [
+      "Extrude"
+    ]
   }
 }

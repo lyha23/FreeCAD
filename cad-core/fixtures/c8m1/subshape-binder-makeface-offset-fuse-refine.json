@@ -1,18 +1,209 @@
 {
   "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
   "c8m1_case": "subshape-binder-makeface-offset-fuse-refine",
-  "oracle_ids": ["C8M1-ORACLE-202"],
+  "oracle_ids": [
+    "C8M1-ORACLE-202"
+  ],
   "freecad_authority": [
     "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::update()"
   ],
   "Objects": [
-    {"Name": "RectangleSketch", "ID": 1, "TypeId": "Sketcher::SketchObject", "Properties": {"Geometry": [{"kind": "LineSegment", "start": [0, 0], "end": [10, 0]}, {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]}, {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]}, {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}], "Constraints": []}},
-    {"Name": "SubShapeBinderMakeFace", "ID": 2, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "RectangleSketch", "SubList": []}]}, "MakeFace": {"PropertyType": "App::PropertyBool", "value": true}}},
-    {"Name": "SubShapeBinderOffset", "ID": 3, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "RectangleSketch", "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"]}]}, "Offset": {"PropertyType": "App::PropertyDistance", "value": 1}}},
-    {"Name": "FuseBoxA", "ID": 4, "TypeId": "Part::Box", "Properties": {"Length": 4, "Width": 4, "Height": 4}},
-    {"Name": "FuseBoxB", "ID": 5, "TypeId": "Part::Box", "Properties": {"Length": 4, "Width": 4, "Height": 4, "Placement": {"PropertyType": "App::PropertyPlacement", "Base": [2, 0, 0], "Rotation": [0, 0, 0, 1]}}},
-    {"Name": "SubShapeBinderFuse", "ID": 6, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "FuseBoxA", "SubList": []}, {"value": "FuseBoxB", "SubList": []}]}, "Fuse": {"PropertyType": "App::PropertyBool", "value": true}}},
-    {"Name": "SubShapeBinderRefine", "ID": 7, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "FuseBoxA", "SubList": []}, {"value": "FuseBoxB", "SubList": []}]}, "Fuse": {"PropertyType": "App::PropertyBool", "value": true}, "Refine": {"PropertyType": "App::PropertyBool", "value": true}}}
+    {
+      "Name": "RectangleSketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "SubShapeBinderMakeFace",
+      "ID": 2,
+      "TypeId": "PartDesign::SubShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "RectangleSketch",
+              "SubList": []
+            }
+          ]
+        },
+        "MakeFace": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        }
+      }
+    },
+    {
+      "Name": "SubShapeBinderOffset",
+      "ID": 3,
+      "TypeId": "PartDesign::SubShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "RectangleSketch",
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
+            }
+          ]
+        },
+        "Offset": {
+          "PropertyType": "App::PropertyDistance",
+          "value": 1
+        }
+      }
+    },
+    {
+      "Name": "FuseBoxA",
+      "ID": 4,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Height": 4
+      }
+    },
+    {
+      "Name": "FuseBoxB",
+      "ID": 5,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 4,
+        "Width": 4,
+        "Height": 4,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            2,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "SubShapeBinderFuse",
+      "ID": 6,
+      "TypeId": "PartDesign::SubShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "FuseBoxA",
+              "SubList": []
+            },
+            {
+              "value": "FuseBoxB",
+              "SubList": []
+            }
+          ]
+        },
+        "Fuse": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        }
+      }
+    },
+    {
+      "Name": "SubShapeBinderRefine",
+      "ID": 7,
+      "TypeId": "PartDesign::SubShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "FuseBoxA",
+              "SubList": []
+            },
+            {
+              "value": "FuseBoxB",
+              "SubList": []
+            }
+          ]
+        },
+        "Fuse": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        },
+        "Refine": {
+          "PropertyType": "App::PropertyBool",
+          "value": true
+        }
+      }
+    }
   ],
-  "recompute": {"objs": ["SubShapeBinderMakeFace", "SubShapeBinderOffset", "SubShapeBinderFuse", "SubShapeBinderRefine"]}
+  "recompute": {
+    "objs": [
+      "SubShapeBinderMakeFace",
+      "SubShapeBinderOffset",
+      "SubShapeBinderFuse",
+      "SubShapeBinderRefine"
+    ]
+  }
 }

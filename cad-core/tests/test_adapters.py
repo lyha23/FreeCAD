@@ -275,12 +275,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(internal_subshapes), 0)
         for item in internal_subshapes:
             if item["indexed"].startswith("InternalFace"):
-                self.assertEqual(item["stableSubname"], "")
+                self.assertNotEqual(item["stableSubname"], "")
+                self.assertNotIn("InternalFace", item["stableSubname"])
+                self.assertNotRegex(item["stableSubname"], r"\bEdge\d+\b")
             elif item["stableSubname"]:
-                self.assertRegex(item["stableSubname"], r"^(Edge|Vertex)\d+$")
+                self.assertRegex(item["stableSubname"], r"^(Edge|Vertex)\d+$|^g\d+(?::split\d+)?$")
         raw_edge = next(item for item in sketch["subshapes"] if item["indexed"] == "Edge1")
-        self.assertEqual(raw_edge["stableSubname"], "")
-        self.assertEqual(raw_edge["identityStatus"], "index_fallback")
+        self.assertEqual(raw_edge["stableSubname"], "g1")
+        self.assertEqual(raw_edge["sourceStableSubname"], "g1")
+        self.assertEqual(raw_edge["sourceGeometryId"], 1)
+        self.assertEqual(raw_edge["identityStatus"], "stable")
 
     def test_c_api_returns_c12m16_split_fragment_ledger_fields(self) -> None:
         result = self.run_recompute_ffi("sketch-split-fragment-line-reference", "c12m16")
@@ -297,17 +301,28 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for item in sketch["subshapes"]
             if item.get("identityStatus") == "stable_split_fragment"
         }
-        self.assertEqual(set(split_segments), {"g701:split1", "g701:split2", "g701:split3"})
+        expected_sources = {
+            "g701:split1": 701,
+            "g701:split2": 701,
+            "g701:split3": 701,
+            "g702:split1": 702,
+            "g702:split2": 702,
+            "g704:split1": 704,
+            "g704:split2": 704,
+        }
+        self.assertEqual(set(split_segments), set(expected_sources))
         self.assertEqual(set(split_subshapes), set(split_segments))
         for token, segment in split_segments.items():
             with self.subTest(token=token):
                 subshape = split_subshapes[token]
+                source_id = expected_sources[token]
+                source_stable = f"g{source_id}"
                 self.assertEqual(segment["stableSubname"], token)
                 self.assertEqual(subshape["stableSubname"], token)
-                self.assertEqual(segment["sourceStableSubname"], "g701")
-                self.assertEqual(subshape["sourceStableSubname"], "g701")
-                self.assertEqual(segment["sourceGeometryId"], 701)
-                self.assertEqual(subshape["sourceGeometryId"], 701)
+                self.assertEqual(segment["sourceStableSubname"], source_stable)
+                self.assertEqual(subshape["sourceStableSubname"], source_stable)
+                self.assertEqual(segment["sourceGeometryId"], source_id)
+                self.assertEqual(subshape["sourceGeometryId"], source_id)
                 self.assertEqual(segment["indexed"], subshape["indexed"])
 
         update = result["elementReferenceUpdates"][0]["SubSet"][0]
@@ -394,13 +409,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertTrue(face_subshapes)
         self.assertTrue(
-            any(item["stableSubname"].startswith("Revolution.Pad.Face") for item in face_subshapes)
+            any(item.get("sourceStableSubname", "").startswith("Pad.Face") for item in face_subshapes)
         )
         for item in face_subshapes:
             self.assertEqual(item["id"], f"Body:{item['indexed']}")
             self.assertRegex(item["indexed"], r"^Face\d+$")
             self.assertRegex(item["subname"], r"^Revolution\.Face\d+$")
-            self.assertRegex(item["stableSubname"], r"^Revolution\..*Face\d+$")
+            self.assertRegex(item["stableSubname"], r"^Revolution\.Face\d+$")
             self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
 
     def test_c4s11_cli_c_api_worker_wasm_share_core_result_contract(self) -> None:
@@ -445,59 +460,29 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["property"], "mesh_limits")
                 self.assertEqual(diagnostic["target"], "mesh_limits")
 
-    def test_c_api_recompute_returns_reference_shadow_update(self) -> None:
+    def test_c_api_recompute_rejects_reference_shadow_legacy_internal_face_sublist(self) -> None:
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "p5")
         updates = ffi_result["elementReferenceUpdates"]
 
-        self.assertEqual(ffi_result["diagnostics"], [])
-        self.assertEqual(len(updates), 1)
-        self.assertEqual(updates[0]["object"], "Pad")
-        self.assertEqual(updates[0]["property"], "Profile")
-        self.assertEqual(updates[0]["PropertyType"], "App::PropertyLinkSubList")
-        item = updates[0]["SubSet"][0]
-        self.assertEqual(item["value"], "Sketch")
-        self.assertEqual(item["SubList"], ["InternalFace1"])
-        self.assertEqual(item["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
+        self.assertEqual([item["code"] for item in ffi_result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(ffi_result["diagnostics"][0]["subname"], "InternalFace1")
+        self.assertEqual(updates, [])
 
-        shadow = item["ReferenceShadow"][0]
-        self.assertEqual(shadow["target"], "Sketch")
-        self.assertEqual(shadow["property"], "InternalShape")
-        self.assertEqual(shadow["indexed"], "Face1")
-        self.assertEqual(shadow["subname"], "InternalFace1")
-        self.assertEqual(shadow["fingerprint"]["shapeType"], "Face")
-        self.assertAlmostEqual(shadow["fingerprint"]["area"], 25.0)
-        self.assertEqual(shadow["fingerprint"]["centroid"], [2.5, 2.5, 0.0])
-
-    def test_c_api_recompute_returns_recovered_reference_shadow_update(self) -> None:
+    def test_c_api_recompute_rejects_recovered_reference_shadow_update(self) -> None:
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
         updates = ffi_result["elementReferenceUpdates"]
 
-        self.assertEqual(ffi_result["diagnostics"], [])
-        self.assertEqual(len(updates), 1)
-        self.assertEqual(updates[0]["object"], "Pad")
-        self.assertEqual(updates[0]["property"], "Profile")
-        item = updates[0]["SubSet"][0]
-        self.assertEqual(item["SubList"], ["InternalFace1"])
-        self.assertEqual(item["StableSubList"], ["g305:split1"])
+        self.assertEqual([item["code"] for item in ffi_result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(ffi_result["diagnostics"][0]["subname"], "InternalFace99")
+        self.assertEqual(updates, [])
 
-        shadow = item["ReferenceShadow"][0]
-        self.assertEqual(shadow["indexed"], "Face1")
-        self.assertEqual(shadow["subname"], "InternalFace1")
-        self.assertEqual(shadow["stableSubname"], "g305:split1")
-        self.assertAlmostEqual(shadow["fingerprint"]["area"], 25.0)
-
-    def test_c_api_recompute_reports_reference_shadow_recovery_metadata(self) -> None:
+    def test_c_api_recompute_omits_reference_shadow_recovery_metadata_for_internal_face_profile(self) -> None:
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
-        shadow = update["ReferenceShadow"][0]
 
-        self.assertEqual(ffi_result["diagnostics"], [])
-        self.assertEqual(update["StableSubList"], ["g305:split1"])
-        self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
-        self.assertEqual(shadow["reference_recovery"], "reference_shadow_single_subshape")
-        self.assertEqual(shadow["reference_recovery_reason"], "element_map_missing_or_split")
+        self.assertEqual([item["code"] for item in ffi_result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
-    def test_c_api_recompute_preserves_full_sublist_on_reference_shadow_update(self) -> None:
+    def test_c_api_recompute_rejects_full_sublist_reference_shadow_update_for_internal_face_profile(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json").read_text())
         profile = payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]
         profile["FullSubList"] = ["ExternalDoc#Sketch.InternalFace1"]
@@ -505,13 +490,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ffi_result = self.run_recompute_ffi_payload(payload)
         updates = ffi_result["elementReferenceUpdates"]
 
-        self.assertEqual(ffi_result["diagnostics"], [])
-        self.assertEqual(len(updates), 1)
-        self.assertEqual(updates[0]["object"], "Pad")
-        self.assertEqual(updates[0]["property"], "Profile")
-        item = updates[0]["SubSet"][0]
-        self.assertEqual(item["SubList"], ["InternalFace1"])
-        self.assertEqual(item["FullSubList"], ["ExternalDoc#Sketch.InternalFace1"])
+        self.assertEqual([item["code"] for item in ffi_result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(ffi_result["diagnostics"][0]["subname"], "InternalFace1")
+        self.assertEqual(updates, [])
 
     def test_c_api_recompute_returns_reference_shadow_update_for_link_sub_list(self) -> None:
         ffi_result = self.run_recompute_ffi("sketch-external-face-reference-shadow", "p5")
@@ -1169,7 +1150,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("Revolution Type=UpToLast", revolution_groove["supported"])
         self.assertIn("Revolution Type=UpToFace", revolution_groove["supported"])
         self.assertIn("Groove Type=ThroughAll", revolution_groove["supported"])
-        self.assertIn("Profile.SubList=InternalFaceN", revolution_groove["supported"])
+        self.assertIn("Profile.StableSubList=SketchInternalFaceAlias", revolution_groove["supported"])
         self.assertIn("Sketch AxisN ReferenceAxis", revolution_groove["supported"])
         self.assertIn("PartDesign::Line ReferenceAxis", revolution_groove["supported"])
         self.assertIn("App::Line ReferenceAxis", revolution_groove["supported"])

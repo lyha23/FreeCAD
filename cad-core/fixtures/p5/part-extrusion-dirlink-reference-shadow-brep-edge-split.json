@@ -6,11 +6,66 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [5, 0]},
-          {"kind": "LineSegment", "start": [5, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              5,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              5,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 5,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -20,13 +75,20 @@
       "ID": 2,
       "TypeId": "Part::Extrusion",
       "Properties": {
-        "Base": {"PropertyType": "App::PropertyLink", "value": "Sketch"},
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Sketch"
+        },
         "DirMode": "Edge",
         "DirLink": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Sketch",
-          "SubList": ["Edge99"],
-          "StableSubList": ["Edge1"],
+          "SubList": [
+            "Edge99"
+          ],
+          "StableSubList": [
+            "Edge1"
+          ],
           "ReferenceShadow": [
             {
               "target": "Sketch",
@@ -38,9 +100,21 @@
               "stableSubname": "Edge1",
               "fingerprint": {
                 "length": 10.0,
-                "centroid": [5.0, 0.0, 0.0],
-                "bboxMin": [0.0, 0.0, 0.0],
-                "bboxMax": [10.0, 0.0, 0.0],
+                "centroid": [
+                  5.0,
+                  0.0,
+                  0.0
+                ],
+                "bboxMin": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "bboxMax": [
+                  10.0,
+                  0.0,
+                  0.0
+                ],
                 "edgeCount": 1,
                 "vertexCount": 2
               },
@@ -59,5 +133,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Extrude"]}
+  "recompute": {
+    "objs": [
+      "Extrude"
+    ]
+  }
 }

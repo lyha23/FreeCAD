@@ -156,13 +156,20 @@ struct SketchGeometrySet
     std::vector<SketchBezier> beziers;
 };
 
+enum class SketchGeometryIdPolicy
+{
+    Required,
+    Optional,
+};
+
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObjectGeometry.cpp
 // and SketchGeometry.cpp own geometry list parsing and geometry-family dispatch for SketchObject.
 bool parseSketchGeometry(const nlohmann::json& geometry,
                          const app::DocumentObject& object,
                          runtime::ComputeContext& context,
                          SketchGeometrySet& parsed,
-                         const std::string& propertyName = "Geometry");
+                         const std::string& propertyName = "Geometry",
+                         SketchGeometryIdPolicy idPolicy = SketchGeometryIdPolicy::Required);
 
 std::vector<SketchSegment> profileSegments(const std::vector<SketchSegment>& segments);
 std::vector<SketchPoint> profilePoints(const std::vector<SketchPoint>& points);

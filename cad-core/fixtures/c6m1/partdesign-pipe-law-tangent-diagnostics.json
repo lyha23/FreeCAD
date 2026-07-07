@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [-0.25, -0.25], "end": [0.25, -0.25] },
-          { "kind": "LineSegment", "start": [0.25, -0.25], "end": [0.25, 0.25] },
-          { "kind": "LineSegment", "start": [0.25, 0.25], "end": [-0.25, 0.25] },
-          { "kind": "LineSegment", "start": [-0.25, 0.25], "end": [-0.25, -0.25] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -0.25,
+              -0.25
+            ],
+            "end": [
+              0.25,
+              -0.25
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0.25,
+              -0.25
+            ],
+            "end": [
+              0.25,
+              0.25
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0.25,
+              0.25
+            ],
+            "end": [
+              -0.25,
+              0.25
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -0.25,
+              0.25
+            ],
+            "end": [
+              -0.25,
+              -0.25
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -33,8 +77,30 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [1, 0] },
-          { "kind": "LineSegment", "start": [3, 0], "end": [4, 0] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              3,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -45,10 +111,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [-1, 0], "end": [0, 0] },
-          { "kind": "LineSegment", "start": [0, 0], "end": [1, 0] },
-          { "kind": "LineSegment", "start": [0, 0], "end": [2, 0] },
-          { "kind": "LineSegment", "start": [0, 0], "end": [-2, 0] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -1,
+              0
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              1,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              2,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              -2,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -59,7 +169,15 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "Circle", "center": [0, 0], "radius": 2 }
+          {
+            "kind": "Circle",
+            "id": 1,
+            "center": [
+              0,
+              0
+            ],
+            "radius": 2
+          }
         ],
         "Constraints": []
       }
@@ -82,7 +200,11 @@
         "Transformation": "S-shape",
         "ScalingData": {
           "PropertyType": "App::PropertyVectorList",
-          "value": [[1.4]]
+          "value": [
+            [
+              1.4
+            ]
+          ]
         }
       }
     },
@@ -117,7 +239,9 @@
         "Spine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "DisconnectedSpine",
-          "SubList": ["Vertex1"]
+          "SubList": [
+            "Vertex1"
+          ]
         },
         "SpineTangent": true,
         "Transformation": "Constant"
@@ -136,7 +260,10 @@
         "Spine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "DisconnectedSpine",
-          "SubList": ["Edge1", "Edge2"]
+          "SubList": [
+            "Edge1",
+            "Edge2"
+          ]
         },
         "SpineTangent": true,
         "Transformation": "Constant"
@@ -155,7 +282,9 @@
         "Spine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "BranchSpine",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "SpineTangent": true,
         "Transformation": "Constant"
@@ -174,7 +303,9 @@
         "Spine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "ClosedLoopSpine",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "SpineTangent": true,
         "Transformation": "Constant"

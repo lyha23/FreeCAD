@@ -6,8 +6,30 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -18,8 +40,30 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [20, 0], "end": [30, 0]},
-          {"kind": "LineSegment", "start": [30, 0], "end": [30, 5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              20,
+              0
+            ],
+            "end": [
+              30,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              30,
+              0
+            ],
+            "end": [
+              30,
+              5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -31,7 +75,10 @@
       "Properties": {
         "Links": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchA", "SketchB"]
+          "values": [
+            "SketchA",
+            "SketchB"
+          ]
         }
       }
     },
@@ -53,6 +100,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Offset2D"]
+    "objs": [
+      "Offset2D"
+    ]
   }
 }

@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               -997.1635692247954,
               93.6258793838465
@@ -19,6 +20,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               -492.89563980766457,
               93.6258793838465
@@ -30,6 +32,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               -492.89563980766457,
               -454.21894028845327
@@ -41,6 +44,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               -997.1635692247954,
               -454.21894028845327
@@ -78,8 +82,9 @@
           "SubSet": [
             {
               "value": "SketchSource",
-              "SubList": [
-                "InternalFace1"
+              "SubList": [],
+              "StableSubList": [
+                "g1;SKT;FAC"
               ]
             }
           ]

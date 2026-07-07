@@ -1,0 +1,167 @@
+{
+  "Objects": [
+    {
+      "Name": "SketchPad",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SketchPad",
+              "SubList": [
+                "InternalFace1"
+              ],
+              "StableSubList": [
+                ""
+              ]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "SketchHole",
+      "ID": 3,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "AttachmentSupport": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "Pad",
+          "SubList": [
+            "Face6"
+          ]
+        },
+        "MapMode": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "FlatFace"
+        },
+        "Geometry": [
+          {
+            "kind": "Circle",
+            "center": [
+              5,
+              2.5
+            ],
+            "radius": 1
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Hole",
+      "ID": 4,
+      "TypeId": "PartDesign::Hole",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "SketchHole",
+          "SubList": []
+        },
+        "Diameter": 4,
+        "Threaded": true,
+        "ModelThread": true,
+        "ThreadType": "ISOMetricProfile",
+        "ThreadSize": "M4x0.7",
+        "ThreadClass": "4G",
+        "ThreadDirection": "Left",
+        "UseCustomThreadClearance": false,
+        "CustomThreadClearance": 0,
+        "HoleCutType": "Counterbore",
+        "HoleCutDiameter": 4,
+        "HoleCutDepth": 2,
+        "DepthType": "Dimension",
+        "Depth": 6,
+        "DrillPoint": "Flat",
+        "BaseProfileType": 6,
+        "Reversed": false,
+        "Refine": false
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 5,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPad",
+            "Pad",
+            "SketchHole",
+            "Hole"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Hole"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Body"
+    ]
+  }
+}

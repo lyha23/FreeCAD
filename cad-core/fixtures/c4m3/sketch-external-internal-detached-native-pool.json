@@ -117,12 +117,8 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
-              "StableSubList": [
-                ""
-              ]
+              "SubList": [],
+              "StableSubList": []
             }
           ]
         },

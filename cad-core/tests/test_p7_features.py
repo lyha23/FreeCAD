@@ -30,6 +30,27 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if temp_path is not None:
                 temp_path.unlink(missing_ok=True)
 
+    def run_recompute_response_payload(self, payload: dict) -> dict:
+        temp_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as temp:
+                json.dump(payload, temp)
+                temp_path = Path(temp.name)
+            with tempfile.TemporaryDirectory() as tmp:
+                output = Path(tmp) / f"{temp_path.stem}.result.json"
+                env = os.environ.copy()
+                env.pop("CAD_CORE_TEST_LEGACY_OUTPUT", None)
+                subprocess.run(
+                    [str(BIN), "recompute", str(temp_path), "--output", str(output)],
+                    cwd=ROOT,
+                    check=True,
+                    env=env,
+                )
+                return json.loads(output.read_text(encoding="utf-8"))
+        finally:
+            if temp_path is not None:
+                temp_path.unlink(missing_ok=True)
+
     def run_recompute_response(self, fixture: str, group: str = "mvp") -> dict:
         input_path = ROOT / "fixtures" / group / f"{fixture}.json"
         with tempfile.TemporaryDirectory() as tmp:
@@ -46,6 +67,38 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def response_result(self, response: dict, object_name: str) -> dict:
         return next(item for item in response["results"] if item["object"] == object_name)
+
+    def test_p7_body_direct_tip_refine_false_response_edges_publish_stable_identity(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "mvp" / "rect-pad.json").read_text(encoding="utf-8"))
+        self.object_payload(payload, "Pad")["Properties"]["Refine"] = False
+
+        response = self.run_recompute_response_payload(payload)
+        body_result = self.response_result(response, "Body")
+        edge_subshapes = [item for item in body_result["subshapes"] if item["kind"] == "Edge"]
+        edge_segments = body_result["mesh"]["edgeSegments"]
+        subshape_statuses = {item["id"]: item["identityStatus"] for item in edge_subshapes}
+
+        self.assertEqual(response["diagnostics"], [])
+        self.assertGreater(len(edge_subshapes), 0)
+        for edge in edge_subshapes:
+            self.assertEqual(edge["identityStatus"], "stable")
+            self.assertNotEqual(edge["stableSubname"], "")
+        for segment in edge_segments:
+            self.assertEqual(segment["identityStatus"], subshape_statuses[segment["id"]])
+            self.assertNotEqual(segment["stableSubname"], "")
+
+    def iter_profile_link_items(self, payload: dict):
+        for document_object in payload.get("Objects", []):
+            profile = document_object.get("Properties", {}).get("Profile")
+            if not isinstance(profile, dict):
+                continue
+            sub_set = profile.get("SubSet")
+            if isinstance(sub_set, list):
+                for item in sub_set:
+                    if isinstance(item, dict):
+                        yield document_object["Name"], item
+            else:
+                yield document_object["Name"], profile
 
     def assert_mesh_has_no_zero_face_render_normals(self, response: dict, object_name: str) -> None:
         mesh = self.response_result(response, object_name)["mesh"]
@@ -302,10 +355,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_refine_false_is_feature_refine_noop(self) -> None:
         result = self.run_recompute("pad-refine-false", "p7")
+        fixture = json.loads((ROOT / "fixtures" / "p7" / "pad-refine-false.json").read_text(encoding="utf-8"))
+        profile = self.object_payload(fixture, "Pad")["Properties"]["Profile"]["SubSet"][0]
         pad = result["objects"]["Pad"]
         pad_named_shape = result["named_shapes"]["Pad"]
+        sketch_internal_shape = result["named_shapes"]["Sketch.InternalShape"]
 
         self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(profile["SubList"], [])
+        self.assertEqual(profile["StableSubList"], ["g1;SKT;FAC"])
+        self.assertEqual(sketch_internal_shape["element_map"][profile["StableSubList"][0]], "InternalFace1")
         self.assertEqual(pad["status"], "ok")
         self.assertNotIn("topo_naming", pad)
         self.assert_pad_profile_source_element_map(pad_named_shape)
@@ -325,6 +384,15 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             result["subshapes"]["PadFromFace"],
             {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}},
         )
+
+    def test_p7_partdesign_loft_profile_accepts_linked_solid_faces(self) -> None:
+        response = self.run_recompute_response("partdesign-loft-linked-face-profile", "p7")
+        body = self.response_result(response, "LoftPreviewBody")
+
+        self.assertEqual(response["diagnostics"], [])
+        self.assertIsNotNone(body["mesh"])
+        self.assertGreater(len(body["mesh"]["vertices"]), 0)
+        self.assertGreater(len(body["subshapes"]), 0)
 
     def test_p3b_pad_reference_axis_accepts_geometrically_linear_bspline_edge(self) -> None:
         result = self.run_recompute("pad-reference-axis-linear-bspline-edge", "p3b")
@@ -687,6 +755,48 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(result["mesh"]["Pad4Body"]["triangles"]), 0)
         self.assertGreater(len(result["subshapes"]["Pad4Body"]), 0)
 
+    def test_p7_internal_face_profile_fixtures_use_stable_aliases(self) -> None:
+        for fixture_path in sorted((ROOT / "fixtures" / "p7").glob("*.json")):
+            with self.subTest(fixture=fixture_path.name):
+                payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+                for object_name, item in self.iter_profile_link_items(payload):
+                    sublist = item.get("SubList", [])
+                    stable_sublist = item.get("StableSubList", [])
+                    self.assertFalse(
+                        any(str(subname).startswith("InternalFace") for subname in sublist),
+                        f"{object_name}.Profile must not persist request-local InternalFace SubList",
+                    )
+                    self.assertNotEqual(
+                        stable_sublist,
+                        [""],
+                        f"{object_name}.Profile must not persist an empty InternalFace StableSubList",
+                    )
+                    self.assertFalse(
+                        any(str(subname).startswith("InternalFace") for subname in stable_sublist),
+                        f"{object_name}.Profile must not persist request-local InternalFace StableSubList",
+                    )
+                    if any(";SKT;FAC" in str(subname) for subname in stable_sublist):
+                        self.assertEqual(
+                            sublist,
+                            [],
+                            f"{object_name}.Profile InternalFace stable alias must leave SubList empty",
+                        )
+
+    def test_p7_internal_face_profile_rejects_legacy_sublist(self) -> None:
+        payload = json.loads((ROOT / "fixtures" / "p7" / "pad-refine-false.json").read_text(encoding="utf-8"))
+        profile = self.object_payload(payload, "Pad")["Properties"]["Profile"]["SubSet"][0]
+        profile["SubList"] = ["InternalFace1"]
+
+        result = self.run_recompute_payload(payload)
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], "InternalFace1")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
     def test_p7_display_only_surface_face_profile_preserves_feature_owner(self) -> None:
         fixture = "partdesign-display-only-surface-face-profile-owner"
         result = self.run_recompute(fixture, "p7")
@@ -721,6 +831,23 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotEqual(inherited_bbox["min"][2], 0.0)
         self.assertNotEqual(inherited_bbox["max"][2], 522.0)
         self.assertEqual(inherited_pad2_face["stableSubname"], "Pad2.Face1")
+
+    def test_p7_face_pad_after_fillet_rejects_revolution_body_display_profile(self) -> None:
+        result = self.run_recompute("partdesign-face-pad-after-fillet-fuse", "p7")
+        diagnostics = result["diagnostics"]
+
+        self.assertEqual([item["code"] for item in diagnostics], ["body_display_subname_not_feature_local"])
+        self.assertEqual(diagnostics[0]["object"], "Pad2")
+        self.assertEqual(diagnostics[0]["property"], "Profile")
+        self.assertEqual(diagnostics[0]["target"], "Revolution")
+        self.assertEqual(diagnostics[0]["subname"], "Face9")
+        self.assertIn("RevolutionBody.Revolution.Face9", diagnostics[0]["message"])
+        self.assertEqual(result["objects"]["Pad2"]["status"], "error")
+        self.assertEqual(result["objects"]["Fillet"]["status"], "skipped")
+        self.assertEqual(result["objects"]["PadPreview"]["status"], "skipped")
+        self.assertEqual(result["objects"]["PadPreviewBody"]["status"], "skipped")
+        self.assertNotIn("PadPreviewBody", result["mesh"])
+        self.assertNotIn("PadPreviewBody", result["subshapes"])
 
     def test_p7_plain_topological_stable_subname_does_not_override_current_face(self) -> None:
         result = self.run_recompute("partdesign-face-profile-current-subname-over-plain-stable", "p7")
@@ -1540,13 +1667,45 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             {"topology_counts": {"faces": 6, "edges": 12, "vertices": 8}},
         )
 
-    def test_c5m1_revolve_preview_body_mesh_has_no_zero_render_normals(self) -> None:
-        response = self.run_recompute_response("revolve-preview-body-render-normal", "c5m1")
-        body = self.response_result(response, "RevolvePreviewBody")
+    def test_c5m1_revolve_preview_mesh_has_no_zero_render_normals(self) -> None:
+        fixture_path = ROOT / "fixtures" / "c5m1" / "revolve-preview-body-render-normal.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        payload["recompute"]["objs"] = ["RevolvePreview"]
+        with tempfile.TemporaryDirectory() as tmp:
+            input_path = Path(tmp) / "revolve-preview.json"
+            output_path = Path(tmp) / "revolve-preview.result.json"
+            input_path.write_text(json.dumps(payload), encoding="utf-8")
+            env = os.environ.copy()
+            env.pop("CAD_CORE_TEST_LEGACY_OUTPUT", None)
+            subprocess.run(
+                [str(BIN), "recompute", str(input_path), "--output", str(output_path)],
+                cwd=ROOT,
+                check=True,
+                env=env,
+            )
+            response = json.loads(output_path.read_text(encoding="utf-8"))
+        body = self.response_result(response, "RevolvePreview")
 
         self.assertEqual(response["diagnostics"], [])
         self.assertIsNotNone(body["mesh"])
-        self.assert_mesh_has_no_zero_face_render_normals(response, "RevolvePreviewBody")
+        self.assert_mesh_has_no_zero_face_render_normals(response, "RevolvePreview")
+
+    def test_c5m1_revolve_preview_prefers_stable_axis_over_sketch_internaledge_handle(self) -> None:
+        fixture_path = ROOT / "fixtures" / "c5m1" / "revolve-preview-body-render-normal.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        reference_axis = self.object_payload(payload, "RevolvePreview")["Properties"]["ReferenceAxis"]
+        reference_axis["SubList"] = ["InternalEdge2"]
+        reference_axis["StableSubList"] = ["g100004"]
+
+        result = self.run_recompute_payload(payload)
+        revolution = result["objects"]["RevolvePreview"]
+        body = result["objects"]["RevolvePreviewBody"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(revolution["status"], "ok")
+        self.assertEqual(body["status"], "ok")
+        self.assertEqual(revolution["axis_direction"], [0.0, 1.0, 0.0])
+        self.assertGreater(revolution["volume"], 0.0)
 
     def test_c5m1_revolved_zero_sum_angles_are_diagnostic(self) -> None:
         result = self.run_recompute("partdesign-revolved-zero-sum-diagnostic", "c5m1")
@@ -1615,11 +1774,13 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assert_object_matches_expected(result, "c51m1", fixture)
                 self.assertIn(expected_object, result["objects"])
 
-    def test_c51m1_revolution_accepts_internal_face_stable_sublist(self) -> None:
+    def test_c51m1_revolution_accepts_internal_face_stable_alias(self) -> None:
         fixture_path = ROOT / "fixtures" / "c51m1" / "partdesign-revolution-internalface-profile.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         profile = payload["Objects"][1]["Properties"]["Profile"]
-        profile["StableSubList"] = ["InternalFace1"]
+
+        self.assertEqual(profile["SubList"], [])
+        self.assertEqual(profile["StableSubList"], ["g1;SKT;FAC"])
 
         temp_path: Path | None = None
         try:
@@ -1641,6 +1802,22 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         if facemaker_history is None:
             facemaker_history = sketch["internal_shape_history_diagnostics"]["facemaker"]
         self.assertEqual(facemaker_history["bounded_face_count"], 1)
+
+    def test_c51m1_revolution_rejects_request_local_internal_face_stable_sublist(self) -> None:
+        fixture_path = ROOT / "fixtures" / "c51m1" / "partdesign-revolution-internalface-profile.json"
+        payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+        profile = payload["Objects"][1]["Properties"]["Profile"]
+        profile["StableSubList"] = ["InternalFace1"]
+
+        result = self.run_recompute_payload(payload)
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(diagnostic["object"], "Revolution")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "SketchRevolution")
+        self.assertEqual(diagnostic["subname"], "InternalFace1")
+        self.assertEqual(result["objects"]["Revolution"]["status"], "error")
 
     def test_c51m1_revolution_reference_axis_variants_keep_freecad_direction(self) -> None:
         expected_directions = {
@@ -2972,7 +3149,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertNotIn("known_gap", expected)
         self.assertEqual(expected["topology_counts"], {"edges": 106, "faces": 50, "vertices": 60})
-        self.assertAlmostEqual(expected["volume"], 419.816869495695, delta=1e-9)
+        # RS9-M39 S2 oracle: re-collected with
+        # `python3 tools/collect_freecad_expected.py
+        # fixtures/p7/hole-supported-model-thread-counterbore.json --out
+        # target/rs9_m39/hole-supported-model-thread-counterbore.current.freecad.json --pretty
+        # --freecadcmd /Users/li/.cargo/bin/FreeCADCmd`.
+        # FreeCAD 1.2.0 revision 20260519 / OCCT 7.8.1 reports Body volume
+        # 434.05359569539525. cad-core aligns this in PartDesign::Hole final Shape replacement:
+        # cut modeled thread before the profiled/head tool and keep the compound wrapper; the
+        # AddSubShape tool remains the pattern-consumer boundary, with no capabilities gate change.
+        self.assertAlmostEqual(expected["volume"], 434.05359569539525, delta=1e-9)
         self.assert_object_matches_expected(result, "p7", "hole-supported-model-thread-counterbore")
         self.assertEqual(hole["threaded"], True)
         self.assertEqual(hole["model_thread"], True)

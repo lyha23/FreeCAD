@@ -1,0 +1,67 @@
+{
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "Body": {
+      "bbox": {
+        "max": [
+          10.0000001,
+          5.0000001,
+          10.000000100000003
+        ],
+        "min": [
+          -1e-07,
+          -1e-07,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 106,
+        "faces": 50,
+        "vertices": 60
+      },
+      "volume": 434.05359569539525
+    },
+    "Hole": {
+      "bbox": {
+        "max": [
+          10.0000001,
+          5.0000001,
+          10.000000100000003
+        ],
+        "min": [
+          -1e-07,
+          -1e-07,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 106,
+        "faces": 50,
+        "vertices": 60
+      },
+      "volume": 434.05359569539525
+    },
+    "Pad": {
+      "bbox": {
+        "max": [
+          10.0,
+          5.0,
+          10.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 499.9999999999999
+    }
+  },
+  "reference": "FreeCADCmd oracle from hole-supported-model-thread-counterbore.pad-hole-body.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, PartDesign::Hole, PartDesign::Body",
+  "schema_version": "cad-core.freecad-expected.v1"
+}

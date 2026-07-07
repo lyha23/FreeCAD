@@ -162,13 +162,14 @@ NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Sha
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getInternalElementMap(),
 // iterates InternalShape vertices/edges and records Internal* <-> raw Edge/Vertex aliases after
 // "findSubShapesWithSharedVertex(..., CheckGeometry | SingleResult)". This helper builds the
-// Sketch InternalShape NamedShape baseline and deliberately leaves InternalFaceN without a stable
-// alias until FaceMaker/WireJoiner history is migrated.
+// Sketch InternalShape NamedShape baseline; FaceMaker/WireJoiner history can publish stable
+// aliases for generated InternalFaceN regions through the InternalShape element map.
 NamedShape namedShapeForSketchInternalShape(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
     const TopoDS_Shape& internalShape,
-    std::optional<InternalShapeHistoryLedger> historyLedger = std::nullopt
+    std::optional<InternalShapeHistoryLedger> historyLedger = std::nullopt,
+    std::map<std::string, std::string> internalEdgeMappedNames = {}
 );
 void applyInternalShapeHistoryPublication(
     NamedShape& namedShape,
@@ -309,7 +310,8 @@ NamedShape namedShapeForTransformedCopy(
 NamedShapeBuild makeElementBooleanFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources,
-    BooleanOperation operation
+    BooleanOperation operation,
+    std::optional<double> tolerance = std::nullopt
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementXor(),

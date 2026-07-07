@@ -147,6 +147,20 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(result["diagnostics"], [])
                 self.assert_object_matches_expected(result, "p3b", fixture)
 
+    def test_p3b_start_offset_moves_profile_before_side_logic(self) -> None:
+        for fixture, expected_min, expected_max, method in [
+            ("pad-start-offset", [0.0, 0.0, 5.0], [10.0, 5.0, 15.0], "Length"),
+            ("pad-start-offset-reversed", [0.0, 0.0, -15.0], [10.0, 5.0, -5.0], "Length"),
+            ("pad-symmetric-start-offset", [0.0, 0.0, -5.0], [10.0, 5.0, 15.0], "Symmetric"),
+        ]:
+            with self.subTest(fixture=fixture):
+                result = self.run_recompute(fixture, "p3b")
+                pad = result["objects"]["Pad"]
+
+                self.assertEqual(result["diagnostics"], [])
+                self.assertEqual(pad["method"], method)
+                self.assert_bbox_close(pad["bbox"], expected_min, expected_max)
+
     def test_p3b_custom_vector_uses_along_sketch_normal_length(self) -> None:
         result = self.run_recompute("pad-custom-vector", "p3b")
 

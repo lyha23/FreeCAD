@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5] },
-          { "kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5] },
-          { "kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5] },
-          { "kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              -0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              -0.5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -84,7 +128,11 @@
         "Mode": "Binormal",
         "Binormal": {
           "PropertyType": "App::PropertyVector",
-          "value": [0, 0, 1]
+          "value": [
+            0,
+            0,
+            1
+          ]
         },
         "Transition": "Transformed",
         "Transformation": "Constant"
@@ -133,6 +181,11 @@
     }
   ],
   "recompute": {
-    "objs": ["AdditivePipeAuxiliary", "AdditivePipeBinormal", "AdditivePipeScaling", "AdditivePipeTangent"]
+    "objs": [
+      "AdditivePipeAuxiliary",
+      "AdditivePipeBinormal",
+      "AdditivePipeScaling",
+      "AdditivePipeTangent"
+    ]
   }
 }

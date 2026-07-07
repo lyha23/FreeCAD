@@ -1496,7 +1496,13 @@ std::optional<std::vector<NativeExternalGeometry>> readNativeExternalGeometry(
         }
 
         SketchGeometrySet parsed;
-        if (!parseSketchGeometry(nlohmann::json::array({item}), object, context, parsed, "ExternalGeo")) {
+        if (!parseSketchGeometry(
+                nlohmann::json::array({item}),
+                object,
+                context,
+                parsed,
+                "ExternalGeo",
+                SketchGeometryIdPolicy::Optional)) {
             return std::nullopt;
         }
         result.push_back(NativeExternalGeometry {

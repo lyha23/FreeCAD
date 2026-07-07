@@ -1,0 +1,33 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "RS9-M44 cad-core product success contract for Part::Offset2D open-wire no-fill.",
+  "diagnostics": [],
+  "objects": {
+    "Offset2D": {
+      "object_fields": {
+        "status": "ok",
+        "feature": "part_offset2d",
+        "source": "Sketch",
+        "shape": "occt_wire",
+        "mode": "Skin",
+        "join": "Arc",
+        "fill": false,
+        "intersection": false,
+        "topo_naming_history": "maker_history:offset2d_wire_no_fill"
+      }
+    }
+  },
+  "named_shapes": {
+    "Offset2D": {
+      "owner": "Offset2D",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "part_offset2d:wire_no_fill_makeoffset",
+        "history_consumed:generated_modified"
+      ],
+      "element_map_contains": [
+        "Sketch.Edge1"
+      ]
+    }
+  }
+}

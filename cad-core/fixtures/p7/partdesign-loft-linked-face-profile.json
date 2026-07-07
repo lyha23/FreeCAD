@@ -1,0 +1,234 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "SketchProfile",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              3,
+              -2
+            ],
+            "id": 100001,
+            "kind": "LineSegment",
+            "start": [
+              -3,
+              -2
+            ]
+          },
+          {
+            "end": [
+              3,
+              2
+            ],
+            "id": 100002,
+            "kind": "LineSegment",
+            "start": [
+              3,
+              -2
+            ]
+          },
+          {
+            "end": [
+              -3,
+              2
+            ],
+            "id": 100003,
+            "kind": "LineSegment",
+            "start": [
+              3,
+              2
+            ]
+          },
+          {
+            "end": [
+              -3,
+              -2
+            ],
+            "id": 100004,
+            "kind": "LineSegment",
+            "start": [
+              -3,
+              2
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 2,
+      "Name": "Pad",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 4,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "g100001;SKT;FAC"
+              ],
+              "SubList": [],
+              "value": "SketchProfile"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 3,
+      "Name": "SketchSection",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "center": [
+              0,
+              0
+            ],
+            "id": 200001,
+            "kind": "Circle",
+            "radius": 1.5
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            8
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 4,
+      "Name": "Pad2",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 2,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "g200001;SKT;FAC"
+              ],
+              "SubList": [],
+              "value": "SketchSection"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 5,
+      "Name": "LoftPreview",
+      "Properties": {
+        "Closed": false,
+        "FuzzyTolerance": 0,
+        "Profile": {
+          "FullSubList": [
+            "PadBody.Pad.Face6"
+          ],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Face6"
+          ],
+          "SubList": [
+            "Face6"
+          ],
+          "value": "Pad"
+        },
+        "Refine": false,
+        "Ruled": false,
+        "Sections": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [
+                "Pad2Body.Pad2.Face3"
+              ],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Face3"
+              ],
+              "SubList": [
+                "Face3"
+              ],
+              "value": "Pad2"
+            }
+          ]
+        }
+      },
+      "TypeId": "PartDesign::AdditiveLoft"
+    },
+    {
+      "ID": 6,
+      "Name": "LoftPreviewBody",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchProfile",
+            "Pad",
+            "LoftPreview"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "LoftPreview"
+        }
+      },
+      "TypeId": "PartDesign::Body"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "LoftPreviewBody"
+    ]
+  }
+}

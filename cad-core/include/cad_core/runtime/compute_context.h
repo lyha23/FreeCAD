@@ -88,6 +88,11 @@ struct AddSubShape
     // is not the same as the replacement solid, so cad-core keeps slot-level NamedShape history.
     std::optional<part::NamedShape> addNamedShape;
     std::optional<part::NamedShape> subNamedShape;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::execute(), stores AddSubShape for pattern consumers but also writes the post-boolean
+    // "this->Shape" after makeElementBoolean(), getSolid(), and refineShapeIfActive().
+    std::optional<TopoDS_Shape> replacementShape;
+    std::optional<part::NamedShape> replacementNamedShape;
     AdditiveFuseOrder additiveFuseOrder = AdditiveFuseOrder::BaseFirst;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
     // reads FeatureAddSub deltas through getAddSubShape(); Body should preserve a producer's
@@ -95,6 +100,8 @@ struct AddSubShape
     // clears it because a new maker result has been built.
     bool addUsesPreciseBoundingBox = false;
     bool subUsesPreciseBoundingBox = false;
+    bool replacementUsesPreciseBoundingBox = false;
+    bool replacementRefined = false;
 };
 
 struct ComputeContext

@@ -6,11 +6,66 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 10]},
-          {"kind": "LineSegment", "start": [10, 10], "end": [0, 10]},
-          {"kind": "LineSegment", "start": [0, 10], "end": [0, 0]},
-          {"kind": "LineSegment", "id": 701, "start": [5, -2], "end": [5, 12]}
+          {
+            "kind": "LineSegment",
+            "id": 702,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 703,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              10
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 704,
+            "start": [
+              10,
+              10
+            ],
+            "end": [
+              0,
+              10
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 705,
+            "start": [
+              0,
+              10
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 701,
+            "start": [
+              5,
+              -2
+            ],
+            "end": [
+              5,
+              12
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -26,8 +81,12 @@
           "SubSet": [
             {
               "value": "BaseSketch",
-              "SubList": ["InternalEdge99"],
-              "StableSubList": ["g701:split1"],
+              "SubList": [
+                "InternalEdge99"
+              ],
+              "StableSubList": [
+                "g701:split1"
+              ],
               "ReferenceShadow": [
                 {
                   "target": "BaseSketch",
@@ -42,12 +101,24 @@
                   "sourceGeometryKind": "LineSegment",
                   "fingerprint": {
                     "shapeType": "Edge",
-                    "bboxMin": [5.0, 0.0, 0.0],
-                    "bboxMax": [5.0, 10.0, 0.0],
+                    "bboxMin": [
+                      5.0,
+                      0.0,
+                      0.0
+                    ],
+                    "bboxMax": [
+                      5.0,
+                      10.0,
+                      0.0
+                    ],
                     "edgeCount": 1,
                     "vertexCount": 2,
                     "length": 10.0,
-                    "centroid": [5.0, 5.0, 0.0]
+                    "centroid": [
+                      5.0,
+                      5.0,
+                      0.0
+                    ]
                   }
                 }
               ]
@@ -58,5 +129,10 @@
       }
     }
   ],
-  "recompute": {"objs": ["BaseSketch", "Consumer"]}
+  "recompute": {
+    "objs": [
+      "BaseSketch",
+      "Consumer"
+    ]
+  }
 }

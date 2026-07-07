@@ -13,6 +13,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               0,
               0
@@ -24,6 +25,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               2,
               0
@@ -35,6 +37,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               2,
               1
@@ -46,6 +49,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               0,
               1
@@ -69,11 +73,9 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

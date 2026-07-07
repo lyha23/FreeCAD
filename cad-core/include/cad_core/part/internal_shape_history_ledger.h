@@ -67,6 +67,7 @@ struct InternalShapeHistoryPublishInput
     TopoDS_Shape rawShape;
     TopoDS_Shape internalShape;
     nlohmann::json internalElementMap = nlohmann::json::object();
+    std::map<std::string, std::string> internalEdgeMappedNames;
 };
 
 struct InternalShapeHistoryPublication

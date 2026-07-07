@@ -60,6 +60,56 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
             return json.loads(output_path.read_text(encoding="utf-8"))
 
+    def assert_duplicate_stable_diagnostics(
+        self,
+        result: dict,
+        object_name: str,
+        expected_conflicts: dict[str, set[str]],
+    ) -> None:
+        diagnostics = [
+            item
+            for item in result["diagnostics"]
+            if item["code"] == "duplicate_stable_subname"
+        ]
+        self.assertTrue(diagnostics)
+        self.assertFalse(
+            any(item["object"] == object_name for item in result["results"]),
+            "response must not publish a target result with duplicate stableSubname",
+        )
+        actual_conflicts = {
+            item["target"]: set(item["subname"].split(", "))
+            for item in diagnostics
+            if item["object"] == object_name
+        }
+        for target, indexed in expected_conflicts.items():
+            self.assertEqual(actual_conflicts.get(target), indexed)
+        for diagnostic in diagnostics:
+            if diagnostic["object"] != object_name:
+                continue
+            self.assertEqual(diagnostic["severity"], "error")
+            self.assertEqual(diagnostic["stage"], "response")
+
+    def assert_edge_identity_contract(self, result: dict, object_name: str) -> None:
+        body = next(item for item in result["results"] if item["object"] == object_name)
+        edge_subshapes = {
+            item["id"]: item
+            for item in body["subshapes"]
+            if item["kind"] == "Edge"
+        }
+        edge_segments = body["mesh"]["edgeSegments"]
+        accepted_statuses = {"stable", "stable_split_fragment"}
+
+        self.assertTrue(edge_subshapes)
+        self.assertTrue(edge_segments)
+        for subshape in edge_subshapes.values():
+            self.assertIn(subshape.get("identityStatus"), accepted_statuses)
+        self.assertEqual({segment["id"] for segment in edge_segments}, set(edge_subshapes))
+        for segment in edge_segments:
+            subshape = edge_subshapes[segment["id"]]
+            self.assertEqual(segment["indexed"], subshape["indexed"])
+            self.assertIn(segment.get("identityStatus"), accepted_statuses)
+            self.assertEqual(segment["identityStatus"], subshape["identityStatus"])
+
     def nearest_edge_distance(self, result_item: dict, point: tuple[float, float, float]) -> float:
         def point_segment_distance(a: list[float], b: list[float]) -> float:
             ab = [b[index] - a[index] for index in range(3)]
@@ -135,6 +185,51 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertGreater(len(result["mesh"]["PadPreviewBody"]["triangles"]), 0)
         self.assertGreater(len(result["subshapes"]["PadPreviewBody"]), 0)
 
+    def test_p6_pad_preview_edges_publish_identity_status_in_core_results(self) -> None:
+        payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")
+        payload["recompute"]["objs"] = ["PadPreview", "PadPreviewBody"]
+
+        cli_result = self.run_response_payload(payload)
+        ffi_result = self.run_recompute_ffi_payload(payload)
+
+        self.assertEqual(cli_result["diagnostics"], [])
+        self.assertEqual(ffi_result["diagnostics"], [])
+        for result in (cli_result, ffi_result):
+            self.assert_edge_identity_contract(result, "PadPreview")
+            self.assert_edge_identity_contract(result, "PadPreviewBody")
+
+    def test_p6_revolution_body_display_face_is_not_feature_local_profile(self) -> None:
+        result = self.run_recompute("body-pad3body-duplicate-stable-subname", "p6")
+
+        diagnostic = next(
+            item
+            for item in result["diagnostics"]
+            if item["code"] == "body_display_subname_not_feature_local"
+        )
+        self.assertEqual(diagnostic["object"], "Pad2")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Revolution")
+        self.assertEqual(diagnostic["subname"], "Face9")
+        self.assertIn("RevolutionBody.Revolution.Face9", diagnostic["message"])
+        self.assertIn("Revolution.Shape has no local Face9", diagnostic["message"])
+
+        revolution_faces = sorted(
+            key
+            for key in result["subshapes"]["Revolution"]
+            if key.startswith("Face")
+        )
+        self.assertEqual(revolution_faces, ["Face1", "Face2", "Face3", "Face4"])
+        self.assertNotIn("Face9", result["subshapes"]["Revolution"])
+
+        self.assertEqual(result["objects"]["Pad2"]["status"], "error")
+        self.assertEqual(result["objects"]["Fillet"]["status"], "skipped")
+        self.assertEqual(result["objects"]["Pad3"]["status"], "skipped")
+        self.assertEqual(result["objects"]["Pad3Body"]["status"], "skipped")
+        self.assertNotIn("Pad2", result["mesh"])
+        self.assertNotIn("Pad2", result["subshapes"])
+        self.assertNotIn("Pad3Body", result["mesh"])
+        self.assertNotIn("Pad3Body", result["subshapes"])
+
     def test_p6_body_face_profile_prefers_body_topo_shape_over_direct_feature_face(self) -> None:
         result = self.run_recompute("body-tip-face-profile-pad-after-sketch-axis-revolution", "p6")
 
@@ -200,14 +295,14 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 item["Properties"]["Tip"]["value"] = "Revolution"
 
         body_only_result = self.run_response_payload(body_only_payload)
-        revolution_body = next(item for item in body_only_result["results"] if item["object"] == "RevolutionBody")
-        edge23 = next(item for item in revolution_body["subshapes"] if item["indexed"] == "Edge23")
-
-        self.assertEqual(body_only_result["diagnostics"], [])
-        self.assertEqual(edge23["id"], "RevolutionBody:Edge23")
-        self.assertEqual(edge23["subname"], "Revolution.Edge23")
-        self.assertEqual(edge23["stableSubname"], "Revolution.Fillet.Edge11")
-        self.assertEqual(edge23["fullSubname"], "RevolutionBody.Revolution.Edge23")
+        self.assert_duplicate_stable_diagnostics(
+            body_only_result,
+            "RevolutionBody",
+            {
+                "Revolution.Edge2": {"Edge1", "Edge2"},
+                "Revolution.Edge5": {"Edge5", "Edge6"},
+            },
+        )
 
         result = self.run_response_payload(payload)
 
@@ -231,19 +326,76 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 item["Properties"]["Tip"]["value"] = "Revolution"
 
         body_only_result = self.run_response_payload(body_only_payload)
-        revolution_body = next(item for item in body_only_result["results"] if item["object"] == "RevolutionBody")
-        edge3 = next(item for item in revolution_body["subshapes"] if item["indexed"] == "Edge3")
-
-        self.assertEqual(body_only_result["diagnostics"], [])
-        self.assertEqual(edge3["subname"], "Revolution.Edge3")
-        self.assertEqual(edge3["stableSubname"], "Revolution.草图 12:01:23 PM.Edge1")
-        self.assertEqual(edge3["fullSubname"], "RevolutionBody.Revolution.Edge3")
+        self.assert_duplicate_stable_diagnostics(
+            body_only_result,
+            "RevolutionBody",
+            {
+                "Revolution.Edge3": {"Edge3", "Edge4"},
+                "Revolution.Edge5": {"Edge19", "Edge5"},
+            },
+        )
 
         result = self.run_response_payload(payload)
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
         self.assertIsNotNone(next(item for item in result["results"] if item["object"] == "RevolutionBody")["mesh"])
+
+    def test_p6_revolution_body_duplicate_face_stable_is_structured_diagnostic(self) -> None:
+        payload = self.p6_payload("revolution-pad2-stable-sublist-pollution")
+        payload["Objects"] = payload["Objects"][:4] + [
+            {
+                "Name": "RevolutionBody",
+                "ID": 8,
+                "TypeId": "PartDesign::Body",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": [
+                            "草图 12:28:39 PM",
+                            "Pad",
+                            "Fillet",
+                            "Revolution",
+                        ],
+                    },
+                    "Tip": {
+                        "PropertyType": "App::PropertyLink",
+                        "value": "Revolution",
+                    },
+                },
+            }
+        ]
+        payload["recompute"] = {"objs": ["RevolutionBody"]}
+
+        result = self.run_response_payload(payload)
+
+        self.assert_duplicate_stable_diagnostics(
+            result,
+            "RevolutionBody",
+            {"Revolution.Vertex1": {"Vertex1", "Vertex2"}},
+        )
+
+    def test_p6_profile_resolver_rejects_revolution_full_path_pick_without_local_face(self) -> None:
+        payload = self.p6_payload("revolution-pad2-stable-sublist-pollution")
+        for item in payload["Objects"]:
+            if item["Name"] == "Pad2":
+                item["Properties"]["Profile"]["SubSet"][0]["StableSubList"] = []
+
+        result = self.run_response_payload(payload)
+
+        diagnostic = next(
+            item
+            for item in result["diagnostics"]
+            if item["code"] == "body_display_subname_not_feature_local"
+        )
+        self.assertEqual(diagnostic["object"], "Pad2")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Revolution")
+        self.assertEqual(diagnostic["subname"], "Face12")
+        self.assertIn("RevolutionBody.Revolution.Face12", diagnostic["message"])
+        self.assertEqual([item["object"] for item in result["results"]], ["Pad2Body"])
+        self.assertIsNone(result["results"][0]["mesh"])
+        self.assertEqual(result["results"][0]["subshapes"], [])
 
     def test_p6_body_result_publishes_revolution_tip_face_path(self) -> None:
         payload = self.p6_payload("body-tip-face-profile-pad-after-revolution")

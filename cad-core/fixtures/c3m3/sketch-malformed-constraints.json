@@ -6,14 +6,35 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          }
         ],
         "Constraints": [
-          {"Type": "Horizontal", "First": 99},
-          {"Type": "Distance", "First": 0}
+          {
+            "Type": "Horizontal",
+            "First": 99
+          },
+          {
+            "Type": "Distance",
+            "First": 0
+          }
         ]
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
 }

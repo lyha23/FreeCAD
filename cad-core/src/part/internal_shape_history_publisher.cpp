@@ -65,6 +65,181 @@ std::string sourceEdgeName(std::size_t sourceEdgeIndex)
     return "Edge" + std::to_string(sourceEdgeIndex);
 }
 
+bool startsWith(const std::string& value, const std::string& prefix)
+{
+    return value.rfind(prefix, 0U) == 0U;
+}
+
+struct FaceAliasCandidate
+{
+    std::string targetName;
+    std::vector<std::string> edgeMappedNames;
+    std::size_t boundedFaceIndex = 0U;
+};
+
+std::optional<std::string> internalEdgeForSourceEdge(
+    const InternalShapeHistoryPublishInput& input,
+    std::size_t sourceEdgeIndex
+)
+{
+    if (!input.internalElementMap.is_object()) {
+        return std::nullopt;
+    }
+    const std::string sourceName = sourceEdgeName(sourceEdgeIndex);
+    if (sourceName.empty()) {
+        return std::nullopt;
+    }
+    const auto mappedIt = input.internalElementMap.find(sourceName);
+    if (mappedIt == input.internalElementMap.end() || !mappedIt->is_string()) {
+        return std::nullopt;
+    }
+    const std::string internalName = mappedIt->get<std::string>();
+    if (!startsWith(internalName, "InternalEdge")) {
+        return std::nullopt;
+    }
+    return internalName;
+}
+
+std::optional<std::string> mappedNameForInternalEdge(
+    const InternalShapeHistoryPublishInput& input,
+    const std::string& internalEdge
+)
+{
+    const auto mappedIt = input.internalEdgeMappedNames.find(internalEdge);
+    if (mappedIt == input.internalEdgeMappedNames.end() || mappedIt->second.empty()) {
+        return std::nullopt;
+    }
+    return mappedIt->second;
+}
+
+void addDistinctMappedName(std::vector<std::string>& values, const std::string& value)
+{
+    if (value.empty()) {
+        return;
+    }
+    if (std::find(values.begin(), values.end(), value) == values.end()) {
+        values.push_back(value);
+    }
+}
+
+std::vector<std::string> mappedBoundaryEdgeNames(
+    const InternalShapeHistoryPublishInput& input,
+    const TopTools_IndexedMapOfShape& internalEdges,
+    const SketchInternalFaceMakerBoundedFaceEvidence& faceEvidence
+)
+{
+    std::vector<std::string> names;
+    for (const SketchInternalFaceMakerBoundedFaceBoundaryEvidence& boundary :
+         faceEvidence.outerBoundary) {
+        if (!boundary.targetEdge.IsNull()) {
+            const int internalEdgeIndex = findSameShapeIndex(internalEdges, boundary.targetEdge);
+            if (internalEdgeIndex > 0) {
+                if (const auto mapped = mappedNameForInternalEdge(
+                        input,
+                        "InternalEdge" + std::to_string(internalEdgeIndex))) {
+                    addDistinctMappedName(names, *mapped);
+                    continue;
+                }
+            }
+        }
+        if (const auto internalEdge = internalEdgeForSourceEdge(input, boundary.sourceEdgeIndex)) {
+            if (const auto mapped = mappedNameForInternalEdge(input, *internalEdge)) {
+                addDistinctMappedName(names, *mapped);
+            }
+        }
+    }
+    for (const std::size_t sourceEdgeIndex : faceEvidence.sourceEdgeIndices) {
+        if (const auto internalEdge = internalEdgeForSourceEdge(input, sourceEdgeIndex)) {
+            if (const auto mapped = mappedNameForInternalEdge(input, *internalEdge)) {
+                addDistinctMappedName(names, *mapped);
+            }
+        }
+    }
+    std::sort(names.begin(), names.end());
+    return names;
+}
+
+std::string edgeNamePrefixKey(const std::vector<std::string>& names, std::size_t count)
+{
+    std::string key;
+    for (std::size_t index = 0; index < count && index < names.size(); ++index) {
+        if (!key.empty()) {
+            key += "|";
+        }
+        key += names.at(index);
+    }
+    return key;
+}
+
+std::string faceAliasForEdgeNames(const std::vector<std::string>& names)
+{
+    std::string alias;
+    for (const std::string& name : names) {
+        if (!alias.empty()) {
+            alias += ",";
+        }
+        alias += name;
+    }
+    return alias.empty() ? std::string{} : alias + ";SKT;FAC";
+}
+
+void publishGeneratedFaceAliases(
+    InternalShapeHistoryPublication& publication,
+    const std::vector<FaceAliasCandidate>& candidates
+)
+{
+    std::map<std::string, std::set<std::string>> targetsByAlias;
+    for (const FaceAliasCandidate& candidate : candidates) {
+        if (candidate.edgeMappedNames.empty()) {
+            addDistinctString(
+                publication.elementHistoryStatus,
+                "facemaker_face_identity:missing_boundary_edge_identity"
+            );
+            continue;
+        }
+
+        std::vector<std::string> selectedNames;
+        for (std::size_t count = 1U; count <= candidate.edgeMappedNames.size(); ++count) {
+            const std::string key = edgeNamePrefixKey(candidate.edgeMappedNames, count);
+            std::size_t matchCount = 0U;
+            for (const FaceAliasCandidate& other : candidates) {
+                if (other.edgeMappedNames.size() >= count
+                    && edgeNamePrefixKey(other.edgeMappedNames, count) == key) {
+                    ++matchCount;
+                }
+            }
+            if (matchCount == 1U) {
+                selectedNames.assign(
+                    candidate.edgeMappedNames.begin(),
+                    candidate.edgeMappedNames.begin() + static_cast<std::ptrdiff_t>(count)
+                );
+                break;
+            }
+        }
+        if (selectedNames.empty()) {
+            addDistinctString(
+                publication.elementHistoryStatus,
+                "facemaker_face_identity:ambiguous_signature"
+            );
+            continue;
+        }
+
+        targetsByAlias[faceAliasForEdgeNames(selectedNames)].insert(candidate.targetName);
+    }
+
+    for (const auto& [alias, targets] : targetsByAlias) {
+        if (targets.size() != 1U) {
+            addDistinctString(
+                publication.elementHistoryStatus,
+                "facemaker_face_identity:ambiguous_signature"
+            );
+            continue;
+        }
+        publication.elementMapAliases[alias] = *targets.begin();
+        addDistinctString(publication.elementHistoryStatus, "facemaker_face_identity:element_map");
+    }
+}
+
 std::optional<TopAbs_ShapeEnum> elementKindFromName(const std::string& elementName)
 {
     const std::size_t dot = elementName.rfind('.');
@@ -250,7 +425,10 @@ void publishGeneratedFaceHistory(
     }
 
     TopTools_IndexedMapOfShape internalFaces;
+    TopTools_IndexedMapOfShape internalEdges;
     TopExp::MapShapes(input.internalShape, TopAbs_FACE, internalFaces);
+    TopExp::MapShapes(input.internalShape, TopAbs_EDGE, internalEdges);
+    std::vector<FaceAliasCandidate> faceAliasCandidates;
     for (const SketchInternalFaceMakerBoundedFaceEvidence& faceEvidence :
          history.faceMakerBoundedFaceEvidence) {
         int internalFaceIndex = 0;
@@ -270,6 +448,11 @@ void publishGeneratedFaceHistory(
             addDistinctString(sources, sourceEdgeName(sourceIndex));
         }
         const std::string targetName = "InternalFace" + std::to_string(internalFaceIndex);
+        faceAliasCandidates.push_back(FaceAliasCandidate {
+            targetName,
+            mappedBoundaryEdgeNames(input, internalEdges, faceEvidence),
+            faceEvidence.boundedFaceIndex,
+        });
         addPublishedHistory(
             publication,
             InternalShapeHistoryRelation::Generated,
@@ -295,6 +478,7 @@ void publishGeneratedFaceHistory(
             );
         }
     }
+    publishGeneratedFaceAliases(publication, faceAliasCandidates);
 }
 
 void publishFaceMakerTerminalHistory(

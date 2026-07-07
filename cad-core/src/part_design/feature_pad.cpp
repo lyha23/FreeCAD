@@ -126,6 +126,7 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
                                       "BaseFeature",
                                       "Offset",
                                       "Offset2",
+                                      "StartOffset",
                                       "TaperAngle",
                                       "TaperAngle2",
                                       "UseCustomVector",

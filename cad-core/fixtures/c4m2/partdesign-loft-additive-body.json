@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [4, 0] },
-          { "kind": "LineSegment", "start": [4, 0], "end": [4, 3] },
-          { "kind": "LineSegment", "start": [4, 3], "end": [0, 3] },
-          { "kind": "LineSegment", "start": [0, 3], "end": [0, 0] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              4,
+              0
+            ],
+            "end": [
+              4,
+              3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              4,
+              3
+            ],
+            "end": [
+              0,
+              3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              3
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -21,14 +65,67 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 4],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            4
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Geometry": [
-          { "kind": "LineSegment", "start": [0.5, 0.5], "end": [3.5, 0.5] },
-          { "kind": "LineSegment", "start": [3.5, 0.5], "end": [3.5, 2.5] },
-          { "kind": "LineSegment", "start": [3.5, 2.5], "end": [0.5, 2.5] },
-          { "kind": "LineSegment", "start": [0.5, 2.5], "end": [0.5, 0.5] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0.5,
+              0.5
+            ],
+            "end": [
+              3.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              3.5,
+              0.5
+            ],
+            "end": [
+              3.5,
+              2.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              3.5,
+              2.5
+            ],
+            "end": [
+              0.5,
+              2.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0.5,
+              2.5
+            ],
+            "end": [
+              0.5,
+              0.5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -65,7 +162,11 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchLoftProfile", "SketchLoftSection", "AdditiveLoft"]
+          "values": [
+            "SketchLoftProfile",
+            "SketchLoftSection",
+            "AdditiveLoft"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -75,6 +176,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
   }
 }

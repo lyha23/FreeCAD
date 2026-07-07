@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               0,
               0
@@ -19,6 +20,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               10,
               0
@@ -30,6 +32,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               10,
               5
@@ -41,6 +44,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               0,
               5
@@ -52,6 +56,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 5,
             "start": [
               0,
               8
@@ -64,6 +69,7 @@
           },
           {
             "kind": "Circle",
+            "id": 6,
             "center": [
               5,
               6
@@ -73,6 +79,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 7,
             "start": [
               5,
               8
@@ -85,6 +92,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 8,
             "start": [
               7,
               8
@@ -97,6 +105,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 9,
             "start": [
               7,
               8
@@ -109,6 +118,7 @@
           },
           {
             "kind": "Point",
+            "id": 10,
             "point": [
               5,
               8
@@ -158,11 +168,9 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

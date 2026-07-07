@@ -20,6 +20,7 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace cad_core::runtime {
 
@@ -222,6 +223,20 @@ bool stableSubnameKindMatchesIndexed(const std::string& indexed, const std::stri
         return true;
     }
     return *indexedKind == *stableKind;
+}
+
+bool namedShapeHasCurrentElementEvidence(const std::string& indexed,
+                                         const part::NamedShape* namedShape)
+{
+    if (namedShape == nullptr) {
+        return false;
+    }
+    return std::any_of(namedShape->elementMap.begin(),
+                       namedShape->elementMap.end(),
+                       [&](const auto& item) {
+                           return item.second == indexed
+                               && stableSubnameKindMatchesIndexed(indexed, item.first);
+                       });
 }
 
 int stableSubnamePriority(const std::string& indexed, const std::string& stableSubname)
@@ -460,6 +475,29 @@ struct BodyDisplayCompoundResponseContext {
     std::map<std::string, bool> childHasNamedShape;
 };
 
+std::optional<std::string> qualifiedStableSubnameOwner(const std::string& stableSubname)
+{
+    const std::size_t dot = stableSubname.find('.');
+    if (dot == std::string::npos || dot == 0U) {
+        return std::nullopt;
+    }
+    if (!topologicalElementKind(stableSubname)) {
+        return std::nullopt;
+    }
+    return stableSubname.substr(0, dot);
+}
+
+bool bodyTipStableSubnameShouldUseCurrentOwner(
+    const std::string& stableSubname,
+    const std::optional<BodyTipSubshapeResponseContext>& tipContext)
+{
+    if (!tipContext) {
+        return false;
+    }
+    const auto owner = qualifiedStableSubnameOwner(stableSubname);
+    return owner && *owner != tipContext->owner;
+}
+
 std::optional<TopologicalElementToken> parseTopologicalElementToken(const std::string& indexed)
 {
     const std::string local = localElementName(indexed);
@@ -658,6 +696,9 @@ std::string bodyTipQualifiedStableSubname(const std::string& objectName,
     // Tips also need that Tip path so downstream PropertyLinkSub can safely peel it off.
     const std::string ownerPrefix = tipContext->owner + ".";
     if (stableSubname.empty()) {
+        return {};
+    }
+    if (bodyTipStableSubnameShouldUseCurrentOwner(stableSubname, tipContext)) {
         return ownerPrefix + indexed;
     }
     const std::string bodyPrefix = objectName + ".";
@@ -674,6 +715,20 @@ std::string bodyTipQualifiedStableSubname(const std::string& objectName,
         return ownerPrefix + stableSubname;
     }
     return stableSubname;
+}
+
+bool bodyTipStableSubnameHasPublicationEvidence(const std::string& indexed,
+                                                const std::string& stableSubname,
+                                                const part::NamedShape* stableSource,
+                                                const std::string& rawIdentityStatus)
+{
+    if (stableSubname.empty()) {
+        return false;
+    }
+    if (rawIdentityStatus == "stable" || rawIdentityStatus == "stable_split_fragment") {
+        return true;
+    }
+    return namedShapeHasCurrentElementEvidence(indexed, stableSource);
 }
 
 std::string responseSubnameFor(const std::string& indexed,
@@ -708,7 +763,39 @@ std::string responseFullSubnameFor(const std::string& objectName,
     return objectPrefix + subname;
 }
 
-nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json& mesh)
+void copyStringField(nlohmann::json& target,
+                     const nlohmann::json& source,
+                     const std::string& field)
+{
+    const auto fieldIt = source.find(field);
+    if (fieldIt != source.end() && fieldIt->is_string()) {
+        target[field] = fieldIt->get<std::string>();
+    }
+}
+
+void copyIdentityFields(nlohmann::json& target, const nlohmann::json& source)
+{
+    for (const std::string& field :
+         {"stableSubname",
+          "sourceStableSubname",
+          "fragmentStableSubname",
+          "sourceGeometryKind",
+          "identityStatus"}) {
+        copyStringField(target, source, field);
+    }
+    const auto sourceGeometryIdIt = source.find("sourceGeometryId");
+    if (sourceGeometryIdIt != source.end() && sourceGeometryIdIt->is_number_integer()) {
+        target["sourceGeometryId"] = sourceGeometryIdIt->get<long long>();
+    }
+    const auto sourceGeometryIndexIt = source.find("sourceGeometryIndex");
+    if (sourceGeometryIndexIt != source.end() && sourceGeometryIndexIt->is_number_unsigned()) {
+        target["sourceGeometryIndex"] = sourceGeometryIndexIt->get<std::size_t>();
+    }
+}
+
+nlohmann::json responseMesh(const std::string& objectName,
+                            const nlohmann::json& mesh,
+                            const nlohmann::json& responseSubshapes)
 {
     if (!mesh.is_object()) {
         return nullptr;
@@ -739,6 +826,19 @@ nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json&
         }
     }
 
+    std::map<std::string, const nlohmann::json*> edgeSubshapeById;
+    if (responseSubshapes.is_array()) {
+        for (const auto& subshape : responseSubshapes) {
+            if (!subshape.is_object() || subshape.value("kind", "") != "Edge") {
+                continue;
+            }
+            const std::string id = subshape.value("id", "");
+            if (!id.empty()) {
+                edgeSubshapeById[id] = &subshape;
+            }
+        }
+    }
+
     nlohmann::json edgeSegments = nlohmann::json::array();
     const auto edgeSegmentsIt = mesh.find("edgeSegments");
     if (edgeSegmentsIt != mesh.end() && edgeSegmentsIt->is_array()) {
@@ -758,24 +858,10 @@ nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json&
                 {"indexed", indexed},
                 {"points", *pointsIt},
             };
-            for (const std::string& field :
-                 {"stableSubname",
-                  "sourceStableSubname",
-                  "fragmentStableSubname",
-                  "sourceGeometryKind",
-                  "identityStatus"}) {
-                const auto fieldIt = segment.find(field);
-                if (fieldIt != segment.end() && fieldIt->is_string()) {
-                    responseSegment[field] = fieldIt->get<std::string>();
-                }
-            }
-            const auto sourceGeometryIdIt = segment.find("sourceGeometryId");
-            if (sourceGeometryIdIt != segment.end() && sourceGeometryIdIt->is_number_integer()) {
-                responseSegment["sourceGeometryId"] = sourceGeometryIdIt->get<long long>();
-            }
-            const auto sourceGeometryIndexIt = segment.find("sourceGeometryIndex");
-            if (sourceGeometryIndexIt != segment.end() && sourceGeometryIndexIt->is_number_unsigned()) {
-                responseSegment["sourceGeometryIndex"] = sourceGeometryIndexIt->get<std::size_t>();
+            copyIdentityFields(responseSegment, segment);
+            const auto subshapeIt = edgeSubshapeById.find(responseSegment["id"].get<std::string>());
+            if (subshapeIt != edgeSubshapeById.end()) {
+                copyIdentityFields(responseSegment, *subshapeIt->second);
             }
             edgeSegments.push_back(std::move(responseSegment));
         }
@@ -812,6 +898,127 @@ nlohmann::json responseMesh(const std::string& objectName, const nlohmann::json&
     };
 }
 
+bool publishesStableEdgeIdentityForResponseContract(const std::string& objectName,
+                                                    const ComputeContext& context)
+{
+    const auto documentIt = context.documentObjects.find(objectName);
+    return documentIt != context.documentObjects.end() && documentIt->second != nullptr;
+}
+
+bool hasStableEdgeIdentityEvidence(const std::string& indexed,
+                                   const std::string& stableSubname,
+                                   const std::string& subname,
+                                   const part::NamedShape* stableSource)
+{
+    if (!stableSubname.empty()) {
+        return true;
+    }
+    if (!subname.empty() && subname.find('.') != std::string::npos) {
+        return true;
+    }
+    return namedShapeHasCurrentElementEvidence(indexed, stableSource);
+}
+
+struct StableSubnamePublicationConflict {
+    std::string kind;
+    std::string stableSubname;
+    std::vector<std::string> indexed;
+};
+
+void addDistinctIndexed(std::vector<std::string>& indexed, const std::string& name)
+{
+    if (name.empty() || std::find(indexed.begin(), indexed.end(), name) != indexed.end()) {
+        return;
+    }
+    indexed.push_back(name);
+}
+
+std::string joinIndexedNames(const std::vector<std::string>& indexed)
+{
+    std::string result;
+    for (const std::string& name : indexed) {
+        if (!result.empty()) {
+            result += ", ";
+        }
+        result += name;
+    }
+    return result;
+}
+
+std::vector<StableSubnamePublicationConflict> stableSubnamePublicationConflicts(
+    const nlohmann::json& subshapes
+)
+{
+    std::map<std::pair<std::string, std::string>, std::vector<std::string>> byStable;
+    if (!subshapes.is_array()) {
+        return {};
+    }
+    for (const auto& subshape : subshapes) {
+        if (!subshape.is_object()) {
+            continue;
+        }
+        const std::string kind = subshape.value("kind", "");
+        const std::string stableSubname = subshape.value("stableSubname", "");
+        const std::string indexed = subshape.value("indexed", "");
+        if (kind.empty() || stableSubname.empty() || indexed.empty()) {
+            continue;
+        }
+        addDistinctIndexed(byStable[{kind, stableSubname}], indexed);
+    }
+
+    std::vector<StableSubnamePublicationConflict> conflicts;
+    for (const auto& [key, indexed] : byStable) {
+        if (indexed.size() <= 1U) {
+            continue;
+        }
+        conflicts.push_back({key.first, key.second, indexed});
+    }
+    return conflicts;
+}
+
+bool appendStableSubnamePublicationDiagnostics(const std::string& objectName,
+                                               const nlohmann::json& subshapes,
+                                               std::vector<Diagnostic>& diagnostics)
+{
+    const std::vector<StableSubnamePublicationConflict> conflicts =
+        stableSubnamePublicationConflicts(subshapes);
+    for (const StableSubnamePublicationConflict& conflict : conflicts) {
+        const std::string indexed = joinIndexedNames(conflict.indexed);
+        addDiagnostic(
+            diagnostics,
+            "error",
+            "duplicate_stable_subname",
+            objectName + " publishes duplicate " + conflict.kind + " stableSubname "
+                + conflict.stableSubname + " for " + indexed,
+            objectName,
+            {},
+            "response",
+            conflict.stableSubname,
+            indexed
+        );
+    }
+    return !conflicts.empty();
+}
+
+bool requiresStableSubnamePublicationDiagnostics(const std::string& objectName,
+                                                 const ComputeContext& context)
+{
+    const auto objectIt = context.documentObjects.find(objectName);
+    if (objectIt == context.documentObjects.end()
+        || objectIt->second == nullptr
+        || objectIt->second->typeId != "PartDesign::Body") {
+        return false;
+    }
+    const auto tip = app::readLink(*objectIt->second, "Tip");
+    if (!tip || tip->object.empty()) {
+        return false;
+    }
+    const auto tipIt = context.documentObjects.find(tip->object);
+    return tipIt != context.documentObjects.end()
+        && tipIt->second != nullptr
+        && tipIt->second->typeId == "PartDesign::Revolution";
+}
+
 nlohmann::json responseSubshapes(const std::string& objectName,
                                  const ComputeContext& context)
 {
@@ -833,6 +1040,8 @@ nlohmann::json responseSubshapes(const std::string& objectName,
     }
     const auto tipContext = bodyTipSubshapeResponseContext(objectName, context);
     const auto displayContext = bodyDisplayCompoundResponseContext(objectName, context, namedShape);
+    const bool stableEdgeIdentityContract =
+        publishesStableEdgeIdentityForResponseContract(objectName, context);
 
     for (const auto& [indexed, subshape] : subshapeIt->second.items()) {
         const bool internalIndexed = indexed.rfind("InternalFace", 0) == 0
@@ -852,18 +1061,28 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         else if (stableSubname.empty()) {
             stableSubname = internalElementStableSubnameFor(objectName, indexed, context);
         }
-        const std::string identityStatus = subshape.value("identityStatus", "");
-        if (identityStatus == "stable") {
+        const std::string rawIdentityStatus = subshape.value("identityStatus", "");
+        if (rawIdentityStatus == "stable") {
             const std::string sourceStableSubname = subshape.value("sourceStableSubname", "");
             if (!sourceStableSubname.empty()) {
                 stableSubname = sourceStableSubname;
             }
         }
-        else if (identityStatus == "stable_split_fragment") {
+        else if (rawIdentityStatus == "stable_split_fragment") {
             stableSubname = subshape.value("stableSubname", "");
         }
-        else if (identityStatus == "index_fallback") {
+        const std::string downgradedSourceStableSubname =
+            bodyTipStableSubnameShouldUseCurrentOwner(stableSubname, tipContext)
+            ? stableSubname
+            : std::string {};
+        bool bodyTipDisplayOnlySubname = false;
+        if (tipContext
+            && !bodyTipStableSubnameHasPublicationEvidence(indexed,
+                                                           stableSubname,
+                                                           stableSource,
+                                                           rawIdentityStatus)) {
             stableSubname.clear();
+            bodyTipDisplayOnlySubname = true;
         }
         stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, tipContext);
         if (displayContext && stableSubname == indexed && isPlainTopologicalElementName(stableSubname)) {
@@ -874,12 +1093,25 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         }
         stableSubname = bodyDisplayCompoundQualifiedStableSubname(indexed, stableSubname, displayContext);
         const std::string subname = responseSubnameFor(indexed, stableSubname, namedShape, tipContext, displayContext);
+        std::string responseIdentityStatus = rawIdentityStatus;
+        if (displayKind(subshape) == "Edge"
+            && stableEdgeIdentityContract
+            && responseIdentityStatus.empty()
+            && !bodyTipDisplayOnlySubname
+            && hasStableEdgeIdentityEvidence(indexed, stableSubname, subname, stableSource)) {
+            responseIdentityStatus = "stable";
+        }
+        if (bodyTipDisplayOnlySubname && responseIdentityStatus.empty()) {
+            responseIdentityStatus = "body_display_only";
+        }
         nlohmann::json responseSubshape {
             {"id", objectName + ":" + indexed},
             {"kind", displayKind(subshape)},
             {"indexed", indexed},
             {"subname", subname},
             {"stableSubname", stableSubname},
+            {"ShadowSub", nlohmann::json::array()},
+            {"ReferenceShadow", nlohmann::json::array()},
         };
         if (const std::string fullSubname = responseFullSubnameFor(objectName, subname);
             !fullSubname.empty()) {
@@ -888,12 +1120,18 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         for (const std::string& field :
              {"sourceStableSubname",
               "fragmentStableSubname",
-              "sourceGeometryKind",
-              "identityStatus"}) {
+              "sourceGeometryKind"}) {
             const auto fieldIt = subshape.find(field);
             if (fieldIt != subshape.end() && fieldIt->is_string()) {
                 responseSubshape[field] = fieldIt->get<std::string>();
             }
+        }
+        if (!downgradedSourceStableSubname.empty()
+            && responseSubshape.find("sourceStableSubname") == responseSubshape.end()) {
+            responseSubshape["sourceStableSubname"] = downgradedSourceStableSubname;
+        }
+        if (!responseIdentityStatus.empty()) {
+            responseSubshape["identityStatus"] = responseIdentityStatus;
         }
         const auto sourceGeometryIdIt = subshape.find("sourceGeometryId");
         if (sourceGeometryIdIt != subshape.end() && sourceGeometryIdIt->is_number_integer()) {
@@ -1025,15 +1263,24 @@ nlohmann::json recomputeResultJson(const app::Document& document,
                                    const ComputeContext& context)
 {
     nlohmann::json results = nlohmann::json::array();
+    std::vector<Diagnostic> diagnostics = context.diagnostics;
     for (const std::string& target : document.targets) {
         if (document.indexByName.count(target) == 0U) {
             continue;
         }
         const auto meshIt = context.mesh.find(target);
+        nlohmann::json subshapes = responseSubshapes(target, context);
+        if (requiresStableSubnamePublicationDiagnostics(target, context)
+            && appendStableSubnamePublicationDiagnostics(target, subshapes, diagnostics)) {
+            continue;
+        }
         nlohmann::json result = {
             {"object", target},
-            {"mesh", meshIt == context.mesh.end() ? nlohmann::json(nullptr) : responseMesh(target, meshIt->second)},
-            {"subshapes", responseSubshapes(target, context)},
+            {"mesh",
+             meshIt == context.mesh.end()
+                 ? nlohmann::json(nullptr)
+                 : responseMesh(target, meshIt->second, subshapes)},
+            {"subshapes", std::move(subshapes)},
         };
         appendDatumFrameResultFields(result, target, context);
         results.push_back(std::move(result));
@@ -1043,7 +1290,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
         {"results", results},
         {"elementReferenceUpdates", context.elementReferenceUpdates},
         {"documentObjectUpdates", context.documentObjectUpdates},
-        {"diagnostics", diagnosticsToJson(context.diagnostics)},
+        {"diagnostics", diagnosticsToJson(diagnostics)},
         {"binaryPayloads", nlohmann::json::array()},
     };
 }

@@ -1,0 +1,43 @@
+{
+  "Objects": [
+    {
+      "Name": "Sketch",
+      "ID": 1,
+      "TypeId": "Sketcher::SketchObject",
+      "Properties": {
+        "Geometry": [
+          { "kind": "LineSegment", "id": 1, "start": [0, 0], "end": [10, 0] },
+          { "kind": "LineSegment", "id": 2, "start": [10, 0], "end": [10, 5] },
+          { "kind": "LineSegment", "id": 3, "start": [10, 5], "end": [0, 5] },
+          { "kind": "LineSegment", "id": 4, "start": [0, 5], "end": [0, 0] }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [],
+              "StableSubList": ["g1;SKT;FAC"]
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 10,
+        "StartOffset": "bad",
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": ["Pad"]
+  }
+}

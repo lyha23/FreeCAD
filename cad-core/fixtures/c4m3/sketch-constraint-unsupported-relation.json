@@ -6,9 +6,42 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [4, 0]},
-          {"kind": "LineSegment", "start": [0, 1], "end": [4, 1]},
-          {"kind": "LineSegment", "start": [0, 0.5], "end": [4, 0.5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0,
+              1
+            ],
+            "end": [
+              4,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0,
+              0.5
+            ],
+            "end": [
+              4,
+              0.5
+            ]
+          }
         ],
         "Constraints": [
           {
@@ -24,5 +57,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
 }

@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               0,
               0
@@ -19,6 +20,7 @@
           },
           {
             "kind": "Circle",
+            "id": 2,
             "center": [
               5,
               2.5
@@ -28,6 +30,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               10,
               0
@@ -39,6 +42,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               0,
               5
@@ -50,6 +54,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 5,
             "start": [
               10,
               5
@@ -61,6 +66,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 6,
             "start": [
               0,
               0
@@ -73,6 +79,7 @@
           },
           {
             "kind": "ArcOfCircle",
+            "id": 7,
             "center": [
               5,
               2.5
@@ -84,6 +91,7 @@
           },
           {
             "kind": "Ellipse",
+            "id": 8,
             "center": [
               5,
               2.5
@@ -94,6 +102,7 @@
           },
           {
             "kind": "ArcOfEllipse",
+            "id": 9,
             "center": [
               5,
               2.5
@@ -126,11 +135,9 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

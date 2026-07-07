@@ -42,7 +42,7 @@ struct RawSketchEdgeIdentityLedger
 {
     std::vector<RawSketchEdgeIdentity> edges;
     std::size_t stableCount = 0;
-    std::size_t fallbackCount = 0;
+    std::size_t unresolvedCount = 0;
     std::size_t splitFragmentCount = 0;
 };
 
@@ -66,6 +66,13 @@ RawSketchEdgeIdentityLedger buildRawSketchEdgeIdentityLedger(
 void addSplitFragmentIdentitiesFromInternalHistory(
     RawSketchEdgeIdentityLedger& ledger,
     const part::NamedShape& internalNamedShape);
+
+// Copies stable raw EdgeN identity onto explicitly mapped InternalEdgeN entries using
+// SketchObject::getInternalElementMap-style geometry evidence. This must not infer identity
+// from response array or mesh ordering or publish anonymous index_fallback identities.
+void addInternalEdgeIdentitiesFromInternalElementMap(
+    RawSketchEdgeIdentityLedger& ledger,
+    const nlohmann::json& internalElementMap);
 
 part::NamedShape namedShapeForSketchRawEdgeIdentity(
     const std::string& owner,

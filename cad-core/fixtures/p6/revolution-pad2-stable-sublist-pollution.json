@@ -1,0 +1,259 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "草图 12:28:39 PM",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              -513.4004275682435,
+              207.78992832564563
+            ],
+            "id": 100001,
+            "kind": "LineSegment",
+            "start": [
+              -940.0170538769404,
+              207.78992832564563
+            ]
+          },
+          {
+            "end": [
+              -513.4004275682435,
+              -343.32807798129556
+            ],
+            "id": 100002,
+            "kind": "LineSegment",
+            "start": [
+              -513.4004275682435,
+              207.78992832564563
+            ]
+          },
+          {
+            "end": [
+              -940.0170538769404,
+              -343.32807798129556
+            ],
+            "id": 100003,
+            "kind": "LineSegment",
+            "start": [
+              -513.4004275682435,
+              -343.32807798129556
+            ]
+          },
+          {
+            "end": [
+              -940.0170538769404,
+              207.78992832564563
+            ],
+            "id": 100004,
+            "kind": "LineSegment",
+            "start": [
+              -940.0170538769404,
+              -343.32807798129556
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 2,
+      "Name": "Pad",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 307,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "g100001;SKT;FAC"
+              ],
+              "SubList": [],
+              "value": "草图 12:28:39 PM"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 3,
+      "Name": "Fillet",
+      "Properties": {
+        "Base": {
+          "FullSubList": [
+            "PadBody.Pad.Edge10"
+          ],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge10"
+          ],
+          "SubList": [
+            "Edge10"
+          ],
+          "value": "Pad"
+        },
+        "Radius": 170,
+        "SupportTransform": true,
+        "UseAllEdges": false
+      },
+      "TypeId": "PartDesign::Fillet"
+    },
+    {
+      "ID": 4,
+      "Name": "Revolution",
+      "Properties": {
+        "Angle": 360,
+        "FuseOrder": "BaseFirst",
+        "FuzzyTolerance": 0,
+        "Midplane": false,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [
+                "PadBody.Fillet.Face5"
+              ],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Pad.Face6"
+              ],
+              "SubList": [
+                "Face5"
+              ],
+              "value": "Fillet"
+            }
+          ]
+        },
+        "ReferenceAxis": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "g100001"
+          ],
+          "SubList": [
+            "InternalEdge1"
+          ],
+          "value": "草图 12:28:39 PM"
+        },
+        "Refine": false,
+        "Reversed": false,
+        "Type": "Angle"
+      },
+      "TypeId": "PartDesign::Revolution"
+    },
+    {
+      "ID": 5,
+      "Name": "Pad2",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 523,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [
+                "RevolutionBody.Revolution.Face12"
+              ],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Fillet.Face2"
+              ],
+              "SubList": [
+                "Face12"
+              ],
+              "value": "Revolution"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 6,
+      "Name": "Fillet2",
+      "Properties": {
+        "Base": {
+          "FullSubList": [
+            "Pad2Body.Pad2.Edge14"
+          ],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge10"
+          ],
+          "SubList": [
+            "Edge14"
+          ],
+          "value": "Pad2"
+        },
+        "Radius": 175.5,
+        "SupportTransform": true,
+        "UseAllEdges": false
+      },
+      "TypeId": "PartDesign::Fillet"
+    },
+    {
+      "ID": 7,
+      "Name": "Pad2Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "草图 12:28:39 PM",
+            "Pad",
+            "Fillet",
+            "Revolution",
+            "Pad2",
+            "Fillet2"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Fillet2"
+        }
+      },
+      "TypeId": "PartDesign::Body"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Pad2Body"
+    ]
+  }
+}

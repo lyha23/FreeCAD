@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -19,13 +63,20 @@
       "ID": 2,
       "TypeId": "Part::Extrusion",
       "Properties": {
-        "Base": {"PropertyType": "App::PropertyLink", "value": "Sketch"},
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Sketch"
+        },
         "DirMode": "Edge",
         "DirLink": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Sketch",
-          "SubList": ["Vertex99"],
-          "StableSubList": ["Vertex1"],
+          "SubList": [
+            "Vertex99"
+          ],
+          "StableSubList": [
+            "Vertex1"
+          ],
           "ReferenceShadow": [
             {
               "target": "Sketch",
@@ -36,9 +87,21 @@
               "subname": "Vertex1",
               "stableSubname": "Vertex1",
               "fingerprint": {
-                "centroid": [20.0, 20.0, 0.0],
-                "bboxMin": [20.0, 20.0, 0.0],
-                "bboxMax": [20.0, 20.0, 0.0],
+                "centroid": [
+                  20.0,
+                  20.0,
+                  0.0
+                ],
+                "bboxMin": [
+                  20.0,
+                  20.0,
+                  0.0
+                ],
+                "bboxMax": [
+                  20.0,
+                  20.0,
+                  0.0
+                ],
                 "edgeCount": 0,
                 "vertexCount": 1
               },
@@ -57,5 +120,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Extrude"]}
+  "recompute": {
+    "objs": [
+      "Extrude"
+    ]
+  }
 }

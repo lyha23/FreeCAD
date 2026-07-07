@@ -167,7 +167,8 @@ bool parseSketchGeometry(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     SketchGeometrySet& parsed,
-    const std::string& propertyName
+    const std::string& propertyName,
+    SketchGeometryIdPolicy idPolicy
 )
 {
     std::set<long> seenGeometryIds;
@@ -187,6 +188,17 @@ bool parseSketchGeometry(
 
         const std::string kind = item.at("kind").get<std::string>();
         const GeometryIdRead geometryId = readGeometryIdField(item);
+        if (idPolicy == SketchGeometryIdPolicy::Required && !geometryId.present) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "missing_geometry_id",
+                "Sketch Geometry item at index " + std::to_string(index) + " must declare id",
+                object.name,
+                propertyName
+            );
+            return false;
+        }
         if (geometryId.present && !geometryId.value) {
             runtime::addDiagnostic(
                 context.diagnostics,

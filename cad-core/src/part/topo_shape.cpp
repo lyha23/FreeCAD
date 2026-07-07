@@ -2715,7 +2715,8 @@ NamedShape namedShapeForSketchInternalShape(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
     const TopoDS_Shape& internalShape,
-    std::optional<InternalShapeHistoryLedger> historyLedger
+    std::optional<InternalShapeHistoryLedger> historyLedger,
+    std::map<std::string, std::string> internalEdgeMappedNames
 )
 {
     NamedShape namedShape;
@@ -2759,6 +2760,7 @@ NamedShape namedShapeForSketchInternalShape(
                 rawShape,
                 internalShape,
                 internalMap,
+                std::move(internalEdgeMappedNames),
             });
         applyInternalShapeHistoryPublication(namedShape, publication);
     }
@@ -3620,7 +3622,8 @@ NamedShapeBuild makeElementCompoundFromSources(
 NamedShapeBuild makeElementBooleanFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources,
-    BooleanOperation operation
+    BooleanOperation operation,
+    std::optional<double> tolerance
 )
 {
     if (sources.empty()) {
@@ -3704,7 +3707,17 @@ NamedShapeBuild makeElementBooleanFromSources(
     maker->SetNonDestructive(Standard_True);
     maker->SetArguments(arguments);
     maker->SetTools(tools);
-    maker->SetFuzzyValue(autoFuzzyValueForSources(booleanSources));
+    if (tolerance) {
+        if (*tolerance > 0.0) {
+            maker->SetFuzzyValue(*tolerance);
+        }
+        else if (*tolerance < 0.0) {
+            maker->SetFuzzyValue(autoFuzzyValueForSources(booleanSources));
+        }
+    }
+    else {
+        maker->SetFuzzyValue(autoFuzzyValueForSources(booleanSources));
+    }
     maker->Build();
     if (!maker->IsDone()) {
         return NamedShapeBuild {

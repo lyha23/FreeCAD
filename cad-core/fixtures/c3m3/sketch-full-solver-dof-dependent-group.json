@@ -6,19 +6,60 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [4, 0]},
-          {"kind": "Point", "point": [3, 2], "construction": true},
-          {"kind": "Circle", "center": [2, 2], "radius": 1}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ]
+          },
+          {
+            "kind": "Point",
+            "id": 2,
+            "point": [
+              3,
+              2
+            ],
+            "construction": true
+          },
+          {
+            "kind": "Circle",
+            "id": 3,
+            "center": [
+              2,
+              2
+            ],
+            "radius": 1
+          }
         ],
         "Constraints": [
-          {"Type": "Block", "First": 0},
-          {"Type": "PointOnObject", "First": 1, "FirstPos": "start", "Second": 2},
-          {"Type": "Radius", "First": 2, "Value": 1}
+          {
+            "Type": "Block",
+            "First": 0
+          },
+          {
+            "Type": "PointOnObject",
+            "First": 1,
+            "FirstPos": "start",
+            "Second": 2
+          },
+          {
+            "Type": "Radius",
+            "First": 2,
+            "Value": 1
+          }
         ]
       }
     }
   ],
   "recompute": {
-    "objs": ["Sketch"]
+    "objs": [
+      "Sketch"
+    ]
   }
 }

@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5] },
-          { "kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5] },
-          { "kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5] },
-          { "kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              -0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              -0.5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -21,11 +65,31 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [0, 4] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              4
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,11 +101,31 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [0, 4] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              4
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -54,12 +138,18 @@
         "Spine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "PipeSpine",
-          "SubList": ["Edge1"],
-          "StableSubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ],
+          "StableSubList": [
+            "Edge1"
+          ]
         },
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SketchPipeProfile"]
+          "values": [
+            "SketchPipeProfile"
+          ]
         },
         "Solid": true,
         "Frenet": true,
@@ -67,8 +157,12 @@
         "AuxiliarySpine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "AuxiliarySpine",
-          "SubList": ["Edge1"],
-          "StableSubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ],
+          "StableSubList": [
+            "Edge1"
+          ]
         },
         "AuxiliaryCurvilinear": false,
         "Tolerance": {
@@ -80,6 +174,8 @@
     }
   ],
   "recompute": {
-    "objs": ["MutableHelperSweep"]
+    "objs": [
+      "MutableHelperSweep"
+    ]
   }
 }

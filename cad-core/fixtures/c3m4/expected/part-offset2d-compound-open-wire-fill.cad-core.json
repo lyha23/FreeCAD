@@ -1,0 +1,96 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "RS9-M44 cad-core product success contract for Part::Offset2D compound open-wire fill.",
+  "diagnostics": [],
+  "objects": {
+    "Compound": {
+      "object_fields": {
+        "status": "ok",
+        "feature": "part_compound",
+        "shape": "occt_compound",
+        "links": [
+          "SketchA",
+          "SketchB"
+        ]
+      }
+    },
+    "Offset2D": {
+      "object_fields": {
+        "status": "ok",
+        "feature": "part_offset2d",
+        "source": "Compound",
+        "shape": "occt_compound",
+        "mode": "Skin",
+        "join": "Arc",
+        "fill": true,
+        "intersection": false,
+        "topo_naming_history": "maker_history:offset2d_compound_recursive"
+      }
+    }
+  },
+  "named_shapes": {
+    "Compound": {
+      "owner": "Compound",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "part_compound:make_element_compound",
+        "element_map_child_map:preserve_source_ranges"
+      ],
+      "child_element_maps": [
+        {
+          "source_owner": "SketchA",
+          "kind": "edge",
+          "indexed_name": "Edge1",
+          "offset": 0,
+          "count": 2,
+          "target_start": "Edge1",
+          "target_end": "Edge2",
+          "has_source_element_map": true,
+          "source_child_map_count": 0
+        },
+        {
+          "source_owner": "SketchA",
+          "kind": "vertex",
+          "indexed_name": "Vertex1",
+          "offset": 0,
+          "count": 3,
+          "target_start": "Vertex1",
+          "target_end": "Vertex3",
+          "has_source_element_map": true,
+          "source_child_map_count": 0
+        },
+        {
+          "source_owner": "SketchB",
+          "kind": "edge",
+          "indexed_name": "Edge1",
+          "offset": 2,
+          "count": 2,
+          "target_start": "Edge3",
+          "target_end": "Edge4",
+          "has_source_element_map": true,
+          "source_child_map_count": 0
+        },
+        {
+          "source_owner": "SketchB",
+          "kind": "vertex",
+          "indexed_name": "Vertex1",
+          "offset": 3,
+          "count": 3,
+          "target_start": "Vertex4",
+          "target_end": "Vertex6",
+          "has_source_element_map": true,
+          "source_child_map_count": 0
+        }
+      ]
+    },
+    "Offset2D": {
+      "owner": "Offset2D",
+      "element_map_status": "history_partial",
+      "element_history_status_contains": [
+        "part_offset2d:compound_child_recursive",
+        "part_offset2d:wire_fill_open_makeoffset",
+        "history_consumed:merge"
+      ]
+    }
+  }
+}

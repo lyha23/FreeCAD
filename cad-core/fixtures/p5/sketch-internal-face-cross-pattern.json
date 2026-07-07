@@ -6,18 +6,110 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [-5, -15], "end": [5, -15]},
-          {"kind": "LineSegment", "start": [5, -15], "end": [5, 15]},
-          {"kind": "LineSegment", "start": [5, 15], "end": [-5, 15]},
-          {"kind": "LineSegment", "start": [-5, 15], "end": [-5, -15]},
-          {"kind": "LineSegment", "start": [-15, -5], "end": [15, -5]},
-          {"kind": "LineSegment", "start": [15, -5], "end": [15, 5]},
-          {"kind": "LineSegment", "start": [15, 5], "end": [-15, 5]},
-          {"kind": "LineSegment", "start": [-15, 5], "end": [-15, -5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -5,
+              -15
+            ],
+            "end": [
+              5,
+              -15
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              5,
+              -15
+            ],
+            "end": [
+              5,
+              15
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              5,
+              15
+            ],
+            "end": [
+              -5,
+              15
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -5,
+              15
+            ],
+            "end": [
+              -5,
+              -15
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 5,
+            "start": [
+              -15,
+              -5
+            ],
+            "end": [
+              15,
+              -5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 6,
+            "start": [
+              15,
+              -5
+            ],
+            "end": [
+              15,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 7,
+            "start": [
+              15,
+              5
+            ],
+            "end": [
+              -15,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 8,
+            "start": [
+              -15,
+              5
+            ],
+            "end": [
+              -15,
+              -5
+            ]
+          }
         ],
         "Constraints": []
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
 }

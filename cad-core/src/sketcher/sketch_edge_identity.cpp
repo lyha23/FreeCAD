@@ -6,6 +6,7 @@
 #include <TopoDS.hxx>
 
 #include <algorithm>
+#include <cctype>
 #include <map>
 #include <set>
 #include <utility>
@@ -16,22 +17,17 @@ namespace cad_core::sketcher
 namespace
 {
 
-std::string fallbackStableSubname(const SketchGeometryIdentity& identity)
-{
-    return "index:" + std::to_string(identity.geometryIndex);
-}
-
 std::string sourceStableSubname(const SketchGeometryIdentity& identity)
 {
     if (identity.geometryId) {
         return stableSubnameForGeometryId(*identity.geometryId);
     }
-    return fallbackStableSubname(identity);
+    return {};
 }
 
 std::string identityStatus(const SketchGeometryIdentity& identity)
 {
-    return identity.geometryId ? "stable" : "index_fallback";
+    return identity.geometryId ? "stable" : "";
 }
 
 std::string stableSubnameForIdentity(const RawSketchEdgeIdentity& identity)
@@ -58,9 +54,15 @@ nlohmann::json edgeIdentityJson(const RawSketchEdgeIdentity& identity)
     nlohmann::json value {
         {"indexed", identity.indexed},
         {"sourceGeometryIndex", identity.source.geometryIndex},
-        {"sourceStableSubname", sourceStableSubname(identity.source)},
-        {"identityStatus", identityStatusForEntry(identity)},
     };
+    const std::string sourceStable = sourceStableSubname(identity.source);
+    if (!sourceStable.empty()) {
+        value["sourceStableSubname"] = sourceStable;
+    }
+    const std::string status = identityStatusForEntry(identity);
+    if (!status.empty()) {
+        value["identityStatus"] = status;
+    }
     const std::string stableSubname = stableSubnameForIdentity(identity);
     if (!stableSubname.empty()) {
         value["stableSubname"] = stableSubname;
@@ -82,9 +84,15 @@ nlohmann::json edgeIdentityJson(const RawSketchEdgeIdentity& identity)
 
 void applyIdentityFields(nlohmann::json& value, const RawSketchEdgeIdentity& identity)
 {
-    value["sourceStableSubname"] = sourceStableSubname(identity.source);
     value["sourceGeometryIndex"] = identity.source.geometryIndex;
-    value["identityStatus"] = identityStatusForEntry(identity);
+    const std::string sourceStable = sourceStableSubname(identity.source);
+    if (!sourceStable.empty()) {
+        value["sourceStableSubname"] = sourceStable;
+    }
+    const std::string status = identityStatusForEntry(identity);
+    if (!status.empty()) {
+        value["identityStatus"] = status;
+    }
     const std::string stableSubname = stableSubnameForIdentity(identity);
     if (!stableSubname.empty()) {
         value["stableSubname"] = stableSubname;
@@ -118,6 +126,50 @@ std::optional<std::size_t> sourceIndexForRawEdge(
         }
     }
     return std::nullopt;
+}
+
+bool hasTopologicalPrefixAndDigits(const std::string& value, const std::string& prefix)
+{
+    if (value.rfind(prefix, 0) != 0 || value.size() == prefix.size()) {
+        return false;
+    }
+    return std::all_of(value.begin() + static_cast<std::ptrdiff_t>(prefix.size()),
+                       value.end(),
+                       [](unsigned char item) { return std::isdigit(item) != 0; });
+}
+
+bool isRawEdgeName(const std::string& value)
+{
+    return hasTopologicalPrefixAndDigits(value, "Edge");
+}
+
+bool isInternalEdgeName(const std::string& value)
+{
+    return hasTopologicalPrefixAndDigits(value, "InternalEdge");
+}
+
+std::vector<RawSketchEdgeIdentity>::iterator findLedgerIdentity(
+    RawSketchEdgeIdentityLedger& ledger,
+    const std::string& indexed)
+{
+    return std::find_if(
+        ledger.edges.begin(),
+        ledger.edges.end(),
+        [&indexed](const RawSketchEdgeIdentity& identity) {
+            return identity.indexed == indexed;
+        });
+}
+
+std::vector<RawSketchEdgeIdentity>::const_iterator findLedgerIdentity(
+    const RawSketchEdgeIdentityLedger& ledger,
+    const std::string& indexed)
+{
+    return std::find_if(
+        ledger.edges.begin(),
+        ledger.edges.end(),
+        [&indexed](const RawSketchEdgeIdentity& identity) {
+            return identity.indexed == indexed;
+        });
 }
 
 }  // namespace
@@ -179,7 +231,7 @@ RawSketchEdgeIdentityLedger buildRawSketchEdgeIdentityLedger(
             ++ledger.stableCount;
         }
         else {
-            ++ledger.fallbackCount;
+            ++ledger.unresolvedCount;
         }
     }
 
@@ -190,10 +242,10 @@ void addSplitFragmentIdentitiesFromInternalHistory(
     RawSketchEdgeIdentityLedger& ledger,
     const part::NamedShape& internalNamedShape)
 {
-    std::map<std::string, const RawSketchEdgeIdentity*> sourcesByIndexed;
+    std::map<std::string, RawSketchEdgeIdentity> sourcesByIndexed;
     for (const RawSketchEdgeIdentity& identity : ledger.edges) {
         if (identity.source.geometryId) {
-            sourcesByIndexed[identity.indexed] = &identity;
+            sourcesByIndexed[identity.indexed] = identity;
         }
     }
 
@@ -221,7 +273,7 @@ void addSplitFragmentIdentitiesFromInternalHistory(
         if (targets.size() <= 1U) {
             continue;
         }
-        const RawSketchEdgeIdentity sourceIdentity = *sourcesByIndexed.at(source);
+        const RawSketchEdgeIdentity sourceIdentity = sourcesByIndexed.at(source);
         std::size_t fragmentIndex = 0;
         for (const std::string& target : targets) {
             const auto targetSourcesIt = candidateSourcesByTarget.find(target);
@@ -253,6 +305,43 @@ void addSplitFragmentIdentitiesFromInternalHistory(
             ++ledger.stableCount;
             ++ledger.splitFragmentCount;
         }
+    }
+}
+
+void addInternalEdgeIdentitiesFromInternalElementMap(
+    RawSketchEdgeIdentityLedger& ledger,
+    const nlohmann::json& internalElementMap)
+{
+    if (!internalElementMap.is_object()) {
+        return;
+    }
+
+    for (const auto& [internalIndexed, mapped] : internalElementMap.items()) {
+        if (!isInternalEdgeName(internalIndexed) || !mapped.is_string()) {
+            continue;
+        }
+        const std::string rawIndexed = mapped.get<std::string>();
+        if (!isRawEdgeName(rawIndexed)) {
+            continue;
+        }
+        if (findLedgerIdentity(ledger, internalIndexed) != ledger.edges.end()) {
+            continue;
+        }
+
+        const RawSketchEdgeIdentityLedger& sourceLedger = ledger;
+        const auto sourceIt = findLedgerIdentity(sourceLedger, rawIndexed);
+        if (sourceIt == ledger.edges.cend()) {
+            continue;
+        }
+        if (!sourceIt->source.geometryId) {
+            continue;
+        }
+
+        RawSketchEdgeIdentity internalIdentity = *sourceIt;
+        internalIdentity.indexed = internalIndexed;
+        internalIdentity.sourceIndexed = rawIndexed;
+        ledger.edges.push_back(std::move(internalIdentity));
+        ++ledger.stableCount;
     }
 }
 
@@ -328,7 +417,7 @@ nlohmann::json rawSketchEdgeIdentityObject(const RawSketchEdgeIdentityLedger& le
         {"byIndexed", byIndexed},
         {"byStableSubname", byStableSubname},
         {"stable_count", ledger.stableCount},
-        {"index_fallback_count", ledger.fallbackCount},
+        {"unresolved_identity_count", ledger.unresolvedCount},
         {"split_fragment_count", ledger.splitFragmentCount},
     };
 }

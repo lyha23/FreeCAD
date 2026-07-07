@@ -103,6 +103,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               0,
               0
@@ -114,6 +115,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               3,
               0
@@ -125,6 +127,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               3,
               2
@@ -136,6 +139,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               0,
               2
@@ -159,11 +163,9 @@
           "SubSet": [
             {
               "value": "SketchPad",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

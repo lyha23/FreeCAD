@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               -3,
               0
@@ -19,6 +20,7 @@
           },
           {
             "kind": "ArcOfEllipse",
+            "id": 2,
             "center": [
               0,
               0
@@ -42,11 +44,9 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

@@ -6,13 +6,61 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
           {
             "kind": "ArcOfHyperbola",
-            "center": [5, 2.5],
+            "id": 5,
+            "center": [
+              5,
+              2.5
+            ],
             "majorRadius": 4,
             "minorRadius": 2,
             "startAngle": -0.5,
@@ -21,7 +69,11 @@
           },
           {
             "kind": "ArcOfParabola",
-            "center": [5, 2.5],
+            "id": 6,
+            "center": [
+              5,
+              2.5
+            ],
             "focal": 1,
             "startAngle": -1,
             "endAngle": 1,
@@ -32,5 +84,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
 }

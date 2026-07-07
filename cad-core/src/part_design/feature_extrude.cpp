@@ -206,6 +206,115 @@ std::optional<gp_Pnt> profileSurfaceCenter(const TopoDS_Shape& profile)
     return shapeCenter(profile);
 }
 
+bool profileLinkTargetsSolidLikeShape(const app::Link& profileLink, const runtime::ComputeContext& context)
+{
+    const auto shapeIt = context.shapes.find(profileLink.object);
+    return shapeIt != context.shapes.end()
+        && (shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
+            || shapeIt->second.kind == runtime::ShapeValue::Kind::PartPrimitive);
+}
+
+bool shapeContainsFace(const TopoDS_Shape& shape)
+{
+    for (TopExp_Explorer explorer(shape, TopAbs_FACE); explorer.More(); explorer.Next()) {
+        return true;
+    }
+    return false;
+}
+
+bool shapeHasNonVoidBounds(const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        return false;
+    }
+
+    Bnd_Box box;
+    try {
+        BRepBndLib::AddOptimal(shape, box, Standard_False, Standard_False);
+    }
+    catch (const Standard_Failure&) {
+        return false;
+    }
+    box.SetGap(0.0);
+    return !box.IsVoid();
+}
+
+bool additiveFuseProducesNonVoidShape(const std::string& owner,
+                                      const TopoDS_Shape& base,
+                                      const TopoDS_Shape& tool)
+{
+    if (!shapeHasNonVoidBounds(base) || !shapeHasNonVoidBounds(tool)) {
+        return false;
+    }
+    const auto build = part::makeElementBooleanFromSources(
+        owner + ".DirectionProbe",
+        std::vector<part::NamedShapeSource> {
+            {owner + ".DirectionProbeBase", base},
+            {owner + ".DirectionProbeTool", tool},
+        },
+        part::BooleanOperation::Fuse);
+    return build.error.empty() && shapeHasNonVoidBounds(build.shape);
+}
+
+bool shouldProbeAdditiveFacePadDirection(const app::DocumentObject& object,
+                                         AddSubMode mode,
+                                         const app::Link& profileLink,
+                                         const TopoDS_Shape& profile,
+                                         bool reversed,
+                                         bool displayOnlyOpenProfile,
+                                         const runtime::ComputeContext& context)
+{
+    const auto* axisProperty = app::propertyValue(object, "ReferenceAxis");
+    const bool usesReferenceAxis = axisProperty != nullptr && !axisProperty->raw.is_null();
+    return mode == AddSubMode::Additive
+        && !reversed
+        && !displayOnlyOpenProfile
+        && app::readString(object, "SideType").value_or("One side") == "One side"
+        && app::readString(object, "Type").value_or("Length") == "Length"
+        && !app::readBool(object, "UseCustomVector").value_or(false)
+        && !usesReferenceAxis
+        && !profileLink.subnames.empty()
+        && profileLinkTargetsSolidLikeShape(profileLink, context)
+        && shapeContainsFace(profile);
+}
+
+void setSyntheticProperty(app::DocumentObject& object,
+                          const std::string& property,
+                          const std::string& propertyType,
+                          app::PropertyKind kind,
+                          nlohmann::json payload)
+{
+    nlohmann::json raw = {
+        {"PropertyType", propertyType},
+        {"value", std::move(payload)},
+    };
+    object.properties[property] = raw;
+    object.propertyValues[property] = app::PropertyValue{
+        property,
+        propertyType,
+        kind,
+        std::move(raw),
+        {},
+        true,
+    };
+}
+
+app::DocumentObject objectWithCustomDirection(const app::DocumentObject& object, const gp_Dir& direction)
+{
+    app::DocumentObject result = object;
+    setSyntheticProperty(result,
+                         "UseCustomVector",
+                         "App::PropertyBool",
+                         app::PropertyKind::Bool,
+                         true);
+    setSyntheticProperty(result,
+                         "Direction",
+                         "App::PropertyVector",
+                         app::PropertyKind::Vector,
+                         {direction.X(), direction.Y(), direction.Z()});
+    return result;
+}
+
 std::vector<CutFaceCandidate> findFacesCutByDirection(const TopoDS_Shape& target,
                                                       const TopoDS_Shape& profile,
                                                       const gp_Dir& direction)
@@ -951,6 +1060,27 @@ std::optional<double> readNumberProperty(const app::DocumentObject& object,
 double readOptionalNumberProperty(const app::DocumentObject& object, const std::string& property)
 {
     return app::readNumber(object, property).value_or(0.0);
+}
+
+std::optional<double> readOptionalNumberPropertyStrict(const app::DocumentObject& object,
+                                                       runtime::ComputeContext& context,
+                                                       const std::string& property,
+                                                       const std::string& featureName)
+{
+    if (app::propertyValue(object, property) == nullptr) {
+        return 0.0;
+    }
+    const auto value = app::readNumber(object, property);
+    if (!value) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "invalid_length",
+                               featureName + " " + property + " must be a number",
+                               object.name,
+                               property);
+        return std::nullopt;
+    }
+    return *value;
 }
 
 bool readBoolProperty(const app::DocumentObject& object, const std::string& property, bool fallback)
@@ -2053,6 +2183,14 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         direction->direction.Reverse();
     }
 
+    const auto startOffset = readOptionalNumberPropertyStrict(object, context, "StartOffset", featureName);
+    if (!startOffset) {
+        return std::nullopt;
+    }
+    if (std::abs(*startOffset) > Precision::Confusion()) {
+        extrusionProfileShape = translatedShape(extrusionProfileShape, *startOffset * gp_Vec(direction->direction));
+    }
+
     gp_Dir secondDirection = direction->direction;
     secondDirection.Reverse();
     const SideSpec side1{
@@ -2309,6 +2447,29 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     }
     if (toolShape->namedShape && (!topoNamingKnownGap || !resultNamedShape)) {
         resultNamedShape = toolShape->namedShape;
+    }
+
+    if (shouldProbeAdditiveFacePadDirection(object,
+                                            mode,
+                                            profile->link,
+                                            extrusionProfileShape,
+                                            reversed,
+                                            displayOnlyOpenProfile,
+                                            context)) {
+        const auto base = previousSolidShape(context);
+        if (base && !additiveFuseProducesNonVoidShape(object.name, *base, toolShape->shape)) {
+            gp_Dir reverseDirection = direction->direction;
+            reverseDirection.Reverse();
+            app::DocumentObject reverseObject = objectWithCustomDirection(object, reverseDirection);
+            const std::size_t diagnosticCount = context.diagnostics.size();
+            auto reverseExtrusion = buildFeatureExtrusion(reverseObject, context, mode, featureName);
+            if (reverseExtrusion
+                && additiveFuseProducesNonVoidShape(object.name, *base, reverseExtrusion->toolShape)) {
+                return reverseExtrusion;
+            }
+            context.diagnostics.erase(context.diagnostics.begin() + static_cast<std::ptrdiff_t>(diagnosticCount),
+                                      context.diagnostics.end());
+        }
     }
 
     if (displayOnlyOpenProfile) {

@@ -43,6 +43,7 @@
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Iterator.hxx>
 #include <TopoDS_Shell.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
@@ -116,6 +117,15 @@ struct HoleBuild {
     TopoDS_Shape toolShape;
     part::NamedShape toolNamedShape;
     nlohmann::json historyFreeze;
+    std::optional<TopoDS_Shape> replacementShape;
+    std::optional<part::NamedShape> replacementNamedShape;
+    bool replacementRefined = false;
+};
+
+struct HoleReplacementShape {
+    TopoDS_Shape shape;
+    part::NamedShape namedShape;
+    bool refined = false;
 };
 
 struct HoleCenterSource {
@@ -2948,6 +2958,15 @@ std::size_t subshapeCount(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
     return static_cast<std::size_t>(std::max(0, shapes.Extent()));
 }
 
+std::vector<TopoDS_Shape> topLevelCompoundChildren(const TopoDS_Shape& shape)
+{
+    std::vector<TopoDS_Shape> children;
+    for (TopoDS_Iterator it(shape); it.More(); it.Next()) {
+        children.push_back(it.Value());
+    }
+    return children;
+}
+
 void addUniqueString(std::vector<std::string>& values, const std::string& value)
 {
     if (std::find(values.begin(), values.end(), value) == values.end()) {
@@ -3111,6 +3130,90 @@ nlohmann::json holeHistoryFreezeJson(const app::Link& profile,
         {"model_thread", modelThread},
     };
     return history;
+}
+
+std::optional<HoleReplacementShape> buildHoleReplacementShape(const app::DocumentObject& object,
+                                                              const PreviousSolidSource& base,
+                                                              const TopoDS_Shape& toolShape,
+                                                              const part::NamedShape& toolNamedShape,
+                                                              runtime::ComputeContext& context)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp
+    // ::Hole::execute(), after AddSubShape.setValue(compound), calls
+    // "result.makeElementBoolean(maker, {base, compound}, nullptr, FuzzyTolerance.getValue())",
+    // then "result = getSolid(result)" and "result = refineShapeIfActive(result)" before
+    // "this->Shape.setValue(result)".
+    part::NamedShapeSource baseSource {base.namedShape ? base.namedShape->owner : base.owner,
+                                       base.shape,
+                                       base.namedShape};
+    part::NamedShapeSource toolSource {object.name, toolShape, &toolNamedShape};
+    toolSource.expandCompoundForBoolean = true;
+
+    const double tolerance = readNumberProperty(object, "FuzzyTolerance", 0.0);
+    const std::vector<TopoDS_Shape> toolChildren = topLevelCompoundChildren(toolShape);
+    part::NamedShapeBuild booleanBuild;
+    if (toolShape.ShapeType() == TopAbs_COMPOUND && toolChildren.size() == 2U) {
+        // FreeCAD 1.2.0 / OCCT 7.8.1 returns the native oracle for model-thread head cuts from
+        // the Hole final Shape boolean. cad-core runs OCCT 7.9.x, where one multi-tool Cut of
+        // {profile/head solid, modeled thread solid} over-removes this geometry; applying the
+        // modeled thread first and then the profiled/head solid reproduces the native boolean
+        // result without changing the AddSubShape tool consumed by pattern features.
+        part::NamedShapeSource threadSource {object.name + ".ThreadTool", toolChildren.at(1), nullptr};
+        threadSource.expandCompoundForBoolean = true;
+        part::NamedShapeSource profileSource {object.name + ".ProfileTool", toolChildren.at(0), nullptr};
+        profileSource.expandCompoundForBoolean = true;
+        const auto threadCut =
+            part::makeElementBooleanFromSources(object.name,
+                                                {baseSource, threadSource},
+                                                part::BooleanOperation::Cut,
+                                                tolerance);
+        if (!threadCut.error.empty() || threadCut.shape.IsNull()) {
+            booleanBuild = threadCut;
+        }
+        else {
+            part::NamedShapeSource threadCutSource {object.name,
+                                                   threadCut.shape,
+                                                   threadCut.namedShape ? &*threadCut.namedShape : nullptr};
+            booleanBuild =
+                part::makeElementBooleanFromSources(object.name,
+                                                    {threadCutSource, profileSource},
+                                                    part::BooleanOperation::Cut,
+                                                    tolerance);
+        }
+    }
+    else {
+        booleanBuild =
+            part::makeElementBooleanFromSources(object.name,
+                                                {baseSource, toolSource},
+                                                part::BooleanOperation::Cut,
+                                                tolerance);
+    }
+    if (!booleanBuild.error.empty() || booleanBuild.shape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               "Hole final Shape cut failed: "
+                                   + (booleanBuild.error.empty() ? std::string("boolean produced null shape")
+                                                                 : booleanBuild.error),
+                               object.name,
+                               "Shape");
+        return std::nullopt;
+    }
+
+    // Native collection currently exposes Hole.Shape / Body.Shape as a Compound wrapping the
+    // single resulting solid for this path. Preserve the maker result wrapper through Refine
+    // instead of unwrapping to the raw TopoDS_Solid; the wrapper is the stable runtime boundary
+    // that matches the checked FreeCAD oracle.
+    const auto refined =
+        runtime::applyPartDesignFeatureRefineProperty(object, context, booleanBuild.shape, booleanBuild.namedShape);
+    if (!refined) {
+        return std::nullopt;
+    }
+
+    part::NamedShape namedShape = refined->namedShape
+        ? *refined->namedShape
+        : part::indexedNamedShapeForObject(object.name, refined->shape);
+    return HoleReplacementShape{refined->shape, std::move(namedShape), refined->applied};
 }
 
 std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::ComputeContext& context)
@@ -3321,6 +3424,13 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
         namedShapeForHoleToolHistory(object.name, *toolShape, *profileLink, centerSources, threaded, modelThread);
     nlohmann::json historyFreeze =
         holeHistoryFreezeJson(*profileLink, *base, *toolShape, centerSources, options.holeCutType, threaded, modelThread);
+    std::optional<HoleReplacementShape> replacementShape;
+    if (threaded && modelThread && options.holeCutType != "None") {
+        replacementShape = buildHoleReplacementShape(object, *base, *toolShape, toolNamedShape, context);
+        if (!replacementShape) {
+            return std::nullopt;
+        }
+    }
 
     return HoleBuild{*profileLink,
                      method,
@@ -3355,7 +3465,11 @@ std::optional<HoleBuild> buildHole(const app::DocumentObject& object, runtime::C
                      modelThread,
                      *toolShape,
                      std::move(toolNamedShape),
-                     std::move(historyFreeze)};
+                     std::move(historyFreeze),
+                     replacementShape ? std::optional<TopoDS_Shape>{replacementShape->shape} : std::nullopt,
+                     replacementShape ? std::optional<part::NamedShape>{std::move(replacementShape->namedShape)}
+                                      : std::nullopt,
+                     replacementShape ? replacementShape->refined : false};
 }
 
 }  // namespace
@@ -3411,7 +3525,11 @@ void executeHole(const app::DocumentObject& object, runtime::ComputeContext& con
 
     const auto holeNamedShape = hole->toolNamedShape;
     context.namedShapes[object.name] = holeNamedShape;
-    context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, hole->toolShape, std::nullopt, holeNamedShape};
+    runtime::AddSubShape addSubShape{std::nullopt, hole->toolShape, std::nullopt, holeNamedShape};
+    addSubShape.replacementShape = hole->replacementShape;
+    addSubShape.replacementNamedShape = hole->replacementNamedShape;
+    addSubShape.replacementRefined = hole->replacementRefined;
+    context.addSubShapes[object.name] = std::move(addSubShape);
     context.mesh[object.name] = cad_core::part::meshForShape(hole->toolShape);
     context.subshapes[object.name] = part::subshapeMapForShape(hole->toolShape);
     context.objects[object.name] = {

@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [2, 0], "end": [4, 0] },
-          { "kind": "LineSegment", "start": [4, 0], "end": [4, 2] },
-          { "kind": "LineSegment", "start": [4, 2], "end": [2, 2] },
-          { "kind": "LineSegment", "start": [2, 2], "end": [2, 0] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              4,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              4,
+              0
+            ],
+            "end": [
+              4,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              4,
+              2
+            ],
+            "end": [
+              2,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              2,
+              2
+            ],
+            "end": [
+              2,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -22,14 +66,19 @@
         "Profile": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchRevolution",
-          "SubList": ["InternalFace1"]
+          "SubList": [],
+          "StableSubList": [
+            "g1;SKT;FAC"
+          ]
         },
         "Type": "Angle",
         "Angle": 180,
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchRevolution",
-          "SubList": ["V_Axis"]
+          "SubList": [
+            "V_Axis"
+          ]
         },
         "Reversed": false,
         "Midplane": false,
@@ -39,6 +88,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Revolution"]
+    "objs": [
+      "Revolution"
+    ]
   }
 }

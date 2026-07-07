@@ -6,7 +6,15 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "Circle", "center": [0, 0], "radius": 1 }
+          {
+            "kind": "Circle",
+            "id": 1,
+            "center": [
+              0,
+              0
+            ],
+            "radius": 1
+          }
         ],
         "Constraints": []
       }
@@ -31,6 +39,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Hole"]
+    "objs": [
+      "Hole"
+    ]
   }
 }

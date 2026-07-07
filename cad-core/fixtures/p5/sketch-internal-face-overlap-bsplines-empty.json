@@ -6,14 +6,76 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "BSpline", "degree": 2, "poles": [[-5, 0], [0, 5], [5, 0]]},
-          {"kind": "LineSegment", "start": [5, 0], "end": [-5, 0]},
-          {"kind": "BSpline", "degree": 2, "poles": [[-3, 0], [2, 5], [7, 0]]},
-          {"kind": "LineSegment", "start": [7, 0], "end": [-3, 0]}
+          {
+            "kind": "BSpline",
+            "id": 1,
+            "degree": 2,
+            "poles": [
+              [
+                -5,
+                0
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                5,
+                0
+              ]
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              5,
+              0
+            ],
+            "end": [
+              -5,
+              0
+            ]
+          },
+          {
+            "kind": "BSpline",
+            "id": 3,
+            "degree": 2,
+            "poles": [
+              [
+                -3,
+                0
+              ],
+              [
+                2,
+                5
+              ],
+              [
+                7,
+                0
+              ]
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              7,
+              0
+            ],
+            "end": [
+              -3,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
 }

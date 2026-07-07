@@ -8,23 +8,51 @@
         "Geometry": [
           {
             "kind": "LineSegment",
-            "start": [0, 0],
-            "end": [10, 0]
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
           },
           {
             "kind": "LineSegment",
-            "start": [10, 0],
-            "end": [10, 5]
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
           },
           {
             "kind": "LineSegment",
-            "start": [10, 5],
-            "end": [0, 5]
+            "id": 3,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
           },
           {
             "kind": "LineSegment",
-            "start": [0, 5],
-            "end": [0, 0]
+            "id": 4,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
           }
         ],
         "Constraints": []
@@ -41,17 +69,35 @@
             "kind": "BSpline",
             "degree": 2,
             "poles": [
-              [0, 0],
-              [5, 2],
-              [10, 0]
+              [
+                0,
+                0
+              ],
+              [
+                5,
+                2
+              ],
+              [
+                10,
+                0
+              ]
             ]
           }
         ],
         "Constraints": [],
         "Placement": {
-          "Base": [0, 0, 0],
+          "Base": [
+            0,
+            0,
+            0
+          ],
           "PropertyType": "App::PropertyPlacement",
-          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
         }
       }
     },
@@ -65,11 +111,9 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [-0.25, -0.25], "end": [0.25, -0.25] },
-          { "kind": "LineSegment", "start": [0.25, -0.25], "end": [0.25, 0.25] },
-          { "kind": "LineSegment", "start": [0.25, 0.25], "end": [-0.25, 0.25] },
-          { "kind": "LineSegment", "start": [-0.25, 0.25], "end": [-0.25, -0.25] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -0.25,
+              -0.25
+            ],
+            "end": [
+              0.25,
+              -0.25
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0.25,
+              -0.25
+            ],
+            "end": [
+              0.25,
+              0.25
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0.25,
+              0.25
+            ],
+            "end": [
+              -0.25,
+              0.25
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -0.25,
+              0.25
+            ],
+            "end": [
+              -0.25,
+              -0.25
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -21,11 +65,31 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [0, 3] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              3
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,13 +101,55 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          { "kind": "LineSegment", "start": [0, 0], "end": [0, 1] },
-          { "kind": "LineSegment", "start": [0, 1], "end": [0, 2] },
-          { "kind": "LineSegment", "start": [0, 2], "end": [0, 3] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0,
+              1
+            ],
+            "end": [
+              0,
+              2
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0,
+              2
+            ],
+            "end": [
+              0,
+              3
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -66,7 +172,9 @@
         "AuxiliarySpine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "AuxiliarySpine",
-          "SubList": ["Edge2"]
+          "SubList": [
+            "Edge2"
+          ]
         },
         "AuxiliarySpineTangent": true,
         "AuxiliaryCurvilinear": false,
@@ -79,6 +187,8 @@
     }
   ],
   "recompute": {
-    "objs": ["AdditivePipeAuxiliaryTangentProduct"]
+    "objs": [
+      "AdditivePipeAuxiliaryTangentProduct"
+    ]
   }
 }

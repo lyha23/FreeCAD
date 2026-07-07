@@ -6,11 +6,66 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "LineSegment", "start": [5, 0], "end": [5, 5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 5,
+            "start": [
+              5,
+              0
+            ],
+            "end": [
+              5,
+              5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -25,28 +80,32 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": ["InternalFace99"],
-              "StableSubList": ["g305:split1"],
+              "SubList": [
+                "InternalFace99"
+              ],
+              "StableSubList": [
+                "g305:split1"
+              ],
               "ReferenceShadow": [
                 {
-              "target": "Sketch",
-              "targetId": 1,
-              "property": "InternalShape",
-              "shapeType": "Face",
-              "indexed": "Face1",
-              "subname": "InternalFace1",
-              "stableSubname": "g305:split1",
-              "fingerprint": {
-                "area": 25.0,
-                "edgeCount": 4,
-                "vertexCount": 4
-              },
-              "brep": {
-                "format": "brep-bin-zstd-base64",
-                "byteLength": 662,
-                "sha256": "fe4b8e0807582f3a9f75af799630727ad12a88998e5f613c9150536519817ff6",
-                "data": "KLUv/WSWAR0JADLOLCMgbaYDcAyUbwslt7QDpEJdQyANcJK+3I1E3msxsBoghBOnAb5TaZO39/sQmjAEiu8CpaccmjjGKb5wS+PbwKXS/3U27T4aTdJ85vPtu7iDWejo01nUumZgcTadQelFYBtUbZP1KCyyFu5HYcUpUkWG3jXO3lnG2WOBEGxzemdWpLQnxYRakcooyNPe4x6mPQUHSAAWSIcjU6ziFSM3HoYDMZwWXk8CghXEm3jY83DBhoMnMSBwgjFE2gFhBkiIGyZhtFgWN4C4wHBqhGjLOwgrkJy1H+XZZcWSQ8mmpZ1ZM2F4BPWnzVDJ8qa1IG20GAZoiekNg6eZ9V/qnoBAhvvMTLg7WDoU3F37BR1JlhJm7YSVayZrgRJphCA1k6wZM6jNLoo="
-              }
+                  "target": "Sketch",
+                  "targetId": 1,
+                  "property": "InternalShape",
+                  "shapeType": "Face",
+                  "indexed": "Face1",
+                  "subname": "InternalFace1",
+                  "stableSubname": "g305:split1",
+                  "fingerprint": {
+                    "area": 25.0,
+                    "edgeCount": 4,
+                    "vertexCount": 4
+                  },
+                  "brep": {
+                    "format": "brep-bin-zstd-base64",
+                    "byteLength": 662,
+                    "sha256": "fe4b8e0807582f3a9f75af799630727ad12a88998e5f613c9150536519817ff6",
+                    "data": "KLUv/WSWAR0JADLOLCMgbaYDcAyUbwslt7QDpEJdQyANcJK+3I1E3msxsBoghBOnAb5TaZO39/sQmjAEiu8CpaccmjjGKb5wS+PbwKXS/3U27T4aTdJ85vPtu7iDWejo01nUumZgcTadQelFYBtUbZP1KCyyFu5HYcUpUkWG3jXO3lnG2WOBEGxzemdWpLQnxYRakcooyNPe4x6mPQUHSAAWSIcjU6ziFSM3HoYDMZwWXk8CghXEm3jY83DBhoMnMSBwgjFE2gFhBkiIGyZhtFgWN4C4wHBqhGjLOwgrkJy1H+XZZcWSQ8mmpZ1ZM2F4BPWnzVDJ8qa1IG20GAZoiekNg6eZ9V/qnoBAhvvMTLg7WDoU3F37BR1JlhJm7YSVayZrgRJphCA1k6wZM6jNLoo="
+                  }
                 }
               ]
             }
@@ -58,5 +117,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

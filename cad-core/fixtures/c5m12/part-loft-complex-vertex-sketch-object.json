@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [-1.5, -1.0], "end": [1.5, -1.0]},
-          {"kind": "LineSegment", "start": [1.5, -1.0], "end": [1.5, 1.0]},
-          {"kind": "LineSegment", "start": [1.5, 1.0], "end": [-1.5, 1.0]},
-          {"kind": "LineSegment", "start": [-1.5, 1.0], "end": [-1.5, -1.0]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -1.5,
+              -1.0
+            ],
+            "end": [
+              1.5,
+              -1.0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              1.5,
+              -1.0
+            ],
+            "end": [
+              1.5,
+              1.0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              1.5,
+              1.0
+            ],
+            "end": [
+              -1.5,
+              1.0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -1.5,
+              1.0
+            ],
+            "end": [
+              -1.5,
+              -1.0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -31,7 +75,10 @@
       "Properties": {
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BaseSketch", "TipVertex"]
+          "values": [
+            "BaseSketch",
+            "TipVertex"
+          ]
         },
         "Solid": false,
         "Ruled": true,
@@ -42,6 +89,8 @@
     }
   ],
   "recompute": {
-    "objs": ["Loft"]
+    "objs": [
+      "Loft"
+    ]
   }
 }

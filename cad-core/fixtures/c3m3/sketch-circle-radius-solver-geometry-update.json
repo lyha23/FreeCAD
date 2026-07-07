@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "Circle",
+            "id": 1,
             "center": [
               0,
               0
@@ -34,11 +35,9 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

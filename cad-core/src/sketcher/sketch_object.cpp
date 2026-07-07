@@ -634,6 +634,25 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         rawShapeBuild->sourceEdgeIdentities,
         rawShapeBuild->sourceOrderMatchesPublishedShape
     );
+    const bool allRawSourcesHaveGeometryId = std::all_of(
+        rawShapeBuild->sourceEdgeIdentities.begin(),
+        rawShapeBuild->sourceEdgeIdentities.end(),
+        [](const SketchGeometryIdentity& identity) {
+            return identity.geometryId.has_value();
+        }
+    );
+    if (rawEdgeIdentityLedger.unresolvedCount > 0U && allRawSourcesHaveGeometryId) {
+        runtime::addDiagnostic(
+            context.diagnostics,
+            "error",
+            "unstable_raw_edge_identity",
+            "Sketch raw edge identity could not be bound to Geometry[].id",
+            object.name,
+            "Geometry"
+        );
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
 
     const SketchInternalResult internalResult = buildSketchInternalResult({
         object.name,

@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               0,
               0
@@ -19,6 +20,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               10,
               0
@@ -30,6 +32,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               10,
               5
@@ -41,6 +44,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               0,
               5
@@ -64,11 +68,9 @@
           "SubSet": [
             {
               "value": "BaseSketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]
@@ -101,6 +103,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               0,
               0
@@ -112,6 +115,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               10,
               0
@@ -123,6 +127,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               10,
               5
@@ -134,6 +139,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               0,
               5
@@ -157,11 +163,9 @@
           "SubSet": [
             {
               "value": "RemovedSketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]
@@ -184,6 +188,7 @@
         "Geometry": [
           {
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               2,
               1
@@ -195,6 +200,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               8,
               1
@@ -206,6 +212,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               8,
               4
@@ -217,6 +224,7 @@
           },
           {
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               2,
               4
@@ -240,11 +248,9 @@
           "SubSet": [
             {
               "value": "PocketSketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
+                "g1;SKT;FAC"
               ]
             }
           ]

@@ -8,7 +8,11 @@
         "Geometry": [
           {
             "kind": "ArcOfParabola",
-            "center": [0, 0],
+            "id": 1,
+            "center": [
+              0,
+              0
+            ],
             "focal": 1.5,
             "angle": 0.3,
             "startAngle": -1.2,
@@ -19,5 +23,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  }
 }

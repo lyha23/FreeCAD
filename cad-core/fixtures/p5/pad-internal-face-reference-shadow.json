@@ -6,11 +6,66 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
-          {"kind": "LineSegment", "start": [10, 5], "end": [0, 5]},
-          {"kind": "LineSegment", "start": [0, 5], "end": [0, 0]},
-          {"kind": "LineSegment", "start": [5, 0], "end": [5, 5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 5,
+            "start": [
+              5,
+              0
+            ],
+            "end": [
+              5,
+              5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -25,27 +80,44 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": ["InternalFace1"],
+              "SubList": [
+                "InternalFace1"
+              ],
               "ShadowSub": [
-                {"newName": "g305:split1", "oldName": "InternalFace1"}
+                {
+                  "newName": "g305:split1",
+                  "oldName": "InternalFace1"
+                }
               ],
               "ReferenceShadow": [
                 {
-              "target": "Sketch",
-              "targetId": 1,
-              "property": "InternalShape",
-              "shapeType": "Face",
-              "indexed": "Face1",
-              "subname": "InternalFace1",
-              "stableSubname": "g305:split1",
-              "fingerprint": {
-                "area": 25.0,
-                "centroid": [2.5, 2.5, 0.0],
-                "bboxMin": [0.0, 0.0, 0.0],
-                "bboxMax": [5.0, 5.0, 0.0],
-                "edgeCount": 4,
-                "vertexCount": 4
-              }
+                  "target": "Sketch",
+                  "targetId": 1,
+                  "property": "InternalShape",
+                  "shapeType": "Face",
+                  "indexed": "Face1",
+                  "subname": "InternalFace1",
+                  "stableSubname": "g305:split1",
+                  "fingerprint": {
+                    "area": 25.0,
+                    "centroid": [
+                      2.5,
+                      2.5,
+                      0.0
+                    ],
+                    "bboxMin": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "bboxMax": [
+                      5.0,
+                      5.0,
+                      0.0
+                    ],
+                    "edgeCount": 4,
+                    "vertexCount": 4
+                  }
                 }
               ]
             }
@@ -57,5 +129,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  }
 }

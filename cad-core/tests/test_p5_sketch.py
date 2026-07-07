@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import ctypes
-import hashlib
 import json
 import math
 import tempfile
@@ -85,6 +84,62 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def open_wire_identity_ffi_result(self, geometry: list[dict]) -> dict:
         return self.run_recompute_ffi_payload(self.open_wire_identity_payload(geometry))
+
+    def rectangle_geometry(
+        self,
+        ids: tuple[int, int, int, int] = (101, 102, 103, 104),
+        x0: float = 0.0,
+        y0: float = 0.0,
+        width: float = 10.0,
+        height: float = 5.0,
+    ) -> list[dict]:
+        x1 = x0 + width
+        y1 = y0 + height
+        return [
+            {"kind": "LineSegment", "id": ids[0], "start": [x0, y0], "end": [x1, y0]},
+            {"kind": "LineSegment", "id": ids[1], "start": [x1, y0], "end": [x1, y1]},
+            {"kind": "LineSegment", "id": ids[2], "start": [x1, y1], "end": [x0, y1]},
+            {"kind": "LineSegment", "id": ids[3], "start": [x0, y1], "end": [x0, y0]},
+        ]
+
+    def stable_internal_face_alias(self, geometry: list[dict], indexed: str = "InternalFace1") -> str:
+        result = self.run_recompute_ffi_payload(self.open_wire_identity_payload(geometry))
+        sketch = self.sketch_result_item(result)
+        subshape = next(item for item in sketch["subshapes"] if item["indexed"] == indexed)
+        return subshape["stableSubname"]
+
+    def pad_with_stable_internal_face_payload(
+        self,
+        geometry: list[dict],
+        stable_subname: str,
+        sublist: list[str] | None = None,
+    ) -> dict:
+        return self.open_wire_identity_payload(
+            geometry,
+            extra_objects=[
+                {
+                    "Name": "Pad",
+                    "ID": 2,
+                    "TypeId": "PartDesign::Pad",
+                    "Properties": {
+                        "Profile": {
+                            "PropertyType": "App::PropertyLinkSubList",
+                            "SubSet": [
+                                {
+                                    "value": "Sketch",
+                                    "SubList": [] if sublist is None else sublist,
+                                    "StableSubList": [stable_subname],
+                                }
+                            ],
+                        },
+                        "Length": 10,
+                        "Reversed": False,
+                        "SideType": "One side",
+                    },
+                }
+            ],
+            targets=["Pad"],
+        )
 
     def open_wire_identity_reference_shadow(
         self,
@@ -328,8 +383,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                         "SubSet": [
                             {
                                 "value": "Sketch",
-                                "SubList": ["InternalFace1"],
-                                "StableSubList": [""],
+                                "SubList": [],
+                                "StableSubList": [],
                             }
                         ],
                     },
@@ -464,9 +519,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "sketch-internal-face-branch-open-cutter",
             "sketch-internal-face-adjacent-rectangles",
             "sketch-internal-face-arc-lens",
-            "pad-internal-face-sublist",
-            "pad-internal-face-reference-shadow",
-            "pad-internal-face-reference-shadow-brep-recover-sublist",
+            "pad-internal-face-stable-sublist",
             "part-extrusion-facemaker-bullseye-intersected-holes",
         ]:
             with self.subTest(fixture=fixture):
@@ -1824,6 +1877,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         ]
         for case_id, geometry in cases:
             with self.subTest(case_id=case_id):
+                geometry = {"id": 900001, **geometry}
                 result = self.run_payload(
                     {
                         "Objects": [
@@ -1888,9 +1942,12 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for item in result["results"][0]["subshapes"]
         }
 
-        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "")
+        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "g1")
         self.assertEqual(subshapes["InternalVertex1"]["stableSubname"], "Vertex1")
-        self.assertEqual(subshapes["InternalFace1"]["stableSubname"], "")
+        face_stable = subshapes["InternalFace1"]["stableSubname"]
+        self.assertEqual(face_stable, "g1;SKT;FAC")
+        self.assertNotIn("InternalFace", face_stable)
+        self.assertNotRegex(face_stable, r"\bEdge\d+\b")
 
     def test_p5_sketch_internal_edge_stable_subname_uses_raw_geometry_identity(self) -> None:
         geometry = [
@@ -1915,9 +1972,43 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             )
         )
 
-    def test_p5_sketch_internal_shape_named_shape_keeps_face_unstable(self) -> None:
+    def test_p5_closed_rectangle_internal_edges_publish_stable_identity_fields(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 100001, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "id": 100002, "start": [10, 0], "end": [10, 5]},
+            {"kind": "LineSegment", "id": 100003, "start": [10, 5], "end": [0, 5]},
+            {"kind": "LineSegment", "id": 100004, "start": [0, 5], "end": [0, 0]},
+        ]
+        result = self.run_recompute_ffi_payload(self.open_wire_identity_payload(geometry))
+        sketch = self.sketch_result_item(result)
+        subshapes = {item["indexed"]: item for item in sketch["subshapes"]}
+        edge_segments = {
+            item["indexed"]: item
+            for item in sketch["mesh"]["edgeSegments"]
+        }
+
+        self.assertEqual(result["diagnostics"], [])
+        for entry in sketch["subshapes"]:
+            if entry["kind"] == "Edge":
+                self.assertIn(entry.get("identityStatus"), {"stable", "stable_split_fragment"})
+        for entry in sketch["mesh"]["edgeSegments"]:
+            self.assertIn(entry.get("identityStatus"), {"stable", "stable_split_fragment"})
+        for index, geometry_item in enumerate(geometry, start=1):
+            internal_edge = f"InternalEdge{index}"
+            stable = f"g{geometry_item['id']}"
+            for entry in (subshapes[internal_edge], edge_segments[internal_edge]):
+                with self.subTest(indexed=internal_edge, response_id=entry["id"]):
+                    self.assertEqual(entry["identityStatus"], "stable")
+                    self.assertEqual(entry["stableSubname"], stable)
+                    self.assertEqual(entry["sourceStableSubname"], stable)
+                    self.assertEqual(entry["sourceGeometryId"], geometry_item["id"])
+                    self.assertEqual(entry["sourceGeometryIndex"], index - 1)
+                    self.assertEqual(entry["sourceGeometryKind"], "LineSegment")
+
+    def test_p5_sketch_internal_shape_named_shape_publishes_face_alias(self) -> None:
         result = self.run_recompute("sketch-internal-face", "p5")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
+        sketch = result["objects"]["Sketch"]
 
         self.assertIn("InternalFace1", named_shape["elements"])
         self.assertIn("InternalEdge1", named_shape["elements"])
@@ -1929,6 +2020,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(named_shape["element_map"]["Edge1"], "InternalEdge1")
         self.assertEqual(named_shape["element_map"]["Vertex1"], "InternalVertex1")
+        self.assertEqual(named_shape["element_map"]["g1;SKT;FAC"], "InternalFace1")
+        self.assertNotIn("g1;SKT;FAC", sketch["internal_element_map"])
         self.assertNotIn("Face1", named_shape["element_map"])
         generated_face_history = [
             item
@@ -1946,9 +2039,10 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         }
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "")
-        self.assertEqual(subshapes["InternalEdge2"]["stableSubname"], "")
-        self.assertEqual(subshapes["InternalFace1"]["stableSubname"], "")
+        self.assertEqual(subshapes["InternalEdge1"]["stableSubname"], "g1")
+        self.assertEqual(subshapes["InternalEdge2"]["stableSubname"], "g2")
+        self.assertNotEqual(subshapes["InternalFace1"]["stableSubname"], "")
+        self.assertNotIn("InternalFace", subshapes["InternalFace1"]["stableSubname"])
 
     def test_p5_split_line_builds_multiple_internal_faces(self) -> None:
         result = self.run_recompute("sketch-internal-face-split-line", "p5")
@@ -2095,7 +2189,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     self.assertEqual(entry["fragmentStableSubname"], token)
                     self.assertEqual(entry["identityStatus"], "stable_split_fragment")
 
-    def test_c12m16_split_fragment_missing_id_fallback_has_no_durable_token(self) -> None:
+    def test_c12m16_split_fragment_migrated_source_ids_publish_durable_tokens(self) -> None:
         result = self.run_recompute("sketch-split-fragment-line-identity", "c12m16")
         named_shape = result["named_shapes"]["Sketch.InternalShape"]
         edge_segments = {
@@ -2103,20 +2197,25 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             for item in result["mesh"]["Sketch"]["edgeSegments"]
         }
         subshapes = result["subshapes"]["Sketch"]
-        anonymous_split_edges = {
-            item["element"]
+        source_ids = {"Edge1": 702, "Edge3": 704}
+        migrated_split_edges = {
+            item["element"]: item["sources"][0]
             for item in named_shape["history"]
             if item["kind"] == "split" and item["sources"] in (["Edge1"], ["Edge3"])
         }
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertGreaterEqual(len(anonymous_split_edges), 4)
-        for indexed in anonymous_split_edges:
-            with self.subTest(indexed=indexed):
+        self.assertGreaterEqual(len(migrated_split_edges), 4)
+        for indexed, source_edge in migrated_split_edges.items():
+            geometry_id = source_ids[source_edge]
+            stable_prefix = f"g{geometry_id}:split"
+            with self.subTest(indexed=indexed, source_edge=source_edge):
                 for entry in (edge_segments[indexed], subshapes[indexed]):
-                    self.assertNotIn("sourceGeometryId", entry)
-                    self.assertNotIn("fragmentStableSubname", entry)
-                    self.assertNotRegex(entry.get("stableSubname", ""), r"^g\d+:split\d+$")
+                    self.assertEqual(entry["sourceGeometryId"], geometry_id)
+                    self.assertEqual(entry["sourceStableSubname"], f"g{geometry_id}")
+                    self.assertTrue(entry["fragmentStableSubname"].startswith(stable_prefix))
+                    self.assertEqual(entry["stableSubname"], entry["fragmentStableSubname"])
+                    self.assertEqual(entry["identityStatus"], "stable_split_fragment")
 
     def test_c12m16_split_fragment_stable_sublist_resolves_current_fragment(self) -> None:
         result = self.run_recompute("sketch-split-fragment-line-reference", "c12m16")
@@ -2304,13 +2403,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
         self.assertIn("InternalEdge", "".join(named_shape["elements"]))
 
-    def test_p5_pad_uses_selected_internal_face_sublist(self) -> None:
+    def test_p5_pad_rejects_selected_internal_face_sublist(self) -> None:
         result = self.run_recompute("pad-internal-face-sublist", "p5")
         pad = result["objects"]["Pad"]
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["status"], "ok")
-        self.assert_object_matches_expected(result, "p5", "pad-internal-face-sublist")
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(result["diagnostics"][0]["subname"], "InternalFace1")
+        self.assertEqual(pad["status"], "error")
 
     def test_p5_pad_accepts_internal_face_stable_sublist_with_internal_named_shape(self) -> None:
         result = self.run_recompute("pad-internal-face-stable-sublist", "p5")
@@ -2321,9 +2420,75 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(pad["status"], "ok")
         self.assertEqual(pad["shape"], "occt_solid")
         self.assertAlmostEqual(pad["volume"], 250.0)
-        self.assertEqual(named_shape["element_map"]["InternalFace1"], "InternalFace1")
+        self.assertEqual(named_shape["element_map"]["g1:split1;SKT;FAC"], "InternalFace1")
         self.assertIn("InternalFace1", named_shape["elements"])
+        self.assertEqual(pad["currentSubname"], "InternalFace1")
+        ffi_result = self.run_recompute_ffi("pad-internal-face-stable-sublist", "p5")
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
         self.assert_object_matches_expected(result, "p5", "pad-internal-face-stable-sublist")
+
+    def test_p5_pad_resolves_internal_face_stable_sublist_after_resize(self) -> None:
+        stable = self.stable_internal_face_alias(self.rectangle_geometry())
+        payload = self.pad_with_stable_internal_face_payload(
+            self.rectangle_geometry(width=12.0, height=6.0),
+            stable,
+        )
+
+        result = self.run_payload(payload)
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["currentSubname"], "InternalFace1")
+        self.assertAlmostEqual(pad["volume"], 720.0)
+        ffi_result = self.run_recompute_ffi_payload(payload)
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
+
+    def test_p5_pad_resolves_internal_face_stable_sublist_after_face_enum_drift(self) -> None:
+        stable = self.stable_internal_face_alias(self.rectangle_geometry())
+        drifted_geometry = self.rectangle_geometry((201, 202, 203, 204), x0=-20.0) + self.rectangle_geometry()
+        payload = self.pad_with_stable_internal_face_payload(drifted_geometry, stable)
+
+        result = self.run_payload(payload)
+        pad = result["objects"]["Pad"]
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual(pad["status"], "ok")
+        self.assertEqual(pad["currentSubname"], "InternalFace2")
+        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [10.0, 5.0, 10.0]})
+        ffi_result = self.run_recompute_ffi_payload(payload)
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
+
+    def test_p5_pad_rejects_deleted_internal_face_stable_source(self) -> None:
+        stable = self.stable_internal_face_alias(self.rectangle_geometry())
+        replacement_geometry = self.rectangle_geometry((102, 103, 104, 105))
+        payload = self.pad_with_stable_internal_face_payload(replacement_geometry, stable)
+
+        result = self.run_payload(payload)
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual(diagnostic["object"], "Pad")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Sketch")
+        self.assertEqual(diagnostic["subname"], stable)
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+
+    def test_p5_pad_rejects_legacy_internal_face_sublist_without_reference_shadow_recovery(self) -> None:
+        stable = self.stable_internal_face_alias(self.rectangle_geometry())
+        payload = self.pad_with_stable_internal_face_payload(
+            self.rectangle_geometry(),
+            stable,
+            sublist=["InternalFace1"],
+        )
+
+        result = self.run_payload(payload)
+        ffi_result = self.run_recompute_ffi_payload(payload)
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(result["diagnostics"][0]["subname"], "InternalFace1")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_rejects_missing_internal_face_stable_sublist(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-stable-sublist.json"
@@ -2335,7 +2500,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_payload(payload)
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
@@ -2352,29 +2517,22 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_payload(payload)
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace1")
-        self.assertIn("Sketch.InternalShape NamedShape/ElementMap evidence", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
-    def test_p5_pad_accepts_reference_shadow_as_recovery_evidence_only(self) -> None:
+    def test_p5_pad_rejects_reference_shadow_legacy_internal_face_sublist(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow", "p5")
         pad = result["objects"]["Pad"]
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["status"], "ok")
-        self.assertEqual(pad["shape"], "occt_solid")
-        self.assertAlmostEqual(pad["volume"], 250.0)
-        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(result["diagnostics"][0]["subname"], "InternalFace1")
+        self.assertEqual(pad["status"], "error")
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
-        self.assertEqual(update["SubList"], ["InternalFace1"])
-        self.assertEqual(update["StableSubList"], ["g305:split1"])
-        self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
-        self.assertEqual(update["ReferenceShadow"][0]["stableSubname"], "g305:split1")
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_c4m3_reference_shadow_single_subshape_pressure_package(self) -> None:
         ffi_result = self.run_recompute_ffi("sketch-external-internal-reference-shadow-edge-stable", "c4m3")
@@ -2405,7 +2563,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("brep", snapshot_shadow)
         self.assertEqual(len(payload["Objects"][0]["Properties"]["ExternalGeometry"]["SubSet"][0]["ReferenceShadow"]), 1)
 
-    def test_p5_pad_uses_shadow_sub_before_global_reference_shadow_recovery(self) -> None:
+    def test_p5_pad_rejects_shadow_sub_legacy_internal_face_sublist(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json"
         payload = json.loads(fixture_path.read_text(encoding="utf-8"))
         payload["Objects"][1]["Properties"]["Profile"]["SubSet"][0]["SubList"] = ["InternalFace2"]
@@ -2421,10 +2579,9 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 temp_path.unlink(missing_ok=True)
 
         pad = result["objects"]["Pad"]
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["status"], "ok")
-        self.assertAlmostEqual(pad["volume"], 250.0)
-        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(result["diagnostics"][0]["subname"], "InternalFace2")
+        self.assertEqual(pad["status"], "error")
 
         library = self.ffi_library()
         raw = json.dumps(payload).encode("utf-8")
@@ -2437,10 +2594,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         finally:
             library.cad_core_free_result(ctypes.byref(ffi))
 
-        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
-        self.assertEqual(update["SubList"], ["InternalFace1"])
-        self.assertEqual(update["StableSubList"], ["g305:split1"])
-        self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_recovers_empty_sublist_from_shadow_sub_reference_shadow(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow.json"
@@ -2464,7 +2618,8 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     if temp_path is not None:
                         temp_path.unlink(missing_ok=True)
 
-                self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_profile"])
+                self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
+                self.assertEqual(result["diagnostics"][0]["subname"], "g305:split1")
                 self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_malformed_reference_shadow(self) -> None:
@@ -2486,65 +2641,42 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("pad-internal-face-reference-shadow-drift", "p5")
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_semantic_drift"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace1")
-        self.assertIn("centroid changed", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
-    def test_p5_pad_recovers_missing_internal_face_sublist_from_reference_shadow(self) -> None:
+    def test_p5_pad_rejects_missing_internal_face_sublist_reference_shadow_recovery(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-recover-sublist", "p5")
-        pad = result["objects"]["Pad"]
+        diagnostic = result["diagnostics"][0]
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["status"], "ok")
-        self.assertEqual(pad["shape"], "occt_solid")
-        self.assertAlmostEqual(pad["volume"], 250.0)
-        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
-        self.assertEqual(update["SubList"], ["InternalFace1"])
-        self.assertEqual(update["StableSubList"], ["g305:split1"])
-        self.assertEqual(update["ShadowSub"], [{"newName": "g305:split1", "oldName": "InternalFace1"}])
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
-    def test_p5_pad_recovers_ambiguous_fingerprint_with_reference_shadow_brep(self) -> None:
+    def test_p5_pad_rejects_ambiguous_fingerprint_reference_shadow_brep_recovery(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-brep-recover-sublist", "p5")
-        pad = result["objects"]["Pad"]
+        diagnostic = result["diagnostics"][0]
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["status"], "ok")
-        self.assertEqual(pad["shape"], "occt_solid")
-        self.assertAlmostEqual(pad["volume"], 250.0)
-        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
-        self.assertEqual(update["SubList"], ["InternalFace1"])
-        self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
-        brep = update["ReferenceShadow"][0]["brep"]
-        self.assertEqual(brep["format"], "brep-text")
-        self.assertEqual(brep["byteLength"], len(brep["data"]))
-        self.assertEqual(brep["sha256"], hashlib.sha256(brep["data"].encode()).hexdigest())
-        self.assertNotEqual(brep["byteLength"], 662)
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
-    def test_p5_pad_recovers_reference_shadow_brep_zstd_base64(self) -> None:
+    def test_p5_pad_rejects_reference_shadow_brep_zstd_base64_recovery(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-brep-bin-recover-sublist", "p5")
-        pad = result["objects"]["Pad"]
+        diagnostic = result["diagnostics"][0]
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["status"], "ok")
-        self.assertEqual(pad["shape"], "occt_solid")
-        self.assertAlmostEqual(pad["volume"], 250.0)
-        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(diagnostic["subname"], "InternalFace99")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-bin-recover-sublist", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
-        self.assertEqual(update["SubList"], ["InternalFace1"])
-        self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
-        brep = update["ReferenceShadow"][0]["brep"]
-        self.assertEqual(brep["format"], "brep-text")
-        self.assertEqual(brep["byteLength"], len(brep["data"]))
-        self.assertEqual(brep["sha256"], hashlib.sha256(brep["data"].encode()).hexdigest())
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_rejects_reference_shadow_brep_zstd_base64_decode_error(self) -> None:
         fixture_path = ROOT / "fixtures" / "p5" / "pad-internal-face-reference-shadow-brep-bin-recover-sublist.json"
@@ -2563,12 +2695,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 temp_path.unlink(missing_ok=True)
 
         diagnostic = result["diagnostics"][0]
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_resolve_failed"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace99")
-        self.assertIn("valid base64", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_reference_shadow_brep_sha_mismatch(self) -> None:
@@ -2587,12 +2718,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 temp_path.unlink(missing_ok=True)
 
         diagnostic = result["diagnostics"][0]
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_resolve_failed"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace99")
-        self.assertIn("sha256 does not match data", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_reference_shadow_brep_uses_shared_vertex_geometry_not_bbox_fingerprint(self) -> None:
@@ -2615,7 +2745,14 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                         "ID": 2,
                         "TypeId": "Sketcher::SketchObject",
                         "Properties": {
-                            "Geometry": [{"kind": "LineSegment", "start": [start[0], start[1]], "end": [end[0], end[1]]}],
+                            "Geometry": [
+                                {
+                                    "kind": "LineSegment",
+                                    "id": 1,
+                                    "start": [start[0], start[1]],
+                                    "end": [end[0], end[1]],
+                                }
+                            ],
                             "Constraints": [],
                         },
                     },
@@ -2698,74 +2835,67 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("deleted", diagnostic["message"])
         self.assertEqual(result["objects"]["Extrude"]["status"], "error")
 
-    def test_p5_pad_recovers_drifted_sublist_with_reference_shadow_brep(self) -> None:
+    def test_p5_pad_rejects_drifted_sublist_with_reference_shadow_brep(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
-        pad = result["objects"]["Pad"]
+        diagnostic = result["diagnostics"][0]
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["status"], "ok")
-        self.assertEqual(pad["shape"], "occt_solid")
-        self.assertAlmostEqual(pad["volume"], 250.0)
-        self.assertEqual(pad["bbox"], {"min": [0.0, 0.0, 0.0], "max": [5.0, 5.0, 10.0]})
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
+        self.assertEqual(diagnostic["subname"], "InternalFace2")
+        self.assertEqual(result["objects"]["Pad"]["status"], "error")
         ffi_result = self.run_recompute_ffi("pad-internal-face-reference-shadow-brep-drift-recover", "p5")
-        update = ffi_result["elementReferenceUpdates"][0]["SubSet"][0]
-        self.assertEqual(update["SubList"], ["InternalFace1"])
-        self.assertEqual(update["ReferenceShadow"][0]["subname"], "InternalFace1")
+        self.assertEqual(ffi_result["elementReferenceUpdates"], [])
 
     def test_p5_pad_requires_reselect_when_reference_shadow_brep_is_split(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-brep-split", "p5")
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_split_requires_reselect"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
-        self.assertEqual(diagnostic["subname"], "InternalFace99")
-        self.assertIn("split", diagnostic["message"])
+        self.assertEqual(diagnostic["subname"], "g305")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_reports_deleted_reference_shadow_brep(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-brep-deleted", "p5")
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_deleted"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_stable_subname"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
-        self.assertEqual(diagnostic["subname"], "InternalFace99")
-        self.assertIn("deleted", diagnostic["message"])
+        self.assertEqual(diagnostic["subname"], "g999")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_ambiguous_reference_shadow_recovery(self) -> None:
         result = self.run_recompute("pad-internal-face-reference-shadow-ambiguous", "p5")
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_resolve_ambiguous"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace99")
-        self.assertIn("multiple", diagnostic["message"])
         self.assertEqual(result["elementReferenceUpdates"], [])
-        ambiguous_events = [
-            event
-            for event in result["named_shapes"]["Sketch.InternalShape"]["mapper_history"]
-            if event["recoverability"] == "ambiguous"
-            and event["diagnostic_status"] == "subname_resolve_ambiguous"
-        ]
-        self.assertEqual(len(ambiguous_events), 1)
-        self.assertEqual(ambiguous_events[0]["source"], {"object": "Sketch", "subname": "InternalFace99"})
-        self.assertEqual(ambiguous_events[0]["target"], {"object": "Sketch.InternalShape", "subname": ""})
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_c4m3_reference_shadow_deferred_diagnostics_are_locatable(self) -> None:
-        for fixture, code in [
+        for fixture, code, subname in [
             (
                 "sketch-external-internal-reference-shadow-brep-split-diagnostic",
-                "subname_split_requires_reselect",
+                "unsupported_stable_subname",
+                "g305",
             ),
-            ("sketch-external-internal-reference-shadow-brep-deleted-diagnostic", "subname_deleted"),
-            ("sketch-external-internal-reference-shadow-ambiguous-diagnostic", "subname_resolve_ambiguous"),
+            (
+                "sketch-external-internal-reference-shadow-brep-deleted-diagnostic",
+                "unsupported_stable_subname",
+                "g999",
+            ),
+            (
+                "sketch-external-internal-reference-shadow-ambiguous-diagnostic",
+                "unsupported_legacy_internal_sublist",
+                "InternalFace99",
+            ),
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "c4m3")
@@ -2775,7 +2905,7 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(diagnostic["object"], "Pad")
                 self.assertEqual(diagnostic["property"], "Profile")
                 self.assertEqual(diagnostic["target"], "Sketch")
-                self.assertEqual(diagnostic["subname"], "InternalFace99")
+                self.assertEqual(diagnostic["subname"], subname)
                 self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_c4m3_external_geometry_unsupported_reference_shadow_brep_is_locatable(self) -> None:
@@ -2796,12 +2926,11 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         result = self.run_recompute("pad-internal-face-reference-shadow-missing", "p5")
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["subname_resolve_failed"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace99")
-        self.assertIn("does not match", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_uses_selected_internal_face_from_cross_cutters(self) -> None:
@@ -2823,30 +2952,29 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p5_pad_requires_sublist_for_multi_internal_face_sketch(self) -> None:
         result = self.run_recompute("pad-internal-face-missing-sublist", "p5")
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_profile"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_subshape"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_reports_missing_internal_face_subshape_context(self) -> None:
         result = self.run_recompute("pad-internal-face-missing-subshape", "p5")
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_subshape"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace99")
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
-    def test_p5_pad_reports_open_profile_for_explicit_empty_internal_face_selection(self) -> None:
+    def test_p5_pad_rejects_open_profile_legacy_internal_face_selection(self) -> None:
         result = self.run_recompute("pad-open-wire-profile", "p5")
         diagnostic = result["diagnostics"][0]
 
-        self.assertEqual([item["code"] for item in result["diagnostics"]], ["open_profile"])
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["unsupported_legacy_internal_sublist"])
         self.assertEqual(diagnostic["object"], "Pad")
         self.assertEqual(diagnostic["property"], "Profile")
         self.assertEqual(diagnostic["target"], "Sketch")
         self.assertEqual(diagnostic["subname"], "InternalFace1")
-        self.assertIn("no closed InternalFace profile", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad"]["status"], "error")
 
     def test_p5_pad_rejects_non_face_internal_profile_subshape(self) -> None:
@@ -3586,6 +3714,33 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["property"], "Geometry")
         self.assertEqual(result["objects"]["Sketch"]["status"], "error")
 
+    def test_p5_sketch_rejects_missing_geometry_id(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 101, "start": [0, 0], "end": [10, 0]},
+            {"kind": "LineSegment", "start": [10, 0], "end": [10, 5]},
+        ]
+
+        result = self.run_payload(self.open_wire_identity_payload(geometry))
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["missing_geometry_id"])
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Geometry")
+        self.assertEqual(result["objects"]["Sketch"]["status"], "error")
+
+    def test_p5_sketch_rejects_invalid_geometry_id(self) -> None:
+        geometry = [
+            {"kind": "LineSegment", "id": 0, "start": [0, 0], "end": [10, 0]},
+        ]
+
+        result = self.run_payload(self.open_wire_identity_payload(geometry))
+        diagnostic = result["diagnostics"][0]
+
+        self.assertEqual([item["code"] for item in result["diagnostics"]], ["invalid_geometry_id"])
+        self.assertEqual(diagnostic["object"], "Sketch")
+        self.assertEqual(diagnostic["property"], "Geometry")
+        self.assertEqual(result["objects"]["Sketch"]["status"], "error")
+
     def test_p5_open_sketch_keeps_raw_shape_without_profile_face(self) -> None:
         result = self.run_recompute("sketch-open-wire-internal-empty", "p5")
         sketch = result["objects"]["Sketch"]
@@ -3600,9 +3755,13 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         edge_segments_by_id = {segment["id"]: segment for segment in edge_segments}
 
         self.assertFalse(any(subshape_id.startswith("Internal") for subshape_id in subshapes))
-        for edge_id in ("Edge1", "Edge2", "Edge3"):
+        for index, edge_id in enumerate(("Edge1", "Edge2", "Edge3"), start=1):
+            stable = f"g{index}"
             self.assertIn(edge_id, subshapes)
             self.assertIn(edge_id, edge_segments_by_id)
             self.assertEqual(edge_segments_by_id[edge_id]["indexed"], edge_id)
-            self.assertEqual(edge_segments_by_id[edge_id]["identityStatus"], "index_fallback")
+            self.assertEqual(edge_segments_by_id[edge_id]["identityStatus"], "stable")
+            self.assertEqual(edge_segments_by_id[edge_id]["stableSubname"], stable)
+            self.assertEqual(edge_segments_by_id[edge_id]["sourceStableSubname"], stable)
+            self.assertEqual(edge_segments_by_id[edge_id]["sourceGeometryId"], index)
             self.assertGreaterEqual(len(edge_segments_by_id[edge_id]["points"]), 2)

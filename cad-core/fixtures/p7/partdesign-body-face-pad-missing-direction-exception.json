@@ -85,10 +85,10 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [],
-              "SubList": [
-                "InternalFace1"
+              "StableSubList": [
+                "g100001;SKT;FAC"
               ],
+              "SubList": [],
               "value": "草图 7:03:05 PM"
             }
           ]

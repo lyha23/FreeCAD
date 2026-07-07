@@ -6,6 +6,7 @@
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/topo_shape_expansion.h"
+#include "cad_core/part_design/profile_resolver.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/feature_executor.h"
 
@@ -136,6 +137,16 @@ const part::NamedShape* namedShapeForTarget(const runtime::ComputeContext& conte
 {
     const auto namedShapeIt = context.namedShapes.find(objectName);
     return namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
+}
+
+bool profileTargetRequiresExplicitFace(const runtime::ComputeContext& context, const app::Link& profileLink)
+{
+    const auto shapeIt = context.shapes.find(profileLink.object);
+    if (shapeIt == context.shapes.end()) {
+        return false;
+    }
+    return shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
+        || shapeIt->second.kind == runtime::ShapeValue::Kind::PartPrimitive;
 }
 
 std::optional<TopoDS_Wire> wireFromEdges(const TopoDS_Shape& shape)
@@ -283,6 +294,10 @@ std::optional<TopoDS_Shape> profileFace(const app::DocumentObject& object,
     }
     if (shapeIt->second.kind == runtime::ShapeValue::Kind::Profile) {
         return shapeIt->second.shape;
+    }
+    if (shapeIt->second.kind == runtime::ShapeValue::Kind::Solid
+        || shapeIt->second.kind == runtime::ShapeValue::Kind::PartPrimitive) {
+        return resolveLinkedFaceProfile(object, context, profileLink, shapeIt->second, "Loft");
     }
     addLoftDiagnostic(object,
                       context,
@@ -505,6 +520,19 @@ void executeLoftFeature(const app::DocumentObject& object,
                                body == nullptr ? std::string {} : body->name);
         context.objects[object.name] = {{"status", "error"}};
         return;
+    }
+    if (profileTargetRequiresExplicitFace(context, *profileLink)) {
+        const auto face = profileFace(object, context, *profileLink);
+        if (!face || face->IsNull()) {
+            addLoftDiagnostic(object,
+                              context,
+                              "open_profile",
+                              "Loft: Creating a face from sketch failed",
+                              "Profile",
+                              profileLink->object);
+            context.objects[object.name] = {{"status", "error"}};
+            return;
+        }
     }
     const std::vector<app::Link> sectionLinks = app::readLinks(object, "Sections");
     if (sectionLinks.empty()) {

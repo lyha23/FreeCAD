@@ -21,8 +21,22 @@
         "Geometry": [
           {
             "kind": "BSpline",
+            "id": 1,
             "degree": 2,
-            "poles": [[10, 0], [12, 3], [14, 0]]
+            "poles": [
+              [
+                10,
+                0
+              ],
+              [
+                12,
+                3
+              ],
+              [
+                14,
+                0
+              ]
+            ]
           }
         ],
         "Constraints": []
@@ -33,13 +47,20 @@
       "ID": 3,
       "TypeId": "Part::Extrusion",
       "Properties": {
-        "Base": {"PropertyType": "App::PropertyLink", "value": "BaseLine"},
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BaseLine"
+        },
         "DirMode": "Edge",
         "DirLink": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SourceSketch",
-          "SubList": ["Edge99"],
-          "StableSubList": ["Edge1"],
+          "SubList": [
+            "Edge99"
+          ],
+          "StableSubList": [
+            "Edge1"
+          ],
           "ReferenceShadow": [
             {
               "target": "SourceSketch",
@@ -51,9 +72,21 @@
               "stableSubname": "Edge1",
               "fingerprint": {
                 "length": 5.19804,
-                "centroid": [2.0, 0.915123, 0.0],
-                "bboxMin": [0.0, 0.0, 0.0],
-                "bboxMax": [4.0, 2.0625, 0.0],
+                "centroid": [
+                  2.0,
+                  0.915123,
+                  0.0
+                ],
+                "bboxMin": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "bboxMax": [
+                  4.0,
+                  2.0625,
+                  0.0
+                ],
                 "edgeCount": 1,
                 "vertexCount": 2
               },
@@ -72,5 +105,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Extrude"]}
+  "recompute": {
+    "objs": [
+      "Extrude"
+    ]
+  }
 }

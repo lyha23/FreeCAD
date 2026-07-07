@@ -6,10 +6,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [-0.5, -0.5], "end": [0.5, -0.5]},
-          {"kind": "LineSegment", "start": [0.5, -0.5], "end": [0.5, 0.5]},
-          {"kind": "LineSegment", "start": [0.5, 0.5], "end": [-0.5, 0.5]},
-          {"kind": "LineSegment", "start": [-0.5, 0.5], "end": [-0.5, -0.5]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              -0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              -0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              0.5,
+              -0.5
+            ],
+            "end": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              0.5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              -0.5,
+              0.5
+            ],
+            "end": [
+              -0.5,
+              -0.5
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -21,11 +65,31 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              4
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -37,11 +101,31 @@
       "Properties": {
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0.7071067811865475, 0, 0, 0.7071067811865476]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0.7071067811865475,
+            0,
+            0,
+            0.7071067811865476
+          ]
         },
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [0, 4]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              0,
+              4
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -61,19 +145,40 @@
       "ID": 5,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "Solid": false,
         "Transition": "Round corner",
-        "AuxiliarySpine": {"PropertyType": "App::PropertyLinkSub", "value": "AuxiliarySpine", "SubList": ["Edge1"]},
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "AuxiliarySpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
         "AuxiliaryCurvilinear": false,
         "SectionOptions": [
           {
             "Location": {
               "PropertyType": "App::PropertyLinkSub",
               "value": "ProfileLocation",
-              "SubList": ["Vertex1"],
-              "StableSubList": ["Vertex1"]
+              "SubList": [
+                "Vertex1"
+              ],
+              "StableSubList": [
+                "Vertex1"
+              ]
             },
             "WithCorrection": true
           }
@@ -90,12 +195,31 @@
       "ID": 6,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "Solid": false,
-        "AuxiliarySpine": {"PropertyType": "App::PropertyLinkSub", "value": "AuxiliarySpine", "SubList": ["Edge1"]},
+        "AuxiliarySpine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "AuxiliarySpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
         "SectionOptions": [
-          {"WithContact": "yes"}
+          {
+            "WithContact": "yes"
+          }
         ],
         "Tolerance": {
           "tol3d": 0.0001,
@@ -109,8 +233,19 @@
       "ID": 9,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "Solid": false,
         "SupportMode": "Sideways",
         "Tolerance": {
@@ -125,16 +260,31 @@
       "ID": 7,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "Solid": false,
         "SectionOptions": [
           {
             "Location": {
               "PropertyType": "App::PropertyLinkSub",
               "value": "ProfileLocation",
-              "SubList": ["Vertex99"],
-              "StableSubList": ["Vertex99"]
+              "SubList": [
+                "Vertex99"
+              ],
+              "StableSubList": [
+                "Vertex99"
+              ]
             }
           }
         ],
@@ -150,11 +300,24 @@
       "ID": 8,
       "TypeId": "Part::Sweep",
       "Properties": {
-        "Spine": {"PropertyType": "App::PropertyLinkSub", "value": "PipeSpine", "SubList": ["Edge1"]},
-        "Sections": {"PropertyType": "App::PropertyLinkList", "values": ["SketchPipeProfile"]},
+        "Spine": {
+          "PropertyType": "App::PropertyLinkSub",
+          "value": "PipeSpine",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Sections": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "SketchPipeProfile"
+          ]
+        },
         "Solid": false,
         "SectionOptions": [
-          {"WithCorrection": "yes"}
+          {
+            "WithCorrection": "yes"
+          }
         ],
         "Tolerance": {
           "tol3d": 0.0001,

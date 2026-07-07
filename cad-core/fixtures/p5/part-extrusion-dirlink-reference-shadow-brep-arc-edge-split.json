@@ -19,8 +19,28 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "ArcOfCircle", "center": [0, 0], "radius": 5, "startAngle": 0, "endAngle": 0.7853981633974483},
-          {"kind": "ArcOfCircle", "center": [0, 0], "radius": 5, "startAngle": 0.7853981633974483, "endAngle": 1.5707963267948966}
+          {
+            "kind": "ArcOfCircle",
+            "id": 1,
+            "center": [
+              0,
+              0
+            ],
+            "radius": 5,
+            "startAngle": 0,
+            "endAngle": 0.7853981633974483
+          },
+          {
+            "kind": "ArcOfCircle",
+            "id": 2,
+            "center": [
+              0,
+              0
+            ],
+            "radius": 5,
+            "startAngle": 0.7853981633974483,
+            "endAngle": 1.5707963267948966
+          }
         ],
         "Constraints": []
       }
@@ -30,13 +50,20 @@
       "ID": 3,
       "TypeId": "Part::Extrusion",
       "Properties": {
-        "Base": {"PropertyType": "App::PropertyLink", "value": "BaseLine"},
+        "Base": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BaseLine"
+        },
         "DirMode": "Edge",
         "DirLink": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SourceSketch",
-          "SubList": ["Edge99"],
-          "StableSubList": ["Edge1"],
+          "SubList": [
+            "Edge99"
+          ],
+          "StableSubList": [
+            "Edge1"
+          ],
           "ReferenceShadow": [
             {
               "target": "SourceSketch",
@@ -48,9 +75,21 @@
               "stableSubname": "Edge1",
               "fingerprint": {
                 "length": 7.853981633974483,
-                "centroid": [3.183098861837907, 3.183098861837907, 0.0],
-                "bboxMin": [0.0, 0.0, 0.0],
-                "bboxMax": [5.0, 5.0, 0.0],
+                "centroid": [
+                  3.183098861837907,
+                  3.183098861837907,
+                  0.0
+                ],
+                "bboxMin": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "bboxMax": [
+                  5.0,
+                  5.0,
+                  0.0
+                ],
                 "edgeCount": 1,
                 "vertexCount": 2
               },
@@ -69,5 +108,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Extrude"]}
+  "recompute": {
+    "objs": [
+      "Extrude"
+    ]
+  }
 }

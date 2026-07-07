@@ -19,7 +19,11 @@
         "Geometry": [
           {
             "kind": "ArcOfHyperbola",
-            "center": [0, 0],
+            "id": 1,
+            "center": [
+              0,
+              0
+            ],
             "majorRadius": 4,
             "minorRadius": 2,
             "angle": 0.35,
@@ -38,7 +42,11 @@
         "Geometry": [
           {
             "kind": "ArcOfParabola",
-            "center": [0, 0],
+            "id": 1,
+            "center": [
+              0,
+              0
+            ],
             "focal": 2,
             "angle": 0.25,
             "startAngle": -0.8,
@@ -56,7 +64,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EllipseEdge",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -72,7 +82,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EllipseEdge",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -88,7 +100,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EllipseEdge",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -104,7 +118,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EllipseEdge",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -120,7 +136,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "HyperbolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -136,7 +154,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "HyperbolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -152,7 +172,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "HyperbolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -168,7 +190,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "HyperbolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -184,7 +208,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "HyperbolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -200,7 +226,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "HyperbolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -216,7 +244,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "ParabolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -232,7 +262,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "ParabolaSketch",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",

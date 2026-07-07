@@ -6,14 +6,102 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          {"kind": "LineSegment", "start": [0, 0], "end": [10, 0]},
-          {"kind": "LineSegment", "start": [10, 0], "end": [10, 10]},
-          {"kind": "LineSegment", "start": [10, 10], "end": [0, 10]},
-          {"kind": "LineSegment", "start": [0, 10], "end": [0, 0]},
-          {"kind": "LineSegment", "start": [3, 3], "end": [7, 3]},
-          {"kind": "LineSegment", "start": [7, 3], "end": [7, 7]},
-          {"kind": "LineSegment", "start": [7, 7], "end": [3, 7]},
-          {"kind": "LineSegment", "start": [3, 7], "end": [3, 3]}
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              10
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              10
+            ],
+            "end": [
+              0,
+              10
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              10
+            ],
+            "end": [
+              0,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 5,
+            "start": [
+              3,
+              3
+            ],
+            "end": [
+              7,
+              3
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 6,
+            "start": [
+              7,
+              3
+            ],
+            "end": [
+              7,
+              7
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 7,
+            "start": [
+              7,
+              7
+            ],
+            "end": [
+              3,
+              7
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 8,
+            "start": [
+              3,
+              7
+            ],
+            "end": [
+              3,
+              3
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -27,7 +115,11 @@
           "PropertyType": "App::PropertyLink",
           "value": "Sketch"
         },
-        "Dir": [0, 0, 1],
+        "Dir": [
+          0,
+          0,
+          1
+        ],
         "LengthFwd": 5,
         "Solid": true,
         "FaceMakerMode": {
@@ -37,5 +129,9 @@
       }
     }
   ],
-  "recompute": {"objs": ["Extrude"]}
+  "recompute": {
+    "objs": [
+      "Extrude"
+    ]
+  }
 }

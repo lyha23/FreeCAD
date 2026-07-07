@@ -12,6 +12,7 @@
               63.14576255103884
             ],
             "kind": "LineSegment",
+            "id": 1,
             "start": [
               -971.028702081187,
               63.14576255103884
@@ -23,6 +24,7 @@
               -634.6604388283963
             ],
             "kind": "LineSegment",
+            "id": 2,
             "start": [
               -447.1792617714393,
               63.14576255103884
@@ -34,6 +36,7 @@
               -634.6604388283963
             ],
             "kind": "LineSegment",
+            "id": 3,
             "start": [
               -447.17926177143937,
               -634.6604388283963
@@ -45,6 +48,7 @@
               63.14576255103884
             ],
             "kind": "LineSegment",
+            "id": 4,
             "start": [
               -971.028702081187,
               -634.6604388283963
@@ -80,10 +84,10 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [],
-              "SubList": [
-                "InternalFace1"
+              "StableSubList": [
+                "g1;SKT;FAC"
               ],
+              "SubList": [],
               "value": "SketchBase"
             }
           ]

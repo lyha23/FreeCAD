@@ -329,3 +329,12 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 - 目标无关未跟踪文件仍保持未被纳入。
 - 验证命令结果清楚记录；若某项因环境失败，给出具体失败原因和后续最小命令。
 - 按中文提交工作流提交本轮相关变更，提交前展示变更边界，提交后证明工作区只剩用户原有无关改动或完全干净。
+
+---
+
+那删除'/Users/li/Chili3DProject/cad-web-background/docs/BUG处理/7-7-14-09-【已实现】Pad3Body重复稳定拓扑名后端修复方案.md', 并回退'/Users/li/Chili3DProject/cad-web-background/cad-core/src/runtime/recompute.cpp', 改为 不同 Edge 发布同一个 stableSubname 的时候, 直接返回 结构化 diagnostics
+
+---
+
+ '/Users/li/Chili3DProject/cad-web-background/docs/BUG处理/7-7-15-59-【待实现】Revolution过度发布Body作用域Face导致下游引用失效.md' 你再看一下这个问题, 我希望按 FreeCAD 的代码实现和
+  FreeCADCmd结果, 作为基准, 来实现我的'/Users/li/Chili3DProject/cad-web-background/cad-core', 该怎么实现呢

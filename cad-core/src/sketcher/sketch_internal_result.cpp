@@ -10,6 +10,8 @@
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp_Explorer.hxx>
 
+#include <map>
+
 namespace cad_core::sketcher
 {
 
@@ -36,6 +38,56 @@ void appendRawSketchDisplayTopology(nlohmann::json& mesh, const nlohmann::json& 
     }
 }
 
+std::string stableSubnameForLedgerIdentity(const RawSketchEdgeIdentity& identity)
+{
+    if (identity.stableSubname) {
+        return *identity.stableSubname;
+    }
+    if (identity.source.geometryId) {
+        return stableSubnameForGeometryId(*identity.source.geometryId);
+    }
+    return {};
+}
+
+bool startsWith(const std::string& value, const std::string& prefix)
+{
+    return value.rfind(prefix, 0U) == 0U;
+}
+
+std::map<std::string, std::string> internalEdgeMappedNamesFromLedger(
+    const RawSketchEdgeIdentityLedger& ledger,
+    const nlohmann::json& internalElementMap
+)
+{
+    std::map<std::string, std::string> stableByIndexed;
+    for (const RawSketchEdgeIdentity& identity : ledger.edges) {
+        const std::string stable = stableSubnameForLedgerIdentity(identity);
+        if (!stable.empty()) {
+            stableByIndexed[identity.indexed] = stable;
+        }
+    }
+
+    std::map<std::string, std::string> mappedNames;
+    for (const auto& [indexed, stable] : stableByIndexed) {
+        if (startsWith(indexed, "InternalEdge")) {
+            mappedNames[indexed] = stable;
+        }
+    }
+    if (!internalElementMap.is_object()) {
+        return mappedNames;
+    }
+    for (const auto& [internalIndexed, mapped] : internalElementMap.items()) {
+        if (!startsWith(internalIndexed, "InternalEdge") || !mapped.is_string()) {
+            continue;
+        }
+        const auto stableIt = stableByIndexed.find(mapped.get<std::string>());
+        if (stableIt != stableByIndexed.end()) {
+            mappedNames[internalIndexed] = stableIt->second;
+        }
+    }
+    return mappedNames;
+}
+
 }  // namespace
 
 SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& input)
@@ -51,18 +103,25 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
 
     const bool hasNonEmptyInternalShape = input.internalShape && !input.internalShape->IsNull();
     if (hasNonEmptyInternalShape) {
-        result.shapeValue.internalNamedShape = part::namedShapeForSketchInternalShape(
+        nlohmann::json internalElementMap =
+            app::internalElementMapForSketch(input.rawShape, *input.internalShape);
+        part::NamedShape preliminaryInternalNamedShape = part::namedShapeForSketchInternalShape(
             input.objectName,
             input.rawShape,
             *input.internalShape,
             input.historyLedger
         );
-        if (result.shapeValue.internalNamedShape) {
-            addSplitFragmentIdentitiesFromInternalHistory(
-                rawEdgeIdentityLedger,
-                *result.shapeValue.internalNamedShape
-            );
-        }
+        addSplitFragmentIdentitiesFromInternalHistory(
+            rawEdgeIdentityLedger,
+            preliminaryInternalNamedShape
+        );
+        result.shapeValue.internalNamedShape = part::namedShapeForSketchInternalShape(
+            input.objectName,
+            input.rawShape,
+            *input.internalShape,
+            input.historyLedger,
+            internalEdgeMappedNamesFromLedger(rawEdgeIdentityLedger, internalElementMap)
+        );
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals(), writes auxiliary "InternalShape"; the web response
         // renders that request-local shape with InternalFace ids matching subshapes.
@@ -93,6 +152,9 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
     const nlohmann::json internalSubshapes = hasNonEmptyInternalShape
         ? part::subshapeMapForShape(*input.internalShape, "Internal")
         : nlohmann::json::object();
+    const nlohmann::json internalElementMap = hasNonEmptyInternalShape
+        ? app::internalElementMapForSketch(input.rawShape, *input.internalShape)
+        : nlohmann::json::object();
     if (!input.rawShape.IsNull()) {
         result.subshapes = part::subshapeMapForShape(input.rawShape);
         if (hasNonEmptyInternalShape) {
@@ -102,16 +164,17 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
         }
     }
     if (result.mesh && !result.subshapes.empty()) {
+        RawSketchEdgeIdentityLedger responseEdgeIdentityLedger = rawEdgeIdentityLedger;
+        addInternalEdgeIdentitiesFromInternalElementMap(
+            responseEdgeIdentityLedger,
+            internalElementMap
+        );
         publishRawSketchEdgeIdentity(
             *result.mesh,
             result.subshapes,
-            rawEdgeIdentityLedger
+            responseEdgeIdentityLedger
         );
     }
-
-    const nlohmann::json internalElementMap = hasNonEmptyInternalShape
-        ? app::internalElementMapForSketch(input.rawShape, *input.internalShape)
-        : nlohmann::json::object();
 
     result.objectFields = {
         {"profile", profileShapeLabel(input.profileShape)},

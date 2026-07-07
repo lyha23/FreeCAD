@@ -16,10 +16,54 @@
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
-          { "kind": "LineSegment", "start": [2, 0], "end": [3, 0] },
-          { "kind": "LineSegment", "start": [3, 0], "end": [3, 1] },
-          { "kind": "LineSegment", "start": [3, 1], "end": [2, 1] },
-          { "kind": "LineSegment", "start": [2, 1], "end": [2, 0] }
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              2,
+              0
+            ],
+            "end": [
+              3,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              3,
+              0
+            ],
+            "end": [
+              3,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              3,
+              1
+            ],
+            "end": [
+              2,
+              1
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              2,
+              1
+            ],
+            "end": [
+              2,
+              0
+            ]
+          }
         ],
         "Constraints": []
       }
@@ -39,7 +83,9 @@
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchRevolution",
-          "SubList": ["V_Axis"]
+          "SubList": [
+            "V_Axis"
+          ]
         }
       }
     },
@@ -58,7 +104,9 @@
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchRevolution",
-          "SubList": ["V_Axis"]
+          "SubList": [
+            "V_Axis"
+          ]
         }
       }
     },
@@ -77,12 +125,16 @@
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchRevolution",
-          "SubList": ["V_Axis"]
+          "SubList": [
+            "V_Axis"
+          ]
         },
         "UpToFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "LimitBox",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         }
       }
     },
@@ -101,12 +153,19 @@
         "ReferenceAxis": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchRevolution",
-          "SubList": ["V_Axis"]
+          "SubList": [
+            "V_Axis"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["RevolutionThroughAll", "RevolutionUpToLast", "RevolutionUpToFace", "GrooveUpToFirst"]
+    "objs": [
+      "RevolutionThroughAll",
+      "RevolutionUpToLast",
+      "RevolutionUpToFace",
+      "GrooveUpToFirst"
+    ]
   }
 }

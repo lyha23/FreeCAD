@@ -8,6 +8,7 @@
         "Geometry": [
           {
             "kind": "OffsetCurve",
+            "id": 1,
             "source": "Edge1",
             "offset": 1
           }

@@ -3,6 +3,8 @@
 #include "cad_core/runtime/element_reference_update.h"
 #include "cad_core/runtime/reference_lifecycle.h"
 
+#include <TopAbs_ShapeEnum.hxx>
+
 #include <algorithm>
 #include <cctype>
 
@@ -36,6 +38,20 @@ std::string internalSubnameFromStableElementMap(const ReferenceResolutionView& v
         return {};
     }
     return currentInternal;
+}
+
+bool requestLocalInternalFaceSubname(const std::string& subname)
+{
+    const auto parsed = part::parseInternalSubshapeName(subname);
+    return parsed && parsed->kind == TopAbs_FACE;
+}
+
+bool legacyInternalFaceProfileLink(const std::string& propertyName, const app::Link& link)
+{
+    return propertyName == "Profile"
+        && std::any_of(link.subnames.begin(),
+                       link.subnames.end(),
+                       requestLocalInternalFaceSubname);
 }
 
 std::optional<ReferenceSubshapeResolution> internalSubshapeForCurrentName(const ShapeValue& shapeValue,
@@ -691,6 +707,9 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
         std::map<std::size_t, std::vector<std::string>> subListSubnameUpdates;
         for (std::size_t linkIndex = 0; linkIndex < propertyValue.links.size(); ++linkIndex) {
             const auto& link = propertyValue.links.at(linkIndex);
+            if (legacyInternalFaceProfileLink(propertyName, link)) {
+                continue;
+            }
             if (link.referenceShadows.empty()) {
                 continue;
             }
