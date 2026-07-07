@@ -649,11 +649,12 @@ void addDirectTipSubshapeAliases(part::NamedShape& namedShape, const std::string
         if (!isLocalTopologicalElementName(stableName) || !isLocalTopologicalElementName(currentName)) {
             continue;
         }
-        const std::string alias = tipPrefix + stableName;
-        const auto existing = namedShape.elementMap.find(alias);
-        if (existing != namedShape.elementMap.end() && existing->second != currentName) {
-            continue;
-        }
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+        // ::Body::execute() reads the Tip "Shape" and "Shape.setValue(tipShape)", while
+        // Body::getSubObject() delegates child paths like Tip.VertexN through BodyBase.
+        // The direct Tip alias is therefore the current displayed child path, not an older
+        // maker-history stableName that may now point at a different current VertexN.
+        const std::string alias = tipPrefix + currentName;
         aliases[alias] = currentName;
     }
 

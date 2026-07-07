@@ -68,6 +68,21 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def response_result(self, response: dict, object_name: str) -> dict:
         return next(item for item in response["results"] if item["object"] == object_name)
 
+    def assert_response_stable_subnames_unique_by_kind(self, result: dict) -> None:
+        seen: dict[tuple[str, str], str] = {}
+        for subshape in result["subshapes"]:
+            stable_subname = subshape.get("stableSubname", "")
+            if not stable_subname:
+                continue
+            key = (subshape["kind"], stable_subname)
+            previous = seen.get(key)
+            self.assertIsNone(
+                previous,
+                f"{result['object']} publishes duplicate {subshape['kind']} "
+                f"stableSubname {stable_subname} for {previous}, {subshape['indexed']}",
+            )
+            seen[key] = subshape["indexed"]
+
     def test_p7_body_direct_tip_refine_false_response_edges_publish_stable_identity(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "mvp" / "rect-pad.json").read_text(encoding="utf-8"))
         self.object_payload(payload, "Pad")["Properties"]["Refine"] = False
@@ -1689,6 +1704,26 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(response["diagnostics"], [])
         self.assertIsNotNone(body["mesh"])
         self.assert_mesh_has_no_zero_face_render_normals(response, "RevolvePreview")
+
+    def test_c5m1_revolve_preview_body_duplicate_vertex_stable_subname(self) -> None:
+        response = self.run_recompute_response(
+            "revolve-preview-body-duplicate-vertex-stable",
+            "c5m1",
+        )
+
+        self.assertNotIn(
+            "duplicate_stable_subname",
+            [diagnostic["code"] for diagnostic in response["diagnostics"]],
+        )
+        body = self.response_result(response, "RevolvePreviewBody")
+        self.assert_response_stable_subnames_unique_by_kind(body)
+        vertex_subshapes = {subshape["indexed"]: subshape for subshape in body["subshapes"] if subshape["kind"] == "Vertex"}
+        self.assertEqual(vertex_subshapes["Vertex1"]["stableSubname"], "RevolvePreview.Vertex1")
+        self.assertEqual(vertex_subshapes["Vertex1"].get("sourceStableSubname"), "Fillet.Vertex5")
+        self.assertEqual(vertex_subshapes["Vertex2"]["stableSubname"], "RevolvePreview.Vertex2")
+        self.assertNotIn("sourceStableSubname", vertex_subshapes["Vertex2"])
+        for subshape in body["subshapes"]:
+            self.assertTrue(subshape["subname"].startswith("RevolvePreview."))
 
     def test_c5m1_revolve_preview_prefers_stable_axis_over_sketch_internaledge_handle(self) -> None:
         fixture_path = ROOT / "fixtures" / "c5m1" / "revolve-preview-body-render-normal.json"

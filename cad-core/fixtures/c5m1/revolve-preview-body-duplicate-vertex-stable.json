@@ -1,0 +1,200 @@
+{
+  "Objects": [
+    {
+      "ID": 1,
+      "Name": "草图 6:24:43 PM",
+      "Properties": {
+        "Constraints": [],
+        "Geometry": [
+          {
+            "end": [
+              -364.9219352341747,
+              126.875289884219
+            ],
+            "id": 100001,
+            "kind": "LineSegment",
+            "start": [
+              -1020.2505384818352,
+              126.875289884219
+            ]
+          },
+          {
+            "end": [
+              -364.9219352341747,
+              -600.2434472173666
+            ],
+            "id": 100002,
+            "kind": "LineSegment",
+            "start": [
+              -364.9219352341747,
+              126.875289884219
+            ]
+          },
+          {
+            "end": [
+              -1020.2505384818352,
+              -600.2434472173666
+            ],
+            "id": 100003,
+            "kind": "LineSegment",
+            "start": [
+              -364.9219352341747,
+              -600.2434472173666
+            ]
+          },
+          {
+            "end": [
+              -1020.2505384818352,
+              126.875289884219
+            ],
+            "id": 100004,
+            "kind": "LineSegment",
+            "start": [
+              -1020.2505384818352,
+              -600.2434472173666
+            ]
+          }
+        ],
+        "Placement": {
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "TypeId": "Sketcher::SketchObject"
+    },
+    {
+      "ID": 2,
+      "Name": "Pad",
+      "Properties": {
+        "FuzzyTolerance": 0,
+        "Length": 419,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "g100001;SKT;FAC"
+              ],
+              "SubList": [],
+              "value": "草图 6:24:43 PM"
+            }
+          ]
+        },
+        "Refine": false,
+        "Reversed": false,
+        "SideType": "One side",
+        "Type": "Length"
+      },
+      "TypeId": "PartDesign::Pad"
+    },
+    {
+      "ID": 3,
+      "Name": "Fillet",
+      "Properties": {
+        "Base": {
+          "FullSubList": [
+            "PadBody.Pad.Edge10"
+          ],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "Edge10"
+          ],
+          "SubList": [
+            "Edge10"
+          ],
+          "value": "Pad"
+        },
+        "Radius": 316.6,
+        "SupportTransform": true,
+        "UseAllEdges": false
+      },
+      "TypeId": "PartDesign::Fillet"
+    },
+    {
+      "ID": 4,
+      "Name": "RevolvePreview",
+      "Properties": {
+        "Angle": 360,
+        "FuseOrder": "BaseFirst",
+        "FuzzyTolerance": 0,
+        "Midplane": false,
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "FullSubList": [
+                "PadBody.Fillet.Face5"
+              ],
+              "ReferenceShadow": [],
+              "ShadowSub": [],
+              "StableSubList": [
+                "Face5"
+              ],
+              "SubList": [
+                "Face5"
+              ],
+              "value": "Fillet"
+            }
+          ]
+        },
+        "ReferenceAxis": {
+          "FullSubList": [],
+          "PropertyType": "App::PropertyLinkSub",
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "StableSubList": [
+            "g100001"
+          ],
+          "SubList": [
+            "Edge1"
+          ],
+          "value": "草图 6:24:43 PM"
+        },
+        "Refine": false,
+        "Reversed": false,
+        "Type": "Angle"
+      },
+      "TypeId": "PartDesign::Revolution"
+    },
+    {
+      "ID": 5,
+      "Name": "RevolvePreviewBody",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "草图 6:24:43 PM",
+            "Pad",
+            "Fillet",
+            "RevolvePreview"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "RevolvePreview"
+        }
+      },
+      "TypeId": "PartDesign::Body"
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "RevolvePreviewBody"
+    ]
+  }
+}
