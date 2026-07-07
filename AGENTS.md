@@ -74,6 +74,7 @@
   - macOS：`/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd`。
 - 原生 FreeCAD 当前可用；但在 Codex sandbox 内直接运行 `FreeCADCmd` 可能报 `Incompatible processor. This Qt build requires the following features: neon`。这只说明 sandbox 执行环境不适合启动该 Qt/FreeCAD 进程，不代表本机 FreeCAD 不可用。
 - 需要重新采集 FreeCAD fixture、运行 oracle collector、或执行原生 FreeCAD/WireJoiner probe 时，应在本机非 sandbox 环境运行 `FreeCADCmd`，再以该输出作为 oracle 判断依据。
+- 遇到 `subname` / `stableSubname` / `fullSubname`、Body / Tip、`NamedShape` / `ElementMap`、mapper history、feature 本地拓扑数量、expected 正误或当前 `cad-core` 输出与 FreeCAD 语义不一致这类语义不清问题时，先调用 `cad-core/tools/collect_freecad_expected.py` 并以本机 `FreeCADCmd` 输出为权威；不要从当前 `cad-core` response、Web 输出或 fixture 结果反推 FreeCAD 语义。
 - 临时 probe 不能假设普通 Python `__main__` 会被 FreeCAD CLI 执行；若 `FreeCADCmd` 启动成功但没有执行脚本主体，应改成和现有采集脚本一致的 FreeCAD CLI 触发方式后再重跑。
 - CAD Core 的 fixture expected、oracle 采集和阶段验收基线以采集 expected 时使用的 FreeCAD / LibPack 版本为准；不要把当前机器偶然安装的系统 OCCT（例如 Linux 发行版自带 OCCT 7.5.x）作为判断 expected 正误或修改几何语义的基线。
 - 若 `cad-core` 在非 expected 采集基线的 OCCT 上出现 BREP topology 版本、bbox 细微偏移或 data-exchange 读写差异，应先归类为环境 / OCCT 兼容性问题并写入 `docs/temp`，不要直接改 fixture expected、放宽断言、增加输出端修剪或加入几何特判。
@@ -152,6 +153,25 @@
   cd ~/Chili3DProject/FreeCAD/cad-core
   cmake -S . -B build
   ```
+- 排查 FreeCAD 语义不清或 expected 裁决问题时，优先采集单个 native expected：
+  ```bash
+  cd ~/Chili3DProject/FreeCAD
+  FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
+    python3 cad-core/tools/collect_freecad_expected.py \
+    path/to/input-or-fixture.json \
+    --out cad-core/out/<case>.freecad.json \
+    --pretty
+  ```
+- 对已纳入 fixture phase 的 native expected 回归，使用：
+  ```bash
+  cd ~/Chili3DProject/FreeCAD
+  FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
+    python3 cad-core/tools/collect_freecad_expected.py \
+    --phase <phase> \
+    --check \
+    --skip-unsupported
+  ```
+- 如果 collector 因输入不是 FreeCAD native 可接受形态、缺少 profile/support、或 FreeCAD Python API 暂不暴露所需账本而失败，应把结论记录为 collector unsupported / known gap / 需 native probe；不得用当前 `cad-core` JSON 输出补猜 FreeCAD 语义。
 - 涉及 OCCT、FreeCAD 原生 runtime、oracle 采集或 GUI/Qt 的验证可能依赖本机环境；运行前先确认是否确实需要，sandbox 中的 FreeCADCmd/Qt 错误不能直接当作实现失败。
 
 ## Git 与工作区

@@ -498,6 +498,40 @@ bool bodyTipStableSubnameShouldUseCurrentOwner(
     return owner && *owner != tipContext->owner;
 }
 
+bool namedShapeMapsStableToCurrent(const part::NamedShape* namedShape,
+                                   const std::string& stableSubname,
+                                   const std::string& indexed)
+{
+    if (namedShape == nullptr || stableSubname.empty()) {
+        return false;
+    }
+    const auto mappedIt = namedShape->elementMap.find(stableSubname);
+    return mappedIt != namedShape->elementMap.end() && mappedIt->second == indexed;
+}
+
+bool bodyTipStableSubnameCanUseCurrentOwner(
+    const std::string& indexed,
+    const std::string& stableSubname,
+    const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+    const part::NamedShape* stableSource)
+{
+    if (!bodyTipStableSubnameShouldUseCurrentOwner(stableSubname, tipContext)) {
+        return false;
+    }
+    return namedShapeMapsStableToCurrent(stableSource, tipContext->owner + "." + indexed, indexed);
+}
+
+std::string bodyTipBodyLocalStableSubnameFor(
+    const std::string& indexed,
+    const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+    const part::NamedShape* stableSource)
+{
+    if (!tipContext || !isPlainTopologicalElementName(indexed)) {
+        return {};
+    }
+    return namedShapeMapsStableToCurrent(stableSource, indexed, indexed) ? indexed : std::string {};
+}
+
 std::optional<TopologicalElementToken> parseTopologicalElementToken(const std::string& indexed)
 {
     const std::string local = localElementName(indexed);
@@ -685,34 +719,44 @@ bool bodyDisplayCompoundStableSubnameHasChildEvidence(
 std::string bodyTipQualifiedStableSubname(const std::string& objectName,
                                           const std::string& indexed,
                                           const std::string& stableSubname,
-                                          const std::optional<BodyTipSubshapeResponseContext>& tipContext)
+                                          const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+                                          const part::NamedShape* stableSource)
 {
     if (!tipContext) {
         return stableSubname;
     }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
     // "Shape.setValue(tipShape)" publishes the Tip feature shape as the Body display shape.
-    // The response subname is always the current Tip child path. Stable names from replacement
-    // Tips also need that Tip path so downstream PropertyLinkSub can safely peel it off.
+    // The response stable name may use the current Tip child path only when ElementMap evidence
+    // proves the Tip owns that local element. Body-only display elements stay Body-local.
     const std::string ownerPrefix = tipContext->owner + ".";
     if (stableSubname.empty()) {
         return {};
     }
-    if (bodyTipStableSubnameShouldUseCurrentOwner(stableSubname, tipContext)) {
+    if (bodyTipStableSubnameCanUseCurrentOwner(indexed, stableSubname, tipContext, stableSource)) {
         return ownerPrefix + indexed;
     }
     const std::string bodyPrefix = objectName + ".";
     if (stableSubname.rfind(ownerPrefix, 0) == 0) {
-        return stableSubname;
+        return namedShapeMapsStableToCurrent(stableSource, stableSubname, indexed) ? stableSubname : std::string {};
     }
     if (stableSubname.rfind(bodyPrefix, 0) == 0) {
-        return ownerPrefix + indexed;
+        const std::string ownerStableSubname = ownerPrefix + indexed;
+        return namedShapeMapsStableToCurrent(stableSource, ownerStableSubname, indexed)
+            ? ownerStableSubname
+            : stableSubname;
     }
     if (stableSubname == indexed && isPlainTopologicalElementName(stableSubname)) {
-        return ownerPrefix + stableSubname;
+        const std::string ownerStableSubname = ownerPrefix + stableSubname;
+        return namedShapeMapsStableToCurrent(stableSource, ownerStableSubname, indexed)
+            ? ownerStableSubname
+            : stableSubname;
     }
     if (tipContext->stablePrefix) {
-        return ownerPrefix + stableSubname;
+        const std::string ownerStableSubname = ownerPrefix + stableSubname;
+        return namedShapeMapsStableToCurrent(stableSource, ownerStableSubname, indexed)
+            ? ownerStableSubname
+            : stableSubname;
     }
     return stableSubname;
 }
@@ -738,7 +782,8 @@ std::string responseSubnameFor(const std::string& indexed,
                                const std::optional<BodyDisplayCompoundResponseContext>& displayContext)
 {
     if (tipContext) {
-        return tipContext->owner + "." + indexed;
+        const std::string ownerSubname = tipContext->owner + "." + indexed;
+        return namedShapeMapsStableToCurrent(namedShape, ownerSubname, indexed) ? ownerSubname : indexed;
     }
     if (const auto displaySubname = bodyDisplayCompoundSubnameFor(indexed, displayContext)) {
         return *displaySubname;
@@ -761,6 +806,17 @@ std::string responseFullSubnameFor(const std::string& objectName,
         return subname;
     }
     return objectPrefix + subname;
+}
+
+std::string responseFullSubnameFor(const std::string& objectName,
+                                   const std::string& indexed,
+                                   const std::string& subname,
+                                   const std::optional<BodyTipSubshapeResponseContext>& tipContext)
+{
+    if (tipContext && !indexed.empty()) {
+        return objectName + "." + tipContext->owner + "." + indexed;
+    }
+    return responseFullSubnameFor(objectName, subname);
 }
 
 void copyStringField(nlohmann::json& target,
@@ -1071,8 +1127,11 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         else if (rawIdentityStatus == "stable_split_fragment") {
             stableSubname = subshape.value("stableSubname", "");
         }
+        if (stableSubname.empty()) {
+            stableSubname = bodyTipBodyLocalStableSubnameFor(indexed, tipContext, stableSource);
+        }
         const std::string downgradedSourceStableSubname =
-            bodyTipStableSubnameShouldUseCurrentOwner(stableSubname, tipContext)
+            bodyTipStableSubnameCanUseCurrentOwner(indexed, stableSubname, tipContext, stableSource)
             ? stableSubname
             : std::string {};
         bool bodyTipDisplayOnlySubname = false;
@@ -1084,7 +1143,7 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             stableSubname.clear();
             bodyTipDisplayOnlySubname = true;
         }
-        stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, tipContext);
+        stableSubname = bodyTipQualifiedStableSubname(objectName, indexed, stableSubname, tipContext, stableSource);
         if (displayContext && stableSubname == indexed && isPlainTopologicalElementName(stableSubname)) {
             stableSubname.clear();
         }
@@ -1113,7 +1172,8 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             {"ShadowSub", nlohmann::json::array()},
             {"ReferenceShadow", nlohmann::json::array()},
         };
-        if (const std::string fullSubname = responseFullSubnameFor(objectName, subname);
+        if (const std::string fullSubname =
+                responseFullSubnameFor(objectName, indexed, subname, tipContext);
             !fullSubname.empty()) {
             responseSubshape["fullSubname"] = fullSubname;
         }

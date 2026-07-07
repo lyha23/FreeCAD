@@ -89,6 +89,21 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(diagnostic["severity"], "error")
             self.assertEqual(diagnostic["stage"], "response")
 
+    def assert_response_stable_subnames_unique_by_kind(self, result: dict) -> None:
+        seen: dict[tuple[str, str], str] = {}
+        for subshape in result["subshapes"]:
+            stable_subname = subshape.get("stableSubname", "")
+            if not stable_subname:
+                continue
+            key = (subshape["kind"], stable_subname)
+            previous = seen.get(key)
+            self.assertIsNone(
+                previous,
+                f"{result['object']} publishes duplicate {subshape['kind']} "
+                f"stableSubname {stable_subname} for {previous}, {subshape['indexed']}",
+            )
+            seen[key] = subshape["indexed"]
+
     def assert_edge_identity_contract(self, result: dict, object_name: str) -> None:
         body = next(item for item in result["results"] if item["object"] == object_name)
         edge_subshapes = {
@@ -295,14 +310,10 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 item["Properties"]["Tip"]["value"] = "Revolution"
 
         body_only_result = self.run_response_payload(body_only_payload)
-        self.assert_duplicate_stable_diagnostics(
-            body_only_result,
-            "RevolutionBody",
-            {
-                "Revolution.Edge2": {"Edge1", "Edge2"},
-                "Revolution.Edge5": {"Edge5", "Edge6"},
-            },
-        )
+        self.assertEqual(body_only_result["diagnostics"], [])
+        self.assertEqual([item["object"] for item in body_only_result["results"]], ["RevolutionBody"])
+        self.assertIsNotNone(body_only_result["results"][0]["mesh"])
+        self.assert_response_stable_subnames_unique_by_kind(body_only_result["results"][0])
 
         result = self.run_response_payload(payload)
 
@@ -326,14 +337,10 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 item["Properties"]["Tip"]["value"] = "Revolution"
 
         body_only_result = self.run_response_payload(body_only_payload)
-        self.assert_duplicate_stable_diagnostics(
-            body_only_result,
-            "RevolutionBody",
-            {
-                "Revolution.Edge3": {"Edge3", "Edge4"},
-                "Revolution.Edge5": {"Edge19", "Edge5"},
-            },
-        )
+        self.assertEqual(body_only_result["diagnostics"], [])
+        self.assertEqual([item["object"] for item in body_only_result["results"]], ["RevolutionBody"])
+        self.assertIsNotNone(body_only_result["results"][0]["mesh"])
+        self.assert_response_stable_subnames_unique_by_kind(body_only_result["results"][0])
 
         result = self.run_response_payload(payload)
 
@@ -341,7 +348,7 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
         self.assertIsNotNone(next(item for item in result["results"] if item["object"] == "RevolutionBody")["mesh"])
 
-    def test_p6_revolution_body_duplicate_face_stable_is_structured_diagnostic(self) -> None:
+    def test_p6_revolution_body_does_not_publish_duplicate_vertex_stable(self) -> None:
         payload = self.p6_payload("revolution-pad2-stable-sublist-pollution")
         payload["Objects"] = payload["Objects"][:4] + [
             {
@@ -369,11 +376,47 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
         result = self.run_response_payload(payload)
 
-        self.assert_duplicate_stable_diagnostics(
-            result,
-            "RevolutionBody",
-            {"Revolution.Vertex1": {"Vertex1", "Vertex2"}},
-        )
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
+        self.assertIsNotNone(result["results"][0]["mesh"])
+        self.assert_response_stable_subnames_unique_by_kind(result["results"][0])
+
+    def test_p6_revolution_body_display_face_without_tip_local_evidence_uses_body_local_stable_subname(self) -> None:
+        payload = self.p6_payload("body-pad3body-duplicate-stable-subname")
+        payload["Objects"] = payload["Objects"][:3] + [
+            {
+                "Name": "RevolutionBody",
+                "ID": 8,
+                "TypeId": "PartDesign::Body",
+                "Properties": {
+                    "Group": {
+                        "PropertyType": "App::PropertyLinkList",
+                        "values": [
+                            "草图 1:57:56 PM",
+                            "Pad",
+                            "Revolution",
+                        ],
+                    },
+                    "Tip": {
+                        "PropertyType": "App::PropertyLink",
+                        "value": "Revolution",
+                    },
+                },
+            }
+        ]
+        payload["recompute"] = {"objs": ["RevolutionBody"]}
+
+        result = self.run_response_payload(payload)
+
+        self.assertEqual(result["diagnostics"], [])
+        self.assertEqual([item["object"] for item in result["results"]], ["RevolutionBody"])
+        body = result["results"][0]
+        self.assert_response_stable_subnames_unique_by_kind(body)
+        face9 = next(item for item in body["subshapes"] if item["indexed"] == "Face9")
+        self.assertEqual(face9["subname"], "Face9")
+        self.assertEqual(face9["fullSubname"], "RevolutionBody.Revolution.Face9")
+        self.assertEqual(face9["stableSubname"], "Face9")
+        self.assertNotEqual(face9.get("identityStatus"), "body_display_only")
 
     def test_p6_profile_resolver_rejects_revolution_full_path_pick_without_local_face(self) -> None:
         payload = self.p6_payload("revolution-pad2-stable-sublist-pollution")

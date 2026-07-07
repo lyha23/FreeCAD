@@ -338,3 +338,30 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 
  '/Users/li/Chili3DProject/cad-web-background/docs/BUG处理/7-7-15-59-【待实现】Revolution过度发布Body作用域Face导致下游引用失效.md' 你再看一下这个问题, 我希望按 FreeCAD 的代码实现和
   FreeCADCmd结果, 作为基准, 来实现我的'/Users/li/Chili3DProject/cad-web-background/cad-core', 该怎么实现呢
+
+---
+
+ 用法：
+
+  tools/build_freecad_macos_homebrew.sh
+
+  只编 FreeCADCmd：
+
+  tools/build_freecad_macos_homebrew.sh --target FreeCADMainCmd
+
+  只重新配置，不编译：
+
+  tools/build_freecad_macos_homebrew.sh --configure-only
+
+  缓存乱了就这样：
+
+  tools/build_freecad_macos_homebrew.sh --clean-cache
+
+  脚本默认做这些事：
+
+  - 使用 build/relwithdebinfo
+  - 使用 Homebrew Python：/opt/homebrew/bin/python3
+  - 固定 ICU 到 icu4c@78
+  - 固定 MEDFile 到 med-file@4.1.1_py312
+  - 修复 Homebrew PySide/Shiboken 的兼容 symlink
+  - 默认 BUILD_BIM=OFF，绕过 lark 依赖

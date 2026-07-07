@@ -637,9 +637,17 @@ bool isLocalTopologicalElementName(const std::string& value)
     return value.find('.') == std::string::npos && part::parseSubshapeName(value).has_value();
 }
 
-void addDirectTipSubshapeAliases(part::NamedShape& namedShape, const std::string& tipOwner)
+bool directTipAliasHasTipElementEvidence(const part::NamedShape& tipNamedShape,
+                                         const std::string& currentName)
 {
-    if (tipOwner.empty()) {
+    return tipNamedShape.elements.find(currentName) != tipNamedShape.elements.end();
+}
+
+void addDirectTipSubshapeAliases(part::NamedShape& namedShape,
+                                 const std::string& tipOwner,
+                                 const part::NamedShape* tipNamedShape)
+{
+    if (tipOwner.empty() || tipNamedShape == nullptr) {
         return;
     }
 
@@ -654,6 +662,11 @@ void addDirectTipSubshapeAliases(part::NamedShape& namedShape, const std::string
         // Body::getSubObject() delegates child paths like Tip.VertexN through BodyBase.
         // The direct Tip alias is therefore the current displayed child path, not an older
         // maker-history stableName that may now point at a different current VertexN.
+        // Only publish it when the Tip feature has that local element name; cumulative Body-only
+        // FaceN/EdgeN/VertexN display paths are not stable feature-local references.
+        if (!directTipAliasHasTipElementEvidence(*tipNamedShape, currentName)) {
+            continue;
+        }
         const std::string alias = tipPrefix + currentName;
         aliases[alias] = currentName;
     }
@@ -1304,8 +1317,15 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
     const bool directTipSubshapeStablePrefix = directTipSubshapeOwner
         && (appliedFeatureCount > 1U
             || (!appliedReplacementFeatures.empty() && appliedReplacementFeatures.back() == resolvedStopFeature));
+    const part::NamedShape* directTipNamedShape = nullptr;
+    if (directTipSubshapeOwner) {
+        const auto tipNamedShapeIt = context.namedShapes.find(*directTipSubshapeOwner);
+        if (tipNamedShapeIt != context.namedShapes.end()) {
+            directTipNamedShape = &tipNamedShapeIt->second;
+        }
+    }
     if (bodyNamedShape && directTipSubshapeOwner) {
-        addDirectTipSubshapeAliases(*bodyNamedShape, *directTipSubshapeOwner);
+        addDirectTipSubshapeAliases(*bodyNamedShape, *directTipSubshapeOwner, directTipNamedShape);
     }
 
     return BodyTopoShapeResult {

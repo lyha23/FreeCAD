@@ -849,14 +849,16 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p7_face_pad_after_fillet_rejects_revolution_body_display_profile(self) -> None:
         result = self.run_recompute("partdesign-face-pad-after-fillet-fuse", "p7")
-        diagnostics = result["diagnostics"]
 
-        self.assertEqual([item["code"] for item in diagnostics], ["body_display_subname_not_feature_local"])
-        self.assertEqual(diagnostics[0]["object"], "Pad2")
-        self.assertEqual(diagnostics[0]["property"], "Profile")
-        self.assertEqual(diagnostics[0]["target"], "Revolution")
-        self.assertEqual(diagnostics[0]["subname"], "Face9")
-        self.assertIn("RevolutionBody.Revolution.Face9", diagnostics[0]["message"])
+        diagnostic = next(
+            item for item in result["diagnostics"] if item["code"] == "body_display_subname_not_feature_local"
+        )
+        self.assertEqual(diagnostic["object"], "Pad2")
+        self.assertEqual(diagnostic["property"], "Profile")
+        self.assertEqual(diagnostic["target"], "Revolution")
+        self.assertEqual(diagnostic["subname"], "Face9")
+        self.assertIn("RevolutionBody.Revolution.Face9", diagnostic["message"])
+        self.assertIn("Revolution.Shape has no local Face9", diagnostic["message"])
         self.assertEqual(result["objects"]["Pad2"]["status"], "error")
         self.assertEqual(result["objects"]["Fillet"]["status"], "skipped")
         self.assertEqual(result["objects"]["PadPreview"]["status"], "skipped")
@@ -1723,7 +1725,14 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(vertex_subshapes["Vertex2"]["stableSubname"], "RevolvePreview.Vertex2")
         self.assertNotIn("sourceStableSubname", vertex_subshapes["Vertex2"])
         for subshape in body["subshapes"]:
-            self.assertTrue(subshape["subname"].startswith("RevolvePreview."))
+            if subshape["subname"].startswith("RevolvePreview."):
+                continue
+            self.assertEqual(subshape["subname"], subshape["indexed"])
+            self.assertNotEqual(subshape["stableSubname"], "")
+            self.assertEqual(
+                subshape["fullSubname"],
+                f"RevolvePreviewBody.RevolvePreview.{subshape['indexed']}",
+            )
 
     def test_c5m1_revolve_preview_prefers_stable_axis_over_sketch_internaledge_handle(self) -> None:
         fixture_path = ROOT / "fixtures" / "c5m1" / "revolve-preview-body-render-normal.json"

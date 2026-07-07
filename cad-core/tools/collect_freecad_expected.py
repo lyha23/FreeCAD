@@ -1228,6 +1228,94 @@ def shape_summary(shape: Any) -> dict:
     return summary
 
 
+def shape_has_indexed_element(shape: Any | None, indexed: str) -> bool:
+    if shape is None:
+        return False
+    try:
+        if shape.isNull():
+            return False
+    except Exception:
+        pass
+    try:
+        shape.getElement(indexed)
+        return True
+    except Exception:
+        return False
+
+
+def shape_mapped_subname(shape: Any | None, indexed: str) -> str:
+    if shape is None:
+        return ""
+    try:
+        if shape.isNull():
+            return ""
+    except Exception:
+        pass
+    try:
+        mapped = shape.getElementMappedName(indexed)
+    except Exception:
+        return ""
+    if not isinstance(mapped, str) or not mapped:
+        return ""
+    return mapped
+
+
+def object_tip(obj: Any) -> Any | None:
+    if getattr(obj, "TypeId", "") != "PartDesign::Body":
+        return None
+    try:
+        return obj.Tip
+    except Exception:
+        return None
+
+
+def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
+    entries: list[dict[str, Any]] = []
+    owner = str(obj.Name)
+    tip = object_tip(obj)
+    tip_name = str(getattr(tip, "Name", "")) if tip is not None else ""
+    tip_shape = getattr(tip, "Shape", None) if tip is not None else None
+
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ComplexGeoDataPyImp.cpp
+    # ::getElementMappedName() exposes ComplexGeoData::getElementName(...), and
+    # /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::execute()
+    # publishes the Tip shape as Body.Shape while ::getSubObject() delegates child paths.
+    # The collector therefore publishes current FaceN/EdgeN names as subname only, and
+    # publishes stableSubname only when FreeCAD returns a mapped element identity.
+    for kind, attr, prefix in (
+        ("Face", "Faces", "Face"),
+        ("Edge", "Edges", "Edge"),
+        ("Vertex", "Vertexes", "Vertex"),
+    ):
+        for index, _ in enumerate(getattr(shape, attr, []), start=1):
+            indexed = f"{prefix}{index}"
+            subname = indexed
+            stable_subname = shape_mapped_subname(shape, indexed)
+            full_subname = f"{owner}.{indexed}"
+
+            if tip_name:
+                full_subname = f"{owner}.{tip_name}.{indexed}"
+                tip_local_subname = f"{tip_name}.{indexed}"
+                if shape_has_indexed_element(tip_shape, indexed):
+                    tip_stable_subname = shape_mapped_subname(tip_shape, indexed)
+                    subname = tip_local_subname
+                    stable_subname = f"{tip_name}.{tip_stable_subname}" if tip_stable_subname else ""
+
+            entries.append(
+                {
+                    "id": f"{owner}:{indexed}",
+                    "kind": kind,
+                    "indexed": indexed,
+                    "subname": subname,
+                    "stableSubname": stable_subname,
+                    "fullSubname": full_subname,
+                    "ShadowSub": [],
+                    "ReferenceShadow": [],
+                }
+            )
+    return entries
+
+
 def has_part_filled_face_helper(fixture: dict) -> bool:
     return any(
         isinstance(spec, dict) and spec.get("TypeId") == "Part::FilledFace"
@@ -5007,7 +5095,9 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         raise UnsupportedFixture(f"target object {obj.Name} has no shape")
     if type_id == "Sketcher::SketchObject":
         return sketch_summary(obj)
-    return shape_summary(shape)
+    payload = shape_summary(shape)
+    payload["subshapes"] = subshape_response_entries(obj, shape)
+    return payload
 
 
 def mesh_import_summary(obj: Any) -> dict:
@@ -5608,6 +5698,8 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
         errors.append("length")
     if "topology_counts" in existing and existing["topology_counts"] != generated["topology_counts"]:
         errors.append("topology_counts")
+    if "subshapes" in existing and existing["subshapes"] != generated.get("subshapes"):
+        errors.append("subshapes")
     if "sketch_external" in existing:
         generated_external = generated.get("sketch_external", {})
         for key, expected_value in existing["sketch_external"].items():
