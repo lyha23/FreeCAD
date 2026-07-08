@@ -12,7 +12,9 @@ C13-M2 S4 在实现 `mappedName.raw/canonical` codec 时被真实 blocker 卡住
 - C13-M3 S1 已关闭：`NamedShape` 现在有 request-local `mapped_name_provenance` JSON 出口，按 entry/stable element name 承载 tag/sourceTag/op/raw/canonical/status 接口；runtime 发布仍在 S4。
 - C13-M3 S2 已关闭：`cad_core::topo` 提供 FreeCAD mapped-name codec/helper，可从完整 `MappedNameProvenance` source/tag/op/type evidence 编码 raw/canonical，并在缺 evidence 时返回 missing/blocker status；runtime 发布仍在 S4。
 - C13-M3 S3 已关闭：shared Part/PartDesign maker-history 和 preserved-source alias 写入 source-backed producer evidence；focused debug recompute 已覆盖 p2 `Body`、c4m6 `Body`、p6 Body-side UpToFace source path。p6 `ProbePad` 的 runtime publication 仍留给 S4。
-- runtime 仍可继续发布 C13-M1 `topoNamingState`，但不能把 stable token 当作 FreeCAD raw mapped name。
+- C13-M3 S4 已有部分 runtime 消费实现：`topoNamingState` 只发布 source-backed `mapped_name_provenance`，p5 `Sketch` 与 p8 `BoxLink` indexed-only no-fake-raw 边界已普通通过。
+- C13-M3 S4 仍保持 open：p2/c4m6 的 S3 ledger 当前只有 request-local source-backed key（如 `Pad.Edge1;CUT...`、`Sketch.Edge1;XTR...`），runtime 会跳过这类没有 FreeCAD `#` encoded element token 的 evidence，不能发布 expected FreeCAD `#...` raw key；p6 `ProbePad` 仍没有 object-local producer ledger。
+- runtime 仍可继续发布 C13-M1 `topoNamingState`，且不再把 stable token 当作 FreeCAD raw mapped name。
 - C13-M3 不替代 C13-M2；它是 C13-M2 S4 的前置补账本批次。
 
 ## S0 关闭结果
@@ -57,7 +59,7 @@ C13-M2 S4 在实现 `mappedName.raw/canonical` codec 时被真实 blocker 卡住
 - S1：已关闭，落地 producer ledger 接口、tag/op/provenance 数据模型。
 - S2：已关闭，落地 FreeCAD-equivalent encode helper 与 request-local tag/op evidence 编码边界。
 - S3：已关闭，接入 PartDesign focused producer 链路，覆盖 p2/c4m6/p6 producer evidence。
-- S4：runtime publisher 消费 ledger，p5/p8 no-fake-raw 边界保持。
+- S4：runtime publisher 已部分消费 ledger，p5/p8 no-fake-raw 边界保持；p2/c4m6/p6 parity blocker 仍 open，队列不关闭。
 - S5：发布闸门，回流 C13-M2 S4 或更新 blocker。
 
 ## 验收入口

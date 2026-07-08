@@ -234,15 +234,13 @@ class TopoNamingStateResponseTest(unittest.TestCase):
             "ProbePad",
         )
 
-    # C13-M2 S3 redline: remove expectedFailure when indexed-only objects stop
-    # publishing display/stable-token entries as fake raw mapped names.
-    @unittest.expectedFailure
+    # C13-M3 S4 partial close: indexed-only objects must not publish
+    # display/stable-token entries as fake raw mapped names.
     def test_c13m2_p5_sketch_indexed_only_boundary_does_not_publish_fake_raw(self) -> None:
         self.assert_c13m2_indexed_only_boundary_case("p5", "sketch-internal-face", "Sketch")
 
-    # C13-M2 S3 redline: remove expectedFailure when indexed-only objects stop
-    # publishing display/stable-token entries as fake raw mapped names.
-    @unittest.expectedFailure
+    # C13-M3 S4 partial close: indexed-only objects must not publish
+    # display/stable-token entries as fake raw mapped names.
     def test_c13m2_p8_app_link_indexed_only_boundary_does_not_publish_fake_raw(self) -> None:
         self.assert_c13m2_indexed_only_boundary_case("p8", "app-link-box-face", "BoxLink")
 

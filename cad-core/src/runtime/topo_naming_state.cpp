@@ -84,7 +84,11 @@ nlohmann::json fallbackObjectHashProjection(const std::string& objectName,
 {
     nlohmann::json projection = {{"Name", objectName}};
     if (namedShape != nullptr) {
-        projection["namedShape"] = part::namedShapeToJson(*namedShape);
+        nlohmann::json namedShapeProjection = part::namedShapeToJson(*namedShape);
+        // mapped_name_provenance can include request-local producer tags before S4 closes.
+        // Keep fallback object hashes stable across CLI/C API/worker/wasm channels.
+        namedShapeProjection.erase("mapped_name_provenance");
+        projection["namedShape"] = std::move(namedShapeProjection);
     }
     return projection;
 }
@@ -252,6 +256,37 @@ bool indexedOnlyAlias(const std::string& objectName,
     return stableName == currentName || stableName == objectName + "." + currentName;
 }
 
+bool hasFreeCadEncodedElementToken(const std::string& rawMappedName)
+{
+    const std::size_t postfix = rawMappedName.find(';');
+    const std::string data = rawMappedName.substr(0, postfix);
+    return data.find('#') != std::string::npos;
+}
+
+const part::MappedNameProvenance* sourceBackedMappedNameProvenance(
+    const part::NamedShape& namedShape,
+    const std::string& entryKey
+)
+{
+    // FreeCAD MappedName raw bytes come from ElementMap producer evidence, not from display or
+    // stable tokens. S4 only publishes provenance that already carries an encoded "#" element
+    // token from the part/topo ledger.
+    const auto provenanceIt = namedShape.mappedNameProvenance.find(entryKey);
+    if (provenanceIt == namedShape.mappedNameProvenance.end()) {
+        return nullptr;
+    }
+    const part::MappedNameProvenance& provenance = provenanceIt->second;
+    if (provenance.status != part::MappedNameProvenanceStatus::SourceBacked
+        || provenance.rawMappedName.empty()
+        || provenance.canonicalMappedName.empty()) {
+        return nullptr;
+    }
+    if (!hasFreeCadEncodedElementToken(provenance.rawMappedName)) {
+        return nullptr;
+    }
+    return &provenance;
+}
+
 nlohmann::json elementMapEntriesJson(
     const std::string& objectName,
     const part::NamedShape& namedShape,
@@ -269,6 +304,11 @@ nlohmann::json elementMapEntriesJson(
         if (currentIt == currentSubshapes.end()) {
             continue;
         }
+        const part::MappedNameProvenance* provenance =
+            sourceBackedMappedNameProvenance(namedShape, stableName);
+        if (provenance == nullptr) {
+            continue;
+        }
 
         const part::MapperHistoryEndpoint source =
             endpointFromElementName(namedShape.owner, stableName);
@@ -277,11 +317,15 @@ nlohmann::json elementMapEntriesJson(
             {"source", "element_map"},
             {"mapperHistoryIndexes", matchingMapperHistoryIndexes(mapperHistory, source, target)},
         };
-        entries[stableName] = {
+        entries[provenance->rawMappedName] = {
             {"target", {{"object", objectName}, {"subname", currentIt->second.subname}}},
             {"shapeKind", currentIt->second.shapeKind},
             {"source", {{"object", source.object}, {"subname", source.subname}}},
-            {"mappedName", {{"raw", stableName}, {"canonical", stableName}}},
+            {"mappedName",
+             {
+                 {"raw", provenance->rawMappedName},
+                 {"canonical", provenance->canonicalMappedName},
+             }},
             {"recoverability", recoverabilityForEntry(mapperHistory, source, target)},
             {"evidence", std::move(evidence)},
         };
@@ -328,6 +372,9 @@ nlohmann::json objectTopoStateJson(
     nlohmann::json entries = nlohmann::json::object();
     if (namedShape != nullptr) {
         entries = elementMapEntriesJson(objectName, *namedShape, subshapes, mapperHistory);
+    }
+    if (entries.empty()) {
+        elementMapStatus = "indexed_only";
     }
 
     nlohmann::json objectHashProjection;
