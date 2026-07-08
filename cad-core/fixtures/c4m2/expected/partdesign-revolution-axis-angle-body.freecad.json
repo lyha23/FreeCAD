@@ -26,10 +26,10 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "Revolution.#17:4;:H-1379,F",
+          "rawFreecadMappedName": "Revolution.#17:4;:H-ff7,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "Revolution.#17:4;:H-1379,F",
-          "subname": "Revolution.Face1"
+          "stableSubname": "Revolution.#17:4;:H-ff7,F",
+          "subname": "Face1"
         },
         {
           "ReferenceShadow": [],
@@ -40,10 +40,10 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "Revolution.#19:2;:H-1379,F",
+          "rawFreecadMappedName": "Revolution.#19:2;:H-ff7,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "Revolution.#19:2;:H-1379,F",
-          "subname": "Revolution.Face2"
+          "stableSubname": "Revolution.#19:2;:H-ff7,F",
+          "subname": "Face2"
         },
         {
           "ReferenceShadow": [],
@@ -54,10 +54,10 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "Revolution.#1b:6;:H-1379,F",
+          "rawFreecadMappedName": "Revolution.#1b:6;:H-ff7,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "Revolution.#1b:6;:H-1379,F",
-          "subname": "Revolution.Face3"
+          "stableSubname": "Revolution.#1b:6;:H-ff7,F",
+          "subname": "Face3"
         },
         {
           "ReferenceShadow": [],
@@ -68,10 +68,10 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "Revolution.#19:4;:H-1379,F",
+          "rawFreecadMappedName": "Revolution.#19:4;:H-ff7,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "Revolution.#19:4;:H-1379,F",
-          "subname": "Revolution.Face4"
+          "stableSubname": "Revolution.#19:4;:H-ff7,F",
+          "subname": "Face4"
         },
         {
           "ReferenceShadow": [],
@@ -82,10 +82,10 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "Revolution.#f:2;:G;RVL;:H1378:7,E;:H-1379,E",
+          "rawFreecadMappedName": "Revolution.#f:2;:G;RVL;:Hff6:7,E;:H-ff7,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "Revolution.#f:2;:G;RVL;:H1378:7,E;:H-1379,E",
-          "subname": "Revolution.Edge1"
+          "stableSubname": "Revolution.#f:2;:G;RVL;:Hff6:7,E;:H-ff7,E",
+          "subname": "Edge1"
         },
         {
           "ReferenceShadow": [],
@@ -96,10 +96,10 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "Revolution.#10:4;:G;RVL;:H1378:7,E;:H-1379,E",
+          "rawFreecadMappedName": "Revolution.#10:4;:G;RVL;:Hff6:7,E;:H-ff7,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "Revolution.#10:4;:G;RVL;:H1378:7,E;:H-1379,E",
-          "subname": "Revolution.Edge2"
+          "stableSubname": "Revolution.#10:4;:G;RVL;:Hff6:7,E;:H-ff7,E",
+          "subname": "Edge2"
         },
         {
           "ReferenceShadow": [],
@@ -110,10 +110,10 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "Revolution.#11:6;:G;RVL;:H1378:7,E;:H-1379,E",
+          "rawFreecadMappedName": "Revolution.#11:6;:G;RVL;:Hff6:7,E;:H-ff7,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "Revolution.#11:6;:G;RVL;:H1378:7,E;:H-1379,E",
-          "subname": "Revolution.Edge3"
+          "stableSubname": "Revolution.#11:6;:G;RVL;:Hff6:7,E;:H-ff7,E",
+          "subname": "Edge3"
         },
         {
           "ReferenceShadow": [],
@@ -124,10 +124,10 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "Revolution.#b:2;:H1378,E;:H-1379,E",
+          "rawFreecadMappedName": "Revolution.#b:2;:Hff6,E;:H-ff7,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "Revolution.#b:2;:H1378,E;:H-1379,E",
-          "subname": "Revolution.Edge4"
+          "stableSubname": "Revolution.#b:2;:Hff6,E;:H-ff7,E",
+          "subname": "Edge4"
         },
         {
           "ReferenceShadow": [],
@@ -138,10 +138,10 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "Revolution.#12:8;:G;RVL;:H1378:7,E;:H-1379,E",
+          "rawFreecadMappedName": "Revolution.#12:8;:G;RVL;:Hff6:7,E;:H-ff7,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "Revolution.#12:8;:G;RVL;:H1378:7,E;:H-1379,E",
-          "subname": "Revolution.Edge5"
+          "stableSubname": "Revolution.#12:8;:G;RVL;:Hff6:7,E;:H-ff7,E",
+          "subname": "Edge5"
         },
         {
           "ReferenceShadow": [],
@@ -152,10 +152,10 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "Revolution.#b:4;:H1378,E;:H-1379,E",
+          "rawFreecadMappedName": "Revolution.#b:4;:Hff6,E;:H-ff7,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "Revolution.#b:4;:H1378,E;:H-1379,E",
-          "subname": "Revolution.Edge6"
+          "stableSubname": "Revolution.#b:4;:Hff6,E;:H-ff7,E",
+          "subname": "Edge6"
         },
         {
           "ReferenceShadow": [],
@@ -166,10 +166,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Revolution.#f;:H-1379,V",
+          "rawFreecadMappedName": "Revolution.#f;:H-ff7,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "Revolution.#f;:H-1379,V",
-          "subname": "Revolution.Vertex1"
+          "stableSubname": "Revolution.#f;:H-ff7,V",
+          "subname": "Vertex1"
         },
         {
           "ReferenceShadow": [],
@@ -180,10 +180,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Revolution.#10;:H-1379,V",
+          "rawFreecadMappedName": "Revolution.#10;:H-ff7,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "Revolution.#10;:H-1379,V",
-          "subname": "Revolution.Vertex2"
+          "stableSubname": "Revolution.#10;:H-ff7,V",
+          "subname": "Vertex2"
         },
         {
           "ReferenceShadow": [],
@@ -194,10 +194,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Revolution.#11;:H-1379,V",
+          "rawFreecadMappedName": "Revolution.#11;:H-ff7,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "Revolution.#11;:H-1379,V",
-          "subname": "Revolution.Vertex3"
+          "stableSubname": "Revolution.#11;:H-ff7,V",
+          "subname": "Vertex3"
         },
         {
           "ReferenceShadow": [],
@@ -208,10 +208,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Revolution.#12;:H-1379,V",
+          "rawFreecadMappedName": "Revolution.#12;:H-ff7,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "Revolution.#12;:H-1379,V",
-          "subname": "Revolution.Vertex4"
+          "stableSubname": "Revolution.#12;:H-ff7,V",
+          "subname": "Vertex4"
         }
       ],
       "topology_counts": {
@@ -230,7 +230,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "Revolution.#10:4;:G;RVL;:H1378:7,E;:H-1379,E": {
+            "Revolution.#10:4;:G;RVL;:Hff6:7,E;:H-ff7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -238,7 +238,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#10:4;:G;RVL;:H*:*,E;:H*,E",
-                "raw": "Revolution.#10:4;:G;RVL;:H1378:7,E;:H-1379,E"
+                "raw": "Revolution.#10:4;:G;RVL;:Hff6:7,E;:H-ff7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -248,10 +248,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Edge2"
+                "subname": "Edge2"
               }
             },
-            "Revolution.#10;:H-1379,V": {
+            "Revolution.#10;:H-ff7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -259,7 +259,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#10;:H*,V",
-                "raw": "Revolution.#10;:H-1379,V"
+                "raw": "Revolution.#10;:H-ff7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -269,10 +269,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Vertex2"
+                "subname": "Vertex2"
               }
             },
-            "Revolution.#11:6;:G;RVL;:H1378:7,E;:H-1379,E": {
+            "Revolution.#11:6;:G;RVL;:Hff6:7,E;:H-ff7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -280,7 +280,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#11:6;:G;RVL;:H*:*,E;:H*,E",
-                "raw": "Revolution.#11:6;:G;RVL;:H1378:7,E;:H-1379,E"
+                "raw": "Revolution.#11:6;:G;RVL;:Hff6:7,E;:H-ff7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -290,10 +290,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Edge3"
+                "subname": "Edge3"
               }
             },
-            "Revolution.#11;:H-1379,V": {
+            "Revolution.#11;:H-ff7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -301,7 +301,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#11;:H*,V",
-                "raw": "Revolution.#11;:H-1379,V"
+                "raw": "Revolution.#11;:H-ff7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -311,10 +311,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Vertex3"
+                "subname": "Vertex3"
               }
             },
-            "Revolution.#12:8;:G;RVL;:H1378:7,E;:H-1379,E": {
+            "Revolution.#12:8;:G;RVL;:Hff6:7,E;:H-ff7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -322,7 +322,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#12:8;:G;RVL;:H*:*,E;:H*,E",
-                "raw": "Revolution.#12:8;:G;RVL;:H1378:7,E;:H-1379,E"
+                "raw": "Revolution.#12:8;:G;RVL;:Hff6:7,E;:H-ff7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -332,10 +332,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Edge5"
+                "subname": "Edge5"
               }
             },
-            "Revolution.#12;:H-1379,V": {
+            "Revolution.#12;:H-ff7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -343,7 +343,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#12;:H*,V",
-                "raw": "Revolution.#12;:H-1379,V"
+                "raw": "Revolution.#12;:H-ff7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -353,10 +353,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Vertex4"
+                "subname": "Vertex4"
               }
             },
-            "Revolution.#17:4;:H-1379,F": {
+            "Revolution.#17:4;:H-ff7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -364,7 +364,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#17:4;:H*,F",
-                "raw": "Revolution.#17:4;:H-1379,F"
+                "raw": "Revolution.#17:4;:H-ff7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -374,10 +374,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Face1"
+                "subname": "Face1"
               }
             },
-            "Revolution.#19:2;:H-1379,F": {
+            "Revolution.#19:2;:H-ff7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -385,7 +385,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#19:2;:H*,F",
-                "raw": "Revolution.#19:2;:H-1379,F"
+                "raw": "Revolution.#19:2;:H-ff7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -395,10 +395,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Face2"
+                "subname": "Face2"
               }
             },
-            "Revolution.#19:4;:H-1379,F": {
+            "Revolution.#19:4;:H-ff7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -406,7 +406,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#19:4;:H*,F",
-                "raw": "Revolution.#19:4;:H-1379,F"
+                "raw": "Revolution.#19:4;:H-ff7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -416,10 +416,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Face4"
+                "subname": "Face4"
               }
             },
-            "Revolution.#1b:6;:H-1379,F": {
+            "Revolution.#1b:6;:H-ff7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -427,7 +427,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#1b:6;:H*,F",
-                "raw": "Revolution.#1b:6;:H-1379,F"
+                "raw": "Revolution.#1b:6;:H-ff7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -437,10 +437,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Face3"
+                "subname": "Face3"
               }
             },
-            "Revolution.#b:2;:H1378,E;:H-1379,E": {
+            "Revolution.#b:2;:Hff6,E;:H-ff7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -448,7 +448,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#b:2;:H*,E;:H*,E",
-                "raw": "Revolution.#b:2;:H1378,E;:H-1379,E"
+                "raw": "Revolution.#b:2;:Hff6,E;:H-ff7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -458,10 +458,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Edge4"
+                "subname": "Edge4"
               }
             },
-            "Revolution.#b:4;:H1378,E;:H-1379,E": {
+            "Revolution.#b:4;:Hff6,E;:H-ff7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -469,7 +469,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#b:4;:H*,E;:H*,E",
-                "raw": "Revolution.#b:4;:H1378,E;:H-1379,E"
+                "raw": "Revolution.#b:4;:Hff6,E;:H-ff7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -479,10 +479,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Edge6"
+                "subname": "Edge6"
               }
             },
-            "Revolution.#f:2;:G;RVL;:H1378:7,E;:H-1379,E": {
+            "Revolution.#f:2;:G;RVL;:Hff6:7,E;:H-ff7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -490,7 +490,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#f:2;:G;RVL;:H*:*,E;:H*,E",
-                "raw": "Revolution.#f:2;:G;RVL;:H1378:7,E;:H-1379,E"
+                "raw": "Revolution.#f:2;:G;RVL;:Hff6:7,E;:H-ff7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -500,10 +500,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Edge1"
+                "subname": "Edge1"
               }
             },
-            "Revolution.#f;:H-1379,V": {
+            "Revolution.#f;:H-ff7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -511,7 +511,7 @@
               },
               "mappedName": {
                 "canonical": "Revolution.#f;:H*,V",
-                "raw": "Revolution.#f;:H-1379,V"
+                "raw": "Revolution.#f;:H-ff7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -521,7 +521,7 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Revolution.Vertex1"
+                "subname": "Vertex1"
               }
             }
           },
@@ -534,100 +534,100 @@
           "Edge1": {
             "canonicalFreecadMappedName": "Revolution.#f:2;:G;RVL;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#f:2;:G;RVL;:H1378:7,E;:H-1379,E",
+            "rawFreecadMappedName": "Revolution.#f:2;:G;RVL;:Hff6:7,E;:H-ff7,E",
             "resolvedIndexed": "Edge1",
-            "subname": "Revolution.Edge1"
+            "subname": "Edge1"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "Revolution.#10:4;:G;RVL;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#10:4;:G;RVL;:H1378:7,E;:H-1379,E",
+            "rawFreecadMappedName": "Revolution.#10:4;:G;RVL;:Hff6:7,E;:H-ff7,E",
             "resolvedIndexed": "Edge2",
-            "subname": "Revolution.Edge2"
+            "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "Revolution.#11:6;:G;RVL;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#11:6;:G;RVL;:H1378:7,E;:H-1379,E",
+            "rawFreecadMappedName": "Revolution.#11:6;:G;RVL;:Hff6:7,E;:H-ff7,E",
             "resolvedIndexed": "Edge3",
-            "subname": "Revolution.Edge3"
+            "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "Revolution.#b:2;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#b:2;:H1378,E;:H-1379,E",
+            "rawFreecadMappedName": "Revolution.#b:2;:Hff6,E;:H-ff7,E",
             "resolvedIndexed": "Edge4",
-            "subname": "Revolution.Edge4"
+            "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "Revolution.#12:8;:G;RVL;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#12:8;:G;RVL;:H1378:7,E;:H-1379,E",
+            "rawFreecadMappedName": "Revolution.#12:8;:G;RVL;:Hff6:7,E;:H-ff7,E",
             "resolvedIndexed": "Edge5",
-            "subname": "Revolution.Edge5"
+            "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "Revolution.#b:4;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#b:4;:H1378,E;:H-1379,E",
+            "rawFreecadMappedName": "Revolution.#b:4;:Hff6,E;:H-ff7,E",
             "resolvedIndexed": "Edge6",
-            "subname": "Revolution.Edge6"
+            "subname": "Edge6"
           },
           "Face1": {
             "canonicalFreecadMappedName": "Revolution.#17:4;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#17:4;:H-1379,F",
+            "rawFreecadMappedName": "Revolution.#17:4;:H-ff7,F",
             "resolvedIndexed": "Face1",
-            "subname": "Revolution.Face1"
+            "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "Revolution.#19:2;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#19:2;:H-1379,F",
+            "rawFreecadMappedName": "Revolution.#19:2;:H-ff7,F",
             "resolvedIndexed": "Face2",
-            "subname": "Revolution.Face2"
+            "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "Revolution.#1b:6;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#1b:6;:H-1379,F",
+            "rawFreecadMappedName": "Revolution.#1b:6;:H-ff7,F",
             "resolvedIndexed": "Face3",
-            "subname": "Revolution.Face3"
+            "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "Revolution.#19:4;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#19:4;:H-1379,F",
+            "rawFreecadMappedName": "Revolution.#19:4;:H-ff7,F",
             "resolvedIndexed": "Face4",
-            "subname": "Revolution.Face4"
+            "subname": "Face4"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "Revolution.#f;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#f;:H-1379,V",
+            "rawFreecadMappedName": "Revolution.#f;:H-ff7,V",
             "resolvedIndexed": "Vertex1",
-            "subname": "Revolution.Vertex1"
+            "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "Revolution.#10;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#10;:H-1379,V",
+            "rawFreecadMappedName": "Revolution.#10;:H-ff7,V",
             "resolvedIndexed": "Vertex2",
-            "subname": "Revolution.Vertex2"
+            "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "Revolution.#11;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#11;:H-1379,V",
+            "rawFreecadMappedName": "Revolution.#11;:H-ff7,V",
             "resolvedIndexed": "Vertex3",
-            "subname": "Revolution.Vertex3"
+            "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "Revolution.#12;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Revolution.#12;:H-1379,V",
+            "rawFreecadMappedName": "Revolution.#12;:H-ff7,V",
             "resolvedIndexed": "Vertex4",
-            "subname": "Revolution.Vertex4"
+            "subname": "Vertex4"
           }
         }
       }

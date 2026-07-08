@@ -26,10 +26,10 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#16:4;:H98b,F",
+          "rawFreecadMappedName": "Hole.#16:4;:H89c,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "Hole.#16:4;:H98b,F",
-          "subname": "Hole.Face1"
+          "stableSubname": "Hole.#16:4;:H89c,F",
+          "subname": "Face1"
         },
         {
           "ReferenceShadow": [],
@@ -40,10 +40,10 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#16:3;:H98b,F",
+          "rawFreecadMappedName": "Hole.#16:3;:H89c,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "Hole.#16:3;:H98b,F",
-          "subname": "Hole.Face2"
+          "stableSubname": "Hole.#16:3;:H89c,F",
+          "subname": "Face2"
         },
         {
           "ReferenceShadow": [],
@@ -54,10 +54,10 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#16:1;:H98b,F",
+          "rawFreecadMappedName": "Hole.#16:1;:H89c,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "Hole.#16:1;:H98b,F",
-          "subname": "Hole.Face3"
+          "stableSubname": "Hole.#16:1;:H89c,F",
+          "subname": "Face3"
         },
         {
           "ReferenceShadow": [],
@@ -68,10 +68,10 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#14:1;:H98b,F",
+          "rawFreecadMappedName": "Hole.#14:1;:H89c,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "Hole.#14:1;:H98b,F",
-          "subname": "Hole.Face4"
+          "stableSubname": "Hole.#14:1;:H89c,F",
+          "subname": "Face4"
         },
         {
           "ReferenceShadow": [],
@@ -82,10 +82,10 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#2d:1;:M;CUT;:H98b:7,F",
+          "rawFreecadMappedName": "Hole.#2d:1;:M;CUT;:H89c:7,F",
           "resolvedIndexed": "Face5",
-          "stableSubname": "Hole.#2d:1;:M;CUT;:H98b:7,F",
-          "subname": "Hole.Face5"
+          "stableSubname": "Hole.#2d:1;:M;CUT;:H89c:7,F",
+          "subname": "Face5"
         },
         {
           "ReferenceShadow": [],
@@ -96,10 +96,10 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#16:2;:H98b,F",
+          "rawFreecadMappedName": "Hole.#16:2;:H89c,F",
           "resolvedIndexed": "Face6",
-          "stableSubname": "Hole.#16:2;:H98b,F",
-          "subname": "Hole.Face6"
+          "stableSubname": "Hole.#16:2;:H89c,F",
+          "subname": "Face6"
         },
         {
           "ReferenceShadow": [],
@@ -110,10 +110,10 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#47;:M;CUT;:H-98d:7,F",
+          "rawFreecadMappedName": "Hole.#47;:M;CUT;:H-89e:7,F",
           "resolvedIndexed": "Face7",
-          "stableSubname": "Hole.#47;:M;CUT;:H-98d:7,F",
-          "subname": "Hole.Face7"
+          "stableSubname": "Hole.#47;:M;CUT;:H-89e:7,F",
+          "subname": "Face7"
         },
         {
           "ReferenceShadow": [],
@@ -124,10 +124,10 @@
           "identityStatus": "stable",
           "indexed": "Face8",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#2;:M3;MAK;:H98c:8,F;:H-98d,F",
+          "rawFreecadMappedName": "Hole.#2;:M3;MAK;:H89d:8,F;:H-89e,F",
           "resolvedIndexed": "Face8",
-          "stableSubname": "Hole.#2;:M3;MAK;:H98c:8,F;:H-98d,F",
-          "subname": "Hole.Face8"
+          "stableSubname": "Hole.#2;:M3;MAK;:H89d:8,F;:H-89e,F",
+          "subname": "Face8"
         },
         {
           "ReferenceShadow": [],
@@ -138,10 +138,10 @@
           "identityStatus": "stable",
           "indexed": "Face9",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#2;:M4;MAK;:H98c:8,F;:H-98d,F",
+          "rawFreecadMappedName": "Hole.#2;:M4;MAK;:H89d:8,F;:H-89e,F",
           "resolvedIndexed": "Face9",
-          "stableSubname": "Hole.#2;:M4;MAK;:H98c:8,F;:H-98d,F",
-          "subname": "Hole.Face9"
+          "stableSubname": "Hole.#2;:M4;MAK;:H89d:8,F;:H-89e,F",
+          "subname": "Face9"
         },
         {
           "ReferenceShadow": [],
@@ -152,10 +152,10 @@
           "identityStatus": "stable",
           "indexed": "Face10",
           "kind": "Face",
-          "rawFreecadMappedName": "Hole.#2;:M5;MAK;:H98c:8,F;:H-98d,F",
+          "rawFreecadMappedName": "Hole.#2;:M5;MAK;:H89d:8,F;:H-89e,F",
           "resolvedIndexed": "Face10",
-          "stableSubname": "Hole.#2;:M5;MAK;:H98c:8,F;:H-98d,F",
-          "subname": "Hole.Face10"
+          "stableSubname": "Hole.#2;:M5;MAK;:H89d:8,F;:H-89e,F",
+          "subname": "Face10"
         },
         {
           "ReferenceShadow": [],
@@ -166,10 +166,10 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#18:2;:H98b,E",
+          "rawFreecadMappedName": "Hole.#18:2;:H89c,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "Hole.#18:2;:H98b,E",
-          "subname": "Hole.Edge1"
+          "stableSubname": "Hole.#18:2;:H89c,E",
+          "subname": "Edge1"
         },
         {
           "ReferenceShadow": [],
@@ -180,10 +180,10 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#19:1;:H98b,E",
+          "rawFreecadMappedName": "Hole.#19:1;:H89c,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "Hole.#19:1;:H98b,E",
-          "subname": "Hole.Edge2"
+          "stableSubname": "Hole.#19:1;:H89c,E",
+          "subname": "Edge2"
         },
         {
           "ReferenceShadow": [],
@@ -194,10 +194,10 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#d:4;:H98b,E",
+          "rawFreecadMappedName": "Hole.#d:4;:H89c,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "Hole.#d:4;:H98b,E",
-          "subname": "Hole.Edge3"
+          "stableSubname": "Hole.#d:4;:H89c,E",
+          "subname": "Edge3"
         },
         {
           "ReferenceShadow": [],
@@ -208,10 +208,10 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#2b:4;:H98b,E",
+          "rawFreecadMappedName": "Hole.#2b:4;:H89c,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "Hole.#2b:4;:H98b,E",
-          "subname": "Hole.Edge4"
+          "stableSubname": "Hole.#2b:4;:H89c,E",
+          "subname": "Edge4"
         },
         {
           "ReferenceShadow": [],
@@ -222,10 +222,10 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#1a:2;:H98b,E",
+          "rawFreecadMappedName": "Hole.#1a:2;:H89c,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "Hole.#1a:2;:H98b,E",
-          "subname": "Hole.Edge5"
+          "stableSubname": "Hole.#1a:2;:H89c,E",
+          "subname": "Edge5"
         },
         {
           "ReferenceShadow": [],
@@ -236,10 +236,10 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#d:3;:H98b,E",
+          "rawFreecadMappedName": "Hole.#d:3;:H89c,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "Hole.#d:3;:H98b,E",
-          "subname": "Hole.Edge6"
+          "stableSubname": "Hole.#d:3;:H89c,E",
+          "subname": "Edge6"
         },
         {
           "ReferenceShadow": [],
@@ -250,10 +250,10 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#2b:3;:H98b,E",
+          "rawFreecadMappedName": "Hole.#2b:3;:H89c,E",
           "resolvedIndexed": "Edge7",
-          "stableSubname": "Hole.#2b:3;:H98b,E",
-          "subname": "Hole.Edge7"
+          "stableSubname": "Hole.#2b:3;:H89c,E",
+          "subname": "Edge7"
         },
         {
           "ReferenceShadow": [],
@@ -264,10 +264,10 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#1b:2;:H98b,E",
+          "rawFreecadMappedName": "Hole.#1b:2;:H89c,E",
           "resolvedIndexed": "Edge8",
-          "stableSubname": "Hole.#1b:2;:H98b,E",
-          "subname": "Hole.Edge8"
+          "stableSubname": "Hole.#1b:2;:H89c,E",
+          "subname": "Edge8"
         },
         {
           "ReferenceShadow": [],
@@ -278,10 +278,10 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#d:1;:H98b,E",
+          "rawFreecadMappedName": "Hole.#d:1;:H89c,E",
           "resolvedIndexed": "Edge9",
-          "stableSubname": "Hole.#d:1;:H98b,E",
-          "subname": "Hole.Edge9"
+          "stableSubname": "Hole.#d:1;:H89c,E",
+          "subname": "Edge9"
         },
         {
           "ReferenceShadow": [],
@@ -292,10 +292,10 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#2b:1;:H98b,E",
+          "rawFreecadMappedName": "Hole.#2b:1;:H89c,E",
           "resolvedIndexed": "Edge10",
-          "stableSubname": "Hole.#2b:1;:H98b,E",
-          "subname": "Hole.Edge10"
+          "stableSubname": "Hole.#2b:1;:H89c,E",
+          "subname": "Edge10"
         },
         {
           "ReferenceShadow": [],
@@ -306,10 +306,10 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#d:2;:H98b,E",
+          "rawFreecadMappedName": "Hole.#d:2;:H89c,E",
           "resolvedIndexed": "Edge11",
-          "stableSubname": "Hole.#d:2;:H98b,E",
-          "subname": "Hole.Edge11"
+          "stableSubname": "Hole.#d:2;:H89c,E",
+          "subname": "Edge11"
         },
         {
           "ReferenceShadow": [],
@@ -320,10 +320,10 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#2b:2;:H98b,E",
+          "rawFreecadMappedName": "Hole.#2b:2;:H89c,E",
           "resolvedIndexed": "Edge12",
-          "stableSubname": "Hole.#2b:2;:H98b,E",
-          "subname": "Hole.Edge12"
+          "stableSubname": "Hole.#2b:2;:H89c,E",
+          "subname": "Edge12"
         },
         {
           "ReferenceShadow": [],
@@ -334,10 +334,10 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#4a;:M;CUT;:H-98d:7,E",
+          "rawFreecadMappedName": "Hole.#4a;:M;CUT;:H-89e:7,E",
           "resolvedIndexed": "Edge13",
-          "stableSubname": "Hole.#4a;:M;CUT;:H-98d:7,E",
-          "subname": "Hole.Edge13"
+          "stableSubname": "Hole.#4a;:M;CUT;:H-89e:7,E",
+          "subname": "Edge13"
         },
         {
           "ReferenceShadow": [],
@@ -348,10 +348,10 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#4f;:M;CUT;:H-98d:7,E",
+          "rawFreecadMappedName": "Hole.#4f;:M;CUT;:H-89e:7,E",
           "resolvedIndexed": "Edge14",
-          "stableSubname": "Hole.#4f;:M;CUT;:H-98d:7,E",
-          "subname": "Hole.Edge14"
+          "stableSubname": "Hole.#4f;:M;CUT;:H-89e:7,E",
+          "subname": "Edge14"
         },
         {
           "ReferenceShadow": [],
@@ -362,10 +362,10 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#1d;:U2;MAK;:H98c:8,E;:H-98d,E",
+          "rawFreecadMappedName": "Hole.#1d;:U2;MAK;:H89d:8,E;:H-89e,E",
           "resolvedIndexed": "Edge15",
-          "stableSubname": "Hole.#1d;:U2;MAK;:H98c:8,E;:H-98d,E",
-          "subname": "Hole.Edge15"
+          "stableSubname": "Hole.#1d;:U2;MAK;:H89d:8,E;:H-89e,E",
+          "subname": "Edge15"
         },
         {
           "ReferenceShadow": [],
@@ -376,10 +376,10 @@
           "identityStatus": "stable",
           "indexed": "Edge16",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#1f;:U2;MAK;:H98c:8,E;:H-98d,E",
+          "rawFreecadMappedName": "Hole.#1f;:U2;MAK;:H89d:8,E;:H-89e,E",
           "resolvedIndexed": "Edge16",
-          "stableSubname": "Hole.#1f;:U2;MAK;:H98c:8,E;:H-98d,E",
-          "subname": "Hole.Edge16"
+          "stableSubname": "Hole.#1f;:U2;MAK;:H89d:8,E;:H-89e,E",
+          "subname": "Edge16"
         },
         {
           "ReferenceShadow": [],
@@ -390,10 +390,10 @@
           "identityStatus": "stable",
           "indexed": "Edge17",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#5f:2;:U2;MAK;:H98c:8,E;:H-98d,E",
+          "rawFreecadMappedName": "Hole.#5f:2;:U2;MAK;:H89d:8,E;:H-89e,E",
           "resolvedIndexed": "Edge17",
-          "stableSubname": "Hole.#5f:2;:U2;MAK;:H98c:8,E;:H-98d,E",
-          "subname": "Hole.Edge17"
+          "stableSubname": "Hole.#5f:2;:U2;MAK;:H89d:8,E;:H-89e,E",
+          "subname": "Edge17"
         },
         {
           "ReferenceShadow": [],
@@ -404,10 +404,10 @@
           "identityStatus": "stable",
           "indexed": "Edge18",
           "kind": "Edge",
-          "rawFreecadMappedName": "Hole.#5f;:U3;MAK;:H98c:8,E;:H-98d,E",
+          "rawFreecadMappedName": "Hole.#5f;:U3;MAK;:H89d:8,E;:H-89e,E",
           "resolvedIndexed": "Edge18",
-          "stableSubname": "Hole.#5f;:U3;MAK;:H98c:8,E;:H-98d,E",
-          "subname": "Hole.Edge18"
+          "stableSubname": "Hole.#5f;:U3;MAK;:H89d:8,E;:H-89e,E",
+          "subname": "Edge18"
         },
         {
           "ReferenceShadow": [],
@@ -418,10 +418,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#f:2;:H98b,V",
+          "rawFreecadMappedName": "Hole.#f:2;:H89c,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "Hole.#f:2;:H98b,V",
-          "subname": "Hole.Vertex1"
+          "stableSubname": "Hole.#f:2;:H89c,V",
+          "subname": "Vertex1"
         },
         {
           "ReferenceShadow": [],
@@ -432,10 +432,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#26:2;:H98b,V",
+          "rawFreecadMappedName": "Hole.#26:2;:H89c,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "Hole.#26:2;:H98b,V",
-          "subname": "Hole.Vertex2"
+          "stableSubname": "Hole.#26:2;:H89c,V",
+          "subname": "Vertex2"
         },
         {
           "ReferenceShadow": [],
@@ -446,10 +446,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#10:1;:H98b,V",
+          "rawFreecadMappedName": "Hole.#10:1;:H89c,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "Hole.#10:1;:H98b,V",
-          "subname": "Hole.Vertex3"
+          "stableSubname": "Hole.#10:1;:H89c,V",
+          "subname": "Vertex3"
         },
         {
           "ReferenceShadow": [],
@@ -460,10 +460,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#27:1;:H98b,V",
+          "rawFreecadMappedName": "Hole.#27:1;:H89c,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "Hole.#27:1;:H98b,V",
-          "subname": "Hole.Vertex4"
+          "stableSubname": "Hole.#27:1;:H89c,V",
+          "subname": "Vertex4"
         },
         {
           "ReferenceShadow": [],
@@ -474,10 +474,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#11:2;:H98b,V",
+          "rawFreecadMappedName": "Hole.#11:2;:H89c,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "Hole.#11:2;:H98b,V",
-          "subname": "Hole.Vertex5"
+          "stableSubname": "Hole.#11:2;:H89c,V",
+          "subname": "Vertex5"
         },
         {
           "ReferenceShadow": [],
@@ -488,10 +488,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#28:2;:H98b,V",
+          "rawFreecadMappedName": "Hole.#28:2;:H89c,V",
           "resolvedIndexed": "Vertex6",
-          "stableSubname": "Hole.#28:2;:H98b,V",
-          "subname": "Hole.Vertex6"
+          "stableSubname": "Hole.#28:2;:H89c,V",
+          "subname": "Vertex6"
         },
         {
           "ReferenceShadow": [],
@@ -502,10 +502,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#12:2;:H98b,V",
+          "rawFreecadMappedName": "Hole.#12:2;:H89c,V",
           "resolvedIndexed": "Vertex7",
-          "stableSubname": "Hole.#12:2;:H98b,V",
-          "subname": "Hole.Vertex7"
+          "stableSubname": "Hole.#12:2;:H89c,V",
+          "subname": "Vertex7"
         },
         {
           "ReferenceShadow": [],
@@ -516,10 +516,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#29:2;:H98b,V",
+          "rawFreecadMappedName": "Hole.#29:2;:H89c,V",
           "resolvedIndexed": "Vertex8",
-          "stableSubname": "Hole.#29:2;:H98b,V",
-          "subname": "Hole.Vertex8"
+          "stableSubname": "Hole.#29:2;:H89c,V",
+          "subname": "Vertex8"
         },
         {
           "ReferenceShadow": [],
@@ -530,10 +530,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#59;:M;CUT;:H-98d:7,V",
+          "rawFreecadMappedName": "Hole.#59;:M;CUT;:H-89e:7,V",
           "resolvedIndexed": "Vertex9",
-          "stableSubname": "Hole.#59;:M;CUT;:H-98d:7,V",
-          "subname": "Hole.Vertex9"
+          "stableSubname": "Hole.#59;:M;CUT;:H-89e:7,V",
+          "subname": "Vertex9"
         },
         {
           "ReferenceShadow": [],
@@ -544,10 +544,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#23;:U;MAK;:H98c:7,V;:H-98d,V",
+          "rawFreecadMappedName": "Hole.#23;:U;MAK;:H89d:7,V;:H-89e,V",
           "resolvedIndexed": "Vertex10",
-          "stableSubname": "Hole.#23;:U;MAK;:H98c:7,V;:H-98d,V",
-          "subname": "Hole.Vertex10"
+          "stableSubname": "Hole.#23;:U;MAK;:H89d:7,V;:H-89e,V",
+          "subname": "Vertex10"
         },
         {
           "ReferenceShadow": [],
@@ -558,10 +558,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex11",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#44;:U;MAK;:H98c:7,V;:H-98d,V",
+          "rawFreecadMappedName": "Hole.#44;:U;MAK;:H89d:7,V;:H-89e,V",
           "resolvedIndexed": "Vertex11",
-          "stableSubname": "Hole.#44;:U;MAK;:H98c:7,V;:H-98d,V",
-          "subname": "Hole.Vertex11"
+          "stableSubname": "Hole.#44;:U;MAK;:H89d:7,V;:H-89e,V",
+          "subname": "Vertex11"
         },
         {
           "ReferenceShadow": [],
@@ -572,10 +572,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex12",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Hole.#60:2;:U;MAK;:H98c:7,V;:H-98d,V",
+          "rawFreecadMappedName": "Hole.#60:2;:U;MAK;:H89d:7,V;:H-89e,V",
           "resolvedIndexed": "Vertex12",
-          "stableSubname": "Hole.#60:2;:U;MAK;:H98c:7,V;:H-98d,V",
-          "subname": "Hole.Vertex12"
+          "stableSubname": "Hole.#60:2;:U;MAK;:H89d:7,V;:H-89e,V",
+          "subname": "Vertex12"
         }
       ],
       "topology_counts": {
@@ -594,7 +594,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "Hole.#10:1;:H98b,V": {
+            "Hole.#10:1;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -602,7 +602,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#10:1;:H*,V",
-                "raw": "Hole.#10:1;:H98b,V"
+                "raw": "Hole.#10:1;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -612,10 +612,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex3"
+                "subname": "Vertex3"
               }
             },
-            "Hole.#11:2;:H98b,V": {
+            "Hole.#11:2;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -623,7 +623,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#11:2;:H*,V",
-                "raw": "Hole.#11:2;:H98b,V"
+                "raw": "Hole.#11:2;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -633,10 +633,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex5"
+                "subname": "Vertex5"
               }
             },
-            "Hole.#12:2;:H98b,V": {
+            "Hole.#12:2;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -644,7 +644,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#12:2;:H*,V",
-                "raw": "Hole.#12:2;:H98b,V"
+                "raw": "Hole.#12:2;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -654,10 +654,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex7"
+                "subname": "Vertex7"
               }
             },
-            "Hole.#14:1;:H98b,F": {
+            "Hole.#14:1;:H89c,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -665,7 +665,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#14:1;:H*,F",
-                "raw": "Hole.#14:1;:H98b,F"
+                "raw": "Hole.#14:1;:H89c,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -675,10 +675,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face4"
+                "subname": "Face4"
               }
             },
-            "Hole.#16:1;:H98b,F": {
+            "Hole.#16:1;:H89c,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -686,7 +686,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#16:1;:H*,F",
-                "raw": "Hole.#16:1;:H98b,F"
+                "raw": "Hole.#16:1;:H89c,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -696,10 +696,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face3"
+                "subname": "Face3"
               }
             },
-            "Hole.#16:2;:H98b,F": {
+            "Hole.#16:2;:H89c,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -707,7 +707,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#16:2;:H*,F",
-                "raw": "Hole.#16:2;:H98b,F"
+                "raw": "Hole.#16:2;:H89c,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -717,10 +717,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face6"
+                "subname": "Face6"
               }
             },
-            "Hole.#16:3;:H98b,F": {
+            "Hole.#16:3;:H89c,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -728,7 +728,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#16:3;:H*,F",
-                "raw": "Hole.#16:3;:H98b,F"
+                "raw": "Hole.#16:3;:H89c,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -738,10 +738,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face2"
+                "subname": "Face2"
               }
             },
-            "Hole.#16:4;:H98b,F": {
+            "Hole.#16:4;:H89c,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -749,7 +749,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#16:4;:H*,F",
-                "raw": "Hole.#16:4;:H98b,F"
+                "raw": "Hole.#16:4;:H89c,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -759,10 +759,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face1"
+                "subname": "Face1"
               }
             },
-            "Hole.#18:2;:H98b,E": {
+            "Hole.#18:2;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -770,7 +770,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#18:2;:H*,E",
-                "raw": "Hole.#18:2;:H98b,E"
+                "raw": "Hole.#18:2;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -780,10 +780,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge1"
+                "subname": "Edge1"
               }
             },
-            "Hole.#19:1;:H98b,E": {
+            "Hole.#19:1;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -791,7 +791,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#19:1;:H*,E",
-                "raw": "Hole.#19:1;:H98b,E"
+                "raw": "Hole.#19:1;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -801,10 +801,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge2"
+                "subname": "Edge2"
               }
             },
-            "Hole.#1a:2;:H98b,E": {
+            "Hole.#1a:2;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -812,7 +812,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#1a:2;:H*,E",
-                "raw": "Hole.#1a:2;:H98b,E"
+                "raw": "Hole.#1a:2;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -822,10 +822,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge5"
+                "subname": "Edge5"
               }
             },
-            "Hole.#1b:2;:H98b,E": {
+            "Hole.#1b:2;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -833,7 +833,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#1b:2;:H*,E",
-                "raw": "Hole.#1b:2;:H98b,E"
+                "raw": "Hole.#1b:2;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -843,10 +843,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge8"
+                "subname": "Edge8"
               }
             },
-            "Hole.#1d;:U2;MAK;:H98c:8,E;:H-98d,E": {
+            "Hole.#1d;:U2;MAK;:H89d:8,E;:H-89e,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -854,7 +854,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#1d;:U2;MAK;:H*:*,E;:H*,E",
-                "raw": "Hole.#1d;:U2;MAK;:H98c:8,E;:H-98d,E"
+                "raw": "Hole.#1d;:U2;MAK;:H89d:8,E;:H-89e,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -864,10 +864,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge15"
+                "subname": "Edge15"
               }
             },
-            "Hole.#1f;:U2;MAK;:H98c:8,E;:H-98d,E": {
+            "Hole.#1f;:U2;MAK;:H89d:8,E;:H-89e,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -875,7 +875,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#1f;:U2;MAK;:H*:*,E;:H*,E",
-                "raw": "Hole.#1f;:U2;MAK;:H98c:8,E;:H-98d,E"
+                "raw": "Hole.#1f;:U2;MAK;:H89d:8,E;:H-89e,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -885,10 +885,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge16"
+                "subname": "Edge16"
               }
             },
-            "Hole.#23;:U;MAK;:H98c:7,V;:H-98d,V": {
+            "Hole.#23;:U;MAK;:H89d:7,V;:H-89e,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -896,7 +896,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#23;:U;MAK;:H*:*,V;:H*,V",
-                "raw": "Hole.#23;:U;MAK;:H98c:7,V;:H-98d,V"
+                "raw": "Hole.#23;:U;MAK;:H89d:7,V;:H-89e,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -906,10 +906,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex10"
+                "subname": "Vertex10"
               }
             },
-            "Hole.#26:2;:H98b,V": {
+            "Hole.#26:2;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -917,7 +917,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#26:2;:H*,V",
-                "raw": "Hole.#26:2;:H98b,V"
+                "raw": "Hole.#26:2;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -927,10 +927,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex2"
+                "subname": "Vertex2"
               }
             },
-            "Hole.#27:1;:H98b,V": {
+            "Hole.#27:1;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -938,7 +938,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#27:1;:H*,V",
-                "raw": "Hole.#27:1;:H98b,V"
+                "raw": "Hole.#27:1;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -948,10 +948,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex4"
+                "subname": "Vertex4"
               }
             },
-            "Hole.#28:2;:H98b,V": {
+            "Hole.#28:2;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -959,7 +959,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#28:2;:H*,V",
-                "raw": "Hole.#28:2;:H98b,V"
+                "raw": "Hole.#28:2;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -969,10 +969,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex6"
+                "subname": "Vertex6"
               }
             },
-            "Hole.#29:2;:H98b,V": {
+            "Hole.#29:2;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -980,7 +980,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#29:2;:H*,V",
-                "raw": "Hole.#29:2;:H98b,V"
+                "raw": "Hole.#29:2;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -990,10 +990,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex8"
+                "subname": "Vertex8"
               }
             },
-            "Hole.#2;:M3;MAK;:H98c:8,F;:H-98d,F": {
+            "Hole.#2;:M3;MAK;:H89d:8,F;:H-89e,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1001,7 +1001,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2;:M3;MAK;:H*:*,F;:H*,F",
-                "raw": "Hole.#2;:M3;MAK;:H98c:8,F;:H-98d,F"
+                "raw": "Hole.#2;:M3;MAK;:H89d:8,F;:H-89e,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1011,10 +1011,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face8"
+                "subname": "Face8"
               }
             },
-            "Hole.#2;:M4;MAK;:H98c:8,F;:H-98d,F": {
+            "Hole.#2;:M4;MAK;:H89d:8,F;:H-89e,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1022,7 +1022,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2;:M4;MAK;:H*:*,F;:H*,F",
-                "raw": "Hole.#2;:M4;MAK;:H98c:8,F;:H-98d,F"
+                "raw": "Hole.#2;:M4;MAK;:H89d:8,F;:H-89e,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1032,10 +1032,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face9"
+                "subname": "Face9"
               }
             },
-            "Hole.#2;:M5;MAK;:H98c:8,F;:H-98d,F": {
+            "Hole.#2;:M5;MAK;:H89d:8,F;:H-89e,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1043,7 +1043,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2;:M5;MAK;:H*:*,F;:H*,F",
-                "raw": "Hole.#2;:M5;MAK;:H98c:8,F;:H-98d,F"
+                "raw": "Hole.#2;:M5;MAK;:H89d:8,F;:H-89e,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1053,10 +1053,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face10"
+                "subname": "Face10"
               }
             },
-            "Hole.#2b:1;:H98b,E": {
+            "Hole.#2b:1;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1064,7 +1064,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2b:1;:H*,E",
-                "raw": "Hole.#2b:1;:H98b,E"
+                "raw": "Hole.#2b:1;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1074,10 +1074,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge10"
+                "subname": "Edge10"
               }
             },
-            "Hole.#2b:2;:H98b,E": {
+            "Hole.#2b:2;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1085,7 +1085,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2b:2;:H*,E",
-                "raw": "Hole.#2b:2;:H98b,E"
+                "raw": "Hole.#2b:2;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1095,10 +1095,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge12"
+                "subname": "Edge12"
               }
             },
-            "Hole.#2b:3;:H98b,E": {
+            "Hole.#2b:3;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1106,7 +1106,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2b:3;:H*,E",
-                "raw": "Hole.#2b:3;:H98b,E"
+                "raw": "Hole.#2b:3;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1116,10 +1116,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge7"
+                "subname": "Edge7"
               }
             },
-            "Hole.#2b:4;:H98b,E": {
+            "Hole.#2b:4;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1127,7 +1127,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2b:4;:H*,E",
-                "raw": "Hole.#2b:4;:H98b,E"
+                "raw": "Hole.#2b:4;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1137,10 +1137,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge4"
+                "subname": "Edge4"
               }
             },
-            "Hole.#2d:1;:M;CUT;:H98b:7,F": {
+            "Hole.#2d:1;:M;CUT;:H89c:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1148,7 +1148,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#2d:1;:M;CUT;:H*:*,F",
-                "raw": "Hole.#2d:1;:M;CUT;:H98b:7,F"
+                "raw": "Hole.#2d:1;:M;CUT;:H89c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1158,10 +1158,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face5"
+                "subname": "Face5"
               }
             },
-            "Hole.#44;:U;MAK;:H98c:7,V;:H-98d,V": {
+            "Hole.#44;:U;MAK;:H89d:7,V;:H-89e,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1169,7 +1169,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#44;:U;MAK;:H*:*,V;:H*,V",
-                "raw": "Hole.#44;:U;MAK;:H98c:7,V;:H-98d,V"
+                "raw": "Hole.#44;:U;MAK;:H89d:7,V;:H-89e,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1179,10 +1179,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex11"
+                "subname": "Vertex11"
               }
             },
-            "Hole.#47;:M;CUT;:H-98d:7,F": {
+            "Hole.#47;:M;CUT;:H-89e:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1190,7 +1190,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#47;:M;CUT;:H*:*,F",
-                "raw": "Hole.#47;:M;CUT;:H-98d:7,F"
+                "raw": "Hole.#47;:M;CUT;:H-89e:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1200,10 +1200,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Face7"
+                "subname": "Face7"
               }
             },
-            "Hole.#4a;:M;CUT;:H-98d:7,E": {
+            "Hole.#4a;:M;CUT;:H-89e:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1211,7 +1211,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#4a;:M;CUT;:H*:*,E",
-                "raw": "Hole.#4a;:M;CUT;:H-98d:7,E"
+                "raw": "Hole.#4a;:M;CUT;:H-89e:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1221,10 +1221,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge13"
+                "subname": "Edge13"
               }
             },
-            "Hole.#4f;:M;CUT;:H-98d:7,E": {
+            "Hole.#4f;:M;CUT;:H-89e:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1232,7 +1232,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#4f;:M;CUT;:H*:*,E",
-                "raw": "Hole.#4f;:M;CUT;:H-98d:7,E"
+                "raw": "Hole.#4f;:M;CUT;:H-89e:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1242,10 +1242,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge14"
+                "subname": "Edge14"
               }
             },
-            "Hole.#59;:M;CUT;:H-98d:7,V": {
+            "Hole.#59;:M;CUT;:H-89e:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1253,7 +1253,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#59;:M;CUT;:H*:*,V",
-                "raw": "Hole.#59;:M;CUT;:H-98d:7,V"
+                "raw": "Hole.#59;:M;CUT;:H-89e:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1263,10 +1263,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex9"
+                "subname": "Vertex9"
               }
             },
-            "Hole.#5f:2;:U2;MAK;:H98c:8,E;:H-98d,E": {
+            "Hole.#5f:2;:U2;MAK;:H89d:8,E;:H-89e,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1274,7 +1274,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#5f:2;:U2;MAK;:H*:*,E;:H*,E",
-                "raw": "Hole.#5f:2;:U2;MAK;:H98c:8,E;:H-98d,E"
+                "raw": "Hole.#5f:2;:U2;MAK;:H89d:8,E;:H-89e,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1284,10 +1284,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge17"
+                "subname": "Edge17"
               }
             },
-            "Hole.#5f;:U3;MAK;:H98c:8,E;:H-98d,E": {
+            "Hole.#5f;:U3;MAK;:H89d:8,E;:H-89e,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1295,7 +1295,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#5f;:U3;MAK;:H*:*,E;:H*,E",
-                "raw": "Hole.#5f;:U3;MAK;:H98c:8,E;:H-98d,E"
+                "raw": "Hole.#5f;:U3;MAK;:H89d:8,E;:H-89e,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1305,10 +1305,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge18"
+                "subname": "Edge18"
               }
             },
-            "Hole.#60:2;:U;MAK;:H98c:7,V;:H-98d,V": {
+            "Hole.#60:2;:U;MAK;:H89d:7,V;:H-89e,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1316,7 +1316,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#60:2;:U;MAK;:H*:*,V;:H*,V",
-                "raw": "Hole.#60:2;:U;MAK;:H98c:7,V;:H-98d,V"
+                "raw": "Hole.#60:2;:U;MAK;:H89d:7,V;:H-89e,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1326,10 +1326,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex12"
+                "subname": "Vertex12"
               }
             },
-            "Hole.#d:1;:H98b,E": {
+            "Hole.#d:1;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1337,7 +1337,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#d:1;:H*,E",
-                "raw": "Hole.#d:1;:H98b,E"
+                "raw": "Hole.#d:1;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1347,10 +1347,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge9"
+                "subname": "Edge9"
               }
             },
-            "Hole.#d:2;:H98b,E": {
+            "Hole.#d:2;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1358,7 +1358,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#d:2;:H*,E",
-                "raw": "Hole.#d:2;:H98b,E"
+                "raw": "Hole.#d:2;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1368,10 +1368,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge11"
+                "subname": "Edge11"
               }
             },
-            "Hole.#d:3;:H98b,E": {
+            "Hole.#d:3;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1379,7 +1379,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#d:3;:H*,E",
-                "raw": "Hole.#d:3;:H98b,E"
+                "raw": "Hole.#d:3;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1389,10 +1389,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge6"
+                "subname": "Edge6"
               }
             },
-            "Hole.#d:4;:H98b,E": {
+            "Hole.#d:4;:H89c,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1400,7 +1400,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#d:4;:H*,E",
-                "raw": "Hole.#d:4;:H98b,E"
+                "raw": "Hole.#d:4;:H89c,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1410,10 +1410,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Edge3"
+                "subname": "Edge3"
               }
             },
-            "Hole.#f:2;:H98b,V": {
+            "Hole.#f:2;:H89c,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1421,7 +1421,7 @@
               },
               "mappedName": {
                 "canonical": "Hole.#f:2;:H*,V",
-                "raw": "Hole.#f:2;:H98b,V"
+                "raw": "Hole.#f:2;:H89c,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1431,7 +1431,7 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Hole.Vertex1"
+                "subname": "Vertex1"
               }
             }
           },
@@ -1444,282 +1444,282 @@
           "Edge1": {
             "canonicalFreecadMappedName": "Hole.#18:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#18:2;:H98b,E",
+            "rawFreecadMappedName": "Hole.#18:2;:H89c,E",
             "resolvedIndexed": "Edge1",
-            "subname": "Hole.Edge1"
+            "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "Hole.#2b:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2b:1;:H98b,E",
+            "rawFreecadMappedName": "Hole.#2b:1;:H89c,E",
             "resolvedIndexed": "Edge10",
-            "subname": "Hole.Edge10"
+            "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "Hole.#d:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#d:2;:H98b,E",
+            "rawFreecadMappedName": "Hole.#d:2;:H89c,E",
             "resolvedIndexed": "Edge11",
-            "subname": "Hole.Edge11"
+            "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "Hole.#2b:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2b:2;:H98b,E",
+            "rawFreecadMappedName": "Hole.#2b:2;:H89c,E",
             "resolvedIndexed": "Edge12",
-            "subname": "Hole.Edge12"
+            "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "Hole.#4a;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#4a;:M;CUT;:H-98d:7,E",
+            "rawFreecadMappedName": "Hole.#4a;:M;CUT;:H-89e:7,E",
             "resolvedIndexed": "Edge13",
-            "subname": "Hole.Edge13"
+            "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "Hole.#4f;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#4f;:M;CUT;:H-98d:7,E",
+            "rawFreecadMappedName": "Hole.#4f;:M;CUT;:H-89e:7,E",
             "resolvedIndexed": "Edge14",
-            "subname": "Hole.Edge14"
+            "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "Hole.#1d;:U2;MAK;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#1d;:U2;MAK;:H98c:8,E;:H-98d,E",
+            "rawFreecadMappedName": "Hole.#1d;:U2;MAK;:H89d:8,E;:H-89e,E",
             "resolvedIndexed": "Edge15",
-            "subname": "Hole.Edge15"
+            "subname": "Edge15"
           },
           "Edge16": {
             "canonicalFreecadMappedName": "Hole.#1f;:U2;MAK;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#1f;:U2;MAK;:H98c:8,E;:H-98d,E",
+            "rawFreecadMappedName": "Hole.#1f;:U2;MAK;:H89d:8,E;:H-89e,E",
             "resolvedIndexed": "Edge16",
-            "subname": "Hole.Edge16"
+            "subname": "Edge16"
           },
           "Edge17": {
             "canonicalFreecadMappedName": "Hole.#5f:2;:U2;MAK;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#5f:2;:U2;MAK;:H98c:8,E;:H-98d,E",
+            "rawFreecadMappedName": "Hole.#5f:2;:U2;MAK;:H89d:8,E;:H-89e,E",
             "resolvedIndexed": "Edge17",
-            "subname": "Hole.Edge17"
+            "subname": "Edge17"
           },
           "Edge18": {
             "canonicalFreecadMappedName": "Hole.#5f;:U3;MAK;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#5f;:U3;MAK;:H98c:8,E;:H-98d,E",
+            "rawFreecadMappedName": "Hole.#5f;:U3;MAK;:H89d:8,E;:H-89e,E",
             "resolvedIndexed": "Edge18",
-            "subname": "Hole.Edge18"
+            "subname": "Edge18"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "Hole.#19:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#19:1;:H98b,E",
+            "rawFreecadMappedName": "Hole.#19:1;:H89c,E",
             "resolvedIndexed": "Edge2",
-            "subname": "Hole.Edge2"
+            "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "Hole.#d:4;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#d:4;:H98b,E",
+            "rawFreecadMappedName": "Hole.#d:4;:H89c,E",
             "resolvedIndexed": "Edge3",
-            "subname": "Hole.Edge3"
+            "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "Hole.#2b:4;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2b:4;:H98b,E",
+            "rawFreecadMappedName": "Hole.#2b:4;:H89c,E",
             "resolvedIndexed": "Edge4",
-            "subname": "Hole.Edge4"
+            "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "Hole.#1a:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#1a:2;:H98b,E",
+            "rawFreecadMappedName": "Hole.#1a:2;:H89c,E",
             "resolvedIndexed": "Edge5",
-            "subname": "Hole.Edge5"
+            "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "Hole.#d:3;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#d:3;:H98b,E",
+            "rawFreecadMappedName": "Hole.#d:3;:H89c,E",
             "resolvedIndexed": "Edge6",
-            "subname": "Hole.Edge6"
+            "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "Hole.#2b:3;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2b:3;:H98b,E",
+            "rawFreecadMappedName": "Hole.#2b:3;:H89c,E",
             "resolvedIndexed": "Edge7",
-            "subname": "Hole.Edge7"
+            "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "Hole.#1b:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#1b:2;:H98b,E",
+            "rawFreecadMappedName": "Hole.#1b:2;:H89c,E",
             "resolvedIndexed": "Edge8",
-            "subname": "Hole.Edge8"
+            "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "Hole.#d:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#d:1;:H98b,E",
+            "rawFreecadMappedName": "Hole.#d:1;:H89c,E",
             "resolvedIndexed": "Edge9",
-            "subname": "Hole.Edge9"
+            "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "Hole.#16:4;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#16:4;:H98b,F",
+            "rawFreecadMappedName": "Hole.#16:4;:H89c,F",
             "resolvedIndexed": "Face1",
-            "subname": "Hole.Face1"
+            "subname": "Face1"
           },
           "Face10": {
             "canonicalFreecadMappedName": "Hole.#2;:M5;MAK;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2;:M5;MAK;:H98c:8,F;:H-98d,F",
+            "rawFreecadMappedName": "Hole.#2;:M5;MAK;:H89d:8,F;:H-89e,F",
             "resolvedIndexed": "Face10",
-            "subname": "Hole.Face10"
+            "subname": "Face10"
           },
           "Face2": {
             "canonicalFreecadMappedName": "Hole.#16:3;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#16:3;:H98b,F",
+            "rawFreecadMappedName": "Hole.#16:3;:H89c,F",
             "resolvedIndexed": "Face2",
-            "subname": "Hole.Face2"
+            "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "Hole.#16:1;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#16:1;:H98b,F",
+            "rawFreecadMappedName": "Hole.#16:1;:H89c,F",
             "resolvedIndexed": "Face3",
-            "subname": "Hole.Face3"
+            "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "Hole.#14:1;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#14:1;:H98b,F",
+            "rawFreecadMappedName": "Hole.#14:1;:H89c,F",
             "resolvedIndexed": "Face4",
-            "subname": "Hole.Face4"
+            "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "Hole.#2d:1;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2d:1;:M;CUT;:H98b:7,F",
+            "rawFreecadMappedName": "Hole.#2d:1;:M;CUT;:H89c:7,F",
             "resolvedIndexed": "Face5",
-            "subname": "Hole.Face5"
+            "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "Hole.#16:2;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#16:2;:H98b,F",
+            "rawFreecadMappedName": "Hole.#16:2;:H89c,F",
             "resolvedIndexed": "Face6",
-            "subname": "Hole.Face6"
+            "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "Hole.#47;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#47;:M;CUT;:H-98d:7,F",
+            "rawFreecadMappedName": "Hole.#47;:M;CUT;:H-89e:7,F",
             "resolvedIndexed": "Face7",
-            "subname": "Hole.Face7"
+            "subname": "Face7"
           },
           "Face8": {
             "canonicalFreecadMappedName": "Hole.#2;:M3;MAK;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2;:M3;MAK;:H98c:8,F;:H-98d,F",
+            "rawFreecadMappedName": "Hole.#2;:M3;MAK;:H89d:8,F;:H-89e,F",
             "resolvedIndexed": "Face8",
-            "subname": "Hole.Face8"
+            "subname": "Face8"
           },
           "Face9": {
             "canonicalFreecadMappedName": "Hole.#2;:M4;MAK;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#2;:M4;MAK;:H98c:8,F;:H-98d,F",
+            "rawFreecadMappedName": "Hole.#2;:M4;MAK;:H89d:8,F;:H-89e,F",
             "resolvedIndexed": "Face9",
-            "subname": "Hole.Face9"
+            "subname": "Face9"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "Hole.#f:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#f:2;:H98b,V",
+            "rawFreecadMappedName": "Hole.#f:2;:H89c,V",
             "resolvedIndexed": "Vertex1",
-            "subname": "Hole.Vertex1"
+            "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "Hole.#23;:U;MAK;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#23;:U;MAK;:H98c:7,V;:H-98d,V",
+            "rawFreecadMappedName": "Hole.#23;:U;MAK;:H89d:7,V;:H-89e,V",
             "resolvedIndexed": "Vertex10",
-            "subname": "Hole.Vertex10"
+            "subname": "Vertex10"
           },
           "Vertex11": {
             "canonicalFreecadMappedName": "Hole.#44;:U;MAK;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#44;:U;MAK;:H98c:7,V;:H-98d,V",
+            "rawFreecadMappedName": "Hole.#44;:U;MAK;:H89d:7,V;:H-89e,V",
             "resolvedIndexed": "Vertex11",
-            "subname": "Hole.Vertex11"
+            "subname": "Vertex11"
           },
           "Vertex12": {
             "canonicalFreecadMappedName": "Hole.#60:2;:U;MAK;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#60:2;:U;MAK;:H98c:7,V;:H-98d,V",
+            "rawFreecadMappedName": "Hole.#60:2;:U;MAK;:H89d:7,V;:H-89e,V",
             "resolvedIndexed": "Vertex12",
-            "subname": "Hole.Vertex12"
+            "subname": "Vertex12"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "Hole.#26:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#26:2;:H98b,V",
+            "rawFreecadMappedName": "Hole.#26:2;:H89c,V",
             "resolvedIndexed": "Vertex2",
-            "subname": "Hole.Vertex2"
+            "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "Hole.#10:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#10:1;:H98b,V",
+            "rawFreecadMappedName": "Hole.#10:1;:H89c,V",
             "resolvedIndexed": "Vertex3",
-            "subname": "Hole.Vertex3"
+            "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "Hole.#27:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#27:1;:H98b,V",
+            "rawFreecadMappedName": "Hole.#27:1;:H89c,V",
             "resolvedIndexed": "Vertex4",
-            "subname": "Hole.Vertex4"
+            "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "Hole.#11:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#11:2;:H98b,V",
+            "rawFreecadMappedName": "Hole.#11:2;:H89c,V",
             "resolvedIndexed": "Vertex5",
-            "subname": "Hole.Vertex5"
+            "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "Hole.#28:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#28:2;:H98b,V",
+            "rawFreecadMappedName": "Hole.#28:2;:H89c,V",
             "resolvedIndexed": "Vertex6",
-            "subname": "Hole.Vertex6"
+            "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "Hole.#12:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#12:2;:H98b,V",
+            "rawFreecadMappedName": "Hole.#12:2;:H89c,V",
             "resolvedIndexed": "Vertex7",
-            "subname": "Hole.Vertex7"
+            "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "Hole.#29:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#29:2;:H98b,V",
+            "rawFreecadMappedName": "Hole.#29:2;:H89c,V",
             "resolvedIndexed": "Vertex8",
-            "subname": "Hole.Vertex8"
+            "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "Hole.#59;:M;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Hole.#59;:M;CUT;:H-98d:7,V",
+            "rawFreecadMappedName": "Hole.#59;:M;CUT;:H-89e:7,V",
             "resolvedIndexed": "Vertex9",
-            "subname": "Hole.Vertex9"
+            "subname": "Vertex9"
           }
         }
       }

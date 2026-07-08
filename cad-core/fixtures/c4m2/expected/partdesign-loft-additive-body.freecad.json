@@ -26,10 +26,10 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoft.#1d:1;:G;SEW;:Hbc6:7,F",
+          "rawFreecadMappedName": "AdditiveLoft.#1d:1;:G;SEW;:Hae4:7,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "AdditiveLoft.#1d:1;:G;SEW;:Hbc6:7,F",
-          "subname": "AdditiveLoft.Face1"
+          "stableSubname": "AdditiveLoft.#1d:1;:G;SEW;:Hae4:7,F",
+          "subname": "Face1"
         },
         {
           "ReferenceShadow": [],
@@ -40,10 +40,10 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoft.#1e:1;:G;SEW;:Hbc6:7,F",
+          "rawFreecadMappedName": "AdditiveLoft.#1e:1;:G;SEW;:Hae4:7,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "AdditiveLoft.#1e:1;:G;SEW;:Hbc6:7,F",
-          "subname": "AdditiveLoft.Face2"
+          "stableSubname": "AdditiveLoft.#1e:1;:G;SEW;:Hae4:7,F",
+          "subname": "Face2"
         },
         {
           "ReferenceShadow": [],
@@ -54,10 +54,10 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoft.g1;SKT;:Hbc7,E;FAC;:Hbc7:4,F",
+          "rawFreecadMappedName": "AdditiveLoft.g1;SKT;:Hae5,E;FAC;:Hae5:4,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "AdditiveLoft.g1;SKT;:Hbc7,E;FAC;:Hbc7:4,F",
-          "subname": "AdditiveLoft.Face3"
+          "stableSubname": "AdditiveLoft.g1;SKT;:Hae5,E;FAC;:Hae5:4,F",
+          "subname": "Face3"
         },
         {
           "ReferenceShadow": [],
@@ -68,10 +68,10 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoft.#1f:2;:G;SEW;:Hbc6:7,F",
+          "rawFreecadMappedName": "AdditiveLoft.#1f:2;:G;SEW;:Hae4:7,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "AdditiveLoft.#1f:2;:G;SEW;:Hbc6:7,F",
-          "subname": "AdditiveLoft.Face4"
+          "stableSubname": "AdditiveLoft.#1f:2;:G;SEW;:Hae4:7,F",
+          "subname": "Face4"
         },
         {
           "ReferenceShadow": [],
@@ -82,10 +82,10 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoft.#20:3;:G;SEW;:Hbc6:7,F",
+          "rawFreecadMappedName": "AdditiveLoft.#20:3;:G;SEW;:Hae4:7,F",
           "resolvedIndexed": "Face5",
-          "stableSubname": "AdditiveLoft.#20:3;:G;SEW;:Hbc6:7,F",
-          "subname": "AdditiveLoft.Face5"
+          "stableSubname": "AdditiveLoft.#20:3;:G;SEW;:Hae4:7,F",
+          "subname": "Face5"
         },
         {
           "ReferenceShadow": [],
@@ -96,10 +96,10 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoft.#21:4;:G;SEW;:Hbc6:7,F",
+          "rawFreecadMappedName": "AdditiveLoft.#21:4;:G;SEW;:Hae4:7,F",
           "resolvedIndexed": "Face6",
-          "stableSubname": "AdditiveLoft.#21:4;:G;SEW;:Hbc6:7,F",
-          "subname": "AdditiveLoft.Face6"
+          "stableSubname": "AdditiveLoft.#21:4;:G;SEW;:Hae4:7,F",
+          "subname": "Face6"
         },
         {
           "ReferenceShadow": [],
@@ -110,10 +110,10 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#d:1;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#d:1;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "AdditiveLoft.#d:1;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge1"
+          "stableSubname": "AdditiveLoft.#d:1;:G;SEW;:Hae4:7,E",
+          "subname": "Edge1"
         },
         {
           "ReferenceShadow": [],
@@ -124,10 +124,10 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#d:2;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#d:2;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "AdditiveLoft.#d:2;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge2"
+          "stableSubname": "AdditiveLoft.#d:2;:G;SEW;:Hae4:7,E",
+          "subname": "Edge2"
         },
         {
           "ReferenceShadow": [],
@@ -138,10 +138,10 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#d:3;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#d:3;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "AdditiveLoft.#d:3;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge3"
+          "stableSubname": "AdditiveLoft.#d:3;:G;SEW;:Hae4:7,E",
+          "subname": "Edge3"
         },
         {
           "ReferenceShadow": [],
@@ -152,10 +152,10 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#d:4;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#d:4;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "AdditiveLoft.#d:4;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge4"
+          "stableSubname": "AdditiveLoft.#d:4;:G;SEW;:Hae4:7,E",
+          "subname": "Edge4"
         },
         {
           "ReferenceShadow": [],
@@ -166,10 +166,10 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#18:4;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#18:4;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "AdditiveLoft.#18:4;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge5"
+          "stableSubname": "AdditiveLoft.#18:4;:G;SEW;:Hae4:7,E",
+          "subname": "Edge5"
         },
         {
           "ReferenceShadow": [],
@@ -180,10 +180,10 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#b:1;:Hbc7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#b:1;:Hae5,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "AdditiveLoft.#b:1;:Hbc7,E",
-          "subname": "AdditiveLoft.Edge6"
+          "stableSubname": "AdditiveLoft.#b:1;:Hae5,E",
+          "subname": "Edge6"
         },
         {
           "ReferenceShadow": [],
@@ -194,10 +194,10 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#19:2;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#19:2;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge7",
-          "stableSubname": "AdditiveLoft.#19:2;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge7"
+          "stableSubname": "AdditiveLoft.#19:2;:G;SEW;:Hae4:7,E",
+          "subname": "Edge7"
         },
         {
           "ReferenceShadow": [],
@@ -208,10 +208,10 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#b:2;:Hbc7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#b:2;:Hae5,E",
           "resolvedIndexed": "Edge8",
-          "stableSubname": "AdditiveLoft.#b:2;:Hbc7,E",
-          "subname": "AdditiveLoft.Edge8"
+          "stableSubname": "AdditiveLoft.#b:2;:Hae5,E",
+          "subname": "Edge8"
         },
         {
           "ReferenceShadow": [],
@@ -222,10 +222,10 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#b:3;:Hbc7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#b:3;:Hae5,E",
           "resolvedIndexed": "Edge9",
-          "stableSubname": "AdditiveLoft.#b:3;:Hbc7,E",
-          "subname": "AdditiveLoft.Edge9"
+          "stableSubname": "AdditiveLoft.#b:3;:Hae5,E",
+          "subname": "Edge9"
         },
         {
           "ReferenceShadow": [],
@@ -236,10 +236,10 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#b:4;:Hbc7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#b:4;:Hae5,E",
           "resolvedIndexed": "Edge10",
-          "stableSubname": "AdditiveLoft.#b:4;:Hbc7,E",
-          "subname": "AdditiveLoft.Edge10"
+          "stableSubname": "AdditiveLoft.#b:4;:Hae5,E",
+          "subname": "Edge10"
         },
         {
           "ReferenceShadow": [],
@@ -250,10 +250,10 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#1a:6;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#1a:6;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge11",
-          "stableSubname": "AdditiveLoft.#1a:6;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge11"
+          "stableSubname": "AdditiveLoft.#1a:6;:G;SEW;:Hae4:7,E",
+          "subname": "Edge11"
         },
         {
           "ReferenceShadow": [],
@@ -264,10 +264,10 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoft.#1b:8;:G;SEW;:Hbc6:7,E",
+          "rawFreecadMappedName": "AdditiveLoft.#1b:8;:G;SEW;:Hae4:7,E",
           "resolvedIndexed": "Edge12",
-          "stableSubname": "AdditiveLoft.#1b:8;:G;SEW;:Hbc6:7,E",
-          "subname": "AdditiveLoft.Edge12"
+          "stableSubname": "AdditiveLoft.#1b:8;:G;SEW;:Hae4:7,E",
+          "subname": "Edge12"
         },
         {
           "ReferenceShadow": [],
@@ -278,10 +278,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#23:2;:G;SEW;:Hbc6:7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#23:2;:G;SEW;:Hae4:7,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "AdditiveLoft.#23:2;:G;SEW;:Hbc6:7,V",
-          "subname": "AdditiveLoft.Vertex1"
+          "stableSubname": "AdditiveLoft.#23:2;:G;SEW;:Hae4:7,V",
+          "subname": "Vertex1"
         },
         {
           "ReferenceShadow": [],
@@ -292,10 +292,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#24:4;:G;SEW;:Hbc6:7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#24:4;:G;SEW;:Hae4:7,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "AdditiveLoft.#24:4;:G;SEW;:Hbc6:7,V",
-          "subname": "AdditiveLoft.Vertex2"
+          "stableSubname": "AdditiveLoft.#24:4;:G;SEW;:Hae4:7,V",
+          "subname": "Vertex2"
         },
         {
           "ReferenceShadow": [],
@@ -306,10 +306,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#25:6;:G;SEW;:Hbc6:7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#25:6;:G;SEW;:Hae4:7,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "AdditiveLoft.#25:6;:G;SEW;:Hbc6:7,V",
-          "subname": "AdditiveLoft.Vertex3"
+          "stableSubname": "AdditiveLoft.#25:6;:G;SEW;:Hae4:7,V",
+          "subname": "Vertex3"
         },
         {
           "ReferenceShadow": [],
@@ -320,10 +320,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#26:8;:G;SEW;:Hbc6:7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#26:8;:G;SEW;:Hae4:7,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "AdditiveLoft.#26:8;:G;SEW;:Hbc6:7,V",
-          "subname": "AdditiveLoft.Vertex4"
+          "stableSubname": "AdditiveLoft.#26:8;:G;SEW;:Hae4:7,V",
+          "subname": "Vertex4"
         },
         {
           "ReferenceShadow": [],
@@ -334,10 +334,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#4;:Hbc7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#4;:Hae5,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "AdditiveLoft.#4;:Hbc7,V",
-          "subname": "AdditiveLoft.Vertex5"
+          "stableSubname": "AdditiveLoft.#4;:Hae5,V",
+          "subname": "Vertex5"
         },
         {
           "ReferenceShadow": [],
@@ -348,10 +348,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#2;:Hbc7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#2;:Hae5,V",
           "resolvedIndexed": "Vertex6",
-          "stableSubname": "AdditiveLoft.#2;:Hbc7,V",
-          "subname": "AdditiveLoft.Vertex6"
+          "stableSubname": "AdditiveLoft.#2;:Hae5,V",
+          "subname": "Vertex6"
         },
         {
           "ReferenceShadow": [],
@@ -362,10 +362,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#6;:Hbc7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#6;:Hae5,V",
           "resolvedIndexed": "Vertex7",
-          "stableSubname": "AdditiveLoft.#6;:Hbc7,V",
-          "subname": "AdditiveLoft.Vertex7"
+          "stableSubname": "AdditiveLoft.#6;:Hae5,V",
+          "subname": "Vertex7"
         },
         {
           "ReferenceShadow": [],
@@ -376,10 +376,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoft.#8;:Hbc7,V",
+          "rawFreecadMappedName": "AdditiveLoft.#8;:Hae5,V",
           "resolvedIndexed": "Vertex8",
-          "stableSubname": "AdditiveLoft.#8;:Hbc7,V",
-          "subname": "AdditiveLoft.Vertex8"
+          "stableSubname": "AdditiveLoft.#8;:Hae5,V",
+          "subname": "Vertex8"
         }
       ],
       "topology_counts": {
@@ -398,7 +398,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "AdditiveLoft.#18:4;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#18:4;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -406,7 +406,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#18:4;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#18:4;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#18:4;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -416,10 +416,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge5"
+                "subname": "Edge5"
               }
             },
-            "AdditiveLoft.#19:2;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#19:2;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -427,7 +427,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#19:2;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#19:2;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#19:2;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -437,10 +437,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge7"
+                "subname": "Edge7"
               }
             },
-            "AdditiveLoft.#1a:6;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#1a:6;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -448,7 +448,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#1a:6;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#1a:6;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#1a:6;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -458,10 +458,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge11"
+                "subname": "Edge11"
               }
             },
-            "AdditiveLoft.#1b:8;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#1b:8;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -469,7 +469,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#1b:8;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#1b:8;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#1b:8;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -479,10 +479,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge12"
+                "subname": "Edge12"
               }
             },
-            "AdditiveLoft.#1d:1;:G;SEW;:Hbc6:7,F": {
+            "AdditiveLoft.#1d:1;:G;SEW;:Hae4:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -490,7 +490,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#1d:1;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoft.#1d:1;:G;SEW;:Hbc6:7,F"
+                "raw": "AdditiveLoft.#1d:1;:G;SEW;:Hae4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -500,10 +500,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Face1"
+                "subname": "Face1"
               }
             },
-            "AdditiveLoft.#1e:1;:G;SEW;:Hbc6:7,F": {
+            "AdditiveLoft.#1e:1;:G;SEW;:Hae4:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -511,7 +511,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#1e:1;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoft.#1e:1;:G;SEW;:Hbc6:7,F"
+                "raw": "AdditiveLoft.#1e:1;:G;SEW;:Hae4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -521,10 +521,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Face2"
+                "subname": "Face2"
               }
             },
-            "AdditiveLoft.#1f:2;:G;SEW;:Hbc6:7,F": {
+            "AdditiveLoft.#1f:2;:G;SEW;:Hae4:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -532,7 +532,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#1f:2;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoft.#1f:2;:G;SEW;:Hbc6:7,F"
+                "raw": "AdditiveLoft.#1f:2;:G;SEW;:Hae4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -542,10 +542,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Face4"
+                "subname": "Face4"
               }
             },
-            "AdditiveLoft.#20:3;:G;SEW;:Hbc6:7,F": {
+            "AdditiveLoft.#20:3;:G;SEW;:Hae4:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -553,7 +553,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#20:3;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoft.#20:3;:G;SEW;:Hbc6:7,F"
+                "raw": "AdditiveLoft.#20:3;:G;SEW;:Hae4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -563,10 +563,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Face5"
+                "subname": "Face5"
               }
             },
-            "AdditiveLoft.#21:4;:G;SEW;:Hbc6:7,F": {
+            "AdditiveLoft.#21:4;:G;SEW;:Hae4:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -574,7 +574,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#21:4;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoft.#21:4;:G;SEW;:Hbc6:7,F"
+                "raw": "AdditiveLoft.#21:4;:G;SEW;:Hae4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -584,10 +584,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Face6"
+                "subname": "Face6"
               }
             },
-            "AdditiveLoft.#23:2;:G;SEW;:Hbc6:7,V": {
+            "AdditiveLoft.#23:2;:G;SEW;:Hae4:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -595,7 +595,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#23:2;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoft.#23:2;:G;SEW;:Hbc6:7,V"
+                "raw": "AdditiveLoft.#23:2;:G;SEW;:Hae4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -605,10 +605,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex1"
+                "subname": "Vertex1"
               }
             },
-            "AdditiveLoft.#24:4;:G;SEW;:Hbc6:7,V": {
+            "AdditiveLoft.#24:4;:G;SEW;:Hae4:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -616,7 +616,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#24:4;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoft.#24:4;:G;SEW;:Hbc6:7,V"
+                "raw": "AdditiveLoft.#24:4;:G;SEW;:Hae4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -626,10 +626,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex2"
+                "subname": "Vertex2"
               }
             },
-            "AdditiveLoft.#25:6;:G;SEW;:Hbc6:7,V": {
+            "AdditiveLoft.#25:6;:G;SEW;:Hae4:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -637,7 +637,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#25:6;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoft.#25:6;:G;SEW;:Hbc6:7,V"
+                "raw": "AdditiveLoft.#25:6;:G;SEW;:Hae4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -647,10 +647,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex3"
+                "subname": "Vertex3"
               }
             },
-            "AdditiveLoft.#26:8;:G;SEW;:Hbc6:7,V": {
+            "AdditiveLoft.#26:8;:G;SEW;:Hae4:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -658,7 +658,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#26:8;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoft.#26:8;:G;SEW;:Hbc6:7,V"
+                "raw": "AdditiveLoft.#26:8;:G;SEW;:Hae4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -668,10 +668,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex4"
+                "subname": "Vertex4"
               }
             },
-            "AdditiveLoft.#2;:Hbc7,V": {
+            "AdditiveLoft.#2;:Hae5,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -679,7 +679,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#2;:H*,V",
-                "raw": "AdditiveLoft.#2;:Hbc7,V"
+                "raw": "AdditiveLoft.#2;:Hae5,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -689,10 +689,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex6"
+                "subname": "Vertex6"
               }
             },
-            "AdditiveLoft.#4;:Hbc7,V": {
+            "AdditiveLoft.#4;:Hae5,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -700,7 +700,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#4;:H*,V",
-                "raw": "AdditiveLoft.#4;:Hbc7,V"
+                "raw": "AdditiveLoft.#4;:Hae5,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -710,10 +710,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex5"
+                "subname": "Vertex5"
               }
             },
-            "AdditiveLoft.#6;:Hbc7,V": {
+            "AdditiveLoft.#6;:Hae5,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -721,7 +721,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#6;:H*,V",
-                "raw": "AdditiveLoft.#6;:Hbc7,V"
+                "raw": "AdditiveLoft.#6;:Hae5,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -731,10 +731,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex7"
+                "subname": "Vertex7"
               }
             },
-            "AdditiveLoft.#8;:Hbc7,V": {
+            "AdditiveLoft.#8;:Hae5,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -742,7 +742,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#8;:H*,V",
-                "raw": "AdditiveLoft.#8;:Hbc7,V"
+                "raw": "AdditiveLoft.#8;:Hae5,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -752,10 +752,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Vertex8"
+                "subname": "Vertex8"
               }
             },
-            "AdditiveLoft.#b:1;:Hbc7,E": {
+            "AdditiveLoft.#b:1;:Hae5,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -763,7 +763,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#b:1;:H*,E",
-                "raw": "AdditiveLoft.#b:1;:Hbc7,E"
+                "raw": "AdditiveLoft.#b:1;:Hae5,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -773,10 +773,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge6"
+                "subname": "Edge6"
               }
             },
-            "AdditiveLoft.#b:2;:Hbc7,E": {
+            "AdditiveLoft.#b:2;:Hae5,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -784,7 +784,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#b:2;:H*,E",
-                "raw": "AdditiveLoft.#b:2;:Hbc7,E"
+                "raw": "AdditiveLoft.#b:2;:Hae5,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -794,10 +794,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge8"
+                "subname": "Edge8"
               }
             },
-            "AdditiveLoft.#b:3;:Hbc7,E": {
+            "AdditiveLoft.#b:3;:Hae5,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -805,7 +805,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#b:3;:H*,E",
-                "raw": "AdditiveLoft.#b:3;:Hbc7,E"
+                "raw": "AdditiveLoft.#b:3;:Hae5,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -815,10 +815,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge9"
+                "subname": "Edge9"
               }
             },
-            "AdditiveLoft.#b:4;:Hbc7,E": {
+            "AdditiveLoft.#b:4;:Hae5,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -826,7 +826,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#b:4;:H*,E",
-                "raw": "AdditiveLoft.#b:4;:Hbc7,E"
+                "raw": "AdditiveLoft.#b:4;:Hae5,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -836,10 +836,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge10"
+                "subname": "Edge10"
               }
             },
-            "AdditiveLoft.#d:1;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#d:1;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -847,7 +847,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#d:1;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#d:1;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#d:1;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -857,10 +857,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge1"
+                "subname": "Edge1"
               }
             },
-            "AdditiveLoft.#d:2;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#d:2;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -868,7 +868,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#d:2;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#d:2;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#d:2;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -878,10 +878,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge2"
+                "subname": "Edge2"
               }
             },
-            "AdditiveLoft.#d:3;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#d:3;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -889,7 +889,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#d:3;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#d:3;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#d:3;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -899,10 +899,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge3"
+                "subname": "Edge3"
               }
             },
-            "AdditiveLoft.#d:4;:G;SEW;:Hbc6:7,E": {
+            "AdditiveLoft.#d:4;:G;SEW;:Hae4:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -910,7 +910,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.#d:4;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoft.#d:4;:G;SEW;:Hbc6:7,E"
+                "raw": "AdditiveLoft.#d:4;:G;SEW;:Hae4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -920,10 +920,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Edge4"
+                "subname": "Edge4"
               }
             },
-            "AdditiveLoft.g1;SKT;:Hbc7,E;FAC;:Hbc7:4,F": {
+            "AdditiveLoft.g1;SKT;:Hae5,E;FAC;:Hae5:4,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -931,7 +931,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoft.g1;SKT;:H*,E;FAC;:H*:*,F",
-                "raw": "AdditiveLoft.g1;SKT;:Hbc7,E;FAC;:Hbc7:4,F"
+                "raw": "AdditiveLoft.g1;SKT;:Hae5,E;FAC;:Hae5:4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -941,7 +941,7 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "AdditiveLoft.Face3"
+                "subname": "Face3"
               }
             }
           },
@@ -954,184 +954,184 @@
           "Edge1": {
             "canonicalFreecadMappedName": "AdditiveLoft.#d:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#d:1;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#d:1;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge1",
-            "subname": "AdditiveLoft.Edge1"
+            "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "AdditiveLoft.#b:4;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#b:4;:Hbc7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#b:4;:Hae5,E",
             "resolvedIndexed": "Edge10",
-            "subname": "AdditiveLoft.Edge10"
+            "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "AdditiveLoft.#1a:6;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#1a:6;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#1a:6;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge11",
-            "subname": "AdditiveLoft.Edge11"
+            "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "AdditiveLoft.#1b:8;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#1b:8;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#1b:8;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge12",
-            "subname": "AdditiveLoft.Edge12"
+            "subname": "Edge12"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "AdditiveLoft.#d:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#d:2;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#d:2;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge2",
-            "subname": "AdditiveLoft.Edge2"
+            "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "AdditiveLoft.#d:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#d:3;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#d:3;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge3",
-            "subname": "AdditiveLoft.Edge3"
+            "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "AdditiveLoft.#d:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#d:4;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#d:4;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge4",
-            "subname": "AdditiveLoft.Edge4"
+            "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "AdditiveLoft.#18:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#18:4;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#18:4;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge5",
-            "subname": "AdditiveLoft.Edge5"
+            "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "AdditiveLoft.#b:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#b:1;:Hbc7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#b:1;:Hae5,E",
             "resolvedIndexed": "Edge6",
-            "subname": "AdditiveLoft.Edge6"
+            "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "AdditiveLoft.#19:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#19:2;:G;SEW;:Hbc6:7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#19:2;:G;SEW;:Hae4:7,E",
             "resolvedIndexed": "Edge7",
-            "subname": "AdditiveLoft.Edge7"
+            "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "AdditiveLoft.#b:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#b:2;:Hbc7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#b:2;:Hae5,E",
             "resolvedIndexed": "Edge8",
-            "subname": "AdditiveLoft.Edge8"
+            "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "AdditiveLoft.#b:3;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#b:3;:Hbc7,E",
+            "rawFreecadMappedName": "AdditiveLoft.#b:3;:Hae5,E",
             "resolvedIndexed": "Edge9",
-            "subname": "AdditiveLoft.Edge9"
+            "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "AdditiveLoft.#1d:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#1d:1;:G;SEW;:Hbc6:7,F",
+            "rawFreecadMappedName": "AdditiveLoft.#1d:1;:G;SEW;:Hae4:7,F",
             "resolvedIndexed": "Face1",
-            "subname": "AdditiveLoft.Face1"
+            "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "AdditiveLoft.#1e:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#1e:1;:G;SEW;:Hbc6:7,F",
+            "rawFreecadMappedName": "AdditiveLoft.#1e:1;:G;SEW;:Hae4:7,F",
             "resolvedIndexed": "Face2",
-            "subname": "AdditiveLoft.Face2"
+            "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "AdditiveLoft.g1;SKT;:H*,E;FAC;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.g1;SKT;:Hbc7,E;FAC;:Hbc7:4,F",
+            "rawFreecadMappedName": "AdditiveLoft.g1;SKT;:Hae5,E;FAC;:Hae5:4,F",
             "resolvedIndexed": "Face3",
-            "subname": "AdditiveLoft.Face3"
+            "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "AdditiveLoft.#1f:2;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#1f:2;:G;SEW;:Hbc6:7,F",
+            "rawFreecadMappedName": "AdditiveLoft.#1f:2;:G;SEW;:Hae4:7,F",
             "resolvedIndexed": "Face4",
-            "subname": "AdditiveLoft.Face4"
+            "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "AdditiveLoft.#20:3;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#20:3;:G;SEW;:Hbc6:7,F",
+            "rawFreecadMappedName": "AdditiveLoft.#20:3;:G;SEW;:Hae4:7,F",
             "resolvedIndexed": "Face5",
-            "subname": "AdditiveLoft.Face5"
+            "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "AdditiveLoft.#21:4;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#21:4;:G;SEW;:Hbc6:7,F",
+            "rawFreecadMappedName": "AdditiveLoft.#21:4;:G;SEW;:Hae4:7,F",
             "resolvedIndexed": "Face6",
-            "subname": "AdditiveLoft.Face6"
+            "subname": "Face6"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "AdditiveLoft.#23:2;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#23:2;:G;SEW;:Hbc6:7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#23:2;:G;SEW;:Hae4:7,V",
             "resolvedIndexed": "Vertex1",
-            "subname": "AdditiveLoft.Vertex1"
+            "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "AdditiveLoft.#24:4;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#24:4;:G;SEW;:Hbc6:7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#24:4;:G;SEW;:Hae4:7,V",
             "resolvedIndexed": "Vertex2",
-            "subname": "AdditiveLoft.Vertex2"
+            "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "AdditiveLoft.#25:6;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#25:6;:G;SEW;:Hbc6:7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#25:6;:G;SEW;:Hae4:7,V",
             "resolvedIndexed": "Vertex3",
-            "subname": "AdditiveLoft.Vertex3"
+            "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "AdditiveLoft.#26:8;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#26:8;:G;SEW;:Hbc6:7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#26:8;:G;SEW;:Hae4:7,V",
             "resolvedIndexed": "Vertex4",
-            "subname": "AdditiveLoft.Vertex4"
+            "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "AdditiveLoft.#4;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#4;:Hbc7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#4;:Hae5,V",
             "resolvedIndexed": "Vertex5",
-            "subname": "AdditiveLoft.Vertex5"
+            "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "AdditiveLoft.#2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#2;:Hbc7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#2;:Hae5,V",
             "resolvedIndexed": "Vertex6",
-            "subname": "AdditiveLoft.Vertex6"
+            "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "AdditiveLoft.#6;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#6;:Hbc7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#6;:Hae5,V",
             "resolvedIndexed": "Vertex7",
-            "subname": "AdditiveLoft.Vertex7"
+            "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "AdditiveLoft.#8;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoft.#8;:Hbc7,V",
+            "rawFreecadMappedName": "AdditiveLoft.#8;:Hae5,V",
             "resolvedIndexed": "Vertex8",
-            "subname": "AdditiveLoft.Vertex8"
+            "subname": "Vertex8"
           }
         }
       }

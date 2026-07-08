@@ -26,9 +26,9 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "#16:4;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "#16:4;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "#16:4;:M;CHF;:H12f8:7,F",
+          "stableSubname": "#16:4;:M;CHF;:H1a:7,F",
           "subname": "Face1"
         },
         {
@@ -40,9 +40,9 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "#14:1;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "#14:1;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "#14:1;:M;CHF;:H12f8:7,F",
+          "stableSubname": "#14:1;:M;CHF;:H1a:7,F",
           "subname": "Face2"
         },
         {
@@ -54,9 +54,9 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "#18:2;:G;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "#18:2;:G;CHF;:H1a:7,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "#18:2;:G;CHF;:H12f8:7,F",
+          "stableSubname": "#18:2;:G;CHF;:H1a:7,F",
           "subname": "Face3"
         },
         {
@@ -68,9 +68,9 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "#16:1;:H12f8,F",
+          "rawFreecadMappedName": "#16:1;:H1a,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "#16:1;:H12f8,F",
+          "stableSubname": "#16:1;:H1a,F",
           "subname": "Face4"
         },
         {
@@ -82,9 +82,9 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "#23:1;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "#23:1;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face5",
-          "stableSubname": "#23:1;:M;CHF;:H12f8:7,F",
+          "stableSubname": "#23:1;:M;CHF;:H1a:7,F",
           "subname": "Face5"
         },
         {
@@ -96,9 +96,9 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "#16:3;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "#16:3;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face6",
-          "stableSubname": "#16:3;:M;CHF;:H12f8:7,F",
+          "stableSubname": "#16:3;:M;CHF;:H1a:7,F",
           "subname": "Face6"
         },
         {
@@ -110,9 +110,9 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "#16:2;:H12f8,F",
+          "rawFreecadMappedName": "#16:2;:H1a,F",
           "resolvedIndexed": "Face7",
-          "stableSubname": "#16:2;:H12f8,F",
+          "stableSubname": "#16:2;:H1a,F",
           "subname": "Face7"
         },
         {
@@ -124,9 +124,9 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "#d:4;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "#d:4;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "#d:4;:M;CHF;:H12f8:7,E",
+          "stableSubname": "#d:4;:M;CHF;:H1a:7,E",
           "subname": "Edge1"
         },
         {
@@ -138,9 +138,9 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "#25:4;:U;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "#25:4;:U;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "#25:4;:U;CHF;:H12f8:7,E",
+          "stableSubname": "#25:4;:U;CHF;:H1a:7,E",
           "subname": "Edge2"
         },
         {
@@ -152,9 +152,9 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "#19:1;:H12f8,E",
+          "rawFreecadMappedName": "#19:1;:H1a,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "#19:1;:H12f8,E",
+          "stableSubname": "#19:1;:H1a,E",
           "subname": "Edge3"
         },
         {
@@ -166,9 +166,9 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "#21:4;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "#21:4;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "#21:4;:M;CHF;:H12f8:7,E",
+          "stableSubname": "#21:4;:M;CHF;:H1a:7,E",
           "subname": "Edge4"
         },
         {
@@ -180,9 +180,9 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "#26:1;:U;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "#26:1;:U;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "#26:1;:U;CHF;:H12f8:7,E",
+          "stableSubname": "#26:1;:U;CHF;:H1a:7,E",
           "subname": "Edge5"
         },
         {
@@ -194,9 +194,9 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "#d:1;:H12f8,E",
+          "rawFreecadMappedName": "#d:1;:H1a,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "#d:1;:H12f8,E",
+          "stableSubname": "#d:1;:H1a,E",
           "subname": "Edge6"
         },
         {
@@ -208,9 +208,9 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "#d:3;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "#d:3;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge7",
-          "stableSubname": "#d:3;:M;CHF;:H12f8:7,E",
+          "stableSubname": "#d:3;:M;CHF;:H1a:7,E",
           "subname": "Edge7"
         },
         {
@@ -222,9 +222,9 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "#d:2;:H12f8,E",
+          "rawFreecadMappedName": "#d:2;:H1a,E",
           "resolvedIndexed": "Edge8",
-          "stableSubname": "#d:2;:H12f8,E",
+          "stableSubname": "#d:2;:H1a,E",
           "subname": "Edge8"
         },
         {
@@ -236,9 +236,9 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "#25:3;:U;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "#25:3;:U;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge9",
-          "stableSubname": "#25:3;:U;CHF;:H12f8:7,E",
+          "stableSubname": "#25:3;:U;CHF;:H1a:7,E",
           "subname": "Edge9"
         },
         {
@@ -250,9 +250,9 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "#28:2;:U4;CHF;:H12f8:8,E",
+          "rawFreecadMappedName": "#28:2;:U4;CHF;:H1a:8,E",
           "resolvedIndexed": "Edge10",
-          "stableSubname": "#28:2;:U4;CHF;:H12f8:8,E",
+          "stableSubname": "#28:2;:U4;CHF;:H1a:8,E",
           "subname": "Edge10"
         },
         {
@@ -264,9 +264,9 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "#1b:2;:H12f8,E",
+          "rawFreecadMappedName": "#1b:2;:H1a,E",
           "resolvedIndexed": "Edge11",
-          "stableSubname": "#1b:2;:H12f8,E",
+          "stableSubname": "#1b:2;:H1a,E",
           "subname": "Edge11"
         },
         {
@@ -278,9 +278,9 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "#21:1;:H12f8,E",
+          "rawFreecadMappedName": "#21:1;:H1a,E",
           "resolvedIndexed": "Edge12",
-          "stableSubname": "#21:1;:H12f8,E",
+          "stableSubname": "#21:1;:H1a,E",
           "subname": "Edge12"
         },
         {
@@ -292,9 +292,9 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "#21:3;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "#21:3;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge13",
-          "stableSubname": "#21:3;:M;CHF;:H12f8:7,E",
+          "stableSubname": "#21:3;:M;CHF;:H1a:7,E",
           "subname": "Edge13"
         },
         {
@@ -306,9 +306,9 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "#21:2;:H12f8,E",
+          "rawFreecadMappedName": "#21:2;:H1a,E",
           "resolvedIndexed": "Edge14",
-          "stableSubname": "#21:2;:H12f8,E",
+          "stableSubname": "#21:2;:H1a,E",
           "subname": "Edge14"
         },
         {
@@ -320,9 +320,9 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "#1a:2;:H12f8,E",
+          "rawFreecadMappedName": "#1a:2;:H1a,E",
           "resolvedIndexed": "Edge15",
-          "stableSubname": "#1a:2;:H12f8,E",
+          "stableSubname": "#1a:2;:H1a,E",
           "subname": "Edge15"
         },
         {
@@ -334,9 +334,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#2a:4;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "#2a:4;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "#2a:4;:U;CHF;:H12f8:7,V",
+          "stableSubname": "#2a:4;:U;CHF;:H1a:7,V",
           "subname": "Vertex1"
         },
         {
@@ -348,9 +348,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#10:1;:H12f8,V",
+          "rawFreecadMappedName": "#10:1;:H1a,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "#10:1;:H12f8,V",
+          "stableSubname": "#10:1;:H1a,V",
           "subname": "Vertex2"
         },
         {
@@ -362,9 +362,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#2b:4;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "#2b:4;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "#2b:4;:U;CHF;:H12f8:7,V",
+          "stableSubname": "#2b:4;:U;CHF;:H1a:7,V",
           "subname": "Vertex3"
         },
         {
@@ -376,9 +376,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#1d:1;:H12f8,V",
+          "rawFreecadMappedName": "#1d:1;:H1a,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "#1d:1;:H12f8,V",
+          "stableSubname": "#1d:1;:H1a,V",
           "subname": "Vertex4"
         },
         {
@@ -390,9 +390,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#2a:3;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "#2a:3;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "#2a:3;:U;CHF;:H12f8:7,V",
+          "stableSubname": "#2a:3;:U;CHF;:H1a:7,V",
           "subname": "Vertex5"
         },
         {
@@ -404,9 +404,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#12:2;:H12f8,V",
+          "rawFreecadMappedName": "#12:2;:H1a,V",
           "resolvedIndexed": "Vertex6",
-          "stableSubname": "#12:2;:H12f8,V",
+          "stableSubname": "#12:2;:H1a,V",
           "subname": "Vertex6"
         },
         {
@@ -418,9 +418,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#11:2;:H12f8,V",
+          "rawFreecadMappedName": "#11:2;:H1a,V",
           "resolvedIndexed": "Vertex7",
-          "stableSubname": "#11:2;:H12f8,V",
+          "stableSubname": "#11:2;:H1a,V",
           "subname": "Vertex7"
         },
         {
@@ -432,9 +432,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#2b:3;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "#2b:3;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex8",
-          "stableSubname": "#2b:3;:U;CHF;:H12f8:7,V",
+          "stableSubname": "#2b:3;:U;CHF;:H1a:7,V",
           "subname": "Vertex8"
         },
         {
@@ -446,9 +446,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#1f:2;:H12f8,V",
+          "rawFreecadMappedName": "#1f:2;:H1a,V",
           "resolvedIndexed": "Vertex9",
-          "stableSubname": "#1f:2;:H12f8,V",
+          "stableSubname": "#1f:2;:H1a,V",
           "subname": "Vertex9"
         },
         {
@@ -460,9 +460,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#1e:2;:H12f8,V",
+          "rawFreecadMappedName": "#1e:2;:H1a,V",
           "resolvedIndexed": "Vertex10",
-          "stableSubname": "#1e:2;:H12f8,V",
+          "stableSubname": "#1e:2;:H1a,V",
           "subname": "Vertex10"
         }
       ],
@@ -497,10 +497,10 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "Chamfer.#16:4;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "Chamfer.#16:4;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "Chamfer.#16:4;:M;CHF;:H12f8:7,F",
-          "subname": "Chamfer.Face1"
+          "stableSubname": "Chamfer.#16:4;:M;CHF;:H1a:7,F",
+          "subname": "Face1"
         },
         {
           "ReferenceShadow": [],
@@ -511,10 +511,10 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "Chamfer.#14:1;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "Chamfer.#14:1;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "Chamfer.#14:1;:M;CHF;:H12f8:7,F",
-          "subname": "Chamfer.Face2"
+          "stableSubname": "Chamfer.#14:1;:M;CHF;:H1a:7,F",
+          "subname": "Face2"
         },
         {
           "ReferenceShadow": [],
@@ -525,10 +525,10 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "Chamfer.#18:2;:G;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "Chamfer.#18:2;:G;CHF;:H1a:7,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "Chamfer.#18:2;:G;CHF;:H12f8:7,F",
-          "subname": "Chamfer.Face3"
+          "stableSubname": "Chamfer.#18:2;:G;CHF;:H1a:7,F",
+          "subname": "Face3"
         },
         {
           "ReferenceShadow": [],
@@ -539,10 +539,10 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "Chamfer.#16:1;:H12f8,F",
+          "rawFreecadMappedName": "Chamfer.#16:1;:H1a,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "Chamfer.#16:1;:H12f8,F",
-          "subname": "Chamfer.Face4"
+          "stableSubname": "Chamfer.#16:1;:H1a,F",
+          "subname": "Face4"
         },
         {
           "ReferenceShadow": [],
@@ -553,10 +553,10 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "Chamfer.#23:1;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "Chamfer.#23:1;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face5",
-          "stableSubname": "Chamfer.#23:1;:M;CHF;:H12f8:7,F",
-          "subname": "Chamfer.Face5"
+          "stableSubname": "Chamfer.#23:1;:M;CHF;:H1a:7,F",
+          "subname": "Face5"
         },
         {
           "ReferenceShadow": [],
@@ -567,10 +567,10 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "Chamfer.#16:3;:M;CHF;:H12f8:7,F",
+          "rawFreecadMappedName": "Chamfer.#16:3;:M;CHF;:H1a:7,F",
           "resolvedIndexed": "Face6",
-          "stableSubname": "Chamfer.#16:3;:M;CHF;:H12f8:7,F",
-          "subname": "Chamfer.Face6"
+          "stableSubname": "Chamfer.#16:3;:M;CHF;:H1a:7,F",
+          "subname": "Face6"
         },
         {
           "ReferenceShadow": [],
@@ -581,10 +581,10 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "Chamfer.#16:2;:H12f8,F",
+          "rawFreecadMappedName": "Chamfer.#16:2;:H1a,F",
           "resolvedIndexed": "Face7",
-          "stableSubname": "Chamfer.#16:2;:H12f8,F",
-          "subname": "Chamfer.Face7"
+          "stableSubname": "Chamfer.#16:2;:H1a,F",
+          "subname": "Face7"
         },
         {
           "ReferenceShadow": [],
@@ -595,10 +595,10 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#d:4;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "Chamfer.#d:4;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "Chamfer.#d:4;:M;CHF;:H12f8:7,E",
-          "subname": "Chamfer.Edge1"
+          "stableSubname": "Chamfer.#d:4;:M;CHF;:H1a:7,E",
+          "subname": "Edge1"
         },
         {
           "ReferenceShadow": [],
@@ -609,10 +609,10 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#25:4;:U;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "Chamfer.#25:4;:U;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "Chamfer.#25:4;:U;CHF;:H12f8:7,E",
-          "subname": "Chamfer.Edge2"
+          "stableSubname": "Chamfer.#25:4;:U;CHF;:H1a:7,E",
+          "subname": "Edge2"
         },
         {
           "ReferenceShadow": [],
@@ -623,10 +623,10 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#19:1;:H12f8,E",
+          "rawFreecadMappedName": "Chamfer.#19:1;:H1a,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "Chamfer.#19:1;:H12f8,E",
-          "subname": "Chamfer.Edge3"
+          "stableSubname": "Chamfer.#19:1;:H1a,E",
+          "subname": "Edge3"
         },
         {
           "ReferenceShadow": [],
@@ -637,10 +637,10 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#21:4;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "Chamfer.#21:4;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "Chamfer.#21:4;:M;CHF;:H12f8:7,E",
-          "subname": "Chamfer.Edge4"
+          "stableSubname": "Chamfer.#21:4;:M;CHF;:H1a:7,E",
+          "subname": "Edge4"
         },
         {
           "ReferenceShadow": [],
@@ -651,10 +651,10 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#26:1;:U;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "Chamfer.#26:1;:U;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "Chamfer.#26:1;:U;CHF;:H12f8:7,E",
-          "subname": "Chamfer.Edge5"
+          "stableSubname": "Chamfer.#26:1;:U;CHF;:H1a:7,E",
+          "subname": "Edge5"
         },
         {
           "ReferenceShadow": [],
@@ -665,10 +665,10 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#d:1;:H12f8,E",
+          "rawFreecadMappedName": "Chamfer.#d:1;:H1a,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "Chamfer.#d:1;:H12f8,E",
-          "subname": "Chamfer.Edge6"
+          "stableSubname": "Chamfer.#d:1;:H1a,E",
+          "subname": "Edge6"
         },
         {
           "ReferenceShadow": [],
@@ -679,10 +679,10 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#d:3;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "Chamfer.#d:3;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge7",
-          "stableSubname": "Chamfer.#d:3;:M;CHF;:H12f8:7,E",
-          "subname": "Chamfer.Edge7"
+          "stableSubname": "Chamfer.#d:3;:M;CHF;:H1a:7,E",
+          "subname": "Edge7"
         },
         {
           "ReferenceShadow": [],
@@ -693,10 +693,10 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#d:2;:H12f8,E",
+          "rawFreecadMappedName": "Chamfer.#d:2;:H1a,E",
           "resolvedIndexed": "Edge8",
-          "stableSubname": "Chamfer.#d:2;:H12f8,E",
-          "subname": "Chamfer.Edge8"
+          "stableSubname": "Chamfer.#d:2;:H1a,E",
+          "subname": "Edge8"
         },
         {
           "ReferenceShadow": [],
@@ -707,10 +707,10 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#25:3;:U;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "Chamfer.#25:3;:U;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge9",
-          "stableSubname": "Chamfer.#25:3;:U;CHF;:H12f8:7,E",
-          "subname": "Chamfer.Edge9"
+          "stableSubname": "Chamfer.#25:3;:U;CHF;:H1a:7,E",
+          "subname": "Edge9"
         },
         {
           "ReferenceShadow": [],
@@ -721,10 +721,10 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#28:2;:U4;CHF;:H12f8:8,E",
+          "rawFreecadMappedName": "Chamfer.#28:2;:U4;CHF;:H1a:8,E",
           "resolvedIndexed": "Edge10",
-          "stableSubname": "Chamfer.#28:2;:U4;CHF;:H12f8:8,E",
-          "subname": "Chamfer.Edge10"
+          "stableSubname": "Chamfer.#28:2;:U4;CHF;:H1a:8,E",
+          "subname": "Edge10"
         },
         {
           "ReferenceShadow": [],
@@ -735,10 +735,10 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#1b:2;:H12f8,E",
+          "rawFreecadMappedName": "Chamfer.#1b:2;:H1a,E",
           "resolvedIndexed": "Edge11",
-          "stableSubname": "Chamfer.#1b:2;:H12f8,E",
-          "subname": "Chamfer.Edge11"
+          "stableSubname": "Chamfer.#1b:2;:H1a,E",
+          "subname": "Edge11"
         },
         {
           "ReferenceShadow": [],
@@ -749,10 +749,10 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#21:1;:H12f8,E",
+          "rawFreecadMappedName": "Chamfer.#21:1;:H1a,E",
           "resolvedIndexed": "Edge12",
-          "stableSubname": "Chamfer.#21:1;:H12f8,E",
-          "subname": "Chamfer.Edge12"
+          "stableSubname": "Chamfer.#21:1;:H1a,E",
+          "subname": "Edge12"
         },
         {
           "ReferenceShadow": [],
@@ -763,10 +763,10 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#21:3;:M;CHF;:H12f8:7,E",
+          "rawFreecadMappedName": "Chamfer.#21:3;:M;CHF;:H1a:7,E",
           "resolvedIndexed": "Edge13",
-          "stableSubname": "Chamfer.#21:3;:M;CHF;:H12f8:7,E",
-          "subname": "Chamfer.Edge13"
+          "stableSubname": "Chamfer.#21:3;:M;CHF;:H1a:7,E",
+          "subname": "Edge13"
         },
         {
           "ReferenceShadow": [],
@@ -777,10 +777,10 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#21:2;:H12f8,E",
+          "rawFreecadMappedName": "Chamfer.#21:2;:H1a,E",
           "resolvedIndexed": "Edge14",
-          "stableSubname": "Chamfer.#21:2;:H12f8,E",
-          "subname": "Chamfer.Edge14"
+          "stableSubname": "Chamfer.#21:2;:H1a,E",
+          "subname": "Edge14"
         },
         {
           "ReferenceShadow": [],
@@ -791,10 +791,10 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "Chamfer.#1a:2;:H12f8,E",
+          "rawFreecadMappedName": "Chamfer.#1a:2;:H1a,E",
           "resolvedIndexed": "Edge15",
-          "stableSubname": "Chamfer.#1a:2;:H12f8,E",
-          "subname": "Chamfer.Edge15"
+          "stableSubname": "Chamfer.#1a:2;:H1a,E",
+          "subname": "Edge15"
         },
         {
           "ReferenceShadow": [],
@@ -805,10 +805,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#2a:4;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "Chamfer.#2a:4;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "Chamfer.#2a:4;:U;CHF;:H12f8:7,V",
-          "subname": "Chamfer.Vertex1"
+          "stableSubname": "Chamfer.#2a:4;:U;CHF;:H1a:7,V",
+          "subname": "Vertex1"
         },
         {
           "ReferenceShadow": [],
@@ -819,10 +819,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#10:1;:H12f8,V",
+          "rawFreecadMappedName": "Chamfer.#10:1;:H1a,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "Chamfer.#10:1;:H12f8,V",
-          "subname": "Chamfer.Vertex2"
+          "stableSubname": "Chamfer.#10:1;:H1a,V",
+          "subname": "Vertex2"
         },
         {
           "ReferenceShadow": [],
@@ -833,10 +833,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#2b:4;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "Chamfer.#2b:4;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "Chamfer.#2b:4;:U;CHF;:H12f8:7,V",
-          "subname": "Chamfer.Vertex3"
+          "stableSubname": "Chamfer.#2b:4;:U;CHF;:H1a:7,V",
+          "subname": "Vertex3"
         },
         {
           "ReferenceShadow": [],
@@ -847,10 +847,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#1d:1;:H12f8,V",
+          "rawFreecadMappedName": "Chamfer.#1d:1;:H1a,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "Chamfer.#1d:1;:H12f8,V",
-          "subname": "Chamfer.Vertex4"
+          "stableSubname": "Chamfer.#1d:1;:H1a,V",
+          "subname": "Vertex4"
         },
         {
           "ReferenceShadow": [],
@@ -861,10 +861,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#2a:3;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "Chamfer.#2a:3;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "Chamfer.#2a:3;:U;CHF;:H12f8:7,V",
-          "subname": "Chamfer.Vertex5"
+          "stableSubname": "Chamfer.#2a:3;:U;CHF;:H1a:7,V",
+          "subname": "Vertex5"
         },
         {
           "ReferenceShadow": [],
@@ -875,10 +875,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#12:2;:H12f8,V",
+          "rawFreecadMappedName": "Chamfer.#12:2;:H1a,V",
           "resolvedIndexed": "Vertex6",
-          "stableSubname": "Chamfer.#12:2;:H12f8,V",
-          "subname": "Chamfer.Vertex6"
+          "stableSubname": "Chamfer.#12:2;:H1a,V",
+          "subname": "Vertex6"
         },
         {
           "ReferenceShadow": [],
@@ -889,10 +889,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#11:2;:H12f8,V",
+          "rawFreecadMappedName": "Chamfer.#11:2;:H1a,V",
           "resolvedIndexed": "Vertex7",
-          "stableSubname": "Chamfer.#11:2;:H12f8,V",
-          "subname": "Chamfer.Vertex7"
+          "stableSubname": "Chamfer.#11:2;:H1a,V",
+          "subname": "Vertex7"
         },
         {
           "ReferenceShadow": [],
@@ -903,10 +903,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#2b:3;:U;CHF;:H12f8:7,V",
+          "rawFreecadMappedName": "Chamfer.#2b:3;:U;CHF;:H1a:7,V",
           "resolvedIndexed": "Vertex8",
-          "stableSubname": "Chamfer.#2b:3;:U;CHF;:H12f8:7,V",
-          "subname": "Chamfer.Vertex8"
+          "stableSubname": "Chamfer.#2b:3;:U;CHF;:H1a:7,V",
+          "subname": "Vertex8"
         },
         {
           "ReferenceShadow": [],
@@ -917,10 +917,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#1f:2;:H12f8,V",
+          "rawFreecadMappedName": "Chamfer.#1f:2;:H1a,V",
           "resolvedIndexed": "Vertex9",
-          "stableSubname": "Chamfer.#1f:2;:H12f8,V",
-          "subname": "Chamfer.Vertex9"
+          "stableSubname": "Chamfer.#1f:2;:H1a,V",
+          "subname": "Vertex9"
         },
         {
           "ReferenceShadow": [],
@@ -931,10 +931,10 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Chamfer.#1e:2;:H12f8,V",
+          "rawFreecadMappedName": "Chamfer.#1e:2;:H1a,V",
           "resolvedIndexed": "Vertex10",
-          "stableSubname": "Chamfer.#1e:2;:H12f8,V",
-          "subname": "Chamfer.Vertex10"
+          "stableSubname": "Chamfer.#1e:2;:H1a,V",
+          "subname": "Vertex10"
         }
       ],
       "topology_counts": {
@@ -953,7 +953,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "Chamfer.#10:1;:H12f8,V": {
+            "Chamfer.#10:1;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -961,7 +961,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#10:1;:H*,V",
-                "raw": "Chamfer.#10:1;:H12f8,V"
+                "raw": "Chamfer.#10:1;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -971,10 +971,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex2"
+                "subname": "Vertex2"
               }
             },
-            "Chamfer.#11:2;:H12f8,V": {
+            "Chamfer.#11:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -982,7 +982,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#11:2;:H*,V",
-                "raw": "Chamfer.#11:2;:H12f8,V"
+                "raw": "Chamfer.#11:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -992,10 +992,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex7"
+                "subname": "Vertex7"
               }
             },
-            "Chamfer.#12:2;:H12f8,V": {
+            "Chamfer.#12:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1003,7 +1003,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#12:2;:H*,V",
-                "raw": "Chamfer.#12:2;:H12f8,V"
+                "raw": "Chamfer.#12:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1013,10 +1013,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex6"
+                "subname": "Vertex6"
               }
             },
-            "Chamfer.#14:1;:M;CHF;:H12f8:7,F": {
+            "Chamfer.#14:1;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1024,7 +1024,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#14:1;:M;CHF;:H*:*,F",
-                "raw": "Chamfer.#14:1;:M;CHF;:H12f8:7,F"
+                "raw": "Chamfer.#14:1;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1034,10 +1034,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Face2"
+                "subname": "Face2"
               }
             },
-            "Chamfer.#16:1;:H12f8,F": {
+            "Chamfer.#16:1;:H1a,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1045,7 +1045,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#16:1;:H*,F",
-                "raw": "Chamfer.#16:1;:H12f8,F"
+                "raw": "Chamfer.#16:1;:H1a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1055,10 +1055,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Face4"
+                "subname": "Face4"
               }
             },
-            "Chamfer.#16:2;:H12f8,F": {
+            "Chamfer.#16:2;:H1a,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1066,7 +1066,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#16:2;:H*,F",
-                "raw": "Chamfer.#16:2;:H12f8,F"
+                "raw": "Chamfer.#16:2;:H1a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1076,10 +1076,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Face7"
+                "subname": "Face7"
               }
             },
-            "Chamfer.#16:3;:M;CHF;:H12f8:7,F": {
+            "Chamfer.#16:3;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1087,7 +1087,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#16:3;:M;CHF;:H*:*,F",
-                "raw": "Chamfer.#16:3;:M;CHF;:H12f8:7,F"
+                "raw": "Chamfer.#16:3;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1097,10 +1097,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Face6"
+                "subname": "Face6"
               }
             },
-            "Chamfer.#16:4;:M;CHF;:H12f8:7,F": {
+            "Chamfer.#16:4;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1108,7 +1108,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#16:4;:M;CHF;:H*:*,F",
-                "raw": "Chamfer.#16:4;:M;CHF;:H12f8:7,F"
+                "raw": "Chamfer.#16:4;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1118,10 +1118,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Face1"
+                "subname": "Face1"
               }
             },
-            "Chamfer.#18:2;:G;CHF;:H12f8:7,F": {
+            "Chamfer.#18:2;:G;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1129,7 +1129,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#18:2;:G;CHF;:H*:*,F",
-                "raw": "Chamfer.#18:2;:G;CHF;:H12f8:7,F"
+                "raw": "Chamfer.#18:2;:G;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1139,10 +1139,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Face3"
+                "subname": "Face3"
               }
             },
-            "Chamfer.#19:1;:H12f8,E": {
+            "Chamfer.#19:1;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1150,7 +1150,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#19:1;:H*,E",
-                "raw": "Chamfer.#19:1;:H12f8,E"
+                "raw": "Chamfer.#19:1;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1160,10 +1160,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge3"
+                "subname": "Edge3"
               }
             },
-            "Chamfer.#1a:2;:H12f8,E": {
+            "Chamfer.#1a:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1171,7 +1171,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#1a:2;:H*,E",
-                "raw": "Chamfer.#1a:2;:H12f8,E"
+                "raw": "Chamfer.#1a:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1181,10 +1181,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge15"
+                "subname": "Edge15"
               }
             },
-            "Chamfer.#1b:2;:H12f8,E": {
+            "Chamfer.#1b:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1192,7 +1192,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#1b:2;:H*,E",
-                "raw": "Chamfer.#1b:2;:H12f8,E"
+                "raw": "Chamfer.#1b:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1202,10 +1202,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge11"
+                "subname": "Edge11"
               }
             },
-            "Chamfer.#1d:1;:H12f8,V": {
+            "Chamfer.#1d:1;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1213,7 +1213,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#1d:1;:H*,V",
-                "raw": "Chamfer.#1d:1;:H12f8,V"
+                "raw": "Chamfer.#1d:1;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1223,10 +1223,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex4"
+                "subname": "Vertex4"
               }
             },
-            "Chamfer.#1e:2;:H12f8,V": {
+            "Chamfer.#1e:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1234,7 +1234,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#1e:2;:H*,V",
-                "raw": "Chamfer.#1e:2;:H12f8,V"
+                "raw": "Chamfer.#1e:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1244,10 +1244,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex10"
+                "subname": "Vertex10"
               }
             },
-            "Chamfer.#1f:2;:H12f8,V": {
+            "Chamfer.#1f:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1255,7 +1255,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#1f:2;:H*,V",
-                "raw": "Chamfer.#1f:2;:H12f8,V"
+                "raw": "Chamfer.#1f:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1265,10 +1265,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex9"
+                "subname": "Vertex9"
               }
             },
-            "Chamfer.#21:1;:H12f8,E": {
+            "Chamfer.#21:1;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1276,7 +1276,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#21:1;:H*,E",
-                "raw": "Chamfer.#21:1;:H12f8,E"
+                "raw": "Chamfer.#21:1;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1286,10 +1286,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge12"
+                "subname": "Edge12"
               }
             },
-            "Chamfer.#21:2;:H12f8,E": {
+            "Chamfer.#21:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1297,7 +1297,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#21:2;:H*,E",
-                "raw": "Chamfer.#21:2;:H12f8,E"
+                "raw": "Chamfer.#21:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1307,10 +1307,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge14"
+                "subname": "Edge14"
               }
             },
-            "Chamfer.#21:3;:M;CHF;:H12f8:7,E": {
+            "Chamfer.#21:3;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1318,7 +1318,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#21:3;:M;CHF;:H*:*,E",
-                "raw": "Chamfer.#21:3;:M;CHF;:H12f8:7,E"
+                "raw": "Chamfer.#21:3;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1328,10 +1328,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge13"
+                "subname": "Edge13"
               }
             },
-            "Chamfer.#21:4;:M;CHF;:H12f8:7,E": {
+            "Chamfer.#21:4;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1339,7 +1339,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#21:4;:M;CHF;:H*:*,E",
-                "raw": "Chamfer.#21:4;:M;CHF;:H12f8:7,E"
+                "raw": "Chamfer.#21:4;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1349,10 +1349,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge4"
+                "subname": "Edge4"
               }
             },
-            "Chamfer.#23:1;:M;CHF;:H12f8:7,F": {
+            "Chamfer.#23:1;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1360,7 +1360,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#23:1;:M;CHF;:H*:*,F",
-                "raw": "Chamfer.#23:1;:M;CHF;:H12f8:7,F"
+                "raw": "Chamfer.#23:1;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1370,10 +1370,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Face5"
+                "subname": "Face5"
               }
             },
-            "Chamfer.#25:3;:U;CHF;:H12f8:7,E": {
+            "Chamfer.#25:3;:U;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1381,7 +1381,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#25:3;:U;CHF;:H*:*,E",
-                "raw": "Chamfer.#25:3;:U;CHF;:H12f8:7,E"
+                "raw": "Chamfer.#25:3;:U;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1391,10 +1391,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge9"
+                "subname": "Edge9"
               }
             },
-            "Chamfer.#25:4;:U;CHF;:H12f8:7,E": {
+            "Chamfer.#25:4;:U;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1402,7 +1402,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#25:4;:U;CHF;:H*:*,E",
-                "raw": "Chamfer.#25:4;:U;CHF;:H12f8:7,E"
+                "raw": "Chamfer.#25:4;:U;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1412,10 +1412,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge2"
+                "subname": "Edge2"
               }
             },
-            "Chamfer.#26:1;:U;CHF;:H12f8:7,E": {
+            "Chamfer.#26:1;:U;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1423,7 +1423,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#26:1;:U;CHF;:H*:*,E",
-                "raw": "Chamfer.#26:1;:U;CHF;:H12f8:7,E"
+                "raw": "Chamfer.#26:1;:U;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1433,10 +1433,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge5"
+                "subname": "Edge5"
               }
             },
-            "Chamfer.#28:2;:U4;CHF;:H12f8:8,E": {
+            "Chamfer.#28:2;:U4;CHF;:H1a:8,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1444,7 +1444,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#28:2;:U4;CHF;:H*:*,E",
-                "raw": "Chamfer.#28:2;:U4;CHF;:H12f8:8,E"
+                "raw": "Chamfer.#28:2;:U4;CHF;:H1a:8,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1454,10 +1454,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge10"
+                "subname": "Edge10"
               }
             },
-            "Chamfer.#2a:3;:U;CHF;:H12f8:7,V": {
+            "Chamfer.#2a:3;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1465,7 +1465,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#2a:3;:U;CHF;:H*:*,V",
-                "raw": "Chamfer.#2a:3;:U;CHF;:H12f8:7,V"
+                "raw": "Chamfer.#2a:3;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1475,10 +1475,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex5"
+                "subname": "Vertex5"
               }
             },
-            "Chamfer.#2a:4;:U;CHF;:H12f8:7,V": {
+            "Chamfer.#2a:4;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1486,7 +1486,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#2a:4;:U;CHF;:H*:*,V",
-                "raw": "Chamfer.#2a:4;:U;CHF;:H12f8:7,V"
+                "raw": "Chamfer.#2a:4;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1496,10 +1496,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex1"
+                "subname": "Vertex1"
               }
             },
-            "Chamfer.#2b:3;:U;CHF;:H12f8:7,V": {
+            "Chamfer.#2b:3;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1507,7 +1507,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#2b:3;:U;CHF;:H*:*,V",
-                "raw": "Chamfer.#2b:3;:U;CHF;:H12f8:7,V"
+                "raw": "Chamfer.#2b:3;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1517,10 +1517,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex8"
+                "subname": "Vertex8"
               }
             },
-            "Chamfer.#2b:4;:U;CHF;:H12f8:7,V": {
+            "Chamfer.#2b:4;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1528,7 +1528,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#2b:4;:U;CHF;:H*:*,V",
-                "raw": "Chamfer.#2b:4;:U;CHF;:H12f8:7,V"
+                "raw": "Chamfer.#2b:4;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1538,10 +1538,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Vertex3"
+                "subname": "Vertex3"
               }
             },
-            "Chamfer.#d:1;:H12f8,E": {
+            "Chamfer.#d:1;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1549,7 +1549,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#d:1;:H*,E",
-                "raw": "Chamfer.#d:1;:H12f8,E"
+                "raw": "Chamfer.#d:1;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1559,10 +1559,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge6"
+                "subname": "Edge6"
               }
             },
-            "Chamfer.#d:2;:H12f8,E": {
+            "Chamfer.#d:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1570,7 +1570,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#d:2;:H*,E",
-                "raw": "Chamfer.#d:2;:H12f8,E"
+                "raw": "Chamfer.#d:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1580,10 +1580,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge8"
+                "subname": "Edge8"
               }
             },
-            "Chamfer.#d:3;:M;CHF;:H12f8:7,E": {
+            "Chamfer.#d:3;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1591,7 +1591,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#d:3;:M;CHF;:H*:*,E",
-                "raw": "Chamfer.#d:3;:M;CHF;:H12f8:7,E"
+                "raw": "Chamfer.#d:3;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1601,10 +1601,10 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge7"
+                "subname": "Edge7"
               }
             },
-            "Chamfer.#d:4;:M;CHF;:H12f8:7,E": {
+            "Chamfer.#d:4;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1612,7 +1612,7 @@
               },
               "mappedName": {
                 "canonical": "Chamfer.#d:4;:M;CHF;:H*:*,E",
-                "raw": "Chamfer.#d:4;:M;CHF;:H12f8:7,E"
+                "raw": "Chamfer.#d:4;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1622,7 +1622,7 @@
               },
               "target": {
                 "object": "Body",
-                "subname": "Chamfer.Edge1"
+                "subname": "Edge1"
               }
             }
           },
@@ -1635,226 +1635,226 @@
           "Edge1": {
             "canonicalFreecadMappedName": "Chamfer.#d:4;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#d:4;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "Chamfer.#d:4;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge1",
-            "subname": "Chamfer.Edge1"
+            "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "Chamfer.#28:2;:U4;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#28:2;:U4;CHF;:H12f8:8,E",
+            "rawFreecadMappedName": "Chamfer.#28:2;:U4;CHF;:H1a:8,E",
             "resolvedIndexed": "Edge10",
-            "subname": "Chamfer.Edge10"
+            "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "Chamfer.#1b:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#1b:2;:H12f8,E",
+            "rawFreecadMappedName": "Chamfer.#1b:2;:H1a,E",
             "resolvedIndexed": "Edge11",
-            "subname": "Chamfer.Edge11"
+            "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "Chamfer.#21:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#21:1;:H12f8,E",
+            "rawFreecadMappedName": "Chamfer.#21:1;:H1a,E",
             "resolvedIndexed": "Edge12",
-            "subname": "Chamfer.Edge12"
+            "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "Chamfer.#21:3;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#21:3;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "Chamfer.#21:3;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge13",
-            "subname": "Chamfer.Edge13"
+            "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "Chamfer.#21:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#21:2;:H12f8,E",
+            "rawFreecadMappedName": "Chamfer.#21:2;:H1a,E",
             "resolvedIndexed": "Edge14",
-            "subname": "Chamfer.Edge14"
+            "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "Chamfer.#1a:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#1a:2;:H12f8,E",
+            "rawFreecadMappedName": "Chamfer.#1a:2;:H1a,E",
             "resolvedIndexed": "Edge15",
-            "subname": "Chamfer.Edge15"
+            "subname": "Edge15"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "Chamfer.#25:4;:U;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#25:4;:U;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "Chamfer.#25:4;:U;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge2",
-            "subname": "Chamfer.Edge2"
+            "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "Chamfer.#19:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#19:1;:H12f8,E",
+            "rawFreecadMappedName": "Chamfer.#19:1;:H1a,E",
             "resolvedIndexed": "Edge3",
-            "subname": "Chamfer.Edge3"
+            "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "Chamfer.#21:4;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#21:4;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "Chamfer.#21:4;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge4",
-            "subname": "Chamfer.Edge4"
+            "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "Chamfer.#26:1;:U;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#26:1;:U;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "Chamfer.#26:1;:U;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge5",
-            "subname": "Chamfer.Edge5"
+            "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "Chamfer.#d:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#d:1;:H12f8,E",
+            "rawFreecadMappedName": "Chamfer.#d:1;:H1a,E",
             "resolvedIndexed": "Edge6",
-            "subname": "Chamfer.Edge6"
+            "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "Chamfer.#d:3;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#d:3;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "Chamfer.#d:3;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge7",
-            "subname": "Chamfer.Edge7"
+            "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "Chamfer.#d:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#d:2;:H12f8,E",
+            "rawFreecadMappedName": "Chamfer.#d:2;:H1a,E",
             "resolvedIndexed": "Edge8",
-            "subname": "Chamfer.Edge8"
+            "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "Chamfer.#25:3;:U;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#25:3;:U;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "Chamfer.#25:3;:U;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge9",
-            "subname": "Chamfer.Edge9"
+            "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "Chamfer.#16:4;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#16:4;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "Chamfer.#16:4;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face1",
-            "subname": "Chamfer.Face1"
+            "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "Chamfer.#14:1;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#14:1;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "Chamfer.#14:1;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face2",
-            "subname": "Chamfer.Face2"
+            "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "Chamfer.#18:2;:G;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#18:2;:G;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "Chamfer.#18:2;:G;CHF;:H1a:7,F",
             "resolvedIndexed": "Face3",
-            "subname": "Chamfer.Face3"
+            "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "Chamfer.#16:1;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#16:1;:H12f8,F",
+            "rawFreecadMappedName": "Chamfer.#16:1;:H1a,F",
             "resolvedIndexed": "Face4",
-            "subname": "Chamfer.Face4"
+            "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "Chamfer.#23:1;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#23:1;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "Chamfer.#23:1;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face5",
-            "subname": "Chamfer.Face5"
+            "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "Chamfer.#16:3;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#16:3;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "Chamfer.#16:3;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face6",
-            "subname": "Chamfer.Face6"
+            "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "Chamfer.#16:2;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#16:2;:H12f8,F",
+            "rawFreecadMappedName": "Chamfer.#16:2;:H1a,F",
             "resolvedIndexed": "Face7",
-            "subname": "Chamfer.Face7"
+            "subname": "Face7"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "Chamfer.#2a:4;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#2a:4;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "Chamfer.#2a:4;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex1",
-            "subname": "Chamfer.Vertex1"
+            "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "Chamfer.#1e:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#1e:2;:H12f8,V",
+            "rawFreecadMappedName": "Chamfer.#1e:2;:H1a,V",
             "resolvedIndexed": "Vertex10",
-            "subname": "Chamfer.Vertex10"
+            "subname": "Vertex10"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "Chamfer.#10:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#10:1;:H12f8,V",
+            "rawFreecadMappedName": "Chamfer.#10:1;:H1a,V",
             "resolvedIndexed": "Vertex2",
-            "subname": "Chamfer.Vertex2"
+            "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "Chamfer.#2b:4;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#2b:4;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "Chamfer.#2b:4;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex3",
-            "subname": "Chamfer.Vertex3"
+            "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "Chamfer.#1d:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#1d:1;:H12f8,V",
+            "rawFreecadMappedName": "Chamfer.#1d:1;:H1a,V",
             "resolvedIndexed": "Vertex4",
-            "subname": "Chamfer.Vertex4"
+            "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "Chamfer.#2a:3;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#2a:3;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "Chamfer.#2a:3;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex5",
-            "subname": "Chamfer.Vertex5"
+            "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "Chamfer.#12:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#12:2;:H12f8,V",
+            "rawFreecadMappedName": "Chamfer.#12:2;:H1a,V",
             "resolvedIndexed": "Vertex6",
-            "subname": "Chamfer.Vertex6"
+            "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "Chamfer.#11:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#11:2;:H12f8,V",
+            "rawFreecadMappedName": "Chamfer.#11:2;:H1a,V",
             "resolvedIndexed": "Vertex7",
-            "subname": "Chamfer.Vertex7"
+            "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "Chamfer.#2b:3;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#2b:3;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "Chamfer.#2b:3;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex8",
-            "subname": "Chamfer.Vertex8"
+            "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "Chamfer.#1f:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Chamfer.#1f:2;:H12f8,V",
+            "rawFreecadMappedName": "Chamfer.#1f:2;:H1a,V",
             "resolvedIndexed": "Vertex9",
-            "subname": "Chamfer.Vertex9"
+            "subname": "Vertex9"
           }
         }
       },
@@ -1863,7 +1863,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "#10:1;:H12f8,V": {
+            "#10:1;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1871,7 +1871,7 @@
               },
               "mappedName": {
                 "canonical": "#10:1;:H*,V",
-                "raw": "#10:1;:H12f8,V"
+                "raw": "#10:1;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1884,7 +1884,7 @@
                 "subname": "Vertex2"
               }
             },
-            "#11:2;:H12f8,V": {
+            "#11:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1892,7 +1892,7 @@
               },
               "mappedName": {
                 "canonical": "#11:2;:H*,V",
-                "raw": "#11:2;:H12f8,V"
+                "raw": "#11:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1905,7 +1905,7 @@
                 "subname": "Vertex7"
               }
             },
-            "#12:2;:H12f8,V": {
+            "#12:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1913,7 +1913,7 @@
               },
               "mappedName": {
                 "canonical": "#12:2;:H*,V",
-                "raw": "#12:2;:H12f8,V"
+                "raw": "#12:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1926,7 +1926,7 @@
                 "subname": "Vertex6"
               }
             },
-            "#14:1;:M;CHF;:H12f8:7,F": {
+            "#14:1;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1934,7 +1934,7 @@
               },
               "mappedName": {
                 "canonical": "#14:1;:M;CHF;:H*:*,F",
-                "raw": "#14:1;:M;CHF;:H12f8:7,F"
+                "raw": "#14:1;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1947,7 +1947,7 @@
                 "subname": "Face2"
               }
             },
-            "#16:1;:H12f8,F": {
+            "#16:1;:H1a,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1955,7 +1955,7 @@
               },
               "mappedName": {
                 "canonical": "#16:1;:H*,F",
-                "raw": "#16:1;:H12f8,F"
+                "raw": "#16:1;:H1a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1968,7 +1968,7 @@
                 "subname": "Face4"
               }
             },
-            "#16:2;:H12f8,F": {
+            "#16:2;:H1a,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1976,7 +1976,7 @@
               },
               "mappedName": {
                 "canonical": "#16:2;:H*,F",
-                "raw": "#16:2;:H12f8,F"
+                "raw": "#16:2;:H1a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1989,7 +1989,7 @@
                 "subname": "Face7"
               }
             },
-            "#16:3;:M;CHF;:H12f8:7,F": {
+            "#16:3;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1997,7 +1997,7 @@
               },
               "mappedName": {
                 "canonical": "#16:3;:M;CHF;:H*:*,F",
-                "raw": "#16:3;:M;CHF;:H12f8:7,F"
+                "raw": "#16:3;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2010,7 +2010,7 @@
                 "subname": "Face6"
               }
             },
-            "#16:4;:M;CHF;:H12f8:7,F": {
+            "#16:4;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2018,7 +2018,7 @@
               },
               "mappedName": {
                 "canonical": "#16:4;:M;CHF;:H*:*,F",
-                "raw": "#16:4;:M;CHF;:H12f8:7,F"
+                "raw": "#16:4;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2031,7 +2031,7 @@
                 "subname": "Face1"
               }
             },
-            "#18:2;:G;CHF;:H12f8:7,F": {
+            "#18:2;:G;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2039,7 +2039,7 @@
               },
               "mappedName": {
                 "canonical": "#18:2;:G;CHF;:H*:*,F",
-                "raw": "#18:2;:G;CHF;:H12f8:7,F"
+                "raw": "#18:2;:G;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2052,7 +2052,7 @@
                 "subname": "Face3"
               }
             },
-            "#19:1;:H12f8,E": {
+            "#19:1;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2060,7 +2060,7 @@
               },
               "mappedName": {
                 "canonical": "#19:1;:H*,E",
-                "raw": "#19:1;:H12f8,E"
+                "raw": "#19:1;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2073,7 +2073,7 @@
                 "subname": "Edge3"
               }
             },
-            "#1a:2;:H12f8,E": {
+            "#1a:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2081,7 +2081,7 @@
               },
               "mappedName": {
                 "canonical": "#1a:2;:H*,E",
-                "raw": "#1a:2;:H12f8,E"
+                "raw": "#1a:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2094,7 +2094,7 @@
                 "subname": "Edge15"
               }
             },
-            "#1b:2;:H12f8,E": {
+            "#1b:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2102,7 +2102,7 @@
               },
               "mappedName": {
                 "canonical": "#1b:2;:H*,E",
-                "raw": "#1b:2;:H12f8,E"
+                "raw": "#1b:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2115,7 +2115,7 @@
                 "subname": "Edge11"
               }
             },
-            "#1d:1;:H12f8,V": {
+            "#1d:1;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2123,7 +2123,7 @@
               },
               "mappedName": {
                 "canonical": "#1d:1;:H*,V",
-                "raw": "#1d:1;:H12f8,V"
+                "raw": "#1d:1;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2136,7 +2136,7 @@
                 "subname": "Vertex4"
               }
             },
-            "#1e:2;:H12f8,V": {
+            "#1e:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2144,7 +2144,7 @@
               },
               "mappedName": {
                 "canonical": "#1e:2;:H*,V",
-                "raw": "#1e:2;:H12f8,V"
+                "raw": "#1e:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2157,7 +2157,7 @@
                 "subname": "Vertex10"
               }
             },
-            "#1f:2;:H12f8,V": {
+            "#1f:2;:H1a,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2165,7 +2165,7 @@
               },
               "mappedName": {
                 "canonical": "#1f:2;:H*,V",
-                "raw": "#1f:2;:H12f8,V"
+                "raw": "#1f:2;:H1a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2178,7 +2178,7 @@
                 "subname": "Vertex9"
               }
             },
-            "#21:1;:H12f8,E": {
+            "#21:1;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2186,7 +2186,7 @@
               },
               "mappedName": {
                 "canonical": "#21:1;:H*,E",
-                "raw": "#21:1;:H12f8,E"
+                "raw": "#21:1;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2199,7 +2199,7 @@
                 "subname": "Edge12"
               }
             },
-            "#21:2;:H12f8,E": {
+            "#21:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2207,7 +2207,7 @@
               },
               "mappedName": {
                 "canonical": "#21:2;:H*,E",
-                "raw": "#21:2;:H12f8,E"
+                "raw": "#21:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2220,7 +2220,7 @@
                 "subname": "Edge14"
               }
             },
-            "#21:3;:M;CHF;:H12f8:7,E": {
+            "#21:3;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2228,7 +2228,7 @@
               },
               "mappedName": {
                 "canonical": "#21:3;:M;CHF;:H*:*,E",
-                "raw": "#21:3;:M;CHF;:H12f8:7,E"
+                "raw": "#21:3;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2241,7 +2241,7 @@
                 "subname": "Edge13"
               }
             },
-            "#21:4;:M;CHF;:H12f8:7,E": {
+            "#21:4;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2249,7 +2249,7 @@
               },
               "mappedName": {
                 "canonical": "#21:4;:M;CHF;:H*:*,E",
-                "raw": "#21:4;:M;CHF;:H12f8:7,E"
+                "raw": "#21:4;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2262,7 +2262,7 @@
                 "subname": "Edge4"
               }
             },
-            "#23:1;:M;CHF;:H12f8:7,F": {
+            "#23:1;:M;CHF;:H1a:7,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2270,7 +2270,7 @@
               },
               "mappedName": {
                 "canonical": "#23:1;:M;CHF;:H*:*,F",
-                "raw": "#23:1;:M;CHF;:H12f8:7,F"
+                "raw": "#23:1;:M;CHF;:H1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2283,7 +2283,7 @@
                 "subname": "Face5"
               }
             },
-            "#25:3;:U;CHF;:H12f8:7,E": {
+            "#25:3;:U;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2291,7 +2291,7 @@
               },
               "mappedName": {
                 "canonical": "#25:3;:U;CHF;:H*:*,E",
-                "raw": "#25:3;:U;CHF;:H12f8:7,E"
+                "raw": "#25:3;:U;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2304,7 +2304,7 @@
                 "subname": "Edge9"
               }
             },
-            "#25:4;:U;CHF;:H12f8:7,E": {
+            "#25:4;:U;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2312,7 +2312,7 @@
               },
               "mappedName": {
                 "canonical": "#25:4;:U;CHF;:H*:*,E",
-                "raw": "#25:4;:U;CHF;:H12f8:7,E"
+                "raw": "#25:4;:U;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2325,7 +2325,7 @@
                 "subname": "Edge2"
               }
             },
-            "#26:1;:U;CHF;:H12f8:7,E": {
+            "#26:1;:U;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2333,7 +2333,7 @@
               },
               "mappedName": {
                 "canonical": "#26:1;:U;CHF;:H*:*,E",
-                "raw": "#26:1;:U;CHF;:H12f8:7,E"
+                "raw": "#26:1;:U;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2346,7 +2346,7 @@
                 "subname": "Edge5"
               }
             },
-            "#28:2;:U4;CHF;:H12f8:8,E": {
+            "#28:2;:U4;CHF;:H1a:8,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2354,7 +2354,7 @@
               },
               "mappedName": {
                 "canonical": "#28:2;:U4;CHF;:H*:*,E",
-                "raw": "#28:2;:U4;CHF;:H12f8:8,E"
+                "raw": "#28:2;:U4;CHF;:H1a:8,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2367,7 +2367,7 @@
                 "subname": "Edge10"
               }
             },
-            "#2a:3;:U;CHF;:H12f8:7,V": {
+            "#2a:3;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2375,7 +2375,7 @@
               },
               "mappedName": {
                 "canonical": "#2a:3;:U;CHF;:H*:*,V",
-                "raw": "#2a:3;:U;CHF;:H12f8:7,V"
+                "raw": "#2a:3;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2388,7 +2388,7 @@
                 "subname": "Vertex5"
               }
             },
-            "#2a:4;:U;CHF;:H12f8:7,V": {
+            "#2a:4;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2396,7 +2396,7 @@
               },
               "mappedName": {
                 "canonical": "#2a:4;:U;CHF;:H*:*,V",
-                "raw": "#2a:4;:U;CHF;:H12f8:7,V"
+                "raw": "#2a:4;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2409,7 +2409,7 @@
                 "subname": "Vertex1"
               }
             },
-            "#2b:3;:U;CHF;:H12f8:7,V": {
+            "#2b:3;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2417,7 +2417,7 @@
               },
               "mappedName": {
                 "canonical": "#2b:3;:U;CHF;:H*:*,V",
-                "raw": "#2b:3;:U;CHF;:H12f8:7,V"
+                "raw": "#2b:3;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2430,7 +2430,7 @@
                 "subname": "Vertex8"
               }
             },
-            "#2b:4;:U;CHF;:H12f8:7,V": {
+            "#2b:4;:U;CHF;:H1a:7,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2438,7 +2438,7 @@
               },
               "mappedName": {
                 "canonical": "#2b:4;:U;CHF;:H*:*,V",
-                "raw": "#2b:4;:U;CHF;:H12f8:7,V"
+                "raw": "#2b:4;:U;CHF;:H1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2451,7 +2451,7 @@
                 "subname": "Vertex3"
               }
             },
-            "#d:1;:H12f8,E": {
+            "#d:1;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2459,7 +2459,7 @@
               },
               "mappedName": {
                 "canonical": "#d:1;:H*,E",
-                "raw": "#d:1;:H12f8,E"
+                "raw": "#d:1;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2472,7 +2472,7 @@
                 "subname": "Edge6"
               }
             },
-            "#d:2;:H12f8,E": {
+            "#d:2;:H1a,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2480,7 +2480,7 @@
               },
               "mappedName": {
                 "canonical": "#d:2;:H*,E",
-                "raw": "#d:2;:H12f8,E"
+                "raw": "#d:2;:H1a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2493,7 +2493,7 @@
                 "subname": "Edge8"
               }
             },
-            "#d:3;:M;CHF;:H12f8:7,E": {
+            "#d:3;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2501,7 +2501,7 @@
               },
               "mappedName": {
                 "canonical": "#d:3;:M;CHF;:H*:*,E",
-                "raw": "#d:3;:M;CHF;:H12f8:7,E"
+                "raw": "#d:3;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2514,7 +2514,7 @@
                 "subname": "Edge7"
               }
             },
-            "#d:4;:M;CHF;:H12f8:7,E": {
+            "#d:4;:M;CHF;:H1a:7,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2522,7 +2522,7 @@
               },
               "mappedName": {
                 "canonical": "#d:4;:M;CHF;:H*:*,E",
-                "raw": "#d:4;:M;CHF;:H12f8:7,E"
+                "raw": "#d:4;:M;CHF;:H1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2545,224 +2545,224 @@
           "Edge1": {
             "canonicalFreecadMappedName": "#d:4;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#d:4;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "#d:4;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "#28:2;:U4;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#28:2;:U4;CHF;:H12f8:8,E",
+            "rawFreecadMappedName": "#28:2;:U4;CHF;:H1a:8,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "#1b:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1b:2;:H12f8,E",
+            "rawFreecadMappedName": "#1b:2;:H1a,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "#21:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#21:1;:H12f8,E",
+            "rawFreecadMappedName": "#21:1;:H1a,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "#21:3;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#21:3;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "#21:3;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge13",
             "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "#21:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#21:2;:H12f8,E",
+            "rawFreecadMappedName": "#21:2;:H1a,E",
             "resolvedIndexed": "Edge14",
             "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "#1a:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1a:2;:H12f8,E",
+            "rawFreecadMappedName": "#1a:2;:H1a,E",
             "resolvedIndexed": "Edge15",
             "subname": "Edge15"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "#25:4;:U;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#25:4;:U;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "#25:4;:U;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "#19:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#19:1;:H12f8,E",
+            "rawFreecadMappedName": "#19:1;:H1a,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "#21:4;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#21:4;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "#21:4;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "#26:1;:U;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#26:1;:U;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "#26:1;:U;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "#d:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#d:1;:H12f8,E",
+            "rawFreecadMappedName": "#d:1;:H1a,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "#d:3;:M;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#d:3;:M;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "#d:3;:M;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "#d:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#d:2;:H12f8,E",
+            "rawFreecadMappedName": "#d:2;:H1a,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "#25:3;:U;CHF;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#25:3;:U;CHF;:H12f8:7,E",
+            "rawFreecadMappedName": "#25:3;:U;CHF;:H1a:7,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "#16:4;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:4;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "#16:4;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "#14:1;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#14:1;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "#14:1;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "#18:2;:G;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#18:2;:G;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "#18:2;:G;CHF;:H1a:7,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "#16:1;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:1;:H12f8,F",
+            "rawFreecadMappedName": "#16:1;:H1a,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "#23:1;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#23:1;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "#23:1;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "#16:3;:M;CHF;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:3;:M;CHF;:H12f8:7,F",
+            "rawFreecadMappedName": "#16:3;:M;CHF;:H1a:7,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "#16:2;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:2;:H12f8,F",
+            "rawFreecadMappedName": "#16:2;:H1a,F",
             "resolvedIndexed": "Face7",
             "subname": "Face7"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "#2a:4;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#2a:4;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "#2a:4;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "#1e:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1e:2;:H12f8,V",
+            "rawFreecadMappedName": "#1e:2;:H1a,V",
             "resolvedIndexed": "Vertex10",
             "subname": "Vertex10"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "#10:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#10:1;:H12f8,V",
+            "rawFreecadMappedName": "#10:1;:H1a,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "#2b:4;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#2b:4;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "#2b:4;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "#1d:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1d:1;:H12f8,V",
+            "rawFreecadMappedName": "#1d:1;:H1a,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "#2a:3;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#2a:3;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "#2a:3;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "#12:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#12:2;:H12f8,V",
+            "rawFreecadMappedName": "#12:2;:H1a,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "#11:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#11:2;:H12f8,V",
+            "rawFreecadMappedName": "#11:2;:H1a,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "#2b:3;:U;CHF;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#2b:3;:U;CHF;:H12f8:7,V",
+            "rawFreecadMappedName": "#2b:3;:U;CHF;:H1a:7,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "#1f:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1f:2;:H12f8,V",
+            "rawFreecadMappedName": "#1f:2;:H1a,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
           }
