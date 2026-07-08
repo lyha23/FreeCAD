@@ -1,5 +1,5 @@
 id	implementation_item	files	status	owner_step	test_evidence	close_condition
-C13M2-IMPL-001	Freeze current baseline docs	docs/CADCore13.0/C13-M2-FreeCADMappedNameParity实现批次	planned	S0	Queue and TSV checks	S0 doc records inherited C13-M1 state and focused gaps.
+C13M2-IMPL-001	Freeze current baseline docs	docs/CADCore13.0/C13-M2-FreeCADMappedNameParity实现批次	closed	S0	C13-M1/M2 queue checks, TSV field count, git diff check	S0 doc records inherited C13-M1 state, focused gaps and non-goals.
 C13M2-IMPL-002	FreeCAD source authority review	docs matrix only	planned	S1	Source rg and excerpts	Source matrix marks raw mappedName/child key/mapper id authority frozen.
 C13M2-IMPL-003	Collector comparator contract review	docs matrix only	planned	S2	Focused expected jq samples	Contract and fixture matrices separate schema from runtime semantics.
 C13M2-IMPL-004	Focused mappedName red tests	cad-core/tests/test_topo_naming_state_response.py or focused test	planned	S3	Focused unittest	Tests fail or expectedFailure before implementation and define S4 deletion condition.

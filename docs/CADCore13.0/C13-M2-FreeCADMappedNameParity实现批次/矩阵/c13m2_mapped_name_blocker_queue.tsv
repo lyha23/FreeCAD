@@ -1,6 +1,6 @@
 id	blocker	owner_step	status	close_condition	next_action
 C13M2-BLOCKER-001	C13-M2 package and matrix validated	入口	closed	Package files, S0-S6 step files and TSV headers validated at HEAD e3b3379102	Proceed to S0 live baseline.
-C13M2-BLOCKER-101	C13-M1 inheritance and focused gaps not frozen	S0	open	Current response state, focused fixture gaps and non-goals recorded	Proceed to S1 source audit.
+C13M2-BLOCKER-101	C13-M1 inheritance and focused gaps not frozen	S0	closed	Current response state, focused fixture gaps and non-goals recorded at HEAD 907a9264d7	Proceed to S1 source audit.
 C13M2-BLOCKER-201	FreeCAD MappedName source authority not frozen	S1	open	MappedName, ElementMap, child map and mapper source chain recorded	Proceed to S2 collector contract review.
 C13M2-BLOCKER-301	Collector comparator and expected evidence not classified	S2	open	Raw/canonical, child key and mapper id expected evidence matrix complete	Proceed to S3 red tests.
 C13M2-BLOCKER-401	Focused mappedName red tests missing	S3	open	Tests require source-backed raw/canonical evidence and gap behavior	Proceed to S4 codec implementation.

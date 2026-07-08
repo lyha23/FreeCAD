@@ -6,7 +6,9 @@ C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输�
 
 - 工作步骤总入口已关闭：`工作步骤细分/7-8-20-16-【已实现】C13-M2工作步骤总入口.md` 已确认包结构、入口 + S0-S6 队列顺序和 8 个 TSV 字段数。
 - 入口关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=e3b3379102`（`e3b3379102 文档：新增 C13-M2 mapped name parity 方案`），起点 worktree clean。
-- 后续队列从 S0 `live 基线与 C13-M1 继承冻结` 继续；本步未改 C++/Python runtime、expected、fixtures 或 supported/focused gap 状态。
+- S0 已关闭：`工作步骤细分/7-8-20-17-【已实现】C13-M2-S0-live基线与C13-M1继承冻结.md` 已冻结 live baseline、C13-M1 继承能力、focused fixture 当前差异和继承非目标。
+- S0 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=907a9264d7`（`907a9264d7 docs: 关闭 C13-M2 工作步骤总入口`），起点 worktree clean，C13-M1 队列为空。
+- 后续队列从 S1 `FreeCAD MappedName 源码调用链复核` 继续；S0 未改 C++/Python runtime、expected、fixtures、frontend 或 supported/focused parity 状态。
 
 ## 当前问题
 
@@ -17,6 +19,16 @@ S4 已确认 focused output 的剩余差异集中在三类：
 - `mapper_history_id_gap`：expected 使用 `mapperHistoryIds`，runtime 目前发布 request-local `mapperHistory` 和 `mapperHistoryIndexes`。
 
 C13-M2 只做这三个 evidence 的 focused parity；不做全量 expected fixture parity，不改前端，不把 expected 字符串硬塞进 runtime。
+
+## S0 focused baseline
+
+| fixture | 当前状态 | gap 分类 |
+| --- | --- | --- |
+| `p2/rect-pad-pocket` | cad-core 输出 111 个 stable-token entries；expected `Body` 有 50 个 FreeCAD raw entries。 | `freecad_mapped_name_encoding_gap`、`child_element_map_key_gap`、`mapper_history_id_gap` |
+| `c4m6/topo-state-body-tip-stable-recovery` | cad-core 输出保持 response state 与 recovery 基线；expected `Body` 使用 FreeCAD raw mapped names。 | `freecad_mapped_name_encoding_gap`、`child_element_map_key_gap`、`mapper_history_id_gap` |
+| `p5/sketch-internal-face` | cad-core 输出 `Sketch` / `Sketch.InternalShape` stable-token entries；expected 为 indexed-only。 | `indexed_only_boundary` |
+| `p6/up-to-face-stable-body-history` | cad-core 输出 10 个对象的 stable-token history projection；expected 只看 `ProbePad` FreeCAD raw evidence。 | `freecad_mapped_name_encoding_gap`、`child_element_map_key_gap`、`mapper_history_id_gap` |
+| `p8/app-link-box-face` | cad-core 输出 Link display-path token；expected 为 indexed-only。 | `child_path_identity_boundary` |
 
 ## FreeCAD source authority
 
