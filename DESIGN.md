@@ -431,3 +431,7 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 ---
 
  '/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures' 检查一下这里面的测试用例, 是否满足'/Users/li/Chili3DProject/FreeCAD/docs/接口规定/7-8-11-08-topoNamingState客户端携带状态接口方案.md' , 我是让你检查测试用例 和 输出结果的, 不是用来测试 cad-core 的. 这个是用做权威基线的, 我之后要实现 cad-core 的
+
+---
+
+ 我希望让它建立多个子Agent 并行跑输出, 在跑输出之前, 先把原有的 expected 里的内容全删了, 给我出一个 /goal prompt

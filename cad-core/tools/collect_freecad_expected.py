@@ -41,6 +41,7 @@ SUPPORTED_NATIVE_TYPES = {
     "PartDesign::Chamfer",
     "PartDesign::CoordinateSystem",
     "PartDesign::Fillet",
+    "PartDesign::FeatureBase",
     "PartDesign::Hole",
     "PartDesign::Line",
     "PartDesign::LinearPattern",
@@ -890,11 +891,15 @@ def set_body_property(created: dict[str, Any], obj: Any, name: str, value: Any) 
     if not isinstance(value, dict):
         return False
     property_type = value.get("PropertyType")
-    if name == "Group" and property_type == "App::PropertyLinkList":
+    if name == "Group" and property_type in {"App::PropertyLinkList", "App::PropertyLinkSubList"}:
         # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/BodyBase.cpp
         # ::BodyBase::addObject() is the supported membership path; writing Group directly skips
         # the same ownership bookkeeping that PartDesign recompute depends on.
-        for target in list_field(value, "values", "value"):
+        if property_type == "App::PropertyLinkSubList":
+            targets = [str(item.get("value", "")) for item in value.get("SubSet", []) if isinstance(item, dict)]
+        else:
+            targets = list_field(value, "values", "value")
+        for target in targets:
             if target not in created:
                 raise UnsupportedFixture(f"body member {target} was not created")
             obj.addObject(created[target])

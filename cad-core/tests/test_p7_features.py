@@ -51,7 +51,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             if temp_path is not None:
                 temp_path.unlink(missing_ok=True)
 
-    def run_recompute_response(self, fixture: str, group: str = "mvp") -> dict:
+    def run_recompute_response(self, fixture: str, group: str = "p2") -> dict:
         input_path = ROOT / "fixtures" / group / f"{fixture}.json"
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / f"{input_path.stem}.result.json"
@@ -99,7 +99,11 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             seen[key] = subshape["indexed"]
 
     def test_p7_body_direct_tip_refine_false_response_edges_publish_stable_identity(self) -> None:
-        payload = json.loads((ROOT / "fixtures" / "mvp" / "rect-pad.json").read_text(encoding="utf-8"))
+        payload = json.loads(
+            (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_text(
+                encoding="utf-8"
+            )
+        )
         self.object_payload(payload, "Pad")["Properties"]["Refine"] = False
 
         response = self.run_recompute_response_payload(payload)

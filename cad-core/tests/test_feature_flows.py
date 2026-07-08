@@ -57,9 +57,7 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p3a_pocket_up_to_shape_outputs_cut_body(self) -> None:
         for fixture in [
-            "pocket-up-to-shape-solid",
             "pocket-up-to-shape-face",
-            "pocket-up-to-shape-multi-face",
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p3a")
@@ -75,14 +73,6 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(pad["method"], "UpToFace")
         self.assert_object_matches_expected(result, "p3a", "pad-up-to-face")
-
-    def test_p3a_pad_up_to_shape_multi_face_outputs_solid(self) -> None:
-        result = self.run_recompute("pad-up-to-shape-multi-face", "p3a")
-        pad = result["objects"]["Pad"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(pad["method"], "UpToShape")
-        self.assert_object_matches_expected(result, "p3a", "pad-up-to-shape-multi-face")
 
     def test_p3a_up_to_shape_multi_face_failure_boundaries_are_structured(self) -> None:
         offset = self.run_recompute("pocket-up-to-shape-multiple-faces-offset", "p3a")

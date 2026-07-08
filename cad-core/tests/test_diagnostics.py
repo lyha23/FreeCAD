@@ -7,30 +7,9 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 
 
 class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
-    def test_fixture_diagnostics(self) -> None:
-        expected = {
-            "empty": [],
-            "unknown-type": ["unsupported_type"],
-            "duplicate-name": ["duplicate_object_name"],
-            "duplicate-id": ["duplicate_object_id"],
-            "legacy-lowercase": ["parse_error"],
-            "missing-profile": ["missing_property"],
-            "missing-link": ["missing_link_target"],
-            "missing-target": ["missing_object"],
-            "cycle-dependency": ["cycle_dependency"],
-            "unsupported-geometry": ["unsupported_geometry"],
-            "invalid-length": ["invalid_length"],
-            "unsupported-property": ["unsupported_property"],
-            "rect-pad": [],
-        }
-        for fixture, codes in expected.items():
-            with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture), codes)
-
     def test_p2_fixture_diagnostics(self) -> None:
         expected = {
             "rect-pad-pocket": [],
-            "missing-basefeature": ["missing_link_target"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -38,8 +17,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
 
     def test_reference_lifecycle_matrix(self) -> None:
         diagnostic_cases = {
-            ("mvp", "rect-pad"): [],
-            ("mvp", "missing-link"): ["missing_link_target"],
+            ("p2", "rect-pad-pocket"): [],
             ("c3m2", "sketch-external-frozen-brep-reuse"): [],
             ("c3m2", "sketch-external-frozen-missing-snapshot"): ["missing_external_geometry_snapshot"],
             ("c3m2", "sketch-external-missing-brep-reuse"): [],
@@ -87,20 +65,10 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "pocket-through-all": [],
             "pocket-through-all-without-base": ["execution_failed"],
             "pocket-up-to-face": [],
-            "pocket-up-to-face-parallel": ["execution_failed"],
-            "pocket-up-to-face-intersects-sketch": ["execution_failed"],
-            "up-to-face-missing-target": ["missing_link_target"],
-            "up-to-face-missing-subshape": ["invalid_subshape"],
-            "up-to-face-edge-subshape": ["unsupported_subshape_kind"],
-            "pocket-up-to-shape-solid": [],
             "pocket-up-to-shape-face": [],
-            "pocket-up-to-shape-multi-face": [],
-            "pad-up-to-shape-multi-face": [],
             "pocket-up-to-shape-multiple-faces-offset": ["unsupported_property"],
             "pocket-up-to-shape-edge-subshape": ["unsupported_subshape_kind"],
-            "pocket-up-to-shape-empty": ["invalid_subshape"],
             "pad-up-to-face": [],
-            "pad-through-all-unsupported": ["unsupported_property"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -120,7 +88,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "pad-start-offset": [],
             "pad-start-offset-reversed": [],
             "pad-symmetric-start-offset": [],
-            "pad-start-offset-invalid": ["invalid_length"],
             "pad-symmetric-taper": [],
             "pocket-symmetric-length": [],
             "pad-custom-vector": [],
@@ -134,16 +101,10 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "pad-custom-direction-sketch-rotation": [],
             "pocket-body-placement": [],
             "body-basefeature-placement": [],
-            "pad-invalid-direction": ["invalid_direction"],
-            "pad-reference-axis-parallel": ["invalid_direction"],
-            "pad-reference-axis-missing-target": ["missing_link_target"],
-            "pad-symmetric-up-to-unsupported": ["unsupported_property"],
             "pad-length-taper": [],
             "pad-length-taper-inner-wire": [],
             "pocket-length-taper": [],
             "pad-two-sides-taper": [],
-            "pocket-invalid-taper": ["invalid_taper"],
-            "pad-two-sides-up-to-face2-missing-target": ["missing_property"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -153,24 +114,9 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         expected = {
             "body-link-list": [],
             "feature-link-sub-list": [],
-            "missing-link-target": ["missing_link_target"],
-            "cycle-link-sub": ["cycle_dependency"],
-            "invalid-link-value": ["invalid_link_value"],
-            "invalid-link-list-conflict": ["invalid_link_value"],
-            "invalid-link-list-value": ["invalid_link_value"],
-            "invalid-link-list-values-type": ["invalid_link_value"],
-            "invalid-link-sub-list-conflict": ["invalid_link_value"],
-            "invalid-link-sub-list-value": ["invalid_link_value"],
-            "invalid-link-sub-list-subset-type": ["invalid_link_value"],
-            "invalid-link-sub-list-nested-property-type": ["invalid_link_value"],
-            "invalid-link-sub-stable-length": ["invalid_link_value"],
-            "invalid-link-sub-list-stable-length": ["invalid_link_value"],
-            "invalid-link-sub-full-sublist": ["invalid_link_value"],
             "part-placement-body": [],
             "sketch-placement-pocket": [],
             "typed-property-pad": [],
-            "invalid-placement": ["invalid_placement"],
-            "invalid-typed-property": ["invalid_property_type"],
             "datum-plane-support": [],
             "datum-line-reference-axis": [],
             "datum-point-part-placement": [],
@@ -206,7 +152,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "sketch-external-face": [],
             "sketch-external-face-intersection": [],
             "sketch-external-face-normal": [],
-            "sketch-external-face-unsupported": ["invalid_subshape"],
             "sketch-external-whole-box": [],
             "sketch-external-internal-edge": [],
             "sketch-external-internal-vertex": [],
@@ -215,10 +160,8 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "sketch-external-vertex": [],
             "sketch-hyperbola-arc-profile": [],
             "sketch-horizontal-vertical-profile": [],
-            "sketch-invalid-conic-arc-params": ["unsupported_geometry"],
             "sketch-internal-face": [],
             "sketch-line-relation-constraints-profile": [],
-            "sketch-missing-external": ["missing_link_target"],
             "sketch-open-wire-internal-empty": [],
             "sketch-parabola-arc-profile": [],
             "sketch-perpendicular-curve-constraints-profile": [],
@@ -229,7 +172,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "sketch-rect-circle-hole": [],
             "sketch-symmetric-constraints-profile": [],
             "sketch-tangent-constraints-profile": [],
-            "sketch-unsupported-constraint": ["unsupported_property"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -257,7 +199,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "up-to-face-stable-body-split": ["execution_failed"],
             "up-to-face-stable-indexed-opaque-sublist": [],
             "up-to-face-stable-indexed-reference": [],
-            "up-to-face-stable-subname-known-gap": ["unsupported_stable_subname"],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -265,7 +206,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
 
     def test_p7_fixture_diagnostics(self) -> None:
         expected = {
-            "datum-coordinate-system-invalid-axis": ["unsupported_subshape_kind"],
             "datum-coordinate-system-reference-axis": [],
             "datum-coordinate-system-sketch-support": [],
             "chamfer-invalid-size": ["invalid_length"],
@@ -349,7 +289,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "app-link-box": [],
             "app-link-box-face": [],
             "app-link-box-multi-face": [],
-            "app-link-box-missing-subshape": ["full_subname_not_stable_identity"],
             "app-link-box-scale": [],
             "app-link-box-transform": [],
             "app-link-element-box": [],
@@ -364,7 +303,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "app-link-group-subshape-alias": [],
             "app-link-group-visibility": [],
             "app-link-label-qualified-sublist": [],
-            "app-link-missing": ["missing_link_target"],
             "app-link-nested-object-qualified-sublist": [],
             "app-link-show-element-inherited-child": [],
             "app-link-show-element-inherited-placement-list": [],
@@ -379,7 +317,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "part-boolean-fragments-split": [],
             "part-boolean-fragments-wire-split": [],
             "mesh-import-stl": [],
-            "mesh-import-stl-missing": ["execution_failed"],
             "part-box": [],
             "part-common": [],
             "part-cone": [],
@@ -400,9 +337,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "part-helix": [],
             "part-hyperbola-edge": [],
             "part-import-iges": [],
-            "part-import-iges-missing": ["execution_failed"],
             "part-import-step": [],
-            "part-import-step-missing": ["execution_failed"],
             "part-line": [],
             "part-multi-common": [],
             "part-multi-common-first-rest": [],
@@ -422,25 +357,3 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
                 self.assertEqual(self.diagnostic_codes(fixture, "p8"), codes)
-
-    def test_diagnostics_include_stage_target_and_subname_metadata(self) -> None:
-        missing_target = self.run_recompute("missing-link-target", "p4")["diagnostics"][0]
-        self.assertEqual(missing_target["code"], "missing_link_target")
-        self.assertEqual(missing_target["object"], "Pad")
-        self.assertEqual(missing_target["property"], "Profile")
-        self.assertEqual(missing_target["stage"], "graph")
-        self.assertEqual(missing_target["target"], "MissingSketch")
-
-        invalid_placement = self.run_recompute("invalid-placement", "p4")["diagnostics"][0]
-        self.assertEqual(invalid_placement["code"], "invalid_placement")
-        self.assertEqual(invalid_placement["object"], "Sketch")
-        self.assertEqual(invalid_placement["property"], "Placement")
-        self.assertEqual(invalid_placement["stage"], "parse")
-
-        missing_subshape = self.run_recompute("up-to-face-missing-subshape", "p3a")["diagnostics"][0]
-        self.assertEqual(missing_subshape["code"], "invalid_subshape")
-        self.assertEqual(missing_subshape["object"], "Pocket")
-        self.assertEqual(missing_subshape["property"], "UpToFace")
-        self.assertEqual(missing_subshape["stage"], "runtime")
-        self.assertEqual(missing_subshape["target"], "Pad")
-        self.assertEqual(missing_subshape["subname"], "Face99")

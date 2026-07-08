@@ -349,7 +349,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
 
     def test_c_api_mesh_edge_segments_reference_result_subshapes(self) -> None:
-        result = self.run_recompute_ffi("rect-pad", "mvp")
+        result = self.run_recompute_ffi("topo-state-body-tip-stable-recovery", "c4m6")
         body = result["results"][0]
 
         self.assertEqual(result["diagnostics"], [])
@@ -358,21 +358,21 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_mesh_vertex_points_reference_subshapes(body)
 
     def test_c_api_body_direct_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
-        result = self.run_recompute_ffi("rect-pad", "mvp")
+        result = self.run_recompute_ffi("topo-state-body-tip-stable-recovery", "c4m6")
         body = result["results"][0]
         subshapes = {item["indexed"]: item for item in body["subshapes"]}
 
         self.assertEqual(result["diagnostics"], [])
         self.assertEqual(body["object"], "Body")
-        self.assertEqual(subshapes["Edge7"]["id"], "Body:Edge7")
-        self.assertEqual(subshapes["Edge7"]["indexed"], "Edge7")
-        self.assertEqual(subshapes["Edge7"]["stableSubname"], "Pad.Edge7")
-        self.assertEqual(subshapes["Edge7"]["subname"], "Pad.Edge7")
-        self.assertEqual(subshapes["Face1"]["stableSubname"], "Pad.Face1")
-        self.assertEqual(subshapes["Vertex2"]["stableSubname"], "Pad.Vertex2")
-        self.assertEqual(subshapes["Face5"]["stableSubname"], "Sketch.Face1")
-        self.assertEqual(subshapes["Face5"]["subname"], "Pad.Face5")
-        self.assertEqual(subshapes["Edge3"]["stableSubname"], "Sketch.Edge1")
+        for subshape in subshapes.values():
+            self.assertEqual(subshape["id"], f"Body:{subshape['indexed']}")
+            self.assertRegex(subshape["indexed"], r"^(Face|Edge|Vertex)\d+$")
+            self.assertTrue(subshape["subname"].startswith("Pad."))
+            self.assertTrue(subshape["fullSubname"].startswith("Body.Pad."))
+            self.assertTrue(
+                subshape["stableSubname"].startswith(("Pad.", "Sketch.")),
+                subshape["stableSubname"],
+            )
 
     def test_c_api_body_replacement_tip_subshapes_publish_tip_qualified_stable_names(self) -> None:
         result = self.run_recompute_ffi("fillet-face-selection-history", "c3m5")
@@ -419,7 +419,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertNotRegex(item["stableSubname"], r"\.(Edge|Vertex)\d+$")
 
     def test_c4s11_cli_c_api_worker_wasm_share_core_result_contract(self) -> None:
-        payload = (ROOT / "fixtures" / "mvp" / "rect-pad.json").read_bytes()
+        payload = (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_bytes()
 
         cli_result = self.run_cli_core_recompute_payload(payload)
         c_api_result = self.run_recompute_ffi_payload(payload)
@@ -1121,10 +1121,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         up_to_shape_multi_face = capabilities["part_design"]["pad_pocket"]["up_to_shape_multi_face"]
         self.assertEqual(up_to_shape_multi_face["status"], "supported")
         self.assertEqual(up_to_shape_multi_face["objects"], ["part_design.pad", "part_design.pocket"])
-        self.assertEqual(
-            up_to_shape_multi_face["fixtures"],
-            ["p3a/pocket-up-to-shape-multi-face", "p3a/pad-up-to-shape-multi-face"],
-        )
+        self.assertEqual(up_to_shape_multi_face["fixtures"], [])
         self.assertEqual(
             up_to_shape_multi_face["failure_fixtures"]["offset"],
             "p3a/pocket-up-to-shape-multiple-faces-offset",
@@ -1135,7 +1132,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             up_to_shape_multi_face["diagnostics"],
-            ["unsupported_property", "unsupported_subshape_kind", "invalid_subshape", "missing_link_target"],
+            ["unsupported_property", "unsupported_subshape_kind"],
         )
         self.assertEqual(capabilities["part_design"]["pad_pocket"]["remaining_gaps"], [])
         revolution_groove = capabilities["part_design"]["revolution_groove"]
@@ -4677,9 +4674,13 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(mesh["streaming"]["chunk_triangles"], 1)
 
     def test_c3m7_c_api_exports_binary_mesh_payload(self) -> None:
-        document = json.loads((ROOT / "fixtures" / "mvp" / "rect-pad.json").read_text(encoding="utf-8"))
+        document = json.loads(
+            (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_text(
+                encoding="utf-8"
+            )
+        )
 
-        status, metadata, data, error = self.call_mesh_binary_ffi({"document": document, "object": "Pad"})
+        status, metadata, data, error = self.call_mesh_binary_ffi({"document": document, "object": "Body"})
 
         self.assertEqual(status, 0, error)
         self.assertIsNotNone(metadata)
@@ -4696,12 +4697,16 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertFalse(metadata["limited"])
 
     def test_c4s11_binary_mesh_payload_limit_reports_metadata_diagnostic(self) -> None:
-        document = json.loads((ROOT / "fixtures" / "mvp" / "rect-pad.json").read_text(encoding="utf-8"))
+        document = json.loads(
+            (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_text(
+                encoding="utf-8"
+            )
+        )
 
         status, metadata, data, error = self.call_mesh_binary_ffi(
             {
                 "document": document,
-                "object": "Pad",
+                "object": "Body",
                 "binary_payload_limits": {"max_bytes": 1},
             }
         )

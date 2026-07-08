@@ -55,7 +55,7 @@ class CadCoreFixtureTestCase(unittest.TestCase):
             subprocess.run(command, cwd=ROOT, check=True, env=env)
             return json.loads(output.read_text(encoding="utf-8"))
 
-    def run_recompute(self, fixture: str, group: str = "mvp") -> dict:
+    def run_recompute(self, fixture: str, group: str = "p2") -> dict:
         return self.run_recompute_file(ROOT / "fixtures" / group / f"{fixture}.json")
 
     def ffi_library_path(self) -> Path:
@@ -84,7 +84,7 @@ class CadCoreFixtureTestCase(unittest.TestCase):
         library.cad_core_free_export_result.restype = None
         return library
 
-    def run_recompute_ffi(self, fixture: str, group: str = "mvp") -> dict:
+    def run_recompute_ffi(self, fixture: str, group: str = "p2") -> dict:
         payload = (ROOT / "fixtures" / group / f"{fixture}.json").read_bytes()
         return self.run_recompute_ffi_payload(payload)
 
@@ -173,5 +173,5 @@ class CadCoreFixtureTestCase(unittest.TestCase):
         finally:
             library.cad_core_free_export_result(ctypes.byref(result))
 
-    def diagnostic_codes(self, fixture: str, group: str = "mvp") -> list[str]:
+    def diagnostic_codes(self, fixture: str, group: str = "p2") -> list[str]:
         return [item["code"] for item in self.run_recompute(fixture, group)["diagnostics"]]
