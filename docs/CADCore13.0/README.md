@@ -1,12 +1,12 @@
 # CADCore13.0
 
-CADCore13.0 用来收口 `topoNamingState` 输出发布与 expected 对齐主线。
+CADCore13.0 用来收口 `topoNamingState` 输出发布与 expected 对齐主线。C13-M1 已完成输出发布闭环；FreeCAD raw mapped-name、child map key、mapper history id 字节级 parity 保留为后续批次。
 
 当前批次：
 
 | 批次 | 状态 | 入口 |
 | --- | --- | --- |
-| C13-M1 TopoNamingState 输出发布闭环 | planned | [C13-M1-TopoNamingState输出发布闭环批次](C13-M1-TopoNamingState输出发布闭环批次/README.md) |
+| C13-M1 TopoNamingState 输出发布闭环 | completed / 已完成 | [C13-M1-TopoNamingState输出发布闭环批次](C13-M1-TopoNamingState输出发布闭环批次/README.md) |
 
 ## 阶段边界
 

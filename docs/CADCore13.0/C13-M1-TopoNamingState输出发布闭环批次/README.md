@@ -2,7 +2,16 @@
 
 C13-M1 目标是让 `cad-core recompute` 的正式 response 携带可消费的 `topoNamingState`，并让输出结构对齐 `cad-core/fixtures/<phase>/expected/*.freecad.json` 中的 `topoNamingState` schema。
 
-当前 S4 已验证输出闭环：`app::parseDocument()` 会读取请求侧 `topoNamingState`，`ComputeContext` 会保存它，`runtime/recompute.cpp` 会用输入 state 的 `elementMap.entries` 补回 `NamedShape.elementMap`，reference resolution 优先消费 `NamedShape` / `ElementMap`；正式 `recomputeResultJson()` 现在会把本轮 `context.namedShapes`、`responseSubshapes()` 和对象 hash 打包成新的顶层 `topoNamingState`。剩余 mapped-name、child map key、mapper history id 字节级 parity 已归类为后续 gap，不在 C13-M1 S4 扩大实现。
+当前发布状态：C13-M1 已完成。`app::parseDocument()` 会读取请求侧 `topoNamingState`，`ComputeContext` 会保存它，`runtime/recompute.cpp` 会用输入 state 的 `elementMap.entries` 补回 `NamedShape.elementMap`，reference resolution 优先消费 `NamedShape` / `ElementMap`；正式 `recomputeResultJson()` 现在会把本轮 `context.namedShapes`、`responseSubshapes()` 和对象 hash 打包成新的顶层 `topoNamingState`。
+
+发布闸门结论：
+
+- 正式 response 已发布顶层 `topoNamingState`，schema 为 `cad-core.topo-state.v1`。
+- response state 可注入下一次请求，`c4m6/topo-state-body-tip-stable-recovery` 的 Body/Tip stable reference 不回退。
+- CLI / C API / worker / wasm 共享同一正式 `topoNamingState` channel。
+- 5 个 focused `cad-core-res` 输出已保存到 `cad-core/fixtures/<phase>/cad-core-res/<case>.cad-core.json`，未写入 `expected/`。
+- full `CadCoreAdapterTest` 仍保留既有 `6 failures, 8 errors` baseline；C13-M1 focused adapter / round-trip / fixture 验证通过，不作为本批次 blocker。
+- FreeCAD raw mappedName、childElementMapKey、mapperHistoryIds 字节级 parity 是后续批次，不在 C13-M1 从 expected 字符串反推 runtime 实现。
 
 ## 当前基线
 
@@ -74,7 +83,7 @@ C13-M1 目标是让 `cad-core recompute` 的正式 response 携带可消费的 `
 - S2：补 focused red tests：正式 response 必须带 `topoNamingState`，且 persisted state 可被下一次 recompute 消费。
 - S3：实现 runtime topo state 发布器，并接入 `recomputeResultJson()`。
 - S4：验证 adapters、fixture expected 小范围和 reference update 不回退。（已完成：focused output、adapter channel、round-trip、legacy branch 均通过，剩余 expected 差异已分类。）
-- S5：发布闸门：更新矩阵、capability/docs，记录剩余 mapped-name gap。
+- S5：发布闸门已完成；矩阵、README、方案和剩余 mapped-name gap 均已收口。
 
 ## 非目标
 
@@ -103,7 +112,7 @@ cd /Users/li/Chili3DProject/FreeCAD/cad-core
 cmake --build build
 build/cad-core recompute fixtures/p2/rect-pad-pocket.json --output out/c13m1-rect-pad-pocket.result.json
 jq '.topoNamingState' out/c13m1-rect-pad-pocket.result.json
-python3 -m unittest tests.test_adapters.CadCoreAdapterTest
+python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel
 ```
 
 阶段收口候选：

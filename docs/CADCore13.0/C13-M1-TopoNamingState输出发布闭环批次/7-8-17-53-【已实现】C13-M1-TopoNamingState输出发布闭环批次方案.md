@@ -1,10 +1,20 @@
-# C13-M1 TopoNamingState 输出发布闭环批次方案
+# 【已实现】C13-M1 TopoNamingState 输出发布闭环批次方案
 
 ## 背景
 
 `cad-core/fixtures/<phase>/expected/*.freecad.json` 已经普遍包含 `topoNamingState`。S3/S4 已补齐第一轮输出发布闭环：请求里的 `topoNamingState` 会进入 `Document` / `ComputeContext`，并在 `registerIndexedNamedShape()` 阶段把 persisted `elementMap.entries` 合并到当前 `NamedShape.elementMap`，用于 stable reference 恢复；正式 response 也会发布新的顶层 `topoNamingState`。
 
-C13-M1 后续 S5 只做发布闸门和 follow-up 拆分；FreeCAD raw mapped-name、child map key、mapper history id 字节级 parity 不在 S4 从 expected 字符串反推实现。
+C13-M1 S5 已完成发布闸门和 follow-up 拆分；FreeCAD raw mapped-name、child map key、mapper history id 字节级 parity 不在 C13-M1 从 expected 字符串反推实现。
+
+## 发布状态
+
+- 状态：completed / 已完成。
+- 正式 response：已发布顶层 `topoNamingState`。
+- 可消费性：response state 可注入下一次请求，`c4m6` Body/Tip stable reference 不回退。
+- Adapter channel：CLI / C API / worker / wasm 的 `topoNamingState` payload 一致。
+- Focused outputs：5 个 `cad-core-res` 输出已保存，且未写入 `expected/`。
+- 已知 baseline：full `CadCoreAdapterTest` 仍是既有 `6 failures, 8 errors`，不作为 C13-M1 blocker。
+- 后续 gap：`freecad_mapped_name_encoding_gap`、`child_element_map_key_gap`、`mapper_history_id_gap` 进入后续批次。
 
 ## 问题定义
 
@@ -90,7 +100,7 @@ object payload：
 
 ## 实施边界
 
-第一轮做到：
+第一轮已做到：
 
 - 正式 response 包含 `topoNamingState`。
 - target object 的 `subshapes`、`elementMap.status`、`entries` 能表达当前 ledger。
@@ -131,7 +141,7 @@ cd /Users/li/Chili3DProject/FreeCAD/cad-core
 cmake --build build
 build/cad-core recompute fixtures/p2/rect-pad-pocket.json --output out/c13m1-rect-pad-pocket.result.json
 jq '.topoNamingState.objects.Body.elementMap.status' out/c13m1-rect-pad-pocket.result.json
-python3 -m unittest tests.test_adapters.CadCoreAdapterTest
+python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel
 ```
 
 阶段收口候选：
@@ -143,7 +153,8 @@ python3 -m unittest discover tests
 
 ## 关闭条件
 
-- C13-M1 focused fixtures 能看到正式 response `topoNamingState`。
-- 输入 state -> recompute -> 输出 state -> 下一次输入 state 的闭环至少有一个 Body stable reference 测试覆盖。
-- `subname/fullSubname/stableSubname` response 既有测试不回退。
-- mapped-name 字节级差异被矩阵明确归类为后续批次，而不是混进输出层特判。
+- C13-M1 focused fixtures 能看到正式 response `topoNamingState`：已完成。
+- 输入 state -> recompute -> 输出 state -> 下一次输入 state 的闭环至少有一个 Body stable reference 测试覆盖：已完成。
+- `subname/fullSubname/stableSubname` response 既有测试不回退：focused 验证已完成。
+- mapped-name 字节级差异被矩阵明确归类为后续批次，而不是混进输出层特判：已完成。
+- C13-M1 blocker queue 已全部 closed；S5 后队列无 pending 步骤。
