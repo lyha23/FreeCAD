@@ -9,30 +9,30 @@
             {
               "brep": "BREP:single-face-snapshot-only",
               "fingerprint": {
-                "area": 12.0
+                "area": 15.0
               },
               "indexed": "Face1",
               "property": "Shape",
               "shapeType": "Face",
-              "stableSubname": "Box.Face1",
+              "stableSubname": "Pad.#d:4;:G;XTR;:H21:7,F",
               "subname": "Face1",
-              "target": "Box",
-              "targetId": 1
+              "target": "Body",
+              "targetId": 3
             }
           ],
           "ShadowSub": [
             {
-              "newName": "Box.Face1",
+              "newName": "Pad.#d:4;:G;XTR;:H21:7,F",
               "oldName": "Face1"
             }
           ],
           "StableSubList": [
-            "Box.Face1"
+            "Pad.#d:4;:G;XTR;:H21:7,F"
           ],
           "SubList": [
             "Face1"
           ],
-          "value": "Box"
+          "value": "Body"
         }
       ],
       "object": "ProbeSketch",
@@ -71,7 +71,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:0d288aaf2cf363a02075fc3af5b7b9177b24d40e89f9b55296b4dddbfa33ca51",
+    "documentHash": "sha256:d2331a296b236e14814da04856d3166dfce5668497174769e235ba666c567fb9",
     "objects": {
       "ProbeSketch": {
         "childElementMaps": [],
@@ -82,7 +82,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:75180dfd22d10e8aedfab96136372e4d3826dd31c4eac320696bb0730213b45f",
+        "objectHash": "sha256:e82f3c1fc13426b09b46247c29fd7f7922ebf72548f461462237da197daaebe6",
         "subshapes": {}
       }
     },

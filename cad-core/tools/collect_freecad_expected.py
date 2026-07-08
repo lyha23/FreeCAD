@@ -29,6 +29,7 @@ TOPO_INDEX_NAME_RE = re.compile(r"^(InternalFace|InternalEdge|InternalVertex|Fac
 TOPO_CHILD_INDEX_PATH_RE = re.compile(
     r"^(?:Child\d+\.)+(InternalFace|InternalEdge|InternalVertex|Face|Edge|Vertex|Wire|Shell|Solid|Compound)\d+$"
 )
+TOPO_DISPLAY_PATH_STABLE_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*\.(Face|Edge|Vertex)\d+$")
 ACTIVE_TOPO_NAMING_STATE: dict[str, Any] | None = None
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
@@ -262,6 +263,50 @@ def list_field(value: dict, *names: str) -> list:
     return []
 
 
+def display_path_stable_token(value: Any) -> bool:
+    return isinstance(value, str) and TOPO_DISPLAY_PATH_STABLE_RE.match(value) is not None
+
+
+def reject_display_path_stable_token(value: Any, field: str) -> None:
+    if display_path_stable_token(value):
+        raise UnsupportedFixture(
+            f"{field} cannot use display path {value}; use a FreeCAD mapped name or "
+            "a topoNamingState elementMap stable token"
+        )
+
+
+def stable_identity_contract_errors(value: Any, label: str, path: str = "$") -> list[str]:
+    errors: list[str] = []
+    if isinstance(value, dict):
+        mapped_name = value.get("mappedName")
+        if isinstance(mapped_name, dict):
+            for field in ("raw", "canonical"):
+                token = mapped_name.get(field)
+                if display_path_stable_token(token):
+                    errors.append(f"{label}:{path}.mappedName.{field}.display_path")
+
+        entries = value.get("entries")
+        if value.get("encoding") == "cad-core.element-map.v1" and isinstance(entries, dict):
+            for token in entries:
+                if display_path_stable_token(token):
+                    errors.append(f"{label}:{path}.entries.{token}.display_path_key")
+
+        for key, item in value.items():
+            item_path = f"{path}.{key}"
+            if key in {"stableSubname", "rawFreecadMappedName", "canonicalFreecadMappedName"}:
+                if display_path_stable_token(item):
+                    errors.append(f"{label}:{item_path}.display_path")
+            elif key == "StableSubList" and isinstance(item, list):
+                for index, stable_token in enumerate(item):
+                    if display_path_stable_token(stable_token):
+                        errors.append(f"{label}:{item_path}[{index}].display_path")
+            errors.extend(stable_identity_contract_errors(item, label, item_path))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            errors.extend(stable_identity_contract_errors(item, label, f"{path}[{index}]"))
+    return errors
+
+
 def state_backed_stable_subname(value: dict, stable_subname: Any) -> str:
     target_name = value.get("value")
     if not isinstance(target_name, str) or not target_name:
@@ -284,6 +329,7 @@ def state_backed_stable_subname(value: dict, stable_subname: Any) -> str:
         raise UnsupportedFixture(f"topoNamingState object {target_name} elementMap.entries must be an object")
 
     token = str(stable_subname)
+    reject_display_path_stable_token(token, "topoNamingState StableSubList")
     entry = entries.get(token)
     if not isinstance(entry, dict):
         raise UnsupportedFixture(f"topoNamingState object {target_name} cannot resolve StableSubList {token}")
@@ -1334,6 +1380,8 @@ def stable_mapped_subname(shape: Any | None, indexed: str) -> str:
     mapped = shape_mapped_subname(shape, indexed)
     if mapped == indexed and plain_topological_subname(mapped):
         return ""
+    if display_path_stable_token(mapped):
+        return ""
     return mapped
 
 
@@ -1346,7 +1394,7 @@ def canonical_freecad_mapped_name(mapped_name: str) -> str:
 
 
 def roundtrip_stable_mapped_subname(shape: Any | None, indexed: str, raw_mapped_name: str) -> tuple[str, str]:
-    if shape is None or not raw_mapped_name:
+    if shape is None or not raw_mapped_name or display_path_stable_token(raw_mapped_name):
         return "", ""
     try:
         resolved = shape.getElementName(raw_mapped_name)
@@ -1577,6 +1625,7 @@ def topo_state_objects_or_raise(fixture: dict) -> dict[str, Any]:
 
 
 def topo_state_entry_for_stable_subname(fixture: dict, target_name: str, stable_subname: str) -> dict[str, Any]:
+    reject_display_path_stable_token(stable_subname, "topoNamingState StableSubList")
     objects = topo_state_objects_or_raise(fixture)
     object_state = objects.get(target_name)
     if not isinstance(object_state, dict):
@@ -1612,6 +1661,7 @@ def topo_state_resolved_indexed_subname(fixture: dict, target_name: str, stable_
 
 
 def updated_reference_shadow(shadow: dict[str, Any], target_name: str, stable_subname: str, indexed: str) -> dict[str, Any]:
+    reject_display_path_stable_token(stable_subname, "ReferenceShadow.stableSubname")
     result = copy.deepcopy(shadow)
     result["target"] = target_name
     result["indexed"] = indexed
@@ -1636,6 +1686,8 @@ def topo_state_link_item_reference_update(fixture: dict, item: dict[str, Any]) -
         raise UnsupportedFixture("topoNamingState ReferenceShadow update requires a value target")
 
     stable_subnames = [str(value) for value in stable_sub_list]
+    for stable_subname in stable_subnames:
+        reject_display_path_stable_token(stable_subname, "StableSubList")
     subnames = [
         topo_state_resolved_indexed_subname(fixture, target_name, stable_subname)
         for stable_subname in stable_subnames
@@ -1891,6 +1943,11 @@ def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dic
     mapper_history = topo_state_mapper_history_events(object_name)
     generated_id = f"{object_name}.mh-generated-face1"
     modified_id = f"{object_name}.mh-modified-edge1"
+    generated_face_token = "Source.#f:1;MHS,F"
+    modified_edge_token = "Source.#e:1;MHS,E"
+    split_edge_token = "Source.#e:2;MHS,E"
+    deleted_face_token = "Source.#f:2;MHS,F"
+    ambiguous_face_token = "Source.#f:3;MHS,F"
     object_state = {
         "objectHash": semantic_hash(probe_spec),
         "elementMapVersion": "cad-core.element-map.v1",
@@ -1908,7 +1965,7 @@ def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dic
             "encoding": "cad-core.element-map.v1",
             "status": "history_partial",
             "entries": {
-                "Source.Face1": {
+                generated_face_token: {
                     "target": {
                         "object": object_name,
                         "subname": "Face1",
@@ -1919,8 +1976,8 @@ def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dic
                         "subname": "Face1",
                     },
                     "mappedName": {
-                        "raw": "Source.Face1",
-                        "canonical": "Source.Face1",
+                        "raw": generated_face_token,
+                        "canonical": generated_face_token,
                     },
                     "recoverability": "resolved",
                     "evidence": {
@@ -1929,7 +1986,7 @@ def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dic
                         "childElementMapKey": None,
                     },
                 },
-                "Source.Edge1": {
+                modified_edge_token: {
                     "target": {
                         "object": object_name,
                         "subname": "Edge1",
@@ -1940,8 +1997,8 @@ def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dic
                         "subname": "Edge1",
                     },
                     "mappedName": {
-                        "raw": "Source.Edge1",
-                        "canonical": "Source.Edge1",
+                        "raw": modified_edge_token,
+                        "canonical": modified_edge_token,
                     },
                     "recoverability": "resolved",
                     "evidence": {
@@ -1961,24 +2018,26 @@ def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dic
             "severity": "warning",
             "source": "topoNamingState.mapperHistory",
             "object": object_name,
-            "stableSubname": "Source.Edge2",
-            "message": "Stable subname Source.Edge2 was split by mapper history and requires reselect",
+            "stableSubname": split_edge_token,
+            "message": f"Stable subname {split_edge_token} was split by mapper history and requires reselect",
         },
         {
             "code": "deleted_stable_subname",
             "severity": "warning",
             "source": "topoNamingState.mapperHistory",
             "object": object_name,
-            "stableSubname": "Source.Face2",
-            "message": "Stable subname Source.Face2 was deleted by mapper history",
+            "stableSubname": deleted_face_token,
+            "message": f"Stable subname {deleted_face_token} was deleted by mapper history",
         },
         {
             "code": "stable_identity_ambiguous",
             "severity": "warning",
             "source": "topoNamingState.mapperHistory",
             "object": object_name,
-            "stableSubname": "Source.Face3",
-            "message": "Stable subname Source.Face3 is ambiguous in mapper history and requires reselect",
+            "stableSubname": ambiguous_face_token,
+            "message": (
+                f"Stable subname {ambiguous_face_token} is ambiguous in mapper history and requires reselect"
+            ),
         },
     ]
     topo_state = {
@@ -2022,10 +2081,9 @@ def topo_state_subshape_entry(subshape: dict[str, Any]) -> dict[str, Any]:
     }
     raw_mapped_name = subshape.get("rawFreecadMappedName")
     if isinstance(raw_mapped_name, str) and raw_mapped_name:
+        reject_display_path_stable_token(raw_mapped_name, "rawFreecadMappedName")
         entry["rawFreecadMappedName"] = raw_mapped_name
-    canonical_mapped_name = subshape.get("canonicalFreecadMappedName")
-    if isinstance(canonical_mapped_name, str) and canonical_mapped_name:
-        entry["canonicalFreecadMappedName"] = canonical_mapped_name
+        entry["canonicalFreecadMappedName"] = canonical_freecad_mapped_name(raw_mapped_name)
     resolved_indexed = subshape.get("resolvedIndexed")
     if isinstance(resolved_indexed, str) and resolved_indexed:
         entry["resolvedIndexed"] = resolved_indexed
@@ -2033,18 +2091,20 @@ def topo_state_subshape_entry(subshape: dict[str, Any]) -> dict[str, Any]:
 
 
 def topo_state_element_map_entry(object_name: str, subshape: dict[str, Any]) -> tuple[str, dict[str, Any]] | None:
-    stable_token = subshape.get("stableSubname") or subshape.get("rawFreecadMappedName")
+    stable_token = subshape.get("stableSubname")
     if not isinstance(stable_token, str) or not stable_token:
         return None
+    reject_display_path_stable_token(stable_token, "topoNamingState.elementMap.entries key")
     target_subname = topo_state_indexed_subname(subshape)
     if not target_subname:
         return None
     shape_kind = str(subshape.get("kind", "shape")).lower()
     source_subname = str(subshape.get("indexed") or target_subname)
-    raw_mapped_name = str(subshape.get("rawFreecadMappedName") or stable_token)
-    canonical_mapped_name = str(
-        subshape.get("canonicalFreecadMappedName") or canonical_freecad_mapped_name(raw_mapped_name)
-    )
+    raw_mapped_name = subshape.get("rawFreecadMappedName")
+    if not isinstance(raw_mapped_name, str) or not raw_mapped_name:
+        return None
+    reject_display_path_stable_token(raw_mapped_name, "rawFreecadMappedName")
+    canonical_mapped_name = canonical_freecad_mapped_name(raw_mapped_name)
     return stable_token, {
         "target": {
             "object": object_name,
@@ -6465,6 +6525,13 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
     if topo_state_error is not None:
         ACTIVE_TOPO_NAMING_STATE = None
         return topo_state_error
+    if isinstance(fixture.get("topoNamingState"), dict):
+        input_contract_errors = stable_identity_contract_errors(fixture, "fixture")
+        if input_contract_errors:
+            raise UnsupportedFixture(
+                "invalid topoNamingState stable identity tokens: "
+                + ", ".join(input_contract_errors[:8])
+            )
 
     topo_state = fixture.get("topoNamingState")
     ACTIVE_TOPO_NAMING_STATE = topo_state if isinstance(topo_state, dict) else None
@@ -6656,6 +6723,7 @@ def topo_naming_state_contract_errors(payload: dict, label: str) -> list[str]:
     state = payload.get("topoNamingState")
     if not isinstance(state, dict):
         return errors
+    errors.extend(stable_identity_contract_errors(payload, label))
     objects = state.get("objects")
     if not isinstance(objects, dict):
         return errors

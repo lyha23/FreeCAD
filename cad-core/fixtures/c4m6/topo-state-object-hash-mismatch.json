@@ -32,38 +32,14 @@
         "subshapes": {
           "Face1": {
             "subname": "Face1",
-            "rawFreecadMappedName": "Box.Face1",
-            "canonicalFreecadMappedName": "Box.Face1",
             "resolvedIndexed": "Face1",
-            "identityStatus": "stable"
+            "identityStatus": "current_only"
           }
         },
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
-          "status": "history_partial",
-          "entries": {
-            "Box.Face1": {
-              "target": {
-                "object": "Box",
-                "subname": "Face1"
-              },
-              "shapeKind": "face",
-              "source": {
-                "object": "Box",
-                "subname": "Face1"
-              },
-              "mappedName": {
-                "raw": "Box.Face1",
-                "canonical": "Box.Face1"
-              },
-              "recoverability": "resolved",
-              "evidence": {
-                "source": "element_map",
-                "mapperHistoryIds": [],
-                "childElementMapKey": null
-              }
-            }
-          }
+          "status": "indexed_only",
+          "entries": {}
         },
         "childElementMaps": [],
         "mapperHistory": []

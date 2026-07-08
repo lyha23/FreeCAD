@@ -2,27 +2,27 @@
   "diagnostics": [
     {
       "code": "split_stable_subname",
-      "message": "Stable subname Source.Edge2 was split by mapper history and requires reselect",
+      "message": "Stable subname Source.#e:2;MHS,E was split by mapper history and requires reselect",
       "object": "HistoryProbe",
       "severity": "warning",
       "source": "topoNamingState.mapperHistory",
-      "stableSubname": "Source.Edge2"
+      "stableSubname": "Source.#e:2;MHS,E"
     },
     {
       "code": "deleted_stable_subname",
-      "message": "Stable subname Source.Face2 was deleted by mapper history",
+      "message": "Stable subname Source.#f:2;MHS,F was deleted by mapper history",
       "object": "HistoryProbe",
       "severity": "warning",
       "source": "topoNamingState.mapperHistory",
-      "stableSubname": "Source.Face2"
+      "stableSubname": "Source.#f:2;MHS,F"
     },
     {
       "code": "stable_identity_ambiguous",
-      "message": "Stable subname Source.Face3 is ambiguous in mapper history and requires reselect",
+      "message": "Stable subname Source.#f:3;MHS,F is ambiguous in mapper history and requires reselect",
       "object": "HistoryProbe",
       "severity": "warning",
       "source": "topoNamingState.mapperHistory",
-      "stableSubname": "Source.Face3"
+      "stableSubname": "Source.#f:3;MHS,F"
     }
   ],
   "elementReferenceUpdates": [],
@@ -35,7 +35,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "Source.Edge1": {
+            "Source.#e:1;MHS,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [
@@ -44,8 +44,8 @@
                 "source": "mapper_history"
               },
               "mappedName": {
-                "canonical": "Source.Edge1",
-                "raw": "Source.Edge1"
+                "canonical": "Source.#e:1;MHS,E",
+                "raw": "Source.#e:1;MHS,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -58,7 +58,7 @@
                 "subname": "Edge1"
               }
             },
-            "Source.Face1": {
+            "Source.#f:1;MHS,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [
@@ -67,8 +67,8 @@
                 "source": "mapper_history"
               },
               "mappedName": {
-                "canonical": "Source.Face1",
-                "raw": "Source.Face1"
+                "canonical": "Source.#f:1;MHS,F",
+                "raw": "Source.#f:1;MHS,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",

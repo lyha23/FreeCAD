@@ -61,7 +61,7 @@
             "Child0.Face1"
           ],
           "StableSubList": [
-            "Compound/ChildBoxA.Face1"
+            "Compound/ChildBoxA.#f:1;BOX,F"
           ],
           "StableSubListSource": "topoNamingState"
         },
@@ -89,8 +89,8 @@
         "subshapes": {
           "Child0.Face1": {
             "subname": "Child0.Face1",
-            "rawFreecadMappedName": "Compound/ChildBoxA.Face1",
-            "canonicalFreecadMappedName": "Compound/ChildBoxA.Face1",
+            "rawFreecadMappedName": "Compound/ChildBoxA.#f:1;BOX,F",
+            "canonicalFreecadMappedName": "Compound/ChildBoxA.#f:1;BOX,F",
             "resolvedIndexed": "Child0.Face1",
             "identityStatus": "stable"
           }
@@ -99,7 +99,7 @@
           "encoding": "cad-core.element-map.v1",
           "status": "history_partial",
           "entries": {
-            "Compound/ChildBoxA.Face1": {
+            "Compound/ChildBoxA.#f:1;BOX,F": {
               "target": {
                 "object": "Compound",
                 "subname": "Child0.Face1"
@@ -110,8 +110,8 @@
                 "subname": "Face1"
               },
               "mappedName": {
-                "raw": "Compound/ChildBoxA.Face1",
-                "canonical": "Compound/ChildBoxA.Face1"
+                "raw": "Compound/ChildBoxA.#f:1;BOX,F",
+                "canonical": "Compound/ChildBoxA.#f:1;BOX,F"
               },
               "recoverability": "resolved",
               "evidence": {
@@ -133,7 +133,7 @@
               "encoding": "cad-core.element-map.v1",
               "status": "history_partial",
               "entries": {
-                "ChildBoxA.Face1": {
+                "ChildBoxA.#f:1;BOX,F": {
                   "target": {
                     "object": "Compound",
                     "subname": "Child0.Face1"
@@ -144,8 +144,8 @@
                     "subname": "Face1"
                   },
                   "mappedName": {
-                    "raw": "ChildBoxA.Face1",
-                    "canonical": "ChildBoxA.Face1"
+                    "raw": "ChildBoxA.#f:1;BOX,F",
+                    "canonical": "ChildBoxA.#f:1;BOX,F"
                   },
                   "recoverability": "resolved",
                   "evidence": {

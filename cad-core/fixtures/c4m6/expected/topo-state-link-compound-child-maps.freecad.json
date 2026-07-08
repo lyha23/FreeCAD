@@ -3,7 +3,7 @@
   "elementReferenceUpdates": [],
   "results": [],
   "topoNamingState": {
-    "documentHash": "sha256:fb80fefd34ad945138071d61024e4134147e2df60e24390346a3cbf8cd39e16c",
+    "documentHash": "sha256:def8edc813e994d1edf78c035a5c325e4a5f3b4dc7cf3d80bb290eb1e1d3289f",
     "objects": {
       "Compound": {
         "childElementMaps": [
@@ -13,15 +13,15 @@
             "elementMap": {
               "encoding": "cad-core.element-map.v1",
               "entries": {
-                "ChildBoxA.Face1": {
+                "ChildBoxA.#f:1;BOX,F": {
                   "evidence": {
                     "childElementMapKey": "Compound:ChildBoxA",
                     "mapperHistoryIds": [],
                     "source": "child_element_map"
                   },
                   "mappedName": {
-                    "canonical": "ChildBoxA.Face1",
-                    "raw": "ChildBoxA.Face1"
+                    "canonical": "ChildBoxA.#f:1;BOX,F",
+                    "raw": "ChildBoxA.#f:1;BOX,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -45,15 +45,15 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "Compound/ChildBoxA.Face1": {
+            "Compound/ChildBoxA.#f:1;BOX,F": {
               "evidence": {
                 "childElementMapKey": "Compound:ChildBoxA",
                 "mapperHistoryIds": [],
                 "source": "child_element_map"
               },
               "mappedName": {
-                "canonical": "Compound/ChildBoxA.Face1",
-                "raw": "Compound/ChildBoxA.Face1"
+                "canonical": "Compound/ChildBoxA.#f:1;BOX,F",
+                "raw": "Compound/ChildBoxA.#f:1;BOX,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -74,9 +74,9 @@
         "objectHash": "sha256:8fc3e887955b209e0a184764a940d5bdf4aaf0d60278742bfb62a429c7c6a9c6",
         "subshapes": {
           "Child0.Face1": {
-            "canonicalFreecadMappedName": "Compound/ChildBoxA.Face1",
+            "canonicalFreecadMappedName": "Compound/ChildBoxA.#f:1;BOX,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Compound/ChildBoxA.Face1",
+            "rawFreecadMappedName": "Compound/ChildBoxA.#f:1;BOX,F",
             "resolvedIndexed": "Child0.Face1",
             "subname": "Child0.Face1"
           }

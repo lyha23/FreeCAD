@@ -2,18 +2,108 @@
   "fixtureCategory": "topoNamingState.reference_shadow_single_subshape_brep_only",
   "Objects": [
     {
-      "Name": "Box",
+      "Name": "Sketch",
       "ID": 1,
-      "TypeId": "Part::Box",
+      "TypeId": "Sketcher::SketchObject",
       "Properties": {
-        "Length": 2,
-        "Width": 3,
-        "Height": 4
+        "Geometry": [
+          {
+            "kind": "LineSegment",
+            "id": 1,
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 2,
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 3,
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
+          },
+          {
+            "kind": "LineSegment",
+            "id": 4,
+            "start": [
+              0,
+              5
+            ],
+            "end": [
+              0,
+              0
+            ]
+          }
+        ],
+        "Constraints": []
+      }
+    },
+    {
+      "Name": "Pad",
+      "ID": 2,
+      "TypeId": "PartDesign::Pad",
+      "Properties": {
+        "Profile": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "Sketch",
+              "SubList": [],
+              "StableSubList": [
+                "g1;SKT;FAC"
+              ],
+              "StableSubListSource": "topoNamingState"
+            }
+          ]
+        },
+        "Type": "Length",
+        "Length": 3,
+        "Reversed": false,
+        "SideType": "One side"
+      }
+    },
+    {
+      "Name": "Body",
+      "ID": 3,
+      "TypeId": "PartDesign::Body",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "Sketch",
+            "Pad"
+          ]
+        },
+        "Tip": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Pad"
+        }
       }
     },
     {
       "Name": "ProbeSketch",
-      "ID": 2,
+      "ID": 4,
       "TypeId": "Sketcher::SketchObject",
       "Properties": {
         "Geometry": [
@@ -34,25 +124,25 @@
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
-              "value": "Box",
+              "value": "Body",
               "SubList": [
                 "Face1"
               ],
               "StableSubList": [
-                "Box.Face1"
+                "Pad.#d:4;:G;XTR;:H21:7,F"
               ],
               "StableSubListSource": "topoNamingState",
               "ReferenceShadow": [
                 {
-                  "target": "Box",
-                  "targetId": 1,
+                  "target": "Body",
+                  "targetId": 3,
                   "property": "Shape",
                   "shapeType": "Face",
                   "indexed": "Face1",
                   "subname": "Face1",
-                  "stableSubname": "Box.Face1",
+                  "stableSubname": "Pad.#d:4;:G;XTR;:H21:7,F",
                   "fingerprint": {
-                    "area": 12.0
+                    "area": 15.0
                   },
                   "brep": "BREP:single-face-snapshot-only"
                 }
@@ -76,16 +166,58 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "documentHash": "sha256:e1b42af47c17a1887c830a17b84c60da64d7493c179b30b0bd0664b8be80133f",
+    "documentHash": "sha256:492d5dfdd739b066b5d7c09a822a15cb46ea506ac91f6b32521b91a51d1f4c0c",
     "objects": {
-      "Box": {
-        "objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+      "Sketch": {
+        "objectHash": "sha256:f9eb89a5470a6ce9d04496976c2527e2dd11cc358b25eb25f7cff747630d79b3",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "InternalFace1": {
+            "subname": "InternalFace1",
+            "rawFreecadMappedName": "g1;SKT;FAC",
+            "canonicalFreecadMappedName": "g1;SKT;FAC",
+            "resolvedIndexed": "InternalFace1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g1;SKT;FAC": {
+              "target": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              },
+              "mappedName": {
+                "raw": "g1;SKT;FAC",
+                "canonical": "g1;SKT;FAC"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "element_map",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "Body": {
+        "objectHash": "sha256:37cd9437f117b4d1c98b658a6b0d1584049e4549c9df2c9cebcefd3c45b06de1",
         "elementMapVersion": "cad-core.element-map.v1",
         "subshapes": {
           "Face1": {
             "subname": "Face1",
-            "rawFreecadMappedName": "Box.Face1",
-            "canonicalFreecadMappedName": "Box.Face1",
+            "rawFreecadMappedName": "Pad.#d:4;:G;XTR;:H21:7,F",
+            "canonicalFreecadMappedName": "Pad.#d:4;:G;XTR;:H*:*,F",
             "resolvedIndexed": "Face1",
             "identityStatus": "stable"
           }
@@ -94,19 +226,19 @@
           "encoding": "cad-core.element-map.v1",
           "status": "history_partial",
           "entries": {
-            "Box.Face1": {
+            "Pad.#d:4;:G;XTR;:H21:7,F": {
               "target": {
-                "object": "Box",
+                "object": "Body",
                 "subname": "Face1"
               },
               "shapeKind": "face",
               "source": {
-                "object": "Box",
+                "object": "Pad",
                 "subname": "Face1"
               },
               "mappedName": {
-                "raw": "Box.Face1",
-                "canonical": "Box.Face1"
+                "raw": "Pad.#d:4;:G;XTR;:H21:7,F",
+                "canonical": "Pad.#d:4;:G;XTR;:H*:*,F"
               },
               "recoverability": "resolved",
               "evidence": {
