@@ -6,10 +6,17 @@ C13-M2 S4 在实现 `mappedName.raw/canonical` codec 时被真实 blocker 卡住
 
 ## 当前结论
 
+- C13-M3 S0 已关闭：`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 `HEAD=095777f8ab`（`095777f8ab 文档：关闭 C13-M3 工作步骤入口`），起点 worktree clean。
 - C13-M2 S0-S3 已关闭，S3 已把 focused red tests 锁住。
 - C13-M2 S4 当前不能安全关闭；缺少的是 `NamedShape` 生产阶段的 FreeCAD-equivalent tag / op / raw mapped-name provenance。
 - runtime 仍可继续发布 C13-M1 `topoNamingState`，但不能把 stable token 当作 FreeCAD raw mapped name。
 - C13-M3 不替代 C13-M2；它是 C13-M2 S4 的前置补账本批次。
+
+## S0 关闭结果
+
+- C13-M2 S3 已有 5 个 guarded `unittest.expectedFailure` redline：p2 `Body`、c4m6 `Body`、p6 `ProbePad` 的 raw/canonical parity，以及 p5 `Sketch`、p8 `BoxLink` 的 indexed-only no-fake-raw 边界。
+- C13-M2 S4 仍保持 open：helper/runtime codec 不能在缺少 `TopoShape.Tag` / `ElementMap::encodeElementName()` 等 producer evidence 时重建 FreeCAD raw names。
+- S0 只冻结 blocker、scope 和验证入口；不改 `cad-core` 代码、tests、fixtures、expected，也不关闭 S1-S5。
 
 ## FreeCAD source authority
 

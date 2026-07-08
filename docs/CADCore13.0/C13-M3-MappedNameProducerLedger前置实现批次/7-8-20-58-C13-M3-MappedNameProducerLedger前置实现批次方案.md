@@ -6,6 +6,13 @@ C13-M2 S3 已经用 focused tests 锁住 `mappedName.raw/canonical` parity：p2 
 
 FreeCAD 的 raw mapped name 不是 response 阶段格式化出来的。它在 `TopoShapeExpansion.cpp` 的 producer 链路中生成：`ensureElementMap()->encodeElementName(..., Tag, op, other.Tag)` 消费当前 shape tag、source tag 和 op postfix，然后 `ElementMap::encodeElementName()` 追加 `;:H...` tag segment。cad-core 当前 `NamedShape.elementMap` 只有 stable token 到 current name 的投影，无法还原这层 source-backed raw bytes。
 
+## S0 关闭结果
+
+- live baseline：`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 `HEAD=095777f8ab`（`095777f8ab 文档：关闭 C13-M3 工作步骤入口`），起点 `git status --short -uall` 无输出。
+- C13-M2 S3 evidence：5 个 guarded `unittest.expectedFailure` redline 已冻结 p2 Body、c4m6 Body、p6 ProbePad raw/canonical parity，以及 p5 Sketch、p8 BoxLink indexed-only no-fake-raw 边界。
+- C13-M2 S4 blocker：helper/runtime codec alone cannot reconstruct FreeCAD raw names without `TopoShape.Tag` / `ElementMap::encodeElementName()` producer evidence；runtime 不得从 stable token 伪造 `mappedName.raw/canonical`。
+- S0 是 docs/matrix freeze；S1-S5 继续 pending。
+
 ## 问题定义
 
 当前 runtime 做的是：

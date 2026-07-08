@@ -1,7 +1,7 @@
 id	validation	level	command	status	expected_result	owner_step
-C13M3-VAL-001	Queue renders	current_docs	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M3-MappedNameProducerLedger前置实现批次/工作步骤细分 --format markdown	planned	Queue lists entry and S0-S5 until closed	入口/S0
-C13M3-VAL-002	TSV field counts	current_docs	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M3-MappedNameProducerLedger前置实现批次/矩阵/*.tsv	planned	No malformed TSV rows	入口/S0
-C13M3-VAL-003	Whitespace diff	current_docs	git diff --check	planned	No whitespace errors after docs/code changes	All
+C13M3-VAL-001	Queue renders	current_docs	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M3-MappedNameProducerLedger前置实现批次/工作步骤细分 --format markdown	passed_s0	After S0 rename, queue starts at S1 and leaves S1-S5 pending	S0
+C13M3-VAL-002	TSV field counts	current_docs	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M3-MappedNameProducerLedger前置实现批次/矩阵/*.tsv	passed_s0	No malformed TSV rows for S0 docs/matrix scope	S0
+C13M3-VAL-003	Whitespace diff	current_docs	git diff --check	passed_s0	No whitespace errors for S0 docs/matrix scope	S0
 C13M3-VAL-101	Focused topo naming state tests	focused_runtime	cd cad-core && python3 -m unittest tests.test_topo_naming_state_response	planned	S3 expectedFailure guards are removed and tests pass normally	S4
 C13M3-VAL-102	Adapter channel regression	focused_runtime	cd cad-core && python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel	planned	CLI C API worker wasm still share topoNamingState	S4/S5
 C13M3-VAL-201	Relevant build	focused_runtime	cd cad-core && cmake --build build	planned	cad-core-lib and adapters compile	S2-S5

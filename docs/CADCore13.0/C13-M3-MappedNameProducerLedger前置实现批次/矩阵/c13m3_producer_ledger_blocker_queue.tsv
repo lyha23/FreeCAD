@@ -1,5 +1,5 @@
 id	blocker	owner_step	status	close_condition	next_action
-C13M3-BLOCKER-001	C13-M2 S4 blocked by missing producer ledger	S0	open	Root cause documented and scoped into C13-M3	Proceed to S1 ledger interface.
+C13M3-BLOCKER-001	C13-M2 S4 blocked by missing producer ledger	S0	closed	C13-M2 S3 five guarded expectedFailure tests freeze p2/c4m6/p6 raw-canonical parity and p5/p8 no-fake-raw boundaries; C13-M2 S4 remains open because producer-side TopoShape.Tag and ElementMap::encodeElementName evidence is missing	Proceed to S1 ledger interface.
 C13M3-BLOCKER-101	Producer ledger interface missing	S1	open	NamedShape can carry FreeCAD-equivalent tag/sourceTag/op provenance	Proceed to S2 codec/helper.
 C13M3-BLOCKER-201	Mapped-name codec/helper missing	S2	open	Helper exists, is registered in CMake, and has FreeCAD source comments	Proceed to S3 producer population.
 C13M3-BLOCKER-301	Focused producer paths do not populate raw evidence	S3	open	p2/c4m6/p6 have source-backed provenance for required entries	Proceed to S4 runtime publisher.
