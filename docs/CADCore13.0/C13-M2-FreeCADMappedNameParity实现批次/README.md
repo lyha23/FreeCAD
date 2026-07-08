@@ -10,7 +10,9 @@ C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输�
 - S0 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=907a9264d7`（`907a9264d7 docs: 关闭 C13-M2 工作步骤总入口`），起点 worktree clean，C13-M1 队列为空。
 - S1 已关闭：`工作步骤细分/7-8-20-18-【已实现】C13-M2-S1-FreeCAD-MappedName源码调用链复核.md` 已冻结 FreeCAD `MappedName` / `ElementMap` / child map / mapper relation source authority。
 - S1 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=10dd70aba8`（`10dd70aba8 docs: 关闭 C13-M2 S0 基线冻结`），起点 worktree clean。
-- 后续队列从 S2 `collector comparator 与 expected 证据矩阵` 继续；S1 未改 C++/Python runtime、expected、fixtures、frontend、codec/helper 或 supported/focused parity 状态。
+- S2 已关闭：`工作步骤细分/7-8-20-19-【已实现】C13-M2-S2-collector-comparator与expected证据矩阵.md` 已把 collector comparator 与 focused expected evidence 分类为 schema/comparator 合同。
+- S2 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5a12e7fdc6`（`5a12e7fdc6 docs: 关闭 C13-M2 S1 源码权威冻结`），起点 worktree clean。
+- 后续队列从 S3 `focused red tests` 继续；S2 未改 C++/Python runtime、tests、expected、fixtures、frontend、codec/helper 或 supported/focused parity 状态。
 
 ## 当前问题
 
@@ -49,6 +51,14 @@ S1 已冻结的关键源码结论：
 - `ElementNamingUtils.h` 中 `;:R`、`;:H`、`;:G`、`;:M`、`;:MG`、`;:U`、`;:L`、`;:C` 是 C13-M2 codec/child key 的字节常量 authority。
 - `ElementMap::encodeElementName()`、`hashElementName()`、`dehashElementName()`、`hashChildMaps()`、`addChildElements()`、`getElementHistory()` 是 raw/canonical/child-key/history 的 source authority；后续实现不能从 expected 字符串反填。
 - `TopoShapeExpansion.cpp` 通过 `ensureElementMap()->encodeElementName()` 传播同拓扑、generated/modified、upper/lower、combo 和 child map 名称；`TopoShapeMapper.cpp` 提供 generated/modified relation 的基础 source。
+
+## S2 expected/comparator 合同
+
+- `cad-core/tools/collect_freecad_expected.py::canonical_freecad_mapped_name()` 只服务 expected/comparator：将 FreeCAD raw mapped name 中的 `:H...` 和 `;D...` 归一化，降低版本/运行时局部 tag 差异。
+- `topo_state_element_map_entry()` 从 `stableSubname` 或 `rawFreecadMappedName` 构造 `mappedName.raw/canonical` 和固定 evidence schema；当前 schema 包含 `childElementMapKey` 与 `mapperHistoryIds`，但 focused expected 里没有非空 key/id 证据。
+- `comparable_topo_naming_state()` 对 mapped names、entry keys 和 producer 的 FreeCAD/OCCT 版本做比较归一化；这是 expected 文件比较合同，不是 cad-core runtime source。
+- focused expected 当前证据：`p2 Body=50 entries`、`c4m6 Body=26 entries`、`p6 ProbePad=26 entries` 有 raw/canonical examples；`p5 Sketch=indexed_only/0`、`p8 BoxLink=indexed_only/0` 是 no-fake-raw 边界。
+- `childElementMapKey` / `mapperHistoryIds` 当前只作为 schema/future S5 关注，不能因字段存在或空值被标成 implemented。
 
 ## cad-core 落点
 
