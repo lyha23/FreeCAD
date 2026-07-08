@@ -1,0 +1,6 @@
+id	non_goal	reason	reopen_condition	status
+C13M1-NONGOAL-001	FreeCAD mapped-name byte-level encoder	C13-M1 is the response state publisher; raw #...:H... parity needs separate source audit and tests	User opens C13-M2 mapped-name parity	active
+C13M1-NONGOAL-002	Full fixture expected parity	All phases contain many geometry/history families; first close focused round-trip output	Focused C13-M1 output is green and user asks for full parity	active
+C13M1-NONGOAL-003	Frontend my-chili3d consumer sync	This repo owns cad-core response; frontend consumption belongs in my-chili3d	User switches repo/task to frontend	active
+C13M1-NONGOAL-004	Persistent backend topology cache	CAD Core is stateless; topo state travels through request/response	Architecture boundary is explicitly changed	active
+C13M1-NONGOAL-005	Changing subname/fullSubname/stableSubname response semantics	C13-M1 publishes state around existing response semantics; changing them risks frontend contract drift	Focused regression proves current semantics wrong	active

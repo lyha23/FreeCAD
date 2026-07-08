@@ -1,0 +1,13 @@
+id	field	required_in_c13m1	source	status	acceptance
+C13M1-CONTRACT-001	topoNamingState.schemaVersion	yes	collector schema	planned	Equals cad-core.topo-state.v1.
+C13M1-CONTRACT-002	topoNamingState.producer	yes	input producer or runtime defaults	planned	Present in official response; version drift does not block semantic tests.
+C13M1-CONTRACT-003	topoNamingState.documentHash	yes_with_gap_allowed	collector semantic_hash	planned	Stable value produced or hash_encoding_gap recorded.
+C13M1-CONTRACT-004	objects[target].objectHash	yes_with_gap_allowed	collector semantic_hash	planned	Stable value produced or hash_encoding_gap recorded.
+C13M1-CONTRACT-005	objects[target].subshapes	yes	responseSubshapes	planned	Indexed subshape keys map to subname and identityStatus.
+C13M1-CONTRACT-006	objects[target].elementMap.encoding	yes	cad-core element map version	planned	Equals cad-core.element-map.v1.
+C13M1-CONTRACT-007	objects[target].elementMap.status	yes	NamedShape mapped history presence	planned	Indexed-only objects publish indexed_only; mapped ledger publishes history_partial.
+C13M1-CONTRACT-008	objects[target].elementMap.entries	yes	NamedShape.elementMap	planned	Non-indexed stable entries map to response target subnames when evidence exists.
+C13M1-CONTRACT-009	objects[target].childElementMaps	yes_current_schema	NamedShape.childElementMaps	planned	Array exists; content follows current cad-core child map schema.
+C13M1-CONTRACT-010	objects[target].mapperHistory	yes_current_schema	NamedShape.mapperHistory	planned	Array exists; content follows mapperHistoryToJson projection.
+C13M1-CONTRACT-901	FreeCAD raw mappedName #...:H...	no_followup	FreeCAD mapped name encoder	followup_mapped_name	C13-M1 must not synthesize this from fixture strings.
+C13M1-CONTRACT-902	childElementMapKey exact FreeCAD hashing	no_followup	ElementMap hashChildMaps	followup_child_map	C13-M1 may expose current encoded evidence but not claim byte parity.
