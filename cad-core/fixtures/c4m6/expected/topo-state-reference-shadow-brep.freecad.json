@@ -1,6 +1,44 @@
 {
   "diagnostics": [],
-  "elementReferenceUpdates": [],
+  "elementReferenceUpdates": [
+    {
+      "PropertyType": "App::PropertyLinkSubList",
+      "SubSet": [
+        {
+          "ReferenceShadow": [
+            {
+              "brep": "BREP:single-face-snapshot-only",
+              "fingerprint": {
+                "area": 12.0
+              },
+              "indexed": "Face1",
+              "property": "Shape",
+              "shapeType": "Face",
+              "stableSubname": "Box.Face1",
+              "subname": "Face1",
+              "target": "Box",
+              "targetId": 1
+            }
+          ],
+          "ShadowSub": [
+            {
+              "newName": "Box.Face1",
+              "oldName": "Face1"
+            }
+          ],
+          "StableSubList": [
+            "Box.Face1"
+          ],
+          "SubList": [
+            "Face1"
+          ],
+          "value": "Box"
+        }
+      ],
+      "object": "ProbeSketch",
+      "property": "ExternalGeometry"
+    }
+  ],
   "results": [
     {
       "object": "ProbeSketch",

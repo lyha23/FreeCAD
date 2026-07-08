@@ -1,0 +1,224 @@
+{
+  "diagnostics": [
+    {
+      "code": "split_stable_subname",
+      "message": "Stable subname Source.Edge2 was split by mapper history and requires reselect",
+      "object": "HistoryProbe",
+      "severity": "warning",
+      "source": "topoNamingState.mapperHistory",
+      "stableSubname": "Source.Edge2"
+    },
+    {
+      "code": "deleted_stable_subname",
+      "message": "Stable subname Source.Face2 was deleted by mapper history",
+      "object": "HistoryProbe",
+      "severity": "warning",
+      "source": "topoNamingState.mapperHistory",
+      "stableSubname": "Source.Face2"
+    },
+    {
+      "code": "stable_identity_ambiguous",
+      "message": "Stable subname Source.Face3 is ambiguous in mapper history and requires reselect",
+      "object": "HistoryProbe",
+      "severity": "warning",
+      "source": "topoNamingState.mapperHistory",
+      "stableSubname": "Source.Face3"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [],
+  "topoNamingState": {
+    "documentHash": "sha256:86e71149b1ffb9a002c2d4119f1a7e59dd254c0b72a43ddf0e6bbce8300e0c42",
+    "objects": {
+      "HistoryProbe": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Source.Edge1": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [
+                  "HistoryProbe.mh-modified-edge1"
+                ],
+                "source": "mapper_history"
+              },
+              "mappedName": {
+                "canonical": "Source.Edge1",
+                "raw": "Source.Edge1"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Source",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Edge1"
+              }
+            },
+            "Source.Face1": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [
+                  "HistoryProbe.mh-generated-face1"
+                ],
+                "source": "mapper_history"
+              },
+              "mappedName": {
+                "canonical": "Source.Face1",
+                "raw": "Source.Face1"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Face1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+            },
+            "id": "HistoryProbe.mh-generated-face1",
+            "maker_stage": "TopoNamingStateProbe",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Source",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "HistoryProbe",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+            },
+            "id": "HistoryProbe.mh-modified-edge1",
+            "maker_stage": "TopoNamingStateProbe",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Source",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "HistoryProbe",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+            },
+            "id": "HistoryProbe.mh-split-edge2-a",
+            "maker_stage": "TopoNamingStateProbe",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Source",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "HistoryProbe",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+            },
+            "id": "HistoryProbe.mh-split-edge2-b",
+            "maker_stage": "TopoNamingStateProbe",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Source",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "HistoryProbe",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "deleted_stable_subname",
+            "evidence": {
+              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+            },
+            "id": "HistoryProbe.mh-deleted-face2",
+            "maker_stage": "TopoNamingStateProbe",
+            "recoverability": "deleted",
+            "relation": "deleted",
+            "shape_kind": "face",
+            "source": {
+              "object": "Source",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "HistoryProbe",
+              "subname": ""
+            }
+          },
+          {
+            "diagnostic_status": "stable_identity_ambiguous",
+            "evidence": {
+              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+            },
+            "id": "HistoryProbe.mh-ambiguous-face3",
+            "maker_stage": "TopoNamingStateProbe",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "shape_kind": "face",
+            "source": {
+              "object": "Source",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "HistoryProbe",
+              "subname": ""
+            }
+          }
+        ],
+        "objectHash": "sha256:60d5c6944fb150d5672ce480efdb27ba040dbd0a4c3d643432865711a65f8127",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "stable",
+            "subname": "Edge1"
+          },
+          "Face1": {
+            "identityStatus": "stable",
+            "subname": "Face1"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}
