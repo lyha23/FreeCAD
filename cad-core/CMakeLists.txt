@@ -329,6 +329,7 @@ add_library(cad-core-lib STATIC
   src/sketcher/sketch_object.cpp
   src/sketcher/sketch_internal_builder.cpp
   src/sketcher/sketch_internal_result.cpp
+  src/topo/freecad_mapped_name_codec.cpp
   src/topo/subshape_identity.cpp
 )
 
