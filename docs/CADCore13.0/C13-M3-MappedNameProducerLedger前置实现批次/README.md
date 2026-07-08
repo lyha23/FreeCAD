@@ -42,7 +42,7 @@ C13-M2 S4 在实现 `mappedName.raw/canonical` codec 时被真实 blocker 卡住
 
 ## 工作步骤
 
-- 入口：`工作步骤细分/7-8-20-59-C13-M3工作步骤总入口.md`
+- 入口：`工作步骤细分/7-8-20-59-【已实现】C13-M3工作步骤总入口.md`
 - S0：冻结 C13-M2 S4 blocker 与当前 redline。
 - S1：设计 producer ledger 接口、tag/op/provenance 数据模型。
 - S2：实现 FreeCAD-equivalent encode helper 与 request-local tag/op 账本。
