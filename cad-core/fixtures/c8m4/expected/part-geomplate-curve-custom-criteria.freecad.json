@@ -1,5 +1,10 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_curve_criteria",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -19,7 +24,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:f211339ffba497fd91a2986b9a09d53533f27598cf5bcc8f6ce7b6fa35bbc758",
+    "documentHash": "sha256:1aba4dc689305d33c824d1de55c5b5e8dadb4beb5d9e31cb58867862319de9ad",
     "objects": {
       "GeomPlateCurveCriteria": {
         "childElementMaps": [],
@@ -30,7 +35,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:9aad5a3f5292b9c32cb33690d603c377c5a7114a66a2208f9ee9524b4b321e0f",
+        "objectHash": "sha256:6e00c892967b41ac2cf8809d4b278328ec4680053938e670e1a68fb4e88f09f8",
         "subshapes": {}
       }
     },

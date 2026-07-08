@@ -1,5 +1,14 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -18,7 +27,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:51ec1d78c5ac25b69b5623fef00265c7a5863bfeded70e628ee511d0bc961ac7",
+    "documentHash": "sha256:3e10f822ff48f9564611ba5c35a2cfe516f4aa21c91b09da5e65c90c3c2e1e82",
     "objects": {
       "FilledFace": {
         "childElementMaps": [],
@@ -29,7 +38,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:977174f8cddd8bacbbda2cee26aedf7db32347565310e246d622597272174211",
+        "objectHash": "sha256:87282ccf28a33d50c90c09e088fc5511a1ab3c2d553db8ab968ebefbaab99bd1",
         "subshapes": {}
       }
     },

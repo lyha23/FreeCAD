@@ -1,6 +1,13 @@
 {
   "diagnostics": [
     {
+      "code": "unsupported_native_mapper_history",
+      "message": "FreeCAD Python does not expose this fixture's producer history; CadCore::TopoNamingStateProbe records the CAD Core mapperHistory DTO contract",
+      "object": "HistoryProbe",
+      "severity": "info",
+      "source": "topoNamingState.mapperHistory"
+    },
+    {
       "code": "split_stable_subname",
       "message": "Stable subname Source.#e:2;MHS,E was split by mapper history and requires reselect",
       "object": "HistoryProbe",
@@ -28,7 +35,7 @@
   "elementReferenceUpdates": [],
   "results": [],
   "topoNamingState": {
-    "documentHash": "sha256:86e71149b1ffb9a002c2d4119f1a7e59dd254c0b72a43ddf0e6bbce8300e0c42",
+    "documentHash": "sha256:c7f0c1a57314a5932a144479f256da8d4db68dcdb4573ea75da86c49efabd755",
     "objects": {
       "HistoryProbe": {
         "childElementMaps": [],
@@ -80,6 +87,29 @@
                 "object": "HistoryProbe",
                 "subname": "Face1"
               }
+            },
+            "Source.#f:4;MHS,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [
+                  "HistoryProbe.mh-merge-face4"
+                ],
+                "source": "mapper_history"
+              },
+              "mappedName": {
+                "canonical": "Source.#f:4;MHS,F",
+                "raw": "Source.#f:4;MHS,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Face1"
+              }
             }
           },
           "status": "history_partial"
@@ -89,7 +119,7 @@
           {
             "diagnostic_status": "",
             "evidence": {
-              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+              "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
             },
             "id": "HistoryProbe.mh-generated-face1",
             "maker_stage": "TopoNamingStateProbe",
@@ -108,7 +138,7 @@
           {
             "diagnostic_status": "",
             "evidence": {
-              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+              "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
             },
             "id": "HistoryProbe.mh-modified-edge1",
             "maker_stage": "TopoNamingStateProbe",
@@ -127,7 +157,7 @@
           {
             "diagnostic_status": "split_stable_subname",
             "evidence": {
-              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+              "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
             },
             "id": "HistoryProbe.mh-split-edge2-a",
             "maker_stage": "TopoNamingStateProbe",
@@ -146,7 +176,7 @@
           {
             "diagnostic_status": "split_stable_subname",
             "evidence": {
-              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+              "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
             },
             "id": "HistoryProbe.mh-split-edge2-b",
             "maker_stage": "TopoNamingStateProbe",
@@ -165,7 +195,7 @@
           {
             "diagnostic_status": "deleted_stable_subname",
             "evidence": {
-              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+              "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
             },
             "id": "HistoryProbe.mh-deleted-face2",
             "maker_stage": "TopoNamingStateProbe",
@@ -182,9 +212,28 @@
             }
           },
           {
+            "diagnostic_status": "",
+            "evidence": {
+              "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+            },
+            "id": "HistoryProbe.mh-merge-face4",
+            "maker_stage": "TopoNamingStateProbe",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "face",
+            "source": {
+              "object": "Source",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "HistoryProbe",
+              "subname": "Face1"
+            }
+          },
+          {
             "diagnostic_status": "stable_identity_ambiguous",
             "evidence": {
-              "probeCase": "mapperHistory generated modified split deleted ambiguous"
+              "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
             },
             "id": "HistoryProbe.mh-ambiguous-face3",
             "maker_stage": "TopoNamingStateProbe",
@@ -201,7 +250,7 @@
             }
           }
         ],
-        "objectHash": "sha256:60d5c6944fb150d5672ce480efdb27ba040dbd0a4c3d643432865711a65f8127",
+        "objectHash": "sha256:bfceb532497ca5e36a8f2cf969229c9ea3ccf294273c0e74a4d2dd1b7f9fa3c1",
         "subshapes": {
           "Edge1": {
             "identityStatus": "stable",

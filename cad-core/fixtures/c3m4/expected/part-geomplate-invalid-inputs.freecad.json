@@ -1,5 +1,26 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "missing_constraints",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_curve_source",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_point_constraint",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_parameter",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {

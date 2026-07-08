@@ -1,5 +1,30 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "missing_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "execution_failed",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "execution_failed",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -52,7 +77,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:75860b905509d3ce70cd625e63f81e2993de36776d04bf503452290ae0e14be7",
+    "documentHash": "sha256:c74fdf9e0513b3e9d4b0e28890d23a0b24b1b3b1fd2818d4ca8f00238c9dd20e",
     "objects": {
       "DisconnectedBoundary": {
         "childElementMaps": [],
@@ -87,7 +112,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:103e1bf0b37b977c51f91742ee08c78bf24ab9ad9fcd14649518216c7042aaaf",
+        "objectHash": "sha256:384c49ec73134b265937210c2a18ed47336ac0fd492cc5ee582b1ba0ff912b7a",
         "subshapes": {}
       },
       "MissingTarget": {

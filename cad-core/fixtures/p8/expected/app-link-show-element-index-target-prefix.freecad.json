@@ -30,7 +30,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:bf5ea0af1ac76e68eeec4b9a41d791dfd82bdf633a1c2d18b18a619edc22b611",
+    "documentHash": "sha256:8b9f288bd2fc06aa71d22d88e57048f9224ade8814b86a21bff38aa5192e9cda",
     "objects": {
       "FaceLink": {
         "childElementMaps": [],
@@ -41,7 +41,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:14c085f952f9b546ce141346e9627ef6aa051e9442648314f25139f481bf25ec",
+        "objectHash": "sha256:ad45f84f801a4dbf74e38ab3ddfa5c86fb136eb034e19c253fa5de38fb843c36",
         "subshapes": {}
       }
     },

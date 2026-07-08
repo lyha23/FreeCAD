@@ -1,5 +1,22 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "missing_link_target",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -36,7 +53,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:4c478346c70856d663d823eddc70881ea52e6fd765fdef43ccbf202e2aaef7d9",
+    "documentHash": "sha256:32bf7a4b5bddc10af95a34ab589aff475e87719187a6bea6c7e1f4831c3be75c",
     "objects": {
       "InvalidMaxSegments": {
         "childElementMaps": [],
@@ -47,7 +64,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:fd1e44001016ba05a58a468485db65d244bed60150b0aba2e467b153be7df332",
+        "objectHash": "sha256:4c070121ff3ccb4dd2c7f74a5f7999baaa781d9a9e394ebf82d68863f1717616",
         "subshapes": {}
       },
       "InvalidPtsOnCurve": {
@@ -59,7 +76,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:07989ac64095fa9a13aff2f22225c53bc803e9bbafd2c41c9d9e0775091aed53",
+        "objectHash": "sha256:1254bf9394eaf0c08b40cc121634208ec0717f2a5c4b0b719855175549261ec8",
         "subshapes": {}
       },
       "InvalidTolG1": {
@@ -71,7 +88,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:8a177ff2a356045dd1140f04a659328546d896643046b6487e6f28e6824ec686",
+        "objectHash": "sha256:cc40baf2a65d3573d4c28bdda5a6fa3e5eccaa69b67c415c50ea11ba6bbfc369",
         "subshapes": {}
       },
       "InvalidTolG2": {
@@ -83,7 +100,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:ce4934b770d86e9fc13f26bc166db5a95fbb615eb7a6c043037d9b3e408e147d",
+        "objectHash": "sha256:d44be1d72f355e319925d238ff18040337d961c3ab06575496bc04f0cc53af18",
         "subshapes": {}
       }
     },

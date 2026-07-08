@@ -24,6 +24,7 @@ ENV_ARG_MARKER = "__cad_core_expected_args_env__"
 ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
 FREECAD_PRECISION_CONFUSION = 1e-7
 FREECAD_MAPPED_NAME_HASH_RE = re.compile(r":H(?!\*)-?[0-9A-Fa-f]+(?::[0-9A-Fa-f]+)?")
+FREECAD_MAPPED_NAME_COLON_HASH_RE = re.compile(r":H:(?!\*)-?[0-9A-Fa-f]+")
 FREECAD_MAPPED_NAME_DELETE_RE = re.compile(r";D(?!\*)[0-9A-Fa-f]+")
 TOPO_INDEX_NAME_RE = re.compile(r"^(InternalFace|InternalEdge|InternalVertex|Face|Edge|Vertex|Wire|Shell|Solid|Compound)\d+$")
 TOPO_CHILD_INDEX_PATH_RE = re.compile(
@@ -330,8 +331,29 @@ def state_backed_stable_subname(value: dict, stable_subname: Any) -> str:
 
     token = str(stable_subname)
     reject_display_path_stable_token(token, "topoNamingState StableSubList")
-    entry = entries.get(token)
+    entry = matching_topo_state_entry(entries, token)
     if not isinstance(entry, dict):
+        child_maps = object_state.get("childElementMaps")
+        if isinstance(child_maps, list):
+            for child_map in child_maps:
+                if not isinstance(child_map, dict):
+                    continue
+                child_entries = child_map.get("elementMap", {}).get("entries")
+                entry = matching_topo_state_entry(child_entries, token)
+                if isinstance(entry, dict):
+                    break
+    if not isinstance(entry, dict):
+        mapper_history = object_state.get("mapperHistory")
+        if isinstance(mapper_history, list):
+            for event in mapper_history:
+                if not isinstance(event, dict) or not mapper_history_event_matches(event, token):
+                    continue
+                relation = event.get("relation")
+                target = event.get("target")
+                target_subname = target.get("subname") if isinstance(target, dict) else None
+                if relation in {"generated", "modified", "merge", "historical"} and isinstance(target_subname, str) and target_subname:
+                    return target_subname
+                break
         raise UnsupportedFixture(f"topoNamingState object {target_name} cannot resolve StableSubList {token}")
     target = entry.get("target")
     if not isinstance(target, dict):
@@ -959,6 +981,23 @@ def set_body_property(created: dict[str, Any], obj: Any, name: str, value: Any) 
     return False
 
 
+def set_compound_property(created: dict[str, Any], obj: Any, name: str, value: Any) -> bool:
+    if not isinstance(value, dict):
+        return False
+    property_type = value.get("PropertyType")
+    if name in {"Objects", "Links"} and property_type == "App::PropertyLinkList":
+        targets = list_field(value, "values", "value")
+        missing = [str(target) for target in targets if target not in created]
+        if missing:
+            raise UnsupportedFixture(f"compound links were not created: {', '.join(missing)}")
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureCompound.cpp
+        # ::Compound::Compound() declares "ADD_PROPERTY(Links, (nullptr))"; execute() iterates
+        # "for (auto obj : Links.getValues())" before makeElementCompound(shapes).
+        safe_setattr(obj, "Links", [created[str(target)] for target in targets])
+        return True
+    return False
+
+
 def link_sub_value_with_empty_datum_subname(
     created: dict[str, Any],
     value: dict,
@@ -1215,6 +1254,8 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
         for prop_name, prop_value in properties.items():
             if type_id == "PartDesign::Body" and set_body_property(created, obj, prop_name, prop_value):
                 continue
+            if type_id == "Part::Compound" and set_compound_property(created, obj, prop_name, prop_value):
+                continue
             if type_id == "PartDesign::LinearPattern" and set_linear_pattern_property(created, obj, prop_name, prop_value):
                 continue
             if type_id == "PartDesign::PolarPattern" and set_polar_pattern_property(created, obj, prop_name, prop_value):
@@ -1390,6 +1431,7 @@ def canonical_freecad_mapped_name(mapped_name: str) -> str:
         return ":H*:*" if match.group(0).count(":") > 1 else ":H*"
 
     normalized = FREECAD_MAPPED_NAME_HASH_RE.sub(replace_hash, mapped_name)
+    normalized = FREECAD_MAPPED_NAME_COLON_HASH_RE.sub(":H*", normalized)
     return FREECAD_MAPPED_NAME_DELETE_RE.sub(";D*", normalized)
 
 
@@ -1428,8 +1470,8 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
     # /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::execute()
     # publishes the Tip shape as Body.Shape while ::getSubObject() delegates child paths.
     # The collector therefore publishes current FaceN/EdgeN names as subname only. It keeps
-    # FreeCAD's raw mapped name as evidence, but publishes stableSubname only when the raw
-    # mapped name round-trips through getElementName() back to the current indexed element.
+    # FreeCAD's raw mapped name as evidence, but publishes canonical stableSubname only when
+    # the raw mapped name round-trips through getElementName() back to the current indexed element.
     for kind, attr, prefix in (
         ("Face", "Faces", "Face"),
         ("Edge", "Edges", "Edge"),
@@ -1445,6 +1487,8 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
                 indexed,
                 raw_mapped_name,
             )
+            if stable_subname:
+                stable_subname = canonical_mapped_name
             full_subname = f"{owner}.{indexed}"
             if stable_subname:
                 identity_status = "stable"
@@ -1471,8 +1515,8 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
                         f"{tip_name}.{tip_canonical_mapped_name}" if tip_canonical_mapped_name else ""
                     )
                     stable_subname = (
-                        f"{tip_name}.{tip_stable_subname}"
-                        if tip_stable_subname
+                        f"{tip_name}.{tip_canonical_mapped_name}"
+                        if tip_stable_subname and tip_canonical_mapped_name
                         else ""
                     )
                     resolved_indexed = tip_resolved_indexed
@@ -1624,7 +1668,75 @@ def topo_state_objects_or_raise(fixture: dict) -> dict[str, Any]:
     return objects
 
 
-def topo_state_entry_for_stable_subname(fixture: dict, target_name: str, stable_subname: str) -> dict[str, Any]:
+def same_stable_token(left: Any, right: Any) -> bool:
+    if not isinstance(left, str) or not isinstance(right, str) or not left or not right:
+        return False
+    return left == right or canonical_freecad_mapped_name(left) == canonical_freecad_mapped_name(right)
+
+
+def matching_topo_state_entry(entries: Any, stable_subname: str) -> dict[str, Any] | None:
+    if not isinstance(entries, dict):
+        return None
+    exact = entries.get(stable_subname)
+    if isinstance(exact, dict):
+        return exact
+    for token, entry in entries.items():
+        if not isinstance(entry, dict) or not same_stable_token(token, stable_subname):
+            continue
+        return entry
+    for entry in entries.values():
+        if not isinstance(entry, dict):
+            continue
+        mapped_name = entry.get("mappedName")
+        if not isinstance(mapped_name, dict):
+            continue
+        if same_stable_token(mapped_name.get("raw"), stable_subname):
+            return entry
+        if same_stable_token(mapped_name.get("canonical"), stable_subname):
+            return entry
+    return None
+
+
+def terminal_mapper_history_diagnostic(target_name: str, stable_subname: str, event: dict[str, Any] | None) -> dict[str, Any]:
+    relation = str(event.get("relation") or "unsupported") if isinstance(event, dict) else "unsupported"
+    code_by_relation = {
+        "split": "split_stable_subname",
+        "deleted": "deleted_stable_subname",
+        "ambiguous": "ambiguous_stable_subname",
+        "needs_reselect": "split_stable_subname",
+    }
+    code = code_by_relation.get(relation, "unsupported_stable_subname")
+    diagnostic: dict[str, Any] = {
+        "code": code,
+        "severity": "warning",
+        "source": "topoNamingState.mapperHistory",
+        "object": target_name,
+        "stableSubname": stable_subname,
+        "message": f"Stable subname {stable_subname} could not be resolved for {target_name}: {relation}",
+    }
+    if isinstance(event, dict) and isinstance(event.get("id"), str):
+        diagnostic["mapperHistoryId"] = event["id"]
+    return diagnostic
+
+
+def mapper_history_event_matches(event: dict[str, Any], stable_subname: str) -> bool:
+    source = event.get("source")
+    if isinstance(source, dict) and same_stable_token(source.get("subname"), stable_subname):
+        return True
+    mapped_name = event.get("mappedName")
+    if isinstance(mapped_name, dict):
+        if same_stable_token(mapped_name.get("raw"), stable_subname):
+            return True
+        if same_stable_token(mapped_name.get("canonical"), stable_subname):
+            return True
+    return False
+
+
+def topo_state_entry_for_stable_subname(
+    fixture: dict,
+    target_name: str,
+    stable_subname: str,
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
     reject_display_path_stable_token(stable_subname, "topoNamingState StableSubList")
     objects = topo_state_objects_or_raise(fixture)
     object_state = objects.get(target_name)
@@ -1634,16 +1746,59 @@ def topo_state_entry_for_stable_subname(fixture: dict, target_name: str, stable_
     entries = element_map.get("entries") if isinstance(element_map, dict) else None
     if not isinstance(entries, dict):
         raise UnsupportedFixture(f"topoNamingState object {target_name} elementMap.entries must be an object")
-    entry = entries.get(stable_subname)
-    if not isinstance(entry, dict):
-        raise UnsupportedFixture(
-            f"topoNamingState object {target_name} cannot resolve StableSubList {stable_subname}"
-        )
-    return entry
+    entry = matching_topo_state_entry(entries, stable_subname)
+    if isinstance(entry, dict):
+        return entry, None
+
+    child_maps = object_state.get("childElementMaps")
+    if isinstance(child_maps, list):
+        for child_map in child_maps:
+            if not isinstance(child_map, dict):
+                continue
+            child_entries = child_map.get("elementMap", {}).get("entries")
+            entry = matching_topo_state_entry(child_entries, stable_subname)
+            if isinstance(entry, dict):
+                return entry, None
+
+    mapper_history = object_state.get("mapperHistory")
+    if isinstance(mapper_history, list):
+        for event in mapper_history:
+            if not isinstance(event, dict) or not mapper_history_event_matches(event, stable_subname):
+                continue
+            relation = event.get("relation")
+            recoverability = event.get("recoverability")
+            target = event.get("target")
+            target_subname = target.get("subname") if isinstance(target, dict) else None
+            if relation in {"generated", "modified", "merge", "historical"} and indexed_topo_subname(target_subname):
+                return {
+                    "target": {
+                        "object": target_name,
+                        "subname": str(target_subname),
+                    },
+                    "evidence": {
+                        "source": "mapper_history",
+                        "mapperHistoryIds": [event.get("id")] if isinstance(event.get("id"), str) else [],
+                        "childElementMapKey": None,
+                    },
+                }, None
+            terminal = str(relation or recoverability or "unsupported")
+            terminal_event = dict(event)
+            terminal_event["relation"] = terminal
+            return None, terminal_mapper_history_diagnostic(target_name, stable_subname, terminal_event)
+
+    return None, terminal_mapper_history_diagnostic(target_name, stable_subname, None)
 
 
-def topo_state_resolved_indexed_subname(fixture: dict, target_name: str, stable_subname: str) -> str:
-    entry = topo_state_entry_for_stable_subname(fixture, target_name, stable_subname)
+def topo_state_resolved_indexed_subname(
+    fixture: dict,
+    target_name: str,
+    stable_subname: str,
+) -> tuple[str | None, dict[str, Any] | None]:
+    entry, diagnostic = topo_state_entry_for_stable_subname(fixture, target_name, stable_subname)
+    if diagnostic is not None:
+        return None, diagnostic
+    if entry is None:
+        return None, terminal_mapper_history_diagnostic(target_name, stable_subname, None)
     target = entry.get("target")
     if not isinstance(target, dict):
         raise UnsupportedFixture(f"topoNamingState StableSubList {stable_subname} missing target")
@@ -1657,25 +1812,29 @@ def topo_state_resolved_indexed_subname(fixture: dict, target_name: str, stable_
         raise UnsupportedFixture(
             f"topoNamingState StableSubList {stable_subname} target.subname is not indexed: {target_subname}"
         )
-    return str(target_subname)
+    return str(target_subname), None
 
 
 def updated_reference_shadow(shadow: dict[str, Any], target_name: str, stable_subname: str, indexed: str) -> dict[str, Any]:
     reject_display_path_stable_token(stable_subname, "ReferenceShadow.stableSubname")
+    stable_token = canonical_freecad_mapped_name(stable_subname)
     result = copy.deepcopy(shadow)
     result["target"] = target_name
     result["indexed"] = indexed
     result["subname"] = indexed
-    result["stableSubname"] = stable_subname
+    result["stableSubname"] = stable_token
     return result
 
 
-def topo_state_link_item_reference_update(fixture: dict, item: dict[str, Any]) -> dict[str, Any] | None:
+def topo_state_link_item_reference_update(
+    fixture: dict,
+    item: dict[str, Any],
+) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
     if item.get("StableSubListSource") != "topoNamingState":
-        return None
+        return None, []
     reference_shadows = item.get("ReferenceShadow")
     if not isinstance(reference_shadows, list) or not reference_shadows:
-        return None
+        return None, []
     stable_sub_list = item.get("StableSubList")
     if not isinstance(stable_sub_list, list) or not stable_sub_list:
         raise UnsupportedFixture("topoNamingState ReferenceShadow update requires StableSubList")
@@ -1688,10 +1847,18 @@ def topo_state_link_item_reference_update(fixture: dict, item: dict[str, Any]) -
     stable_subnames = [str(value) for value in stable_sub_list]
     for stable_subname in stable_subnames:
         reject_display_path_stable_token(stable_subname, "StableSubList")
-    subnames = [
-        topo_state_resolved_indexed_subname(fixture, target_name, stable_subname)
-        for stable_subname in stable_subnames
-    ]
+    stable_tokens = [canonical_freecad_mapped_name(stable_subname) for stable_subname in stable_subnames]
+    subnames: list[str] = []
+    diagnostics: list[dict[str, Any]] = []
+    for stable_subname in stable_subnames:
+        subname, diagnostic = topo_state_resolved_indexed_subname(fixture, target_name, stable_subname)
+        if diagnostic is not None:
+            diagnostics.append(diagnostic)
+            continue
+        if subname is not None:
+            subnames.append(subname)
+    if diagnostics:
+        return None, diagnostics
     shadows = [
         updated_reference_shadow(shadow, target_name, stable_subname, indexed)
         for shadow, stable_subname, indexed in zip(reference_shadows, stable_subnames, subnames)
@@ -1703,24 +1870,25 @@ def topo_state_link_item_reference_update(fixture: dict, item: dict[str, Any]) -
     update_item: dict[str, Any] = {
         "value": target_name,
         "SubList": subnames,
-        "StableSubList": stable_subnames,
+        "StableSubList": stable_tokens,
         "ShadowSub": [
             {
-                "newName": stable_subname,
+                "newName": stable_token,
                 "oldName": subname,
             }
-            for stable_subname, subname in zip(stable_subnames, subnames)
+            for stable_token, subname in zip(stable_tokens, subnames)
         ],
         "ReferenceShadow": shadows,
     }
     for optional_field in ("ExternalFlags", "FullSubList", "labelReferenceRename", "documentReference"):
         if optional_field in item:
             update_item[optional_field] = copy.deepcopy(item[optional_field])
-    return update_item
+    return update_item, []
 
 
-def topo_state_reference_shadow_updates(fixture: dict) -> list[dict[str, Any]]:
+def topo_state_reference_shadow_updates_and_diagnostics(fixture: dict) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     updates: list[dict[str, Any]] = []
+    diagnostics: list[dict[str, Any]] = []
     for spec in fixture.get("Objects", []):
         if not isinstance(spec, dict):
             continue
@@ -1733,7 +1901,8 @@ def topo_state_reference_shadow_updates(fixture: dict) -> list[dict[str, Any]]:
                 continue
             property_type = value.get("PropertyType")
             if property_type in LINK_SUB_PROPERTY_TYPES:
-                update_item = topo_state_link_item_reference_update(fixture, value)
+                update_item, item_diagnostics = topo_state_link_item_reference_update(fixture, value)
+                diagnostics.extend(item_diagnostics)
                 if update_item is None:
                     continue
                 updates.append({
@@ -1752,7 +1921,8 @@ def topo_state_reference_shadow_updates(fixture: dict) -> list[dict[str, Any]]:
                 for item in sub_set:
                     if not isinstance(item, dict):
                         raise UnsupportedFixture(f"{object_name}.{property_name}.SubSet items must be objects")
-                    update_item = topo_state_link_item_reference_update(fixture, item)
+                    update_item, item_diagnostics = topo_state_link_item_reference_update(fixture, item)
+                    diagnostics.extend(item_diagnostics)
                     if update_item is None:
                         update_item = {
                             "value": item.get("value"),
@@ -1768,6 +1938,11 @@ def topo_state_reference_shadow_updates(fixture: dict) -> list[dict[str, Any]]:
                         "PropertyType": property_type,
                         "SubSet": updated_sub_set,
                     })
+    return updates, diagnostics
+
+
+def topo_state_reference_shadow_updates(fixture: dict) -> list[dict[str, Any]]:
+    updates, _ = topo_state_reference_shadow_updates_and_diagnostics(fixture)
     return updates
 
 
@@ -1862,29 +2037,48 @@ def topo_state_protocol_response(
     topo_state: dict[str, Any],
     diagnostics: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
     return {
         "results": [],
         "topoNamingState": topo_state,
-        "elementReferenceUpdates": topo_state_reference_shadow_updates(fixture),
-        "diagnostics": diagnostics or [],
+        "elementReferenceUpdates": reference_updates,
+        "diagnostics": (diagnostics or []) + reference_diagnostics,
     }
 
 
 def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[str, Any] | None:
     if fixture.get("fixtureCategory") != "topoNamingState.childElementMaps.link_compound_expansion":
         return None
-    topo_state = normalized_input_topo_state(fixture, FreeCAD)
-    if not any(
-        object_state.get("childElementMaps")
-        for object_state in topo_state.get("objects", {}).values()
-        if isinstance(object_state, dict)
-    ):
-        raise UnsupportedFixture("topoNamingState childElementMaps fixture requires non-empty childElementMaps")
-    return topo_state_protocol_response(fixture, FreeCAD, topo_state)
+    doc = FreeCAD.newDocument("CadCoreTopoStateChildMaps")
+    try:
+        created = create_objects(FreeCAD, doc, fixture)
+        doc.recompute()
+        specs = fixture_object_specs(fixture)
+        objects: dict[str, Any] = {}
+        for object_name, object_spec in specs.items():
+            obj = created.get(object_name)
+            if obj is None:
+                continue
+            if not generated_child_element_maps(object_name, object_spec, created):
+                continue
+            summary = object_expected_payload(obj, fixture, created)
+            object_state = topo_state_object_payload(object_name, summary, object_spec, created)
+            if object_state.get("childElementMaps"):
+                objects[object_name] = object_state
+        if not objects:
+            raise UnsupportedFixture("topoNamingState childElementMaps fixture requires non-empty childElementMaps")
+        topo_state = {
+            "schemaVersion": TOPO_STATE_SCHEMA_VERSION,
+            "producer": topo_state_producer(fixture, FreeCAD),
+            "documentHash": fixture_document_hash(fixture),
+            "objects": objects,
+        }
+        return topo_state_protocol_response(fixture, FreeCAD, topo_state)
+    finally:
+        FreeCAD.closeDocument(doc.Name)
 
 
-def topo_state_mapper_history_events(object_name: str) -> list[dict[str, Any]]:
-    probe_case = "mapperHistory generated modified split deleted ambiguous"
+def topo_state_mapper_history_events(object_name: str, probe_case: str) -> list[dict[str, Any]]:
 
     def event(
         event_id: str,
@@ -1921,30 +2115,39 @@ def topo_state_mapper_history_events(object_name: str) -> list[dict[str, Any]]:
         event("mh-split-edge2-a", "Edge2", "Edge2", "edge", "split", "needs_reselect", "split_stable_subname"),
         event("mh-split-edge2-b", "Edge2", "Edge3", "edge", "split", "needs_reselect", "split_stable_subname"),
         event("mh-deleted-face2", "Face2", "", "face", "deleted", "deleted", "deleted_stable_subname"),
+        event("mh-merge-face4", "Face4", "Face1", "face", "merge", "resolved"),
         event("mh-ambiguous-face3", "Face3", "", "face", "ambiguous", "ambiguous", "stable_identity_ambiguous"),
     ]
 
 
 def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dict[str, Any] | None:
     probe_spec = None
+    probe_case = ""
     for spec in fixture.get("Objects", []):
         if not isinstance(spec, dict) or spec.get("TypeId") != "CadCore::TopoNamingStateProbe":
             continue
         properties = spec.get("Properties")
         if not isinstance(properties, dict):
             continue
-        if properties.get("ProbeCase") == "mapperHistory generated modified split deleted ambiguous":
+        probe_case_value = str(properties.get("ProbeCase") or "")
+        if probe_case_value in {
+            "mapperHistory generated modified split deleted ambiguous",
+            "mapperHistory generated modified split deleted merge ambiguous",
+        }:
             probe_spec = spec
+            probe_case = probe_case_value
             break
     if probe_spec is None:
         return None
 
     object_name = str(probe_spec.get("Name") or "HistoryProbe")
-    mapper_history = topo_state_mapper_history_events(object_name)
+    mapper_history = topo_state_mapper_history_events(object_name, probe_case)
     generated_id = f"{object_name}.mh-generated-face1"
     modified_id = f"{object_name}.mh-modified-edge1"
+    merge_id = f"{object_name}.mh-merge-face4"
     generated_face_token = "Source.#f:1;MHS,F"
     modified_edge_token = "Source.#e:1;MHS,E"
+    merge_face_token = "Source.#f:4;MHS,F"
     split_edge_token = "Source.#e:2;MHS,E"
     deleted_face_token = "Source.#f:2;MHS,F"
     ambiguous_face_token = "Source.#f:3;MHS,F"
@@ -2007,12 +2210,43 @@ def topo_state_mapper_history_probe_response(fixture: dict, FreeCAD: Any) -> dic
                         "childElementMapKey": None,
                     },
                 },
+                merge_face_token: {
+                    "target": {
+                        "object": object_name,
+                        "subname": "Face1",
+                    },
+                    "shapeKind": "face",
+                    "source": {
+                        "object": "Source",
+                        "subname": "Face4",
+                    },
+                    "mappedName": {
+                        "raw": merge_face_token,
+                        "canonical": merge_face_token,
+                    },
+                    "recoverability": "resolved",
+                    "evidence": {
+                        "source": "mapper_history",
+                        "mapperHistoryIds": [merge_id],
+                        "childElementMapKey": None,
+                    },
+                },
             },
         },
         "childElementMaps": [],
         "mapperHistory": mapper_history,
     }
     diagnostics = [
+        {
+            "code": "unsupported_native_mapper_history",
+            "severity": "info",
+            "source": "topoNamingState.mapperHistory",
+            "object": object_name,
+            "message": (
+                "FreeCAD Python does not expose this fixture's producer history; "
+                "CadCore::TopoNamingStateProbe records the CAD Core mapperHistory DTO contract"
+            ),
+        },
         {
             "code": "split_stable_subname",
             "severity": "warning",
@@ -2128,7 +2362,242 @@ def topo_state_element_map_entry(object_name: str, subshape: dict[str, Any]) -> 
     }
 
 
-def topo_state_object_payload(object_name: str, summary: dict[str, Any], object_spec: dict | None) -> dict[str, Any]:
+def topo_shape_kind_from_indexed(indexed: str) -> str:
+    for prefix, kind in (("Face", "face"), ("Edge", "edge"), ("Vertex", "vertex")):
+        if indexed.startswith(prefix):
+            return kind
+    return "shape"
+
+
+def child_element_entry(
+    owner_name: str,
+    child_name: str,
+    child_key: str,
+    local_subname: str,
+    target_subname: str,
+    raw_mapped_name: str,
+    evidence_source: str,
+) -> tuple[str, dict[str, Any]] | None:
+    if not raw_mapped_name:
+        return None
+    reject_display_path_stable_token(raw_mapped_name, "childElementMaps.elementMap.entries key")
+    return raw_mapped_name, {
+        "target": {
+            "object": owner_name,
+            "subname": target_subname,
+        },
+        "shapeKind": topo_shape_kind_from_indexed(local_subname),
+        "source": {
+            "object": child_name,
+            "subname": local_subname,
+        },
+        "mappedName": {
+            "raw": raw_mapped_name,
+            "canonical": canonical_freecad_mapped_name(raw_mapped_name),
+        },
+        "recoverability": "resolved",
+        "evidence": {
+            "source": evidence_source,
+            "mapperHistoryIds": [],
+            "childElementMapKey": child_key,
+        },
+    }
+
+
+def shape_indexed_names(shape: Any | None, prefix: str) -> list[str]:
+    if shape is None:
+        return []
+    attr = {
+        "Face": "Faces",
+        "Edge": "Edges",
+        "Vertex": "Vertexes",
+    }[prefix]
+    return [f"{prefix}{index}" for index, _ in enumerate(getattr(shape, attr, []), start=1)]
+
+
+def shape_topology_offsets(shape: Any | None) -> dict[str, int]:
+    return {
+        "Face": len(shape_indexed_names(shape, "Face")),
+        "Edge": len(shape_indexed_names(shape, "Edge")),
+        "Vertex": len(shape_indexed_names(shape, "Vertex")),
+    }
+
+
+def child_map_for_shape_relation(
+    owner_name: str,
+    owner_shape: Any,
+    child_name: str,
+    child_shape: Any,
+    child_index: int,
+    path_prefix: str,
+    offsets: dict[str, int],
+    evidence_source: str,
+    raw_token_prefix: str = "",
+) -> dict[str, Any] | None:
+    child_key = f"{owner_name}:{child_name}"
+    if path_prefix:
+        child_key = f"{child_key}:{path_prefix}"
+    entries: dict[str, Any] = {}
+    for prefix in ("Face", "Edge", "Vertex"):
+        for local_index, local_subname in enumerate(shape_indexed_names(child_shape, prefix), start=1):
+            target_subname = f"{prefix}{offsets[prefix] + local_index}"
+            if not shape_has_indexed_element(owner_shape, target_subname):
+                continue
+            raw_mapped_name = stable_mapped_subname(owner_shape, target_subname)
+            if raw_token_prefix:
+                child_raw = stable_mapped_subname(child_shape, local_subname)
+                raw_mapped_name = f"{raw_token_prefix}.{child_raw}" if child_raw else ""
+            stable_entry = child_element_entry(
+                owner_name,
+                child_name,
+                child_key,
+                local_subname,
+                target_subname,
+                raw_mapped_name,
+                evidence_source,
+            )
+            if stable_entry is not None:
+                token, entry = stable_entry
+                entries[token] = entry
+    if not entries:
+        return None
+    return {
+        "key": child_key,
+        "ownerObject": owner_name,
+        "childObject": child_name,
+        "childIndex": child_index,
+        "pathPrefix": path_prefix,
+        "elementMap": {
+            "encoding": "cad-core.element-map.v1",
+            "status": "history_partial",
+            "entries": entries,
+        },
+    }
+
+
+def fixture_link_targets(value: Any) -> list[str]:
+    if not isinstance(value, dict):
+        return []
+    return [str(item) for item in list_field(value, "values", "value") if isinstance(item, str)]
+
+
+def compound_child_names_from_spec(spec: dict | None) -> list[str]:
+    properties = spec.get("Properties", {}) if isinstance(spec, dict) else {}
+    for field in ("Objects", "Links"):
+        targets = fixture_link_targets(properties.get(field))
+        if targets:
+            return targets
+    return []
+
+
+def generated_child_element_maps(
+    object_name: str,
+    object_spec: dict | None,
+    created: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    if created is None or object_name not in created:
+        return []
+    owner = created[object_name]
+    owner_shape = getattr(owner, "Shape", None)
+    if owner_shape is None or owner_shape.isNull():
+        return []
+
+    type_id = str(getattr(owner, "TypeId", ""))
+    child_maps: list[dict[str, Any]] = []
+    offsets = {"Face": 0, "Edge": 0, "Vertex": 0}
+
+    if type_id == "Part::Compound":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureCompound.cpp
+        # ::Compound::execute() consumes "Links.getValues()" in order and calls
+        # "TopoShape().makeElementCompound(shapes)", so child ranges follow link order.
+        for child_index, child_name in enumerate(compound_child_names_from_spec(object_spec)):
+            child = created.get(child_name)
+            child_shape = getattr(child, "Shape", None) if child is not None else None
+            if child_shape is None or child_shape.isNull():
+                continue
+            child_map = child_map_for_shape_relation(
+                object_name,
+                owner_shape,
+                child_name,
+                child_shape,
+                child_index,
+                f"Child{child_index}",
+                offsets,
+                "freecad_part_compound_links",
+            )
+            if child_map is not None:
+                child_maps.append(child_map)
+            for prefix, count in shape_topology_offsets(child_shape).items():
+                offsets[prefix] += count
+
+    if type_id == "PartDesign::Body":
+        tip = object_tip(owner)
+        tip_name = str(getattr(tip, "Name", "")) if tip is not None else ""
+        tip_shape = getattr(tip, "Shape", None) if tip is not None else None
+        if tip_name and tip_shape is not None and not tip_shape.isNull():
+            # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+            # ::Body::execute() stores "Shape.setValue(tipShape)" after reading Tip.getValue().
+            child_map = child_map_for_shape_relation(
+                object_name,
+                owner_shape,
+                tip_name,
+                tip_shape,
+                0,
+                tip_name,
+                offsets,
+                "freecad_partdesign_body_tip",
+                raw_token_prefix=tip_name,
+            )
+            if child_map is not None:
+                child_maps.append(child_map)
+
+    if type_id == "App::Link":
+        linked = getattr(owner, "LinkedObject", None)
+        linked_name = link_target_name(linked)
+        linked_obj = created.get(linked_name) if linked_name else None
+        linked_shape = getattr(linked_obj, "Shape", None) if linked_obj is not None else None
+        if linked_name and linked_shape is not None and not linked_shape.isNull():
+            # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Link.cpp
+            # ::LinkBaseExtension::extensionGetSubObject() delegates through getTrueLinkedObject()
+            # and ShowElement/ElementCount child indexes before returning linked subobjects.
+            child_map = child_map_for_shape_relation(
+                object_name,
+                owner_shape,
+                linked_name,
+                linked_shape,
+                0,
+                linked_name,
+                offsets,
+                "freecad_app_link_linked_object",
+            )
+            if child_map is not None:
+                child_maps.append(child_map)
+
+    return child_maps
+
+
+def merge_child_map_entries_into_element_entries(entries: dict[str, Any], child_maps: list[dict[str, Any]]) -> None:
+    for child_map in child_maps:
+        child_entries = child_map.get("elementMap", {}).get("entries")
+        if not isinstance(child_entries, dict):
+            continue
+        for token, child_entry in child_entries.items():
+            if not isinstance(child_entry, dict):
+                continue
+            current_entry = entries.get(token)
+            if current_entry is None:
+                continue
+            current_entry["source"] = copy.deepcopy(child_entry.get("source", current_entry.get("source")))
+            current_entry["mappedName"] = copy.deepcopy(child_entry.get("mappedName", current_entry.get("mappedName")))
+            current_entry["evidence"] = copy.deepcopy(child_entry.get("evidence", current_entry.get("evidence")))
+
+
+def topo_state_object_payload(
+    object_name: str,
+    summary: dict[str, Any],
+    object_spec: dict | None,
+    created: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     subshapes = summary.get("subshapes")
     if not isinstance(subshapes, list):
         subshapes = []
@@ -2146,6 +2615,9 @@ def topo_state_object_payload(object_name: str, summary: dict[str, Any], object_
             token, entry = element_map_entry
             entries[token] = entry
 
+    child_maps = generated_child_element_maps(object_name, object_spec, created)
+    merge_child_map_entries_into_element_entries(entries, child_maps)
+
     return {
         "objectHash": semantic_hash(object_spec or {"Name": object_name}),
         "elementMapVersion": "cad-core.element-map.v1",
@@ -2155,7 +2627,7 @@ def topo_state_object_payload(object_name: str, summary: dict[str, Any], object_
             "status": "history_partial" if entries else "indexed_only",
             "entries": entries,
         },
-        "childElementMaps": [],
+        "childElementMaps": child_maps,
         "mapperHistory": [],
     }
 
@@ -2164,8 +2636,10 @@ def topo_naming_state_response(
     fixture: dict,
     FreeCAD: Any,
     object_payloads: dict[str, dict[str, Any]],
+    created: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     specs = fixture_object_specs(fixture)
+    reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
     return {
         "results": [
             {
@@ -2182,12 +2656,12 @@ def topo_naming_state_response(
                 "recompute": fixture.get("recompute", {}),
             }),
             "objects": {
-                object_name: topo_state_object_payload(object_name, summary, specs.get(object_name))
+                object_name: topo_state_object_payload(object_name, summary, specs.get(object_name), created)
                 for object_name, summary in object_payloads.items()
             },
         },
-        "elementReferenceUpdates": topo_state_reference_shadow_updates(fixture),
-        "diagnostics": [],
+        "elementReferenceUpdates": reference_updates,
+        "diagnostics": reference_diagnostics,
     }
 
 
@@ -6352,6 +6826,8 @@ def expected_target_names(path: Path) -> list[str] | None:
     if not path.exists():
         return None
     expected = json.loads(path.read_text(encoding="utf-8"))
+    if expected.get("diagnostics"):
+        return None
     if isinstance(expected.get("results"), list):
         names = [
             str(item["object"])
@@ -6583,7 +7059,7 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             object_payloads[name] = object_expected_payload(obj, fixture, created)
 
         if ACTIVE_TOPO_NAMING_STATE is not None:
-            return topo_naming_state_response(fixture, FreeCAD, object_payloads)
+            return topo_naming_state_response(fixture, FreeCAD, object_payloads, created)
 
         reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
         payload: dict[str, Any] = {
@@ -6804,7 +7280,6 @@ def child_element_map_contract_errors(object_name: str, object_state: dict[str, 
         return errors
 
     key_to_targets: dict[str, set[str]] = {}
-    key_to_prefix: dict[str, str] = {}
     for index, child_map in enumerate(child_maps):
         if not isinstance(child_map, dict):
             errors.append(f"{label}:topoNamingState.{object_name}.childElementMaps.{index}")
@@ -6813,9 +7288,13 @@ def child_element_map_contract_errors(object_name: str, object_state: dict[str, 
         if not isinstance(key, str) or not key:
             errors.append(f"{label}:topoNamingState.{object_name}.childElementMaps.{index}.key")
             continue
+        if child_map.get("ownerObject") != object_name:
+            errors.append(f"{label}:topoNamingState.{object_name}.childElementMaps.{key}.ownerObject")
+        if not isinstance(child_map.get("childObject"), str) or not child_map.get("childObject"):
+            errors.append(f"{label}:topoNamingState.{object_name}.childElementMaps.{key}.childObject")
         path_prefix = child_map.get("pathPrefix")
-        if isinstance(path_prefix, str) and path_prefix:
-            key_to_prefix[key] = path_prefix
+        if not isinstance(path_prefix, str) or not path_prefix:
+            errors.append(f"{label}:topoNamingState.{object_name}.childElementMaps.{key}.pathPrefix")
         targets = key_to_targets.setdefault(key, set())
         entries = child_map.get("elementMap", {}).get("entries")
         if not isinstance(entries, dict):
@@ -6839,10 +7318,6 @@ def child_element_map_contract_errors(object_name: str, object_state: dict[str, 
                 )
                 continue
             targets.add(str(target_subname))
-            if isinstance(path_prefix, str) and path_prefix and not str(target_subname).startswith(path_prefix + "."):
-                errors.append(
-                    f"{label}:topoNamingState.{object_name}.childElementMaps.{key}.entries.{token}.target.subname.prefix"
-                )
 
     top_entries = object_state.get("elementMap", {}).get("entries")
     if not isinstance(top_entries, dict):
@@ -6861,9 +7336,6 @@ def child_element_map_contract_errors(object_name: str, object_state: dict[str, 
         target_subname = target.get("subname") if isinstance(target, dict) else None
         if target_subname not in key_to_targets[child_key]:
             errors.append(f"{label}:topoNamingState.{object_name}.elementMap.{token}.target.subname.childElementMapKey")
-        path_prefix = key_to_prefix.get(child_key)
-        if path_prefix and isinstance(target_subname, str) and not target_subname.startswith(path_prefix + "."):
-            errors.append(f"{label}:topoNamingState.{object_name}.elementMap.{token}.target.subname.prefix")
     return errors
 
 
@@ -6912,7 +7384,7 @@ def mapper_history_contract_errors(object_name: str, object_state: dict[str, Any
                     f"{label}:topoNamingState.{object_name}.elementMap.{token}.evidence.mapperHistoryIds.missing"
                 )
                 continue
-            if event.get("relation") not in {"generated", "modified"}:
+            if event.get("relation") not in {"generated", "modified", "merge"}:
                 errors.append(
                     f"{label}:topoNamingState.{object_name}.elementMap.{token}.evidence.mapperHistoryIds.terminal"
                 )

@@ -130,7 +130,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:346f55d43332e010fa90213540aa2ca0e38985ae8537c4bde404d1165730f7e6",
+    "documentHash": "sha256:94c25c1b4d0632b387be94eb41b848faa1ae7aa63ed1705291d6725d427b22ef",
     "objects": {
       "DatumPointProximityEdgeEdge1": {
         "childElementMaps": [],
@@ -213,7 +213,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:f6278de679140495307e3bf6d583a2d761d9a96e8c303841fcd6083f7599ff22",
+        "objectHash": "sha256:99a9c0a95f9909238674fc25d387e891432ef0900b4548e86cf3d27e3cb05f89",
         "subshapes": {}
       },
       "DatumPointProximityVertexVertex1": {

@@ -1,5 +1,10 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -20,7 +25,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:19b72c332fd993859ed7cf0b908ad0f1f5b74638cc5e0a74ded0181c0e57387c",
+    "documentHash": "sha256:b76ca01b489a56a455df7af748a8e0ef9401c3380908916295da0b0b0a849820",
     "objects": {
       "WrapperUvPointOnSupport": {
         "childElementMaps": [],
@@ -31,7 +36,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:bb73746f8f905d93dbec24d02e9f0110d20ac6b3da86db01dc0d0610e2151f5e",
+        "objectHash": "sha256:2869a91b931b015e08b8a00aaf22c1b89ecea620a4035eb0ba9f20267712d427",
         "subshapes": {}
       }
     },

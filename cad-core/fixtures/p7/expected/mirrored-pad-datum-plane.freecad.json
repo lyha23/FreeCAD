@@ -26,9 +26,9 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "#d:4;:G;XTR;:Hab3:7,F;:Hab4,F",
+          "rawFreecadMappedName": "#d:4;:G;XTR;:H76f:7,F;:H770,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "#d:4;:G;XTR;:Hab3:7,F;:Hab4,F",
+          "stableSubname": "#d:4;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face1"
         },
         {
@@ -40,9 +40,9 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "#3e:3;:M#3c;RFI;:H*:*,F;:H*,F",
           "subname": "Face2"
         },
         {
@@ -54,9 +54,9 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F",
+          "rawFreecadMappedName": "#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F",
+          "stableSubname": "#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
           "subname": "Face3"
         },
         {
@@ -68,9 +68,9 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "#3e:1;:M#3f;RFI;:H*:*,F;:H*,F",
           "subname": "Face4"
         },
         {
@@ -82,9 +82,9 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "#41:1;:M#40;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face5",
-          "stableSubname": "#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "#41:1;:M#40;RFI;:H*:*,F;:H*,F",
           "subname": "Face5"
         },
         {
@@ -96,9 +96,9 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "#43:1;:M#42;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face6",
-          "stableSubname": "#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "#43:1;:M#42;RFI;:H*:*,F;:H*,F",
           "subname": "Face6"
         },
         {
@@ -110,9 +110,9 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "#f:2;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "rawFreecadMappedName": "#f:2;:G;XTR;:H76f:7,E;:H770,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "#f:2;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "stableSubname": "#f:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge1"
         },
         {
@@ -124,9 +124,9 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "#10:1;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "rawFreecadMappedName": "#10:1;:G;XTR;:H76f:7,E;:H770,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "#10:1;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "stableSubname": "#10:1;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge2"
         },
         {
@@ -138,9 +138,9 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "#b:4;:Hab3,E;:Hab4,E",
+          "rawFreecadMappedName": "#b:4;:H76f,E;:H770,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "#b:4;:Hab3,E;:Hab4,E",
+          "stableSubname": "#b:4;:H*,E;:H*,E",
           "subname": "Edge3"
         },
         {
@@ -152,9 +152,9 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "#16:4;:U;XTR;:Hab3:7,E;:Hab4,E",
+          "rawFreecadMappedName": "#16:4;:U;XTR;:H76f:7,E;:H770,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "#16:4;:U;XTR;:Hab3:7,E;:Hab4,E",
+          "stableSubname": "#16:4;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge4"
         },
         {
@@ -166,9 +166,9 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "#37:3;:M#35;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "#37:3;:M#35;RFI;:H*:*,E;:H*,E",
           "subname": "Edge5"
         },
         {
@@ -180,9 +180,9 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "stableSubname": "#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge6"
         },
         {
@@ -194,9 +194,9 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "#39:3;:M#38;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge7",
-          "stableSubname": "#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "#39:3;:M#38;RFI;:H*:*,E;:H*,E",
           "subname": "Edge7"
         },
         {
@@ -208,9 +208,9 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge8",
-          "stableSubname": "#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "stableSubname": "#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge8"
         },
         {
@@ -222,9 +222,9 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "#b:4;:Hab3,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "#b:4;:H76f,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge9",
-          "stableSubname": "#b:4;:Hab3,E;:H,E;:Hab4,E",
+          "stableSubname": "#b:4;:H*,E;:H,E;:H*,E",
           "subname": "Edge9"
         },
         {
@@ -236,9 +236,9 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge10",
-          "stableSubname": "#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "stableSubname": "#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge10"
         },
         {
@@ -250,9 +250,9 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "#39:1;:M#3a;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge11",
-          "stableSubname": "#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "#39:1;:M#3a;RFI;:H*:*,E;:H*,E",
           "subname": "Edge11"
         },
         {
@@ -264,9 +264,9 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "#37:1;:M#3b;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge12",
-          "stableSubname": "#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "#37:1;:M#3b;RFI;:H*:*,E;:H*,E",
           "subname": "Edge12"
         },
         {
@@ -278,9 +278,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#8:2;:Hab3,V;:Hab4,V",
+          "rawFreecadMappedName": "#8:2;:H76f,V;:H770,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "#8:2;:Hab3,V;:Hab4,V",
+          "stableSubname": "#8:2;:H*,V;:H*,V",
           "subname": "Vertex1"
         },
         {
@@ -292,9 +292,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#18:2;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "rawFreecadMappedName": "#18:2;:U;XTR;:H76f:7,V;:H770,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "#18:2;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "stableSubname": "#18:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex2"
         },
         {
@@ -306,9 +306,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#2:1;:Hab3,V;:Hab4,V",
+          "rawFreecadMappedName": "#2:1;:H76f,V;:H770,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "#2:1;:Hab3,V;:Hab4,V",
+          "stableSubname": "#2:1;:H*,V;:H*,V",
           "subname": "Vertex3"
         },
         {
@@ -320,9 +320,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#19:1;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "rawFreecadMappedName": "#19:1;:U;XTR;:H76f:7,V;:H770,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "#19:1;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "stableSubname": "#19:1;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex4"
         },
         {
@@ -334,9 +334,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "stableSubname": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex5"
         },
         {
@@ -348,9 +348,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#8:2;:Hab3,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "#8:2;:H76f,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex6",
-          "stableSubname": "#8:2;:Hab3,V;:H,V;:Hab4,V",
+          "stableSubname": "#8:2;:H*,V;:H,V;:H*,V",
           "subname": "Vertex6"
         },
         {
@@ -362,9 +362,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#2:1;:Hab3,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "#2:1;:H76f,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex7",
-          "stableSubname": "#2:1;:Hab3,V;:H,V;:Hab4,V",
+          "stableSubname": "#2:1;:H*,V;:H,V;:H*,V",
           "subname": "Vertex7"
         },
         {
@@ -376,9 +376,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex8",
-          "stableSubname": "#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "stableSubname": "#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex8"
         }
       ],
@@ -413,9 +413,9 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:Hab4,F",
+          "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H770,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:Hab4,F",
+          "stableSubname": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face1"
         },
         {
@@ -427,9 +427,9 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "Mirrored.#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "Mirrored.#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "Mirrored.#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "Mirrored.#3e:3;:M#3c;RFI;:H*:*,F;:H*,F",
           "subname": "Face2"
         },
         {
@@ -441,9 +441,9 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F",
+          "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F",
+          "stableSubname": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
           "subname": "Face3"
         },
         {
@@ -455,9 +455,9 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "Mirrored.#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "Mirrored.#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "Mirrored.#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "Mirrored.#3e:1;:M#3f;RFI;:H*:*,F;:H*,F",
           "subname": "Face4"
         },
         {
@@ -469,9 +469,9 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "Mirrored.#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "Mirrored.#41:1;:M#40;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face5",
-          "stableSubname": "Mirrored.#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "Mirrored.#41:1;:M#40;RFI;:H*:*,F;:H*,F",
           "subname": "Face5"
         },
         {
@@ -483,9 +483,9 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "Mirrored.#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F",
+          "rawFreecadMappedName": "Mirrored.#43:1;:M#42;RFI;:H76f:a,F;:H770,F",
           "resolvedIndexed": "Face6",
-          "stableSubname": "Mirrored.#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F",
+          "stableSubname": "Mirrored.#43:1;:M#42;RFI;:H*:*,F;:H*,F",
           "subname": "Face6"
         },
         {
@@ -497,9 +497,9 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H770,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "stableSubname": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge1"
         },
         {
@@ -511,9 +511,9 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H770,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:Hab4,E",
+          "stableSubname": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge2"
         },
         {
@@ -525,9 +525,9 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#b:4;:Hab3,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#b:4;:H76f,E;:H770,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "Mirrored.#b:4;:Hab3,E;:Hab4,E",
+          "stableSubname": "Mirrored.#b:4;:H*,E;:H*,E",
           "subname": "Edge3"
         },
         {
@@ -539,9 +539,9 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H770,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:Hab4,E",
+          "stableSubname": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge4"
         },
         {
@@ -553,9 +553,9 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#37:3;:M#35;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "Mirrored.#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "Mirrored.#37:3;:M#35;RFI;:H*:*,E;:H*,E",
           "subname": "Edge5"
         },
         {
@@ -567,9 +567,9 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "stableSubname": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge6"
         },
         {
@@ -581,9 +581,9 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#39:3;:M#38;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge7",
-          "stableSubname": "Mirrored.#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "Mirrored.#39:3;:M#38;RFI;:H*:*,E;:H*,E",
           "subname": "Edge7"
         },
         {
@@ -595,9 +595,9 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge8",
-          "stableSubname": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "stableSubname": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge8"
         },
         {
@@ -609,9 +609,9 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#b:4;:Hab3,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#b:4;:H76f,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge9",
-          "stableSubname": "Mirrored.#b:4;:Hab3,E;:H,E;:Hab4,E",
+          "stableSubname": "Mirrored.#b:4;:H*,E;:H,E;:H*,E",
           "subname": "Edge9"
         },
         {
@@ -623,9 +623,9 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E",
           "resolvedIndexed": "Edge10",
-          "stableSubname": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+          "stableSubname": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge10"
         },
         {
@@ -637,9 +637,9 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#39:1;:M#3a;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge11",
-          "stableSubname": "Mirrored.#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "Mirrored.#39:1;:M#3a;RFI;:H*:*,E;:H*,E",
           "subname": "Edge11"
         },
         {
@@ -651,9 +651,9 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "Mirrored.#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E",
+          "rawFreecadMappedName": "Mirrored.#37:1;:M#3b;RFI;:H76f:a,E;:H770,E",
           "resolvedIndexed": "Edge12",
-          "stableSubname": "Mirrored.#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E",
+          "stableSubname": "Mirrored.#37:1;:M#3b;RFI;:H*:*,E;:H*,E",
           "subname": "Edge12"
         },
         {
@@ -665,9 +665,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#8:2;:Hab3,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#8:2;:H76f,V;:H770,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "Mirrored.#8:2;:Hab3,V;:Hab4,V",
+          "stableSubname": "Mirrored.#8:2;:H*,V;:H*,V",
           "subname": "Vertex1"
         },
         {
@@ -679,9 +679,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H770,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "stableSubname": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex2"
         },
         {
@@ -693,9 +693,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#2:1;:Hab3,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#2:1;:H76f,V;:H770,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "Mirrored.#2:1;:Hab3,V;:Hab4,V",
+          "stableSubname": "Mirrored.#2:1;:H*,V;:H*,V",
           "subname": "Vertex3"
         },
         {
@@ -707,9 +707,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H770,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:Hab4,V",
+          "stableSubname": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex4"
         },
         {
@@ -721,9 +721,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "stableSubname": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex5"
         },
         {
@@ -735,9 +735,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#8:2;:Hab3,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#8:2;:H76f,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex6",
-          "stableSubname": "Mirrored.#8:2;:Hab3,V;:H,V;:Hab4,V",
+          "stableSubname": "Mirrored.#8:2;:H*,V;:H,V;:H*,V",
           "subname": "Vertex6"
         },
         {
@@ -749,9 +749,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#2:1;:Hab3,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#2:1;:H76f,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex7",
-          "stableSubname": "Mirrored.#2:1;:Hab3,V;:H,V;:Hab4,V",
+          "stableSubname": "Mirrored.#2:1;:H*,V;:H,V;:H*,V",
           "subname": "Vertex7"
         },
         {
@@ -763,9 +763,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V",
           "resolvedIndexed": "Vertex8",
-          "stableSubname": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+          "stableSubname": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex8"
         }
       ],
@@ -781,32 +781,571 @@
     "documentHash": "sha256:7147ff91d9b3d660d404e14eedb94efa62231201e8771623acc978cd3162f745",
     "objects": {
       "Body": {
-        "childElementMaps": [],
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "Mirrored",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
+                    "raw": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge8"
+                  }
+                },
+                "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H*,E",
+                    "raw": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge2"
+                  }
+                },
+                "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
+                    "raw": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge10"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge10"
+                  }
+                },
+                "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H*,E",
+                    "raw": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge4"
+                  }
+                },
+                "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                    "raw": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex5"
+                  }
+                },
+                "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H*,V",
+                    "raw": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex2"
+                  }
+                },
+                "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                    "raw": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex8"
+                  }
+                },
+                "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H*,V",
+                    "raw": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex4"
+                  }
+                },
+                "Mirrored.#2:1;:H76f,V;:H,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#2:1;:H*,V;:H,V;:H*,V",
+                    "raw": "Mirrored.#2:1;:H76f,V;:H,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex7"
+                  }
+                },
+                "Mirrored.#2:1;:H76f,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#2:1;:H*,V;:H*,V",
+                    "raw": "Mirrored.#2:1;:H76f,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex3"
+                  }
+                },
+                "Mirrored.#37:1;:M#3b;RFI;:H76f:a,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#37:1;:M#3b;RFI;:H*:*,E;:H*,E",
+                    "raw": "Mirrored.#37:1;:M#3b;RFI;:H76f:a,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge12"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge12"
+                  }
+                },
+                "Mirrored.#37:3;:M#35;RFI;:H76f:a,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#37:3;:M#35;RFI;:H*:*,E;:H*,E",
+                    "raw": "Mirrored.#37:3;:M#35;RFI;:H76f:a,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge5"
+                  }
+                },
+                "Mirrored.#39:1;:M#3a;RFI;:H76f:a,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#39:1;:M#3a;RFI;:H*:*,E;:H*,E",
+                    "raw": "Mirrored.#39:1;:M#3a;RFI;:H76f:a,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge11"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge11"
+                  }
+                },
+                "Mirrored.#39:3;:M#38;RFI;:H76f:a,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#39:3;:M#38;RFI;:H*:*,E;:H*,E",
+                    "raw": "Mirrored.#39:3;:M#38;RFI;:H76f:a,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge7"
+                  }
+                },
+                "Mirrored.#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#3e:1;:M#3f;RFI;:H*:*,F;:H*,F",
+                    "raw": "Mirrored.#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Face4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face4"
+                  }
+                },
+                "Mirrored.#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#3e:3;:M#3c;RFI;:H*:*,F;:H*,F",
+                    "raw": "Mirrored.#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Face2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face2"
+                  }
+                },
+                "Mirrored.#41:1;:M#40;RFI;:H76f:a,F;:H770,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#41:1;:M#40;RFI;:H*:*,F;:H*,F",
+                    "raw": "Mirrored.#41:1;:M#40;RFI;:H76f:a,F;:H770,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Face5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face5"
+                  }
+                },
+                "Mirrored.#43:1;:M#42;RFI;:H76f:a,F;:H770,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#43:1;:M#42;RFI;:H*:*,F;:H*,F",
+                    "raw": "Mirrored.#43:1;:M#42;RFI;:H76f:a,F;:H770,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Face6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face6"
+                  }
+                },
+                "Mirrored.#8:2;:H76f,V;:H,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#8:2;:H*,V;:H,V;:H*,V",
+                    "raw": "Mirrored.#8:2;:H76f,V;:H,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex6"
+                  }
+                },
+                "Mirrored.#8:2;:H76f,V;:H770,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#8:2;:H*,V;:H*,V",
+                    "raw": "Mirrored.#8:2;:H76f,V;:H770,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex1"
+                  }
+                },
+                "Mirrored.#b:4;:H76f,E;:H,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#b:4;:H*,E;:H,E;:H*,E",
+                    "raw": "Mirrored.#b:4;:H76f,E;:H,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge9"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge9"
+                  }
+                },
+                "Mirrored.#b:4;:H76f,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#b:4;:H*,E;:H*,E",
+                    "raw": "Mirrored.#b:4;:H76f,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge3"
+                  }
+                },
+                "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
+                    "raw": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Face3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face3"
+                  }
+                },
+                "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H770,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H*,F",
+                    "raw": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H770,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Face1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face1"
+                  }
+                },
+                "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
+                    "raw": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge6"
+                  }
+                },
+                "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H770,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Mirrored:Mirrored",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H*,E",
+                    "raw": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H770,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Mirrored",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge1"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "Body:Mirrored:Mirrored",
+            "ownerObject": "Body",
+            "pathPrefix": "Mirrored"
+          }
+        ],
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "Body",
-                "subname": "Edge8"
-              },
-              "target": {
-                "object": "Body",
-                "subname": "Edge8"
-              }
-            },
-            "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:Hab4,E": {
+            "Mirrored.#10:1;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -814,7 +1353,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:Hab4,E"
+                "raw": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -827,28 +1366,28 @@
                 "subname": "Edge2"
               }
             },
-            "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E": {
+            "Mirrored.#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E"
+                "canonical": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
+                "raw": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
                 "object": "Body",
-                "subname": "Edge10"
+                "subname": "Edge8"
               },
               "target": {
                 "object": "Body",
-                "subname": "Edge10"
+                "subname": "Edge8"
               }
             },
-            "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:Hab4,E": {
+            "Mirrored.#16:4;:U;XTR;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -856,7 +1395,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:Hab4,E"
+                "raw": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -869,28 +1408,28 @@
                 "subname": "Edge4"
               }
             },
-            "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V": {
+            "Mirrored.#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V"
+                "canonical": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
+                "raw": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E"
               },
               "recoverability": "resolved",
-              "shapeKind": "vertex",
+              "shapeKind": "edge",
               "source": {
                 "object": "Body",
-                "subname": "Vertex5"
+                "subname": "Edge10"
               },
               "target": {
                 "object": "Body",
-                "subname": "Vertex5"
+                "subname": "Edge10"
               }
             },
-            "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:Hab4,V": {
+            "Mirrored.#18:2;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -898,7 +1437,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:Hab4,V"
+                "raw": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -911,28 +1450,28 @@
                 "subname": "Vertex2"
               }
             },
-            "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V": {
+            "Mirrored.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V"
+                "canonical": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                "raw": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
                 "object": "Body",
-                "subname": "Vertex8"
+                "subname": "Vertex5"
               },
               "target": {
                 "object": "Body",
-                "subname": "Vertex8"
+                "subname": "Vertex5"
               }
             },
-            "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:Hab4,V": {
+            "Mirrored.#19:1;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -940,7 +1479,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:Hab4,V"
+                "raw": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -953,28 +1492,28 @@
                 "subname": "Vertex4"
               }
             },
-            "Mirrored.#2:1;:Hab3,V;:H,V;:Hab4,V": {
+            "Mirrored.#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "Mirrored.#2:1;:H*,V;:H,V;:H*,V",
-                "raw": "Mirrored.#2:1;:Hab3,V;:H,V;:Hab4,V"
+                "canonical": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                "raw": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
                 "object": "Body",
-                "subname": "Vertex7"
+                "subname": "Vertex8"
               },
               "target": {
                 "object": "Body",
-                "subname": "Vertex7"
+                "subname": "Vertex8"
               }
             },
-            "Mirrored.#2:1;:Hab3,V;:Hab4,V": {
+            "Mirrored.#2:1;:H*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -982,7 +1521,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#2:1;:H*,V;:H*,V",
-                "raw": "Mirrored.#2:1;:Hab3,V;:Hab4,V"
+                "raw": "Mirrored.#2:1;:H76f,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -995,7 +1534,28 @@
                 "subname": "Vertex3"
               }
             },
-            "Mirrored.#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E": {
+            "Mirrored.#2:1;:H*,V;:H,V;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Mirrored.#2:1;:H*,V;:H,V;:H*,V",
+                "raw": "Mirrored.#2:1;:H76f,V;:H,V;:H770,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex7"
+              }
+            },
+            "Mirrored.#37:1;:M#3b;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1003,7 +1563,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#37:1;:M#3b;RFI;:H*:*,E;:H*,E",
-                "raw": "Mirrored.#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "Mirrored.#37:1;:M#3b;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1016,7 +1576,7 @@
                 "subname": "Edge12"
               }
             },
-            "Mirrored.#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E": {
+            "Mirrored.#37:3;:M#35;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1024,7 +1584,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#37:3;:M#35;RFI;:H*:*,E;:H*,E",
-                "raw": "Mirrored.#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "Mirrored.#37:3;:M#35;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1037,7 +1597,7 @@
                 "subname": "Edge5"
               }
             },
-            "Mirrored.#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E": {
+            "Mirrored.#39:1;:M#3a;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1045,7 +1605,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#39:1;:M#3a;RFI;:H*:*,E;:H*,E",
-                "raw": "Mirrored.#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "Mirrored.#39:1;:M#3a;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1058,7 +1618,7 @@
                 "subname": "Edge11"
               }
             },
-            "Mirrored.#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E": {
+            "Mirrored.#39:3;:M#38;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1066,7 +1626,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#39:3;:M#38;RFI;:H*:*,E;:H*,E",
-                "raw": "Mirrored.#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "Mirrored.#39:3;:M#38;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1079,7 +1639,7 @@
                 "subname": "Edge7"
               }
             },
-            "Mirrored.#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F": {
+            "Mirrored.#3e:1;:M#3f;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1087,7 +1647,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#3e:1;:M#3f;RFI;:H*:*,F;:H*,F",
-                "raw": "Mirrored.#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "Mirrored.#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1100,7 +1660,7 @@
                 "subname": "Face4"
               }
             },
-            "Mirrored.#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F": {
+            "Mirrored.#3e:3;:M#3c;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1108,7 +1668,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#3e:3;:M#3c;RFI;:H*:*,F;:H*,F",
-                "raw": "Mirrored.#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "Mirrored.#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1121,7 +1681,7 @@
                 "subname": "Face2"
               }
             },
-            "Mirrored.#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F": {
+            "Mirrored.#41:1;:M#40;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1129,7 +1689,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#41:1;:M#40;RFI;:H*:*,F;:H*,F",
-                "raw": "Mirrored.#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "Mirrored.#41:1;:M#40;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1142,7 +1702,7 @@
                 "subname": "Face5"
               }
             },
-            "Mirrored.#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F": {
+            "Mirrored.#43:1;:M#42;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1150,7 +1710,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#43:1;:M#42;RFI;:H*:*,F;:H*,F",
-                "raw": "Mirrored.#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "Mirrored.#43:1;:M#42;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1163,28 +1723,7 @@
                 "subname": "Face6"
               }
             },
-            "Mirrored.#8:2;:Hab3,V;:H,V;:Hab4,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Mirrored.#8:2;:H*,V;:H,V;:H*,V",
-                "raw": "Mirrored.#8:2;:Hab3,V;:H,V;:Hab4,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "Body",
-                "subname": "Vertex6"
-              },
-              "target": {
-                "object": "Body",
-                "subname": "Vertex6"
-              }
-            },
-            "Mirrored.#8:2;:Hab3,V;:Hab4,V": {
+            "Mirrored.#8:2;:H*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1192,7 +1731,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#8:2;:H*,V;:H*,V",
-                "raw": "Mirrored.#8:2;:Hab3,V;:Hab4,V"
+                "raw": "Mirrored.#8:2;:H76f,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1205,28 +1744,28 @@
                 "subname": "Vertex1"
               }
             },
-            "Mirrored.#b:4;:Hab3,E;:H,E;:Hab4,E": {
+            "Mirrored.#8:2;:H*,V;:H,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "Mirrored.#b:4;:H*,E;:H,E;:H*,E",
-                "raw": "Mirrored.#b:4;:Hab3,E;:H,E;:Hab4,E"
+                "canonical": "Mirrored.#8:2;:H*,V;:H,V;:H*,V",
+                "raw": "Mirrored.#8:2;:H76f,V;:H,V;:H770,V"
               },
               "recoverability": "resolved",
-              "shapeKind": "edge",
+              "shapeKind": "vertex",
               "source": {
                 "object": "Body",
-                "subname": "Edge9"
+                "subname": "Vertex6"
               },
               "target": {
                 "object": "Body",
-                "subname": "Edge9"
+                "subname": "Vertex6"
               }
             },
-            "Mirrored.#b:4;:Hab3,E;:Hab4,E": {
+            "Mirrored.#b:4;:H*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1234,7 +1773,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#b:4;:H*,E;:H*,E",
-                "raw": "Mirrored.#b:4;:Hab3,E;:Hab4,E"
+                "raw": "Mirrored.#b:4;:H76f,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1247,28 +1786,28 @@
                 "subname": "Edge3"
               }
             },
-            "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F": {
+            "Mirrored.#b:4;:H*,E;:H,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
-                "raw": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F"
+                "canonical": "Mirrored.#b:4;:H*,E;:H,E;:H*,E",
+                "raw": "Mirrored.#b:4;:H76f,E;:H,E;:H770,E"
               },
               "recoverability": "resolved",
-              "shapeKind": "face",
+              "shapeKind": "edge",
               "source": {
                 "object": "Body",
-                "subname": "Face3"
+                "subname": "Edge9"
               },
               "target": {
                 "object": "Body",
-                "subname": "Face3"
+                "subname": "Edge9"
               }
             },
-            "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:Hab4,F": {
+            "Mirrored.#d:4;:G;XTR;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1276,7 +1815,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:Hab4,F"
+                "raw": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1289,28 +1828,28 @@
                 "subname": "Face1"
               }
             },
-            "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E": {
+            "Mirrored.#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E"
+                "canonical": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
+                "raw": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F"
               },
               "recoverability": "resolved",
-              "shapeKind": "edge",
+              "shapeKind": "face",
               "source": {
                 "object": "Body",
-                "subname": "Edge6"
+                "subname": "Face3"
               },
               "target": {
                 "object": "Body",
-                "subname": "Edge6"
+                "subname": "Face3"
               }
             },
-            "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:Hab4,E": {
+            "Mirrored.#f:2;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1318,7 +1857,7 @@
               },
               "mappedName": {
                 "canonical": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:Hab4,E"
+                "raw": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1329,6 +1868,27 @@
               "target": {
                 "object": "Body",
                 "subname": "Edge1"
+              }
+            },
+            "Mirrored.#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
+                "raw": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge6"
               }
             }
           },
@@ -1341,182 +1901,182 @@
           "Edge1": {
             "canonicalFreecadMappedName": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H770,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "Mirrored.#39:1;:M#3a;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#39:1;:M#3a;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "Mirrored.#37:1;:M#3b;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#37:1;:M#3b;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H770,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "Mirrored.#b:4;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#b:4;:Hab3,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#b:4;:H76f,E;:H770,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "Mirrored.#16:4;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:Hab3:7,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#16:4;:U;XTR;:H76f:7,E;:H770,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "Mirrored.#37:3;:M#35;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#37:3;:M#35;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "Mirrored.#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "Mirrored.#39:3;:M#38;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#39:3;:M#38;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "Mirrored.#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "Mirrored.#b:4;:H*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#b:4;:Hab3,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "Mirrored.#b:4;:H76f,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:Hab4,F",
+            "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H770,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "Mirrored.#3e:3;:M#3c;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "Mirrored.#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "Mirrored.#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F",
+            "rawFreecadMappedName": "Mirrored.#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "Mirrored.#3e:1;:M#3f;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "Mirrored.#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "Mirrored.#41:1;:M#40;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "Mirrored.#41:1;:M#40;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "Mirrored.#43:1;:M#42;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "Mirrored.#43:1;:M#42;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "Mirrored.#8:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#8:2;:Hab3,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#8:2;:H76f,V;:H770,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H770,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "Mirrored.#2:1;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#2:1;:Hab3,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#2:1;:H76f,V;:H770,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H770,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "Mirrored.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "Mirrored.#8:2;:H*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#8:2;:Hab3,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#8:2;:H76f,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "Mirrored.#2:1;:H*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#2:1;:Hab3,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#2:1;:H76f,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "Mirrored.#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "Mirrored.#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           }
@@ -1527,28 +2087,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "Mirrored",
-                "subname": "Edge8"
-              },
-              "target": {
-                "object": "Mirrored",
-                "subname": "Edge8"
-              }
-            },
-            "#10:1;:G;XTR;:Hab3:7,E;:Hab4,E": {
+            "#10:1;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1556,7 +2095,7 @@
               },
               "mappedName": {
                 "canonical": "#10:1;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "#10:1;:G;XTR;:Hab3:7,E;:Hab4,E"
+                "raw": "#10:1;:G;XTR;:H76f:7,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1569,28 +2108,28 @@
                 "subname": "Edge2"
               }
             },
-            "#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E": {
+            "#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E"
+                "canonical": "#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
+                "raw": "#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
                 "object": "Mirrored",
-                "subname": "Edge10"
+                "subname": "Edge8"
               },
               "target": {
                 "object": "Mirrored",
-                "subname": "Edge10"
+                "subname": "Edge8"
               }
             },
-            "#16:4;:U;XTR;:Hab3:7,E;:Hab4,E": {
+            "#16:4;:U;XTR;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1598,7 +2137,7 @@
               },
               "mappedName": {
                 "canonical": "#16:4;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "#16:4;:U;XTR;:Hab3:7,E;:Hab4,E"
+                "raw": "#16:4;:U;XTR;:H76f:7,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1611,28 +2150,28 @@
                 "subname": "Edge4"
               }
             },
-            "#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V": {
+            "#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V"
+                "canonical": "#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
+                "raw": "#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E"
               },
               "recoverability": "resolved",
-              "shapeKind": "vertex",
+              "shapeKind": "edge",
               "source": {
                 "object": "Mirrored",
-                "subname": "Vertex5"
+                "subname": "Edge10"
               },
               "target": {
                 "object": "Mirrored",
-                "subname": "Vertex5"
+                "subname": "Edge10"
               }
             },
-            "#18:2;:U;XTR;:Hab3:7,V;:Hab4,V": {
+            "#18:2;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1640,7 +2179,7 @@
               },
               "mappedName": {
                 "canonical": "#18:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "#18:2;:U;XTR;:Hab3:7,V;:Hab4,V"
+                "raw": "#18:2;:U;XTR;:H76f:7,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1653,28 +2192,28 @@
                 "subname": "Vertex2"
               }
             },
-            "#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V": {
+            "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V"
+                "canonical": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                "raw": "#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
                 "object": "Mirrored",
-                "subname": "Vertex8"
+                "subname": "Vertex5"
               },
               "target": {
                 "object": "Mirrored",
-                "subname": "Vertex8"
+                "subname": "Vertex5"
               }
             },
-            "#19:1;:U;XTR;:Hab3:7,V;:Hab4,V": {
+            "#19:1;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1682,7 +2221,7 @@
               },
               "mappedName": {
                 "canonical": "#19:1;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "#19:1;:U;XTR;:Hab3:7,V;:Hab4,V"
+                "raw": "#19:1;:U;XTR;:H76f:7,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1695,28 +2234,28 @@
                 "subname": "Vertex4"
               }
             },
-            "#2:1;:Hab3,V;:H,V;:Hab4,V": {
+            "#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "#2:1;:H*,V;:H,V;:H*,V",
-                "raw": "#2:1;:Hab3,V;:H,V;:Hab4,V"
+                "canonical": "#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                "raw": "#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
                 "object": "Mirrored",
-                "subname": "Vertex7"
+                "subname": "Vertex8"
               },
               "target": {
                 "object": "Mirrored",
-                "subname": "Vertex7"
+                "subname": "Vertex8"
               }
             },
-            "#2:1;:Hab3,V;:Hab4,V": {
+            "#2:1;:H*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1724,7 +2263,7 @@
               },
               "mappedName": {
                 "canonical": "#2:1;:H*,V;:H*,V",
-                "raw": "#2:1;:Hab3,V;:Hab4,V"
+                "raw": "#2:1;:H76f,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1737,7 +2276,28 @@
                 "subname": "Vertex3"
               }
             },
-            "#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E": {
+            "#2:1;:H*,V;:H,V;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2:1;:H*,V;:H,V;:H*,V",
+                "raw": "#2:1;:H76f,V;:H,V;:H770,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Mirrored",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Mirrored",
+                "subname": "Vertex7"
+              }
+            },
+            "#37:1;:M#3b;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1745,7 +2305,7 @@
               },
               "mappedName": {
                 "canonical": "#37:1;:M#3b;RFI;:H*:*,E;:H*,E",
-                "raw": "#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "#37:1;:M#3b;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1758,7 +2318,7 @@
                 "subname": "Edge12"
               }
             },
-            "#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E": {
+            "#37:3;:M#35;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1766,7 +2326,7 @@
               },
               "mappedName": {
                 "canonical": "#37:3;:M#35;RFI;:H*:*,E;:H*,E",
-                "raw": "#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "#37:3;:M#35;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1779,7 +2339,7 @@
                 "subname": "Edge5"
               }
             },
-            "#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E": {
+            "#39:1;:M#3a;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1787,7 +2347,7 @@
               },
               "mappedName": {
                 "canonical": "#39:1;:M#3a;RFI;:H*:*,E;:H*,E",
-                "raw": "#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "#39:1;:M#3a;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1800,7 +2360,7 @@
                 "subname": "Edge11"
               }
             },
-            "#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E": {
+            "#39:3;:M#38;RFI;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1808,7 +2368,7 @@
               },
               "mappedName": {
                 "canonical": "#39:3;:M#38;RFI;:H*:*,E;:H*,E",
-                "raw": "#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E"
+                "raw": "#39:3;:M#38;RFI;:H76f:a,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1821,7 +2381,7 @@
                 "subname": "Edge7"
               }
             },
-            "#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F": {
+            "#3e:1;:M#3f;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1829,7 +2389,7 @@
               },
               "mappedName": {
                 "canonical": "#3e:1;:M#3f;RFI;:H*:*,F;:H*,F",
-                "raw": "#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1842,7 +2402,7 @@
                 "subname": "Face4"
               }
             },
-            "#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F": {
+            "#3e:3;:M#3c;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1850,7 +2410,7 @@
               },
               "mappedName": {
                 "canonical": "#3e:3;:M#3c;RFI;:H*:*,F;:H*,F",
-                "raw": "#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1863,7 +2423,7 @@
                 "subname": "Face2"
               }
             },
-            "#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F": {
+            "#41:1;:M#40;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1871,7 +2431,7 @@
               },
               "mappedName": {
                 "canonical": "#41:1;:M#40;RFI;:H*:*,F;:H*,F",
-                "raw": "#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "#41:1;:M#40;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1884,7 +2444,7 @@
                 "subname": "Face5"
               }
             },
-            "#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F": {
+            "#43:1;:M#42;RFI;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1892,7 +2452,7 @@
               },
               "mappedName": {
                 "canonical": "#43:1;:M#42;RFI;:H*:*,F;:H*,F",
-                "raw": "#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F"
+                "raw": "#43:1;:M#42;RFI;:H76f:a,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1905,28 +2465,7 @@
                 "subname": "Face6"
               }
             },
-            "#8:2;:Hab3,V;:H,V;:Hab4,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "#8:2;:H*,V;:H,V;:H*,V",
-                "raw": "#8:2;:Hab3,V;:H,V;:Hab4,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "Mirrored",
-                "subname": "Vertex6"
-              },
-              "target": {
-                "object": "Mirrored",
-                "subname": "Vertex6"
-              }
-            },
-            "#8:2;:Hab3,V;:Hab4,V": {
+            "#8:2;:H*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1934,7 +2473,7 @@
               },
               "mappedName": {
                 "canonical": "#8:2;:H*,V;:H*,V",
-                "raw": "#8:2;:Hab3,V;:Hab4,V"
+                "raw": "#8:2;:H76f,V;:H770,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1947,28 +2486,28 @@
                 "subname": "Vertex1"
               }
             },
-            "#b:4;:Hab3,E;:H,E;:Hab4,E": {
+            "#8:2;:H*,V;:H,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "#b:4;:H*,E;:H,E;:H*,E",
-                "raw": "#b:4;:Hab3,E;:H,E;:Hab4,E"
+                "canonical": "#8:2;:H*,V;:H,V;:H*,V",
+                "raw": "#8:2;:H76f,V;:H,V;:H770,V"
               },
               "recoverability": "resolved",
-              "shapeKind": "edge",
+              "shapeKind": "vertex",
               "source": {
                 "object": "Mirrored",
-                "subname": "Edge9"
+                "subname": "Vertex6"
               },
               "target": {
                 "object": "Mirrored",
-                "subname": "Edge9"
+                "subname": "Vertex6"
               }
             },
-            "#b:4;:Hab3,E;:Hab4,E": {
+            "#b:4;:H*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -1976,7 +2515,7 @@
               },
               "mappedName": {
                 "canonical": "#b:4;:H*,E;:H*,E",
-                "raw": "#b:4;:Hab3,E;:Hab4,E"
+                "raw": "#b:4;:H76f,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1989,28 +2528,28 @@
                 "subname": "Edge3"
               }
             },
-            "#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F": {
+            "#b:4;:H*,E;:H,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
-                "raw": "#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F"
+                "canonical": "#b:4;:H*,E;:H,E;:H*,E",
+                "raw": "#b:4;:H76f,E;:H,E;:H770,E"
               },
               "recoverability": "resolved",
-              "shapeKind": "face",
+              "shapeKind": "edge",
               "source": {
                 "object": "Mirrored",
-                "subname": "Face3"
+                "subname": "Edge9"
               },
               "target": {
                 "object": "Mirrored",
-                "subname": "Face3"
+                "subname": "Edge9"
               }
             },
-            "#d:4;:G;XTR;:Hab3:7,F;:Hab4,F": {
+            "#d:4;:G;XTR;:H*:*,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2018,7 +2557,7 @@
               },
               "mappedName": {
                 "canonical": "#d:4;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "#d:4;:G;XTR;:Hab3:7,F;:Hab4,F"
+                "raw": "#d:4;:G;XTR;:H76f:7,F;:H770,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2031,28 +2570,28 @@
                 "subname": "Face1"
               }
             },
-            "#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E": {
+            "#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E"
+                "canonical": "#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
+                "raw": "#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F"
               },
               "recoverability": "resolved",
-              "shapeKind": "edge",
+              "shapeKind": "face",
               "source": {
                 "object": "Mirrored",
-                "subname": "Edge6"
+                "subname": "Face3"
               },
               "target": {
                 "object": "Mirrored",
-                "subname": "Edge6"
+                "subname": "Face3"
               }
             },
-            "#f:2;:G;XTR;:Hab3:7,E;:Hab4,E": {
+            "#f:2;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -2060,7 +2599,7 @@
               },
               "mappedName": {
                 "canonical": "#f:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "#f:2;:G;XTR;:Hab3:7,E;:Hab4,E"
+                "raw": "#f:2;:G;XTR;:H76f:7,E;:H770,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2071,6 +2610,27 @@
               "target": {
                 "object": "Mirrored",
                 "subname": "Edge1"
+              }
+            },
+            "#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
+                "raw": "#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Mirrored",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Mirrored",
+                "subname": "Edge6"
               }
             }
           },
@@ -2083,182 +2643,182 @@
           "Edge1": {
             "canonicalFreecadMappedName": "#f:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#f:2;:G;XTR;:Hab3:7,E;:Hab4,E",
+            "rawFreecadMappedName": "#f:2;:G;XTR;:H76f:7,E;:H770,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "#16:4;:U;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:4;:U;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "#16:4;:U;XTR;:H76f:7,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "#39:1;:M#3a;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#39:1;:M#3a;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "#39:1;:M#3a;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "#37:1;:M#3b;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#37:1;:M#3b;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "#37:1;:M#3b;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "#10:1;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#10:1;:G;XTR;:Hab3:7,E;:Hab4,E",
+            "rawFreecadMappedName": "#10:1;:G;XTR;:H76f:7,E;:H770,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "#b:4;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#b:4;:Hab3,E;:Hab4,E",
+            "rawFreecadMappedName": "#b:4;:H76f,E;:H770,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "#16:4;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:4;:U;XTR;:Hab3:7,E;:Hab4,E",
+            "rawFreecadMappedName": "#16:4;:U;XTR;:H76f:7,E;:H770,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "#37:3;:M#35;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#37:3;:M#35;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "#37:3;:M#35;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "#f:2;:G;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#f:2;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "#f:2;:G;XTR;:H76f:7,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "#39:3;:M#38;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#39:3;:M#38;RFI;:Hab3:a,E;:Hab4,E",
+            "rawFreecadMappedName": "#39:3;:M#38;RFI;:H76f:a,E;:H770,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "#10:1;:G;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#10:1;:G;XTR;:Hab3:7,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "#10:1;:G;XTR;:H76f:7,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "#b:4;:H*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#b:4;:Hab3,E;:H,E;:Hab4,E",
+            "rawFreecadMappedName": "#b:4;:H76f,E;:H,E;:H770,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "#d:4;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#d:4;:G;XTR;:Hab3:7,F;:Hab4,F",
+            "rawFreecadMappedName": "#d:4;:G;XTR;:H76f:7,F;:H770,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "#3e:3;:M#3c;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#3e:3;:M#3c;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "#3e:3;:M#3c;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "#d:4;:G;XTR;:H*:*,F;:H,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#d:4;:G;XTR;:Hab3:7,F;:H,F;:Hab4,F",
+            "rawFreecadMappedName": "#d:4;:G;XTR;:H76f:7,F;:H,F;:H770,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "#3e:1;:M#3f;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#3e:1;:M#3f;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "#3e:1;:M#3f;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "#41:1;:M#40;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#41:1;:M#40;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "#41:1;:M#40;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "#43:1;:M#42;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#43:1;:M#42;RFI;:Hab3:a,F;:Hab4,F",
+            "rawFreecadMappedName": "#43:1;:M#42;RFI;:H76f:a,F;:H770,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "#8:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#8:2;:Hab3,V;:Hab4,V",
+            "rawFreecadMappedName": "#8:2;:H76f,V;:H770,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "#18:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#18:2;:U;XTR;:Hab3:7,V;:Hab4,V",
+            "rawFreecadMappedName": "#18:2;:U;XTR;:H76f:7,V;:H770,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "#2:1;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#2:1;:Hab3,V;:Hab4,V",
+            "rawFreecadMappedName": "#2:1;:H76f,V;:H770,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "#19:1;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#19:1;:U;XTR;:Hab3:7,V;:Hab4,V",
+            "rawFreecadMappedName": "#19:1;:U;XTR;:H76f:7,V;:H770,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#18:2;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "#18:2;:U;XTR;:H76f:7,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "#8:2;:H*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#8:2;:Hab3,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "#8:2;:H76f,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "#2:1;:H*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#2:1;:Hab3,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "#2:1;:H76f,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "#19:1;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#19:1;:U;XTR;:Hab3:7,V;:H,V;:Hab4,V",
+            "rawFreecadMappedName": "#19:1;:U;XTR;:H76f:7,V;:H,V;:H770,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           }

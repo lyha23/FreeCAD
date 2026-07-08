@@ -1,5 +1,10 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -19,7 +24,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:268034a0b71ef46be128de2ce9d5cc26fb49650199a663d8b34a86e205818bbf",
+    "documentHash": "sha256:3c7c8de75f5174b00c825a7aec0d1267aa9350e7b0a9f5ab93f71345141251d9",
     "objects": {
       "PlateSurfaceCurvesBoundary": {
         "childElementMaps": [],
@@ -30,7 +35,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:41cdba2659051663ff8fdb5bc79eb801590b8909f0e0e9f5e3ab8fa1f76222be",
+        "objectHash": "sha256:f579c85afcf3253b8eca3e79a6265a795a600480a6088231575c221094a5da7a",
         "subshapes": {}
       }
     },

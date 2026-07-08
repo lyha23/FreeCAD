@@ -1,5 +1,18 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "invalid_curve2d_source",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "invalid_point2d_source",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -75,7 +88,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:a119a80a08cbfee1dfaa9e3a62eeb2ee975c3aaa6f1292b659482b6c61658113",
+    "documentHash": "sha256:627011e24685aefba55471363f4ee59dbe0f6eacae06717baa9a5ce2791dc327",
     "objects": {
       "Curve2dDeferred": {
         "childElementMaps": [],
@@ -86,7 +99,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:9d386d5110a63abc0720439b6614fbd82c5792b4716f5719156f59f4bcbe475c",
+        "objectHash": "sha256:77750c4f1954d115a72dd445c50a041b4d316859272431fc4ac0d35abcf27532",
         "subshapes": {}
       },
       "InitialSurfaceDeferred": {
@@ -98,7 +111,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:0de824c01805a93997cc9baf3a19f9c17486a5cd6e5742b516ac002b7997722d",
+        "objectHash": "sha256:c1e718fd3f7e4a0f58c492bb3d386b060af25a2f1a0d5a01d573817ee0f9d12a",
         "subshapes": {}
       },
       "PlateSurfaceCurvesDeferred": {

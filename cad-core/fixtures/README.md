@@ -5,8 +5,8 @@
 
 ## `.freecad.json`
 
-`.freecad.json` 只用于 FreeCADCmd 采集、FreeCADCmd 等价 oracle，或已经明确标注
-FreeCAD native parity 的几何期望。
+`.freecad.json` 只用于 FreeCADCmd 采集、FreeCADCmd 等价 oracle、已经明确标注
+FreeCAD native parity 的几何期望，或本文件明确列出的 collector 协议契约分支。
 
 这类文件可以被 `cad-core/tools/collect_freecad_expected.py --check` 和
 `cad-core/tests/fixture_expected.py` 的默认发现逻辑当作 FreeCAD oracle 使用。
@@ -42,13 +42,14 @@ collector 生成 `.freecad.json`，再删除或替换原来的人工契约文件
   并确认 `ReferenceShadow.brep` 只作为输入侧单 subshape 引用证据，不进入输出
   `topoNamingState`。
 
-以下类别不是 FreeCADCmd 可采集语义，本轮不生成 `.freecad.json` expected：
+以下类别不是 FreeCAD native API 直接可采集语义；`.freecad.json` 由
+`collect_freecad_expected.py` 的协议契约分支生成，不能手工维护：
 
 - `topo-state-link-compound-child-maps.json`：CAD Core 产品契约；覆盖 Link / Compound
   `childElementMaps` 非空展开关系，当前 FreeCADCmd collector 只能采集原生 compound
-  shape / mapped name，不能采集 CAD Core 协议里的 child map DTO。
+  shape / mapped name，并据此生成 CAD Core 协议里的 child map DTO。
 - `topo-state-mapper-history-events.json`：CAD Core 产品契约；覆盖 `generated`、
-  `modified`、`split`、`deleted`、`ambiguous`，并要求 split / deleted / ambiguous
+  `modified`、`split`、`deleted`、`merge`、`ambiguous`，并要求 split / deleted / ambiguous
   不进入 `elementMap.entries`；当前 fixture 使用 `CadCore::TopoNamingStateProbe`，
   FreeCAD native 不能创建该对象。
 - `topo-state-schema-incompatible.json` 与 `topo-state-producer-incompatible.json`：

@@ -44,7 +44,7 @@
   "elementReferenceUpdates": [],
   "results": [],
   "topoNamingState": {
-    "documentHash": "sha256:da35033c8b54a4b96788a12cdd5b1cd6bdba27622aa0716fa518f3124b010e01",
+    "documentHash": "sha256:367d88b7efc85284d4064ef01ef49f714b1a9263138c154c9cbcbe605d7d0e9f",
     "objects": {},
     "producer": {
       "cadCoreVersion": "fixture-contract-v1",

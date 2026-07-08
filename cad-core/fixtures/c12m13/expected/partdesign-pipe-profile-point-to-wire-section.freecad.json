@@ -59,9 +59,9 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Ha91:7,F",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Hed5:7,F",
           "resolvedIndexed": "Face1",
-          "stableSubname": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Ha91:7,F",
+          "stableSubname": "AdditivePipeProfilePoint.#f:1;:G;SEW;:H*:*,F",
           "subname": "Face1"
         },
         {
@@ -73,9 +73,9 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Ha91:7,F",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Hed5:7,F",
           "resolvedIndexed": "Face2",
-          "stableSubname": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Ha91:7,F",
+          "stableSubname": "AdditivePipeProfilePoint.#f:2;:G;SEW;:H*:*,F",
           "subname": "Face2"
         },
         {
@@ -87,9 +87,9 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Ha91:7,F",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Hed5:7,F",
           "resolvedIndexed": "Face3",
-          "stableSubname": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Ha91:7,F",
+          "stableSubname": "AdditivePipeProfilePoint.#f:3;:G;SEW;:H*:*,F",
           "subname": "Face3"
         },
         {
@@ -101,9 +101,9 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Ha91:7,F",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Hed5:7,F",
           "resolvedIndexed": "Face4",
-          "stableSubname": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Ha91:7,F",
+          "stableSubname": "AdditivePipeProfilePoint.#f:4;:G;SEW;:H*:*,F",
           "subname": "Face4"
         },
         {
@@ -115,9 +115,9 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Ha91:a,F",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Hed5:a,F",
           "resolvedIndexed": "Face5",
-          "stableSubname": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Ha91:a,F",
+          "stableSubname": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:H*:*,F",
           "subname": "Face5"
         },
         {
@@ -129,9 +129,9 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#11;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#11;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "AdditivePipeProfilePoint.#11;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#11;:G;SEW;:H*:*,E",
           "subname": "Edge1"
         },
         {
@@ -143,9 +143,9 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#12;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#12;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "AdditivePipeProfilePoint.#12;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#12;:G;SEW;:H*:*,E",
           "subname": "Edge2"
         },
         {
@@ -157,9 +157,9 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#16:1;:G;SEW;:H*:*,E",
           "subname": "Edge3"
         },
         {
@@ -171,9 +171,9 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#13;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#13;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "AdditivePipeProfilePoint.#13;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#13;:G;SEW;:H*:*,E",
           "subname": "Edge4"
         },
         {
@@ -185,9 +185,9 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#16:2;:G;SEW;:H*:*,E",
           "subname": "Edge5"
         },
         {
@@ -199,9 +199,9 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#14;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#14;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge6",
-          "stableSubname": "AdditivePipeProfilePoint.#14;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#14;:G;SEW;:H*:*,E",
           "subname": "Edge6"
         },
         {
@@ -213,9 +213,9 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge7",
-          "stableSubname": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#16:3;:G;SEW;:H*:*,E",
           "subname": "Edge7"
         },
         {
@@ -227,9 +227,9 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Ha91:7,E",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Hed5:7,E",
           "resolvedIndexed": "Edge8",
-          "stableSubname": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Ha91:7,E",
+          "stableSubname": "AdditivePipeProfilePoint.#16:4;:G;SEW;:H*:*,E",
           "subname": "Edge8"
         },
         {
@@ -241,9 +241,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Ha91:7,V",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Hed5:7,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Ha91:7,V",
+          "stableSubname": "AdditivePipeProfilePoint.#11:2;:U;PSH;:H*:*,V",
           "subname": "Vertex1"
         },
         {
@@ -255,9 +255,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Ha91:7,V",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Hed5:7,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Ha91:7,V",
+          "stableSubname": "AdditivePipeProfilePoint.#18:b;:G;SEW;:H*:*,V",
           "subname": "Vertex2"
         },
         {
@@ -269,9 +269,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Ha91:7,V",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Hed5:7,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Ha91:7,V",
+          "stableSubname": "AdditivePipeProfilePoint.#19:4;:G;SEW;:H*:*,V",
           "subname": "Vertex3"
         },
         {
@@ -283,9 +283,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Ha91:7,V",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Hed5:7,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Ha91:7,V",
+          "stableSubname": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:H*:*,V",
           "subname": "Vertex4"
         },
         {
@@ -297,9 +297,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Ha91:7,V",
+          "rawFreecadMappedName": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Hed5:7,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Ha91:7,V",
+          "stableSubname": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:H*:*,V",
           "subname": "Vertex5"
         }
       ],
@@ -327,11 +327,403 @@
         "subshapes": {}
       },
       "Body": {
-        "childElementMaps": [],
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "AdditivePipeProfilePoint",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "AdditivePipeProfilePoint.#11:2;:U;PSH;:Hed5:7,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#11:2;:U;PSH;:H*:*,V",
+                    "raw": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Hed5:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex1"
+                  }
+                },
+                "AdditivePipeProfilePoint.#11;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#11;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#11;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge1"
+                  }
+                },
+                "AdditivePipeProfilePoint.#12;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#12;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#12;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge2"
+                  }
+                },
+                "AdditivePipeProfilePoint.#13;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#13;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#13;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge4"
+                  }
+                },
+                "AdditivePipeProfilePoint.#14;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#14;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#14;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge6"
+                  }
+                },
+                "AdditivePipeProfilePoint.#16:1;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#16:1;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge3"
+                  }
+                },
+                "AdditivePipeProfilePoint.#16:2;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#16:2;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge5"
+                  }
+                },
+                "AdditivePipeProfilePoint.#16:3;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#16:3;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge7"
+                  }
+                },
+                "AdditivePipeProfilePoint.#16:4;:G;SEW;:Hed5:7,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#16:4;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Hed5:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Edge8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge8"
+                  }
+                },
+                "AdditivePipeProfilePoint.#18:b;:G;SEW;:Hed5:7,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#18:b;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Hed5:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex2"
+                  }
+                },
+                "AdditivePipeProfilePoint.#19:4;:G;SEW;:Hed5:7,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#19:4;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Hed5:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex3"
+                  }
+                },
+                "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Hed5:7,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Hed5:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex4"
+                  }
+                },
+                "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Hed5:7,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Hed5:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Vertex5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex5"
+                  }
+                },
+                "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Hed5:a,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:H*:*,F",
+                    "raw": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Hed5:a,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Face5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face5"
+                  }
+                },
+                "AdditivePipeProfilePoint.#f:1;:G;SEW;:Hed5:7,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#f:1;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Hed5:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Face1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face1"
+                  }
+                },
+                "AdditivePipeProfilePoint.#f:2;:G;SEW;:Hed5:7,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#f:2;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Hed5:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Face2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face2"
+                  }
+                },
+                "AdditivePipeProfilePoint.#f:3;:G;SEW;:Hed5:7,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#f:3;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Hed5:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Face3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face3"
+                  }
+                },
+                "AdditivePipeProfilePoint.#f:4;:G;SEW;:Hed5:7,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeProfilePoint.#f:4;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Hed5:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeProfilePoint",
+                    "subname": "Face4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face4"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "Body:AdditivePipeProfilePoint:AdditivePipeProfilePoint",
+            "ownerObject": "Body",
+            "pathPrefix": "AdditivePipeProfilePoint"
+          }
+        ],
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "AdditivePipeProfilePoint.#11:2;:U;PSH;:Ha91:7,V": {
+            "AdditivePipeProfilePoint.#11:2;:U;PSH;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -339,7 +731,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#11:2;:U;PSH;:H*:*,V",
-                "raw": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Ha91:7,V"
+                "raw": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Hed5:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -352,7 +744,7 @@
                 "subname": "Vertex1"
               }
             },
-            "AdditivePipeProfilePoint.#11;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#11;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -360,7 +752,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#11;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#11;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#11;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -373,7 +765,7 @@
                 "subname": "Edge1"
               }
             },
-            "AdditivePipeProfilePoint.#12;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#12;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -381,7 +773,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#12;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#12;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#12;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -394,7 +786,7 @@
                 "subname": "Edge2"
               }
             },
-            "AdditivePipeProfilePoint.#13;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#13;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -402,7 +794,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#13;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#13;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#13;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -415,7 +807,7 @@
                 "subname": "Edge4"
               }
             },
-            "AdditivePipeProfilePoint.#14;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#14;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -423,7 +815,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#14;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#14;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#14;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -436,7 +828,7 @@
                 "subname": "Edge6"
               }
             },
-            "AdditivePipeProfilePoint.#16:1;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#16:1;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -444,7 +836,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#16:1;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -457,7 +849,7 @@
                 "subname": "Edge3"
               }
             },
-            "AdditivePipeProfilePoint.#16:2;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#16:2;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -465,7 +857,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#16:2;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -478,7 +870,7 @@
                 "subname": "Edge5"
               }
             },
-            "AdditivePipeProfilePoint.#16:3;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#16:3;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -486,7 +878,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#16:3;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -499,7 +891,7 @@
                 "subname": "Edge7"
               }
             },
-            "AdditivePipeProfilePoint.#16:4;:G;SEW;:Ha91:7,E": {
+            "AdditivePipeProfilePoint.#16:4;:G;SEW;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -507,7 +899,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#16:4;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Ha91:7,E"
+                "raw": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Hed5:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -520,7 +912,7 @@
                 "subname": "Edge8"
               }
             },
-            "AdditivePipeProfilePoint.#18:b;:G;SEW;:Ha91:7,V": {
+            "AdditivePipeProfilePoint.#18:b;:G;SEW;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -528,7 +920,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#18:b;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Ha91:7,V"
+                "raw": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Hed5:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -541,7 +933,7 @@
                 "subname": "Vertex2"
               }
             },
-            "AdditivePipeProfilePoint.#19:4;:G;SEW;:Ha91:7,V": {
+            "AdditivePipeProfilePoint.#19:4;:G;SEW;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -549,7 +941,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#19:4;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Ha91:7,V"
+                "raw": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Hed5:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -562,7 +954,7 @@
                 "subname": "Vertex3"
               }
             },
-            "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Ha91:7,V": {
+            "AdditivePipeProfilePoint.#1a:6;:G;SEW;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -570,7 +962,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Ha91:7,V"
+                "raw": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Hed5:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -583,7 +975,7 @@
                 "subname": "Vertex4"
               }
             },
-            "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Ha91:7,V": {
+            "AdditivePipeProfilePoint.#1b:8;:G;SEW;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -591,7 +983,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Ha91:7,V"
+                "raw": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Hed5:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -604,7 +996,7 @@
                 "subname": "Vertex5"
               }
             },
-            "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Ha91:a,F": {
+            "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -612,7 +1004,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:H*:*,F",
-                "raw": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Ha91:a,F"
+                "raw": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Hed5:a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -625,7 +1017,7 @@
                 "subname": "Face5"
               }
             },
-            "AdditivePipeProfilePoint.#f:1;:G;SEW;:Ha91:7,F": {
+            "AdditivePipeProfilePoint.#f:1;:G;SEW;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -633,7 +1025,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#f:1;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Ha91:7,F"
+                "raw": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Hed5:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -646,7 +1038,7 @@
                 "subname": "Face1"
               }
             },
-            "AdditivePipeProfilePoint.#f:2;:G;SEW;:Ha91:7,F": {
+            "AdditivePipeProfilePoint.#f:2;:G;SEW;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -654,7 +1046,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#f:2;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Ha91:7,F"
+                "raw": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Hed5:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -667,7 +1059,7 @@
                 "subname": "Face2"
               }
             },
-            "AdditivePipeProfilePoint.#f:3;:G;SEW;:Ha91:7,F": {
+            "AdditivePipeProfilePoint.#f:3;:G;SEW;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -675,7 +1067,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#f:3;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Ha91:7,F"
+                "raw": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Hed5:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -688,7 +1080,7 @@
                 "subname": "Face3"
               }
             },
-            "AdditivePipeProfilePoint.#f:4;:G;SEW;:Ha91:7,F": {
+            "AdditivePipeProfilePoint.#f:4;:G;SEW;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -696,7 +1088,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeProfilePoint.#f:4;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Ha91:7,F"
+                "raw": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Hed5:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -719,126 +1111,126 @@
           "Edge1": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#11;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#11;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#11;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#12;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#12;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#12;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#16:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:1;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#13;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#13;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#13;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#16:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:2;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#14;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#14;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#14;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#16:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:3;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#16:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Ha91:7,E",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#16:4;:G;SEW;:Hed5:7,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Face1": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#f:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Ha91:7,F",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:1;:G;SEW;:Hed5:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#f:2;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Ha91:7,F",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:2;:G;SEW;:Hed5:7,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#f:3;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Ha91:7,F",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:3;:G;SEW;:Hed5:7,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#f:4;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Ha91:7,F",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#f:4;:G;SEW;:Hed5:7,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Ha91:a,F",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#1e:1;:L#1c;SEW;:Hed5:a,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#11:2;:U;PSH;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Ha91:7,V",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#11:2;:U;PSH;:Hed5:7,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#18:b;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Ha91:7,V",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#18:b;:G;SEW;:Hed5:7,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#19:4;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Ha91:7,V",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#19:4;:G;SEW;:Hed5:7,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Ha91:7,V",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#1a:6;:G;SEW;:Hed5:7,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Ha91:7,V",
+            "rawFreecadMappedName": "AdditivePipeProfilePoint.#1b:8;:G;SEW;:Hed5:7,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           }

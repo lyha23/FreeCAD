@@ -1,5 +1,10 @@
 {
-  "diagnostics": [],
+  "diagnostics": [
+    {
+      "code": "missing_curve_source",
+      "source": "freecad_expected_collector"
+    }
+  ],
   "elementReferenceUpdates": [],
   "results": [
     {
@@ -19,7 +24,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:2154edd773fdcee2b96d5e12c004ae5341dd13c9d5f024266d7b394b3eca7844",
+    "documentHash": "sha256:f7876f60e9e656b961d7abbf823771ac802c5ed5dc1864212f2cdb76521c1621",
     "objects": {
       "GeomPlate": {
         "childElementMaps": [],
@@ -30,7 +35,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:c05ed95920cf7adde716c7b703ca9653e22c2648e404cd1be457e99c1be2bdb5",
+        "objectHash": "sha256:7de88f0ef4c28805b1892a3f83fae9b73457342625055b57dac5c1d63f0dfa77",
         "subshapes": {}
       }
     },

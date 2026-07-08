@@ -14,7 +14,7 @@
               "indexed": "Face1",
               "property": "Shape",
               "shapeType": "Face",
-              "stableSubname": "Pad.#d:4;:G;XTR;:H21:7,F",
+              "stableSubname": "Pad.#d:4;:G;XTR;:H*:*,F",
               "subname": "Face1",
               "target": "Body",
               "targetId": 3
@@ -22,12 +22,12 @@
           ],
           "ShadowSub": [
             {
-              "newName": "Pad.#d:4;:G;XTR;:H21:7,F",
+              "newName": "Pad.#d:4;:G;XTR;:H*:*,F",
               "oldName": "Face1"
             }
           ],
           "StableSubList": [
-            "Pad.#d:4;:G;XTR;:H21:7,F"
+            "Pad.#d:4;:G;XTR;:H*:*,F"
           ],
           "SubList": [
             "Face1"

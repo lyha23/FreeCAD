@@ -1,12 +1,12 @@
 {
-  "fixtureCategory": "topoNamingState.mapperHistory.generated_modified_split_deleted_ambiguous",
+  "fixtureCategory": "topoNamingState.mapperHistory.generated_modified_split_deleted_merge_ambiguous",
   "Objects": [
     {
       "Name": "HistoryProbe",
       "ID": 1,
       "TypeId": "CadCore::TopoNamingStateProbe",
       "Properties": {
-        "ProbeCase": "mapperHistory generated modified split deleted ambiguous"
+        "ProbeCase": "mapperHistory generated modified split deleted merge ambiguous"
       }
     }
   ],

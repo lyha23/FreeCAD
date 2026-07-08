@@ -26,9 +26,9 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "g1;SKT;:H42,E;:H44,E",
+          "rawFreecadMappedName": "g1;SKT;:H118f,E;:H1191,E",
           "resolvedIndexed": "Edge1",
-          "stableSubname": "g1;SKT;:H42,E;:H44,E",
+          "stableSubname": "g1;SKT;:H*,E;:H*,E",
           "subname": "Edge1"
         },
         {
@@ -40,9 +40,9 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "g2;SKT;:H42,E;:H44,E",
+          "rawFreecadMappedName": "g2;SKT;:H118f,E;:H1191,E",
           "resolvedIndexed": "Edge2",
-          "stableSubname": "g2;SKT;:H42,E;:H44,E",
+          "stableSubname": "g2;SKT;:H*,E;:H*,E",
           "subname": "Edge2"
         },
         {
@@ -54,9 +54,9 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "g1;SKT;:H43,E;:H44,E",
+          "rawFreecadMappedName": "g1;SKT;:H1190,E;:H1191,E",
           "resolvedIndexed": "Edge3",
-          "stableSubname": "g1;SKT;:H43,E;:H44,E",
+          "stableSubname": "g1;SKT;:H*,E;:H*,E",
           "subname": "Edge3"
         },
         {
@@ -68,9 +68,9 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "g2;SKT;:H43,E;:H44,E",
+          "rawFreecadMappedName": "g2;SKT;:H1190,E;:H1191,E",
           "resolvedIndexed": "Edge4",
-          "stableSubname": "g2;SKT;:H43,E;:H44,E",
+          "stableSubname": "g2;SKT;:H*,E;:H*,E",
           "subname": "Edge4"
         },
         {
@@ -82,9 +82,9 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "g1;SKT;:H45,E",
+          "rawFreecadMappedName": "g1;SKT;:H1192,E",
           "resolvedIndexed": "Edge5",
-          "stableSubname": "g1;SKT;:H45,E",
+          "stableSubname": "g1;SKT;:H*,E",
           "subname": "Edge5"
         },
         {
@@ -96,9 +96,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g1v1;SKT;:H42,V;:H44,V",
+          "rawFreecadMappedName": "g1v1;SKT;:H118f,V;:H1191,V",
           "resolvedIndexed": "Vertex1",
-          "stableSubname": "g1v1;SKT;:H42,V;:H44,V",
+          "stableSubname": "g1v1;SKT;:H*,V;:H*,V",
           "subname": "Vertex1"
         },
         {
@@ -110,9 +110,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g1v2;SKT;:H42,V;:H44,V",
+          "rawFreecadMappedName": "g1v2;SKT;:H118f,V;:H1191,V",
           "resolvedIndexed": "Vertex2",
-          "stableSubname": "g1v2;SKT;:H42,V;:H44,V",
+          "stableSubname": "g1v2;SKT;:H*,V;:H*,V",
           "subname": "Vertex2"
         },
         {
@@ -124,9 +124,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g2v2;SKT;:H42,V;:H44,V",
+          "rawFreecadMappedName": "g2v2;SKT;:H118f,V;:H1191,V",
           "resolvedIndexed": "Vertex3",
-          "stableSubname": "g2v2;SKT;:H42,V;:H44,V",
+          "stableSubname": "g2v2;SKT;:H*,V;:H*,V",
           "subname": "Vertex3"
         },
         {
@@ -138,9 +138,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g1v1;SKT;:H43,V;:H44,V",
+          "rawFreecadMappedName": "g1v1;SKT;:H1190,V;:H1191,V",
           "resolvedIndexed": "Vertex4",
-          "stableSubname": "g1v1;SKT;:H43,V;:H44,V",
+          "stableSubname": "g1v1;SKT;:H*,V;:H*,V",
           "subname": "Vertex4"
         },
         {
@@ -152,9 +152,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g1v2;SKT;:H43,V;:H44,V",
+          "rawFreecadMappedName": "g1v2;SKT;:H1190,V;:H1191,V",
           "resolvedIndexed": "Vertex5",
-          "stableSubname": "g1v2;SKT;:H43,V;:H44,V",
+          "stableSubname": "g1v2;SKT;:H*,V;:H*,V",
           "subname": "Vertex5"
         },
         {
@@ -166,9 +166,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g2v2;SKT;:H43,V;:H44,V",
+          "rawFreecadMappedName": "g2v2;SKT;:H1190,V;:H1191,V",
           "resolvedIndexed": "Vertex6",
-          "stableSubname": "g2v2;SKT;:H43,V;:H44,V",
+          "stableSubname": "g2v2;SKT;:H*,V;:H*,V",
           "subname": "Vertex6"
         },
         {
@@ -180,9 +180,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g1v1;SKT;:H45,V",
+          "rawFreecadMappedName": "g1v1;SKT;:H1192,V",
           "resolvedIndexed": "Vertex7",
-          "stableSubname": "g1v1;SKT;:H45,V",
+          "stableSubname": "g1v1;SKT;:H*,V",
           "subname": "Vertex7"
         },
         {
@@ -194,9 +194,9 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "g1v2;SKT;:H45,V",
+          "rawFreecadMappedName": "g1v2;SKT;:H1192,V",
           "resolvedIndexed": "Vertex8",
-          "stableSubname": "g1v2;SKT;:H45,V",
+          "stableSubname": "g1v2;SKT;:H*,V",
           "subname": "Vertex8"
         }
       ],
@@ -212,53 +212,311 @@
     "documentHash": "sha256:532c153682ad9d546b25d42b710a8e54dbc1b8331733726aa497406779e0b3c2",
     "objects": {
       "CompoundNested": {
-        "childElementMaps": [],
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "CompoundAB",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "g1;SKT;:H118f,E;:H1191,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1;SKT;:H*,E;:H*,E",
+                    "raw": "g1;SKT;:H118f,E;:H1191,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Edge1"
+                  }
+                },
+                "g1;SKT;:H1190,E;:H1191,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1;SKT;:H*,E;:H*,E",
+                    "raw": "g1;SKT;:H1190,E;:H1191,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Edge3"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Edge3"
+                  }
+                },
+                "g1v1;SKT;:H118f,V;:H1191,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v1;SKT;:H*,V;:H*,V",
+                    "raw": "g1v1;SKT;:H118f,V;:H1191,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex1"
+                  }
+                },
+                "g1v1;SKT;:H1190,V;:H1191,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v1;SKT;:H*,V;:H*,V",
+                    "raw": "g1v1;SKT;:H1190,V;:H1191,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex4"
+                  }
+                },
+                "g1v2;SKT;:H118f,V;:H1191,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v2;SKT;:H*,V;:H*,V",
+                    "raw": "g1v2;SKT;:H118f,V;:H1191,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex2"
+                  }
+                },
+                "g1v2;SKT;:H1190,V;:H1191,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v2;SKT;:H*,V;:H*,V",
+                    "raw": "g1v2;SKT;:H1190,V;:H1191,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex5"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex5"
+                  }
+                },
+                "g2;SKT;:H118f,E;:H1191,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2;SKT;:H*,E;:H*,E",
+                    "raw": "g2;SKT;:H118f,E;:H1191,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Edge2"
+                  }
+                },
+                "g2;SKT;:H1190,E;:H1191,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2;SKT;:H*,E;:H*,E",
+                    "raw": "g2;SKT;:H1190,E;:H1191,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Edge4"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Edge4"
+                  }
+                },
+                "g2v2;SKT;:H118f,V;:H1191,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2v2;SKT;:H*,V;:H*,V",
+                    "raw": "g2v2;SKT;:H118f,V;:H1191,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex3"
+                  }
+                },
+                "g2v2;SKT;:H1190,V;:H1191,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:CompoundAB:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g2v2;SKT;:H*,V;:H*,V",
+                    "raw": "g2v2;SKT;:H1190,V;:H1191,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "CompoundAB",
+                    "subname": "Vertex6"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex6"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "CompoundNested:CompoundAB:Child0",
+            "ownerObject": "CompoundNested",
+            "pathPrefix": "Child0"
+          },
+          {
+            "childIndex": 1,
+            "childObject": "SketchC",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "g1;SKT;:H1192,E": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:SketchC:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1;SKT;:H*,E",
+                    "raw": "g1;SKT;:H1192,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "SketchC",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Edge5"
+                  }
+                },
+                "g1v1;SKT;:H1192,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:SketchC:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v1;SKT;:H*,V",
+                    "raw": "g1v1;SKT;:H1192,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchC",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex7"
+                  }
+                },
+                "g1v2;SKT;:H1192,V": {
+                  "evidence": {
+                    "childElementMapKey": "CompoundNested:SketchC:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "g1v2;SKT;:H*,V",
+                    "raw": "g1v2;SKT;:H1192,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "SketchC",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "CompoundNested",
+                    "subname": "Vertex8"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "CompoundNested:SketchC:Child1",
+            "ownerObject": "CompoundNested",
+            "pathPrefix": "Child1"
+          }
+        ],
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "g1;SKT;:H42,E;:H44,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "g1;SKT;:H*,E;:H*,E",
-                "raw": "g1;SKT;:H42,E;:H44,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "CompoundNested",
-                "subname": "Edge1"
-              },
-              "target": {
-                "object": "CompoundNested",
-                "subname": "Edge1"
-              }
-            },
-            "g1;SKT;:H43,E;:H44,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "g1;SKT;:H*,E;:H*,E",
-                "raw": "g1;SKT;:H43,E;:H44,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "CompoundNested",
-                "subname": "Edge3"
-              },
-              "target": {
-                "object": "CompoundNested",
-                "subname": "Edge3"
-              }
-            },
-            "g1;SKT;:H45,E": {
+            "g1;SKT;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -266,7 +524,7 @@
               },
               "mappedName": {
                 "canonical": "g1;SKT;:H*,E",
-                "raw": "g1;SKT;:H45,E"
+                "raw": "g1;SKT;:H1192,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -279,49 +537,28 @@
                 "subname": "Edge5"
               }
             },
-            "g1v1;SKT;:H42,V;:H44,V": {
+            "g1;SKT;:H*,E;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "g1v1;SKT;:H*,V;:H*,V",
-                "raw": "g1v1;SKT;:H42,V;:H44,V"
+                "canonical": "g1;SKT;:H*,E;:H*,E",
+                "raw": "g1;SKT;:H1190,E;:H1191,E"
               },
               "recoverability": "resolved",
-              "shapeKind": "vertex",
+              "shapeKind": "edge",
               "source": {
                 "object": "CompoundNested",
-                "subname": "Vertex1"
+                "subname": "Edge3"
               },
               "target": {
                 "object": "CompoundNested",
-                "subname": "Vertex1"
+                "subname": "Edge3"
               }
             },
-            "g1v1;SKT;:H43,V;:H44,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "g1v1;SKT;:H*,V;:H*,V",
-                "raw": "g1v1;SKT;:H43,V;:H44,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "CompoundNested",
-                "subname": "Vertex4"
-              },
-              "target": {
-                "object": "CompoundNested",
-                "subname": "Vertex4"
-              }
-            },
-            "g1v1;SKT;:H45,V": {
+            "g1v1;SKT;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -329,7 +566,7 @@
               },
               "mappedName": {
                 "canonical": "g1v1;SKT;:H*,V",
-                "raw": "g1v1;SKT;:H45,V"
+                "raw": "g1v1;SKT;:H1192,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -342,49 +579,28 @@
                 "subname": "Vertex7"
               }
             },
-            "g1v2;SKT;:H42,V;:H44,V": {
+            "g1v1;SKT;:H*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "g1v2;SKT;:H*,V;:H*,V",
-                "raw": "g1v2;SKT;:H42,V;:H44,V"
+                "canonical": "g1v1;SKT;:H*,V;:H*,V",
+                "raw": "g1v1;SKT;:H1190,V;:H1191,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
                 "object": "CompoundNested",
-                "subname": "Vertex2"
+                "subname": "Vertex4"
               },
               "target": {
                 "object": "CompoundNested",
-                "subname": "Vertex2"
+                "subname": "Vertex4"
               }
             },
-            "g1v2;SKT;:H43,V;:H44,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "g1v2;SKT;:H*,V;:H*,V",
-                "raw": "g1v2;SKT;:H43,V;:H44,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "CompoundNested",
-                "subname": "Vertex5"
-              },
-              "target": {
-                "object": "CompoundNested",
-                "subname": "Vertex5"
-              }
-            },
-            "g1v2;SKT;:H45,V": {
+            "g1v2;SKT;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -392,7 +608,7 @@
               },
               "mappedName": {
                 "canonical": "g1v2;SKT;:H*,V",
-                "raw": "g1v2;SKT;:H45,V"
+                "raw": "g1v2;SKT;:H1192,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -405,70 +621,49 @@
                 "subname": "Vertex8"
               }
             },
-            "g2;SKT;:H42,E;:H44,E": {
+            "g1v2;SKT;:H*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
                 "source": "freecad_expected_collector"
               },
               "mappedName": {
-                "canonical": "g2;SKT;:H*,E;:H*,E",
-                "raw": "g2;SKT;:H42,E;:H44,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "CompoundNested",
-                "subname": "Edge2"
-              },
-              "target": {
-                "object": "CompoundNested",
-                "subname": "Edge2"
-              }
-            },
-            "g2;SKT;:H43,E;:H44,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "g2;SKT;:H*,E;:H*,E",
-                "raw": "g2;SKT;:H43,E;:H44,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "CompoundNested",
-                "subname": "Edge4"
-              },
-              "target": {
-                "object": "CompoundNested",
-                "subname": "Edge4"
-              }
-            },
-            "g2v2;SKT;:H42,V;:H44,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "g2v2;SKT;:H*,V;:H*,V",
-                "raw": "g2v2;SKT;:H42,V;:H44,V"
+                "canonical": "g1v2;SKT;:H*,V;:H*,V",
+                "raw": "g1v2;SKT;:H1190,V;:H1191,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
                 "object": "CompoundNested",
-                "subname": "Vertex3"
+                "subname": "Vertex5"
               },
               "target": {
                 "object": "CompoundNested",
-                "subname": "Vertex3"
+                "subname": "Vertex5"
               }
             },
-            "g2v2;SKT;:H43,V;:H44,V": {
+            "g2;SKT;:H*,E;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "g2;SKT;:H*,E;:H*,E",
+                "raw": "g2;SKT;:H1190,E;:H1191,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "CompoundNested",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "CompoundNested",
+                "subname": "Edge4"
+              }
+            },
+            "g2v2;SKT;:H*,V;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -476,7 +671,7 @@
               },
               "mappedName": {
                 "canonical": "g2v2;SKT;:H*,V;:H*,V",
-                "raw": "g2v2;SKT;:H43,V;:H44,V"
+                "raw": "g2v2;SKT;:H1190,V;:H1191,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -499,91 +694,91 @@
           "Edge1": {
             "canonicalFreecadMappedName": "g1;SKT;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1;SKT;:H42,E;:H44,E",
+            "rawFreecadMappedName": "g1;SKT;:H118f,E;:H1191,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "g2;SKT;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g2;SKT;:H42,E;:H44,E",
+            "rawFreecadMappedName": "g2;SKT;:H118f,E;:H1191,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "g1;SKT;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1;SKT;:H43,E;:H44,E",
+            "rawFreecadMappedName": "g1;SKT;:H1190,E;:H1191,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "g2;SKT;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g2;SKT;:H43,E;:H44,E",
+            "rawFreecadMappedName": "g2;SKT;:H1190,E;:H1191,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "g1;SKT;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1;SKT;:H45,E",
+            "rawFreecadMappedName": "g1;SKT;:H1192,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "g1v1;SKT;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1v1;SKT;:H42,V;:H44,V",
+            "rawFreecadMappedName": "g1v1;SKT;:H118f,V;:H1191,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "g1v2;SKT;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1v2;SKT;:H42,V;:H44,V",
+            "rawFreecadMappedName": "g1v2;SKT;:H118f,V;:H1191,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "g2v2;SKT;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g2v2;SKT;:H42,V;:H44,V",
+            "rawFreecadMappedName": "g2v2;SKT;:H118f,V;:H1191,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "g1v1;SKT;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1v1;SKT;:H43,V;:H44,V",
+            "rawFreecadMappedName": "g1v1;SKT;:H1190,V;:H1191,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "g1v2;SKT;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1v2;SKT;:H43,V;:H44,V",
+            "rawFreecadMappedName": "g1v2;SKT;:H1190,V;:H1191,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "g2v2;SKT;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g2v2;SKT;:H43,V;:H44,V",
+            "rawFreecadMappedName": "g2v2;SKT;:H1190,V;:H1191,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "g1v1;SKT;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1v1;SKT;:H45,V",
+            "rawFreecadMappedName": "g1v1;SKT;:H1192,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "g1v2;SKT;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "g1v2;SKT;:H45,V",
+            "rawFreecadMappedName": "g1v2;SKT;:H1192,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           }

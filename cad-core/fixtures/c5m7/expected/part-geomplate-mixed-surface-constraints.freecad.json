@@ -38,7 +38,7 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:a0094eb702e6113984e613738da7ca3e6b128e34b474ead82036dd303b3181f4",
+    "documentHash": "sha256:13fc8af2c387868397196a36d8fff04cfdc93eed542dcb849e1b9c919a5b7680",
     "objects": {
       "GeomPlate": {
         "childElementMaps": [],
@@ -49,7 +49,7 @@
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [],
-        "objectHash": "sha256:5eddba3e0bbe295e02eae3dfd71068075695ad78abee652b386702032725510a",
+        "objectHash": "sha256:4cf6647382edf6a29669317a8932728366393ab5d6ab9a172e66de4f99b468f0",
         "subshapes": {}
       }
     },
