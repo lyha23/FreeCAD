@@ -12,7 +12,9 @@ C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输�
 - S1 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=10dd70aba8`（`10dd70aba8 docs: 关闭 C13-M2 S0 基线冻结`），起点 worktree clean。
 - S2 已关闭：`工作步骤细分/7-8-20-19-【已实现】C13-M2-S2-collector-comparator与expected证据矩阵.md` 已把 collector comparator 与 focused expected evidence 分类为 schema/comparator 合同。
 - S2 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5a12e7fdc6`（`5a12e7fdc6 docs: 关闭 C13-M2 S1 源码权威冻结`），起点 worktree clean。
-- 后续队列从 S3 `focused red tests` 继续；S2 未改 C++/Python runtime、tests、expected、fixtures、frontend、codec/helper 或 supported/focused parity 状态。
+- S3 已关闭：`工作步骤细分/7-8-20-20-【已实现】C13-M2-S3-focused-red-tests.md` 已新增 guarded focused red tests，锁定 p2/c4m6/p6 FreeCAD `mappedName.raw/canonical` parity、p5/p8 indexed-only no-fake-raw 边界，以及 S5 `childElementMapKey` / `mapperHistoryIds` 空证据守卫。
+- S3 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=696a4d0f29`（`696a4d0f29 文档：关闭 C13-M2 S2 证据矩阵`），起点 worktree clean。
+- 后续队列从 S4 `mappedName codec 实现` 继续；S3 未改 C++ runtime、fixtures、expected、collector、adapter 或 `cad-core-res`，也未把 S5 key/id 空证据标成 implemented/supported。
 
 ## 当前问题
 
@@ -58,7 +60,7 @@ S1 已冻结的关键源码结论：
 - `topo_state_element_map_entry()` 从 `stableSubname` 或 `rawFreecadMappedName` 构造 `mappedName.raw/canonical` 和固定 evidence schema；当前 schema 包含 `childElementMapKey` 与 `mapperHistoryIds`，但 focused expected 里没有非空 key/id 证据。
 - `comparable_topo_naming_state()` 对 mapped names、entry keys 和 producer 的 FreeCAD/OCCT 版本做比较归一化；这是 expected 文件比较合同，不是 cad-core runtime source。
 - focused expected 当前证据：`p2 Body=50 entries`、`c4m6 Body=26 entries`、`p6 ProbePad=26 entries` 有 raw/canonical examples；`p5 Sketch=indexed_only/0`、`p8 BoxLink=indexed_only/0` 是 no-fake-raw 边界。
-- `childElementMapKey` / `mapperHistoryIds` 当前只作为 schema/future S5 关注，不能因字段存在或空值被标成 implemented。
+- `childElementMapKey` / `mapperHistoryIds` 当前只作为 schema/future S5 关注，S3 只用测试断言 focused expected 没有非空 key/id evidence，不能因字段存在或空值被标成 implemented。
 
 ## cad-core 落点
 
