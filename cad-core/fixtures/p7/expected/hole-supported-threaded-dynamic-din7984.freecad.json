@@ -1,26 +1,1734 @@
 {
-  "bbox": {
-    "max": [
-      14.0,
-      14.0,
-      10.0
-    ],
-    "min": [
-      0.0,
-      0.0,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.05,
-  "object": "Body",
-  "reference": "FreeCADCmd oracle from hole-supported-threaded-dynamic-din7984.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, PartDesign::Hole, PartDesign::Body",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 18,
-    "faces": 10,
-    "vertices": 12
-  },
-  "volume": 1775.2020953378878,
-  "volume_delta": 0.00001
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          14.0,
+          14.0,
+          10.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#16:4;:H*,F",
+          "fullSubname": "Body.Hole.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.#16:4;:H3f8,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "Hole.#16:4;:H3f8,F",
+          "subname": "Hole.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#16:3;:H*,F",
+          "fullSubname": "Body.Hole.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.#16:3;:H3f8,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "Hole.#16:3;:H3f8,F",
+          "subname": "Hole.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#16:1;:H*,F",
+          "fullSubname": "Body.Hole.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.#16:1;:H3f8,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "Hole.#16:1;:H3f8,F",
+          "subname": "Hole.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#14:1;:H*,F",
+          "fullSubname": "Body.Hole.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.#14:1;:H3f8,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "Hole.#14:1;:H3f8,F",
+          "subname": "Hole.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#26:1;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.Hole.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.#26:1;:M;CUT;:H3f8:7,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "Hole.#26:1;:M;CUT;:H3f8:7,F",
+          "subname": "Hole.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#16:2;:H*,F",
+          "fullSubname": "Body.Hole.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.#16:2;:H3f8,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "Hole.#16:2;:H3f8,F",
+          "subname": "Hole.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#34:1;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.Hole.Face7",
+          "id": "Body:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.#34:1;:M;CUT;:H-3fa:7,F",
+          "resolvedIndexed": "Face7",
+          "stableSubname": "Hole.#34:1;:M;CUT;:H-3fa:7,F",
+          "subname": "Hole.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M3;MAK;:H*:*,F;:H*,F",
+          "fullSubname": "Body.Hole.Face8",
+          "id": "Body:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:H-3fa,F",
+          "resolvedIndexed": "Face8",
+          "stableSubname": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:H-3fa,F",
+          "subname": "Hole.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:H*,F",
+          "fullSubname": "Body.Hole.Face9",
+          "id": "Body:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:H-3fa,F",
+          "resolvedIndexed": "Face9",
+          "stableSubname": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:H-3fa,F",
+          "subname": "Hole.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M5;MAK;:H*:*,F;:H*,F",
+          "fullSubname": "Body.Hole.Face10",
+          "id": "Body:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "rawFreecadMappedName": "Hole.Edge1;:M5;MAK;:H3f9:8,F;:H-3fa,F",
+          "resolvedIndexed": "Face10",
+          "stableSubname": "Hole.Edge1;:M5;MAK;:H3f9:8,F;:H-3fa,F",
+          "subname": "Hole.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#18:2;:H*,E",
+          "fullSubname": "Body.Hole.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#18:2;:H3f8,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "Hole.#18:2;:H3f8,E",
+          "subname": "Hole.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#19:1;:H*,E",
+          "fullSubname": "Body.Hole.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#19:1;:H3f8,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "Hole.#19:1;:H3f8,E",
+          "subname": "Hole.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#d:4;:H*,E",
+          "fullSubname": "Body.Hole.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#d:4;:H3f8,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "Hole.#d:4;:H3f8,E",
+          "subname": "Hole.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#24:4;:H*,E",
+          "fullSubname": "Body.Hole.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#24:4;:H3f8,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "Hole.#24:4;:H3f8,E",
+          "subname": "Hole.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#1a:2;:H*,E",
+          "fullSubname": "Body.Hole.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#1a:2;:H3f8,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "Hole.#1a:2;:H3f8,E",
+          "subname": "Hole.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#d:3;:H*,E",
+          "fullSubname": "Body.Hole.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#d:3;:H3f8,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "Hole.#d:3;:H3f8,E",
+          "subname": "Hole.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#24:3;:H*,E",
+          "fullSubname": "Body.Hole.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#24:3;:H3f8,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "Hole.#24:3;:H3f8,E",
+          "subname": "Hole.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#1b:2;:H*,E",
+          "fullSubname": "Body.Hole.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#1b:2;:H3f8,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "Hole.#1b:2;:H3f8,E",
+          "subname": "Hole.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#d:1;:H*,E",
+          "fullSubname": "Body.Hole.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#d:1;:H3f8,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "Hole.#d:1;:H3f8,E",
+          "subname": "Hole.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#24:1;:H*,E",
+          "fullSubname": "Body.Hole.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#24:1;:H3f8,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "Hole.#24:1;:H3f8,E",
+          "subname": "Hole.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#d:2;:H*,E",
+          "fullSubname": "Body.Hole.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#d:2;:H3f8,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "Hole.#d:2;:H3f8,E",
+          "subname": "Hole.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#24:2;:H*,E",
+          "fullSubname": "Body.Hole.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#24:2;:H3f8,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "Hole.#24:2;:H3f8,E",
+          "subname": "Hole.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#36:1;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.Hole.Edge13",
+          "id": "Body:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#36:1;:M;CUT;:H-3fa:7,E",
+          "resolvedIndexed": "Edge13",
+          "stableSubname": "Hole.#36:1;:M;CUT;:H-3fa:7,E",
+          "subname": "Hole.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#38:1;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.Hole.Edge14",
+          "id": "Body:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.#38:1;:M;CUT;:H-3fa:7,E",
+          "resolvedIndexed": "Edge14",
+          "stableSubname": "Hole.#38:1;:M;CUT;:H-3fa:7,E",
+          "subname": "Hole.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M2;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+          "fullSubname": "Body.Hole.Edge15",
+          "id": "Body:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+          "resolvedIndexed": "Edge15",
+          "stableSubname": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+          "subname": "Hole.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M3;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+          "fullSubname": "Body.Hole.Edge16",
+          "id": "Body:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+          "resolvedIndexed": "Edge16",
+          "stableSubname": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+          "subname": "Hole.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+          "fullSubname": "Body.Hole.Edge17",
+          "id": "Body:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+          "resolvedIndexed": "Edge17",
+          "stableSubname": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+          "subname": "Hole.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:U3;MAK;:H*:*,E;:H*,E",
+          "fullSubname": "Body.Hole.Edge18",
+          "id": "Body:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U3;MAK;:H3f9:8,E;:H-3fa,E",
+          "resolvedIndexed": "Edge18",
+          "stableSubname": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U3;MAK;:H3f9:8,E;:H-3fa,E",
+          "subname": "Hole.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#f:2;:H*,V",
+          "fullSubname": "Body.Hole.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#f:2;:H3f8,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "Hole.#f:2;:H3f8,V",
+          "subname": "Hole.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#1f:2;:H*,V",
+          "fullSubname": "Body.Hole.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#1f:2;:H3f8,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "Hole.#1f:2;:H3f8,V",
+          "subname": "Hole.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#10:1;:H*,V",
+          "fullSubname": "Body.Hole.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#10:1;:H3f8,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "Hole.#10:1;:H3f8,V",
+          "subname": "Hole.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#20:1;:H*,V",
+          "fullSubname": "Body.Hole.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#20:1;:H3f8,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "Hole.#20:1;:H3f8,V",
+          "subname": "Hole.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#11:2;:H*,V",
+          "fullSubname": "Body.Hole.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#11:2;:H3f8,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "Hole.#11:2;:H3f8,V",
+          "subname": "Hole.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#21:2;:H*,V",
+          "fullSubname": "Body.Hole.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#21:2;:H3f8,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "Hole.#21:2;:H3f8,V",
+          "subname": "Hole.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#12:2;:H*,V",
+          "fullSubname": "Body.Hole.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#12:2;:H3f8,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "Hole.#12:2;:H3f8,V",
+          "subname": "Hole.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#22:2;:H*,V",
+          "fullSubname": "Body.Hole.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#22:2;:H3f8,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "Hole.#22:2;:H3f8,V",
+          "subname": "Hole.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.#3b:1;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.Hole.Vertex9",
+          "id": "Body:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.#3b:1;:M;CUT;:H-3fa:7,V",
+          "resolvedIndexed": "Vertex9",
+          "stableSubname": "Hole.#3b:1;:M;CUT;:H-3fa:7,V",
+          "subname": "Hole.Vertex9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M2;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+          "fullSubname": "Body.Hole.Vertex10",
+          "id": "Body:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+          "resolvedIndexed": "Vertex10",
+          "stableSubname": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+          "subname": "Hole.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M3;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+          "fullSubname": "Body.Hole.Vertex11",
+          "id": "Body:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+          "resolvedIndexed": "Vertex11",
+          "stableSubname": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+          "subname": "Hole.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+          "fullSubname": "Body.Hole.Vertex12",
+          "id": "Body:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+          "resolvedIndexed": "Vertex12",
+          "stableSubname": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+          "subname": "Hole.Vertex12"
+        }
+      ],
+      "topology_counts": {
+        "edges": 18,
+        "faces": 10,
+        "vertices": 12
+      },
+      "volume": 1775.2020953378878
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:fe08b06618a5d3b544826d46af9633a908d947378bdbfa802f84b0e5852baf23",
+    "objects": {
+      "Body": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Hole.#10:1;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#10:1;:H*,V",
+                "raw": "Hole.#10:1;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex3"
+              }
+            },
+            "Hole.#11:2;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#11:2;:H*,V",
+                "raw": "Hole.#11:2;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex5"
+              }
+            },
+            "Hole.#12:2;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#12:2;:H*,V",
+                "raw": "Hole.#12:2;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex7"
+              }
+            },
+            "Hole.#14:1;:H3f8,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#14:1;:H*,F",
+                "raw": "Hole.#14:1;:H3f8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face4"
+              }
+            },
+            "Hole.#16:1;:H3f8,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#16:1;:H*,F",
+                "raw": "Hole.#16:1;:H3f8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face3"
+              }
+            },
+            "Hole.#16:2;:H3f8,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#16:2;:H*,F",
+                "raw": "Hole.#16:2;:H3f8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face6"
+              }
+            },
+            "Hole.#16:3;:H3f8,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#16:3;:H*,F",
+                "raw": "Hole.#16:3;:H3f8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face2"
+              }
+            },
+            "Hole.#16:4;:H3f8,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#16:4;:H*,F",
+                "raw": "Hole.#16:4;:H3f8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face1"
+              }
+            },
+            "Hole.#18:2;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#18:2;:H*,E",
+                "raw": "Hole.#18:2;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge1"
+              }
+            },
+            "Hole.#19:1;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#19:1;:H*,E",
+                "raw": "Hole.#19:1;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge2"
+              }
+            },
+            "Hole.#1a:2;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#1a:2;:H*,E",
+                "raw": "Hole.#1a:2;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge5"
+              }
+            },
+            "Hole.#1b:2;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#1b:2;:H*,E",
+                "raw": "Hole.#1b:2;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge8"
+              }
+            },
+            "Hole.#1f:2;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#1f:2;:H*,V",
+                "raw": "Hole.#1f:2;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex2"
+              }
+            },
+            "Hole.#20:1;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#20:1;:H*,V",
+                "raw": "Hole.#20:1;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex4"
+              }
+            },
+            "Hole.#21:2;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#21:2;:H*,V",
+                "raw": "Hole.#21:2;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex6"
+              }
+            },
+            "Hole.#22:2;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#22:2;:H*,V",
+                "raw": "Hole.#22:2;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex8"
+              }
+            },
+            "Hole.#24:1;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#24:1;:H*,E",
+                "raw": "Hole.#24:1;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge10"
+              }
+            },
+            "Hole.#24:2;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#24:2;:H*,E",
+                "raw": "Hole.#24:2;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge12"
+              }
+            },
+            "Hole.#24:3;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#24:3;:H*,E",
+                "raw": "Hole.#24:3;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge7"
+              }
+            },
+            "Hole.#24:4;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#24:4;:H*,E",
+                "raw": "Hole.#24:4;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge4"
+              }
+            },
+            "Hole.#26:1;:M;CUT;:H3f8:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#26:1;:M;CUT;:H*:*,F",
+                "raw": "Hole.#26:1;:M;CUT;:H3f8:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face5"
+              }
+            },
+            "Hole.#34:1;:M;CUT;:H-3fa:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#34:1;:M;CUT;:H*:*,F",
+                "raw": "Hole.#34:1;:M;CUT;:H-3fa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face7"
+              }
+            },
+            "Hole.#36:1;:M;CUT;:H-3fa:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#36:1;:M;CUT;:H*:*,E",
+                "raw": "Hole.#36:1;:M;CUT;:H-3fa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge13"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge13"
+              }
+            },
+            "Hole.#38:1;:M;CUT;:H-3fa:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#38:1;:M;CUT;:H*:*,E",
+                "raw": "Hole.#38:1;:M;CUT;:H-3fa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge14"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge14"
+              }
+            },
+            "Hole.#3b:1;:M;CUT;:H-3fa:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#3b:1;:M;CUT;:H*:*,V",
+                "raw": "Hole.#3b:1;:M;CUT;:H-3fa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex9"
+              }
+            },
+            "Hole.#d:1;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#d:1;:H*,E",
+                "raw": "Hole.#d:1;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge9"
+              }
+            },
+            "Hole.#d:2;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#d:2;:H*,E",
+                "raw": "Hole.#d:2;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge11"
+              }
+            },
+            "Hole.#d:3;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#d:3;:H*,E",
+                "raw": "Hole.#d:3;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge6"
+              }
+            },
+            "Hole.#d:4;:H3f8,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#d:4;:H*,E",
+                "raw": "Hole.#d:4;:H3f8,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge3"
+              }
+            },
+            "Hole.#f:2;:H3f8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.#f:2;:H*,V",
+                "raw": "Hole.#f:2;:H3f8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex1"
+              }
+            },
+            "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M2;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+                "raw": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge15"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge15"
+              }
+            },
+            "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M2;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+                "raw": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex10"
+              }
+            },
+            "Hole.Edge1;:M3;MAK;:H3f9:8,F;:H-3fa,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M3;MAK;:H*:*,F;:H*,F",
+                "raw": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:H-3fa,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face8"
+              }
+            },
+            "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M3;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+                "raw": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge16"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge16"
+              }
+            },
+            "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M3;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+                "raw": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex11"
+              }
+            },
+            "Hole.Edge1;:M4;MAK;:H3f9:8,F;:H-3fa,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M4;MAK;:H*:*,F;:H*,F",
+                "raw": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:H-3fa,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face9"
+              }
+            },
+            "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M4;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+                "raw": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge17"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge17"
+              }
+            },
+            "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M4;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+                "raw": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Vertex12"
+              }
+            },
+            "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U3;MAK;:H3f9:8,E;:H-3fa,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M4;MAK;:H*:*,F;:U3;MAK;:H*:*,E;:H*,E",
+                "raw": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U3;MAK;:H3f9:8,E;:H-3fa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge18"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Edge18"
+              }
+            },
+            "Hole.Edge1;:M5;MAK;:H3f9:8,F;:H-3fa,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Hole.Edge1;:M5;MAK;:H*:*,F;:H*,F",
+                "raw": "Hole.Edge1;:M5;MAK;:H3f9:8,F;:H-3fa,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Hole.Face10"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:282b98f74d38153ed35380f4b0d74f262e650cda19981d172c43a3beb7d83b4e",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "Hole.#18:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#18:2;:H3f8,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Hole.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "Hole.#24:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#24:1;:H3f8,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Hole.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "Hole.#d:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#d:2;:H3f8,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Hole.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "Hole.#24:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#24:2;:H3f8,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Hole.Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "Hole.#36:1;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#36:1;:M;CUT;:H-3fa:7,E",
+            "resolvedIndexed": "Edge13",
+            "subname": "Hole.Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "Hole.#38:1;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#38:1;:M;CUT;:H-3fa:7,E",
+            "resolvedIndexed": "Edge14",
+            "subname": "Hole.Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M2;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+            "resolvedIndexed": "Edge15",
+            "subname": "Hole.Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M3;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+            "resolvedIndexed": "Edge16",
+            "subname": "Hole.Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:H-3fa,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "Hole.Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:U3;MAK;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U3;MAK;:H3f9:8,E;:H-3fa,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "Hole.Edge18"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "Hole.#19:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#19:1;:H3f8,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Hole.Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "Hole.#d:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#d:4;:H3f8,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Hole.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "Hole.#24:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#24:4;:H3f8,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Hole.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "Hole.#1a:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#1a:2;:H3f8,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Hole.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "Hole.#d:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#d:3;:H3f8,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Hole.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "Hole.#24:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#24:3;:H3f8,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Hole.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "Hole.#1b:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#1b:2;:H3f8,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Hole.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "Hole.#d:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#d:1;:H3f8,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Hole.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "Hole.#16:4;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#16:4;:H3f8,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Hole.Face1"
+          },
+          "Face10": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M5;MAK;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M5;MAK;:H3f9:8,F;:H-3fa,F",
+            "resolvedIndexed": "Face10",
+            "subname": "Hole.Face10"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "Hole.#16:3;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#16:3;:H3f8,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Hole.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "Hole.#16:1;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#16:1;:H3f8,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Hole.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "Hole.#14:1;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#14:1;:H3f8,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Hole.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "Hole.#26:1;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#26:1;:M;CUT;:H3f8:7,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Hole.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "Hole.#16:2;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#16:2;:H3f8,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Hole.Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "Hole.#34:1;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#34:1;:M;CUT;:H-3fa:7,F",
+            "resolvedIndexed": "Face7",
+            "subname": "Hole.Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M3;MAK;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:H-3fa,F",
+            "resolvedIndexed": "Face8",
+            "subname": "Hole.Face8"
+          },
+          "Face9": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:H-3fa,F",
+            "resolvedIndexed": "Face9",
+            "subname": "Hole.Face9"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "Hole.#f:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#f:2;:H3f8,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Hole.Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M2;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M2;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "Hole.Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M3;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M3;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "Hole.Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "Hole.Edge1;:M4;MAK;:H*:*,F;:U2;MAK;:H*:*,E;:U;MAK;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.Edge1;:M4;MAK;:H3f9:8,F;:U2;MAK;:H3f9:8,E;:U;MAK;:H3f9:7,V;:H-3fa,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "Hole.Vertex12"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "Hole.#1f:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#1f:2;:H3f8,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Hole.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "Hole.#10:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#10:1;:H3f8,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Hole.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "Hole.#20:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#20:1;:H3f8,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Hole.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "Hole.#11:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#11:2;:H3f8,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Hole.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "Hole.#21:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#21:2;:H3f8,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Hole.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "Hole.#12:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#12:2;:H3f8,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Hole.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "Hole.#22:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#22:2;:H3f8,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Hole.Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "Hole.#3b:1;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Hole.#3b:1;:M;CUT;:H-3fa:7,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "Hole.Vertex9"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

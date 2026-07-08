@@ -1,390 +1,1146 @@
 {
-  "bbox": {
-    "max": [
-      8.0,
-      4.0,
-      10.0
-    ],
-    "min": [
-      2.0,
-      1.0,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "Body",
-  "reference": "FreeCADCmd oracle from pocket-without-base.json; objects: Sketcher::SketchObject, PartDesign::Pocket, PartDesign::Body",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "subshapes": [
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
     {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#f:1;:G;XTR;:H*:*,F",
-      "fullSubname": "Body.Pocket.Face1",
-      "id": "Body:Face1",
-      "identityStatus": "stable",
-      "indexed": "Face1",
-      "kind": "Face",
-      "rawFreecadMappedName": "Pocket.#f:1;:G;XTR;:H3ab:7,F",
-      "resolvedIndexed": "Face1",
-      "stableSubname": "Pocket.#f:1;:G;XTR;:H3ab:7,F",
-      "subname": "Pocket.Face1"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#f:2;:G;XTR;:H*:*,F",
-      "fullSubname": "Body.Pocket.Face2",
-      "id": "Body:Face2",
-      "identityStatus": "stable",
-      "indexed": "Face2",
-      "kind": "Face",
-      "rawFreecadMappedName": "Pocket.#f:2;:G;XTR;:H3ab:7,F",
-      "resolvedIndexed": "Face2",
-      "stableSubname": "Pocket.#f:2;:G;XTR;:H3ab:7,F",
-      "subname": "Pocket.Face2"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#f:3;:G;XTR;:H*:*,F",
-      "fullSubname": "Body.Pocket.Face3",
-      "id": "Body:Face3",
-      "identityStatus": "stable",
-      "indexed": "Face3",
-      "kind": "Face",
-      "rawFreecadMappedName": "Pocket.#f:3;:G;XTR;:H3ab:7,F",
-      "resolvedIndexed": "Face3",
-      "stableSubname": "Pocket.#f:3;:G;XTR;:H3ab:7,F",
-      "subname": "Pocket.Face3"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#f:4;:G;XTR;:H*:*,F",
-      "fullSubname": "Body.Pocket.Face4",
-      "id": "Body:Face4",
-      "identityStatus": "stable",
-      "indexed": "Face4",
-      "kind": "Face",
-      "rawFreecadMappedName": "Pocket.#f:4;:G;XTR;:H3ab:7,F",
-      "resolvedIndexed": "Face4",
-      "stableSubname": "Pocket.#f:4;:G;XTR;:H3ab:7,F",
-      "subname": "Pocket.Face4"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#f:1;FAC;:H*:*,F",
-      "fullSubname": "Body.Pocket.Face5",
-      "id": "Body:Face5",
-      "identityStatus": "stable",
-      "indexed": "Face5",
-      "kind": "Face",
-      "rawFreecadMappedName": "Pocket.#f:1;FAC;:H3ab:4,F",
-      "resolvedIndexed": "Face5",
-      "stableSubname": "Pocket.#f:1;FAC;:H3ab:4,F",
-      "subname": "Pocket.Face5"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#16:1;:G0;XTR;:H*:*,F",
-      "fullSubname": "Body.Pocket.Face6",
-      "id": "Body:Face6",
-      "identityStatus": "stable",
-      "indexed": "Face6",
-      "kind": "Face",
-      "rawFreecadMappedName": "Pocket.#16:1;:G0;XTR;:H3ab:8,F",
-      "resolvedIndexed": "Face6",
-      "stableSubname": "Pocket.#16:1;:G0;XTR;:H3ab:8,F",
-      "subname": "Pocket.Face6"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#11:1;:G;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge1",
-      "id": "Body:Edge1",
-      "identityStatus": "stable",
-      "indexed": "Edge1",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#11:1;:G;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge1",
-      "stableSubname": "Pocket.#11:1;:G;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge1"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#12:2;:G;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge2",
-      "id": "Body:Edge2",
-      "identityStatus": "stable",
-      "indexed": "Edge2",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#12:2;:G;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge2",
-      "stableSubname": "Pocket.#12:2;:G;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge2"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g1;SKT;:H*,E",
-      "fullSubname": "Body.Pocket.Edge3",
-      "id": "Body:Edge3",
-      "identityStatus": "stable",
-      "indexed": "Edge3",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.g1;SKT;:H3ab,E",
-      "resolvedIndexed": "Edge3",
-      "stableSubname": "Pocket.g1;SKT;:H3ab,E",
-      "subname": "Pocket.Edge3"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#18:1;:U;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge4",
-      "id": "Body:Edge4",
-      "identityStatus": "stable",
-      "indexed": "Edge4",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#18:1;:U;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge4",
-      "stableSubname": "Pocket.#18:1;:U;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge4"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#13:2;:G;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge5",
-      "id": "Body:Edge5",
-      "identityStatus": "stable",
-      "indexed": "Edge5",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#13:2;:G;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge5",
-      "stableSubname": "Pocket.#13:2;:G;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge5"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g2;SKT;:H*,E",
-      "fullSubname": "Body.Pocket.Edge6",
-      "id": "Body:Edge6",
-      "identityStatus": "stable",
-      "indexed": "Edge6",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.g2;SKT;:H3ab,E",
-      "resolvedIndexed": "Edge6",
-      "stableSubname": "Pocket.g2;SKT;:H3ab,E",
-      "subname": "Pocket.Edge6"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#18:2;:U;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge7",
-      "id": "Body:Edge7",
-      "identityStatus": "stable",
-      "indexed": "Edge7",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#18:2;:U;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge7",
-      "stableSubname": "Pocket.#18:2;:U;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge7"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#14:2;:G;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge8",
-      "id": "Body:Edge8",
-      "identityStatus": "stable",
-      "indexed": "Edge8",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#14:2;:G;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge8",
-      "stableSubname": "Pocket.#14:2;:G;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge8"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g3;SKT;:H*,E",
-      "fullSubname": "Body.Pocket.Edge9",
-      "id": "Body:Edge9",
-      "identityStatus": "stable",
-      "indexed": "Edge9",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.g3;SKT;:H3ab,E",
-      "resolvedIndexed": "Edge9",
-      "stableSubname": "Pocket.g3;SKT;:H3ab,E",
-      "subname": "Pocket.Edge9"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#18:3;:U;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge10",
-      "id": "Body:Edge10",
-      "identityStatus": "stable",
-      "indexed": "Edge10",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#18:3;:U;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge10",
-      "stableSubname": "Pocket.#18:3;:U;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge10"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g4;SKT;:H*,E",
-      "fullSubname": "Body.Pocket.Edge11",
-      "id": "Body:Edge11",
-      "identityStatus": "stable",
-      "indexed": "Edge11",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.g4;SKT;:H3ab,E",
-      "resolvedIndexed": "Edge11",
-      "stableSubname": "Pocket.g4;SKT;:H3ab,E",
-      "subname": "Pocket.Edge11"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#18:4;:U;XTR;:H*:*,E",
-      "fullSubname": "Body.Pocket.Edge12",
-      "id": "Body:Edge12",
-      "identityStatus": "stable",
-      "indexed": "Edge12",
-      "kind": "Edge",
-      "rawFreecadMappedName": "Pocket.#18:4;:U;XTR;:H3ab:7,E",
-      "resolvedIndexed": "Edge12",
-      "stableSubname": "Pocket.#18:4;:U;XTR;:H3ab:7,E",
-      "subname": "Pocket.Edge12"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g1v1;SKT;:H*,V",
-      "fullSubname": "Body.Pocket.Vertex1",
-      "id": "Body:Vertex1",
-      "identityStatus": "stable",
-      "indexed": "Vertex1",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.g1v1;SKT;:H3ab,V",
-      "resolvedIndexed": "Vertex1",
-      "stableSubname": "Pocket.g1v1;SKT;:H3ab,V",
-      "subname": "Pocket.Vertex1"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#1a:1;:U;XTR;:H*:*,V",
-      "fullSubname": "Body.Pocket.Vertex2",
-      "id": "Body:Vertex2",
-      "identityStatus": "stable",
-      "indexed": "Vertex2",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.#1a:1;:U;XTR;:H3ab:7,V",
-      "resolvedIndexed": "Vertex2",
-      "stableSubname": "Pocket.#1a:1;:U;XTR;:H3ab:7,V",
-      "subname": "Pocket.Vertex2"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g1v2;SKT;:H*,V",
-      "fullSubname": "Body.Pocket.Vertex3",
-      "id": "Body:Vertex3",
-      "identityStatus": "stable",
-      "indexed": "Vertex3",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.g1v2;SKT;:H3ab,V",
-      "resolvedIndexed": "Vertex3",
-      "stableSubname": "Pocket.g1v2;SKT;:H3ab,V",
-      "subname": "Pocket.Vertex3"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#1b:2;:U;XTR;:H*:*,V",
-      "fullSubname": "Body.Pocket.Vertex4",
-      "id": "Body:Vertex4",
-      "identityStatus": "stable",
-      "indexed": "Vertex4",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.#1b:2;:U;XTR;:H3ab:7,V",
-      "resolvedIndexed": "Vertex4",
-      "stableSubname": "Pocket.#1b:2;:U;XTR;:H3ab:7,V",
-      "subname": "Pocket.Vertex4"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g2v2;SKT;:H*,V",
-      "fullSubname": "Body.Pocket.Vertex5",
-      "id": "Body:Vertex5",
-      "identityStatus": "stable",
-      "indexed": "Vertex5",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.g2v2;SKT;:H3ab,V",
-      "resolvedIndexed": "Vertex5",
-      "stableSubname": "Pocket.g2v2;SKT;:H3ab,V",
-      "subname": "Pocket.Vertex5"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#1c:2;:U;XTR;:H*:*,V",
-      "fullSubname": "Body.Pocket.Vertex6",
-      "id": "Body:Vertex6",
-      "identityStatus": "stable",
-      "indexed": "Vertex6",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.#1c:2;:U;XTR;:H3ab:7,V",
-      "resolvedIndexed": "Vertex6",
-      "stableSubname": "Pocket.#1c:2;:U;XTR;:H3ab:7,V",
-      "subname": "Pocket.Vertex6"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.g3v2;SKT;:H*,V",
-      "fullSubname": "Body.Pocket.Vertex7",
-      "id": "Body:Vertex7",
-      "identityStatus": "stable",
-      "indexed": "Vertex7",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.g3v2;SKT;:H3ab,V",
-      "resolvedIndexed": "Vertex7",
-      "stableSubname": "Pocket.g3v2;SKT;:H3ab,V",
-      "subname": "Pocket.Vertex7"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "canonicalFreecadMappedName": "Pocket.#1d:2;:U;XTR;:H*:*,V",
-      "fullSubname": "Body.Pocket.Vertex8",
-      "id": "Body:Vertex8",
-      "identityStatus": "stable",
-      "indexed": "Vertex8",
-      "kind": "Vertex",
-      "rawFreecadMappedName": "Pocket.#1d:2;:U;XTR;:H3ab:7,V",
-      "resolvedIndexed": "Vertex8",
-      "stableSubname": "Pocket.#1d:2;:U;XTR;:H3ab:7,V",
-      "subname": "Pocket.Vertex8"
+      "bbox": {
+        "max": [
+          8.0,
+          4.0,
+          10.0
+        ],
+        "min": [
+          2.0,
+          1.0,
+          0.0
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#d:4;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.Pocket.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "Pocket.#d:4;:G;XTR;:Hced:7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "Pocket.#d:4;:G;XTR;:Hced:7,F",
+          "subname": "Pocket.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#d:3;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.Pocket.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "Pocket.#d:3;:G;XTR;:Hced:7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "Pocket.#d:3;:G;XTR;:Hced:7,F",
+          "subname": "Pocket.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#d:2;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.Pocket.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "Pocket.#d:2;:G;XTR;:Hced:7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "Pocket.#d:2;:G;XTR;:Hced:7,F",
+          "subname": "Pocket.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#d:1;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.Pocket.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "Pocket.#d:1;:G;XTR;:Hced:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "Pocket.#d:1;:G;XTR;:Hced:7,F",
+          "subname": "Pocket.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#d:1;;:H*:*,F",
+          "fullSubname": "Body.Pocket.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "Pocket.#d:1;;:Hced:1,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "Pocket.#d:1;;:Hced:1,F",
+          "subname": "Pocket.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#14:1;:G0;XTR;:H*:*,F",
+          "fullSubname": "Body.Pocket.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "Pocket.#14:1;:G0;XTR;:Hced:8,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "Pocket.#14:1;:G0;XTR;:Hced:8,F",
+          "subname": "Pocket.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#f:2;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#f:2;:G;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "Pocket.#f:2;:G;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#10:1;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#10:1;:G;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "Pocket.#10:1;:G;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#b:4;:H*,E",
+          "fullSubname": "Body.Pocket.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#b:4;:Hced,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "Pocket.#b:4;:Hced,E",
+          "subname": "Pocket.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#16:4;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#16:4;:U;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "Pocket.#16:4;:U;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#11:2;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#11:2;:G;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "Pocket.#11:2;:G;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#b:3;:H*,E",
+          "fullSubname": "Body.Pocket.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#b:3;:Hced,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "Pocket.#b:3;:Hced,E",
+          "subname": "Pocket.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#16:3;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#16:3;:U;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "Pocket.#16:3;:U;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#12:2;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#12:2;:G;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "Pocket.#12:2;:G;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#b:2;:H*,E",
+          "fullSubname": "Body.Pocket.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#b:2;:Hced,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "Pocket.#b:2;:Hced,E",
+          "subname": "Pocket.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#16:2;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#16:2;:U;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "Pocket.#16:2;:U;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#b:1;:H*,E",
+          "fullSubname": "Body.Pocket.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#b:1;:Hced,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "Pocket.#b:1;:Hced,E",
+          "subname": "Pocket.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#16:1;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.Pocket.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Pocket.#16:1;:U;XTR;:Hced:7,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "Pocket.#16:1;:U;XTR;:Hced:7,E",
+          "subname": "Pocket.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#8:2;:H*,V",
+          "fullSubname": "Body.Pocket.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#8:2;:Hced,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "Pocket.#8:2;:Hced,V",
+          "subname": "Pocket.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#18:2;:U;XTR;:H*:*,V",
+          "fullSubname": "Body.Pocket.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#18:2;:U;XTR;:Hced:7,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "Pocket.#18:2;:U;XTR;:Hced:7,V",
+          "subname": "Pocket.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#2:1;:H*,V",
+          "fullSubname": "Body.Pocket.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#2:1;:Hced,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "Pocket.#2:1;:Hced,V",
+          "subname": "Pocket.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#19:1;:U;XTR;:H*:*,V",
+          "fullSubname": "Body.Pocket.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#19:1;:U;XTR;:Hced:7,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "Pocket.#19:1;:U;XTR;:Hced:7,V",
+          "subname": "Pocket.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#6:2;:H*,V",
+          "fullSubname": "Body.Pocket.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#6:2;:Hced,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "Pocket.#6:2;:Hced,V",
+          "subname": "Pocket.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#1a:2;:U;XTR;:H*:*,V",
+          "fullSubname": "Body.Pocket.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#1a:2;:U;XTR;:Hced:7,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "Pocket.#1a:2;:U;XTR;:Hced:7,V",
+          "subname": "Pocket.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#4:2;:H*,V",
+          "fullSubname": "Body.Pocket.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#4:2;:Hced,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "Pocket.#4:2;:Hced,V",
+          "subname": "Pocket.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Pocket.#1b:2;:U;XTR;:H*:*,V",
+          "fullSubname": "Body.Pocket.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Pocket.#1b:2;:U;XTR;:Hced:7,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "Pocket.#1b:2;:U;XTR;:Hced:7,V",
+          "subname": "Pocket.Vertex8"
+        }
+      ],
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 180.0
     }
   ],
-  "topology_counts": {
-    "edges": 12,
-    "faces": 6,
-    "vertices": 8
-  },
-  "volume": 180.0
+  "topoNamingState": {
+    "documentHash": "sha256:f2f322b13ae490621c6a8facc19cc85acdf957a35e77cf92ed87b56e87865bb9",
+    "objects": {
+      "Body": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Pocket.#10:1;:G;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#10:1;:G;XTR;:H*:*,E",
+                "raw": "Pocket.#10:1;:G;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge2"
+              }
+            },
+            "Pocket.#11:2;:G;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#11:2;:G;XTR;:H*:*,E",
+                "raw": "Pocket.#11:2;:G;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge5"
+              }
+            },
+            "Pocket.#12:2;:G;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#12:2;:G;XTR;:H*:*,E",
+                "raw": "Pocket.#12:2;:G;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge8"
+              }
+            },
+            "Pocket.#14:1;:G0;XTR;:Hced:8,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#14:1;:G0;XTR;:H*:*,F",
+                "raw": "Pocket.#14:1;:G0;XTR;:Hced:8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Face6"
+              }
+            },
+            "Pocket.#16:1;:U;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#16:1;:U;XTR;:H*:*,E",
+                "raw": "Pocket.#16:1;:U;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge12"
+              }
+            },
+            "Pocket.#16:2;:U;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#16:2;:U;XTR;:H*:*,E",
+                "raw": "Pocket.#16:2;:U;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge10"
+              }
+            },
+            "Pocket.#16:3;:U;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#16:3;:U;XTR;:H*:*,E",
+                "raw": "Pocket.#16:3;:U;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge7"
+              }
+            },
+            "Pocket.#16:4;:U;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#16:4;:U;XTR;:H*:*,E",
+                "raw": "Pocket.#16:4;:U;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge4"
+              }
+            },
+            "Pocket.#18:2;:U;XTR;:Hced:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#18:2;:U;XTR;:H*:*,V",
+                "raw": "Pocket.#18:2;:U;XTR;:Hced:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex2"
+              }
+            },
+            "Pocket.#19:1;:U;XTR;:Hced:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#19:1;:U;XTR;:H*:*,V",
+                "raw": "Pocket.#19:1;:U;XTR;:Hced:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex4"
+              }
+            },
+            "Pocket.#1a:2;:U;XTR;:Hced:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#1a:2;:U;XTR;:H*:*,V",
+                "raw": "Pocket.#1a:2;:U;XTR;:Hced:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex6"
+              }
+            },
+            "Pocket.#1b:2;:U;XTR;:Hced:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#1b:2;:U;XTR;:H*:*,V",
+                "raw": "Pocket.#1b:2;:U;XTR;:Hced:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex8"
+              }
+            },
+            "Pocket.#2:1;:Hced,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#2:1;:H*,V",
+                "raw": "Pocket.#2:1;:Hced,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex3"
+              }
+            },
+            "Pocket.#4:2;:Hced,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#4:2;:H*,V",
+                "raw": "Pocket.#4:2;:Hced,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex7"
+              }
+            },
+            "Pocket.#6:2;:Hced,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#6:2;:H*,V",
+                "raw": "Pocket.#6:2;:Hced,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex5"
+              }
+            },
+            "Pocket.#8:2;:Hced,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#8:2;:H*,V",
+                "raw": "Pocket.#8:2;:Hced,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Vertex1"
+              }
+            },
+            "Pocket.#b:1;:Hced,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#b:1;:H*,E",
+                "raw": "Pocket.#b:1;:Hced,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge11"
+              }
+            },
+            "Pocket.#b:2;:Hced,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#b:2;:H*,E",
+                "raw": "Pocket.#b:2;:Hced,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge9"
+              }
+            },
+            "Pocket.#b:3;:Hced,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#b:3;:H*,E",
+                "raw": "Pocket.#b:3;:Hced,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge6"
+              }
+            },
+            "Pocket.#b:4;:Hced,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#b:4;:H*,E",
+                "raw": "Pocket.#b:4;:Hced,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge3"
+              }
+            },
+            "Pocket.#d:1;:G;XTR;:Hced:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#d:1;:G;XTR;:H*:*,F",
+                "raw": "Pocket.#d:1;:G;XTR;:Hced:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Face4"
+              }
+            },
+            "Pocket.#d:1;;:Hced:1,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#d:1;;:H*:*,F",
+                "raw": "Pocket.#d:1;;:Hced:1,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Face5"
+              }
+            },
+            "Pocket.#d:2;:G;XTR;:Hced:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#d:2;:G;XTR;:H*:*,F",
+                "raw": "Pocket.#d:2;:G;XTR;:Hced:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Face3"
+              }
+            },
+            "Pocket.#d:3;:G;XTR;:Hced:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#d:3;:G;XTR;:H*:*,F",
+                "raw": "Pocket.#d:3;:G;XTR;:Hced:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Face2"
+              }
+            },
+            "Pocket.#d:4;:G;XTR;:Hced:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#d:4;:G;XTR;:H*:*,F",
+                "raw": "Pocket.#d:4;:G;XTR;:Hced:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Face1"
+              }
+            },
+            "Pocket.#f:2;:G;XTR;:Hced:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Pocket.#f:2;:G;XTR;:H*:*,E",
+                "raw": "Pocket.#f:2;:G;XTR;:Hced:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Pocket.Edge1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:38d28bfdeab0ff2d473d5fe9ab2880bbde014ce0185099507593c529ca32fa90",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "Pocket.#f:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#f:2;:G;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Pocket.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "Pocket.#16:2;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#16:2;:U;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Pocket.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "Pocket.#b:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#b:1;:Hced,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Pocket.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "Pocket.#16:1;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#16:1;:U;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Pocket.Edge12"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "Pocket.#10:1;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#10:1;:G;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Pocket.Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "Pocket.#b:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#b:4;:Hced,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Pocket.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "Pocket.#16:4;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#16:4;:U;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Pocket.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "Pocket.#11:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#11:2;:G;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Pocket.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "Pocket.#b:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#b:3;:Hced,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Pocket.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "Pocket.#16:3;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#16:3;:U;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Pocket.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "Pocket.#12:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#12:2;:G;XTR;:Hced:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Pocket.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "Pocket.#b:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#b:2;:Hced,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Pocket.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "Pocket.#d:4;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#d:4;:G;XTR;:Hced:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Pocket.Face1"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "Pocket.#d:3;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#d:3;:G;XTR;:Hced:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Pocket.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "Pocket.#d:2;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#d:2;:G;XTR;:Hced:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Pocket.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "Pocket.#d:1;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#d:1;:G;XTR;:Hced:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Pocket.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "Pocket.#d:1;;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#d:1;;:Hced:1,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Pocket.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "Pocket.#14:1;:G0;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#14:1;:G0;XTR;:Hced:8,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Pocket.Face6"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "Pocket.#8:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#8:2;:Hced,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Pocket.Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "Pocket.#18:2;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#18:2;:U;XTR;:Hced:7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Pocket.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "Pocket.#2:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#2:1;:Hced,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Pocket.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "Pocket.#19:1;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#19:1;:U;XTR;:Hced:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Pocket.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "Pocket.#6:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#6:2;:Hced,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Pocket.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "Pocket.#1a:2;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#1a:2;:U;XTR;:Hced:7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Pocket.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "Pocket.#4:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#4:2;:Hced,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Pocket.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "Pocket.#1b:2;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pocket.#1b:2;:U;XTR;:Hced:7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Pocket.Vertex8"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

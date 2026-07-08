@@ -1,35 +1,61 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "Sketch",
-  "object_fields": {
-    "external_curve_count": 0,
-    "external_geometry_count": 0,
-    "external_point_count": 0,
-    "raw_edge_count": 5,
-    "shape": "occt_sketch_shape",
-    "status": "ok"
-  },
-  "reference": "FreeCADCmd oracle from sketch-internal-face-dangling-line.json; objects: Sketcher::SketchObject",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "sketch_external": {
-    "construction_count": 0,
-    "flag_counts": {
-      "Defining": 0,
-      "Detached": 0,
-      "Frozen": 0,
-      "Missing": 0,
-      "Sync": 0
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "Sketch",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 0,
+        "external_point_count": 0,
+        "raw_edge_count": 5,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_external": {
+        "construction_count": 0,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": []
+      },
+      "sketch_internal": {
+        "internal_counts": {
+          "edges": 5,
+          "faces": 1,
+          "vertices": 5
+        },
+        "profile_ready": true,
+        "raw_edge_count": 5,
+        "shape": "occt_internal_shape"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:8cedc3215e55bba0e9340e6cca7dc94f8403273394b41c6e2a8e39537da49448",
+    "objects": {
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fd39f2d39bea6a16c4eba99ae966118f191bfd51b0c048559040b4f8b5ffe992",
+        "subshapes": {}
+      }
     },
-    "flags": []
-  },
-  "sketch_internal": {
-    "internal_counts": {
-      "edges": 5,
-      "faces": 1,
-      "vertices": 5
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
     },
-    "profile_ready": true,
-    "raw_edge_count": 5,
-    "shape": "occt_internal_shape"
+    "schemaVersion": "cad-core.topo-state.v1"
   }
 }

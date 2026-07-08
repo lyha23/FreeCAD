@@ -1,57 +1,83 @@
 {
-  "bbox": {
-    "max": [
-      5.0,
-      3.5,
-      0.0
-    ],
-    "min": [
-      1.0,
-      0.5,
-      0.0
-    ]
-  },
-  "bbox_delta": 0.11,
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "ProjectedFaceRebuildProvenance",
-  "object_fields": {
-    "feature": "part_project_on_surface",
-    "height": 0.0,
-    "mode": "Faces",
-    "offset": 0.0,
-    "projected_face_count": 1,
-    "projected_inner_wire_count": 1,
-    "projected_solid_count": 0,
-    "projected_wire_count": 2,
-    "projection_item_ledger": [
-      {
-        "projection_item_index": 0,
-        "source_object": "ProjectionFaceWithHole",
-        "source_shape_kind": "face",
-        "source_subname": "Face1",
-        "stable_subname": "Face1"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          5.0,
+          3.5,
+          0.0
+        ],
+        "min": [
+          1.0,
+          0.5,
+          0.0
+        ]
+      },
+      "bbox_delta": 0.11,
+      "object": "ProjectedFaceRebuildProvenance",
+      "object_fields": {
+        "feature": "part_project_on_surface",
+        "height": 0.0,
+        "mode": "Faces",
+        "offset": 0.0,
+        "projected_face_count": 1,
+        "projected_inner_wire_count": 1,
+        "projected_solid_count": 0,
+        "projected_wire_count": 2,
+        "projection_item_ledger": [
+          {
+            "projection_item_index": 0,
+            "source_object": "ProjectionFaceWithHole",
+            "source_shape_kind": "face",
+            "source_subname": "Face1",
+            "stable_subname": "Face1"
+          }
+        ],
+        "projection_items": [
+          {
+            "object": "ProjectionFaceWithHole",
+            "subshape": "Face1"
+          }
+        ],
+        "projection_subshape": "Face1",
+        "shape": "occt_compound",
+        "source_projection": "ProjectionFaceWithHole",
+        "source_support": "SupportPlane",
+        "status": "ok",
+        "support_face": "Face1",
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+      },
+      "topology_counts": {
+        "edges": 8,
+        "faces": 1,
+        "vertices": 8
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:3296c89d81193001d9659671f28b91b4d3db1e537bda78f9bd7b98a4d5aa1b35",
+    "objects": {
+      "ProjectedFaceRebuildProvenance": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:9a355f6e3fd3df3f4faf1e973ee2b4023a10e82677034ef7bd2f87b8d8d46724",
+        "subshapes": {}
       }
-    ],
-    "projection_items": [
-      {
-        "object": "ProjectionFaceWithHole",
-        "subshape": "Face1"
-      }
-    ],
-    "projection_subshape": "Face1",
-    "shape": "occt_compound",
-    "source_projection": "ProjectionFaceWithHole",
-    "source_support": "SupportPlane",
-    "status": "ok",
-    "support_face": "Face1",
-    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
-  },
-  "reference": "FreeCADCmd oracle from part-project-on-surface-face-rebuild-provenance.json; objects: Part::Plane, Part::Plane, Part::Box, Part::Cut, Part::ProjectOnSurface",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 8,
-    "faces": 1,
-    "vertices": 8
-  },
-  "volume": 0.0
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

@@ -1,23 +1,8 @@
 {
-  "diagnostic_codes": [
-    "invalid_curve2d_source",
-    "invalid_point2d_source",
-    "unsupported_wrapper_lifecycle"
-  ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "Curve2dDeferred": {
-      "native_error": "Part.GeomPlate.BuildPlateSurface Curve2dOnSurface requires Surface link",
-      "native_error_code": "invalid_curve2d_source",
-      "object_fields": {
-        "feature": "part_geomplate_surface",
-        "freecad_native_document_object": false,
-        "helper": "Part.GeomPlate.BuildPlateSurface",
-        "source_backed_helper": true,
-        "status": "error"
-      }
-    },
-    "InitialSurfaceDeferred": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
       "bbox": {
         "max": [
           0.0005501000000000004,
@@ -31,6 +16,7 @@
         ]
       },
       "bbox_delta": 0.2,
+      "object": "InitialSurfaceDeferred",
       "object_fields": {
         "curve_constraint_count": 0,
         "dto": "PartGeomPlateSurfaceDTO",
@@ -51,9 +37,10 @@
       },
       "volume": 0.0
     },
-    "PlateSurfaceCurvesDeferred": {
-      "native_error": "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; PlateSurfacePyImp.cpp leaves Curves as TODO and GeomPlateSurface Save/Restore throw NotImplementedError",
-      "native_error_code": "unsupported_wrapper_lifecycle",
+    {
+      "native_error": "Part.GeomPlate.BuildPlateSurface Curve2dOnSurface requires Surface link",
+      "native_error_code": "invalid_curve2d_source",
+      "object": "Curve2dDeferred",
       "object_fields": {
         "feature": "part_geomplate_surface",
         "freecad_native_document_object": false,
@@ -62,9 +49,22 @@
         "status": "error"
       }
     },
-    "Point2dDeferred": {
+    {
       "native_error": "Part.GeomPlate.BuildPlateSurface Point2dOnSurface must be an object or object list",
       "native_error_code": "invalid_point2d_source",
+      "object": "Point2dDeferred",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; PlateSurfacePyImp.cpp leaves Curves as TODO and GeomPlateSurface Save/Restore throw NotImplementedError",
+      "native_error_code": "unsupported_wrapper_lifecycle",
+      "object": "PlateSurfaceCurvesDeferred",
       "object_fields": {
         "feature": "part_geomplate_surface",
         "freecad_native_document_object": false,
@@ -73,7 +73,64 @@
         "status": "error"
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from part-geomplate-advanced-deferred.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::Plane, Part::GeomPlateSurface, Part::GeomPlateSurface, Part::GeomPlateSurface, Part::GeomPlateSurface",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:a119a80a08cbfee1dfaa9e3a62eeb2ee975c3aaa6f1292b659482b6c61658113",
+    "objects": {
+      "Curve2dDeferred": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:9d386d5110a63abc0720439b6614fbd82c5792b4716f5719156f59f4bcbe475c",
+        "subshapes": {}
+      },
+      "InitialSurfaceDeferred": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0de824c01805a93997cc9baf3a19f9c17486a5cd6e5742b516ac002b7997722d",
+        "subshapes": {}
+      },
+      "PlateSurfaceCurvesDeferred": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:49dee8f9b173f3fdfbbf6dd6b05cbc27b84e7c9317ec7bc4831f4923183a141f",
+        "subshapes": {}
+      },
+      "Point2dDeferred": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7a9b4a8e4f9f957685b8caecb30726628be858dea16734dc291f3cb4364d089e",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

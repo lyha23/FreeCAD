@@ -1,20 +1,9 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DatumPointProximityBadSubname": {
-      "object_fields": {
-        "attached": true,
-        "datum": "point",
-        "map_mode": "ProximityPoint2",
-        "point": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "status": "ok"
-      }
-    },
-    "DatumPointProximityMissingSecond": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumPointProximityMissingSecond",
       "object_fields": {
         "attached": true,
         "datum": "point",
@@ -26,8 +15,55 @@
         ],
         "status": "ok"
       }
+    },
+    {
+      "object": "DatumPointProximityBadSubname",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "ProximityPoint2",
+        "point": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-datum-point-proximity-diagnostics.json; objects: Part::Vertex, Part::Plane, PartDesign::Point, PartDesign::Point",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:0d29e7bdf6aea18aa9a21916ba6bafac3fa38e7becb99e48a81e2cb580d03080",
+    "objects": {
+      "DatumPointProximityBadSubname": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d2e590f71d158674c597a5f3f870f4f3336b7c84a2108e8732273f07221d6018",
+        "subshapes": {}
+      },
+      "DatumPointProximityMissingSecond": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7d8965375b335ce917441c18b80a1f1ba484d238c889abd80ac3192b0ca77ef0",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

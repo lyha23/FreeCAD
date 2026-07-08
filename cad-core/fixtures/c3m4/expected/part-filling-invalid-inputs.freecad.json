@@ -1,57 +1,125 @@
 {
-  "diagnostic_codes": [
-    "missing_link_target",
-    "missing_property",
-    "execution_failed",
-    "execution_failed",
-    "invalid_support_target"
-  ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DisconnectedBoundary": {
-      "native_error": "Standard_ConstructionError: Geom_RectangularTrimmedSurface::V1==V2",
-      "native_error_code": "execution_failed",
-      "object_fields": {
-        "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
-      }
-    },
-    "EmptyBoundary": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
       "native_error": "No input shape",
       "native_error_code": "missing_property",
+      "object": "EmptyBoundary",
       "object_fields": {
         "feature": "part_filled_face",
         "helper": "Part.makeFilledFace",
         "status": "error"
       }
     },
-    "FaceOnlyBoundary": {
-      "native_error": "FreeCAD exception thrown (No boundary wire)",
-      "native_error_code": "execution_failed",
-      "object_fields": {
-        "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
-      }
-    },
-    "MissingTarget": {
+    {
       "native_error": "Boundary target DoesNotExist was not created",
       "native_error_code": "missing_link_target",
+      "object": "MissingTarget",
       "object_fields": {
         "status": "error"
       }
     },
-    "UnsupportedKwargs": {
+    {
+      "native_error": "FreeCAD exception thrown (No boundary wire)",
+      "native_error_code": "execution_failed",
+      "object": "FaceOnlyBoundary",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Standard_ConstructionError: Geom_RectangularTrimmedSurface::V1==V2",
+      "native_error_code": "execution_failed",
+      "object": "DisconnectedBoundary",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    {
       "native_error": "Unsupported Part.makeFilledFace kwargs: Orders, Supports",
-      "native_error_code": "invalid_support_target",
+      "native_error_code": "unsupported_property",
+      "object": "UnsupportedKwargs",
       "object_fields": {
         "feature": "part_filled_face",
         "helper": "Part.makeFilledFace",
         "status": "error"
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from part-filling-invalid-inputs.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::Plane, Part::Line, Part::Line, Part::FilledFace, Part::FilledFace, Part::FilledFace, Part::FilledFace, Part::FilledFace",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:75860b905509d3ce70cd625e63f81e2993de36776d04bf503452290ae0e14be7",
+    "objects": {
+      "DisconnectedBoundary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d6decb2ac46666ba0476792415cada5c566fcf023441bcc1778fb5618b955641",
+        "subshapes": {}
+      },
+      "EmptyBoundary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fefb3d03b1ed65de811e9bdacfbd88753487d174715b77d011addb6fc0657578",
+        "subshapes": {}
+      },
+      "FaceOnlyBoundary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:103e1bf0b37b977c51f91742ee08c78bf24ab9ad9fcd14649518216c7042aaaf",
+        "subshapes": {}
+      },
+      "MissingTarget": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c5033fd7c3d3b56eaac0242bea2febd23f700912c57c12120d461896dd4937ca",
+        "subshapes": {}
+      },
+      "UnsupportedKwargs": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:679c194e2aab6bbfdddc543032e9288e95e3ca3cce17378dd578fe25a816ca42",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

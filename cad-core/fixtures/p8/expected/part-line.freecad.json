@@ -1,59 +1,98 @@
 {
-  "bbox": {
-    "max": [
-      1.0,
-      2.0,
-      3.0
-    ],
-    "min": [
-      0.0,
-      0.0,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "Line",
-  "reference": "FreeCADCmd oracle from part-line.json; objects: Part::Line",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "subshapes": [
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
     {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "fullSubname": "Line.Edge1",
-      "id": "Line:Edge1",
-      "identityStatus": "current_only",
-      "indexed": "Edge1",
-      "kind": "Edge",
-      "stableSubname": "",
-      "subname": "Edge1"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "fullSubname": "Line.Vertex1",
-      "id": "Line:Vertex1",
-      "identityStatus": "current_only",
-      "indexed": "Vertex1",
-      "kind": "Vertex",
-      "stableSubname": "",
-      "subname": "Vertex1"
-    },
-    {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "fullSubname": "Line.Vertex2",
-      "id": "Line:Vertex2",
-      "identityStatus": "current_only",
-      "indexed": "Vertex2",
-      "kind": "Vertex",
-      "stableSubname": "",
-      "subname": "Vertex2"
+      "bbox": {
+        "max": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object": "Line",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Line.Edge1",
+          "id": "Line:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Line.Vertex1",
+          "id": "Line:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Line.Vertex2",
+          "id": "Line:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        }
+      ],
+      "topology_counts": {
+        "edges": 1,
+        "faces": 0,
+        "vertices": 2
+      },
+      "volume": 0.0
     }
   ],
-  "topology_counts": {
-    "edges": 1,
-    "faces": 0,
-    "vertices": 2
-  },
-  "volume": 0.0
+  "topoNamingState": {
+    "documentHash": "sha256:8fd3e506f29d01199047ec1debded7e6d98181ca8c2c2a7de61f3a66cf6b0133",
+    "objects": {
+      "Line": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:a6d1105e5c3665a35ea35fa18828dcac88fa8729e607bc2d770a1493df896a5a",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

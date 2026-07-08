@@ -1,8 +1,0 @@
-{
-  "reference": "FreeCAD Hole threaded-standard oracle pending: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureHole.cpp applies standard countersink data, but this case still needs a native FreeCAD oracle before freezing bbox, volume, topology, or named-shape golden.",
-  "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
-    "kind": "hole_thread_geometry_oracle_pending",
-    "reason": "Do not freeze threaded countersink geometry from current cad-core output; focused flow tests only validate resolved standard fields."
-  }
-}

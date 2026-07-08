@@ -1,42 +1,23 @@
 {
-  "diagnostic_codes": [],
-  "diagnostic_split": [
+  "diagnostics": [
     {
+      "code": "native_expected_diagnostic",
       "object": "Sweep",
       "policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker",
-      "reason": "OCCError: NCollection_Array1::Value"
+      "reason": "OCCError: NCollection_Array1::Value",
+      "source": "freecad_expected_collector"
     }
   ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "object_fields": {
-    "advanced": {},
-    "builder_status": {
-      "build_ok": false,
-      "shape_access_ok": false
+  "elementReferenceUpdates": [],
+  "results": [],
+  "topoNamingState": {
+    "documentHash": "sha256:14dd1aa7045cd64f2b4ee9661e1c45b58c258e7dd0b18e62e709d735f7cc6a0e",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
     },
-    "dto": "PartSweepAdvancedPipeShellDTO",
-    "helper": "Part.BRepOffsetAPI_MakePipeShell",
-    "status": "diagnostic_only"
-  },
-  "reference": "FreeCADCmd wrapper oracle from part-sweep-located-profile-contract.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Part::Vertex, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "known_gap": {
-    "kind": "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
-    "freecadcmd_evidence": {
-      "error": "OCCError: NCollection_Array1::Value",
-      "failed_stage": "build",
-      "collector_policy": "do not fabricate shape_summary from cad-core output",
-      "failing_location_representatives": [
-        "located_free_vertex",
-        "located_profile_owned_vertex"
-      ],
-      "failing_call_order_variants": [
-        "located_add_before_transition"
-      ],
-      "successful_controls": [
-        "plain_control"
-      ]
-    },
-    "delete_condition": "Delete after FreeCADCmd wrapper expected can build located-profile add(Profile, Location, WithContact, WithCorrection)."
+    "schemaVersion": "cad-core.topo-state.v1"
   }
 }

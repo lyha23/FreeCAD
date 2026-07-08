@@ -1,23 +1,23 @@
 {
-  "diagnostic_codes": [],
-  "diagnostic_split": [
+  "diagnostics": [
     {
+      "code": "native_expected_diagnostic",
       "object": "Sweep",
       "policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker",
-      "reason": "OCCError: NCollection_Array1::Value"
+      "reason": "OCCError: NCollection_Array1::Value",
+      "source": "freecad_expected_collector"
     }
   ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "object_fields": {
-    "advanced": {},
-    "builder_status": {
-      "build_ok": false,
-      "shape_access_ok": false
+  "elementReferenceUpdates": [],
+  "results": [],
+  "topoNamingState": {
+    "documentHash": "sha256:0363ba83c9f927c47bcc2a78898244114b68862f1f2bd6b7ea7a8bf43976bd33",
+    "objects": {},
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
     },
-    "dto": "PartSweepAdvancedPipeShellDTO",
-    "helper": "Part.BRepOffsetAPI_MakePipeShell",
-    "status": "diagnostic_only"
-  },
-  "reference": "FreeCADCmd wrapper oracle from part-sweep-located-profile-product.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Part::Vertex, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1"
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

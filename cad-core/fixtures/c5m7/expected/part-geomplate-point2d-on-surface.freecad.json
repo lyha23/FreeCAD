@@ -1,38 +1,63 @@
 {
-  "bbox": {
-    "max": [
-      4.400000100000002,
-      4.400000100000001,
-      0.9946903764658888
-    ],
-    "min": [
-      -1.0000000066613381e-07,
-      -1.000000000454182e-07,
-      -0.1795590008639852
-    ]
-  },
-  "bbox_delta": 0.2,
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "GeomPlate",
-  "object_fields": {
-    "curve_constraint_count": 4,
-    "dto": "PartGeomPlateSurfaceDTO",
-    "feature": "part_geomplate_surface",
-    "freecad_native_document_object": false,
-    "helper": "Part.GeomPlate.BuildPlateSurface",
-    "is_done": true,
-    "point_constraint_count": 1,
-    "shape": "occt_face",
-    "source_backed_helper": true,
-    "status": "ok",
-    "surface_kind": "GeomPlate_Surface"
-  },
-  "reference": "FreeCADCmd oracle from part-geomplate-point2d-on-surface.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::Line, Part::Line, Part::Line, Part::Plane, Part::GeomPlateSurface",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 4,
-    "faces": 1,
-    "vertices": 4
-  },
-  "volume": 5.966720600638695
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.400000100000002,
+          4.400000100000001,
+          0.9946903764658888
+        ],
+        "min": [
+          -1.0000000066613381e-07,
+          -1.000000000454182e-07,
+          -0.1795590008639852
+        ]
+      },
+      "object": "GeomPlate",
+      "object_fields": {
+        "curve_constraint_count": 4,
+        "dto": "PartGeomPlateSurfaceDTO",
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "is_done": true,
+        "point_constraint_count": 1,
+        "shape": "occt_face",
+        "source_backed_helper": true,
+        "status": "ok",
+        "surface_kind": "GeomPlate_Surface"
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": 5.966720600638695
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:c80c0199bdcb685af355c6e3dd1fd13f1ca410fe31bb41f15a6efd8f8ba866fd",
+    "objects": {
+      "GeomPlate": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8bff7b3e4d85f9c6dcd80b3d5007e0fa614d3dd1e98fb50feb337ecac3e4ee54",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

@@ -1,7 +1,8 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "BooleanCommon": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
       "bbox": {
         "max": [
           8.0,
@@ -14,6 +15,7 @@
           0.0
         ]
       },
+      "object": "BooleanCommon",
       "object_fields": {
         "body_mode": "replace",
         "boolean_type": "Common",
@@ -31,7 +33,7 @@
       },
       "volume": 31.999999999999993
     },
-    "MainBody": {
+    {
       "bbox": {
         "max": [
           8.0,
@@ -44,6 +46,373 @@
           0.0
         ]
       },
+      "object": "MainBody",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#14:1;:M#3b;CMN;:H*:*,F;:H*,F",
+          "fullSubname": "MainBody.BooleanCommon.Face1",
+          "id": "MainBody:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "BooleanCommon.#14:1;:M#3b;CMN;:Hd0f:a,F;:Hd10,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "BooleanCommon.#14:1;:M#3b;CMN;:Hd0f:a,F;:Hd10,F",
+          "subname": "BooleanCommon.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#16:2;:M;CMN;:H*:*,F;:H*,F",
+          "fullSubname": "MainBody.BooleanCommon.Face2",
+          "id": "MainBody:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "BooleanCommon.#16:2;:M;CMN;:Hd0f:7,F;:Hd10,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "BooleanCommon.#16:2;:M;CMN;:Hd0f:7,F;:Hd10,F",
+          "subname": "BooleanCommon.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#2f:1;:M;CMN;:H*:*,F;:H*,F",
+          "fullSubname": "MainBody.BooleanCommon.Face3",
+          "id": "MainBody:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "BooleanCommon.#2f:1;:M;CMN;:Hd13:7,F;:Hd10,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "BooleanCommon.#2f:1;:M;CMN;:Hd13:7,F;:Hd10,F",
+          "subname": "BooleanCommon.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#2f:4;:M;CMN;:H*:*,F;:H*,F",
+          "fullSubname": "MainBody.BooleanCommon.Face4",
+          "id": "MainBody:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "BooleanCommon.#2f:4;:M;CMN;:Hd13:7,F;:Hd10,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "BooleanCommon.#2f:4;:M;CMN;:Hd13:7,F;:Hd10,F",
+          "subname": "BooleanCommon.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#2f:3;:M;CMN;:H*:*,F;:H*,F",
+          "fullSubname": "MainBody.BooleanCommon.Face5",
+          "id": "MainBody:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "BooleanCommon.#2f:3;:M;CMN;:Hd13:7,F;:Hd10,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "BooleanCommon.#2f:3;:M;CMN;:Hd13:7,F;:Hd10,F",
+          "subname": "BooleanCommon.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#40:1;:M#3e;CMN;:H*:*,F;:H*,F",
+          "fullSubname": "MainBody.BooleanCommon.Face6",
+          "id": "MainBody:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "BooleanCommon.#40:1;:M#3e;CMN;:Hd0f:a,F;:Hd10,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "BooleanCommon.#40:1;:M#3e;CMN;:Hd0f:a,F;:Hd10,F",
+          "subname": "BooleanCommon.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#d:2;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge1",
+          "id": "MainBody:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#d:2;:M;CMN;:Hd0f:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "BooleanCommon.#d:2;:M;CMN;:Hd0f:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#2d:1;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge2",
+          "id": "MainBody:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#2d:1;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "BooleanCommon.#2d:1;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#2d:4;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge3",
+          "id": "MainBody:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#2d:4;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "BooleanCommon.#2d:4;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#2d:3;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge4",
+          "id": "MainBody:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#2d:3;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "BooleanCommon.#2d:3;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#16:2;:G#30;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge5",
+          "id": "MainBody:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#16:2;:G#30;CMN;:Hd0f:a,E;:Hd10,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "BooleanCommon.#16:2;:G#30;CMN;:Hd0f:a,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#32:2;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge6",
+          "id": "MainBody:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#32:2;:M;CMN;:Hd0f:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "BooleanCommon.#32:2;:M;CMN;:Hd0f:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#16:2;:G2#33;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge7",
+          "id": "MainBody:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#16:2;:G2#33;CMN;:Hd0f:b,E;:Hd10,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "BooleanCommon.#16:2;:G2#33;CMN;:Hd0f:b,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#35:1;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge8",
+          "id": "MainBody:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#35:1;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "BooleanCommon.#35:1;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#37:2;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge9",
+          "id": "MainBody:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#37:2;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "BooleanCommon.#37:2;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#38:8;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge10",
+          "id": "MainBody:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#38:8;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "BooleanCommon.#38:8;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#35:4;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge11",
+          "id": "MainBody:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#35:4;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "BooleanCommon.#35:4;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#35:3;:M;CMN;:H*:*,E;:H*,E",
+          "fullSubname": "MainBody.BooleanCommon.Edge12",
+          "id": "MainBody:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "BooleanCommon.#35:3;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "BooleanCommon.#35:3;:M;CMN;:Hd13:7,E;:Hd10,E",
+          "subname": "BooleanCommon.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#d:2;:G2#41;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex1",
+          "id": "MainBody:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#d:2;:G2#41;CMN;:Hd0f:b,V;:Hd10,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "BooleanCommon.#d:2;:G2#41;CMN;:Hd0f:b,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#d:2;:G#42;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex2",
+          "id": "MainBody:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#d:2;:G#42;CMN;:Hd0f:a,V;:Hd10,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "BooleanCommon.#d:2;:G#42;CMN;:Hd0f:a,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#44:2;:M;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex3",
+          "id": "MainBody:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#44:2;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "BooleanCommon.#44:2;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#45:8;:M;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex4",
+          "id": "MainBody:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#45:8;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "BooleanCommon.#45:8;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#32:2;:G#46;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex5",
+          "id": "MainBody:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#32:2;:G#46;CMN;:Hd0f:a,V;:Hd10,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "BooleanCommon.#32:2;:G#46;CMN;:Hd0f:a,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#32:2;:G2#47;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex6",
+          "id": "MainBody:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#32:2;:G2#47;CMN;:Hd0f:b,V;:Hd10,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "BooleanCommon.#32:2;:G2#47;CMN;:Hd0f:b,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#49:2;:M;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex7",
+          "id": "MainBody:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#49:2;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "BooleanCommon.#49:2;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "BooleanCommon.#4a:8;:M;CMN;:H*:*,V;:H*,V",
+          "fullSubname": "MainBody.BooleanCommon.Vertex8",
+          "id": "MainBody:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "BooleanCommon.#4a:8;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "BooleanCommon.#4a:8;:M;CMN;:Hd13:7,V;:Hd10,V",
+          "subname": "BooleanCommon.Vertex8"
+        }
+      ],
       "topology_counts": {
         "edges": 12,
         "faces": 6,
@@ -51,7 +420,770 @@
       },
       "volume": 31.999999999999993
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-boolean-common-body-tool.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, PartDesign::Pad, PartDesign::Body, PartDesign::Boolean, PartDesign::Body",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:f48dfc6cf80209879d4a8a1a86c745e779e32062b311ef2e3b28b4658b349dfa",
+    "objects": {
+      "BooleanCommon": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:f15316e11636c13dfbab0f6e01cb941e63a452112835a2f9941daea0144a5e13",
+        "subshapes": {}
+      },
+      "MainBody": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "BooleanCommon.#14:1;:M#3b;CMN;:Hd0f:a,F;:Hd10,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#14:1;:M#3b;CMN;:H*:*,F;:H*,F",
+                "raw": "BooleanCommon.#14:1;:M#3b;CMN;:Hd0f:a,F;:Hd10,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "MainBody",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Face1"
+              }
+            },
+            "BooleanCommon.#16:2;:G#30;CMN;:Hd0f:a,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#16:2;:G#30;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#16:2;:G#30;CMN;:Hd0f:a,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge5"
+              }
+            },
+            "BooleanCommon.#16:2;:G2#33;CMN;:Hd0f:b,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#16:2;:G2#33;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#16:2;:G2#33;CMN;:Hd0f:b,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge7"
+              }
+            },
+            "BooleanCommon.#16:2;:M;CMN;:Hd0f:7,F;:Hd10,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#16:2;:M;CMN;:H*:*,F;:H*,F",
+                "raw": "BooleanCommon.#16:2;:M;CMN;:Hd0f:7,F;:Hd10,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "MainBody",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Face2"
+              }
+            },
+            "BooleanCommon.#2d:1;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#2d:1;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#2d:1;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge2"
+              }
+            },
+            "BooleanCommon.#2d:3;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#2d:3;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#2d:3;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge4"
+              }
+            },
+            "BooleanCommon.#2d:4;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#2d:4;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#2d:4;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge3"
+              }
+            },
+            "BooleanCommon.#2f:1;:M;CMN;:Hd13:7,F;:Hd10,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#2f:1;:M;CMN;:H*:*,F;:H*,F",
+                "raw": "BooleanCommon.#2f:1;:M;CMN;:Hd13:7,F;:Hd10,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "MainBody",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Face3"
+              }
+            },
+            "BooleanCommon.#2f:3;:M;CMN;:Hd13:7,F;:Hd10,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#2f:3;:M;CMN;:H*:*,F;:H*,F",
+                "raw": "BooleanCommon.#2f:3;:M;CMN;:Hd13:7,F;:Hd10,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "MainBody",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Face5"
+              }
+            },
+            "BooleanCommon.#2f:4;:M;CMN;:Hd13:7,F;:Hd10,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#2f:4;:M;CMN;:H*:*,F;:H*,F",
+                "raw": "BooleanCommon.#2f:4;:M;CMN;:Hd13:7,F;:Hd10,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "MainBody",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Face4"
+              }
+            },
+            "BooleanCommon.#32:2;:G#46;CMN;:Hd0f:a,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#32:2;:G#46;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#32:2;:G#46;CMN;:Hd0f:a,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex5"
+              }
+            },
+            "BooleanCommon.#32:2;:G2#47;CMN;:Hd0f:b,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#32:2;:G2#47;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#32:2;:G2#47;CMN;:Hd0f:b,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex6"
+              }
+            },
+            "BooleanCommon.#32:2;:M;CMN;:Hd0f:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#32:2;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#32:2;:M;CMN;:Hd0f:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge6"
+              }
+            },
+            "BooleanCommon.#35:1;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#35:1;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#35:1;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge8"
+              }
+            },
+            "BooleanCommon.#35:3;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#35:3;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#35:3;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge12"
+              }
+            },
+            "BooleanCommon.#35:4;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#35:4;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#35:4;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge11"
+              }
+            },
+            "BooleanCommon.#37:2;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#37:2;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#37:2;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge9"
+              }
+            },
+            "BooleanCommon.#38:8;:M;CMN;:Hd13:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#38:8;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#38:8;:M;CMN;:Hd13:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge10"
+              }
+            },
+            "BooleanCommon.#40:1;:M#3e;CMN;:Hd0f:a,F;:Hd10,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#40:1;:M#3e;CMN;:H*:*,F;:H*,F",
+                "raw": "BooleanCommon.#40:1;:M#3e;CMN;:Hd0f:a,F;:Hd10,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "MainBody",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Face6"
+              }
+            },
+            "BooleanCommon.#44:2;:M;CMN;:Hd13:7,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#44:2;:M;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#44:2;:M;CMN;:Hd13:7,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex3"
+              }
+            },
+            "BooleanCommon.#45:8;:M;CMN;:Hd13:7,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#45:8;:M;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#45:8;:M;CMN;:Hd13:7,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex4"
+              }
+            },
+            "BooleanCommon.#49:2;:M;CMN;:Hd13:7,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#49:2;:M;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#49:2;:M;CMN;:Hd13:7,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex7"
+              }
+            },
+            "BooleanCommon.#4a:8;:M;CMN;:Hd13:7,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#4a:8;:M;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#4a:8;:M;CMN;:Hd13:7,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex8"
+              }
+            },
+            "BooleanCommon.#d:2;:G#42;CMN;:Hd0f:a,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#d:2;:G#42;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#d:2;:G#42;CMN;:Hd0f:a,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex2"
+              }
+            },
+            "BooleanCommon.#d:2;:G2#41;CMN;:Hd0f:b,V;:Hd10,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#d:2;:G2#41;CMN;:H*:*,V;:H*,V",
+                "raw": "BooleanCommon.#d:2;:G2#41;CMN;:Hd0f:b,V;:Hd10,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "MainBody",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Vertex1"
+              }
+            },
+            "BooleanCommon.#d:2;:M;CMN;:Hd0f:7,E;:Hd10,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "BooleanCommon.#d:2;:M;CMN;:H*:*,E;:H*,E",
+                "raw": "BooleanCommon.#d:2;:M;CMN;:Hd0f:7,E;:Hd10,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "MainBody",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "MainBody",
+                "subname": "BooleanCommon.Edge1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7cc5a94106d7c0633ea8ba42d6e31fc6b166861635f05af321e8fc4bdec7d72b",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "BooleanCommon.#d:2;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#d:2;:M;CMN;:Hd0f:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "BooleanCommon.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "BooleanCommon.#38:8;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#38:8;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "BooleanCommon.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "BooleanCommon.#35:4;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#35:4;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "BooleanCommon.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "BooleanCommon.#35:3;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#35:3;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "BooleanCommon.Edge12"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "BooleanCommon.#2d:1;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#2d:1;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "BooleanCommon.Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "BooleanCommon.#2d:4;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#2d:4;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "BooleanCommon.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "BooleanCommon.#2d:3;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#2d:3;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "BooleanCommon.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "BooleanCommon.#16:2;:G#30;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#16:2;:G#30;CMN;:Hd0f:a,E;:Hd10,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "BooleanCommon.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "BooleanCommon.#32:2;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#32:2;:M;CMN;:Hd0f:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "BooleanCommon.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "BooleanCommon.#16:2;:G2#33;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#16:2;:G2#33;CMN;:Hd0f:b,E;:Hd10,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "BooleanCommon.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "BooleanCommon.#35:1;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#35:1;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "BooleanCommon.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "BooleanCommon.#37:2;:M;CMN;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#37:2;:M;CMN;:Hd13:7,E;:Hd10,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "BooleanCommon.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "BooleanCommon.#14:1;:M#3b;CMN;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#14:1;:M#3b;CMN;:Hd0f:a,F;:Hd10,F",
+            "resolvedIndexed": "Face1",
+            "subname": "BooleanCommon.Face1"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "BooleanCommon.#16:2;:M;CMN;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#16:2;:M;CMN;:Hd0f:7,F;:Hd10,F",
+            "resolvedIndexed": "Face2",
+            "subname": "BooleanCommon.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "BooleanCommon.#2f:1;:M;CMN;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#2f:1;:M;CMN;:Hd13:7,F;:Hd10,F",
+            "resolvedIndexed": "Face3",
+            "subname": "BooleanCommon.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "BooleanCommon.#2f:4;:M;CMN;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#2f:4;:M;CMN;:Hd13:7,F;:Hd10,F",
+            "resolvedIndexed": "Face4",
+            "subname": "BooleanCommon.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "BooleanCommon.#2f:3;:M;CMN;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#2f:3;:M;CMN;:Hd13:7,F;:Hd10,F",
+            "resolvedIndexed": "Face5",
+            "subname": "BooleanCommon.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "BooleanCommon.#40:1;:M#3e;CMN;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#40:1;:M#3e;CMN;:Hd0f:a,F;:Hd10,F",
+            "resolvedIndexed": "Face6",
+            "subname": "BooleanCommon.Face6"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "BooleanCommon.#d:2;:G2#41;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#d:2;:G2#41;CMN;:Hd0f:b,V;:Hd10,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "BooleanCommon.Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "BooleanCommon.#d:2;:G#42;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#d:2;:G#42;CMN;:Hd0f:a,V;:Hd10,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "BooleanCommon.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "BooleanCommon.#44:2;:M;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#44:2;:M;CMN;:Hd13:7,V;:Hd10,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "BooleanCommon.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "BooleanCommon.#45:8;:M;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#45:8;:M;CMN;:Hd13:7,V;:Hd10,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "BooleanCommon.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "BooleanCommon.#32:2;:G#46;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#32:2;:G#46;CMN;:Hd0f:a,V;:Hd10,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "BooleanCommon.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "BooleanCommon.#32:2;:G2#47;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#32:2;:G2#47;CMN;:Hd0f:b,V;:Hd10,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "BooleanCommon.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "BooleanCommon.#49:2;:M;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#49:2;:M;CMN;:Hd13:7,V;:Hd10,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "BooleanCommon.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "BooleanCommon.#4a:8;:M;CMN;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "BooleanCommon.#4a:8;:M;CMN;:Hd13:7,V;:Hd10,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "BooleanCommon.Vertex8"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

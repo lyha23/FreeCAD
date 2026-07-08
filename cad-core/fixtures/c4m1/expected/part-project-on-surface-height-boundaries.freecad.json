@@ -1,7 +1,8 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "ProjectedAllHeight": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
       "bbox": {
         "max": [
           4.0,
@@ -15,6 +16,7 @@
         ]
       },
       "bbox_delta": 0.11,
+      "object": "ProjectedAllHeight",
       "object_fields": {
         "feature": "part_project_on_surface",
         "height": 1.5,
@@ -54,7 +56,7 @@
       },
       "volume": 9.0
     },
-    "ProjectedFacesHeight": {
+    {
       "bbox": {
         "max": [
           4.0,
@@ -68,6 +70,7 @@
         ]
       },
       "bbox_delta": 0.11,
+      "object": "ProjectedFacesHeight",
       "object_fields": {
         "feature": "part_project_on_surface",
         "height": 1.5,
@@ -107,7 +110,40 @@
       },
       "volume": 0.0
     }
-  },
-  "reference": "FreeCADCmd oracle from part-project-on-surface-height-boundaries.json; objects: Part::Plane, Part::Plane, Part::ProjectOnSurface, Part::ProjectOnSurface",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b2ab5f88aff294563e75181263a2629236f3200a6badc5bdfa470db3f09cd2a5",
+    "objects": {
+      "ProjectedAllHeight": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b778480090f5332f6975c1d45f9bb087b46691e9b10f663d8b29e41cdf5a5982",
+        "subshapes": {}
+      },
+      "ProjectedFacesHeight": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:75b4363693237b39f15ce59ef8b0a5fbaf9f1b3edb6e0979820f54f2008fd934",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

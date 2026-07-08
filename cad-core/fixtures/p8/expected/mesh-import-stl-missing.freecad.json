@@ -1,28 +1,54 @@
 {
-  "bbox": {
-    "max": [
-      -1.7976931348623157e+308,
-      -1.7976931348623157e+308,
-      -1.7976931348623157e+308
-    ],
-    "min": [
-      1.7976931348623157e+308,
-      1.7976931348623157e+308,
-      1.7976931348623157e+308
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "mesh_summary": {
-    "triangle_count": 0,
-    "vertex_count": 0
-  },
-  "object": "ImportedMissingStl",
-  "reference": "FreeCADCmd oracle from mesh-import-stl-missing.json; objects: Mesh::Import",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 0,
-    "faces": 0,
-    "vertices": 0
-  },
-  "volume": 0.0
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          -1.7976931348623157e+308,
+          -1.7976931348623157e+308,
+          -1.7976931348623157e+308
+        ],
+        "min": [
+          1.7976931348623157e+308,
+          1.7976931348623157e+308,
+          1.7976931348623157e+308
+        ]
+      },
+      "mesh_summary": {
+        "triangle_count": 0,
+        "vertex_count": 0
+      },
+      "object": "ImportedMissingStl",
+      "topology_counts": {
+        "edges": 0,
+        "faces": 0,
+        "vertices": 0
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:27bb67f79930525e6a157948f82693ba50e13af68ecda21ea8cd022b2b77a857",
+    "objects": {
+      "ImportedMissingStl": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:10a057815e60e5502876d30760a286832183a3f0466e0830e0a6620c2194fa92",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

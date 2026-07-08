@@ -1,57 +1,83 @@
 {
-  "bbox": {
-    "max": [
-      4.0,
-      3.0,
-      0.0
-    ],
-    "min": [
-      1.0,
-      1.0,
-      0.0
-    ]
-  },
-  "bbox_delta": 0.11,
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "ProjectedWireSplitProvenance",
-  "object_fields": {
-    "feature": "part_project_on_surface",
-    "height": 0.0,
-    "mode": "Edges",
-    "offset": 0.0,
-    "projected_face_count": 0,
-    "projected_inner_wire_count": 0,
-    "projected_solid_count": 0,
-    "projected_wire_count": 0,
-    "projection_item_ledger": [
-      {
-        "projection_item_index": 0,
-        "source_object": "ProjectionWireFace",
-        "source_shape_kind": "wire",
-        "source_subname": "Wire1",
-        "stable_subname": "Wire1"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.0,
+          3.0,
+          0.0
+        ],
+        "min": [
+          1.0,
+          1.0,
+          0.0
+        ]
+      },
+      "bbox_delta": 0.11,
+      "object": "ProjectedWireSplitProvenance",
+      "object_fields": {
+        "feature": "part_project_on_surface",
+        "height": 0.0,
+        "mode": "Edges",
+        "offset": 0.0,
+        "projected_face_count": 0,
+        "projected_inner_wire_count": 0,
+        "projected_solid_count": 0,
+        "projected_wire_count": 0,
+        "projection_item_ledger": [
+          {
+            "projection_item_index": 0,
+            "source_object": "ProjectionWireFace",
+            "source_shape_kind": "wire",
+            "source_subname": "Wire1",
+            "stable_subname": "Wire1"
+          }
+        ],
+        "projection_items": [
+          {
+            "object": "ProjectionWireFace",
+            "subshape": "Wire1"
+          }
+        ],
+        "projection_subshape": "Wire1",
+        "shape": "occt_compound",
+        "source_projection": "ProjectionWireFace",
+        "source_support": "SupportPlane",
+        "status": "ok",
+        "support_face": "Face1",
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 0,
+        "vertices": 4
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:c13de29e224194cf739377855e77f27f82251575c4f492dd59a997e3d0730cd5",
+    "objects": {
+      "ProjectedWireSplitProvenance": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:10b7ee2f48987d8938013ee6298dd286e5d71f93fd9d546c86471745f81ef8b5",
+        "subshapes": {}
       }
-    ],
-    "projection_items": [
-      {
-        "object": "ProjectionWireFace",
-        "subshape": "Wire1"
-      }
-    ],
-    "projection_subshape": "Wire1",
-    "shape": "occt_compound",
-    "source_projection": "ProjectionWireFace",
-    "source_support": "SupportPlane",
-    "status": "ok",
-    "support_face": "Face1",
-    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
-  },
-  "reference": "FreeCADCmd oracle from part-project-on-surface-wire-split-provenance.json; objects: Part::Plane, Part::Plane, Part::ProjectOnSurface",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 4,
-    "faces": 0,
-    "vertices": 4
-  },
-  "volume": 0.0
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

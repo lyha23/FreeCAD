@@ -1,21 +1,42 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "FilledFace",
-  "object_fields": {
-    "status": "ok",
-    "feature": "part_filled_face",
-    "helper": "Part.makeFilledFace",
-    "shape": "occt_face",
-    "boundary_mode": "closed_wire",
-    "boundary_edge_count": 4,
-    "source_backed_helper": true,
-    "freecad_native_document_object": false,
-    "surface_support_order_status": "source_backed_native_helper_oracle_known_gap",
-    "params_source_status": "default_params",
-    "surface_source_status": "cad_core_product_contract_covered",
-    "support_order_source_status": "not_used"
-  },
-  "reference": "CAD Core C6-M5 Part.makeFilledFace product-contract fixture; native helper kwargs oracle remains known-gap evidence, not a backend failure.",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "oracle_kind": "cad_core_product_contract"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "diagnostic_codes": [
+        "unsupported_property"
+      ],
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Surface",
+      "native_error_code": "unsupported_property",
+      "object": "FilledFace",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:ea412acb2e51bfc28ba99fb091aa2332f4aa1f28de33358ef7c3ef281b7d5840",
+    "objects": {
+      "FilledFace": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:12dbc4a89fb55f73e148e11cf9c5c757214bd7df214239e1e406f79e8b94f286",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

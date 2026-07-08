@@ -1,38 +1,64 @@
 {
-  "bbox": {
-    "max": [
-      4.6000000000000005,
-      0.6000000000000001,
-      5.0
-    ],
-    "min": [
-      -0.6,
-      -0.6000000000000001,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "Sweep",
-  "object_fields": {
-    "feature": "part_sweep",
-    "frenet": true,
-    "linearize": false,
-    "sections": [
-      "Profile"
-    ],
-    "shape": "occt_shell",
-    "solid": false,
-    "spine": "PathWire",
-    "status": "ok",
-    "topo_naming_history": "maker_history:pipeshell",
-    "transition": "Transformed"
-  },
-  "reference": "FreeCADCmd oracle from part-sweep-transition-transformed.json; objects: Part::Line, Part::Line, Part::Compound, Part::RegularPolygon, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 20,
-    "faces": 8,
-    "vertices": 12
-  },
-  "volume": 2.3999999999999995
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.6000000000000005,
+          0.6000000000000001,
+          5.0
+        ],
+        "min": [
+          -0.6,
+          -0.6000000000000001,
+          0.0
+        ]
+      },
+      "object": "Sweep",
+      "object_fields": {
+        "feature": "part_sweep",
+        "frenet": true,
+        "linearize": false,
+        "sections": [
+          "Profile"
+        ],
+        "shape": "occt_shell",
+        "solid": false,
+        "spine": "PathWire",
+        "status": "ok",
+        "topo_naming_history": "maker_history:pipeshell",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 20,
+        "faces": 8,
+        "vertices": 12
+      },
+      "volume": 2.3999999999999995
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:89381e10b8f35e00f09ce631e7158b62f9a312bb932954573dbf14412095014b",
+    "objects": {
+      "Sweep": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:ab7aef67c71af0d666777b4f60c48865900e3176d28cafa5dd01c1bb6c819395",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

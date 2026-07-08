@@ -1,7 +1,28 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DatumLineIntersectionParallel": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumLineTwoPointSingle",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "TwoPointLine",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineIntersectionParallel",
       "object_fields": {
         "attached": true,
         "base": [
@@ -19,7 +40,8 @@
         "status": "ok"
       }
     },
-    "DatumLineProximityTouching": {
+    {
+      "object": "DatumLineProximityTouching",
       "object_fields": {
         "attached": true,
         "base": [
@@ -36,26 +58,53 @@
         "map_mode": "ProximityLine",
         "status": "ok"
       }
-    },
-    "DatumLineTwoPointSingle": {
-      "object_fields": {
-        "attached": true,
-        "base": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "datum": "line",
-        "direction": [
-          0.0,
-          0.0,
-          1.0
-        ],
-        "map_mode": "TwoPointLine",
-        "status": "ok"
-      }
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-datum-line-family-diagnostics.json; objects: Part::Vertex, Part::Plane, Part::Plane, Part::Vertex, Part::Vertex, PartDesign::Line, PartDesign::Line, PartDesign::Line",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:585e89d4d6f41ada8d4f7ba0815d3927eb74f1b05107962334ce7e38432db8cf",
+    "objects": {
+      "DatumLineIntersectionParallel": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7dff4c29594a23b57b4affe59d2fdafca70265806507d2b2a111a1e96445ba55",
+        "subshapes": {}
+      },
+      "DatumLineProximityTouching": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b718bc644098b5a5c2c9f3d81d20165fb3f9fbc22bee326b59749e3d357db426",
+        "subshapes": {}
+      },
+      "DatumLineTwoPointSingle": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:38097511f7f4299af3f8a258f5809f2609b785e4480c2ec1226bd025130cb384",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

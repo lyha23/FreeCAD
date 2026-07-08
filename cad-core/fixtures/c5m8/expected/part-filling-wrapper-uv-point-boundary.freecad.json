@@ -1,19 +1,45 @@
 {
-  "diagnostic_codes": [
-    "unsupported_wrapper_lifecycle"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "diagnostic_codes": [
+        "unsupported_wrapper_lifecycle"
+      ],
+      "native_error": "Part.BRepOffsetAPI.MakeFilling direct wrapper requires a mutable Python add/build/shape lifecycle; cad-core only supports request-local Part.makeFilledFace DTO inputs here.",
+      "native_error_code": "unsupported_wrapper_lifecycle",
+      "object": "WrapperUvPointOnSupport",
+      "object_fields": {
+        "feature": "part_brepoffsetapi_makefilling_wrapper",
+        "freecad_native_document_object": false,
+        "helper": "Part.BRepOffsetAPI.MakeFilling",
+        "source_backed_helper": false,
+        "status": "error",
+        "wrapper_lifecycle": "python_mutable_builder_unsupported"
+      }
+    }
   ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "native_error": "Part.BRepOffsetAPI.MakeFilling direct wrapper requires a mutable Python add/build/shape lifecycle; cad-core only supports request-local Part.makeFilledFace DTO inputs here.",
-  "native_error_code": "unsupported_wrapper_lifecycle",
-  "object": "WrapperUvPointOnSupport",
-  "object_fields": {
-    "feature": "part_brepoffsetapi_makefilling_wrapper",
-    "freecad_native_document_object": false,
-    "helper": "Part.BRepOffsetAPI.MakeFilling",
-    "source_backed_helper": false,
-    "status": "error",
-    "wrapper_lifecycle": "python_mutable_builder_unsupported"
-  },
-  "reference": "FreeCADCmd oracle from part-filling-wrapper-uv-point-boundary.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::Plane, Part::FilledFace",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "topoNamingState": {
+    "documentHash": "sha256:19b72c332fd993859ed7cf0b908ad0f1f5b74638cc5e0a74ded0181c0e57387c",
+    "objects": {
+      "WrapperUvPointOnSupport": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:bb73746f8f905d93dbec24d02e9f0110d20ac6b3da86db01dc0d0610e2151f5e",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

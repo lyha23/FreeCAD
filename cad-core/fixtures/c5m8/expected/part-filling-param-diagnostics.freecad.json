@@ -1,33 +1,77 @@
 {
-  "diagnostic_codes": [
-    "missing_link_target",
-    "missing_link_target",
-    "missing_link_target"
-  ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "InvalidAnisotropy": {
-      "native_error": "Part.makeFilledFace Anisotropy must be boolean",
-      "native_error_code": "missing_link_target",
-      "object_fields": {
-        "status": "error"
-      }
-    },
-    "InvalidDegree": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
       "native_error": "Part.makeFilledFace Degree must be a positive integer",
       "native_error_code": "missing_link_target",
+      "object": "InvalidDegree",
       "object_fields": {
         "status": "error"
       }
     },
-    "InvalidTolerance": {
+    {
       "native_error": "Part.makeFilledFace Tol3d must be a positive number",
       "native_error_code": "missing_link_target",
+      "object": "InvalidTolerance",
+      "object_fields": {
+        "status": "error"
+      }
+    },
+    {
+      "native_error": "Part.makeFilledFace Anisotropy must be boolean",
+      "native_error_code": "missing_link_target",
+      "object": "InvalidAnisotropy",
       "object_fields": {
         "status": "error"
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from part-filling-param-diagnostics.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::FilledFace, Part::FilledFace, Part::FilledFace",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:f95b407dbfd67e28108e365c11e562cc5faa7aa669cf7c4af84159f7cf8b40c4",
+    "objects": {
+      "InvalidAnisotropy": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1a8720d5b946afeda5a8ffa720222502af14b5d009e3963e58a44cd0d5a82d0c",
+        "subshapes": {}
+      },
+      "InvalidDegree": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:a73fc86b6d3e3cf15b461a8d2022bb9b6348546c4ab201111e2887e5ebf30894",
+        "subshapes": {}
+      },
+      "InvalidTolerance": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:332c871f0eaff6a351b2bcd48c48c869307df35c1fb0d179535093f6f1e83848",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

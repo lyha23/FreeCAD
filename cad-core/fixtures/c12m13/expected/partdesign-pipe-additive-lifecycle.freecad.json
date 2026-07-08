@@ -1,51 +1,8 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "s4_resolution": {
-    "closed_blocker": "C12M13-BLOCKER-501",
-    "freecad_source_authority": [
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute(), AddSubShape.setValue(...) before result.makeElementFuse(...)",
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp::Pipe::execute(), this->rawShape = boolOp; Shape.setValue(getSolid(boolOp))"
-    ],
-    "current_evidence": {
-      "AdditivePipeNoBase": "current_supported",
-      "AdditivePipeFuse": "current_feature_shape_matches_post_boolean_shape",
-      "BodyFuse": "current_body_shape_matches_native_post_boolean_result"
-    }
-  },
-  "objects": {
-    "AdditivePipeFuse": {
-      "bbox": {
-        "max": [
-          1.5,
-          1.5,
-          4.0
-        ],
-        "min": [
-          -1.5,
-          -1.5,
-          0.0
-        ]
-      },
-      "object_fields": {
-        "add_sub": "add",
-        "feature": "partdesign_pipe",
-        "mode": "Standard",
-        "shape": "occt_compound",
-        "source_profile": "SketchPipeProfileFuse",
-        "spine": "SketchPipeSpineFuse",
-        "status": "ok",
-        "topo_naming_history": "maker_history:partdesign_pipe",
-        "transformation": "Constant",
-        "transition": "Transformed"
-      },
-      "topology_counts": {
-        "edges": 20,
-        "faces": 8,
-        "vertices": 16
-      },
-      "volume": 36.0
-    },
-    "AdditivePipeNoBase": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
       "bbox": {
         "max": [
           0.45,
@@ -58,6 +15,7 @@
           0.0
         ]
       },
+      "object": "AdditivePipeNoBase",
       "object_fields": {
         "add_sub": "add",
         "feature": "partdesign_pipe",
@@ -77,27 +35,7 @@
       },
       "volume": 3.24
     },
-    "BodyFuse": {
-      "bbox": {
-        "max": [
-          1.5,
-          1.5,
-          4.0
-        ],
-        "min": [
-          -1.5,
-          -1.5,
-          0.0
-        ]
-      },
-      "topology_counts": {
-        "edges": 20,
-        "faces": 8,
-        "vertices": 16
-      },
-      "volume": 36.0
-    },
-    "BodyNoBase": {
+    {
       "bbox": {
         "max": [
           0.45,
@@ -110,14 +48,3074 @@
           0.0
         ]
       },
+      "object": "BodyNoBase",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:1;:G;SEW;:H*:*,F",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Face1",
+          "id": "BodyNoBase:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#f:1;:G;SEW;:H50d:7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "AdditivePipeNoBase.#f:1;:G;SEW;:H50d:7,F",
+          "subname": "AdditivePipeNoBase.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:2;:G;SEW;:H*:*,F",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Face2",
+          "id": "BodyNoBase:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#f:2;:G;SEW;:H50d:7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "AdditivePipeNoBase.#f:2;:G;SEW;:H50d:7,F",
+          "subname": "AdditivePipeNoBase.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:3;:G;SEW;:H*:*,F",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Face3",
+          "id": "BodyNoBase:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#f:3;:G;SEW;:H50d:7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "AdditivePipeNoBase.#f:3;:G;SEW;:H50d:7,F",
+          "subname": "AdditivePipeNoBase.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:4;:G;SEW;:H*:*,F",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Face4",
+          "id": "BodyNoBase:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#f:4;:G;SEW;:H50d:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "AdditivePipeNoBase.#f:4;:G;SEW;:H50d:7,F",
+          "subname": "AdditivePipeNoBase.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#25:1;:L#23;SEW;:H*:*,F",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Face5",
+          "id": "BodyNoBase:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#25:1;:L#23;SEW;:H50d:a,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "AdditivePipeNoBase.#25:1;:L#23;SEW;:H50d:a,F",
+          "subname": "AdditivePipeNoBase.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#27:1;:L#26;SEW;:H*:*,F",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Face6",
+          "id": "BodyNoBase:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#27:1;:L#26;SEW;:H50d:a,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "AdditivePipeNoBase.#27:1;:L#26;SEW;:H50d:a,F",
+          "subname": "AdditivePipeNoBase.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#11;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge1",
+          "id": "BodyNoBase:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#11;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "AdditivePipeNoBase.#11;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:1;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge2",
+          "id": "BodyNoBase:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#16:1;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "AdditivePipeNoBase.#16:1;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#12;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge3",
+          "id": "BodyNoBase:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#12;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "AdditivePipeNoBase.#12;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:1;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge4",
+          "id": "BodyNoBase:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#18:1;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "AdditivePipeNoBase.#18:1;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:2;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge5",
+          "id": "BodyNoBase:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#16:2;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "AdditivePipeNoBase.#16:2;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#13;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge6",
+          "id": "BodyNoBase:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#13;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "AdditivePipeNoBase.#13;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:2;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge7",
+          "id": "BodyNoBase:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#18:2;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "AdditivePipeNoBase.#18:2;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:3;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge8",
+          "id": "BodyNoBase:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#16:3;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "AdditivePipeNoBase.#16:3;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#14;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge9",
+          "id": "BodyNoBase:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#14;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "AdditivePipeNoBase.#14;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:3;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge10",
+          "id": "BodyNoBase:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#18:3;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "AdditivePipeNoBase.#18:3;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:4;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge11",
+          "id": "BodyNoBase:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#16:4;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "AdditivePipeNoBase.#16:4;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:4;:G;SEW;:H*:*,E",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Edge12",
+          "id": "BodyNoBase:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#18:4;:G;SEW;:H50d:7,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "AdditivePipeNoBase.#18:4;:G;SEW;:H50d:7,E",
+          "subname": "AdditivePipeNoBase.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#1a:2;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex1",
+          "id": "BodyNoBase:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#1a:2;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "AdditivePipeNoBase.#1a:2;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#1c:b;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex2",
+          "id": "BodyNoBase:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#1c:b;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "AdditivePipeNoBase.#1c:b;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#1d:4;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex3",
+          "id": "BodyNoBase:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#1d:4;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "AdditivePipeNoBase.#1d:4;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#1e:c;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex4",
+          "id": "BodyNoBase:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#1e:c;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "AdditivePipeNoBase.#1e:c;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#1f:6;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex5",
+          "id": "BodyNoBase:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#1f:6;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "AdditivePipeNoBase.#1f:6;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#20:d;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex6",
+          "id": "BodyNoBase:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#20:d;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "AdditivePipeNoBase.#20:d;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#21:8;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex7",
+          "id": "BodyNoBase:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#21:8;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "AdditivePipeNoBase.#21:8;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeNoBase.#22:e;:G;SEW;:H*:*,V",
+          "fullSubname": "BodyNoBase.AdditivePipeNoBase.Vertex8",
+          "id": "BodyNoBase:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeNoBase.#22:e;:G;SEW;:H50d:7,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "AdditivePipeNoBase.#22:e;:G;SEW;:H50d:7,V",
+          "subname": "AdditivePipeNoBase.Vertex8"
+        }
+      ],
       "topology_counts": {
         "edges": 12,
         "faces": 6,
         "vertices": 8
       },
       "volume": 3.24
+    },
+    {
+      "bbox": {
+        "max": [
+          1.5,
+          1.5,
+          4.0
+        ],
+        "min": [
+          -1.5,
+          -1.5,
+          0.0
+        ]
+      },
+      "object": "AdditivePipeFuse",
+      "object_fields": {
+        "add_sub": "add",
+        "feature": "partdesign_pipe",
+        "mode": "Standard",
+        "shape": "occt_compound",
+        "source_profile": "SketchPipeProfileFuse",
+        "spine": "SketchPipeSpineFuse",
+        "status": "ok",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "transformation": "Constant",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 20,
+        "faces": 8,
+        "vertices": 16
+      },
+      "volume": 36.0
+    },
+    {
+      "bbox": {
+        "max": [
+          1.5,
+          1.5,
+          4.0
+        ],
+        "min": [
+          -1.5,
+          -1.5,
+          0.0
+        ]
+      },
+      "object": "BodyFuse",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#29:4;:G;XTR;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face1",
+          "id": "BodyFuse:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#29:4;:G;XTR;:H519:7,F;:H51a,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "AdditivePipeFuse.#29:4;:G;XTR;:H519:7,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#29:3;:G;XTR;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face2",
+          "id": "BodyFuse:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#29:3;:G;XTR;:H519:7,F;:H51a,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "AdditivePipeFuse.#29:3;:G;XTR;:H519:7,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#29:1;:G;XTR;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face3",
+          "id": "BodyFuse:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#29:1;:G;XTR;:H519:7,F;:H51a,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "AdditivePipeFuse.#29:1;:G;XTR;:H519:7,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#30:1;:M;FUS;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face4",
+          "id": "BodyFuse:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#30:1;:M;FUS;:H519:7,F;:H51a,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "AdditivePipeFuse.#30:1;:M;FUS;:H519:7,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#55:1;:M;FUS;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face5",
+          "id": "BodyFuse:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#55:1;:M;FUS;:H519:7,F;:H51a,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "AdditivePipeFuse.#55:1;:M;FUS;:H519:7,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#29:2;:G;XTR;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face6",
+          "id": "BodyFuse:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#29:2;:G;XTR;:H519:7,F;:H51a,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "AdditivePipeFuse.#29:2;:G;XTR;:H519:7,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#57:1;:M#56;FUS;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face7",
+          "id": "BodyFuse:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#57:1;:M#56;FUS;:H-51d:a,F;:H51a,F",
+          "resolvedIndexed": "Face7",
+          "stableSubname": "AdditivePipeFuse.#57:1;:M#56;FUS;:H-51d:a,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#59:1;:M#58;FUS;:H*:*,F;:H*,F",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Face8",
+          "id": "BodyFuse:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeFuse.#59:1;:M#58;FUS;:H-51d:a,F;:H51a,F",
+          "resolvedIndexed": "Face8",
+          "stableSubname": "AdditivePipeFuse.#59:1;:M#58;FUS;:H-51d:a,F;:H51a,F",
+          "subname": "AdditivePipeFuse.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#2b:8;:G;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge1",
+          "id": "BodyFuse:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#2b:8;:G;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "AdditivePipeFuse.#2b:8;:G;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#2c:2;:G;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge2",
+          "id": "BodyFuse:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#2c:2;:G;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "AdditivePipeFuse.#2c:2;:G;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#b:4;:H*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge3",
+          "id": "BodyFuse:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#b:4;:H519,E;:H51a,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "AdditivePipeFuse.#b:4;:H519,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#32:4;:U;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge4",
+          "id": "BodyFuse:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#32:4;:U;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "AdditivePipeFuse.#32:4;:U;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#2d:6;:G;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge5",
+          "id": "BodyFuse:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#2d:6;:G;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "AdditivePipeFuse.#2d:6;:G;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#b:3;:H*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge6",
+          "id": "BodyFuse:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#b:3;:H519,E;:H51a,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "AdditivePipeFuse.#b:3;:H519,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#32:3;:U;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge7",
+          "id": "BodyFuse:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#32:3;:U;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "AdditivePipeFuse.#32:3;:U;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#2e:4;:G;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge8",
+          "id": "BodyFuse:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#2e:4;:G;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "AdditivePipeFuse.#2e:4;:G;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#b:1;:H*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge9",
+          "id": "BodyFuse:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#b:1;:H519,E;:H51a,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "AdditivePipeFuse.#b:1;:H519,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#32:1;:U;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge10",
+          "id": "BodyFuse:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#32:1;:U;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "AdditivePipeFuse.#32:1;:U;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#b:2;:H*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge11",
+          "id": "BodyFuse:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#b:2;:H519,E;:H51a,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "AdditivePipeFuse.#b:2;:H519,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#51:1;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge12",
+          "id": "BodyFuse:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#51:1;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "AdditivePipeFuse.#51:1;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#51:2;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge13",
+          "id": "BodyFuse:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#51:2;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge13",
+          "stableSubname": "AdditivePipeFuse.#51:2;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#51:3;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge14",
+          "id": "BodyFuse:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#51:3;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge14",
+          "stableSubname": "AdditivePipeFuse.#51:3;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#51:4;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge15",
+          "id": "BodyFuse:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#51:4;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge15",
+          "stableSubname": "AdditivePipeFuse.#51:4;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#32:2;:U;XTR;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge16",
+          "id": "BodyFuse:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#32:2;:U;XTR;:H519:7,E;:H51a,E",
+          "resolvedIndexed": "Edge16",
+          "stableSubname": "AdditivePipeFuse.#32:2;:U;XTR;:H519:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#53:1;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge17",
+          "id": "BodyFuse:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#53:1;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge17",
+          "stableSubname": "AdditivePipeFuse.#53:1;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#53:2;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge18",
+          "id": "BodyFuse:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#53:2;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge18",
+          "stableSubname": "AdditivePipeFuse.#53:2;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#53:3;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge19",
+          "id": "BodyFuse:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#53:3;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge19",
+          "stableSubname": "AdditivePipeFuse.#53:3;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#53:4;:M;FUS;:H*:*,E;:H*,E",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Edge20",
+          "id": "BodyFuse:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeFuse.#53:4;:M;FUS;:H-51d:7,E;:H51a,E",
+          "resolvedIndexed": "Edge20",
+          "stableSubname": "AdditivePipeFuse.#53:4;:M;FUS;:H-51d:7,E;:H51a,E",
+          "subname": "AdditivePipeFuse.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#8;:H*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex1",
+          "id": "BodyFuse:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#8;:H519,V;:H51a,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "AdditivePipeFuse.#8;:H519,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#34:8;:U;XTR;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex2",
+          "id": "BodyFuse:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#34:8;:U;XTR;:H519:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "AdditivePipeFuse.#34:8;:U;XTR;:H519:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#2;:H*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex3",
+          "id": "BodyFuse:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#2;:H519,V;:H51a,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "AdditivePipeFuse.#2;:H519,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#35:2;:U;XTR;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex4",
+          "id": "BodyFuse:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#35:2;:U;XTR;:H519:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "AdditivePipeFuse.#35:2;:U;XTR;:H519:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#6;:H*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex5",
+          "id": "BodyFuse:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#6;:H519,V;:H51a,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "AdditivePipeFuse.#6;:H519,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#36:6;:U;XTR;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex6",
+          "id": "BodyFuse:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#36:6;:U;XTR;:H519:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "AdditivePipeFuse.#36:6;:U;XTR;:H519:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#4;:H*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex7",
+          "id": "BodyFuse:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#4;:H519,V;:H51a,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "AdditivePipeFuse.#4;:H519,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#37:4;:U;XTR;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex8",
+          "id": "BodyFuse:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#37:4;:U;XTR;:H519:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "AdditivePipeFuse.#37:4;:U;XTR;:H519:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#5b:2;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex9",
+          "id": "BodyFuse:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#5b:2;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex9",
+          "stableSubname": "AdditivePipeFuse.#5b:2;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#5c:4;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex10",
+          "id": "BodyFuse:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#5c:4;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex10",
+          "stableSubname": "AdditivePipeFuse.#5c:4;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#5d:6;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex11",
+          "id": "BodyFuse:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#5d:6;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex11",
+          "stableSubname": "AdditivePipeFuse.#5d:6;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#5e:8;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex12",
+          "id": "BodyFuse:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#5e:8;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex12",
+          "stableSubname": "AdditivePipeFuse.#5e:8;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#5f:30;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex13",
+          "id": "BodyFuse:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#5f:30;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex13",
+          "stableSubname": "AdditivePipeFuse.#5f:30;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#60;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex14",
+          "id": "BodyFuse:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#60;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex14",
+          "stableSubname": "AdditivePipeFuse.#60;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#61;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex15",
+          "id": "BodyFuse:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#61;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex15",
+          "stableSubname": "AdditivePipeFuse.#61;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeFuse.#62:28;:M;FUS;:H*:*,V;:H*,V",
+          "fullSubname": "BodyFuse.AdditivePipeFuse.Vertex16",
+          "id": "BodyFuse:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeFuse.#62:28;:M;FUS;:H-51d:7,V;:H51a,V",
+          "resolvedIndexed": "Vertex16",
+          "stableSubname": "AdditivePipeFuse.#62:28;:M;FUS;:H-51d:7,V;:H51a,V",
+          "subname": "AdditivePipeFuse.Vertex16"
+        }
+      ],
+      "topology_counts": {
+        "edges": 20,
+        "faces": 8,
+        "vertices": 16
+      },
+      "volume": 36.0
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-pipe-additive-lifecycle.json; objects: Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::AdditivePipe, PartDesign::Body, Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::AdditivePipe, PartDesign::Body",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:2b363a5fd16dce23d735b1f40939f68fc3b120f8b735339e8004386d3b54cea6",
+    "objects": {
+      "AdditivePipeFuse": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:02287c945ce7324242f34d467894e4ae0bbc0fa2b9f4de48b0d275d0012edbf3",
+        "subshapes": {}
+      },
+      "AdditivePipeNoBase": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:5679322cafa45d570562c8ada0be5ce2190832d4e13b89b89a9383db4571d714",
+        "subshapes": {}
+      },
+      "BodyFuse": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "AdditivePipeFuse.#29:1;:G;XTR;:H519:7,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#29:1;:G;XTR;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#29:1;:G;XTR;:H519:7,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face3"
+              }
+            },
+            "AdditivePipeFuse.#29:2;:G;XTR;:H519:7,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#29:2;:G;XTR;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#29:2;:G;XTR;:H519:7,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face6"
+              }
+            },
+            "AdditivePipeFuse.#29:3;:G;XTR;:H519:7,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#29:3;:G;XTR;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#29:3;:G;XTR;:H519:7,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face2"
+              }
+            },
+            "AdditivePipeFuse.#29:4;:G;XTR;:H519:7,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#29:4;:G;XTR;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#29:4;:G;XTR;:H519:7,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face1"
+              }
+            },
+            "AdditivePipeFuse.#2;:H519,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#2;:H*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#2;:H519,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex3"
+              }
+            },
+            "AdditivePipeFuse.#2b:8;:G;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#2b:8;:G;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#2b:8;:G;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge1"
+              }
+            },
+            "AdditivePipeFuse.#2c:2;:G;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#2c:2;:G;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#2c:2;:G;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge2"
+              }
+            },
+            "AdditivePipeFuse.#2d:6;:G;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#2d:6;:G;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#2d:6;:G;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge5"
+              }
+            },
+            "AdditivePipeFuse.#2e:4;:G;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#2e:4;:G;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#2e:4;:G;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge8"
+              }
+            },
+            "AdditivePipeFuse.#30:1;:M;FUS;:H519:7,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#30:1;:M;FUS;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#30:1;:M;FUS;:H519:7,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face4"
+              }
+            },
+            "AdditivePipeFuse.#32:1;:U;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#32:1;:U;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#32:1;:U;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge10"
+              }
+            },
+            "AdditivePipeFuse.#32:2;:U;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#32:2;:U;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#32:2;:U;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge16"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge16"
+              }
+            },
+            "AdditivePipeFuse.#32:3;:U;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#32:3;:U;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#32:3;:U;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge7"
+              }
+            },
+            "AdditivePipeFuse.#32:4;:U;XTR;:H519:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#32:4;:U;XTR;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#32:4;:U;XTR;:H519:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge4"
+              }
+            },
+            "AdditivePipeFuse.#34:8;:U;XTR;:H519:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#34:8;:U;XTR;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#34:8;:U;XTR;:H519:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex2"
+              }
+            },
+            "AdditivePipeFuse.#35:2;:U;XTR;:H519:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#35:2;:U;XTR;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#35:2;:U;XTR;:H519:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex4"
+              }
+            },
+            "AdditivePipeFuse.#36:6;:U;XTR;:H519:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#36:6;:U;XTR;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#36:6;:U;XTR;:H519:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex6"
+              }
+            },
+            "AdditivePipeFuse.#37:4;:U;XTR;:H519:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#37:4;:U;XTR;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#37:4;:U;XTR;:H519:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex8"
+              }
+            },
+            "AdditivePipeFuse.#4;:H519,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#4;:H*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#4;:H519,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex7"
+              }
+            },
+            "AdditivePipeFuse.#51:1;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#51:1;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#51:1;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge12"
+              }
+            },
+            "AdditivePipeFuse.#51:2;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#51:2;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#51:2;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge13"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge13"
+              }
+            },
+            "AdditivePipeFuse.#51:3;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#51:3;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#51:3;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge14"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge14"
+              }
+            },
+            "AdditivePipeFuse.#51:4;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#51:4;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#51:4;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge15"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge15"
+              }
+            },
+            "AdditivePipeFuse.#53:1;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#53:1;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#53:1;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge17"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge17"
+              }
+            },
+            "AdditivePipeFuse.#53:2;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#53:2;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#53:2;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge18"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge18"
+              }
+            },
+            "AdditivePipeFuse.#53:3;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#53:3;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#53:3;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge19"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge19"
+              }
+            },
+            "AdditivePipeFuse.#53:4;:M;FUS;:H-51d:7,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#53:4;:M;FUS;:H*:*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#53:4;:M;FUS;:H-51d:7,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge20"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge20"
+              }
+            },
+            "AdditivePipeFuse.#55:1;:M;FUS;:H519:7,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#55:1;:M;FUS;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#55:1;:M;FUS;:H519:7,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face5"
+              }
+            },
+            "AdditivePipeFuse.#57:1;:M#56;FUS;:H-51d:a,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#57:1;:M#56;FUS;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#57:1;:M#56;FUS;:H-51d:a,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face7"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face7"
+              }
+            },
+            "AdditivePipeFuse.#59:1;:M#58;FUS;:H-51d:a,F;:H51a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#59:1;:M#58;FUS;:H*:*,F;:H*,F",
+                "raw": "AdditivePipeFuse.#59:1;:M#58;FUS;:H-51d:a,F;:H51a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Face8"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Face8"
+              }
+            },
+            "AdditivePipeFuse.#5b:2;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#5b:2;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#5b:2;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex9"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex9"
+              }
+            },
+            "AdditivePipeFuse.#5c:4;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#5c:4;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#5c:4;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex10"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex10"
+              }
+            },
+            "AdditivePipeFuse.#5d:6;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#5d:6;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#5d:6;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex11"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex11"
+              }
+            },
+            "AdditivePipeFuse.#5e:8;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#5e:8;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#5e:8;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex12"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex12"
+              }
+            },
+            "AdditivePipeFuse.#5f:30;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#5f:30;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#5f:30;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex13"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex13"
+              }
+            },
+            "AdditivePipeFuse.#60;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#60;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#60;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex14"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex14"
+              }
+            },
+            "AdditivePipeFuse.#61;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#61;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#61;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex15"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex15"
+              }
+            },
+            "AdditivePipeFuse.#62:28;:M;FUS;:H-51d:7,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#62:28;:M;FUS;:H*:*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#62:28;:M;FUS;:H-51d:7,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex16"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex16"
+              }
+            },
+            "AdditivePipeFuse.#6;:H519,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#6;:H*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#6;:H519,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex5"
+              }
+            },
+            "AdditivePipeFuse.#8;:H519,V;:H51a,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#8;:H*,V;:H*,V",
+                "raw": "AdditivePipeFuse.#8;:H519,V;:H51a,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Vertex1"
+              }
+            },
+            "AdditivePipeFuse.#b:1;:H519,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#b:1;:H*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#b:1;:H519,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge9"
+              }
+            },
+            "AdditivePipeFuse.#b:2;:H519,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#b:2;:H*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#b:2;:H519,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge11"
+              }
+            },
+            "AdditivePipeFuse.#b:3;:H519,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#b:3;:H*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#b:3;:H519,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge6"
+              }
+            },
+            "AdditivePipeFuse.#b:4;:H519,E;:H51a,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeFuse.#b:4;:H*,E;:H*,E",
+                "raw": "AdditivePipeFuse.#b:4;:H519,E;:H51a,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyFuse",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "BodyFuse",
+                "subname": "AdditivePipeFuse.Edge3"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4475b614184908eca2c325ca7271c51478bce86af435105ce438f1386aa44854",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#2b:8;:G;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#2b:8;:G;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "AdditivePipeFuse.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#32:1;:U;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#32:1;:U;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "AdditivePipeFuse.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#b:2;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#b:2;:H519,E;:H51a,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "AdditivePipeFuse.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#51:1;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#51:1;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "AdditivePipeFuse.Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#51:2;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#51:2;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge13",
+            "subname": "AdditivePipeFuse.Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#51:3;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#51:3;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge14",
+            "subname": "AdditivePipeFuse.Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#51:4;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#51:4;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge15",
+            "subname": "AdditivePipeFuse.Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#32:2;:U;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#32:2;:U;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge16",
+            "subname": "AdditivePipeFuse.Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#53:1;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#53:1;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "AdditivePipeFuse.Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#53:2;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#53:2;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "AdditivePipeFuse.Edge18"
+          },
+          "Edge19": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#53:3;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#53:3;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge19",
+            "subname": "AdditivePipeFuse.Edge19"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#2c:2;:G;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#2c:2;:G;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "AdditivePipeFuse.Edge2"
+          },
+          "Edge20": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#53:4;:M;FUS;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#53:4;:M;FUS;:H-51d:7,E;:H51a,E",
+            "resolvedIndexed": "Edge20",
+            "subname": "AdditivePipeFuse.Edge20"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#b:4;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#b:4;:H519,E;:H51a,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "AdditivePipeFuse.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#32:4;:U;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#32:4;:U;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "AdditivePipeFuse.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#2d:6;:G;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#2d:6;:G;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "AdditivePipeFuse.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#b:3;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#b:3;:H519,E;:H51a,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "AdditivePipeFuse.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#32:3;:U;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#32:3;:U;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "AdditivePipeFuse.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#2e:4;:G;XTR;:H*:*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#2e:4;:G;XTR;:H519:7,E;:H51a,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "AdditivePipeFuse.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#b:1;:H*,E;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#b:1;:H519,E;:H51a,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "AdditivePipeFuse.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#29:4;:G;XTR;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#29:4;:G;XTR;:H519:7,F;:H51a,F",
+            "resolvedIndexed": "Face1",
+            "subname": "AdditivePipeFuse.Face1"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#29:3;:G;XTR;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#29:3;:G;XTR;:H519:7,F;:H51a,F",
+            "resolvedIndexed": "Face2",
+            "subname": "AdditivePipeFuse.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#29:1;:G;XTR;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#29:1;:G;XTR;:H519:7,F;:H51a,F",
+            "resolvedIndexed": "Face3",
+            "subname": "AdditivePipeFuse.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#30:1;:M;FUS;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#30:1;:M;FUS;:H519:7,F;:H51a,F",
+            "resolvedIndexed": "Face4",
+            "subname": "AdditivePipeFuse.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#55:1;:M;FUS;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#55:1;:M;FUS;:H519:7,F;:H51a,F",
+            "resolvedIndexed": "Face5",
+            "subname": "AdditivePipeFuse.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#29:2;:G;XTR;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#29:2;:G;XTR;:H519:7,F;:H51a,F",
+            "resolvedIndexed": "Face6",
+            "subname": "AdditivePipeFuse.Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#57:1;:M#56;FUS;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#57:1;:M#56;FUS;:H-51d:a,F;:H51a,F",
+            "resolvedIndexed": "Face7",
+            "subname": "AdditivePipeFuse.Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#59:1;:M#58;FUS;:H*:*,F;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#59:1;:M#58;FUS;:H-51d:a,F;:H51a,F",
+            "resolvedIndexed": "Face8",
+            "subname": "AdditivePipeFuse.Face8"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#8;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#8;:H519,V;:H51a,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "AdditivePipeFuse.Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#5c:4;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#5c:4;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "AdditivePipeFuse.Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#5d:6;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#5d:6;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "AdditivePipeFuse.Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#5e:8;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#5e:8;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "AdditivePipeFuse.Vertex12"
+          },
+          "Vertex13": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#5f:30;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#5f:30;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex13",
+            "subname": "AdditivePipeFuse.Vertex13"
+          },
+          "Vertex14": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#60;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#60;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex14",
+            "subname": "AdditivePipeFuse.Vertex14"
+          },
+          "Vertex15": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#61;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#61;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex15",
+            "subname": "AdditivePipeFuse.Vertex15"
+          },
+          "Vertex16": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#62:28;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#62:28;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex16",
+            "subname": "AdditivePipeFuse.Vertex16"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#34:8;:U;XTR;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#34:8;:U;XTR;:H519:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "AdditivePipeFuse.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#2;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#2;:H519,V;:H51a,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "AdditivePipeFuse.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#35:2;:U;XTR;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#35:2;:U;XTR;:H519:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "AdditivePipeFuse.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#6;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#6;:H519,V;:H51a,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "AdditivePipeFuse.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#36:6;:U;XTR;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#36:6;:U;XTR;:H519:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "AdditivePipeFuse.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#4;:H*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#4;:H519,V;:H51a,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "AdditivePipeFuse.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#37:4;:U;XTR;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#37:4;:U;XTR;:H519:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "AdditivePipeFuse.Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "AdditivePipeFuse.#5b:2;:M;FUS;:H*:*,V;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeFuse.#5b:2;:M;FUS;:H-51d:7,V;:H51a,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "AdditivePipeFuse.Vertex9"
+          }
+        }
+      },
+      "BodyNoBase": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "AdditivePipeNoBase.#11;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#11;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#11;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge1"
+              }
+            },
+            "AdditivePipeNoBase.#12;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#12;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#12;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge3"
+              }
+            },
+            "AdditivePipeNoBase.#13;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#13;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#13;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge6"
+              }
+            },
+            "AdditivePipeNoBase.#14;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#14;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#14;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge9"
+              }
+            },
+            "AdditivePipeNoBase.#16:1;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#16:1;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#16:1;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge2"
+              }
+            },
+            "AdditivePipeNoBase.#16:2;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#16:2;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#16:2;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge5"
+              }
+            },
+            "AdditivePipeNoBase.#16:3;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#16:3;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#16:3;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge8"
+              }
+            },
+            "AdditivePipeNoBase.#16:4;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#16:4;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#16:4;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge11"
+              }
+            },
+            "AdditivePipeNoBase.#18:1;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#18:1;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#18:1;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge4"
+              }
+            },
+            "AdditivePipeNoBase.#18:2;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#18:2;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#18:2;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge7"
+              }
+            },
+            "AdditivePipeNoBase.#18:3;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#18:3;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#18:3;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge10"
+              }
+            },
+            "AdditivePipeNoBase.#18:4;:G;SEW;:H50d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#18:4;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeNoBase.#18:4;:G;SEW;:H50d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Edge12"
+              }
+            },
+            "AdditivePipeNoBase.#1a:2;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#1a:2;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#1a:2;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex1"
+              }
+            },
+            "AdditivePipeNoBase.#1c:b;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#1c:b;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#1c:b;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex2"
+              }
+            },
+            "AdditivePipeNoBase.#1d:4;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#1d:4;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#1d:4;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex3"
+              }
+            },
+            "AdditivePipeNoBase.#1e:c;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#1e:c;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#1e:c;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex4"
+              }
+            },
+            "AdditivePipeNoBase.#1f:6;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#1f:6;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#1f:6;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex5"
+              }
+            },
+            "AdditivePipeNoBase.#20:d;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#20:d;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#20:d;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex6"
+              }
+            },
+            "AdditivePipeNoBase.#21:8;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#21:8;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#21:8;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex7"
+              }
+            },
+            "AdditivePipeNoBase.#22:e;:G;SEW;:H50d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#22:e;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeNoBase.#22:e;:G;SEW;:H50d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Vertex8"
+              }
+            },
+            "AdditivePipeNoBase.#25:1;:L#23;SEW;:H50d:a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#25:1;:L#23;SEW;:H*:*,F",
+                "raw": "AdditivePipeNoBase.#25:1;:L#23;SEW;:H50d:a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Face5"
+              }
+            },
+            "AdditivePipeNoBase.#27:1;:L#26;SEW;:H50d:a,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#27:1;:L#26;SEW;:H*:*,F",
+                "raw": "AdditivePipeNoBase.#27:1;:L#26;SEW;:H50d:a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Face6"
+              }
+            },
+            "AdditivePipeNoBase.#f:1;:G;SEW;:H50d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#f:1;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeNoBase.#f:1;:G;SEW;:H50d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Face1"
+              }
+            },
+            "AdditivePipeNoBase.#f:2;:G;SEW;:H50d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#f:2;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeNoBase.#f:2;:G;SEW;:H50d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Face2"
+              }
+            },
+            "AdditivePipeNoBase.#f:3;:G;SEW;:H50d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#f:3;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeNoBase.#f:3;:G;SEW;:H50d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Face3"
+              }
+            },
+            "AdditivePipeNoBase.#f:4;:G;SEW;:H50d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeNoBase.#f:4;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeNoBase.#f:4;:G;SEW;:H50d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BodyNoBase",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "BodyNoBase",
+                "subname": "AdditivePipeNoBase.Face4"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:5fbdd9ecb30f0f8f14638b583596477e5906dc48ef6b4421dbdddcac4ede087c",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#11;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#11;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "AdditivePipeNoBase.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#18:3;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "AdditivePipeNoBase.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#16:4;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "AdditivePipeNoBase.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#18:4;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "AdditivePipeNoBase.Edge12"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:1;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#16:1;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "AdditivePipeNoBase.Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#12;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#12;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "AdditivePipeNoBase.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:1;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#18:1;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "AdditivePipeNoBase.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#16:2;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "AdditivePipeNoBase.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#13;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#13;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "AdditivePipeNoBase.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#18:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#18:2;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "AdditivePipeNoBase.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#16:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#16:3;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "AdditivePipeNoBase.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#14;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#14;:G;SEW;:H50d:7,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "AdditivePipeNoBase.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:1;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#f:1;:G;SEW;:H50d:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "AdditivePipeNoBase.Face1"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:2;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#f:2;:G;SEW;:H50d:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "AdditivePipeNoBase.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:3;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#f:3;:G;SEW;:H50d:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "AdditivePipeNoBase.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#f:4;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#f:4;:G;SEW;:H50d:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "AdditivePipeNoBase.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#25:1;:L#23;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#25:1;:L#23;SEW;:H50d:a,F",
+            "resolvedIndexed": "Face5",
+            "subname": "AdditivePipeNoBase.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#27:1;:L#26;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#27:1;:L#26;SEW;:H50d:a,F",
+            "resolvedIndexed": "Face6",
+            "subname": "AdditivePipeNoBase.Face6"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#1a:2;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#1a:2;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "AdditivePipeNoBase.Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#1c:b;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#1c:b;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "AdditivePipeNoBase.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#1d:4;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#1d:4;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "AdditivePipeNoBase.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#1e:c;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#1e:c;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "AdditivePipeNoBase.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#1f:6;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#1f:6;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "AdditivePipeNoBase.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#20:d;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#20:d;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "AdditivePipeNoBase.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#21:8;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#21:8;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "AdditivePipeNoBase.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "AdditivePipeNoBase.#22:e;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeNoBase.#22:e;:G;SEW;:H50d:7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "AdditivePipeNoBase.Vertex8"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

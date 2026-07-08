@@ -22,6 +22,7 @@ ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
 FREECAD_PRECISION_CONFUSION = 1e-7
 FREECAD_MAPPED_NAME_HASH_RE = re.compile(r":H(?!\*)-?[0-9A-Fa-f]+(?::[0-9A-Fa-f]+)?")
 FREECAD_MAPPED_NAME_DELETE_RE = re.compile(r";D(?!\*)[0-9A-Fa-f]+")
+TOPO_INDEX_NAME_RE = re.compile(r"^(InternalFace|InternalEdge|InternalVertex|Face|Edge|Vertex|Wire|Shell|Solid|Compound)\d+$")
 ACTIVE_TOPO_NAMING_STATE: dict[str, Any] | None = None
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
@@ -1591,6 +1592,78 @@ def topo_naming_state_response(
         "elementReferenceUpdates": [],
         "diagnostics": [],
     }
+
+
+def legacy_object_payloads(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Convert legacy native expected payloads to topo-state result summaries."""
+    if isinstance(payload.get("results"), list):
+        object_payloads: dict[str, dict[str, Any]] = {}
+        for item in payload["results"]:
+            if not isinstance(item, dict) or "object" not in item:
+                continue
+            object_payloads[str(item["object"])] = {
+                key: value
+                for key, value in item.items()
+                if key != "object"
+            }
+        return object_payloads
+
+    if isinstance(payload.get("objects"), dict):
+        return {
+            str(name): dict(summary)
+            for name, summary in payload["objects"].items()
+            if isinstance(summary, dict)
+        }
+
+    object_name = payload.get("object")
+    if isinstance(object_name, str) and object_name:
+        legacy_metadata = {
+            "schema_version",
+            "reference",
+            "freecad_version",
+            "object",
+            "objects",
+            "results",
+            "bbox_delta",
+        }
+        return {
+            object_name: {
+                key: value
+                for key, value in payload.items()
+                if key not in legacy_metadata
+            }
+        }
+    return {}
+
+
+def wrap_topo_naming_response_if_needed(
+    fixture: dict,
+    FreeCAD: Any,
+    payload: dict[str, Any],
+) -> dict[str, Any]:
+    if ACTIVE_TOPO_NAMING_STATE is None or "topoNamingState" in payload:
+        return payload
+    object_payloads = legacy_object_payloads(payload)
+    response = topo_naming_state_response(fixture, FreeCAD, object_payloads)
+    diagnostics: list[dict[str, Any]] = []
+    for code in payload.get("diagnostic_codes", []):
+        diagnostics.append({"code": str(code), "source": "freecad_expected_collector"})
+    for item in payload.get("diagnostic_split", []):
+        if isinstance(item, dict):
+            diagnostics.append({
+                "code": "native_expected_diagnostic",
+                "source": "freecad_expected_collector",
+                **item,
+            })
+    if not diagnostics and payload.get("object_fields", {}).get("status") == "diagnostic_only":
+        diagnostics.append({
+            "code": "native_expected_diagnostic",
+            "source": "freecad_expected_collector",
+            "object_fields": payload.get("object_fields", {}),
+        })
+    response["diagnostics"] = diagnostics
+    return response
+
 
 
 def has_part_filled_face_helper(fixture: dict) -> bool:
@@ -5683,11 +5756,12 @@ def expected_target_names(path: Path) -> list[str] | None:
         return None
     expected = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(expected.get("results"), list):
-        return [
+        names = [
             str(item["object"])
             for item in expected["results"]
             if isinstance(item, dict) and "object" in item
         ]
+        return names or None
     if "objects" in expected:
         return list(expected["objects"].keys())
     if "object" in expected:
@@ -5853,13 +5927,17 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
     topo_state = fixture.get("topoNamingState")
     ACTIVE_TOPO_NAMING_STATE = topo_state if isinstance(topo_state, dict) else None
     if has_part_sweep_wrapper_helper(fixture):
-        return collect_part_sweep_wrapper_expected(fixture_path, fixture, requested_targets)
+        payload = collect_part_sweep_wrapper_expected(fixture_path, fixture, requested_targets)
+        return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload)
     if has_part_geomplate_surface_helper(fixture):
-        return collect_part_geomplate_surface_expected(fixture_path, fixture, requested_targets)
+        payload = collect_part_geomplate_surface_expected(fixture_path, fixture, requested_targets)
+        return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload)
     if has_part_filled_face_helper(fixture):
-        return collect_part_filled_face_expected(fixture_path, fixture, requested_targets)
+        payload = collect_part_filled_face_expected(fixture_path, fixture, requested_targets)
+        return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload)
     if has_part_geometry_curve_object(fixture):
-        return collect_part_geometry_curve_expected(fixture_path, fixture)
+        payload = collect_part_geometry_curve_expected(fixture_path, fixture)
+        return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload)
     require_native_hole_profile_support(fixture)
     require_native_dressup_body_membership(fixture)
     require_native_polar_pattern_whole_shape_support(fixture)
@@ -5984,6 +6062,50 @@ def canonicalize_freecad_mapped_names(value: Any) -> Any:
     return value
 
 
+def canonicalize_freecad_mapped_names_and_keys(value: Any) -> Any:
+    if isinstance(value, str):
+        canonical = canonical_freecad_mapped_name(value)
+        return TOPO_INDEX_NAME_RE.sub(lambda match: f"{match.group(1)}*", canonical)
+    if isinstance(value, list):
+        return [canonicalize_freecad_mapped_names_and_keys(item) for item in value]
+    if isinstance(value, dict):
+        return {
+            canonical_freecad_mapped_name(str(key)): canonicalize_freecad_mapped_names_and_keys(item)
+            for key, item in value.items()
+        }
+    return value
+
+
+def comparable_topo_naming_state(value: dict) -> dict:
+    comparable = canonicalize_freecad_mapped_names_and_keys(value)
+    if not isinstance(comparable, dict):
+        return {}
+    producer = comparable.get("producer")
+    if isinstance(producer, dict):
+        producer = dict(producer)
+        producer["freecadVersion"] = "*"
+        producer["occtVersion"] = "*"
+        comparable = dict(comparable)
+        comparable["producer"] = producer
+    return comparable
+
+
+def compare_topo_naming_state_expected(existing: dict, generated: dict) -> list[str]:
+    existing_has_state = isinstance(existing.get("topoNamingState"), dict)
+    generated_has_state = isinstance(generated.get("topoNamingState"), dict)
+    if existing_has_state != generated_has_state:
+        if generated_has_state:
+            return ["topoNamingState:missing"]
+        return ["topoNamingState:unexpected"]
+    if not existing_has_state:
+        return []
+    if comparable_topo_naming_state(existing["topoNamingState"]) != comparable_topo_naming_state(
+        generated["topoNamingState"]
+    ):
+        return ["topoNamingState"]
+    return []
+
+
 def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     errors: list[str] = []
     bbox_delta = existing.get("bbox_delta", 1e-6)
@@ -6068,6 +6190,7 @@ def compare_json(path: Path, payload: dict) -> bool:
         return False
     existing = json.loads(path.read_text(encoding="utf-8"))
     errors: list[str] = []
+    errors.extend(compare_topo_naming_state_expected(existing, payload))
     existing_objects = result_objects(existing)
     generated_objects = result_objects(payload)
     if existing_objects:

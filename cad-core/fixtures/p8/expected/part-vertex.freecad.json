@@ -1,37 +1,68 @@
 {
-  "bbox": {
-    "max": [
-      1.0,
-      2.0,
-      3.0
-    ],
-    "min": [
-      1.0,
-      2.0,
-      3.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "Vertex",
-  "reference": "FreeCADCmd oracle from part-vertex.json; objects: Part::Vertex",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "subshapes": [
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
     {
-      "ReferenceShadow": [],
-      "ShadowSub": [],
-      "fullSubname": "Vertex.Vertex1",
-      "id": "Vertex:Vertex1",
-      "identityStatus": "current_only",
-      "indexed": "Vertex1",
-      "kind": "Vertex",
-      "stableSubname": "",
-      "subname": "Vertex1"
+      "bbox": {
+        "max": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "min": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      },
+      "object": "Vertex",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Vertex.Vertex1",
+          "id": "Vertex:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        }
+      ],
+      "topology_counts": {
+        "edges": 0,
+        "faces": 0,
+        "vertices": 1
+      },
+      "volume": 0.0
     }
   ],
-  "topology_counts": {
-    "edges": 0,
-    "faces": 0,
-    "vertices": 1
-  },
-  "volume": 0.0
+  "topoNamingState": {
+    "documentHash": "sha256:948273b7da718de274b92586797859e03431bf6e182c1314bb45bb7e893a3903",
+    "objects": {
+      "Vertex": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3a337dee212180fe583bcb5d33a17c52c826a7a2160790053a9f716ef4d9c846",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

@@ -1,7 +1,9 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DatumCSFolding": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumCSFolding",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
@@ -29,7 +31,8 @@
         ]
       }
     },
-    "DatumCSFoldingReversedSupports": {
+    {
+      "object": "DatumCSFoldingReversedSupports",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
@@ -57,7 +60,8 @@
         ]
       }
     },
-    "DatumPlaneFolding": {
+    {
+      "object": "DatumPlaneFolding",
       "object_fields": {
         "attached": true,
         "datum": "plane",
@@ -80,7 +84,52 @@
         ]
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-datum-folding-modes.json; objects: Part::Line, Part::Line, Part::Line, Part::Line, Part::Line, Part::Line, Part::Line, Part::Line, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::Plane",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b7fa26af119abbf0fc4d247a9a50055033983b69565d3ae5463fe866449a6e39",
+    "objects": {
+      "DatumCSFolding": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b6b0475036b975cf1aa69d3c5a472fa1aacf9bdf39de2018b823057e903297df",
+        "subshapes": {}
+      },
+      "DatumCSFoldingReversedSupports": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:a7fed4fbdc273d4fe056de9b6daced3126e89c7770b7278e5e376c9ced0db786",
+        "subshapes": {}
+      },
+      "DatumPlaneFolding": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:65954425c32b4fd4b01303937f681a6c15b0ce55ad7be901c10c9db91a5dc3c8",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

@@ -1,8 +1,0 @@
-{
-  "reference": "FreeCADCmd geometry-equivalent BSF cosmetic threaded blind hole: tap-drill cylinder radius=2 depth=4 cut from 20x20x10 base",
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "Hole": {"volume": 50.26548245743669},
-    "Body": {"volume": 3949.7345175425633}
-  }
-}

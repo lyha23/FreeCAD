@@ -1,25 +1,2154 @@
 {
-  "bbox": {
-    "max": [
-      8.0,
-      6.0,
-      5.0000001
-    ],
-    "min": [
-      0.0,
-      0.0,
-      -1e-07
-    ]
-  },
-  "bbox_delta": 0.13,
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "Body",
-  "reference": "FreeCADCmd oracle from partdesign-loft-subtractive-body.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::SubtractiveLoft, PartDesign::Body",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 24,
-    "faces": 10,
-    "vertices": 16
-  },
-  "volume": 216.66666666666669
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          8.0,
+          6.0,
+          5.0000001
+        ],
+        "min": [
+          0.0,
+          0.0,
+          -1e-07
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#16:4;:H*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#16:4;:Hdc7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "SubtractiveLoft.#16:4;:Hdc7,F",
+          "subname": "SubtractiveLoft.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#16:3;:H*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#16:3;:Hdc7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "SubtractiveLoft.#16:3;:Hdc7,F",
+          "subname": "SubtractiveLoft.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#16:1;:H*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#16:1;:Hdc7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "SubtractiveLoft.#16:1;:Hdc7,F",
+          "subname": "SubtractiveLoft.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#14:1;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#14:1;:M;CUT;:Hdc7:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "SubtractiveLoft.#14:1;:M;CUT;:Hdc7:7,F",
+          "subname": "SubtractiveLoft.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#45:1;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#45:1;:M;CUT;:Hdc7:7,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "SubtractiveLoft.#45:1;:M;CUT;:Hdc7:7,F",
+          "subname": "SubtractiveLoft.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#16:2;:H*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#16:2;:Hdc7,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "SubtractiveLoft.#16:2;:Hdc7,F",
+          "subname": "SubtractiveLoft.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#47:1;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face7",
+          "id": "Body:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#47:1;:M;CUT;:H-dca:7,F",
+          "resolvedIndexed": "Face7",
+          "stableSubname": "SubtractiveLoft.#47:1;:M;CUT;:H-dca:7,F",
+          "subname": "SubtractiveLoft.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#48:2;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face8",
+          "id": "Body:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#48:2;:M;CUT;:H-dca:7,F",
+          "resolvedIndexed": "Face8",
+          "stableSubname": "SubtractiveLoft.#48:2;:M;CUT;:H-dca:7,F",
+          "subname": "SubtractiveLoft.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#49:3;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face9",
+          "id": "Body:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#49:3;:M;CUT;:H-dca:7,F",
+          "resolvedIndexed": "Face9",
+          "stableSubname": "SubtractiveLoft.#49:3;:M;CUT;:H-dca:7,F",
+          "subname": "SubtractiveLoft.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#4a:4;:M;CUT;:H*:*,F",
+          "fullSubname": "Body.SubtractiveLoft.Face10",
+          "id": "Body:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "rawFreecadMappedName": "SubtractiveLoft.#4a:4;:M;CUT;:H-dca:7,F",
+          "resolvedIndexed": "Face10",
+          "stableSubname": "SubtractiveLoft.#4a:4;:M;CUT;:H-dca:7,F",
+          "subname": "SubtractiveLoft.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#18:2;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#18:2;:Hdc7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "SubtractiveLoft.#18:2;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#19:1;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#19:1;:Hdc7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "SubtractiveLoft.#19:1;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#d:4;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#d:4;:Hdc7,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "SubtractiveLoft.#d:4;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3d:4;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3d:4;:Hdc7,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "SubtractiveLoft.#3d:4;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#1a:2;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#1a:2;:Hdc7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "SubtractiveLoft.#1a:2;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#d:3;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#d:3;:Hdc7,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "SubtractiveLoft.#d:3;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3d:3;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3d:3;:Hdc7,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "SubtractiveLoft.#3d:3;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#1b:2;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#1b:2;:Hdc7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "SubtractiveLoft.#1b:2;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#d:1;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#d:1;:Hdc7,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "SubtractiveLoft.#d:1;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3d:1;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3d:1;:Hdc7,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "SubtractiveLoft.#3d:1;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#d:2;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#d:2;:Hdc7,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "SubtractiveLoft.#d:2;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3f:1;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3f:1;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "SubtractiveLoft.#3f:1;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3f:2;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge13",
+          "id": "Body:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3f:2;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge13",
+          "stableSubname": "SubtractiveLoft.#3f:2;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3f:3;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge14",
+          "id": "Body:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3f:3;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge14",
+          "stableSubname": "SubtractiveLoft.#3f:3;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3f:4;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge15",
+          "id": "Body:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3f:4;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge15",
+          "stableSubname": "SubtractiveLoft.#3f:4;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3d:2;:H*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge16",
+          "id": "Body:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#3d:2;:Hdc7,E",
+          "resolvedIndexed": "Edge16",
+          "stableSubname": "SubtractiveLoft.#3d:2;:Hdc7,E",
+          "subname": "SubtractiveLoft.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#1f:1;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge17",
+          "id": "Body:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#1f:1;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge17",
+          "stableSubname": "SubtractiveLoft.#1f:1;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#1f:2;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge18",
+          "id": "Body:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#1f:2;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge18",
+          "stableSubname": "SubtractiveLoft.#1f:2;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#1f:3;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge19",
+          "id": "Body:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#1f:3;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge19",
+          "stableSubname": "SubtractiveLoft.#1f:3;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#1f:4;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge20",
+          "id": "Body:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#1f:4;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge20",
+          "stableSubname": "SubtractiveLoft.#1f:4;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#40:4;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge21",
+          "id": "Body:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#40:4;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge21",
+          "stableSubname": "SubtractiveLoft.#40:4;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#41:2;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge22",
+          "id": "Body:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#41:2;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge22",
+          "stableSubname": "SubtractiveLoft.#41:2;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#42:6;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge23",
+          "id": "Body:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#42:6;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge23",
+          "stableSubname": "SubtractiveLoft.#42:6;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#43:8;:M;CUT;:H*:*,E",
+          "fullSubname": "Body.SubtractiveLoft.Edge24",
+          "id": "Body:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "rawFreecadMappedName": "SubtractiveLoft.#43:8;:M;CUT;:H-dca:7,E",
+          "resolvedIndexed": "Edge24",
+          "stableSubname": "SubtractiveLoft.#43:8;:M;CUT;:H-dca:7,E",
+          "subname": "SubtractiveLoft.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#f:2;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#f:2;:Hdc7,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "SubtractiveLoft.#f:2;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#38:2;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#38:2;:Hdc7,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "SubtractiveLoft.#38:2;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#10:1;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#10:1;:Hdc7,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "SubtractiveLoft.#10:1;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#39:1;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#39:1;:Hdc7,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "SubtractiveLoft.#39:1;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#11:2;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#11:2;:Hdc7,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "SubtractiveLoft.#11:2;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3a:2;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#3a:2;:Hdc7,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "SubtractiveLoft.#3a:2;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#12:2;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#12:2;:Hdc7,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "SubtractiveLoft.#12:2;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#3b:2;:H*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#3b:2;:Hdc7,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "SubtractiveLoft.#3b:2;:Hdc7,V",
+          "subname": "SubtractiveLoft.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#4c:2;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex9",
+          "id": "Body:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#4c:2;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex9",
+          "stableSubname": "SubtractiveLoft.#4c:2;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#4d:4;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex10",
+          "id": "Body:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#4d:4;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex10",
+          "stableSubname": "SubtractiveLoft.#4d:4;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#4e:6;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex11",
+          "id": "Body:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#4e:6;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex11",
+          "stableSubname": "SubtractiveLoft.#4e:6;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#4f:8;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex12",
+          "id": "Body:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#4f:8;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex12",
+          "stableSubname": "SubtractiveLoft.#4f:8;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#51:2;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex13",
+          "id": "Body:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#51:2;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex13",
+          "stableSubname": "SubtractiveLoft.#51:2;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#52:4;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex14",
+          "id": "Body:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#52:4;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex14",
+          "stableSubname": "SubtractiveLoft.#52:4;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#53:6;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex15",
+          "id": "Body:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#53:6;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex15",
+          "stableSubname": "SubtractiveLoft.#53:6;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "SubtractiveLoft.#54:8;:M;CUT;:H*:*,V",
+          "fullSubname": "Body.SubtractiveLoft.Vertex16",
+          "id": "Body:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "SubtractiveLoft.#54:8;:M;CUT;:H-dca:7,V",
+          "resolvedIndexed": "Vertex16",
+          "stableSubname": "SubtractiveLoft.#54:8;:M;CUT;:H-dca:7,V",
+          "subname": "SubtractiveLoft.Vertex16"
+        }
+      ],
+      "topology_counts": {
+        "edges": 24,
+        "faces": 10,
+        "vertices": 16
+      },
+      "volume": 216.66666666666669
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b9fbfba69497efe46116dfc1734fb47e0ba54366cc9808fd064c3fba0c1b853c",
+    "objects": {
+      "Body": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "SubtractiveLoft.#10:1;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#10:1;:H*,V",
+                "raw": "SubtractiveLoft.#10:1;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex3"
+              }
+            },
+            "SubtractiveLoft.#11:2;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#11:2;:H*,V",
+                "raw": "SubtractiveLoft.#11:2;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex5"
+              }
+            },
+            "SubtractiveLoft.#12:2;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#12:2;:H*,V",
+                "raw": "SubtractiveLoft.#12:2;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex7"
+              }
+            },
+            "SubtractiveLoft.#14:1;:M;CUT;:Hdc7:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#14:1;:M;CUT;:H*:*,F",
+                "raw": "SubtractiveLoft.#14:1;:M;CUT;:Hdc7:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face4"
+              }
+            },
+            "SubtractiveLoft.#16:1;:Hdc7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#16:1;:H*,F",
+                "raw": "SubtractiveLoft.#16:1;:Hdc7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face3"
+              }
+            },
+            "SubtractiveLoft.#16:2;:Hdc7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#16:2;:H*,F",
+                "raw": "SubtractiveLoft.#16:2;:Hdc7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face6"
+              }
+            },
+            "SubtractiveLoft.#16:3;:Hdc7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#16:3;:H*,F",
+                "raw": "SubtractiveLoft.#16:3;:Hdc7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face2"
+              }
+            },
+            "SubtractiveLoft.#16:4;:Hdc7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#16:4;:H*,F",
+                "raw": "SubtractiveLoft.#16:4;:Hdc7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face1"
+              }
+            },
+            "SubtractiveLoft.#18:2;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#18:2;:H*,E",
+                "raw": "SubtractiveLoft.#18:2;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge1"
+              }
+            },
+            "SubtractiveLoft.#19:1;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#19:1;:H*,E",
+                "raw": "SubtractiveLoft.#19:1;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge2"
+              }
+            },
+            "SubtractiveLoft.#1a:2;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#1a:2;:H*,E",
+                "raw": "SubtractiveLoft.#1a:2;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge5"
+              }
+            },
+            "SubtractiveLoft.#1b:2;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#1b:2;:H*,E",
+                "raw": "SubtractiveLoft.#1b:2;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge8"
+              }
+            },
+            "SubtractiveLoft.#1f:1;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#1f:1;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#1f:1;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge17"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge17"
+              }
+            },
+            "SubtractiveLoft.#1f:2;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#1f:2;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#1f:2;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge18"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge18"
+              }
+            },
+            "SubtractiveLoft.#1f:3;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#1f:3;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#1f:3;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge19"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge19"
+              }
+            },
+            "SubtractiveLoft.#1f:4;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#1f:4;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#1f:4;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge20"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge20"
+              }
+            },
+            "SubtractiveLoft.#38:2;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#38:2;:H*,V",
+                "raw": "SubtractiveLoft.#38:2;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex2"
+              }
+            },
+            "SubtractiveLoft.#39:1;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#39:1;:H*,V",
+                "raw": "SubtractiveLoft.#39:1;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex4"
+              }
+            },
+            "SubtractiveLoft.#3a:2;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3a:2;:H*,V",
+                "raw": "SubtractiveLoft.#3a:2;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex6"
+              }
+            },
+            "SubtractiveLoft.#3b:2;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3b:2;:H*,V",
+                "raw": "SubtractiveLoft.#3b:2;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex8"
+              }
+            },
+            "SubtractiveLoft.#3d:1;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3d:1;:H*,E",
+                "raw": "SubtractiveLoft.#3d:1;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge10"
+              }
+            },
+            "SubtractiveLoft.#3d:2;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3d:2;:H*,E",
+                "raw": "SubtractiveLoft.#3d:2;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge16"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge16"
+              }
+            },
+            "SubtractiveLoft.#3d:3;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3d:3;:H*,E",
+                "raw": "SubtractiveLoft.#3d:3;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge7"
+              }
+            },
+            "SubtractiveLoft.#3d:4;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3d:4;:H*,E",
+                "raw": "SubtractiveLoft.#3d:4;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge4"
+              }
+            },
+            "SubtractiveLoft.#3f:1;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3f:1;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#3f:1;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge12"
+              }
+            },
+            "SubtractiveLoft.#3f:2;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3f:2;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#3f:2;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge13"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge13"
+              }
+            },
+            "SubtractiveLoft.#3f:3;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3f:3;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#3f:3;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge14"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge14"
+              }
+            },
+            "SubtractiveLoft.#3f:4;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#3f:4;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#3f:4;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge15"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge15"
+              }
+            },
+            "SubtractiveLoft.#40:4;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#40:4;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#40:4;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge21"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge21"
+              }
+            },
+            "SubtractiveLoft.#41:2;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#41:2;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#41:2;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge22"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge22"
+              }
+            },
+            "SubtractiveLoft.#42:6;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#42:6;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#42:6;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge23"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge23"
+              }
+            },
+            "SubtractiveLoft.#43:8;:M;CUT;:H-dca:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#43:8;:M;CUT;:H*:*,E",
+                "raw": "SubtractiveLoft.#43:8;:M;CUT;:H-dca:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge24"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge24"
+              }
+            },
+            "SubtractiveLoft.#45:1;:M;CUT;:Hdc7:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#45:1;:M;CUT;:H*:*,F",
+                "raw": "SubtractiveLoft.#45:1;:M;CUT;:Hdc7:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face5"
+              }
+            },
+            "SubtractiveLoft.#47:1;:M;CUT;:H-dca:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#47:1;:M;CUT;:H*:*,F",
+                "raw": "SubtractiveLoft.#47:1;:M;CUT;:H-dca:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face7"
+              }
+            },
+            "SubtractiveLoft.#48:2;:M;CUT;:H-dca:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#48:2;:M;CUT;:H*:*,F",
+                "raw": "SubtractiveLoft.#48:2;:M;CUT;:H-dca:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face8"
+              }
+            },
+            "SubtractiveLoft.#49:3;:M;CUT;:H-dca:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#49:3;:M;CUT;:H*:*,F",
+                "raw": "SubtractiveLoft.#49:3;:M;CUT;:H-dca:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face9"
+              }
+            },
+            "SubtractiveLoft.#4a:4;:M;CUT;:H-dca:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#4a:4;:M;CUT;:H*:*,F",
+                "raw": "SubtractiveLoft.#4a:4;:M;CUT;:H-dca:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Face10"
+              }
+            },
+            "SubtractiveLoft.#4c:2;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#4c:2;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#4c:2;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex9"
+              }
+            },
+            "SubtractiveLoft.#4d:4;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#4d:4;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#4d:4;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex10"
+              }
+            },
+            "SubtractiveLoft.#4e:6;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#4e:6;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#4e:6;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex11"
+              }
+            },
+            "SubtractiveLoft.#4f:8;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#4f:8;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#4f:8;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex12"
+              }
+            },
+            "SubtractiveLoft.#51:2;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#51:2;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#51:2;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex13"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex13"
+              }
+            },
+            "SubtractiveLoft.#52:4;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#52:4;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#52:4;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex14"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex14"
+              }
+            },
+            "SubtractiveLoft.#53:6;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#53:6;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#53:6;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex15"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex15"
+              }
+            },
+            "SubtractiveLoft.#54:8;:M;CUT;:H-dca:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#54:8;:M;CUT;:H*:*,V",
+                "raw": "SubtractiveLoft.#54:8;:M;CUT;:H-dca:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex16"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex16"
+              }
+            },
+            "SubtractiveLoft.#d:1;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#d:1;:H*,E",
+                "raw": "SubtractiveLoft.#d:1;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge9"
+              }
+            },
+            "SubtractiveLoft.#d:2;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#d:2;:H*,E",
+                "raw": "SubtractiveLoft.#d:2;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge11"
+              }
+            },
+            "SubtractiveLoft.#d:3;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#d:3;:H*,E",
+                "raw": "SubtractiveLoft.#d:3;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge6"
+              }
+            },
+            "SubtractiveLoft.#d:4;:Hdc7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#d:4;:H*,E",
+                "raw": "SubtractiveLoft.#d:4;:Hdc7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Edge3"
+              }
+            },
+            "SubtractiveLoft.#f:2;:Hdc7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "SubtractiveLoft.#f:2;:H*,V",
+                "raw": "SubtractiveLoft.#f:2;:Hdc7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "SubtractiveLoft.Vertex1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:a478345d5c69cde8b3420d839bb17f25f5d28a92793928e551bc244a82655d4c",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#18:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#18:2;:Hdc7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "SubtractiveLoft.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3d:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3d:1;:Hdc7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "SubtractiveLoft.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#d:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#d:2;:Hdc7,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "SubtractiveLoft.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3f:1;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3f:1;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "SubtractiveLoft.Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3f:2;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3f:2;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge13",
+            "subname": "SubtractiveLoft.Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3f:3;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3f:3;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge14",
+            "subname": "SubtractiveLoft.Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3f:4;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3f:4;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge15",
+            "subname": "SubtractiveLoft.Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3d:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3d:2;:Hdc7,E",
+            "resolvedIndexed": "Edge16",
+            "subname": "SubtractiveLoft.Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#1f:1;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#1f:1;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "SubtractiveLoft.Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#1f:2;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#1f:2;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "SubtractiveLoft.Edge18"
+          },
+          "Edge19": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#1f:3;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#1f:3;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge19",
+            "subname": "SubtractiveLoft.Edge19"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#19:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#19:1;:Hdc7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "SubtractiveLoft.Edge2"
+          },
+          "Edge20": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#1f:4;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#1f:4;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge20",
+            "subname": "SubtractiveLoft.Edge20"
+          },
+          "Edge21": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#40:4;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#40:4;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge21",
+            "subname": "SubtractiveLoft.Edge21"
+          },
+          "Edge22": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#41:2;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#41:2;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge22",
+            "subname": "SubtractiveLoft.Edge22"
+          },
+          "Edge23": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#42:6;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#42:6;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge23",
+            "subname": "SubtractiveLoft.Edge23"
+          },
+          "Edge24": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#43:8;:M;CUT;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#43:8;:M;CUT;:H-dca:7,E",
+            "resolvedIndexed": "Edge24",
+            "subname": "SubtractiveLoft.Edge24"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#d:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#d:4;:Hdc7,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "SubtractiveLoft.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3d:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3d:4;:Hdc7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "SubtractiveLoft.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#1a:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#1a:2;:Hdc7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "SubtractiveLoft.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#d:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#d:3;:Hdc7,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "SubtractiveLoft.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3d:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3d:3;:Hdc7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "SubtractiveLoft.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#1b:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#1b:2;:Hdc7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "SubtractiveLoft.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#d:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#d:1;:Hdc7,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "SubtractiveLoft.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#16:4;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#16:4;:Hdc7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "SubtractiveLoft.Face1"
+          },
+          "Face10": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#4a:4;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#4a:4;:M;CUT;:H-dca:7,F",
+            "resolvedIndexed": "Face10",
+            "subname": "SubtractiveLoft.Face10"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#16:3;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#16:3;:Hdc7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "SubtractiveLoft.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#16:1;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#16:1;:Hdc7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "SubtractiveLoft.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#14:1;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#14:1;:M;CUT;:Hdc7:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "SubtractiveLoft.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#45:1;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#45:1;:M;CUT;:Hdc7:7,F",
+            "resolvedIndexed": "Face5",
+            "subname": "SubtractiveLoft.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#16:2;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#16:2;:Hdc7,F",
+            "resolvedIndexed": "Face6",
+            "subname": "SubtractiveLoft.Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#47:1;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#47:1;:M;CUT;:H-dca:7,F",
+            "resolvedIndexed": "Face7",
+            "subname": "SubtractiveLoft.Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#48:2;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#48:2;:M;CUT;:H-dca:7,F",
+            "resolvedIndexed": "Face8",
+            "subname": "SubtractiveLoft.Face8"
+          },
+          "Face9": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#49:3;:M;CUT;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#49:3;:M;CUT;:H-dca:7,F",
+            "resolvedIndexed": "Face9",
+            "subname": "SubtractiveLoft.Face9"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#f:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#f:2;:Hdc7,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "SubtractiveLoft.Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#4d:4;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#4d:4;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "SubtractiveLoft.Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#4e:6;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#4e:6;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "SubtractiveLoft.Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#4f:8;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#4f:8;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "SubtractiveLoft.Vertex12"
+          },
+          "Vertex13": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#51:2;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#51:2;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex13",
+            "subname": "SubtractiveLoft.Vertex13"
+          },
+          "Vertex14": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#52:4;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#52:4;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex14",
+            "subname": "SubtractiveLoft.Vertex14"
+          },
+          "Vertex15": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#53:6;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#53:6;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex15",
+            "subname": "SubtractiveLoft.Vertex15"
+          },
+          "Vertex16": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#54:8;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#54:8;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex16",
+            "subname": "SubtractiveLoft.Vertex16"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#38:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#38:2;:Hdc7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "SubtractiveLoft.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#10:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#10:1;:Hdc7,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "SubtractiveLoft.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#39:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#39:1;:Hdc7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "SubtractiveLoft.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#11:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#11:2;:Hdc7,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "SubtractiveLoft.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3a:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3a:2;:Hdc7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "SubtractiveLoft.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#12:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#12:2;:Hdc7,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "SubtractiveLoft.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#3b:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#3b:2;:Hdc7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "SubtractiveLoft.Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "SubtractiveLoft.#4c:2;:M;CUT;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "SubtractiveLoft.#4c:2;:M;CUT;:H-dca:7,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "SubtractiveLoft.Vertex9"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

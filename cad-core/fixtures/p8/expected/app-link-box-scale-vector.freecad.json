@@ -1,29 +1,55 @@
 {
-  "bbox": {
-    "max": [
-      9.0000001,
-      3.0000001,
-      2.0000001
-    ],
-    "min": [
-      4.9999999,
-      -1e-07,
-      -1e-07
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "BoxLink",
-  "object_fields": {
-    "link": "app_link",
-    "linked_object": "Box",
-    "shape": "occt_solid"
-  },
-  "reference": "FreeCADCmd oracle from app-link-box-scale-vector.json; objects: Part::Box, App::Link",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 12,
-    "faces": 6,
-    "vertices": 8
-  },
-  "volume": 23.999999999999996
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          9.0000001,
+          3.0000001,
+          2.0000001
+        ],
+        "min": [
+          4.9999999,
+          -1e-07,
+          -1e-07
+        ]
+      },
+      "object": "BoxLink",
+      "object_fields": {
+        "link": "app_link",
+        "linked_object": "Box",
+        "shape": "occt_solid"
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 23.999999999999996
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:5fd9fa865032257f37c4e972b48b606d96f75c5ca79272b01dd12519c5a2b2fa",
+    "objects": {
+      "BoxLink": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b0c4fb571340ef385a13ed5786170da1695837286c7fc9a49e5d02b399e6f858",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

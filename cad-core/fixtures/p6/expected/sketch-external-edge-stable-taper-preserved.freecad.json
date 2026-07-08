@@ -1,19 +1,58 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "ProbeSketch",
-  "object_fields": {
-    "external_curve_count": 0,
-    "external_geometry_count": 1,
-    "external_point_count": 0,
-    "raw_edge_count": 1,
-    "shape": "occt_sketch_shape",
-    "status": "ok"
-  },
-  "reference": "FreeCADCmd oracle from sketch-external-edge-stable-taper-preserved.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "sketch_internal": {
-    "profile_ready": false,
-    "raw_edge_count": 1,
-    "shape": "empty"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "ProbeSketch",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 1,
+        "external_point_count": 0,
+        "raw_edge_count": 1,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_external": {
+        "construction_count": 1,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": [
+          []
+        ]
+      },
+      "sketch_internal": {
+        "profile_ready": false,
+        "raw_edge_count": 1,
+        "shape": "empty"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:331cfc8798336d87f3a43b43abd5aba3331888bd553104b81361275b419c0f0d",
+    "objects": {
+      "ProbeSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:199166c6fc89ebc3b51dc710d40b46bcfd15f656a6df63bc6cefd45b200606a8",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
   }
 }

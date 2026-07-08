@@ -1,57 +1,83 @@
 {
-  "bbox": {
-    "max": [
-      5.0,
-      2.0,
-      0.0
-    ],
-    "min": [
-      1.0,
-      1.0,
-      0.0
-    ]
-  },
-  "bbox_delta": 0.11,
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "ProjectedEdges",
-  "object_fields": {
-    "feature": "part_project_on_surface",
-    "height": 0.0,
-    "mode": "Edges",
-    "offset": 0.0,
-    "projected_face_count": 0,
-    "projected_inner_wire_count": 0,
-    "projected_solid_count": 0,
-    "projected_wire_count": 0,
-    "projection_item_ledger": [
-      {
-        "projection_item_index": 0,
-        "source_object": "ProjectionLine",
-        "source_shape_kind": "edge",
-        "source_subname": "Edge1",
-        "stable_subname": "Edge1"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          5.0,
+          2.0,
+          0.0
+        ],
+        "min": [
+          1.0,
+          1.0,
+          0.0
+        ]
+      },
+      "bbox_delta": 0.11,
+      "object": "ProjectedEdges",
+      "object_fields": {
+        "feature": "part_project_on_surface",
+        "height": 0.0,
+        "mode": "Edges",
+        "offset": 0.0,
+        "projected_face_count": 0,
+        "projected_inner_wire_count": 0,
+        "projected_solid_count": 0,
+        "projected_wire_count": 0,
+        "projection_item_ledger": [
+          {
+            "projection_item_index": 0,
+            "source_object": "ProjectionLine",
+            "source_shape_kind": "edge",
+            "source_subname": "Edge1",
+            "stable_subname": "Edge1"
+          }
+        ],
+        "projection_items": [
+          {
+            "object": "ProjectionLine",
+            "subshape": "Edge1"
+          }
+        ],
+        "projection_subshape": "Edge1",
+        "shape": "occt_compound",
+        "source_projection": "ProjectionLine",
+        "source_support": "SupportPlane",
+        "status": "ok",
+        "support_face": "Face1",
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+      },
+      "topology_counts": {
+        "edges": 1,
+        "faces": 0,
+        "vertices": 2
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:e554cfa753e2a7ebbffe02eda96e9057b6ab8bcbc8ad8f5dce1771dc60f62433",
+    "objects": {
+      "ProjectedEdges": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b0d3b05b915e9d0f7347441c9436bcdf99d02bcad81a4e97f494b5c1d5f01840",
+        "subshapes": {}
       }
-    ],
-    "projection_items": [
-      {
-        "object": "ProjectionLine",
-        "subshape": "Edge1"
-      }
-    ],
-    "projection_subshape": "Edge1",
-    "shape": "occt_compound",
-    "source_projection": "ProjectionLine",
-    "source_support": "SupportPlane",
-    "status": "ok",
-    "support_face": "Face1",
-    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
-  },
-  "reference": "FreeCADCmd oracle from part-project-on-surface-edge-plane.json; objects: Part::Plane, Part::Line, Part::ProjectOnSurface",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 1,
-    "faces": 0,
-    "vertices": 2
-  },
-  "volume": 0.0
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

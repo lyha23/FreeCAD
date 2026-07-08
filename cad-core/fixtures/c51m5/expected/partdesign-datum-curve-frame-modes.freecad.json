@@ -1,35 +1,9 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DatumCSConcentricCircle": {
-      "object_fields": {
-        "attached": true,
-        "datum": "coordinate_system",
-        "map_mode": "Concentric",
-        "origin": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "status": "ok",
-        "x_axis": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "y_axis": [
-          0.0,
-          -1.0,
-          0.0
-        ],
-        "z_axis": [
-          0.0,
-          0.0,
-          1.0
-        ]
-      }
-    },
-    "DatumCSFrenetNBParameter": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumCSFrenetNBParameter",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
@@ -57,35 +31,8 @@
         ]
       }
     },
-    "DatumCSFrenetTBVertexFirst": {
-      "object_fields": {
-        "attached": true,
-        "datum": "coordinate_system",
-        "map_mode": "FrenetTB",
-        "origin": [
-          -2.0000000000000004,
-          3.0000000000000004,
-          0.0
-        ],
-        "status": "ok",
-        "x_axis": [
-          -0.9729268372225408,
-          -0.23111332590775402,
-          1.1688938249933805e-18
-        ],
-        "y_axis": [
-          1.1688938249933805e-18,
-          0.0,
-          1.0
-        ],
-        "z_axis": [
-          -0.23111332590775402,
-          0.9729268372225408,
-          0.0
-        ]
-      }
-    },
-    "DatumCSFrenetTNVertexProjection": {
+    {
+      "object": "DatumCSFrenetTNVertexProjection",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
@@ -113,7 +60,66 @@
         ]
       }
     },
-    "DatumCSSectionArc": {
+    {
+      "object": "DatumCSFrenetTBVertexFirst",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTB",
+        "origin": [
+          -2.0000000000000004,
+          3.0000000000000004,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          -0.9729268372225408,
+          -0.23111332590775402,
+          1.1688938249933805e-18
+        ],
+        "y_axis": [
+          1.1688938249933805e-18,
+          0.0,
+          1.0
+        ],
+        "z_axis": [
+          -0.23111332590775402,
+          0.9729268372225408,
+          0.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSConcentricCircle",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Concentric",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSSectionArc",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
@@ -141,7 +147,8 @@
         ]
       }
     },
-    "DatumLineAxisOfCurvature": {
+    {
+      "object": "DatumLineAxisOfCurvature",
       "object_fields": {
         "alias_source_mode": "SectionOfRevolution",
         "attached": true,
@@ -160,26 +167,8 @@
         "status": "ok"
       }
     },
-    "DatumLineBinormal": {
-      "object_fields": {
-        "alias_source_mode": "FrenetTN",
-        "attached": true,
-        "base": [
-          -1.2360679774997891,
-          1.9021130325903073,
-          0.0
-        ],
-        "datum": "line",
-        "direction": [
-          0.0,
-          0.0,
-          1.0
-        ],
-        "map_mode": "Binormal",
-        "status": "ok"
-      }
-    },
-    "DatumLineNormal": {
+    {
+      "object": "DatumLineNormal",
       "object_fields": {
         "alias_source_mode": "FrenetTB",
         "attached": true,
@@ -198,7 +187,28 @@
         "status": "ok"
       }
     },
-    "DatumPointCenterOfCurvature": {
+    {
+      "object": "DatumLineBinormal",
+      "object_fields": {
+        "alias_source_mode": "FrenetTN",
+        "attached": true,
+        "base": [
+          -1.2360679774997891,
+          1.9021130325903073,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "Binormal",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPointCenterOfCurvature",
       "object_fields": {
         "alias_source_mode": "SectionOfRevolution",
         "attached": true,
@@ -212,7 +222,124 @@
         "status": "ok"
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-datum-curve-frame-modes.json; objects: Part::Ellipse, Part::Ellipse, Part::Cylinder, Part::Vertex, Part::Vertex, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::Line, PartDesign::Line, PartDesign::Line, PartDesign::Point",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:f64604a37da7026920c563c660f480f20c1028b22cf576df9f6db99d4257cae6",
+    "objects": {
+      "DatumCSConcentricCircle": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:67f2861398727fda200bed4eff02f773c53cc286bea8562e8ea60a963184154f",
+        "subshapes": {}
+      },
+      "DatumCSFrenetNBParameter": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c2de0fa105cce46607ac249b7a04932602b4d90a6927fce7ce39afa46e8aefc5",
+        "subshapes": {}
+      },
+      "DatumCSFrenetTBVertexFirst": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:abf6950c7f3b508549286961e47946ea587a18aafa11342b530013d6221d7d6c",
+        "subshapes": {}
+      },
+      "DatumCSFrenetTNVertexProjection": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:79fb58933544701042f3797ee9414fbb4469754a37497d54f41668b358bdea0b",
+        "subshapes": {}
+      },
+      "DatumCSSectionArc": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d3af3438b3e68139c01ae679f86f23d8db15fc143d5deada5358debe60c66055",
+        "subshapes": {}
+      },
+      "DatumLineAxisOfCurvature": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:39a29bee3c87638f1dbe21cf488aed6884e5d7e530d68b0dcc3c25ae155c7d23",
+        "subshapes": {}
+      },
+      "DatumLineBinormal": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b4587e9bded6c7b0ae8683be8c54f5645ec8718e354577a82d184ebec1b8ddc8",
+        "subshapes": {}
+      },
+      "DatumLineNormal": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fed539b622ac28a2f01cb7853637be981c97722d809fafc8426df53e9ed37913",
+        "subshapes": {}
+      },
+      "DatumPointCenterOfCurvature": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:729e7d4bbe5a3db0864d760c2f82ceeb5a11f80f2f02579974202707af7dbf28",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

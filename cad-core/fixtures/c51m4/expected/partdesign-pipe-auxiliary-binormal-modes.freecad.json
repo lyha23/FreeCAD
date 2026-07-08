@@ -1,7 +1,8 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "AdditivePipeAuxiliary": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
       "bbox": {
         "max": [
           0.5000001,
@@ -14,6 +15,7 @@
           -1e-07
         ]
       },
+      "object": "AdditivePipeAuxiliary",
       "object_fields": {
         "add_sub": "add",
         "feature": "partdesign_pipe",
@@ -33,7 +35,7 @@
       },
       "volume": 3.9999999999999996
     },
-    "AdditivePipeBinormal": {
+    {
       "bbox": {
         "max": [
           0.5,
@@ -46,6 +48,7 @@
           0.0
         ]
       },
+      "object": "AdditivePipeBinormal",
       "object_fields": {
         "add_sub": "add",
         "feature": "partdesign_pipe",
@@ -65,7 +68,40 @@
       },
       "volume": 3.9999999999999996
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-pipe-auxiliary-binormal-modes.json; objects: Sketcher::SketchObject, Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::AdditivePipe, PartDesign::AdditivePipe",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:fd21d425c0ff8146942d4058ded963b186beb9300dcd8696da7368bbb8ccd024",
+    "objects": {
+      "AdditivePipeAuxiliary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:6976698561c5ad09082fb8765f4c53ff1aea6c573ba8d60c5b96b1e713412cc5",
+        "subshapes": {}
+      },
+      "AdditivePipeBinormal": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4f89673287e482a4fee4442d682aa6b699ae5276154cc689c50cae69e59bb718",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

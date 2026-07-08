@@ -1,67 +1,93 @@
 {
-  "bbox": {
-    "max": [
-      2.0,
-      2.0,
-      1e-07
-    ],
-    "min": [
-      -2.0,
-      -2.0000000000000004,
-      -1e-07
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "FilledFace",
-  "object_fields": {
-    "boundary_edge_count": 4,
-    "boundary_mode": "edge_wire_closed",
-    "feature": "part_filled_face",
-    "freecad_native_document_object": false,
-    "helper": "Part.makeFilledFace",
-    "params": {
-      "anisotropy": false,
-      "degree": 3,
-      "iterations": 2,
-      "max_degree": 9,
-      "max_segments": 9,
-      "points_on_curve": 15,
-      "tolerance_2d": 1e-05,
-      "tolerance_3d": 0.0001,
-      "tolerance_g1": 0.01,
-      "tolerance_g2": 0.1
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          1e-07
+        ],
+        "min": [
+          -2.0,
+          -2.0000000000000004,
+          -1e-07
+        ]
+      },
+      "object": "FilledFace",
+      "object_fields": {
+        "boundary_edge_count": 4,
+        "boundary_mode": "edge_wire_closed",
+        "feature": "part_filled_face",
+        "freecad_native_document_object": false,
+        "helper": "Part.makeFilledFace",
+        "params": {
+          "anisotropy": false,
+          "degree": 3,
+          "iterations": 2,
+          "max_degree": 9,
+          "max_segments": 9,
+          "points_on_curve": 15,
+          "tolerance_2d": 1e-05,
+          "tolerance_3d": 0.0001,
+          "tolerance_g1": 0.01,
+          "tolerance_g2": 0.1
+        },
+        "params_source": "Part.makeFilledFace constructor kwargs",
+        "source_backed_helper": true,
+        "status": "ok",
+        "topo_naming_history": "maker_history:filling"
+      },
+      "shape_summary": {
+        "bbox": {
+          "max": [
+            2.0,
+            2.0,
+            1e-07
+          ],
+          "min": [
+            -2.0,
+            -2.0000000000000004,
+            -1e-07
+          ]
+        },
+        "topology_counts": {
+          "edges": 4,
+          "faces": 1,
+          "vertices": 4
+        },
+        "volume": 0.0
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b12b5c74ede429bc08e552f6d927ede97760de0625f191d45e55e22c2b24dd08",
+    "objects": {
+      "FilledFace": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:50497ba7267560e27311a6851e3085b9716e33429776cb12435e130a9909ea8b",
+        "subshapes": {}
+      }
     },
-    "params_source": "Part.makeFilledFace constructor kwargs",
-    "source_backed_helper": true,
-    "status": "ok",
-    "topo_naming_history": "maker_history:filling"
-  },
-  "reference": "FreeCADCmd oracle from part-filling-param-max-degree-only.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::FilledFace",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "shape_summary": {
-    "bbox": {
-      "max": [
-        2.0,
-        2.0,
-        1e-07
-      ],
-      "min": [
-        -2.0,
-        -2.0000000000000004,
-        -1e-07
-      ]
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
     },
-    "topology_counts": {
-      "edges": 4,
-      "faces": 1,
-      "vertices": 4
-    },
-    "volume": 0.0
-  },
-  "topology_counts": {
-    "edges": 4,
-    "faces": 1,
-    "vertices": 4
-  },
-  "volume": 0.0
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

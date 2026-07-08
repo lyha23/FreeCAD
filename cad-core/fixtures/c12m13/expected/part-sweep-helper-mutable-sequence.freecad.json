@@ -1,118 +1,137 @@
 {
-  "bbox": {
-    "max": [
-      0.5000001,
-      0.5000001000000008,
-      4.0000001
-    ],
-    "min": [
-      -0.5000001,
-      -0.5000001,
-      -1e-07
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "MutableHelperSweep",
-  "object_fields": {
-    "advanced": {
-      "auxiliary_spine": {
-        "contact": "NoContact",
-        "curvilinear": false,
-        "subname": "Edge1",
-        "target": "AuxiliarySpine"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          0.5000001,
+          0.5000001000000008,
+          4.0000001
+        ],
+        "min": [
+          -0.5000001,
+          -0.5000001,
+          -1e-07
+        ]
       },
-      "mode": "Auxiliary",
-      "tolerance": {
-        "boundTol": 0.0002,
-        "tol3d": 0.0001,
-        "tolAngular": 0.01
+      "object": "MutableHelperSweep",
+      "object_fields": {
+        "advanced": {
+          "auxiliary_spine": {
+            "contact": "NoContact",
+            "curvilinear": false,
+            "subname": "Edge1",
+            "target": "AuxiliarySpine"
+          },
+          "mode": "Auxiliary",
+          "tolerance": {
+            "boundTol": 0.0002,
+            "tol3d": 0.0001,
+            "tolAngular": 0.01
+          }
+        },
+        "feature": "part_sweep",
+        "frenet": true,
+        "sections": [
+          "SketchPipeProfile"
+        ],
+        "shape": "occt_solid",
+        "solid": true,
+        "spine": "PipeSpine",
+        "status": "ok",
+        "topo_naming_history": "maker_history:pipeshell",
+        "transition": "Round corner"
+      },
+      "shape_summary": {
+        "bbox": {
+          "max": [
+            0.5000001,
+            0.5000001000000008,
+            4.0000001
+          ],
+          "min": [
+            -0.5000001,
+            -0.5000001,
+            -1e-07
+          ]
+        },
+        "shape": "occt_solid",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "vertices": 8
+        },
+        "volume": 3.9999999999999996
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 3.9999999999999996,
+      "wrapper_oracle": {
+        "advanced": {
+          "auxiliary_spine": {
+            "contact": "NoContact",
+            "curvilinear": false,
+            "subname": "Edge1",
+            "target": "AuxiliarySpine"
+          },
+          "mode": "Auxiliary",
+          "sections": [
+            {
+              "profile": "SketchPipeProfile",
+              "with_contact": false,
+              "with_correction": false
+            }
+          ],
+          "tolerance": {
+            "boundTol": 0.0002,
+            "tol3d": 0.0001,
+            "tolAngular": 0.01
+          }
+        },
+        "builder_status": {
+          "build_ok": true,
+          "is_ready": true,
+          "make_solid_ok": true,
+          "set_auxiliary_spine": true,
+          "set_tolerance": true,
+          "shape_access_ok": true,
+          "status_after_build": 0,
+          "status_before_build": 0,
+          "transition_mode": 2
+        },
+        "dto": "PartSweepAdvancedPipeShellDTO",
+        "freecad_native_document_object": false,
+        "helper": "Part.BRepOffsetAPI_MakePipeShell",
+        "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
+        "spine_subname": "Edge1"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:c26b9956e438f4abfb5389c893ef98043649f17727894be9d39f2a12db4dcae0",
+    "objects": {
+      "MutableHelperSweep": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:06e3279899657979945a5be226f76178c664e2e554187636111aa0e8e49e32bb",
+        "subshapes": {}
       }
     },
-    "feature": "part_sweep",
-    "frenet": true,
-    "sections": [
-      "SketchPipeProfile"
-    ],
-    "shape": "occt_solid",
-    "solid": true,
-    "spine": "PipeSpine",
-    "status": "ok",
-    "topo_naming_history": "maker_history:pipeshell",
-    "transition": "Round corner"
-  },
-  "reference": "FreeCADCmd wrapper oracle from part-sweep-helper-mutable-sequence.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Sketcher::SketchObject, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "shape_summary": {
-    "bbox": {
-      "max": [
-        0.5000001,
-        0.5000001000000008,
-        4.0000001
-      ],
-      "min": [
-        -0.5000001,
-        -0.5000001,
-        -1e-07
-      ]
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
     },
-    "shape": "occt_solid",
-    "topology_counts": {
-      "edges": 12,
-      "faces": 6,
-      "vertices": 8
-    },
-    "volume": 3.9999999999999996
-  },
-  "topology_counts": {
-    "edges": 12,
-    "faces": 6,
-    "vertices": 8
-  },
-  "volume": 3.9999999999999996,
-  "wrapper_oracle": {
-    "advanced": {
-      "auxiliary_spine": {
-        "contact": "NoContact",
-        "curvilinear": false,
-        "subname": "Edge1",
-        "target": "AuxiliarySpine"
-      },
-      "mode": "Auxiliary",
-      "sections": [
-        {
-          "profile": "SketchPipeProfile",
-          "with_contact": false,
-          "with_correction": false
-        }
-      ],
-      "tolerance": {
-        "boundTol": 0.0002,
-        "tol3d": 0.0001,
-        "tolAngular": 0.01
-      }
-    },
-    "builder_status": {
-      "build_ok": true,
-      "is_ready": true,
-      "make_solid_ok": true,
-      "set_auxiliary_spine": true,
-      "set_tolerance": true,
-      "shape_access_ok": true,
-      "status_after_build": 0,
-      "status_before_build": 0,
-      "transition_mode": 2
-    },
-    "dto": "PartSweepAdvancedPipeShellDTO",
-    "freecad_native_document_object": false,
-    "helper": "Part.BRepOffsetAPI_MakePipeShell",
-    "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
-    "spine_subname": "Edge1"
-  },
-  "oracle_boundary": {
-    "uncollected_methods": [
-      "simulate",
-      "generated"
-    ],
-    "reason": "C12-M13 helper sequence collected build/isReady/status/shape; mutable simulate/generated lifecycle is covered by C12-M14."
+    "schemaVersion": "cad-core.topo-state.v1"
   }
 }

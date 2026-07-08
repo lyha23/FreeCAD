@@ -1,26 +1,55 @@
 {
-  "reference": "FreeCAD source-code oracle: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute() replays each Original with getAddSubShape() and makeElementTransform(opName); /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp::LinkBaseExtension::checkGeoElementMap() retags linked topology through reTagElementMap.",
-  "named_shapes": {
-    "BodyLink": {
-      "owner": "BodyLink",
-      "element_map_status": "history_partial",
-      "element_map_prefixes": [
-        "Body.LinearPattern.",
-        "Body.LinearPattern.Transform1.",
-        "Body.LinearPattern.Transform2.",
-        "Body.Pocket.",
-        "Pocket."
-      ],
-      "history_kinds_include": ["modified", "generated", "deleted", "split", "merge"],
-      "history_non_indexed_source_prefixes": [
-        "Body.LinearPattern.Transform1.",
-        "Body.LinearPattern.Transform2.",
-        "Body.Pocket.",
-        "Pad.",
-        "Pocket.",
-        "SketchPad.",
-        "SketchPocket."
-      ]
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          22.0,
+          5.0,
+          10.000000000000004
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object": "BodyLink",
+      "object_fields": {
+        "link": "app_link",
+        "linked_object": "Body",
+        "shape": "occt_compound"
+      },
+      "topology_counts": {
+        "edges": 48,
+        "faces": 20,
+        "vertices": 32
+      },
+      "volume": 639.9999999999999
     }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:2dfeb639737d082ce9012be377b10a9d358e128831545ceda735e9ff80cc4cc3",
+    "objects": {
+      "BodyLink": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3ee2428f4c9ae140fb119a5e96c4394f600ee7d0f484012ced7e6f9a5207d941",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
   }
 }

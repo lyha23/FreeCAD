@@ -1,112 +1,138 @@
 {
-  "bbox": {
-    "max": [
-      0.5,
-      0.5000000000000009,
-      4.0
-    ],
-    "min": [
-      -0.5,
-      -0.5,
-      0.0
-    ]
-  },
-  "diagnostic_codes": [
-    "invalid_parameter",
-    "unsupported_property"
-  ],
-  "diagnostic_split": [
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
     {
-      "object": "InvalidToleranceTol3d",
-      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
-      "reason": "Part.BRepOffsetAPI_MakePipeShell Tolerance.tol3d must be a finite number"
-    },
-    {
-      "object": "LegacyScalarTolerance",
-      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
-      "reason": "Part.BRepOffsetAPI_MakePipeShell Tolerance must be an object with tol3d/boundTol/tolAngular"
-    }
-  ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "ToleranceSweep",
-  "object_fields": {
-    "advanced": {
-      "tolerance": {
-        "boundTol": 0.0002,
-        "tol3d": 0.0001,
-        "tolAngular": 0.01
-      }
-    },
-    "feature": "part_sweep",
-    "frenet": true,
-    "sections": [
-      "SketchPipeProfile"
-    ],
-    "shape": "occt_shell",
-    "solid": false,
-    "spine": "PipeSpine",
-    "status": "ok",
-    "topo_naming_history": "maker_history:pipeshell",
-    "transition": "Right corner"
-  },
-  "reference": "FreeCADCmd wrapper oracle from part-sweep-tolerance-contract.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Part::Sweep, Part::Sweep, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "shape_summary": {
-    "bbox": {
-      "max": [
-        0.5,
-        0.5000000000000009,
-        4.0
+      "bbox": {
+        "max": [
+          0.5,
+          0.5000000000000009,
+          4.0
+        ],
+        "min": [
+          -0.5,
+          -0.5,
+          0.0
+        ]
+      },
+      "diagnostic_codes": [
+        "invalid_parameter",
+        "unsupported_property"
       ],
-      "min": [
-        -0.5,
-        -0.5,
-        0.0
-      ]
-    },
-    "shape": "occt_shell",
-    "topology_counts": {
-      "edges": 12,
-      "faces": 4,
-      "vertices": 8
-    },
-    "volume": 2.6666666666666665
-  },
-  "topology_counts": {
-    "edges": 12,
-    "faces": 4,
-    "vertices": 8
-  },
-  "volume": 2.6666666666666665,
-  "wrapper_oracle": {
-    "advanced": {
-      "sections": [
+      "diagnostic_split": [
         {
-          "profile": "SketchPipeProfile",
-          "with_contact": false,
-          "with_correction": false
+          "object": "InvalidToleranceTol3d",
+          "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+          "reason": "Part.BRepOffsetAPI_MakePipeShell Tolerance.tol3d must be a finite number"
+        },
+        {
+          "object": "LegacyScalarTolerance",
+          "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+          "reason": "Part.BRepOffsetAPI_MakePipeShell Tolerance must be an object with tol3d/boundTol/tolAngular"
         }
       ],
-      "tolerance": {
-        "boundTol": 0.0002,
-        "tol3d": 0.0001,
-        "tolAngular": 0.01
+      "object": "ToleranceSweep",
+      "object_fields": {
+        "advanced": {
+          "tolerance": {
+            "boundTol": 0.0002,
+            "tol3d": 0.0001,
+            "tolAngular": 0.01
+          }
+        },
+        "feature": "part_sweep",
+        "frenet": true,
+        "sections": [
+          "SketchPipeProfile"
+        ],
+        "shape": "occt_shell",
+        "solid": false,
+        "spine": "PipeSpine",
+        "status": "ok",
+        "topo_naming_history": "maker_history:pipeshell",
+        "transition": "Right corner"
+      },
+      "shape_summary": {
+        "bbox": {
+          "max": [
+            0.5,
+            0.5000000000000009,
+            4.0
+          ],
+          "min": [
+            -0.5,
+            -0.5,
+            0.0
+          ]
+        },
+        "shape": "occt_shell",
+        "topology_counts": {
+          "edges": 12,
+          "faces": 4,
+          "vertices": 8
+        },
+        "volume": 2.6666666666666665
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 4,
+        "vertices": 8
+      },
+      "volume": 2.6666666666666665,
+      "wrapper_oracle": {
+        "advanced": {
+          "sections": [
+            {
+              "profile": "SketchPipeProfile",
+              "with_contact": false,
+              "with_correction": false
+            }
+          ],
+          "tolerance": {
+            "boundTol": 0.0002,
+            "tol3d": 0.0001,
+            "tolAngular": 0.01
+          }
+        },
+        "builder_status": {
+          "build_ok": true,
+          "is_ready": true,
+          "set_frenet_mode": true,
+          "set_tolerance": true,
+          "shape_access_ok": true,
+          "status_after_build": 0,
+          "status_before_build": 0,
+          "transition_mode": 1
+        },
+        "dto": "PartSweepAdvancedPipeShellDTO",
+        "freecad_native_document_object": false,
+        "helper": "Part.BRepOffsetAPI_MakePipeShell",
+        "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
+        "spine_subname": "Edge1"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:660287d30ea5719a5ef603586a01bee3296cbc1588c6dc9b7ed7383bc8b8afe0",
+    "objects": {
+      "ToleranceSweep": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:caf38a8ad772ca6f6ba1991968f9dcf2dbed7fc167da0481401cfb4ec65e2f24",
+        "subshapes": {}
       }
     },
-    "builder_status": {
-      "build_ok": true,
-      "is_ready": true,
-      "set_frenet_mode": true,
-      "set_tolerance": true,
-      "shape_access_ok": true,
-      "status_after_build": 0,
-      "status_before_build": 0,
-      "transition_mode": 1
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
     },
-    "dto": "PartSweepAdvancedPipeShellDTO",
-    "freecad_native_document_object": false,
-    "helper": "Part.BRepOffsetAPI_MakePipeShell",
-    "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
-    "spine_subname": "Edge1"
+    "schemaVersion": "cad-core.topo-state.v1"
   }
 }

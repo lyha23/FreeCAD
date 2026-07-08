@@ -1,32 +1,58 @@
 {
-  "bbox": {
-    "max": [
-      2.0000001,
-      2.0000001,
-      3.0000001
-    ],
-    "min": [
-      -2.0000001,
-      -2.0000001000000003,
-      -1e-07
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "RuledSurface",
-  "object_fields": {
-    "feature": "part_ruled_surface",
-    "orientation": "Automatic",
-    "shape": "occt_shell",
-    "source_curve1": "LowerWire",
-    "source_curve2": "UpperWire",
-    "status": "ok"
-  },
-  "reference": "FreeCADCmd oracle from part-ruled-surface-wire-wire.json; objects: Part::RegularPolygon, Part::RegularPolygon, Part::RuledSurface",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 12,
-    "faces": 4,
-    "vertices": 8
-  },
-  "volume": 10.5625
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          2.0000001,
+          2.0000001,
+          3.0000001
+        ],
+        "min": [
+          -2.0000001,
+          -2.0000001000000003,
+          -1e-07
+        ]
+      },
+      "object": "RuledSurface",
+      "object_fields": {
+        "feature": "part_ruled_surface",
+        "orientation": "Automatic",
+        "shape": "occt_shell",
+        "source_curve1": "LowerWire",
+        "source_curve2": "UpperWire",
+        "status": "ok"
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 4,
+        "vertices": 8
+      },
+      "volume": 10.5625
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:f67005e86ca39a54b517a6f4543290e733b137ae9734c4c5a4a45afc3ab48efd",
+    "objects": {
+      "RuledSurface": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1adce0f0f31403310f5f63464d0f926703c14402c4c3d1c9d2f8173cb4df6550",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

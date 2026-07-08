@@ -1,25 +1,27 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DatumCSTangentFaceVertex": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumCSTranslateVertexOffset",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
-        "map_mode": "TangentPlane",
+        "map_mode": "Translate",
         "origin": [
-          2.0,
-          1.0,
-          0.0
+          3.0,
+          5.0,
+          7.0
         ],
         "status": "ok",
         "x_axis": [
-          -1.0,
+          1.0,
           0.0,
           0.0
         ],
         "y_axis": [
           0.0,
-          -1.0,
+          1.0,
           0.0
         ],
         "z_axis": [
@@ -29,91 +31,8 @@
         ]
       }
     },
-    "DatumCSTangentVertexFace": {
-      "object_fields": {
-        "attached": true,
-        "datum": "coordinate_system",
-        "map_mode": "TangentPlane",
-        "origin": [
-          2.0,
-          1.0,
-          3.0
-        ],
-        "status": "ok",
-        "x_axis": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "y_axis": [
-          0.0,
-          -1.0,
-          0.0
-        ],
-        "z_axis": [
-          0.0,
-          0.0,
-          1.0
-        ]
-      }
-    },
-    "DatumCSThreePointsEdgeVertex": {
-      "object_fields": {
-        "attached": true,
-        "datum": "coordinate_system",
-        "map_mode": "ThreePointsPlane",
-        "origin": [
-          1.3333333333333335,
-          2.666666666666667,
-          1.3333333333333333
-        ],
-        "status": "ok",
-        "x_axis": [
-          -0.7071067811865477,
-          0.7071067811865477,
-          6.705405824221068e-17
-        ],
-        "y_axis": [
-          -4.854193011101215e-17,
-          -1.1102230246251565e-16,
-          1.0000000000000002
-        ],
-        "z_axis": [
-          0.7071067811865477,
-          0.7071067811865477,
-          1.1102230246251565e-16
-        ]
-      }
-    },
-    "DatumCSThreePointsNormal": {
-      "object_fields": {
-        "attached": true,
-        "datum": "coordinate_system",
-        "map_mode": "ThreePointsNormal",
-        "origin": [
-          0.0,
-          -4.440892098500627e-16,
-          -4.440892098500627e-16
-        ],
-        "status": "ok",
-        "x_axis": [
-          1.0000000000000002,
-          0.0,
-          0.0
-        ],
-        "y_axis": [
-          0.0,
-          -0.5547001962252294,
-          0.8320502943378436
-        ],
-        "z_axis": [
-          0.0,
-          -0.8320502943378436,
-          -0.5547001962252294
-        ]
-      }
-    },
-    "DatumCSThreePointsVertices": {
+    {
+      "object": "DatumCSThreePointsVertices",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
@@ -141,25 +60,113 @@
         ]
       }
     },
-    "DatumCSTranslateVertexOffset": {
+    {
+      "object": "DatumCSThreePointsEdgeVertex",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
-        "map_mode": "Translate",
+        "map_mode": "ThreePointsPlane",
         "origin": [
-          3.0,
-          5.0,
-          7.0
+          1.3333333333333335,
+          2.666666666666667,
+          1.3333333333333333
         ],
         "status": "ok",
         "x_axis": [
-          1.0,
+          -0.7071067811865477,
+          0.7071067811865477,
+          6.705405824221068e-17
+        ],
+        "y_axis": [
+          -4.854193011101215e-17,
+          -1.1102230246251565e-16,
+          1.0000000000000002
+        ],
+        "z_axis": [
+          0.7071067811865477,
+          0.7071067811865477,
+          1.1102230246251565e-16
+        ]
+      }
+    },
+    {
+      "object": "DatumCSThreePointsNormal",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "ThreePointsNormal",
+        "origin": [
+          0.0,
+          -4.440892098500627e-16,
+          -4.440892098500627e-16
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0000000000000002,
           0.0,
           0.0
         ],
         "y_axis": [
           0.0,
+          -0.5547001962252294,
+          0.8320502943378436
+        ],
+        "z_axis": [
+          0.0,
+          -0.8320502943378436,
+          -0.5547001962252294
+        ]
+      }
+    },
+    {
+      "object": "DatumCSTangentFaceVertex",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
+        "origin": [
+          2.0,
           1.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSTangentVertexFace",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
+        "origin": [
+          2.0,
+          1.0,
+          3.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          -1.0,
           0.0
         ],
         "z_axis": [
@@ -169,7 +176,88 @@
         ]
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-datum-3d-plane-modes.json; objects: Part::Vertex, Part::Vertex, Part::Vertex, Part::Vertex, Part::Line, Part::Plane, Part::Vertex, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:7fe3770f97854fe8fb54ab37befa0dbe7e635b58e15fca4a3ba1dcf76a9d41c8",
+    "objects": {
+      "DatumCSTangentFaceVertex": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:86a05345eaa428683540759cd569d0dd50849c17d1cdf715e93334acec3d6474",
+        "subshapes": {}
+      },
+      "DatumCSTangentVertexFace": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0db9b195aa2b7cac2d0d36bbcefd0e4d97787d9c36b5c8c12dd187bb95fc577e",
+        "subshapes": {}
+      },
+      "DatumCSThreePointsEdgeVertex": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e472c3a4eb309b870b4755020d6a8a8a6cdfd470c52a923b8c5cc1eec5fdc649",
+        "subshapes": {}
+      },
+      "DatumCSThreePointsNormal": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:429055ad402bc0fd6cc7e53fc5d336f73c5615e27f893fc2d10608d161c497b2",
+        "subshapes": {}
+      },
+      "DatumCSThreePointsVertices": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:57b11a493a315ffb955663b7f843e19dc48567a4bb71b4d087744e7a4b8a3dde",
+        "subshapes": {}
+      },
+      "DatumCSTranslateVertexOffset": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:45f61a34b773c6e907f3a757bf00094b27b8765d180417d990f1295afc996d8c",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

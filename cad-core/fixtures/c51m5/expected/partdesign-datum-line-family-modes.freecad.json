@@ -1,43 +1,28 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DatumLineIntersection": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumLineTwoPointVertices",
       "object_fields": {
         "attached": true,
         "base": [
-          2.0,
+          0.0,
           0.0,
           0.0
         ],
         "datum": "line",
         "direction": [
-          0.0,
-          1.0,
-          -2.220446049250313e-16
+          0.8944271909999162,
+          0.44721359549995804,
+          2.7755575615628914e-16
         ],
-        "map_mode": "IntersectionLine",
+        "map_mode": "TwoPointLine",
         "status": "ok"
       }
     },
-    "DatumLineProximity": {
-      "object_fields": {
-        "attached": true,
-        "base": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "datum": "line",
-        "direction": [
-          0.0,
-          0.0,
-          1.0
-        ],
-        "map_mode": "ProximityLine",
-        "status": "ok"
-      }
-    },
-    "DatumLineTwoPointEdge": {
+    {
+      "object": "DatumLineTwoPointEdge",
       "object_fields": {
         "attached": true,
         "base": [
@@ -55,25 +40,102 @@
         "status": "ok"
       }
     },
-    "DatumLineTwoPointVertices": {
+    {
+      "object": "DatumLineIntersection",
       "object_fields": {
         "attached": true,
         "base": [
-          0.0,
+          2.0,
           0.0,
           0.0
         ],
         "datum": "line",
         "direction": [
-          0.8944271909999162,
-          0.44721359549995804,
-          2.7755575615628914e-16
+          0.0,
+          1.0,
+          -2.220446049250313e-16
         ],
-        "map_mode": "TwoPointLine",
+        "map_mode": "IntersectionLine",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineProximity",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "ProximityLine",
         "status": "ok"
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-datum-line-family-modes.json; objects: Part::Vertex, Part::Vertex, Part::Line, Part::Plane, Part::Plane, Part::Vertex, Part::Vertex, PartDesign::Line, PartDesign::Line, PartDesign::Line, PartDesign::Line",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:426bc9db84994cad2b83660d8197e8bb84df46fd272f88a9a34fdf4cdd1bbd38",
+    "objects": {
+      "DatumLineIntersection": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1061e653427d0346f51387a72bb5947af211e08fd9af4ca2d504c1ea4327ad9b",
+        "subshapes": {}
+      },
+      "DatumLineProximity": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7e251fddb69094203b3e4ecc2cec36a6cc0c598e9d6b05065227d14821034134",
+        "subshapes": {}
+      },
+      "DatumLineTwoPointEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:91cab91b4920ff89e62ecb648763f0d6f308c1297627108a79c48c192eb526fb",
+        "subshapes": {}
+      },
+      "DatumLineTwoPointVertices": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:31fdc09c17483f9a9438e155d86d4eb06c167dcc10dab4a206d6275d63269261",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

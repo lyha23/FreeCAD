@@ -1,29 +1,55 @@
 {
-  "bbox": {
-    "max": [
-      5.0,
-      3.0,
-      4.0
-    ],
-    "min": [
-      5.0,
-      0.0,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "BoxLink",
-  "object_fields": {
-    "link": "app_link",
-    "linked_object": "Box",
-    "shape": "occt_face"
-  },
-  "reference": "FreeCADCmd oracle from app-link-label-qualified-sublist.json; objects: Part::Box, App::Link",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 4,
-    "faces": 1,
-    "vertices": 4
-  },
-  "volume": 0.0
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          5.0,
+          3.0,
+          4.0
+        ],
+        "min": [
+          5.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object": "BoxLink",
+      "object_fields": {
+        "link": "app_link",
+        "linked_object": "Box",
+        "shape": "occt_face"
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:0506fd4dfa4e3fce9e25e44b12217eae71fad3cf3aa2696fd8569f6418805782",
+    "objects": {
+      "BoxLink": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8ce5e6dc5840a92f35a61a2d08fd6f2f5d4c18ff3e7f5c5db10338ea8dad09d6",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

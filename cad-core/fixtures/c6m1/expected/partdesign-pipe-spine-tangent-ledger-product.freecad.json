@@ -1,36 +1,62 @@
 {
-  "bbox": {
-    "max": [
-      0.25,
-      0.2500000000000002,
-      1.0
-    ],
-    "min": [
-      -0.25,
-      -0.25,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "AdditivePipeSpineTangentProduct",
-  "object_fields": {
-    "add_sub": "add",
-    "feature": "partdesign_pipe",
-    "mode": "Standard",
-    "shape": "occt_solid",
-    "source_profile": "SketchPipeProfile",
-    "spine": "SketchPipeSpine",
-    "status": "ok",
-    "topo_naming_history": "maker_history:partdesign_pipe",
-    "transformation": "Constant",
-    "transition": "Transformed"
-  },
-  "reference": "FreeCADCmd oracle from partdesign-pipe-spine-tangent-ledger-product.json; objects: Sketcher::SketchObject, Sketcher::SketchObject, PartDesign::AdditivePipe",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 12,
-    "faces": 6,
-    "vertices": 8
-  },
-  "volume": 0.24999999999999994
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          0.25,
+          0.2500000000000002,
+          1.0
+        ],
+        "min": [
+          -0.25,
+          -0.25,
+          0.0
+        ]
+      },
+      "object": "AdditivePipeSpineTangentProduct",
+      "object_fields": {
+        "add_sub": "add",
+        "feature": "partdesign_pipe",
+        "mode": "Standard",
+        "shape": "occt_solid",
+        "source_profile": "SketchPipeProfile",
+        "spine": "SketchPipeSpine",
+        "status": "ok",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "transformation": "Constant",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 0.24999999999999994
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:0955fbbe4bfb2c6020cd8baa6e78e322f7220f715a33b7c06cd7e17dc4a57587",
+    "objects": {
+      "AdditivePipeSpineTangentProduct": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:f24df158735cbb8d642b978c28a730ee0ae3fe17bc1b40551d092aca7196d606",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

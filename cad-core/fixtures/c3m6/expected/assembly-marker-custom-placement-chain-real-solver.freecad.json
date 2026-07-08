@@ -1,457 +1,474 @@
 {
-  "backendGap": {
-    "delete_condition": "S5 implements FreeCAD handleOneSideOfJoint object-global to part-local marker resolution and focused expected parity passes for this fixture.",
-    "ids": [
-      "MP-BLOCK-002",
-      "MP-BLOCK-003",
-      "MP-BLOCK-006"
-    ]
-  },
-  "bbox": {
-    "max": [
-      3.5280680277502947,
-      4.732050807568878,
-      2.5
-    ],
-    "min": [
-      1.1102230246251565e-16,
-      1.1738287237342468,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": "MP-BLOCK-002/003/006: S4 native marker oracle is checked in, but current cad-core S3 resolver still withholds subshape markerPlacement and the real Ondsel path falls back to identity markers; delete this in S5 after resolver parity makes placement_updates match this native expected.",
-  "native_marker_oracle": {
-    "requires_cad_core_marker_parity": true,
-    "solver_joints": [
-      {
-        "jcs_swapped_for_solver": false,
-        "joint_type": "Fixed",
-        "native_reference1": {
-          "connector_placement": {
-            "Base": [
-              0.25,
-              0.5,
-              0.75
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.3826834323650898,
-              0.9238795325112867
-            ]
-          },
-          "frame": "part_local",
-          "jcs_global_placement": {
-            "Base": [
-              0.9665063509461097,
-              2.558012701892219,
-              0.75
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.6087614290087207,
-              0.7933533402912352
-            ]
-          },
-          "marker_placement": {
-            "Base": [
-              0.24999999999999978,
-              0.5,
-              0.75
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.38268343236508984,
-              0.9238795325112867
-            ]
-          },
-          "moving_part": "ComponentA",
-          "object_global_placement": {
-            "Base": [
-              1.0,
-              2.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.25881904510252074,
-              0.9659258262890683
-            ]
-          },
-          "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
-          "part_global_placement": {
-            "Base": [
-              1.0,
-              2.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.25881904510252074,
-              0.9659258262890683
-            ]
-          },
-          "reference": {
-            "object": "ComponentA",
-            "subnames": [
-              "Face1"
-            ]
-          },
-          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
-          "status": "resolved_native_handle_one_side",
-          "subshape_reference": true
-        },
-        "native_reference2": {
-          "connector_placement": {
-            "Base": [
-              0.5,
-              -0.25,
-              0.25
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.25881904510252074,
-              0.9659258262890683
-            ]
-          },
-          "frame": "part_local",
-          "jcs_global_placement": {
-            "Base": [
-              5.1767766952966365,
-              -1.5303300858899107,
-              1.25
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.6087614290087207,
-              0.7933533402912352
-            ]
-          },
-          "marker_placement": {
-            "Base": [
-              0.5,
-              -0.25,
-              0.25
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.2588190451025208,
-              0.9659258262890683
-            ]
-          },
-          "moving_part": "ComponentB",
-          "object_global_placement": {
-            "Base": [
-              5.0,
-              -1.0,
-              1.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.3826834323650898,
-              0.9238795325112867
-            ]
-          },
-          "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
-          "part_global_placement": {
-            "Base": [
-              5.0,
-              -1.0,
-              1.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.3826834323650898,
-              0.9238795325112867
-            ]
-          },
-          "reference": {
-            "object": "ComponentB",
-            "subnames": [
-              "Face1"
-            ]
-          },
-          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
-          "status": "resolved_native_handle_one_side",
-          "subshape_reference": true
-        },
-        "object": "FixedJoint",
-        "solver_reference1": {
-          "connector_placement": {
-            "Base": [
-              0.25,
-              0.5,
-              0.75
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.3826834323650898,
-              0.9238795325112867
-            ]
-          },
-          "frame": "part_local",
-          "jcs_global_placement": {
-            "Base": [
-              0.9665063509461097,
-              2.558012701892219,
-              0.75
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.6087614290087207,
-              0.7933533402912352
-            ]
-          },
-          "marker_placement": {
-            "Base": [
-              0.24999999999999978,
-              0.5,
-              0.75
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.38268343236508984,
-              0.9238795325112867
-            ]
-          },
-          "moving_part": "ComponentA",
-          "object_global_placement": {
-            "Base": [
-              1.0,
-              2.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.25881904510252074,
-              0.9659258262890683
-            ]
-          },
-          "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
-          "part_global_placement": {
-            "Base": [
-              1.0,
-              2.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.25881904510252074,
-              0.9659258262890683
-            ]
-          },
-          "reference": {
-            "object": "ComponentA",
-            "subnames": [
-              "Face1"
-            ]
-          },
-          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
-          "status": "resolved_native_handle_one_side",
-          "subshape_reference": true
-        },
-        "solver_reference2": {
-          "connector_placement": {
-            "Base": [
-              0.5,
-              -0.25,
-              0.25
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.25881904510252074,
-              0.9659258262890683
-            ]
-          },
-          "frame": "part_local",
-          "jcs_global_placement": {
-            "Base": [
-              5.1767766952966365,
-              -1.5303300858899107,
-              1.25
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.6087614290087207,
-              0.7933533402912352
-            ]
-          },
-          "marker_placement": {
-            "Base": [
-              0.5,
-              -0.25,
-              0.25
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.2588190451025208,
-              0.9659258262890683
-            ]
-          },
-          "moving_part": "ComponentB",
-          "object_global_placement": {
-            "Base": [
-              5.0,
-              -1.0,
-              1.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.3826834323650898,
-              0.9238795325112867
-            ]
-          },
-          "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
-          "part_global_placement": {
-            "Base": [
-              5.0,
-              -1.0,
-              1.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.3826834323650898,
-              0.9238795325112867
-            ]
-          },
-          "reference": {
-            "object": "ComponentB",
-            "subnames": [
-              "Face1"
-            ]
-          },
-          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
-          "status": "resolved_native_handle_one_side",
-          "subshape_reference": true
-        }
-      }
-    ],
-    "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint(); /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp::getJointCurrentValue()"
-  },
-  "native_solver": {
-    "return_code": 0
-  },
-  "object": "Assembly",
-  "object_fields": {
-    "assembly": "object",
-    "group": [
-      "ComponentA",
-      "ComponentB",
-      "Joints"
-    ],
-    "joint_groups": [
-      "Joints"
-    ],
-    "joints": [
-      "GroundedJoint",
-      "FixedJoint"
-    ],
-    "solve": "solved"
-  },
-  "reference": "FreeCADCmd oracle from assembly-marker-custom-placement-chain-real-solver.json; objects: Part::Box, Part::Box, Assembly::AssemblyLink, Assembly::AssemblyLink, App::FeaturePython, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "solver_adapter": {
-    "grounded_joints": [
-      "GroundedJoint"
-    ],
-    "joints": [
-      "FixedJoint"
-    ],
-    "mode": "real_ondsel_solver",
-    "placement_updates": [
-      {
-        "action": "assembly_set_placement",
-        "assembly": "Assembly",
-        "joint": "OndselSolver",
-        "joint_type": "solver_result",
-        "object": "ComponentB",
-        "objectId": 4,
-        "properties": {
-          "Placement": {
-            "Base": [
-              1.0785782849671162,
-              3.1056803763123835,
-              0.49999999999999994
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              -0.6087614290087205,
-              0.7933533402912353
-            ]
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          3.5280680277502947,
+          4.732050807568878,
+          2.5
+        ],
+        "min": [
+          1.1102230246251565e-16,
+          1.1738287237342468,
+          0.0
+        ]
+      },
+      "native_marker_oracle": {
+        "requires_cad_core_marker_parity": true,
+        "solver_joints": [
+          {
+            "jcs_swapped_for_solver": false,
+            "joint_type": "Fixed",
+            "native_reference1": {
+              "connector_placement": {
+                "Base": [
+                  0.25,
+                  0.5,
+                  0.75
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.3826834323650898,
+                  0.9238795325112867
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  0.9665063509461097,
+                  2.558012701892219,
+                  0.75
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.6087614290087207,
+                  0.7933533402912352
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.24999999999999978,
+                  0.5,
+                  0.75
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.38268343236508984,
+                  0.9238795325112867
+                ]
+              },
+              "moving_part": "ComponentA",
+              "object_global_placement": {
+                "Base": [
+                  1.0,
+                  2.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.25881904510252074,
+                  0.9659258262890683
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  1.0,
+                  2.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.25881904510252074,
+                  0.9659258262890683
+                ]
+              },
+              "reference": {
+                "object": "ComponentA",
+                "subnames": [
+                  "Face1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            },
+            "native_reference2": {
+              "connector_placement": {
+                "Base": [
+                  0.5,
+                  -0.25,
+                  0.25
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.25881904510252074,
+                  0.9659258262890683
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  5.1767766952966365,
+                  -1.5303300858899107,
+                  1.25
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.6087614290087207,
+                  0.7933533402912352
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.5,
+                  -0.25,
+                  0.25
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.2588190451025208,
+                  0.9659258262890683
+                ]
+              },
+              "moving_part": "ComponentB",
+              "object_global_placement": {
+                "Base": [
+                  5.0,
+                  -1.0,
+                  1.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.3826834323650898,
+                  0.9238795325112867
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  5.0,
+                  -1.0,
+                  1.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.3826834323650898,
+                  0.9238795325112867
+                ]
+              },
+              "reference": {
+                "object": "ComponentB",
+                "subnames": [
+                  "Face1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            },
+            "object": "FixedJoint",
+            "solver_reference1": {
+              "connector_placement": {
+                "Base": [
+                  0.25,
+                  0.5,
+                  0.75
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.3826834323650898,
+                  0.9238795325112867
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  0.9665063509461097,
+                  2.558012701892219,
+                  0.75
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.6087614290087207,
+                  0.7933533402912352
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.24999999999999978,
+                  0.5,
+                  0.75
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.38268343236508984,
+                  0.9238795325112867
+                ]
+              },
+              "moving_part": "ComponentA",
+              "object_global_placement": {
+                "Base": [
+                  1.0,
+                  2.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.25881904510252074,
+                  0.9659258262890683
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  1.0,
+                  2.0,
+                  0.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  0.25881904510252074,
+                  0.9659258262890683
+                ]
+              },
+              "reference": {
+                "object": "ComponentA",
+                "subnames": [
+                  "Face1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            },
+            "solver_reference2": {
+              "connector_placement": {
+                "Base": [
+                  0.5,
+                  -0.25,
+                  0.25
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.25881904510252074,
+                  0.9659258262890683
+                ]
+              },
+              "frame": "part_local",
+              "jcs_global_placement": {
+                "Base": [
+                  5.1767766952966365,
+                  -1.5303300858899107,
+                  1.25
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.6087614290087207,
+                  0.7933533402912352
+                ]
+              },
+              "marker_placement": {
+                "Base": [
+                  0.5,
+                  -0.25,
+                  0.25
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.2588190451025208,
+                  0.9659258262890683
+                ]
+              },
+              "moving_part": "ComponentB",
+              "object_global_placement": {
+                "Base": [
+                  5.0,
+                  -1.0,
+                  1.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.3826834323650898,
+                  0.9238795325112867
+                ]
+              },
+              "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+              "part_global_placement": {
+                "Base": [
+                  5.0,
+                  -1.0,
+                  1.0
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.3826834323650898,
+                  0.9238795325112867
+                ]
+              },
+              "reference": {
+                "object": "ComponentB",
+                "subnames": [
+                  "Face1"
+                ]
+              },
+              "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+              "status": "resolved_native_handle_one_side",
+              "subshape_reference": true
+            }
           }
+        ],
+        "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint(); /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyUtils.cpp::getJointCurrentValue()"
+      },
+      "native_solver": {
+        "return_code": 0
+      },
+      "object": "Assembly",
+      "object_fields": {
+        "assembly": "object",
+        "group": [
+          "ComponentA",
+          "ComponentB",
+          "Joints"
+        ],
+        "joint_groups": [
+          "Joints"
+        ],
+        "joints": [
+          "GroundedJoint",
+          "FixedJoint"
+        ],
+        "solve": "solved"
+      },
+      "solver_adapter": {
+        "grounded_joints": [
+          "GroundedJoint"
+        ],
+        "joints": [
+          "FixedJoint"
+        ],
+        "mode": "real_ondsel_solver",
+        "placement_updates": [
+          {
+            "action": "assembly_set_placement",
+            "assembly": "Assembly",
+            "joint": "OndselSolver",
+            "joint_type": "solver_result",
+            "object": "ComponentB",
+            "objectId": 4,
+            "properties": {
+              "Placement": {
+                "Base": [
+                  1.0785782849671162,
+                  3.1056803763123835,
+                  0.49999999999999994
+                ],
+                "PropertyType": "App::PropertyPlacement",
+                "Rotation": [
+                  0.0,
+                  0.0,
+                  -0.6087614290087205,
+                  0.7933533402912353
+                ]
+              }
+            },
+            "reason": "assembly_solver_placement_writeback",
+            "typeId": "Assembly::AssemblyLink"
+          }
+        ],
+        "solver_joints": [
+          {
+            "joint_type": "Fixed",
+            "object": "FixedJoint",
+            "reference1": {
+              "object": "ComponentA",
+              "subnames": [
+                "Face1"
+              ]
+            },
+            "reference2": {
+              "object": "ComponentB",
+              "subnames": [
+                "Face1"
+              ]
+            },
+            "suppressed": false
+          }
+        ],
+        "status": "solved",
+        "unsupported_joints": []
+      },
+      "topology_counts": {
+        "edges": 24,
+        "faces": 12,
+        "vertices": 16
+      },
+      "volume": 16.000000000000004
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:03bd2ebd74ed4d524b14f862ca27ca6f71a1616e8a987d7fdc0093e0eaf92f5b",
+    "objects": {
+      "Assembly": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
         },
-        "reason": "assembly_solver_placement_writeback",
-        "typeId": "Assembly::AssemblyLink"
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fdfcf2ddfe20d2ab70c41a26ee0a8c6d1894c46bfd012d257c4433fb141f659a",
+        "subshapes": {}
       }
-    ],
-    "solver_joints": [
-      {
-        "joint_type": "Fixed",
-        "object": "FixedJoint",
-        "reference1": {
-          "object": "ComponentA",
-          "subnames": [
-            "Face1"
-          ]
-        },
-        "reference2": {
-          "object": "ComponentB",
-          "subnames": [
-            "Face1"
-          ]
-        },
-        "suppressed": false
-      }
-    ],
-    "status": "solved",
-    "unsupported_joints": []
-  },
-  "topology_counts": {
-    "edges": 24,
-    "faces": 12,
-    "vertices": 16
-  },
-  "volume": 16.000000000000004
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

@@ -1,25 +1,2196 @@
 {
-  "bbox": {
-    "max": [
-      6.0,
-      4.0,
-      4.0
-    ],
-    "min": [
-      -2.0,
-      0.0,
-      -2.0
-    ]
-  },
-  "bbox_delta": 0.04,
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "Body",
-  "reference": "FreeCADCmd oracle from partdesign-revolution-featurefirst-body.json; objects: Sketcher::SketchObject, PartDesign::Pad, Sketcher::SketchObject, PartDesign::Revolution, PartDesign::Body",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 24,
-    "faces": 11,
-    "vertices": 16
-  },
-  "volume": 110.13716694115408
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          6.0,
+          4.0,
+          4.0
+        ],
+        "min": [
+          -2.0,
+          0.0,
+          -2.0
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#26:1;:M;FUS;:H*:*,F",
+          "fullSubname": "Body.Revolution.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#26:1;:M;FUS;:H-9cc:7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "Revolution.#26:1;:M;FUS;:H-9cc:7,F",
+          "subname": "Revolution.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#26:4;:M;FUS;:H*:*,F",
+          "fullSubname": "Body.Revolution.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#26:4;:M;FUS;:H-9cc:7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "Revolution.#26:4;:M;FUS;:H-9cc:7,F",
+          "subname": "Revolution.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#26:2;:M;FUS;:H*:*,F",
+          "fullSubname": "Body.Revolution.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#26:2;:M;FUS;:H-9cc:7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "Revolution.#26:2;:M;FUS;:H-9cc:7,F",
+          "subname": "Revolution.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#14:1;:M;FUS;:H*:*,F",
+          "fullSubname": "Body.Revolution.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#14:1;:M;FUS;:H9ca:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "Revolution.#14:1;:M;FUS;:H9ca:7,F",
+          "subname": "Revolution.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#34:1;:H*,F",
+          "fullSubname": "Body.Revolution.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#34:1;:H-9cc,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "Revolution.#34:1;:H-9cc,F",
+          "subname": "Revolution.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#26:3;:M;FUS;:H*:*,F",
+          "fullSubname": "Body.Revolution.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#26:3;:M;FUS;:H-9cc:7,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "Revolution.#26:3;:M;FUS;:H-9cc:7,F",
+          "subname": "Revolution.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#16:4;:H*,F",
+          "fullSubname": "Body.Revolution.Face7",
+          "id": "Body:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#16:4;:H9ca,F",
+          "resolvedIndexed": "Face7",
+          "stableSubname": "Revolution.#16:4;:H9ca,F",
+          "subname": "Revolution.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#16:3;:H*,F",
+          "fullSubname": "Body.Revolution.Face8",
+          "id": "Body:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#16:3;:H9ca,F",
+          "resolvedIndexed": "Face8",
+          "stableSubname": "Revolution.#16:3;:H9ca,F",
+          "subname": "Revolution.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#16:1;:H*,F",
+          "fullSubname": "Body.Revolution.Face9",
+          "id": "Body:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#16:1;:H9ca,F",
+          "resolvedIndexed": "Face9",
+          "stableSubname": "Revolution.#16:1;:H9ca,F",
+          "subname": "Revolution.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#16:2;:H*,F",
+          "fullSubname": "Body.Revolution.Face10",
+          "id": "Body:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#16:2;:H9ca,F",
+          "resolvedIndexed": "Face10",
+          "stableSubname": "Revolution.#16:2;:H9ca,F",
+          "subname": "Revolution.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#3d:1;:H*,F",
+          "fullSubname": "Body.Revolution.Face11",
+          "id": "Body:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "rawFreecadMappedName": "Revolution.#3d:1;:H9ca,F",
+          "resolvedIndexed": "Face11",
+          "stableSubname": "Revolution.#3d:1;:H9ca,F",
+          "subname": "Revolution.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#28:2;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#28:2;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "Revolution.#28:2;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#29:4;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#29:4;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "Revolution.#29:4;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#1d:1;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#1d:1;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "Revolution.#1d:1;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#32:1;:H*,E",
+          "fullSubname": "Body.Revolution.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#32:1;:H-9cc,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "Revolution.#32:1;:H-9cc,E",
+          "subname": "Revolution.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#2b:8;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#2b:8;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "Revolution.#2b:8;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#1d:4;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#1d:4;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "Revolution.#1d:4;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#32:4;:H*,E",
+          "fullSubname": "Body.Revolution.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#32:4;:H-9cc,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "Revolution.#32:4;:H-9cc,E",
+          "subname": "Revolution.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#2a:6;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#2a:6;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "Revolution.#2a:6;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#1d:2;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#1d:2;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "Revolution.#1d:2;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#32:2;:H*,E",
+          "fullSubname": "Body.Revolution.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#32:2;:H-9cc,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "Revolution.#32:2;:H-9cc,E",
+          "subname": "Revolution.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#d:4;:H*,E",
+          "fullSubname": "Body.Revolution.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#d:4;:H9ca,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "Revolution.#d:4;:H9ca,E",
+          "subname": "Revolution.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#d:3;:H*,E",
+          "fullSubname": "Body.Revolution.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#d:3;:H9ca,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "Revolution.#d:3;:H9ca,E",
+          "subname": "Revolution.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#d:1;:H*,E",
+          "fullSubname": "Body.Revolution.Edge13",
+          "id": "Body:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#d:1;:H9ca,E",
+          "resolvedIndexed": "Edge13",
+          "stableSubname": "Revolution.#d:1;:H9ca,E",
+          "subname": "Revolution.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#d:2;:H*,E",
+          "fullSubname": "Body.Revolution.Edge14",
+          "id": "Body:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#d:2;:H9ca,E",
+          "resolvedIndexed": "Edge14",
+          "stableSubname": "Revolution.#d:2;:H9ca,E",
+          "subname": "Revolution.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#1d:3;:M;FUS;:H*:*,E",
+          "fullSubname": "Body.Revolution.Edge15",
+          "id": "Body:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#1d:3;:M;FUS;:H-9cc:7,E",
+          "resolvedIndexed": "Edge15",
+          "stableSubname": "Revolution.#1d:3;:M;FUS;:H-9cc:7,E",
+          "subname": "Revolution.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#32:3;:H*,E",
+          "fullSubname": "Body.Revolution.Edge16",
+          "id": "Body:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#32:3;:H-9cc,E",
+          "resolvedIndexed": "Edge16",
+          "stableSubname": "Revolution.#32:3;:H-9cc,E",
+          "subname": "Revolution.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#18:2;:H*,E",
+          "fullSubname": "Body.Revolution.Edge17",
+          "id": "Body:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#18:2;:H9ca,E",
+          "resolvedIndexed": "Edge17",
+          "stableSubname": "Revolution.#18:2;:H9ca,E",
+          "subname": "Revolution.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#19:1;:H*,E",
+          "fullSubname": "Body.Revolution.Edge18",
+          "id": "Body:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#19:1;:H9ca,E",
+          "resolvedIndexed": "Edge18",
+          "stableSubname": "Revolution.#19:1;:H9ca,E",
+          "subname": "Revolution.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#3b:4;:H*,E",
+          "fullSubname": "Body.Revolution.Edge19",
+          "id": "Body:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#3b:4;:H9ca,E",
+          "resolvedIndexed": "Edge19",
+          "stableSubname": "Revolution.#3b:4;:H9ca,E",
+          "subname": "Revolution.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#1a:2;:H*,E",
+          "fullSubname": "Body.Revolution.Edge20",
+          "id": "Body:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#1a:2;:H9ca,E",
+          "resolvedIndexed": "Edge20",
+          "stableSubname": "Revolution.#1a:2;:H9ca,E",
+          "subname": "Revolution.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#3b:3;:H*,E",
+          "fullSubname": "Body.Revolution.Edge21",
+          "id": "Body:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#3b:3;:H9ca,E",
+          "resolvedIndexed": "Edge21",
+          "stableSubname": "Revolution.#3b:3;:H9ca,E",
+          "subname": "Revolution.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#1b:2;:H*,E",
+          "fullSubname": "Body.Revolution.Edge22",
+          "id": "Body:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#1b:2;:H9ca,E",
+          "resolvedIndexed": "Edge22",
+          "stableSubname": "Revolution.#1b:2;:H9ca,E",
+          "subname": "Revolution.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#3b:1;:H*,E",
+          "fullSubname": "Body.Revolution.Edge23",
+          "id": "Body:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#3b:1;:H9ca,E",
+          "resolvedIndexed": "Edge23",
+          "stableSubname": "Revolution.#3b:1;:H9ca,E",
+          "subname": "Revolution.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#3b:2;:H*,E",
+          "fullSubname": "Body.Revolution.Edge24",
+          "id": "Body:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Revolution.#3b:2;:H9ca,E",
+          "resolvedIndexed": "Edge24",
+          "stableSubname": "Revolution.#3b:2;:H9ca,E",
+          "subname": "Revolution.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#1f;:M;FUS;:H*:*,V",
+          "fullSubname": "Body.Revolution.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#1f;:M;FUS;:H-9cc:7,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "Revolution.#1f;:M;FUS;:H-9cc:7,V",
+          "subname": "Revolution.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#2d:2;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#2d:2;:H-9cc,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "Revolution.#2d:2;:H-9cc,V",
+          "subname": "Revolution.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#20;:M;FUS;:H*:*,V",
+          "fullSubname": "Body.Revolution.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#20;:M;FUS;:H-9cc:7,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "Revolution.#20;:M;FUS;:H-9cc:7,V",
+          "subname": "Revolution.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#2e:4;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#2e:4;:H-9cc,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "Revolution.#2e:4;:H-9cc,V",
+          "subname": "Revolution.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#22;:M;FUS;:H*:*,V",
+          "fullSubname": "Body.Revolution.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#22;:M;FUS;:H-9cc:7,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "Revolution.#22;:M;FUS;:H-9cc:7,V",
+          "subname": "Revolution.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#30:8;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#30:8;:H-9cc,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "Revolution.#30:8;:H-9cc,V",
+          "subname": "Revolution.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#21;:M;FUS;:H*:*,V",
+          "fullSubname": "Body.Revolution.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#21;:M;FUS;:H-9cc:7,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "Revolution.#21;:M;FUS;:H-9cc:7,V",
+          "subname": "Revolution.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#2f:6;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#2f:6;:H-9cc,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "Revolution.#2f:6;:H-9cc,V",
+          "subname": "Revolution.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#f:2;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex9",
+          "id": "Body:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#f:2;:H9ca,V",
+          "resolvedIndexed": "Vertex9",
+          "stableSubname": "Revolution.#f:2;:H9ca,V",
+          "subname": "Revolution.Vertex9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#10:1;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex10",
+          "id": "Body:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#10:1;:H9ca,V",
+          "resolvedIndexed": "Vertex10",
+          "stableSubname": "Revolution.#10:1;:H9ca,V",
+          "subname": "Revolution.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#11:2;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex11",
+          "id": "Body:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#11:2;:H9ca,V",
+          "resolvedIndexed": "Vertex11",
+          "stableSubname": "Revolution.#11:2;:H9ca,V",
+          "subname": "Revolution.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#12:2;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex12",
+          "id": "Body:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#12:2;:H9ca,V",
+          "resolvedIndexed": "Vertex12",
+          "stableSubname": "Revolution.#12:2;:H9ca,V",
+          "subname": "Revolution.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#36:2;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex13",
+          "id": "Body:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#36:2;:H9ca,V",
+          "resolvedIndexed": "Vertex13",
+          "stableSubname": "Revolution.#36:2;:H9ca,V",
+          "subname": "Revolution.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#37:1;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex14",
+          "id": "Body:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#37:1;:H9ca,V",
+          "resolvedIndexed": "Vertex14",
+          "stableSubname": "Revolution.#37:1;:H9ca,V",
+          "subname": "Revolution.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#38:2;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex15",
+          "id": "Body:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#38:2;:H9ca,V",
+          "resolvedIndexed": "Vertex15",
+          "stableSubname": "Revolution.#38:2;:H9ca,V",
+          "subname": "Revolution.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Revolution.#39:2;:H*,V",
+          "fullSubname": "Body.Revolution.Vertex16",
+          "id": "Body:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "Revolution.#39:2;:H9ca,V",
+          "resolvedIndexed": "Vertex16",
+          "stableSubname": "Revolution.#39:2;:H9ca,V",
+          "subname": "Revolution.Vertex16"
+        }
+      ],
+      "topology_counts": {
+        "edges": 24,
+        "faces": 11,
+        "vertices": 16
+      },
+      "volume": 110.13716694115408
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:e9ce31d9982955e513336be7fc05cc5c64514fe59771e03395997787a2c992c4",
+    "objects": {
+      "Body": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Revolution.#10:1;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#10:1;:H*,V",
+                "raw": "Revolution.#10:1;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex10"
+              }
+            },
+            "Revolution.#11:2;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#11:2;:H*,V",
+                "raw": "Revolution.#11:2;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex11"
+              }
+            },
+            "Revolution.#12:2;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#12:2;:H*,V",
+                "raw": "Revolution.#12:2;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex12"
+              }
+            },
+            "Revolution.#14:1;:M;FUS;:H9ca:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#14:1;:M;FUS;:H*:*,F",
+                "raw": "Revolution.#14:1;:M;FUS;:H9ca:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face4"
+              }
+            },
+            "Revolution.#16:1;:H9ca,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#16:1;:H*,F",
+                "raw": "Revolution.#16:1;:H9ca,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face9"
+              }
+            },
+            "Revolution.#16:2;:H9ca,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#16:2;:H*,F",
+                "raw": "Revolution.#16:2;:H9ca,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face10"
+              }
+            },
+            "Revolution.#16:3;:H9ca,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#16:3;:H*,F",
+                "raw": "Revolution.#16:3;:H9ca,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face8"
+              }
+            },
+            "Revolution.#16:4;:H9ca,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#16:4;:H*,F",
+                "raw": "Revolution.#16:4;:H9ca,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face7"
+              }
+            },
+            "Revolution.#18:2;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#18:2;:H*,E",
+                "raw": "Revolution.#18:2;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge17"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge17"
+              }
+            },
+            "Revolution.#19:1;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#19:1;:H*,E",
+                "raw": "Revolution.#19:1;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge18"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge18"
+              }
+            },
+            "Revolution.#1a:2;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#1a:2;:H*,E",
+                "raw": "Revolution.#1a:2;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge20"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge20"
+              }
+            },
+            "Revolution.#1b:2;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#1b:2;:H*,E",
+                "raw": "Revolution.#1b:2;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge22"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge22"
+              }
+            },
+            "Revolution.#1d:1;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#1d:1;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#1d:1;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge3"
+              }
+            },
+            "Revolution.#1d:2;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#1d:2;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#1d:2;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge9"
+              }
+            },
+            "Revolution.#1d:3;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#1d:3;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#1d:3;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge15"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge15"
+              }
+            },
+            "Revolution.#1d:4;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#1d:4;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#1d:4;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge6"
+              }
+            },
+            "Revolution.#1f;:M;FUS;:H-9cc:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#1f;:M;FUS;:H*:*,V",
+                "raw": "Revolution.#1f;:M;FUS;:H-9cc:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex1"
+              }
+            },
+            "Revolution.#20;:M;FUS;:H-9cc:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#20;:M;FUS;:H*:*,V",
+                "raw": "Revolution.#20;:M;FUS;:H-9cc:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex3"
+              }
+            },
+            "Revolution.#21;:M;FUS;:H-9cc:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#21;:M;FUS;:H*:*,V",
+                "raw": "Revolution.#21;:M;FUS;:H-9cc:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex7"
+              }
+            },
+            "Revolution.#22;:M;FUS;:H-9cc:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#22;:M;FUS;:H*:*,V",
+                "raw": "Revolution.#22;:M;FUS;:H-9cc:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex5"
+              }
+            },
+            "Revolution.#26:1;:M;FUS;:H-9cc:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#26:1;:M;FUS;:H*:*,F",
+                "raw": "Revolution.#26:1;:M;FUS;:H-9cc:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face1"
+              }
+            },
+            "Revolution.#26:2;:M;FUS;:H-9cc:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#26:2;:M;FUS;:H*:*,F",
+                "raw": "Revolution.#26:2;:M;FUS;:H-9cc:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face3"
+              }
+            },
+            "Revolution.#26:3;:M;FUS;:H-9cc:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#26:3;:M;FUS;:H*:*,F",
+                "raw": "Revolution.#26:3;:M;FUS;:H-9cc:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face6"
+              }
+            },
+            "Revolution.#26:4;:M;FUS;:H-9cc:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#26:4;:M;FUS;:H*:*,F",
+                "raw": "Revolution.#26:4;:M;FUS;:H-9cc:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face2"
+              }
+            },
+            "Revolution.#28:2;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#28:2;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#28:2;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge1"
+              }
+            },
+            "Revolution.#29:4;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#29:4;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#29:4;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge2"
+              }
+            },
+            "Revolution.#2a:6;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#2a:6;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#2a:6;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge8"
+              }
+            },
+            "Revolution.#2b:8;:M;FUS;:H-9cc:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#2b:8;:M;FUS;:H*:*,E",
+                "raw": "Revolution.#2b:8;:M;FUS;:H-9cc:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge5"
+              }
+            },
+            "Revolution.#2d:2;:H-9cc,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#2d:2;:H*,V",
+                "raw": "Revolution.#2d:2;:H-9cc,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex2"
+              }
+            },
+            "Revolution.#2e:4;:H-9cc,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#2e:4;:H*,V",
+                "raw": "Revolution.#2e:4;:H-9cc,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex4"
+              }
+            },
+            "Revolution.#2f:6;:H-9cc,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#2f:6;:H*,V",
+                "raw": "Revolution.#2f:6;:H-9cc,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex8"
+              }
+            },
+            "Revolution.#30:8;:H-9cc,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#30:8;:H*,V",
+                "raw": "Revolution.#30:8;:H-9cc,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex6"
+              }
+            },
+            "Revolution.#32:1;:H-9cc,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#32:1;:H*,E",
+                "raw": "Revolution.#32:1;:H-9cc,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge4"
+              }
+            },
+            "Revolution.#32:2;:H-9cc,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#32:2;:H*,E",
+                "raw": "Revolution.#32:2;:H-9cc,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge10"
+              }
+            },
+            "Revolution.#32:3;:H-9cc,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#32:3;:H*,E",
+                "raw": "Revolution.#32:3;:H-9cc,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge16"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge16"
+              }
+            },
+            "Revolution.#32:4;:H-9cc,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#32:4;:H*,E",
+                "raw": "Revolution.#32:4;:H-9cc,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge7"
+              }
+            },
+            "Revolution.#34:1;:H-9cc,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#34:1;:H*,F",
+                "raw": "Revolution.#34:1;:H-9cc,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face5"
+              }
+            },
+            "Revolution.#36:2;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#36:2;:H*,V",
+                "raw": "Revolution.#36:2;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex13"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex13"
+              }
+            },
+            "Revolution.#37:1;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#37:1;:H*,V",
+                "raw": "Revolution.#37:1;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex14"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex14"
+              }
+            },
+            "Revolution.#38:2;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#38:2;:H*,V",
+                "raw": "Revolution.#38:2;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex15"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex15"
+              }
+            },
+            "Revolution.#39:2;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#39:2;:H*,V",
+                "raw": "Revolution.#39:2;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex16"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex16"
+              }
+            },
+            "Revolution.#3b:1;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#3b:1;:H*,E",
+                "raw": "Revolution.#3b:1;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge23"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge23"
+              }
+            },
+            "Revolution.#3b:2;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#3b:2;:H*,E",
+                "raw": "Revolution.#3b:2;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge24"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge24"
+              }
+            },
+            "Revolution.#3b:3;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#3b:3;:H*,E",
+                "raw": "Revolution.#3b:3;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge21"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge21"
+              }
+            },
+            "Revolution.#3b:4;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#3b:4;:H*,E",
+                "raw": "Revolution.#3b:4;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge19"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge19"
+              }
+            },
+            "Revolution.#3d:1;:H9ca,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#3d:1;:H*,F",
+                "raw": "Revolution.#3d:1;:H9ca,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Face11"
+              }
+            },
+            "Revolution.#d:1;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#d:1;:H*,E",
+                "raw": "Revolution.#d:1;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge13"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge13"
+              }
+            },
+            "Revolution.#d:2;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#d:2;:H*,E",
+                "raw": "Revolution.#d:2;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge14"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge14"
+              }
+            },
+            "Revolution.#d:3;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#d:3;:H*,E",
+                "raw": "Revolution.#d:3;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge12"
+              }
+            },
+            "Revolution.#d:4;:H9ca,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#d:4;:H*,E",
+                "raw": "Revolution.#d:4;:H9ca,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Edge11"
+              }
+            },
+            "Revolution.#f:2;:H9ca,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Revolution.#f:2;:H*,V",
+                "raw": "Revolution.#f:2;:H9ca,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Revolution.Vertex9"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:959c6584935d2f0d809e7343989ca436bca803fb74d484d71391fbca8b2561b5",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "Revolution.#28:2;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#28:2;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Revolution.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "Revolution.#32:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#32:2;:H-9cc,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Revolution.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "Revolution.#d:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#d:4;:H9ca,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Revolution.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "Revolution.#d:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#d:3;:H9ca,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Revolution.Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "Revolution.#d:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#d:1;:H9ca,E",
+            "resolvedIndexed": "Edge13",
+            "subname": "Revolution.Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "Revolution.#d:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#d:2;:H9ca,E",
+            "resolvedIndexed": "Edge14",
+            "subname": "Revolution.Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "Revolution.#1d:3;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#1d:3;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge15",
+            "subname": "Revolution.Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "Revolution.#32:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#32:3;:H-9cc,E",
+            "resolvedIndexed": "Edge16",
+            "subname": "Revolution.Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "Revolution.#18:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#18:2;:H9ca,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "Revolution.Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "Revolution.#19:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#19:1;:H9ca,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "Revolution.Edge18"
+          },
+          "Edge19": {
+            "canonicalFreecadMappedName": "Revolution.#3b:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#3b:4;:H9ca,E",
+            "resolvedIndexed": "Edge19",
+            "subname": "Revolution.Edge19"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "Revolution.#29:4;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#29:4;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Revolution.Edge2"
+          },
+          "Edge20": {
+            "canonicalFreecadMappedName": "Revolution.#1a:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#1a:2;:H9ca,E",
+            "resolvedIndexed": "Edge20",
+            "subname": "Revolution.Edge20"
+          },
+          "Edge21": {
+            "canonicalFreecadMappedName": "Revolution.#3b:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#3b:3;:H9ca,E",
+            "resolvedIndexed": "Edge21",
+            "subname": "Revolution.Edge21"
+          },
+          "Edge22": {
+            "canonicalFreecadMappedName": "Revolution.#1b:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#1b:2;:H9ca,E",
+            "resolvedIndexed": "Edge22",
+            "subname": "Revolution.Edge22"
+          },
+          "Edge23": {
+            "canonicalFreecadMappedName": "Revolution.#3b:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#3b:1;:H9ca,E",
+            "resolvedIndexed": "Edge23",
+            "subname": "Revolution.Edge23"
+          },
+          "Edge24": {
+            "canonicalFreecadMappedName": "Revolution.#3b:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#3b:2;:H9ca,E",
+            "resolvedIndexed": "Edge24",
+            "subname": "Revolution.Edge24"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "Revolution.#1d:1;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#1d:1;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Revolution.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "Revolution.#32:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#32:1;:H-9cc,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Revolution.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "Revolution.#2b:8;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#2b:8;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Revolution.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "Revolution.#1d:4;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#1d:4;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Revolution.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "Revolution.#32:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#32:4;:H-9cc,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Revolution.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "Revolution.#2a:6;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#2a:6;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Revolution.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "Revolution.#1d:2;:M;FUS;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#1d:2;:M;FUS;:H-9cc:7,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Revolution.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "Revolution.#26:1;:M;FUS;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#26:1;:M;FUS;:H-9cc:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Revolution.Face1"
+          },
+          "Face10": {
+            "canonicalFreecadMappedName": "Revolution.#16:2;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#16:2;:H9ca,F",
+            "resolvedIndexed": "Face10",
+            "subname": "Revolution.Face10"
+          },
+          "Face11": {
+            "canonicalFreecadMappedName": "Revolution.#3d:1;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#3d:1;:H9ca,F",
+            "resolvedIndexed": "Face11",
+            "subname": "Revolution.Face11"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "Revolution.#26:4;:M;FUS;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#26:4;:M;FUS;:H-9cc:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Revolution.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "Revolution.#26:2;:M;FUS;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#26:2;:M;FUS;:H-9cc:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Revolution.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "Revolution.#14:1;:M;FUS;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#14:1;:M;FUS;:H9ca:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Revolution.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "Revolution.#34:1;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#34:1;:H-9cc,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Revolution.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "Revolution.#26:3;:M;FUS;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#26:3;:M;FUS;:H-9cc:7,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Revolution.Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "Revolution.#16:4;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#16:4;:H9ca,F",
+            "resolvedIndexed": "Face7",
+            "subname": "Revolution.Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "Revolution.#16:3;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#16:3;:H9ca,F",
+            "resolvedIndexed": "Face8",
+            "subname": "Revolution.Face8"
+          },
+          "Face9": {
+            "canonicalFreecadMappedName": "Revolution.#16:1;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#16:1;:H9ca,F",
+            "resolvedIndexed": "Face9",
+            "subname": "Revolution.Face9"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "Revolution.#1f;:M;FUS;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#1f;:M;FUS;:H-9cc:7,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Revolution.Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "Revolution.#10:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#10:1;:H9ca,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "Revolution.Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "Revolution.#11:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#11:2;:H9ca,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "Revolution.Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "Revolution.#12:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#12:2;:H9ca,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "Revolution.Vertex12"
+          },
+          "Vertex13": {
+            "canonicalFreecadMappedName": "Revolution.#36:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#36:2;:H9ca,V",
+            "resolvedIndexed": "Vertex13",
+            "subname": "Revolution.Vertex13"
+          },
+          "Vertex14": {
+            "canonicalFreecadMappedName": "Revolution.#37:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#37:1;:H9ca,V",
+            "resolvedIndexed": "Vertex14",
+            "subname": "Revolution.Vertex14"
+          },
+          "Vertex15": {
+            "canonicalFreecadMappedName": "Revolution.#38:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#38:2;:H9ca,V",
+            "resolvedIndexed": "Vertex15",
+            "subname": "Revolution.Vertex15"
+          },
+          "Vertex16": {
+            "canonicalFreecadMappedName": "Revolution.#39:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#39:2;:H9ca,V",
+            "resolvedIndexed": "Vertex16",
+            "subname": "Revolution.Vertex16"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "Revolution.#2d:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#2d:2;:H-9cc,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Revolution.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "Revolution.#20;:M;FUS;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#20;:M;FUS;:H-9cc:7,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Revolution.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "Revolution.#2e:4;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#2e:4;:H-9cc,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Revolution.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "Revolution.#22;:M;FUS;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#22;:M;FUS;:H-9cc:7,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Revolution.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "Revolution.#30:8;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#30:8;:H-9cc,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Revolution.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "Revolution.#21;:M;FUS;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#21;:M;FUS;:H-9cc:7,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Revolution.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "Revolution.#2f:6;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#2f:6;:H-9cc,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Revolution.Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "Revolution.#f:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Revolution.#f:2;:H9ca,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "Revolution.Vertex9"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

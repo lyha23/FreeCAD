@@ -1,52 +1,78 @@
 {
-  "bbox": {
-    "max": [
-      2.0,
-      8.0,
-      4.0
-    ],
-    "min": [
-      0.0,
-      5.0,
-      0.0
-    ]
-  },
-  "freecad_version": "1.2.0 revision 20260519",
-  "native_solver": {
-    "return_code": 0
-  },
-  "object": "Assembly",
-  "object_fields": {
-    "assembly": "object",
-    "group": [
-      "ComponentLink",
-      "Joints"
-    ],
-    "joint_groups": [
-      "Joints"
-    ],
-    "joints": [
-      "GroundedJoint"
-    ],
-    "solve": "solved_noop"
-  },
-  "reference": "FreeCADCmd oracle from assembly-grounded-only-solver-success.json; objects: Part::Box, Assembly::AssemblyLink, App::FeaturePython, Assembly::JointGroup, Assembly::AssemblyObject",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "solver_adapter": {
-    "grounded_joints": [
-      "GroundedJoint"
-    ],
-    "joints": [],
-    "mode": "grounded_only_noop",
-    "placement_updates": [],
-    "solver_joints": [],
-    "status": "solved",
-    "unsupported_joints": []
-  },
-  "topology_counts": {
-    "edges": 12,
-    "faces": 6,
-    "vertices": 8
-  },
-  "volume": 23.999999999999996
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          2.0,
+          8.0,
+          4.0
+        ],
+        "min": [
+          0.0,
+          5.0,
+          0.0
+        ]
+      },
+      "native_solver": {
+        "return_code": 0
+      },
+      "object": "Assembly",
+      "object_fields": {
+        "assembly": "object",
+        "group": [
+          "ComponentLink",
+          "Joints"
+        ],
+        "joint_groups": [
+          "Joints"
+        ],
+        "joints": [
+          "GroundedJoint"
+        ],
+        "solve": "solved_noop"
+      },
+      "solver_adapter": {
+        "grounded_joints": [
+          "GroundedJoint"
+        ],
+        "joints": [],
+        "mode": "grounded_only_noop",
+        "placement_updates": [],
+        "solver_joints": [],
+        "status": "solved",
+        "unsupported_joints": []
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 23.999999999999996
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:6c4c8cddce2a55fec798bf835239cd6abb927d1e30bd2cca25e305cb949314b2",
+    "objects": {
+      "Assembly": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:37bba99a342019213a4e6bc38a1a954241971dd5659ed7e05901d4b8470e8425",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

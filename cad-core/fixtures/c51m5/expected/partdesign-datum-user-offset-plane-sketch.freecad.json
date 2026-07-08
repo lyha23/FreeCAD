@@ -1,0 +1,1261 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "BasePlane",
+      "object_fields": {
+        "attached": false,
+        "datum": "plane",
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "object": "OffsetPlane",
+      "object_fields": {
+        "attached": true,
+        "datum": "plane",
+        "map_mode": "ObjectXY",
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          3.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "object": "SketchOnOffsetPlane",
+      "object_fields": {
+        "external_curve_count": 0,
+        "external_geometry_count": 0,
+        "external_point_count": 0,
+        "raw_edge_count": 4,
+        "shape": "occt_sketch_shape",
+        "status": "ok"
+      },
+      "sketch_external": {
+        "construction_count": 0,
+        "flag_counts": {
+          "Defining": 0,
+          "Detached": 0,
+          "Frozen": 0,
+          "Missing": 0,
+          "Sync": 0
+        },
+        "flags": []
+      },
+      "sketch_internal": {
+        "internal_counts": {
+          "edges": 4,
+          "faces": 1,
+          "vertices": 4
+        },
+        "profile_ready": true,
+        "raw_edge_count": 4,
+        "shape": "occt_internal_shape"
+      }
+    },
+    {
+      "bbox": {
+        "max": [
+          10.0,
+          5.0,
+          8.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          3.0
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:4;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.PadOnOffsetPlane.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#d:4;:G;XTR;:Hf7d:7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "PadOnOffsetPlane.#d:4;:G;XTR;:Hf7d:7,F",
+          "subname": "PadOnOffsetPlane.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:3;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.PadOnOffsetPlane.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#d:3;:G;XTR;:Hf7d:7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "PadOnOffsetPlane.#d:3;:G;XTR;:Hf7d:7,F",
+          "subname": "PadOnOffsetPlane.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:2;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.PadOnOffsetPlane.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#d:2;:G;XTR;:Hf7d:7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "PadOnOffsetPlane.#d:2;:G;XTR;:Hf7d:7,F",
+          "subname": "PadOnOffsetPlane.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:1;:G;XTR;:H*:*,F",
+          "fullSubname": "Body.PadOnOffsetPlane.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#d:1;:G;XTR;:Hf7d:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "PadOnOffsetPlane.#d:1;:G;XTR;:Hf7d:7,F",
+          "subname": "PadOnOffsetPlane.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:1;;:H*:*,F",
+          "fullSubname": "Body.PadOnOffsetPlane.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#d:1;;:Hf7d:1,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "PadOnOffsetPlane.#d:1;;:Hf7d:1,F",
+          "subname": "PadOnOffsetPlane.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#14:1;:G0;XTR;:H*:*,F",
+          "fullSubname": "Body.PadOnOffsetPlane.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#14:1;:G0;XTR;:Hf7d:8,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "PadOnOffsetPlane.#14:1;:G0;XTR;:Hf7d:8,F",
+          "subname": "PadOnOffsetPlane.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#1c:8;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#1c:8;:G;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "PadOnOffsetPlane.#1c:8;:G;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#1d:2;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#1d:2;:G;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "PadOnOffsetPlane.#1d:2;:G;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:4;:H*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#b:4;:Hf7d,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "PadOnOffsetPlane.#b:4;:Hf7d,E",
+          "subname": "PadOnOffsetPlane.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:4;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#16:4;:U;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "PadOnOffsetPlane.#16:4;:U;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#1e:6;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#1e:6;:G;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "PadOnOffsetPlane.#1e:6;:G;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:3;:H*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#b:3;:Hf7d,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "PadOnOffsetPlane.#b:3;:Hf7d,E",
+          "subname": "PadOnOffsetPlane.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:3;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#16:3;:U;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "PadOnOffsetPlane.#16:3;:U;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#1f:4;:G;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#1f:4;:G;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "PadOnOffsetPlane.#1f:4;:G;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:2;:H*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#b:2;:Hf7d,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "PadOnOffsetPlane.#b:2;:Hf7d,E",
+          "subname": "PadOnOffsetPlane.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:2;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#16:2;:U;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "PadOnOffsetPlane.#16:2;:U;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:1;:H*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#b:1;:Hf7d,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "PadOnOffsetPlane.#b:1;:Hf7d,E",
+          "subname": "PadOnOffsetPlane.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:1;:U;XTR;:H*:*,E",
+          "fullSubname": "Body.PadOnOffsetPlane.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#16:1;:U;XTR;:Hf7d:7,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "PadOnOffsetPlane.#16:1;:U;XTR;:Hf7d:7,E",
+          "subname": "PadOnOffsetPlane.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#8;:H*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#8;:Hf7d,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "PadOnOffsetPlane.#8;:Hf7d,V",
+          "subname": "PadOnOffsetPlane.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:3;:U2;XTR;:H*:*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#21:3;:U2;XTR;:Hf7d:8,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "PadOnOffsetPlane.#21:3;:U2;XTR;:Hf7d:8,V",
+          "subname": "PadOnOffsetPlane.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#2;:H*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#2;:Hf7d,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "PadOnOffsetPlane.#2;:Hf7d,V",
+          "subname": "PadOnOffsetPlane.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:1;:U;XTR;:H*:*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#21:1;:U;XTR;:Hf7d:7,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "PadOnOffsetPlane.#21:1;:U;XTR;:Hf7d:7,V",
+          "subname": "PadOnOffsetPlane.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#6;:H*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#6;:Hf7d,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "PadOnOffsetPlane.#6;:Hf7d,V",
+          "subname": "PadOnOffsetPlane.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:2;:U2;XTR;:H*:*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#21:2;:U2;XTR;:Hf7d:8,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "PadOnOffsetPlane.#21:2;:U2;XTR;:Hf7d:8,V",
+          "subname": "PadOnOffsetPlane.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#4;:H*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#4;:Hf7d,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "PadOnOffsetPlane.#4;:Hf7d,V",
+          "subname": "PadOnOffsetPlane.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:1;:U2;XTR;:H*:*,V",
+          "fullSubname": "Body.PadOnOffsetPlane.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "PadOnOffsetPlane.#21:1;:U2;XTR;:Hf7d:8,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "PadOnOffsetPlane.#21:1;:U2;XTR;:Hf7d:8,V",
+          "subname": "PadOnOffsetPlane.Vertex8"
+        }
+      ],
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 249.99999999999994
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:77aa4a94f7b60e16ca0bdb12ead8e9e1f85d9c8d483e797cdaea9c31f8e27107",
+    "objects": {
+      "BasePlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:6d5ddb6a6182194d9b766514f03eb9ed908880dd052c455628facb06f1a18e5b",
+        "subshapes": {}
+      },
+      "Body": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "PadOnOffsetPlane.#14:1;:G0;XTR;:Hf7d:8,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#14:1;:G0;XTR;:H*:*,F",
+                "raw": "PadOnOffsetPlane.#14:1;:G0;XTR;:Hf7d:8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Face6"
+              }
+            },
+            "PadOnOffsetPlane.#16:1;:U;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#16:1;:U;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#16:1;:U;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge12"
+              }
+            },
+            "PadOnOffsetPlane.#16:2;:U;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#16:2;:U;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#16:2;:U;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge10"
+              }
+            },
+            "PadOnOffsetPlane.#16:3;:U;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#16:3;:U;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#16:3;:U;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge7"
+              }
+            },
+            "PadOnOffsetPlane.#16:4;:U;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#16:4;:U;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#16:4;:U;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge4"
+              }
+            },
+            "PadOnOffsetPlane.#1c:8;:G;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#1c:8;:G;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#1c:8;:G;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge1"
+              }
+            },
+            "PadOnOffsetPlane.#1d:2;:G;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#1d:2;:G;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#1d:2;:G;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge2"
+              }
+            },
+            "PadOnOffsetPlane.#1e:6;:G;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#1e:6;:G;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#1e:6;:G;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge5"
+              }
+            },
+            "PadOnOffsetPlane.#1f:4;:G;XTR;:Hf7d:7,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#1f:4;:G;XTR;:H*:*,E",
+                "raw": "PadOnOffsetPlane.#1f:4;:G;XTR;:Hf7d:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge8"
+              }
+            },
+            "PadOnOffsetPlane.#21:1;:U2;XTR;:Hf7d:8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#21:1;:U2;XTR;:H*:*,V",
+                "raw": "PadOnOffsetPlane.#21:1;:U2;XTR;:Hf7d:8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex8"
+              }
+            },
+            "PadOnOffsetPlane.#21:1;:U;XTR;:Hf7d:7,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#21:1;:U;XTR;:H*:*,V",
+                "raw": "PadOnOffsetPlane.#21:1;:U;XTR;:Hf7d:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex4"
+              }
+            },
+            "PadOnOffsetPlane.#21:2;:U2;XTR;:Hf7d:8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#21:2;:U2;XTR;:H*:*,V",
+                "raw": "PadOnOffsetPlane.#21:2;:U2;XTR;:Hf7d:8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex6"
+              }
+            },
+            "PadOnOffsetPlane.#21:3;:U2;XTR;:Hf7d:8,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#21:3;:U2;XTR;:H*:*,V",
+                "raw": "PadOnOffsetPlane.#21:3;:U2;XTR;:Hf7d:8,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex2"
+              }
+            },
+            "PadOnOffsetPlane.#2;:Hf7d,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#2;:H*,V",
+                "raw": "PadOnOffsetPlane.#2;:Hf7d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex3"
+              }
+            },
+            "PadOnOffsetPlane.#4;:Hf7d,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#4;:H*,V",
+                "raw": "PadOnOffsetPlane.#4;:Hf7d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex7"
+              }
+            },
+            "PadOnOffsetPlane.#6;:Hf7d,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#6;:H*,V",
+                "raw": "PadOnOffsetPlane.#6;:Hf7d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex5"
+              }
+            },
+            "PadOnOffsetPlane.#8;:Hf7d,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#8;:H*,V",
+                "raw": "PadOnOffsetPlane.#8;:Hf7d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Body",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Vertex1"
+              }
+            },
+            "PadOnOffsetPlane.#b:1;:Hf7d,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#b:1;:H*,E",
+                "raw": "PadOnOffsetPlane.#b:1;:Hf7d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge11"
+              }
+            },
+            "PadOnOffsetPlane.#b:2;:Hf7d,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#b:2;:H*,E",
+                "raw": "PadOnOffsetPlane.#b:2;:Hf7d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge9"
+              }
+            },
+            "PadOnOffsetPlane.#b:3;:Hf7d,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#b:3;:H*,E",
+                "raw": "PadOnOffsetPlane.#b:3;:Hf7d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge6"
+              }
+            },
+            "PadOnOffsetPlane.#b:4;:Hf7d,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#b:4;:H*,E",
+                "raw": "PadOnOffsetPlane.#b:4;:Hf7d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Body",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Edge3"
+              }
+            },
+            "PadOnOffsetPlane.#d:1;:G;XTR;:Hf7d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#d:1;:G;XTR;:H*:*,F",
+                "raw": "PadOnOffsetPlane.#d:1;:G;XTR;:Hf7d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Face4"
+              }
+            },
+            "PadOnOffsetPlane.#d:1;;:Hf7d:1,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#d:1;;:H*:*,F",
+                "raw": "PadOnOffsetPlane.#d:1;;:Hf7d:1,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Face5"
+              }
+            },
+            "PadOnOffsetPlane.#d:2;:G;XTR;:Hf7d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#d:2;:G;XTR;:H*:*,F",
+                "raw": "PadOnOffsetPlane.#d:2;:G;XTR;:Hf7d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Face3"
+              }
+            },
+            "PadOnOffsetPlane.#d:3;:G;XTR;:Hf7d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#d:3;:G;XTR;:H*:*,F",
+                "raw": "PadOnOffsetPlane.#d:3;:G;XTR;:Hf7d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Face2"
+              }
+            },
+            "PadOnOffsetPlane.#d:4;:G;XTR;:Hf7d:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "PadOnOffsetPlane.#d:4;:G;XTR;:H*:*,F",
+                "raw": "PadOnOffsetPlane.#d:4;:G;XTR;:Hf7d:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "PadOnOffsetPlane.Face1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c0cc07c18dd608ac3885e984e6097119f40aea5acdaa20a4b49a299bb6038e0e",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#1c:8;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#1c:8;:G;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "PadOnOffsetPlane.Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:2;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#16:2;:U;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "PadOnOffsetPlane.Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#b:1;:Hf7d,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "PadOnOffsetPlane.Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:1;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#16:1;:U;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "PadOnOffsetPlane.Edge12"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#1d:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#1d:2;:G;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "PadOnOffsetPlane.Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#b:4;:Hf7d,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "PadOnOffsetPlane.Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:4;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#16:4;:U;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "PadOnOffsetPlane.Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#1e:6;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#1e:6;:G;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "PadOnOffsetPlane.Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#b:3;:Hf7d,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "PadOnOffsetPlane.Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#16:3;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#16:3;:U;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "PadOnOffsetPlane.Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#1f:4;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#1f:4;:G;XTR;:Hf7d:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "PadOnOffsetPlane.Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#b:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#b:2;:Hf7d,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "PadOnOffsetPlane.Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:4;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#d:4;:G;XTR;:Hf7d:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "PadOnOffsetPlane.Face1"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:3;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#d:3;:G;XTR;:Hf7d:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "PadOnOffsetPlane.Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:2;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#d:2;:G;XTR;:Hf7d:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "PadOnOffsetPlane.Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:1;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#d:1;:G;XTR;:Hf7d:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "PadOnOffsetPlane.Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#d:1;;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#d:1;;:Hf7d:1,F",
+            "resolvedIndexed": "Face5",
+            "subname": "PadOnOffsetPlane.Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#14:1;:G0;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#14:1;:G0;XTR;:Hf7d:8,F",
+            "resolvedIndexed": "Face6",
+            "subname": "PadOnOffsetPlane.Face6"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#8;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#8;:Hf7d,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "PadOnOffsetPlane.Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:3;:U2;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#21:3;:U2;XTR;:Hf7d:8,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "PadOnOffsetPlane.Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#2;:Hf7d,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "PadOnOffsetPlane.Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:1;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#21:1;:U;XTR;:Hf7d:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "PadOnOffsetPlane.Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#6;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#6;:Hf7d,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "PadOnOffsetPlane.Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:2;:U2;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#21:2;:U2;XTR;:Hf7d:8,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "PadOnOffsetPlane.Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#4;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#4;:Hf7d,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "PadOnOffsetPlane.Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "PadOnOffsetPlane.#21:1;:U2;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "PadOnOffsetPlane.#21:1;:U2;XTR;:Hf7d:8,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "PadOnOffsetPlane.Vertex8"
+          }
+        }
+      },
+      "OffsetPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3b8ce794bbef5f1755b4426d147c763ea17582815b74b72f12b660858600fd71",
+        "subshapes": {}
+      },
+      "SketchOnOffsetPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:08fcbff05b2654277127d698fdd29ed713bbfa231f6a918e8e8fd714f1f3c0f9",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

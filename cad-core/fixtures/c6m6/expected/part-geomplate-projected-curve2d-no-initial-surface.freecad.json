@@ -1,60 +1,70 @@
 {
-  "bbox": {
-    "max": [
-      4.2000001,
-      4.6054348771104054,
-      4.290130232010049
-    ],
-    "min": [
-      -0.6054348771104044,
-      -0.5677536883658948,
-      -0.6300032404387551
-    ]
-  },
-  "bbox_delta": 0.1,
-  "freecad_version": "1.2.0 revision 20260519",
-  "object": "GeomPlate",
-  "object_fields": {
-    "curve_constraint_count": 4,
-    "dto": "PartGeomPlateSurfaceDTO",
-    "feature": "part_geomplate_surface",
-    "freecad_native_document_object": false,
-    "helper": "Part.GeomPlate.BuildPlateSurface",
-    "is_done": true,
-    "point_constraint_count": 1,
-    "shape": "occt_face",
-    "source_backed_helper": true,
-    "status": "ok",
-    "surface_kind": "GeomPlate_Surface"
-  },
-  "oracle_evidence": {
-    "blocked_without_initial_surface": "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
-    "collectability": "expected_backed_with_initial_surface",
-    "helper": "Part.GeomPlate.CurveConstraint.setProjectedCurve",
-    "probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
-    "successful_probe_case": "geomplate_projected_curve2d_variants:range_0_4_tol_0p01_initial_surface"
-  },
-  "reference": "FreeCADCmd oracle from part-geomplate-projected-curve2d-no-initial-surface.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::Line, Part::Line, Part::Line, Part::Plane, Part::GeomPlateSurface",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "topology_counts": {
-    "edges": 4,
-    "faces": 1,
-    "vertices": 4
-  },
-  "volume": 0.200476187212551,
-  "known_gap": {
-    "kind": "geomplate_projected_curve2d_no_initial_surface_native_oracle_blocked",
-    "cad_core_contract": {
-      "status": "request_local_source_backed_not_freecad_expected",
-      "expected_native_shape": false
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.2000001,
+          4.6054348771104054,
+          4.290130232010049
+        ],
+        "min": [
+          -0.6054348771104044,
+          -0.5677536883658948,
+          -0.6300032404387551
+        ]
+      },
+      "object": "GeomPlate",
+      "object_fields": {
+        "curve_constraint_count": 4,
+        "dto": "PartGeomPlateSurfaceDTO",
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "is_done": true,
+        "point_constraint_count": 1,
+        "shape": "occt_face",
+        "source_backed_helper": true,
+        "status": "ok",
+        "surface_kind": "GeomPlate_Surface"
+      },
+      "oracle_evidence": {
+        "blocked_without_initial_surface": "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2",
+        "collectability": "expected_backed_with_initial_surface",
+        "helper": "Part.GeomPlate.CurveConstraint.setProjectedCurve",
+        "probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-05-28-c5m13-s4-geomplate-native-oracle-probe.py",
+        "successful_probe_case": "geomplate_projected_curve2d_variants:range_0_4_tol_0p01_initial_surface"
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": 0.200476187212551
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:9ab2ab58af71dce0b179ec4906243ca8b862bc88f1971ec927adf0bcee4ae182",
+    "objects": {
+      "GeomPlate": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e13ea80fa6366fc591864d68ec2487f9147fcc6eca595997e17bacfbf197ec1a",
+        "subshapes": {}
+      }
     },
-    "freecadcmd_evidence": {
-      "error": "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2"
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
     },
-    "s5_publication": {
-      "status": "published_c6m6_product_contract_non_parity",
-      "active_remaining_gap": false
-    },
-    "delete_condition": "Delete after no-InitialSurface ProjectedCurve2d native oracle becomes collectable and expected-backed."
+    "schemaVersion": "cad-core.topo-state.v1"
   }
 }

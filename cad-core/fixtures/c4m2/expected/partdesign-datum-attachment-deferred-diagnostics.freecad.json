@@ -1,7 +1,66 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "DatumCSOnFace": {
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumPointOnVertex",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "ObjectOrigin",
+        "point": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineOnEdge",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "ObjectZ",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPlaneOnFace",
+      "object_fields": {
+        "attached": true,
+        "datum": "plane",
+        "map_mode": "FlatFace",
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSOnFace",
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
@@ -28,62 +87,65 @@
           1.0
         ]
       }
-    },
-    "DatumLineOnEdge": {
-      "object_fields": {
-        "attached": true,
-        "base": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "datum": "line",
-        "direction": [
-          0.0,
-          0.0,
-          1.0
-        ],
-        "map_mode": "ObjectZ",
-        "status": "ok"
-      }
-    },
-    "DatumPlaneOnFace": {
-      "object_fields": {
-        "attached": true,
-        "datum": "plane",
-        "map_mode": "FlatFace",
-        "normal": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "origin": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "status": "ok",
-        "x_axis": [
-          0.0,
-          -1.0,
-          0.0
-        ]
-      }
-    },
-    "DatumPointOnVertex": {
-      "object_fields": {
-        "attached": true,
-        "datum": "point",
-        "map_mode": "ObjectOrigin",
-        "point": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "status": "ok"
-      }
     }
-  },
-  "reference": "FreeCADCmd oracle from partdesign-datum-attachment-deferred-diagnostics.json; objects: Part::Box, PartDesign::Point, PartDesign::Line, PartDesign::Plane, PartDesign::CoordinateSystem",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:672768129f7477486752eff15529422d5ec930a6ebfa36397986146f8d1ceb8e",
+    "objects": {
+      "DatumCSOnFace": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b3e1a3d0b1612250e2b460b98bf751a879f6b77693d2bc7f89a1e9f278db3f32",
+        "subshapes": {}
+      },
+      "DatumLineOnEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d911ed5557d484b71f33efacabf4a459a76d58476bab39e375ca4c8532ea7b8e",
+        "subshapes": {}
+      },
+      "DatumPlaneOnFace": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c744f2c6454e65b1d99096051fbe1ce1b6d3868b41380bace4da2ecdf1215ad6",
+        "subshapes": {}
+      },
+      "DatumPointOnVertex": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e82be7ad92e00ecd770f4d9c1d2da7049c7bfc9ea432b2f3902b052faa7a04f0",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

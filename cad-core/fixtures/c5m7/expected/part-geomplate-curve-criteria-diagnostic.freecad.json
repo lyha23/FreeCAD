@@ -1,18 +1,44 @@
 {
-  "diagnostic_codes": [
-    "unsupported_curve_criteria"
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "diagnostic_codes": [
+        "unsupported_curve_criteria"
+      ],
+      "native_error": "Part.GeomPlate.BuildPlateSurface curve criteria setter is unsupported: G0Criterion maps to CurveConstraintPyImp.cpp NotImplementedError",
+      "native_error_code": "unsupported_curve_criteria",
+      "object": "CurveCriteriaDiagnostic",
+      "object_fields": {
+        "feature": "part_geomplate_surface",
+        "freecad_native_document_object": false,
+        "helper": "Part.GeomPlate.BuildPlateSurface",
+        "source_backed_helper": true,
+        "status": "error"
+      }
+    }
   ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "native_error": "Part.GeomPlate.BuildPlateSurface curve criteria setter is unsupported: G0Criterion maps to CurveConstraintPyImp.cpp NotImplementedError",
-  "native_error_code": "unsupported_curve_criteria",
-  "object": "CurveCriteriaDiagnostic",
-  "object_fields": {
-    "feature": "part_geomplate_surface",
-    "freecad_native_document_object": false,
-    "helper": "Part.GeomPlate.BuildPlateSurface",
-    "source_backed_helper": true,
-    "status": "error"
-  },
-  "reference": "FreeCADCmd oracle from part-geomplate-curve-criteria-diagnostic.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Line, Part::GeomPlateSurface",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "topoNamingState": {
+    "documentHash": "sha256:ca1be77206c5c34ad779ba213a467117a3ac3a13d6be4ea3c070b9b8380adac8",
+    "objects": {
+      "CurveCriteriaDiagnostic": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:dff45b4277938a3cd84ba2d9fd949f8d4dd09d44100a79ac5bd4ef131d094b17",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

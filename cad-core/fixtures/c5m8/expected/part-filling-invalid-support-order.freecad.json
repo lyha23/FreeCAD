@@ -1,29 +1,61 @@
 {
-  "diagnostic_codes": [
-    "unsupported_property",
-    "unsupported_property"
-  ],
-  "freecad_version": "1.2.0 revision 20260519",
-  "objects": {
-    "InvalidOrder": {
-      "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
       "native_error_code": "unsupported_property",
+      "object": "InvalidSupport",
       "object_fields": {
         "feature": "part_filled_face",
         "helper": "Part.makeFilledFace",
         "status": "error"
       }
     },
-    "InvalidSupport": {
-      "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
+    {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
       "native_error_code": "unsupported_property",
+      "object": "InvalidOrder",
       "object_fields": {
         "feature": "part_filled_face",
         "helper": "Part.makeFilledFace",
         "status": "error"
       }
     }
-  },
-  "reference": "FreeCADCmd oracle from part-filling-invalid-support-order.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::Plane, Part::FilledFace, Part::FilledFace",
-  "schema_version": "cad-core.freecad-expected.v1"
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:884b373809084a141311d30aae608b68c8b6857e2109d31ec694aae41fe38baf",
+    "objects": {
+      "InvalidOrder": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:06d8fd7f1baca9c8c7197d33efb88c6a92e0b7279be16b8e41df5e180f009723",
+        "subshapes": {}
+      },
+      "InvalidSupport": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e7122429710bcf99de4b9d40db6d5e7f34f5e9eb8657169c0ecdd46f80fa1b4c",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }
