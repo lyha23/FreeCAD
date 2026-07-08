@@ -1,0 +1,30 @@
+{
+  "fixtureCategory": "topoNamingState.version_incompatible_hard_fail.producer",
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Box"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v0",
+      "freecadVersion": "0.19 incompatible fixture",
+      "occtVersion": "6.9 incompatible fixture"
+    },
+    "documentHash": "sha256:ef962d13640cfceda5030dd23f0539f7c40aaf35ba5e4069c45723b615ad7465",
+    "objects": {}
+  }
+}

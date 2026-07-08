@@ -1,0 +1,29 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core C4M6 topoNamingState objectHash mismatch hard-fail boundary.",
+  "diagnostic_codes": [
+    "topo_state_object_hash_mismatch"
+  ],
+  "cad_core_contract": {
+    "protocol_category": "topoNamingState.hash_mismatch.object",
+    "request_error": {
+      "code": "topo_state_object_hash_mismatch",
+      "hard_fail": true,
+      "recompute_started": false,
+      "results": [],
+      "topoNamingState": null
+    },
+    "expected_current_objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+    "received_objectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "assertions": [
+      "objectHash mismatch is explicit and not silently ignored",
+      "stale object elementMap is not consumed after object ownership check fails"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_topo_state_protocol_contract",
+    "reason": "FreeCADCmd collector recomputes geometry but does not enforce CAD Core objectHash ownership validation.",
+    "reference": "cad-core/fixtures/c4m6/topo-state-object-hash-mismatch.json"
+  }
+}

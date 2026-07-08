@@ -1,0 +1,43 @@
+{
+  "fixtureCategory": "topoNamingState.hash_mismatch.document",
+  "Objects": [
+    {
+      "Name": "Box",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Box"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "documentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "objects": {
+      "Box": {
+        "objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "indexed_only",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    }
+  }
+}

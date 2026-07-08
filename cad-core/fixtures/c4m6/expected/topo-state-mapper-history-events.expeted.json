@@ -1,0 +1,195 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core C4M6 topoNamingState mapperHistory contract for generated, modified, split, deleted, and ambiguous events.",
+  "diagnostic_codes": [
+    "split_stable_subname",
+    "deleted_stable_subname",
+    "ambiguous_stable_subname"
+  ],
+  "cad_core_contract": {
+    "protocol_category": "topoNamingState.mapperHistory.event_ledger",
+    "expected_response": {
+      "topoNamingState": {
+        "schemaVersion": "cad-core.topo-state.v1",
+        "producer": {
+          "cadCoreVersion": "fixture-contract-v1",
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "fixture-occt-unspecified"
+        },
+        "documentHash": "sha256:2b7a5033a9144b793d930e6bc921165b50f227fab76e37c5d2360b9c53cee7f3",
+        "objects": {
+          "HistoryProbe": {
+            "objectHash": "sha256:aa9ea48ea1b59abf8d169336c400312e60f92e68ef83af90f816ce54f01d8b79",
+            "elementMapVersion": "cad-core.element-map.v1",
+            "subshapes": {
+              "Face2": {
+                "subname": "Face2",
+                "rawFreecadMappedName": "generated-face-token",
+                "canonicalFreecadMappedName": "generated-face-token",
+                "resolvedIndexed": "Face2",
+                "identityStatus": "stable"
+              },
+              "Edge3": {
+                "subname": "Edge3",
+                "rawFreecadMappedName": "modified-edge-token",
+                "canonicalFreecadMappedName": "modified-edge-token",
+                "resolvedIndexed": "Edge3",
+                "identityStatus": "stable"
+              }
+            },
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "status": "history_partial",
+              "entries": {
+                "generated-face-token": {
+                  "target": {
+                    "object": "HistoryProbe",
+                    "subname": "Face2"
+                  },
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "SourceSketch",
+                    "subname": "Face1"
+                  },
+                  "mappedName": {
+                    "raw": "generated-face-token",
+                    "canonical": "generated-face-token"
+                  },
+                  "recoverability": "resolved",
+                  "evidence": {
+                    "source": "mapper_history",
+                    "mapperHistoryIds": [
+                      "mh-generated"
+                    ],
+                    "childElementMapKey": null
+                  }
+                },
+                "modified-edge-token": {
+                  "target": {
+                    "object": "HistoryProbe",
+                    "subname": "Edge3"
+                  },
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "SourceSketch",
+                    "subname": "Edge1"
+                  },
+                  "mappedName": {
+                    "raw": "modified-edge-token",
+                    "canonical": "modified-edge-token"
+                  },
+                  "recoverability": "recoverable",
+                  "evidence": {
+                    "source": "mapper_history",
+                    "mapperHistoryIds": [
+                      "mh-modified"
+                    ],
+                    "childElementMapKey": null
+                  }
+                }
+              }
+            },
+            "childElementMaps": [],
+            "mapperHistory": [
+              {
+                "id": "mh-generated",
+                "relation": "generated",
+                "source": {
+                  "object": "SourceSketch",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "HistoryProbe",
+                  "subname": "Face2"
+                },
+                "shape_kind": "face",
+                "recoverability": "resolved"
+              },
+              {
+                "id": "mh-modified",
+                "relation": "modified",
+                "source": {
+                  "object": "SourceSketch",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "HistoryProbe",
+                  "subname": "Edge3"
+                },
+                "shape_kind": "edge",
+                "recoverability": "recoverable"
+              },
+              {
+                "id": "mh-split",
+                "relation": "split",
+                "source": {
+                  "object": "SourceSketch",
+                  "subname": "Face2"
+                },
+                "targets": [
+                  {
+                    "object": "HistoryProbe",
+                    "subname": "Face4"
+                  },
+                  {
+                    "object": "HistoryProbe",
+                    "subname": "Face5"
+                  }
+                ],
+                "shape_kind": "face",
+                "recoverability": "needs_reselect"
+              },
+              {
+                "id": "mh-deleted",
+                "relation": "deleted",
+                "source": {
+                  "object": "SourceSketch",
+                  "subname": "Edge4"
+                },
+                "target": null,
+                "shape_kind": "edge",
+                "recoverability": "deleted"
+              },
+              {
+                "id": "mh-ambiguous",
+                "relation": "ambiguous",
+                "source": {
+                  "object": "SourceSketch",
+                  "subname": "Face3"
+                },
+                "candidates": [
+                  {
+                    "object": "HistoryProbe",
+                    "subname": "Face6"
+                  },
+                  {
+                    "object": "HistoryProbe",
+                    "subname": "Face7"
+                  }
+                ],
+                "shape_kind": "face",
+                "recoverability": "needs_reselect"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "assertions": [
+      "mapperHistory contains generated, modified, split, deleted, and ambiguous relations",
+      "elementMap.entries contains generated-face-token and modified-edge-token only",
+      "split, deleted, and ambiguous tokens are absent from elementMap.entries"
+    ],
+    "forbidden_element_map_tokens": [
+      "split-face-token",
+      "deleted-edge-token",
+      "ambiguous-face-token"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_topo_state_protocol_contract",
+    "reason": "This fixture is a CAD Core topology-state ledger probe; FreeCADCmd does not expose a serializable generated/modified/split/deleted/ambiguous mapperHistory DTO for this request.",
+    "reference": "cad-core/fixtures/c4m6/topo-state-mapper-history-events.json"
+  }
+}

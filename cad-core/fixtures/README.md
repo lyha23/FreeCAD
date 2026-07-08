@@ -30,3 +30,15 @@ collector 生成 `.freecad.json`，再删除或替换原来的人工契约文件
 
 不要新增 `.cad-core.json` 这类第三种 expected 后缀。已有 CAD Core 人工契约应统一改为
 `.expeted.json`，避免测试发现和 oracle 语义继续分叉。
+
+## `c4m6` topoNamingState expected 基线
+
+`fixtures/c4m6/` 是 `topoNamingState` 客户端携带状态协议的最小完整语义批次：
+
+- `topo-state-first-recompute-empty.freecad.json`：FreeCADCmd collector 采集；覆盖空 state 首次 recompute 返回完整 `topoNamingState`。
+- `topo-state-body-tip-stable-recovery.freecad.json`：FreeCADCmd collector 采集；覆盖 `StableSubListSource=topoNamingState` 恢复，以及 Body scoped indexed subshape 指向 Tip child path。
+- `topo-state-link-compound-child-maps.expeted.json`：CAD Core 产品契约；覆盖 Link / Compound `childElementMaps` 非空展开关系，当前 collector 只会生成空 child map。
+- `topo-state-mapper-history-events.expeted.json`：CAD Core 产品契约；覆盖 `generated`、`modified`、`split`、`deleted`、`ambiguous`，并要求 split / deleted / ambiguous 不进入 `elementMap.entries`。
+- `topo-state-schema-incompatible.expeted.json` 与 `topo-state-producer-incompatible.expeted.json`：CAD Core 请求协议契约；覆盖版本不兼容硬失败、不继续 recompute、不返回新 state。
+- `topo-state-document-hash-mismatch.expeted.json` 与 `topo-state-object-hash-mismatch.expeted.json`：CAD Core 请求协议契约；覆盖 hash mismatch 的硬失败边界。
+- `topo-state-reference-shadow-brep.expeted.json`：CAD Core 协议边界；覆盖 `ReferenceShadow.brep` 只允许作为单个被引用 subshape 的旧快照，不允许进入 `topoNamingState`。
