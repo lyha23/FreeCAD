@@ -53,7 +53,8 @@
               "subname": "Face1",
               "stableSubname": "ChildBox.Face1"
             }
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         }
       }
     },
@@ -129,7 +130,18 @@
               }
             }
           }
-        }
+        },
+        "objectHash": "sha256:729695839f40529849d649e10e494789aad417602900efa080f8740fd10ca706",
+        "subshapes": {
+          "Face1": {
+            "subname": "Face1",
+            "rawFreecadMappedName": "ChildBox.Face1",
+            "canonicalFreecadMappedName": "ChildBox.Face1",
+            "resolvedIndexed": "Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "childElementMaps": []
       }
     },
     "documentHash": "sha256:28acf21a96c06413d250e6a96377e5a7c7c5c32da94532aa99de42cf0cd32306"

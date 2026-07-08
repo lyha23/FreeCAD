@@ -60,7 +60,8 @@
                 "g101",
                 "g102",
                 "g103"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -81,9 +82,6 @@
             {
               "value": "Pad",
               "SubList": [
-                "Edge4"
-              ],
-              "StableSubList": [
                 "Edge4"
               ]
             }
@@ -112,7 +110,106 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "Sketch": {
+        "objectHash": "sha256:f1ef5839ed300c265f259c9aa9b54e608fba3fa6333bece776b28e466cd13ef4",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "StableRef1": {
+            "subname": "StableRef1",
+            "rawFreecadMappedName": "g101",
+            "canonicalFreecadMappedName": "g101",
+            "resolvedIndexed": "StableRef1",
+            "identityStatus": "stable"
+          },
+          "StableRef2": {
+            "subname": "StableRef2",
+            "rawFreecadMappedName": "g102",
+            "canonicalFreecadMappedName": "g102",
+            "resolvedIndexed": "StableRef2",
+            "identityStatus": "stable"
+          },
+          "StableRef3": {
+            "subname": "StableRef3",
+            "rawFreecadMappedName": "g103",
+            "canonicalFreecadMappedName": "g103",
+            "resolvedIndexed": "StableRef3",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g101": {
+              "target": {
+                "object": "Sketch",
+                "subname": "StableRef1"
+              },
+              "shapeKind": "shape",
+              "source": {
+                "object": "Sketch",
+                "subname": "StableRef1"
+              },
+              "mappedName": {
+                "raw": "g101",
+                "canonical": "g101"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            },
+            "g102": {
+              "target": {
+                "object": "Sketch",
+                "subname": "StableRef2"
+              },
+              "shapeKind": "shape",
+              "source": {
+                "object": "Sketch",
+                "subname": "StableRef2"
+              },
+              "mappedName": {
+                "raw": "g102",
+                "canonical": "g102"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            },
+            "g103": {
+              "target": {
+                "object": "Sketch",
+                "subname": "StableRef3"
+              },
+              "shapeKind": "shape",
+              "source": {
+                "object": "Sketch",
+                "subname": "StableRef3"
+              },
+              "mappedName": {
+                "raw": "g103",
+                "canonical": "g103"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:2eabd2bc11bc1f58582813ddddd0275b3024b31c6805f716810e0a5b6be2b9ee"
   }
 }

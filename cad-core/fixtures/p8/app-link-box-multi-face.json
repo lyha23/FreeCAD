@@ -25,7 +25,8 @@
           "StableSubList": [
             "Box.Face1",
             "Box.Face2"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LinkTransform": false,
         "LinkPlacement": {
@@ -108,7 +109,25 @@
               }
             }
           }
-        }
+        },
+        "objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+        "subshapes": {
+          "Face1": {
+            "subname": "Face1",
+            "rawFreecadMappedName": "Box.Face1",
+            "canonicalFreecadMappedName": "Box.Face1",
+            "resolvedIndexed": "Face1",
+            "identityStatus": "stable"
+          },
+          "Face2": {
+            "subname": "Face2",
+            "rawFreecadMappedName": "Box.Face2",
+            "canonicalFreecadMappedName": "Box.Face2",
+            "resolvedIndexed": "Face2",
+            "identityStatus": "stable"
+          }
+        },
+        "childElementMaps": []
       }
     },
     "documentHash": "sha256:efbb7ee37497de63565ba169f41f696da61ea948cdb8a5e9a87dec588bc6a2d1"

@@ -130,7 +130,8 @@
               "stableSubname": "Edge1",
               "fingerprint": {}
             }
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "ChamferType": "Equal distance",
         "Size": 0.05,
@@ -213,6 +214,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Fillet": {
+        "objectHash": "sha256:5f15a86ea1e450fd08d910ca1a74f0dfff9c509ce3473d30f019a956cd2f1fb4",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Fillet.fixture-history-9d5cac3a77",
+            "source": {
+              "object": "Fillet",
+              "subname": "Edge1"
+            },
+            "shape_kind": "shape",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Edge1",
+              "canonical": "Edge1"
+            },
+            "target": {
+              "object": "Fillet",
+              "subname": "OldFilletEdge1"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:22113429dd32dcd74a9b4cac5068cfee7ee29806b42e9c86ff97744bed34b7fd"

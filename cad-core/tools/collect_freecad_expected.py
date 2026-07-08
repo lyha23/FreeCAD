@@ -17,6 +17,8 @@ from typing import Any, Sequence
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FREECADCMD = "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd"
 SCHEMA_VERSION = "cad-core.freecad-expected.v1"
+TOPO_STATE_SCHEMA_VERSION = "cad-core.topo-state.v1"
+TOPO_STATE_PRODUCER_CAD_CORE_VERSION = "fixture-contract-v1"
 ENV_ARG_MARKER = "__cad_core_expected_args_env__"
 ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
 FREECAD_PRECISION_CONFUSION = 1e-7
@@ -1412,7 +1414,6 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
                         indexed,
                         tip_raw_mapped_name,
                     )
-                    subname = tip_local_subname
                     raw_mapped_name = f"{tip_name}.{tip_raw_mapped_name}" if tip_raw_mapped_name else ""
                     canonical_mapped_name = (
                         f"{tip_name}.{tip_canonical_mapped_name}" if tip_canonical_mapped_name else ""
@@ -1434,7 +1435,7 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
                 "id": f"{owner}:{indexed}",
                 "kind": kind,
                 "indexed": indexed,
-                "subname": subname,
+                "subname": resolved_indexed or indexed,
                 "stableSubname": stable_subname,
                 "identityStatus": identity_status,
                 "fullSubname": full_subname,
@@ -1483,9 +1484,72 @@ def topo_state_producer(fixture: dict, FreeCAD: Any) -> dict[str, str]:
     }
 
 
+def topo_state_version_error_response(fixture: dict) -> dict[str, Any] | None:
+    topo_state = fixture.get("topoNamingState")
+    if not isinstance(topo_state, dict):
+        return None
+
+    schema_version = topo_state.get("schemaVersion")
+    if schema_version != TOPO_STATE_SCHEMA_VERSION:
+        return {
+            "diagnostics": [
+                {
+                    "code": "topo_state_schema_incompatible",
+                    "severity": "error",
+                    "source": "topoNamingState",
+                    "message": (
+                        "topoNamingState schemaVersion is incompatible; request-level "
+                        "recompute is refused"
+                    ),
+                    "actualSchemaVersion": schema_version,
+                    "expectedSchemaVersion": TOPO_STATE_SCHEMA_VERSION,
+                }
+            ],
+            "elementReferenceUpdates": [],
+            "results": [],
+        }
+
+    producer = topo_state.get("producer")
+    cad_core_version = producer.get("cadCoreVersion") if isinstance(producer, dict) else None
+    if not isinstance(producer, dict) or cad_core_version != TOPO_STATE_PRODUCER_CAD_CORE_VERSION:
+        return {
+            "diagnostics": [
+                {
+                    "code": "topo_state_producer_incompatible",
+                    "severity": "error",
+                    "source": "topoNamingState",
+                    "message": (
+                        "topoNamingState producer is incompatible; request-level recompute "
+                        "is refused"
+                    ),
+                    "actualProducer": producer,
+                    "expectedProducer": {
+                        "cadCoreVersion": TOPO_STATE_PRODUCER_CAD_CORE_VERSION,
+                    },
+                }
+            ],
+            "elementReferenceUpdates": [],
+            "results": [],
+        }
+
+    return None
+
+
+def topo_state_indexed_subname(subshape: dict[str, Any]) -> str:
+    for key in ("resolvedIndexed", "indexed"):
+        value = subshape.get(key)
+        if isinstance(value, str) and value:
+            return value
+    subname = subshape.get("subname")
+    if isinstance(subname, str) and subname and "." not in subname:
+        return subname
+    return ""
+
+
 def topo_state_subshape_entry(subshape: dict[str, Any]) -> dict[str, Any]:
+    indexed_subname = topo_state_indexed_subname(subshape)
     entry = {
-        "subname": str(subshape.get("subname", "")),
+        "subname": indexed_subname,
         "identityStatus": str(subshape.get("identityStatus", "current_only")),
     }
     raw_mapped_name = subshape.get("rawFreecadMappedName")
@@ -1504,11 +1568,11 @@ def topo_state_element_map_entry(object_name: str, subshape: dict[str, Any]) -> 
     stable_token = subshape.get("stableSubname") or subshape.get("rawFreecadMappedName")
     if not isinstance(stable_token, str) or not stable_token:
         return None
-    subname = subshape.get("subname")
-    if not isinstance(subname, str) or not subname:
+    target_subname = topo_state_indexed_subname(subshape)
+    if not target_subname:
         return None
     shape_kind = str(subshape.get("kind", "shape")).lower()
-    source_subname = str(subshape.get("indexed") or subname)
+    source_subname = str(subshape.get("indexed") or target_subname)
     raw_mapped_name = str(subshape.get("rawFreecadMappedName") or stable_token)
     canonical_mapped_name = str(
         subshape.get("canonicalFreecadMappedName") or canonical_freecad_mapped_name(raw_mapped_name)
@@ -1516,7 +1580,7 @@ def topo_state_element_map_entry(object_name: str, subshape: dict[str, Any]) -> 
     return stable_token, {
         "target": {
             "object": object_name,
-            "subname": subname,
+            "subname": target_subname,
         },
         "shapeKind": shape_kind,
         "source": {
@@ -1546,8 +1610,8 @@ def topo_state_object_payload(object_name: str, summary: dict[str, Any], object_
     for subshape in subshapes:
         if not isinstance(subshape, dict):
             continue
-        indexed = subshape.get("indexed")
-        if isinstance(indexed, str) and indexed:
+        indexed = topo_state_indexed_subname(subshape)
+        if indexed:
             state_subshapes[indexed] = topo_state_subshape_entry(subshape)
         element_map_entry = topo_state_element_map_entry(object_name, subshape)
         if element_map_entry is not None:
@@ -5929,6 +5993,11 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
 
     global ACTIVE_TOPO_NAMING_STATE
     fixture = load_fixture(fixture_path)
+    topo_state_error = topo_state_version_error_response(fixture)
+    if topo_state_error is not None:
+        ACTIVE_TOPO_NAMING_STATE = None
+        return topo_state_error
+
     topo_state = fixture.get("topoNamingState")
     ACTIVE_TOPO_NAMING_STATE = topo_state if isinstance(topo_state, dict) else None
     if has_part_sweep_wrapper_helper(fixture):
@@ -6111,6 +6180,70 @@ def compare_topo_naming_state_expected(existing: dict, generated: dict) -> list[
     return []
 
 
+def topo_naming_state_contract_errors(payload: dict, label: str) -> list[str]:
+    errors: list[str] = []
+    state = payload.get("topoNamingState")
+    if not isinstance(state, dict):
+        return errors
+    objects = state.get("objects")
+    if not isinstance(objects, dict):
+        return errors
+
+    for object_name, object_state in objects.items():
+        if not isinstance(object_state, dict):
+            continue
+        subshapes = object_state.get("subshapes")
+        if not isinstance(subshapes, dict):
+            subshapes = {}
+        for subshape_key, subshape_entry in subshapes.items():
+            if not isinstance(subshape_entry, dict):
+                errors.append(f"{label}:topoNamingState.{object_name}.subshapes.{subshape_key}")
+                continue
+            if subshape_entry.get("subname") != subshape_key:
+                errors.append(
+                    f"{label}:topoNamingState.{object_name}.subshapes.{subshape_key}.subname"
+                )
+
+        element_map = object_state.get("elementMap")
+        entries = element_map.get("entries") if isinstance(element_map, dict) else {}
+        if not isinstance(entries, dict):
+            continue
+        for token, element_entry in entries.items():
+            if not isinstance(element_entry, dict):
+                errors.append(f"{label}:topoNamingState.{object_name}.elementMap.{token}")
+                continue
+            target = element_entry.get("target")
+            if not isinstance(target, dict):
+                errors.append(f"{label}:topoNamingState.{object_name}.elementMap.{token}.target")
+                continue
+            target_subname = target.get("subname")
+            if not isinstance(target_subname, str) or not target_subname:
+                errors.append(f"{label}:topoNamingState.{object_name}.elementMap.{token}.target.subname")
+                continue
+            if "." in target_subname:
+                errors.append(
+                    f"{label}:topoNamingState.{object_name}.elementMap.{token}.target.subname.path"
+                )
+            if target.get("object") == object_name and target_subname not in subshapes:
+                errors.append(
+                    f"{label}:topoNamingState.{object_name}.elementMap.{token}.target.subname.missing"
+                )
+    return errors
+
+
+def compare_response_contract(existing: dict, generated: dict) -> list[str]:
+    errors: list[str] = []
+    if existing.get("results") == [] and generated.get("results") != []:
+        errors.append("results")
+    if existing.get("diagnostics"):
+        if existing.get("diagnostics") != generated.get("diagnostics"):
+            errors.append("diagnostics")
+    if existing.get("elementReferenceUpdates"):
+        if existing.get("elementReferenceUpdates") != generated.get("elementReferenceUpdates"):
+            errors.append("elementReferenceUpdates")
+    return errors
+
+
 def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     errors: list[str] = []
     bbox_delta = existing.get("bbox_delta", 1e-6)
@@ -6195,6 +6328,9 @@ def compare_json(path: Path, payload: dict) -> bool:
         return False
     existing = json.loads(path.read_text(encoding="utf-8"))
     errors: list[str] = []
+    errors.extend(topo_naming_state_contract_errors(existing, "existing"))
+    errors.extend(topo_naming_state_contract_errors(payload, "generated"))
+    errors.extend(compare_response_contract(existing, payload))
     errors.extend(compare_topo_naming_state_expected(existing, payload))
     existing_objects = result_objects(existing)
     generated_objects = result_objects(payload)

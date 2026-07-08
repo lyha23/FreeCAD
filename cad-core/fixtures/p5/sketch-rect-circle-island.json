@@ -97,7 +97,8 @@
               "SubList": [],
               "StableSubList": [
                 "g5;SKT;FAC"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -153,6 +154,27 @@
               "recoverability": "resolved",
               "evidence": {
                 "source": "legacy_internal_face_fixture_migration",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            },
+            "g5;SKT;FAC": {
+              "target": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              },
+              "mappedName": {
+                "raw": "g5;SKT;FAC",
+                "canonical": "g5;SKT;FAC"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
                 "mapperHistoryIds": [],
                 "childElementMapKey": null
               }

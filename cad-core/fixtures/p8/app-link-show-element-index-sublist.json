@@ -96,9 +96,6 @@
           "value": "ArrayLink",
           "SubList": [
             "1.Face1"
-          ],
-          "StableSubList": [
-            "1.Face1"
           ]
         },
         "LinkTransform": false,

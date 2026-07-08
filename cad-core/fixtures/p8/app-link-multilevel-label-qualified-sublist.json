@@ -87,7 +87,8 @@
           ],
           "StableSubList": [
             "BoxLink.Box.Face1"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LinkTransform": false,
         "LinkPlacement": {
@@ -119,7 +120,50 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "ChainLink": {
+        "objectHash": "sha256:7b9db537b19afa8716caffba6582888e70b3b4595ee4fe3fd21f3a4fb190d509",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1": {
+            "subname": "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1",
+            "rawFreecadMappedName": "BoxLink.Box.Face1",
+            "canonicalFreecadMappedName": "BoxLink.Box.Face1",
+            "resolvedIndexed": "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "BoxLink.Box.Face1": {
+              "target": {
+                "object": "ChainLink",
+                "subname": "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "ChainLink",
+                "subname": "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"
+              },
+              "mappedName": {
+                "raw": "BoxLink.Box.Face1",
+                "canonical": "BoxLink.Box.Face1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:10cd64eadb6f515c7e0c90fb0b871ec6d9a20ba0ea9e36e0184a4f288a55ed08"
   }
 }

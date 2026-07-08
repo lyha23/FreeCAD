@@ -83,9 +83,6 @@
             {
               "value": "SourceSketch",
               "SubList": [
-                "OldEdgeExport"
-              ],
-              "StableSubList": [
                 "Edge1"
               ]
             }

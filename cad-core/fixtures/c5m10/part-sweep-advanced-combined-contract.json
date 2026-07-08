@@ -175,9 +175,6 @@
               "value": "ProfileLocation",
               "SubList": [
                 "Vertex1"
-              ],
-              "StableSubList": [
-                "Vertex1"
               ]
             },
             "WithCorrection": true
@@ -280,9 +277,6 @@
               "PropertyType": "App::PropertyLinkSub",
               "value": "ProfileLocation",
               "SubList": [
-                "Vertex99"
-              ],
-              "StableSubList": [
                 "Vertex99"
               ]
             }

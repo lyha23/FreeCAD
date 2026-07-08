@@ -121,7 +121,8 @@
                     ]
                   }
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -142,7 +143,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "BaseSketch": {
+        "objectHash": "sha256:892f6c6d8216b4176e4579c099eb2245dd82740a0d3b4428c817cb98956cd491",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "BaseSketch.fixture-history-93f95d2e03",
+            "source": {
+              "object": "BaseSketch",
+              "subname": "g701:split1"
+            },
+            "shape_kind": "edge",
+            "relation": "split",
+            "recoverability": "split",
+            "mappedName": {
+              "raw": "g701:split1",
+              "canonical": "g701:split1"
+            },
+            "target": {
+              "object": "BaseSketch",
+              "subname": "InternalEdge3"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:cf284083e20fc23c0357681fcd7dc48fbfb13ed1900802c4297b5a22d41e8383"
   }
 }

@@ -149,7 +149,8 @@
           "SubList": [
             "Edge1"
           ],
-          "value": "草图 12:44:06 AM"
+          "value": "草图 12:44:06 AM",
+          "StableSubListSource": "topoNamingState"
         },
         "Transformation": "Constant",
         "Transition": "Transformed"
@@ -177,7 +178,8 @@
               "SubList": [
                 "Face5"
               ],
-              "value": "Sweep"
+              "value": "Sweep",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -192,7 +194,8 @@
           "SubList": [
             "Edge4"
           ],
-          "value": "草图 12:44:01 AM"
+          "value": "草图 12:44:01 AM",
+          "StableSubListSource": "topoNamingState"
         },
         "Refine": false,
         "Reversed": false,
@@ -233,7 +236,134 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "草图 12:44:06 AM": {
+        "objectHash": "sha256:0696fe9345bfbc8e7e26aacc2d4aa67353c60090913976320b375a3b90d299e5",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Edge1": {
+            "subname": "Edge1",
+            "rawFreecadMappedName": "g600001",
+            "canonicalFreecadMappedName": "g600001",
+            "resolvedIndexed": "Edge1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g600001": {
+              "target": {
+                "object": "草图 12:44:06 AM",
+                "subname": "Edge1"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "草图 12:44:06 AM",
+                "subname": "Edge1"
+              },
+              "mappedName": {
+                "raw": "g600001",
+                "canonical": "g600001"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "Sweep": {
+        "objectHash": "sha256:228b4c1f053178f572b9c003ccba2760d73d8670abed4a605fa0c364befeb559",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Face5": {
+            "subname": "Face5",
+            "rawFreecadMappedName": "Sweep.FrontFace.Face1",
+            "canonicalFreecadMappedName": "Sweep.FrontFace.Face1",
+            "resolvedIndexed": "Face5",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "Sweep.FrontFace.Face1": {
+              "target": {
+                "object": "Sweep",
+                "subname": "Face5"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Sweep",
+                "subname": "Face5"
+              },
+              "mappedName": {
+                "raw": "Sweep.FrontFace.Face1",
+                "canonical": "Sweep.FrontFace.Face1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "草图 12:44:01 AM": {
+        "objectHash": "sha256:a56c049af807dc0f8caac91cbde164ac05b55efec566b2052f24464bae5717fd",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Edge4": {
+            "subname": "Edge4",
+            "rawFreecadMappedName": "g100004",
+            "canonicalFreecadMappedName": "g100004",
+            "resolvedIndexed": "Edge4",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g100004": {
+              "target": {
+                "object": "草图 12:44:01 AM",
+                "subname": "Edge4"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "草图 12:44:01 AM",
+                "subname": "Edge4"
+              },
+              "mappedName": {
+                "raw": "g100004",
+                "canonical": "g100004"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:672da5ab64ce0b19b6ad3eb5c4b644b9b38012e2a46deec331fa00ec5eda9791"
   }
 }

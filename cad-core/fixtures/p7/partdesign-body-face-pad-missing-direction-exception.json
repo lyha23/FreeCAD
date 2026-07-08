@@ -89,7 +89,8 @@
                 "g100001;SKT;FAC"
               ],
               "SubList": [],
-              "value": "草图 7:03:05 PM"
+              "value": "草图 7:03:05 PM",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -109,9 +110,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "ReferenceShadow": [],
           "ShadowSub": [],
-          "StableSubList": [
-            "Edge12"
-          ],
           "SubList": [
             "Edge12"
           ],
@@ -144,7 +142,8 @@
               "SubList": [
                 "Face5"
               ],
-              "value": "Fillet"
+              "value": "Fillet",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -153,9 +152,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "ReferenceShadow": [],
           "ShadowSub": [],
-          "StableSubList": [
-            "Edge4"
-          ],
           "SubList": [
             "Edge4"
           ],
@@ -181,9 +177,6 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Edge19"
-              ],
               "SubList": [
                 "Edge19"
               ],
@@ -211,9 +204,6 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Face1"
-              ],
               "SubList": [
                 "Face1"
               ],
@@ -263,7 +253,62 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "草图 7:03:05 PM": {
+        "objectHash": "sha256:8058d4e84e0b3a4d402784b3d5103c2424e9641700befbb6d81cf90f4fa91c28",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "草图 7:03:05 PM.fixture-history-9895a7dcc1",
+            "source": {
+              "object": "草图 7:03:05 PM",
+              "subname": "g100001;SKT;FAC"
+            },
+            "shape_kind": "face",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "g100001;SKT;FAC",
+              "canonical": "g100001;SKT;FAC"
+            }
+          }
+        ]
+      },
+      "Fillet": {
+        "objectHash": "sha256:e6ea5950e30dd08389969a6a23360d77110e25c39d9172a4d3ed2765eda5e1f9",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Fillet.fixture-history-dbac379070",
+            "source": {
+              "object": "Fillet",
+              "subname": "Pad.Face6"
+            },
+            "shape_kind": "face",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Pad.Face6",
+              "canonical": "Pad.Face6"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:95aec439277b9436f1a3b94b0406f43ec3d53ba2b84f92cbbc3cb4c5a5dc4054"
   }
 }

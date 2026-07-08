@@ -26,9 +26,6 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Order": 0,
               "NbPts": 10,
               "TolDist": 0.0001,

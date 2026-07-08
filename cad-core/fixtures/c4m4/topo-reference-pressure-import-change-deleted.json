@@ -93,7 +93,8 @@
           ],
           "StableSubList": [
             "ImportedStep.Face999"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Reversed": false,
         "SideType": "One side"
@@ -154,6 +155,33 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "ImportedStep": {
+        "objectHash": "sha256:1fc2c2cb982913eff6cbc6533d9fa85813d071e1b4008844b15ba10de1b67448",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "ImportedStep.fixture-history-e967c726fd",
+            "source": {
+              "object": "ImportedStep",
+              "subname": "ImportedStep.Face999"
+            },
+            "shape_kind": "face",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "ImportedStep.Face999",
+              "canonical": "ImportedStep.Face999"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:7a13009a22481c1ff0ff859327e88ff5ee1d20fd0364a99c23bb0bf4034ec9c6"

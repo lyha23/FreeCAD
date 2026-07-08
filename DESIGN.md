@@ -435,3 +435,8 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 ---
 
  我希望让它建立多个子Agent 并行跑输出, 在跑输出之前, 先把原有的 expected 里的内容全删了, 给我出一个 /goal prompt
+
+----
+
+根据'/Users/li/Chili3DProject/FreeCAD/docs/接口规定/7-8-11-08-topoNamingState客户端携带状态接口方案.md' 挨个查阅一下, '/Users/li/Chili3DProject/
+  FreeCAD/cad-core/fixtures'里面的 `fixtures/<phase>/*.json` 是根输入 fixture。 这些输入 fixture 有不满足要求的吗

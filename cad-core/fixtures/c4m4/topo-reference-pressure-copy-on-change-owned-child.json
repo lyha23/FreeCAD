@@ -124,7 +124,8 @@
                   "stableSubname": "OwnedCopyBox.Face1",
                   "fingerprint": {}
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -145,7 +146,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "ArrayLink_i0": {
+        "objectHash": "sha256:0fa0951bf80f39ad8df536ef1a6be8ed25d88ccfdd1f121d2cf5318012fa7dba",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "ArrayLink_i0.fixture-history-85ccfc5290",
+            "source": {
+              "object": "ArrayLink_i0",
+              "subname": "OwnedCopyBox.Face1"
+            },
+            "shape_kind": "shape",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "OwnedCopyBox.Face1",
+              "canonical": "OwnedCopyBox.Face1"
+            },
+            "target": {
+              "object": "ArrayLink_i0",
+              "subname": "OldOwnedFace"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:ac7572f56a78c1a86173faf2eecc5a68f7c0218c7ee2fe73ceb39c0e1fc3a2b1"
   }
 }

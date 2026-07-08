@@ -61,9 +61,6 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Order": 1,
               "NbPts": 10,
               "TolDist": 0.0001,
@@ -74,18 +71,12 @@
                 "value": "SupportPlane",
                 "SubList": [
                   "Face1"
-                ],
-                "StableSubList": [
-                  "Face1"
                 ]
               }
             },
             {
               "value": "BoundaryB",
               "SubList": [
-                "Edge1"
-              ],
-              "StableSubList": [
                 "Edge1"
               ],
               "Order": 0,
@@ -99,9 +90,6 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Order": 0,
               "NbPts": 10,
               "TolDist": 0.0001,
@@ -111,9 +99,6 @@
             {
               "value": "BoundaryD",
               "SubList": [
-                "Edge1"
-              ],
-              "StableSubList": [
                 "Edge1"
               ],
               "Order": 0,

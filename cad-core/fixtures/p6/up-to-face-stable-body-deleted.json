@@ -271,7 +271,8 @@
           ],
           "StableSubList": [
             "Pocket.Face5"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Reversed": false,
         "SideType": "One side"
@@ -416,6 +417,33 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Body": {
+        "objectHash": "sha256:57b09f0efb99e95b28c16273c94be1233c395029d3dd6c4dfe9d800257765f20",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Body.fixture-history-159de5aef6",
+            "source": {
+              "object": "Body",
+              "subname": "Pocket.Face5"
+            },
+            "shape_kind": "face",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Pocket.Face5",
+              "canonical": "Pocket.Face5"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:1e35821ebe94d1a7305c34a608834402ebce5f22f46c0053e6c4216146668628"

@@ -83,7 +83,8 @@
               "oldName": "Edge1",
               "newName": "g100:1"
             }
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -241,6 +242,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "SupportBox": {
+        "objectHash": "sha256:d42a62c1ba3448070c7f493befe6775b24fc23203c103377b3b7bf9e7112e67c",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "SupportBox.fixture-history-061af3e837",
+            "source": {
+              "object": "SupportBox",
+              "subname": "g100:1"
+            },
+            "shape_kind": "edge",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "g100:1",
+              "canonical": "g100:1"
+            },
+            "target": {
+              "object": "SupportBox",
+              "subname": "Edge1"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:2d89e4f27f96627d6de7f810b2cb78c4a3c2ee6ff2fa156e5146f1b70e5ad712"

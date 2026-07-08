@@ -62,7 +62,8 @@
               "SubList": [
                 "Edge1"
               ],
-              "value": "草图 2:10:13 PM"
+              "value": "草图 2:10:13 PM",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -99,7 +100,8 @@
               "SubList": [
                 "Face1"
               ],
-              "value": "Pad"
+              "value": "Pad",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -125,9 +127,6 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Edge12"
-              ],
               "SubList": [
                 "Edge12"
               ],
@@ -161,9 +160,6 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Face1"
-              ],
               "SubList": [
                 "Face1"
               ],
@@ -188,11 +184,8 @@
           "PropertyType": "App::PropertyLinkSub",
           "ReferenceShadow": [],
           "ShadowSub": [],
-          "StableSubList": [
-            "Edge12"
-          ],
           "SubList": [
-            "Edge23"
+            "Edge12"
           ],
           "value": "Pad4"
         },
@@ -237,7 +230,92 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "草图 2:10:13 PM": {
+        "objectHash": "sha256:f1a0a7fbd6c045cd53cee26c01962733c4286cfbca034fbb9a748bdf9580cad0",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Edge1": {
+            "subname": "Edge1",
+            "rawFreecadMappedName": "g100001",
+            "canonicalFreecadMappedName": "g100001",
+            "resolvedIndexed": "Edge1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g100001": {
+              "target": {
+                "object": "草图 2:10:13 PM",
+                "subname": "Edge1"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "草图 2:10:13 PM",
+                "subname": "Edge1"
+              },
+              "mappedName": {
+                "raw": "g100001",
+                "canonical": "g100001"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "Pad": {
+        "objectHash": "sha256:136ded5c8c18d1e654036ec4c130a43256bccc20e4910067d6257731039a1111",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Face1": {
+            "subname": "Face1",
+            "rawFreecadMappedName": "g100001",
+            "canonicalFreecadMappedName": "g100001",
+            "resolvedIndexed": "Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g100001": {
+              "target": {
+                "object": "Pad",
+                "subname": "Face1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face1"
+              },
+              "mappedName": {
+                "raw": "g100001",
+                "canonical": "g100001"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:987dcbc43b5a7452bac88552db84be326a72c3f88161623efda47bf7b4e4f1e1"
   }
 }

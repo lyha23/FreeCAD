@@ -106,9 +106,6 @@
           "value": "Pad",
           "SubList": [
             "Edge7"
-          ],
-          "StableSubList": [
-            "Edge7"
           ]
         },
         "Radius": 95,
@@ -131,7 +128,8 @@
               ],
               "StableSubList": [
                 "Pad.Face6"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -159,9 +157,6 @@
             {
               "value": "Fillet",
               "SubList": [
-                "Face7"
-              ],
-              "StableSubList": [
                 "Face3"
               ]
             }
@@ -190,9 +185,6 @@
           "value": "Pad3",
           "SubList": [
             "Edge7"
-          ],
-          "StableSubList": [
-            "Edge7"
           ]
         },
         "Radius": 74.9,
@@ -215,7 +207,8 @@
               ],
               "StableSubList": [
                 "Fillet.Face2"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -243,9 +236,6 @@
             {
               "value": "Fillet2",
               "SubList": [
-                "Face13"
-              ],
-              "StableSubList": [
                 "Face3"
               ]
             }
@@ -277,7 +267,8 @@
           ],
           "StableSubList": [
             "Fillet2.Edge30"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Radius": 58.3,
         "UseAllEdges": false,
@@ -297,7 +288,8 @@
           ],
           "StableSubList": [
             "Pad5.Edge8"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Radius": 1,
         "UseAllEdges": false,
@@ -386,6 +378,114 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Fillet": {
+        "objectHash": "sha256:10922dbd8c57c838a88343d698bd3e4433c24fc0c3160aa77002a62ca350e060",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Fillet.fixture-history-dbac379070",
+            "source": {
+              "object": "Fillet",
+              "subname": "Pad.Face6"
+            },
+            "shape_kind": "face",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Pad.Face6",
+              "canonical": "Pad.Face6"
+            }
+          }
+        ]
+      },
+      "Fillet2": {
+        "objectHash": "sha256:4c8d54940b6a45f68988300041be220fb138c2b0f31c0f7efb862393a866c7ae",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Fillet2.fixture-history-01558b2898",
+            "source": {
+              "object": "Fillet2",
+              "subname": "Fillet.Face2"
+            },
+            "shape_kind": "face",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Fillet.Face2",
+              "canonical": "Fillet.Face2"
+            }
+          }
+        ]
+      },
+      "Pad5": {
+        "objectHash": "sha256:984733c64847e95830716f164b302a14b50016ab13187a215fedc1effcbf28d6",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Pad5.fixture-history-b4cfea5aeb",
+            "source": {
+              "object": "Pad5",
+              "subname": "Fillet2.Edge30"
+            },
+            "shape_kind": "edge",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Fillet2.Edge30",
+              "canonical": "Fillet2.Edge30"
+            }
+          }
+        ]
+      },
+      "Fillet3": {
+        "objectHash": "sha256:15f64b6a003048f07542bb9ab4aef44d536d963c4be16230b822cb4db0b92edc",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Fillet3.fixture-history-a4169279eb",
+            "source": {
+              "object": "Fillet3",
+              "subname": "Pad5.Edge8"
+            },
+            "shape_kind": "edge",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Pad5.Edge8",
+              "canonical": "Pad5.Edge8"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:42e154aecdc402a596df3fb850d4abab217470c80bb5f163794b7a79b7db66ca"

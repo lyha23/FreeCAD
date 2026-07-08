@@ -33,7 +33,8 @@
           },
           "StableSubList": [
             "ExternalBox.Face1"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LinkTransform": false
       }
@@ -81,7 +82,18 @@
               }
             }
           }
-        }
+        },
+        "objectHash": "sha256:a28c628b4547089970ba807035b0f0d1c178599b747fa377e69b378554c8b5ca",
+        "subshapes": {
+          "Face1": {
+            "subname": "Face1",
+            "rawFreecadMappedName": "ExternalBox.Face1",
+            "canonicalFreecadMappedName": "ExternalBox.Face1",
+            "resolvedIndexed": "Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "childElementMaps": []
       }
     },
     "documentHash": "sha256:fcaef2c17cec71c2cf4a6061fb8d204fb36502b6e845109740a88ee80f62a3be"

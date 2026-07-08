@@ -49,9 +49,6 @@
               "SubList": [
                 "Face1"
               ],
-              "StableSubList": [
-                "Face1"
-              ],
               "Order": "C0"
             }
           ]
@@ -73,9 +70,6 @@
               "value": "CenterPoint",
               "SubList": [
                 "Vertex1"
-              ],
-              "StableSubList": [
-                "Vertex1"
               ]
             }
           ]
@@ -86,9 +80,6 @@
             {
               "value": "CenterPoint",
               "SubList": [
-                "Vertex1"
-              ],
-              "StableSubList": [
                 "Vertex1"
               ],
               "Order": "G1"
@@ -112,9 +103,6 @@
               "value": "SupportPlane",
               "SubList": [
                 "Face1"
-              ],
-              "StableSubList": [
-                "Face1"
               ]
             }
           ]
@@ -127,16 +115,10 @@
               "SubList": [
                 "Face1"
               ],
-              "StableSubList": [
-                "Face1"
-              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
                 "SubList": [
-                  "Face1"
-                ],
-                "StableSubList": [
                   "Face1"
                 ]
               }

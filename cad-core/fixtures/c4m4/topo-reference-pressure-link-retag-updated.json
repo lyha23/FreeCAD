@@ -237,7 +237,8 @@
                   "stableSubname": "Body.SketchPocket.Edge1",
                   "fingerprint": {}
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -342,6 +343,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "BodyLink": {
+        "objectHash": "sha256:296dddf3d974a68d17d747cf336d111a8f0ba343ff8f0a61da39dc7325d866bf",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "BodyLink.fixture-history-ef1d2d20be",
+            "source": {
+              "object": "BodyLink",
+              "subname": "Body.SketchPocket.Edge1"
+            },
+            "shape_kind": "shape",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Body.SketchPocket.Edge1",
+              "canonical": "Body.SketchPocket.Edge1"
+            },
+            "target": {
+              "object": "BodyLink",
+              "subname": "OldRetagEdge"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:bbee3e4e541c0208f71e1bcc4535c9a0cfa9de1f431ac35f4088616282094682"

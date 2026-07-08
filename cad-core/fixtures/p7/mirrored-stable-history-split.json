@@ -311,7 +311,8 @@
           ],
           "StableSubList": [
             "Pad.Face5"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Reversed": false,
         "SideType": "One side"
@@ -456,6 +457,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Mirrored": {
+        "objectHash": "sha256:90a5a08af826997d29bc119b5189fd297dcd2494ec144858da055290a0bccf3f",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Mirrored.fixture-history-742e57dd58",
+            "source": {
+              "object": "Mirrored",
+              "subname": "Pad.Face5"
+            },
+            "shape_kind": "face",
+            "relation": "split",
+            "recoverability": "split",
+            "mappedName": {
+              "raw": "Pad.Face5",
+              "canonical": "Pad.Face5"
+            },
+            "target": {
+              "object": "Mirrored",
+              "subname": "Face5"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:474e1d2e1593e4e818896456a20bb8afd18f42a5661ebb074233bfdac29999b3"

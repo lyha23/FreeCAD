@@ -112,9 +112,6 @@
               "SubList": [
                 "Face6"
               ],
-              "StableSubList": [
-                "Face6"
-              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -127,9 +124,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchSource",
           "SubList": [
-            "Edge2"
-          ],
-          "StableSubList": [
             "Edge2"
           ],
           "FullSubList": [],
@@ -154,9 +148,6 @@
             {
               "value": "Revolution",
               "SubList": [
-                "Face4"
-              ],
-              "StableSubList": [
                 "Face4"
               ],
               "FullSubList": [],

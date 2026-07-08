@@ -73,7 +73,8 @@
           ],
           "StableSubList": [
             "ImportedCylinder.Edge1"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LinkTransform": false
       }
@@ -91,7 +92,8 @@
           ],
           "StableSubList": [
             "ImportedStep.Face1"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LinkTransform": false
       }
@@ -109,7 +111,8 @@
           ],
           "StableSubList": [
             "ImportedIges.Face1"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LinkTransform": false
       }
@@ -150,7 +153,134 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "BrepLink": {
+        "objectHash": "sha256:0e1e5d75608cd7f4cd3fbad3fe8e84fce9ee22d115873519b8a4d20dc6f3e888",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "BrepLink.ImportedCylinder.Edge1": {
+            "subname": "BrepLink.ImportedCylinder.Edge1",
+            "rawFreecadMappedName": "ImportedCylinder.Edge1",
+            "canonicalFreecadMappedName": "ImportedCylinder.Edge1",
+            "resolvedIndexed": "BrepLink.ImportedCylinder.Edge1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "ImportedCylinder.Edge1": {
+              "target": {
+                "object": "BrepLink",
+                "subname": "BrepLink.ImportedCylinder.Edge1"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "BrepLink",
+                "subname": "BrepLink.ImportedCylinder.Edge1"
+              },
+              "mappedName": {
+                "raw": "ImportedCylinder.Edge1",
+                "canonical": "ImportedCylinder.Edge1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "StepLink": {
+        "objectHash": "sha256:8ef54e32f5552ef97fa2ee9a507efa424b0f7c3102602319770702f570f44465",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "StepLink.ImportedStep.Face1": {
+            "subname": "StepLink.ImportedStep.Face1",
+            "rawFreecadMappedName": "ImportedStep.Face1",
+            "canonicalFreecadMappedName": "ImportedStep.Face1",
+            "resolvedIndexed": "StepLink.ImportedStep.Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "ImportedStep.Face1": {
+              "target": {
+                "object": "StepLink",
+                "subname": "StepLink.ImportedStep.Face1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "StepLink",
+                "subname": "StepLink.ImportedStep.Face1"
+              },
+              "mappedName": {
+                "raw": "ImportedStep.Face1",
+                "canonical": "ImportedStep.Face1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "IgesLink": {
+        "objectHash": "sha256:300b23e14b38fa53086e40b1896b180c614f948b71645947c9db0913b4add963",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "IgesLink.ImportedIges.Face1": {
+            "subname": "IgesLink.ImportedIges.Face1",
+            "rawFreecadMappedName": "ImportedIges.Face1",
+            "canonicalFreecadMappedName": "ImportedIges.Face1",
+            "resolvedIndexed": "IgesLink.ImportedIges.Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "ImportedIges.Face1": {
+              "target": {
+                "object": "IgesLink",
+                "subname": "IgesLink.ImportedIges.Face1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "IgesLink",
+                "subname": "IgesLink.ImportedIges.Face1"
+              },
+              "mappedName": {
+                "raw": "ImportedIges.Face1",
+                "canonical": "ImportedIges.Face1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:aef507f636454b9af40370e63ba731064a05c0ccd8ab6529fdd3a0a2119dafb1"
   }
 }

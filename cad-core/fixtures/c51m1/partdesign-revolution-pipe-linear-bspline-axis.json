@@ -150,7 +150,8 @@
           "SubList": [
             "Edge1"
           ],
-          "value": "SketchPipeSpine"
+          "value": "SketchPipeSpine",
+          "StableSubListSource": "topoNamingState"
         },
         "Transformation": "Constant",
         "Transition": "Transformed"
@@ -178,7 +179,8 @@
               "SubList": [
                 "Face5"
               ],
-              "value": "AdditivePipe"
+              "value": "AdditivePipe",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -193,7 +195,8 @@
           "SubList": [
             "Edge7"
           ],
-          "value": "AdditivePipe"
+          "value": "AdditivePipe",
+          "StableSubListSource": "topoNamingState"
         },
         "Refine": false,
         "Reversed": false,
@@ -233,7 +236,120 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "SketchPipeSpine": {
+        "objectHash": "sha256:b2f70f9a776fa77816ba7fa2cb816f3a9c7d27ffef07802e0c534e8a3094d4b3",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Edge1": {
+            "subname": "Edge1",
+            "rawFreecadMappedName": "g600001",
+            "canonicalFreecadMappedName": "g600001",
+            "resolvedIndexed": "Edge1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g600001": {
+              "target": {
+                "object": "SketchPipeSpine",
+                "subname": "Edge1"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "SketchPipeSpine",
+                "subname": "Edge1"
+              },
+              "mappedName": {
+                "raw": "g600001",
+                "canonical": "g600001"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "AdditivePipe": {
+        "objectHash": "sha256:581eecf5f7cce8b5c8dcdfe443f19339020e1beddf834beab650bf1ea3fa4557",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Face5": {
+            "subname": "Face5",
+            "rawFreecadMappedName": "AdditivePipe.FrontFace.Face1",
+            "canonicalFreecadMappedName": "AdditivePipe.FrontFace.Face1",
+            "resolvedIndexed": "Face5",
+            "identityStatus": "stable"
+          },
+          "Edge7": {
+            "subname": "Edge7",
+            "rawFreecadMappedName": "AdditivePipe.BackFace.Edge2",
+            "canonicalFreecadMappedName": "AdditivePipe.BackFace.Edge2",
+            "resolvedIndexed": "Edge7",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "AdditivePipe.FrontFace.Face1": {
+              "target": {
+                "object": "AdditivePipe",
+                "subname": "Face5"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipe",
+                "subname": "Face5"
+              },
+              "mappedName": {
+                "raw": "AdditivePipe.FrontFace.Face1",
+                "canonical": "AdditivePipe.FrontFace.Face1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            },
+            "AdditivePipe.BackFace.Edge2": {
+              "target": {
+                "object": "AdditivePipe",
+                "subname": "Edge7"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipe",
+                "subname": "Edge7"
+              },
+              "mappedName": {
+                "raw": "AdditivePipe.BackFace.Edge2",
+                "canonical": "AdditivePipe.BackFace.Edge2"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:1515623dd69c28a834063f6dd2049851a72cd143cd9840fb93f8c847864bdcdc"
   }
 }

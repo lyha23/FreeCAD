@@ -60,9 +60,6 @@
               "value": "ConstraintEdge",
               "SubList": [
                 "Edge1"
-              ],
-              "StableSubList": [
-                "Edge1"
               ]
             }
           ]
@@ -75,16 +72,10 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
                 "SubList": [
-                  "Face1"
-                ],
-                "StableSubList": [
                   "Face1"
                 ]
               }
@@ -97,9 +88,6 @@
             {
               "value": "ConstraintEdge",
               "SubList": [
-                "Edge1"
-              ],
-              "StableSubList": [
                 "Edge1"
               ],
               "Order": "G1"

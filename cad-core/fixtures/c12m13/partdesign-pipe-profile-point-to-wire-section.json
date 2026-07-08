@@ -128,18 +128,12 @@
           "value": "ProfilePoint",
           "SubList": [
             "Vertex1"
-          ],
-          "StableSubList": [
-            "Vertex1"
           ]
         },
         "Spine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SketchPipeSpine",
           "SubList": [
-            "Edge1"
-          ],
-          "StableSubList": [
             "Edge1"
           ]
         },

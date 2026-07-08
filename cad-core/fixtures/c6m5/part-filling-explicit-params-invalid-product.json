@@ -24,12 +24,6 @@
                 "Edge2",
                 "Edge3",
                 "Edge4"
-              ],
-              "StableSubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
               ]
             }
           ]
@@ -48,12 +42,6 @@
             {
               "value": "Profile",
               "SubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
-              ],
-              "StableSubList": [
                 "Edge1",
                 "Edge2",
                 "Edge3",
@@ -80,12 +68,6 @@
                 "Edge2",
                 "Edge3",
                 "Edge4"
-              ],
-              "StableSubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
               ]
             }
           ]
@@ -104,12 +86,6 @@
             {
               "value": "Profile",
               "SubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
-              ],
-              "StableSubList": [
                 "Edge1",
                 "Edge2",
                 "Edge3",

@@ -281,7 +281,8 @@
               "stableSubname": "Pad.Face6",
               "fingerprint": {}
             }
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Reversed": false,
         "SideType": "One side"
@@ -426,6 +427,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Body": {
+        "objectHash": "sha256:42264be5719beb8fb660af7c5f01d762c034c8967aca70297c8bc1ecab350360",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Body.fixture-history-dbac379070",
+            "source": {
+              "object": "Body",
+              "subname": "Pad.Face6"
+            },
+            "shape_kind": "shape",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Pad.Face6",
+              "canonical": "Pad.Face6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "OldBodyFace"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:2bc59b8fc0a14fa209769a6b03bcf51d32034329862b3cb17ab6afa99c375cf2"

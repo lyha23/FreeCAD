@@ -114,9 +114,6 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Face6"
-              ],
               "SubList": [
                 "Face6"
               ],
@@ -129,9 +126,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "ReferenceShadow": [],
           "ShadowSub": [],
-          "StableSubList": [
-            "Edge4"
-          ],
           "SubList": [
             "Edge4"
           ],
@@ -161,9 +155,6 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Face4"
-              ],
               "SubList": [
                 "Face4"
               ],
@@ -187,11 +178,8 @@
           "PropertyType": "App::PropertyLinkSub",
           "ReferenceShadow": [],
           "ShadowSub": [],
-          "StableSubList": [
-            "Edge7"
-          ],
           "SubList": [
-            "Edge9"
+            "Edge7"
           ],
           "value": "Pad2"
         },

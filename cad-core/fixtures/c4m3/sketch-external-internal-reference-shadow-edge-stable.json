@@ -144,7 +144,8 @@
                     "vertexCount": 2
                   }
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -230,6 +231,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "BaseSketch": {
+        "objectHash": "sha256:832d5e84dea257e2412e39369e17bc42d725fd4f7ef2091569f1f4381fe4db88",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "BaseSketch.fixture-history-9d5cac3a77",
+            "source": {
+              "object": "BaseSketch",
+              "subname": "Edge1"
+            },
+            "shape_kind": "edge",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Edge1",
+              "canonical": "Edge1"
+            },
+            "target": {
+              "object": "BaseSketch",
+              "subname": "Edge1"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:20d79bc0f0436a580ec36d698979428cd564260009be49e9e747ccbf37f579a5"

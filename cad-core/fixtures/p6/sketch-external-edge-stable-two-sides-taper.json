@@ -115,7 +115,8 @@
               ],
               "StableSubList": [
                 "Sketch.Edge1"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -174,6 +175,48 @@
             }
           },
           "status": "indexed_only"
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "Pad": {
+        "objectHash": "sha256:e4055923ea60de56137dc417a09e1e15a1aa0432191dd84dbe6c8efa5fc63ae3",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Edge1": {
+            "subname": "Edge1",
+            "rawFreecadMappedName": "Sketch.Edge1",
+            "canonicalFreecadMappedName": "Sketch.Edge1",
+            "resolvedIndexed": "Edge1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "Sketch.Edge1": {
+              "target": {
+                "object": "Pad",
+                "subname": "Edge1"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge1"
+              },
+              "mappedName": {
+                "raw": "Sketch.Edge1",
+                "canonical": "Sketch.Edge1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
         },
         "childElementMaps": [],
         "mapperHistory": []

@@ -113,7 +113,8 @@
                 "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 1\n1 20 0 0 1 0 0 \nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 0\nTriangulations 0\n\nTShapes 3\nVe\n1e-07\n20 0 0\n0 0\n\n0101101\n*\nVe\n1e-07\n30 0 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  1 0 0 10\n0\n\n1101000\n+3 0 -2 0 *\n\n+1 0 "
               }
             }
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LengthFwd": 10,
         "LengthRev": 0,
@@ -133,7 +134,35 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "Sketch": {
+        "objectHash": "sha256:f9eb89a5470a6ce9d04496976c2527e2dd11cc358b25eb25f7cff747630d79b3",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Sketch.fixture-history-9d5cac3a77",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "shape_kind": "edge",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Edge1",
+              "canonical": "Edge1"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:def3e4f1a3d1620e9550ad08d2c738af6555af9efa58558733db9ee2a7f4961b"
   }
 }

@@ -107,7 +107,8 @@
                     "data": "KLUv/WSWAR0JADLOLCMgbaYDcAyUbwslt7QDpEJdQyANcJK+3I1E3msxsBoghBOnAb5TaZO39/sQmjAEiu8CpaccmjjGKb5wS+PbwKXS/3U27T4aTdJ85vPtu7iDWejo01nUumZgcTadQelFYBtUbZP1KCyyFu5HYcUpUkWG3jXO3lnG2WOBEGxzemdWpLQnxYRakcooyNPe4x6mPQUHSAAWSIcjU6ziFSM3HoYDMZwWXk8CghXEm3jY83DBhoMnMSBwgjFE2gFhBkiIGyZhtFgWN4C4wHBqhGjLOwgrkJy1H+XZZcWSQ8mmpZ1ZM2F4BPWnzVDJ8qa1IG20GAZoiekNg6eZ9V/qnoBAhvvMTLg7WDoU3F37BR1JlhJm7YSVayZrgRJphCA1k6wZM6jNLoo="
                   }
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -129,7 +130,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "Sketch": {
+        "objectHash": "sha256:7c11f5de025a3b28ade5bcc7f2f3be88fdd7cd9c0b202a11d2498776fb46dba7",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Sketch.fixture-history-d70e592878",
+            "source": {
+              "object": "Sketch",
+              "subname": "g305:split1"
+            },
+            "shape_kind": "face",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "g305:split1",
+              "canonical": "g305:split1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Face1"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:197ee60189893db5cc06dc56e3430bedce11764715f5489e0927d1d8642812b1"
   }
 }

@@ -271,7 +271,8 @@
           ],
           "StableSubList": [
             "Pad.Face5"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Reversed": false,
         "SideType": "One side"
@@ -416,6 +417,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Body": {
+        "objectHash": "sha256:57b09f0efb99e95b28c16273c94be1233c395029d3dd6c4dfe9d800257765f20",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Body.fixture-history-742e57dd58",
+            "source": {
+              "object": "Body",
+              "subname": "Pad.Face5"
+            },
+            "shape_kind": "face",
+            "relation": "split",
+            "recoverability": "split",
+            "mappedName": {
+              "raw": "Pad.Face5",
+              "canonical": "Pad.Face5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face5"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:94c48eff3878dc96b62f3fd57dd35b2bae150557fe862d59bba4d702395a97f2"

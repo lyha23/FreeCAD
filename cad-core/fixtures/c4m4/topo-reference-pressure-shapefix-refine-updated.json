@@ -124,7 +124,8 @@
                   "stableSubname": "Sketch.Face1",
                   "fingerprint": {}
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -187,6 +188,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Pad": {
+        "objectHash": "sha256:059c09c26d7abb3fc2271c7f045155c6e54e4958e72fd140e3897abacfcdb37d",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Pad.fixture-history-0cdbc1abf6",
+            "source": {
+              "object": "Pad",
+              "subname": "Sketch.Face1"
+            },
+            "shape_kind": "shape",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Sketch.Face1",
+              "canonical": "Sketch.Face1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "OldRefineFace"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:c6324dd4897d71849e0bc2d952efe275456135ed7e991462151822f0d129cde7"

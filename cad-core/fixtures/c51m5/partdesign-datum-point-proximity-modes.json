@@ -328,7 +328,8 @@
                   "oldName": "MissingVertex1",
                   "newName": "Vertex1"
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             },
             {
               "value": "PointB",
@@ -363,7 +364,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "RecoveryBox": {
+        "objectHash": "sha256:efbdab580e062f6d51ef0f4388e56d56a1948396a86f0f91d068d0c0b50abf8f",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "RecoveryBox.fixture-history-22dd46cf33",
+            "source": {
+              "object": "RecoveryBox",
+              "subname": "Vertex1"
+            },
+            "shape_kind": "vertex",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Vertex1",
+              "canonical": "Vertex1"
+            },
+            "target": {
+              "object": "RecoveryBox",
+              "subname": "Vertex1"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:346f55d43332e010fa90213540aa2ca0e38985ae8537c4bde404d1165730f7e6"
   }
 }

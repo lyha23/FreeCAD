@@ -120,9 +120,6 @@
           "value": "SketchPipeSpine",
           "SubList": [
             "Edge1"
-          ],
-          "StableSubList": [
-            "Edge1"
           ]
         },
         "Sections": {
@@ -131,9 +128,6 @@
             {
               "value": "LastSectionPoint",
               "SubList": [
-                "Vertex1"
-              ],
-              "StableSubList": [
                 "Vertex1"
               ]
             }

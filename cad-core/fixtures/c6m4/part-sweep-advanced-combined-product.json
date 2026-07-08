@@ -150,9 +150,6 @@
           "value": "PipeSpine",
           "SubList": [
             "Edge1"
-          ],
-          "StableSubList": [
-            "Edge1"
           ]
         },
         "Sections": {
@@ -169,9 +166,6 @@
           "value": "AuxiliarySpine",
           "SubList": [
             "Edge1"
-          ],
-          "StableSubList": [
-            "Edge1"
           ]
         },
         "AuxiliaryCurvilinear": false,
@@ -181,9 +175,6 @@
               "PropertyType": "App::PropertyLinkSub",
               "value": "ProfileLocation",
               "SubList": [
-                "Vertex1"
-              ],
-              "StableSubList": [
                 "Vertex1"
               ]
             },

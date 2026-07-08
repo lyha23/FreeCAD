@@ -130,9 +130,6 @@
               "value": "ProfileLocation",
               "SubList": [
                 "Vertex1"
-              ],
-              "StableSubList": [
-                "Vertex1"
               ]
             },
             "ProfilePlacement": "AnchorLocationToSpineStart",
@@ -166,9 +163,6 @@
               "PropertyType": "App::PropertyLinkSub",
               "value": "ProfileLocation",
               "SubList": [
-                "Vertex1"
-              ],
-              "StableSubList": [
                 "Vertex1"
               ]
             },

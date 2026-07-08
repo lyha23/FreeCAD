@@ -61,7 +61,8 @@
               "SubList": [
                 "Edge1"
               ],
-              "value": "草图 1:10:59 PM"
+              "value": "草图 1:10:59 PM",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -96,7 +97,8 @@
               "SubList": [
                 "Face1"
               ],
-              "value": "Pad"
+              "value": "Pad",
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -125,9 +127,6 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Face6"
-              ],
               "SubList": [
                 "Face6"
               ],
@@ -160,11 +159,8 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": [
-                "Face4"
-              ],
               "SubList": [
-                "Face5"
+                "Face4"
               ],
               "value": "Pad2"
             }
@@ -211,7 +207,92 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "草图 1:10:59 PM": {
+        "objectHash": "sha256:001ee2b08122caaf198c9dac7b710c49f9f032b124a5c4b2fcfe0c2645a3433e",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Edge1": {
+            "subname": "Edge1",
+            "rawFreecadMappedName": "g100001",
+            "canonicalFreecadMappedName": "g100001",
+            "resolvedIndexed": "Edge1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g100001": {
+              "target": {
+                "object": "草图 1:10:59 PM",
+                "subname": "Edge1"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "草图 1:10:59 PM",
+                "subname": "Edge1"
+              },
+              "mappedName": {
+                "raw": "g100001",
+                "canonical": "g100001"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "Pad": {
+        "objectHash": "sha256:9a33aaf69024a9243e1080fd0b40a5ce223fd968cd843c51ea7e9e3516eedfa5",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Face1": {
+            "subname": "Face1",
+            "rawFreecadMappedName": "g100001",
+            "canonicalFreecadMappedName": "g100001",
+            "resolvedIndexed": "Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g100001": {
+              "target": {
+                "object": "Pad",
+                "subname": "Face1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face1"
+              },
+              "mappedName": {
+                "raw": "g100001",
+                "canonical": "g100001"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:3699105f90d5481996b5bdb954deac769b209f7fd8948e5900fd172f79c76490"
   }
 }

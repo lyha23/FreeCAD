@@ -74,10 +74,6 @@
           "SubList": [
             "Edge1",
             "Edge2"
-          ],
-          "StableSubList": [
-            "Edge1",
-            "Edge2"
           ]
         },
         "Sections": {

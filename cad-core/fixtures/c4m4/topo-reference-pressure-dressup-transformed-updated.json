@@ -220,7 +220,8 @@
                   "stableSubname": "Mirrored.Transform1.Face1",
                   "fingerprint": {}
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -283,6 +284,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Mirrored": {
+        "objectHash": "sha256:aacd8d0e0e838d89d0525c6f7f89dbc439726c2fe8642a85bd367fb3504ffd7f",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Mirrored.fixture-history-aba048f266",
+            "source": {
+              "object": "Mirrored",
+              "subname": "Mirrored.Transform1.Face1"
+            },
+            "shape_kind": "shape",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Mirrored.Transform1.Face1",
+              "canonical": "Mirrored.Transform1.Face1"
+            },
+            "target": {
+              "object": "Mirrored",
+              "subname": "OldDressupFace"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:83e1371a39d1b0c50274824908688a066e0d5e0effd1d134ea7d8295ce27994a"

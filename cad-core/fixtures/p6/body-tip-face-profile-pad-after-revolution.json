@@ -106,9 +106,6 @@
           "value": "Pad",
           "SubList": [
             "Face6"
-          ],
-          "StableSubList": [
-            "Face6"
           ]
         },
         "Type": "Angle",
@@ -117,9 +114,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",
           "SubList": [
-            "Edge7"
-          ],
-          "StableSubList": [
             "Edge7"
           ]
         },
@@ -141,9 +135,6 @@
             {
               "value": "Revolution",
               "SubList": [
-                "Face4"
-              ],
-              "StableSubList": [
                 "Face4"
               ]
             }

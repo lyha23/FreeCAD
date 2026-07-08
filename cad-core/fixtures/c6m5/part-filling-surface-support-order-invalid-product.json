@@ -33,12 +33,6 @@
                 "Edge2",
                 "Edge3",
                 "Edge4"
-              ],
-              "StableSubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
               ]
             }
           ]
@@ -47,9 +41,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "value": "Profile",
           "SubList": [
-            "Edge1"
-          ],
-          "StableSubList": [
             "Edge1"
           ]
         }
@@ -70,12 +61,6 @@
                 "Edge2",
                 "Edge3",
                 "Edge4"
-              ],
-              "StableSubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
               ]
             }
           ]
@@ -88,16 +73,10 @@
               "SubList": [
                 "Face1"
               ],
-              "StableSubList": [
-                "Face1"
-              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
                 "SubList": [
-                  "Face1"
-                ],
-                "StableSubList": [
                   "Face1"
                 ]
               }
@@ -121,12 +100,6 @@
                 "Edge2",
                 "Edge3",
                 "Edge4"
-              ],
-              "StableSubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
               ]
             }
           ]
@@ -139,16 +112,10 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "Profile",
                 "SubList": [
-                  "Edge1"
-                ],
-                "StableSubList": [
                   "Edge1"
                 ]
               }
@@ -172,12 +139,6 @@
                 "Edge2",
                 "Edge3",
                 "Edge4"
-              ],
-              "StableSubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
               ]
             }
           ]
@@ -188,9 +149,6 @@
             {
               "value": "SupportPlane",
               "SubList": [
-                "Face1"
-              ],
-              "StableSubList": [
                 "Face1"
               ],
               "Order": "G1"
@@ -214,12 +172,6 @@
                 "Edge2",
                 "Edge3",
                 "Edge4"
-              ],
-              "StableSubList": [
-                "Edge1",
-                "Edge2",
-                "Edge3",
-                "Edge4"
               ]
             }
           ]
@@ -230,9 +182,6 @@
             {
               "value": "Profile",
               "SubList": [
-                "Edge1"
-              ],
-              "StableSubList": [
                 "Edge1"
               ],
               "Order": "BadContinuity"

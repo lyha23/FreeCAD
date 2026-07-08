@@ -33,7 +33,8 @@
             "label": "External Assembly",
             "currentName": "ExternalDocRestored",
             "currentLabel": "External Assembly Restored"
-          }
+          },
+          "StableSubListSource": "topoNamingState"
         },
         "LinkTransform": false
       }
@@ -81,7 +82,18 @@
               }
             }
           }
-        }
+        },
+        "objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+        "subshapes": {
+          "Face1": {
+            "subname": "Face1",
+            "rawFreecadMappedName": "Box.Face1",
+            "canonicalFreecadMappedName": "Box.Face1",
+            "resolvedIndexed": "Face1",
+            "identityStatus": "stable"
+          }
+        },
+        "childElementMaps": []
       }
     },
     "documentHash": "sha256:f993afb21c305e89a0f0f840677a61a35b9155ca5a7998f9278f90367bfd605e"

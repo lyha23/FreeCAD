@@ -138,7 +138,8 @@
           ],
           "StableSubList": [
             "BoxA.Face3"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Reversed": false,
         "SideType": "One side"
@@ -199,6 +200,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "BooleanFragments": {
+        "objectHash": "sha256:d8353cce5d5b24b51be9819be1b11276e32bfb18a6955d3bdc7464044922ece1",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "BooleanFragments.fixture-history-1228ddad87",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "BoxA.Face3"
+            },
+            "shape_kind": "face",
+            "relation": "split",
+            "recoverability": "split",
+            "mappedName": {
+              "raw": "BoxA.Face3",
+              "canonical": "BoxA.Face3"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face3"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:33d46c15abcd4db87a0a5573d54c1cc6ecd3567d95abc9fc442d709288e7e7fb"

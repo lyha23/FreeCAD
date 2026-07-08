@@ -313,7 +313,8 @@
               ],
               "StableSubList": [
                 "Pocket.Edge1"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -459,6 +460,37 @@
         },
         "childElementMaps": [],
         "mapperHistory": []
+      },
+      "Body": {
+        "objectHash": "sha256:b4e23756580626e52bf93fca3bc8f01af513dc5c726bb0a09c91d373aacdd8dd",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Body.fixture-history-93373c1b0b",
+            "source": {
+              "object": "Body",
+              "subname": "Pocket.Edge1"
+            },
+            "shape_kind": "edge",
+            "relation": "split",
+            "recoverability": "split",
+            "mappedName": {
+              "raw": "Pocket.Edge1",
+              "canonical": "Pocket.Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge1"
+            }
+          }
+        ]
       }
     },
     "documentHash": "sha256:3cd00efa0b6d756063049fc8c91fd97dc444a0355d208404bb627fad07ede9c1"

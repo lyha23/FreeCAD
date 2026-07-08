@@ -110,7 +110,8 @@
                     "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 4\n1 20 0 0 1 0 0 \n1 30 0 0 0 1 0 \n1 30 5 0 -1 0 0 \n1 20 5 0 0 -1 0 \nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 1\n1 25 2.5 0 0 0 1 1 0 -0 -0 1 0 \nTriangulations 0\n\nTShapes 10\nVe\n1e-07\n20 0 0\n0 0\n\n0101101\n*\nVe\n1e-07\n30 0 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  1 0 0 10\n0\n\n0101000\n+10 0 -9 0 *\nVe\n1e-07\n30 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  2 0 0 5\n0\n\n0101000\n+9 0 -7 0 *\nVe\n1e-07\n20 5 0\n0 0\n\n0101101\n*\nEd\n 1e-07 1 1 0\n1  3 0 0 10\n0\n\n0101000\n+7 0 -5 0 *\nEd\n 1e-07 1 1 0\n1  4 0 0 5\n0\n\n0101000\n+5 0 -10 0 *\nWi\n\n0101100\n+8 0 +6 0 +4 0 +3 0 *\nFa\n0  1e-07 1 0\n\n1101000\n+2 0 *\n\n+1 0 "
                   }
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -132,7 +133,35 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "Sketch": {
+        "objectHash": "sha256:f9eb89a5470a6ce9d04496976c2527e2dd11cc358b25eb25f7cff747630d79b3",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Sketch.fixture-history-8bbe2f310e",
+            "source": {
+              "object": "Sketch",
+              "subname": "g999"
+            },
+            "shape_kind": "face",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "g999",
+              "canonical": "g999"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:4013c83ed986af7a9e433a07cff2d3b081c8754b1f10988cd0bfc69589bd3ba3"
   }
 }

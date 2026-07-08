@@ -207,9 +207,6 @@
           "value": "SupportPlane",
           "SubList": [
             "Face99"
-          ],
-          "StableSubList": [
-            "Face99"
           ]
         },
         "Solid": false
@@ -265,9 +262,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
           "SubList": [
-            "Face99"
-          ],
-          "StableSubList": [
             "Face99"
           ]
         },

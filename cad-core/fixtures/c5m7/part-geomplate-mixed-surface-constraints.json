@@ -71,9 +71,6 @@
           "value": "SupportPlane",
           "SubList": [
             "Face1"
-          ],
-          "StableSubList": [
-            "Face1"
           ]
         },
         "Curve2dOnSurface": [
@@ -83,18 +80,12 @@
               "value": "BoundaryA",
               "SubList": [
                 "Edge1"
-              ],
-              "StableSubList": [
-                "Edge1"
               ]
             },
             "Surface": {
               "PropertyType": "App::PropertyLinkSub",
               "value": "SupportPlane",
               "SubList": [
-                "Face1"
-              ],
-              "StableSubList": [
                 "Face1"
               ]
             },
@@ -124,9 +115,6 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Order": 0,
               "NbPts": 10,
               "TolDist": 0.0001,
@@ -138,9 +126,6 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Order": 0,
               "NbPts": 10,
               "TolDist": 0.0001,
@@ -150,9 +135,6 @@
             {
               "value": "BoundaryD",
               "SubList": [
-                "Edge1"
-              ],
-              "StableSubList": [
                 "Edge1"
               ],
               "Order": 0,
@@ -178,9 +160,6 @@
               "PropertyType": "App::PropertyLinkSub",
               "value": "SupportPlane",
               "SubList": [
-                "Face1"
-              ],
-              "StableSubList": [
                 "Face1"
               ]
             },

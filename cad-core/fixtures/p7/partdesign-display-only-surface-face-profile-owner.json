@@ -54,7 +54,8 @@
               ],
               "FullSubList": [],
               "ShadowSub": [],
-              "ReferenceShadow": []
+              "ReferenceShadow": [],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -85,9 +86,6 @@
               "SubList": [
                 "Edge4"
               ],
-              "StableSubList": [
-                "Edge4"
-              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -112,9 +110,6 @@
             {
               "value": "Pad2",
               "SubList": [
-                "Face1"
-              ],
-              "StableSubList": [
                 "Face1"
               ],
               "FullSubList": [],
@@ -170,7 +165,50 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "草图 11:19:53 AM": {
+        "objectHash": "sha256:c9ad8de3fe4585e6bb79b5917d9c553f8640d0838fb55c927c57bd4b1c7e628b",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Edge1": {
+            "subname": "Edge1",
+            "rawFreecadMappedName": "g100001",
+            "canonicalFreecadMappedName": "g100001",
+            "resolvedIndexed": "Edge1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "g100001": {
+              "target": {
+                "object": "草图 11:19:53 AM",
+                "subname": "Edge1"
+              },
+              "shapeKind": "edge",
+              "source": {
+                "object": "草图 11:19:53 AM",
+                "subname": "Edge1"
+              },
+              "mappedName": {
+                "raw": "g100001",
+                "canonical": "g100001"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
     "documentHash": "sha256:9bd13d4f6a44b8d70e995d5693f882decaae4de8b3a8ea262e910d2f0e6a6431"
   }
 }

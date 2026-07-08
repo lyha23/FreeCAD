@@ -29,7 +29,8 @@
               "oldName": "MissingFace1",
               "newName": "Face1"
             }
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -91,7 +92,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "SupportBox": {
+        "objectHash": "sha256:d42a62c1ba3448070c7f493befe6775b24fc23203c103377b3b7bf9e7112e67c",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "SupportBox.fixture-history-f977871b7e",
+            "source": {
+              "object": "SupportBox",
+              "subname": "Face1"
+            },
+            "shape_kind": "face",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "Face1",
+              "canonical": "Face1"
+            },
+            "target": {
+              "object": "SupportBox",
+              "subname": "Face1"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:ff3a6e70f7d51e0164efad21dcc4b62636c606ee5a14e089bf3c9b89f69608ab"
   }
 }

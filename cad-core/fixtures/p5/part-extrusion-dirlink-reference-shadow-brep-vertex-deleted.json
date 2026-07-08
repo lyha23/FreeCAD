@@ -112,7 +112,8 @@
                 "data": "DBRep_DrawableShape\n\nCASCADE Topology V1, (c) Matra-Datavision\nLocations 0\nCurve2ds 0\nCurves 0\nPolygon3D 0\nPolygonOnTriangulations 0\nSurfaces 0\nTriangulations 0\n\nTShapes 1\nVe\n1e-07\n20 20 0\n0 0\n\n1101101\n*\n\n+1 0 "
               }
             }
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "LengthFwd": 10,
         "LengthRev": 0,
@@ -132,7 +133,35 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "Sketch": {
+        "objectHash": "sha256:f9eb89a5470a6ce9d04496976c2527e2dd11cc358b25eb25f7cff747630d79b3",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Sketch.fixture-history-22dd46cf33",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            },
+            "shape_kind": "vertex",
+            "relation": "deleted",
+            "recoverability": "deleted",
+            "mappedName": {
+              "raw": "Vertex1",
+              "canonical": "Vertex1"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:c539e1c08d0061b1539c48378a7b9f5ee2355a5e3f31efb275060bf3c623411a"
   }
 }

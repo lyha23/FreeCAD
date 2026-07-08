@@ -57,17 +57,11 @@
               "value": "SupportFace",
               "SubList": [
                 "Face1"
-              ],
-              "StableSubList": [
-                "Face1"
               ]
             },
             {
               "value": "CenterPoint",
               "SubList": [
-                "Vertex1"
-              ],
-              "StableSubList": [
                 "Vertex1"
               ]
             }

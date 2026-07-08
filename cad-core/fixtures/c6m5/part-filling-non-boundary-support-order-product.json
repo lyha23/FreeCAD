@@ -92,9 +92,6 @@
               "value": "ConstraintEdge",
               "SubList": [
                 "Edge1"
-              ],
-              "StableSubList": [
-                "Edge1"
               ]
             },
             {
@@ -103,9 +100,6 @@
             {
               "value": "SupportFace",
               "SubList": [
-                "Face1"
-              ],
-              "StableSubList": [
                 "Face1"
               ]
             }
@@ -119,16 +113,10 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
                 "SubList": [
-                  "Face1"
-                ],
-                "StableSubList": [
                   "Face1"
                 ]
               }
@@ -138,16 +126,10 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
                 "SubList": [
-                  "Face1"
-                ],
-                "StableSubList": [
                   "Face1"
                 ]
               }
@@ -162,9 +144,6 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Order": "G1"
             },
             {
@@ -172,17 +151,11 @@
               "SubList": [
                 "Edge1"
               ],
-              "StableSubList": [
-                "Edge1"
-              ],
               "Order": "G2"
             },
             {
               "value": "SupportFace",
               "SubList": [
-                "Face1"
-              ],
-              "StableSubList": [
                 "Face1"
               ],
               "Order": "C0"

@@ -116,7 +116,8 @@
                     "vertexCount": 4
                   }
                 }
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -138,7 +139,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "Sketch": {
+        "objectHash": "sha256:7c11f5de025a3b28ade5bcc7f2f3be88fdd7cd9c0b202a11d2498776fb46dba7",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {},
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {}
+        },
+        "childElementMaps": [],
+        "mapperHistory": [
+          {
+            "id": "Sketch.fixture-history-d70e592878",
+            "source": {
+              "object": "Sketch",
+              "subname": "g305:split1"
+            },
+            "shape_kind": "face",
+            "relation": "historical",
+            "recoverability": "recoverable",
+            "mappedName": {
+              "raw": "g305:split1",
+              "canonical": "g305:split1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Face1"
+            }
+          }
+        ]
+      }
+    },
     "documentHash": "sha256:c291cb95fd472f9f0001196aafa0229324b3daac7a70f02091c9a348c778bed7"
   }
 }

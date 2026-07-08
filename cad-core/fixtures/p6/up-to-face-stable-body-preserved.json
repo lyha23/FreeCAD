@@ -271,7 +271,8 @@
           ],
           "StableSubList": [
             "Pad.Face6"
-          ]
+          ],
+          "StableSubListSource": "topoNamingState"
         },
         "Reversed": false,
         "SideType": "One side"
@@ -413,6 +414,48 @@
             }
           },
           "status": "indexed_only"
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "Body": {
+        "objectHash": "sha256:57b09f0efb99e95b28c16273c94be1233c395029d3dd6c4dfe9d800257765f20",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Face6": {
+            "subname": "Face6",
+            "rawFreecadMappedName": "Pad.Face6",
+            "canonicalFreecadMappedName": "Pad.Face6",
+            "resolvedIndexed": "Face6",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "Pad.Face6": {
+              "target": {
+                "object": "Body",
+                "subname": "Face6"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Body",
+                "subname": "Face6"
+              },
+              "mappedName": {
+                "raw": "Pad.Face6",
+                "canonical": "Pad.Face6"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
         },
         "childElementMaps": [],
         "mapperHistory": []

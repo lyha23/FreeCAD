@@ -42,9 +42,6 @@
           "value": "Path",
           "SubList": [
             "Edge1"
-          ],
-          "StableSubList": [
-            "Edge1"
           ]
         },
         "Tolerance": {

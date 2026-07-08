@@ -50,9 +50,6 @@
           "value": "SupportPlane",
           "SubList": [
             "Face1"
-          ],
-          "StableSubList": [
-            "Face1"
           ]
         }
       }

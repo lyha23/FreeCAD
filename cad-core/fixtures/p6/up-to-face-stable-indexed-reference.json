@@ -163,9 +163,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad",
           "SubList": [
-            "Face99"
-          ],
-          "StableSubList": [
             "Face6"
           ]
         },

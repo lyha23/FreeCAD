@@ -36,9 +36,6 @@
           "value": "SupportPlane",
           "SubList": [
             "Face1"
-          ],
-          "StableSubList": [
-            "Face1"
           ]
         }
       }
@@ -62,9 +59,6 @@
             {
               "value": "SupportPlane",
               "SubList": [
-                "Face1"
-              ],
-              "StableSubList": [
                 "Face1"
               ]
             }
@@ -91,9 +85,6 @@
             {
               "value": "Profile",
               "SubList": [
-                "Edge1"
-              ],
-              "StableSubList": [
                 "Edge1"
               ]
             }

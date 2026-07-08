@@ -106,9 +106,6 @@
           "value": "Pad",
           "SubList": [
             "Edge10"
-          ],
-          "StableSubList": [
-            "Edge10"
           ]
         },
         "Radius": 200,
@@ -131,7 +128,8 @@
               ],
               "StableSubList": [
                 "Pad.Face6"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -159,9 +157,6 @@
             {
               "value": "Fillet",
               "SubList": [
-                "Face11"
-              ],
-              "StableSubList": [
                 "Face7"
               ]
             }
@@ -191,9 +186,6 @@
             {
               "value": "Fillet",
               "SubList": [
-                "Face7"
-              ],
-              "StableSubList": [
                 "Face3"
               ]
             }
@@ -223,9 +215,6 @@
             {
               "value": "Pad3",
               "SubList": [
-                "Face13"
-              ],
-              "StableSubList": [
                 "Face1"
               ]
             }
@@ -253,9 +242,6 @@
           "PropertyType": "App::PropertyLinkSub",
           "value": "Pad5",
           "SubList": [
-            "Edge14"
-          ],
-          "StableSubList": [
             "Edge8"
           ]
         },
@@ -341,6 +327,48 @@
             }
           },
           "status": "indexed_only"
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      },
+      "Fillet": {
+        "objectHash": "sha256:f1c7c9fe9d82b78657624574ea041c8f430a9aa212751b9e9c8904304d7def8c",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "Face5": {
+            "subname": "Face5",
+            "rawFreecadMappedName": "Pad.Face6",
+            "canonicalFreecadMappedName": "Pad.Face6",
+            "resolvedIndexed": "Face5",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "history_partial",
+          "entries": {
+            "Pad.Face6": {
+              "target": {
+                "object": "Fillet",
+                "subname": "Face5"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Fillet",
+                "subname": "Face5"
+              },
+              "mappedName": {
+                "raw": "Pad.Face6",
+                "canonical": "Pad.Face6"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
         },
         "childElementMaps": [],
         "mapperHistory": []
