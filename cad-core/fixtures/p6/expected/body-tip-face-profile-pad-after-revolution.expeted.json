@@ -1,0 +1,34 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P6 fixture contract for body-tip-face-profile-pad-after-revolution; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "unstable_subshape_reference"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "unstable_subshape_reference"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Pad",
+      "PadPreview",
+      "PadPreviewBody",
+      "Revolution",
+      "SketchSource"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad",
+      "PartDesign::Revolution",
+      "PartDesign::Body"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_revolution_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p6/body-tip-face-profile-pad-after-revolution.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/p6/body-tip-face-profile-pad-after-revolution.json: failed to set property Direction: type must be 'Vector' or tuple of three floats, not list"
+  }
+}

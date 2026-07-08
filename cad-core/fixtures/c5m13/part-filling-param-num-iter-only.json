@@ -19,8 +19,18 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
-              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
             }
           ]
         },
@@ -29,6 +39,18 @@
     }
   ],
   "recompute": {
-    "objs": ["FilledFace"]
+    "objs": [
+      "FilledFace"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:e3833d45cd13a17a715367d7a96c7fcfd52424fb92a695facb5058b259565bfb"
   }
 }

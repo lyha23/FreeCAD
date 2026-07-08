@@ -18,8 +18,17 @@
         "Circumradius": 1,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 3],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            3
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -57,7 +66,9 @@
       "Properties": {
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ProfileA"]
+          "values": [
+            "ProfileA"
+          ]
         },
         "Solid": false
       }
@@ -69,7 +80,10 @@
       "Properties": {
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ProfileA", "NoSuchProfile"]
+          "values": [
+            "ProfileA",
+            "NoSuchProfile"
+          ]
         },
         "Solid": false
       }
@@ -81,7 +95,10 @@
       "Properties": {
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ProfileA", "ProfileA"]
+          "values": [
+            "ProfileA",
+            "ProfileA"
+          ]
         },
         "Solid": false
       }
@@ -93,7 +110,10 @@
       "Properties": {
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BoxSection", "ProfileB"]
+          "values": [
+            "BoxSection",
+            "ProfileB"
+          ]
         },
         "Solid": false
       }
@@ -108,5 +128,15 @@
       "RepeatedSections",
       "NonProfileSection"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:535f0d9f6ba98765146ff77fdbe16b1824008ea27a513befd611d979e8dc1b09"
   }
 }

@@ -9,15 +9,30 @@
           {
             "kind": "LineSegment",
             "id": 100001,
-            "start": [-495.5606724580872, 1047.3474745576389],
-            "end": [-292.3726187886027, -299.81433767917656]
+            "start": [
+              -495.5606724580872,
+              1047.3474745576389
+            ],
+            "end": [
+              -292.3726187886027,
+              -299.81433767917656
+            ]
           }
         ],
         "Constraints": [],
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -31,8 +46,12 @@
           "SubSet": [
             {
               "value": "草图 11:19:53 AM",
-              "SubList": ["Edge1"],
-              "StableSubList": ["g100001"],
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "g100001"
+              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -46,7 +65,11 @@
         "SideType": "One side",
         "AlongSketchNormal": true,
         "UseCustomVector": true,
-        "Direction": [0, 0, 1]
+        "Direction": [
+          0,
+          0,
+          1
+        ]
       }
     },
     {
@@ -59,8 +82,12 @@
           "SubSet": [
             {
               "value": "Pad",
-              "SubList": ["Edge4"],
-              "StableSubList": ["Edge4"],
+              "SubList": [
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge4"
+              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -84,8 +111,12 @@
           "SubSet": [
             {
               "value": "Pad2",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"],
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -98,7 +129,11 @@
         "SideType": "One side",
         "AlongSketchNormal": true,
         "UseCustomVector": true,
-        "Direction": [0.9888161007748896, 0.1491399304289216, 0]
+        "Direction": [
+          0.9888161007748896,
+          0.1491399304289216,
+          0
+        ]
       }
     },
     {
@@ -108,7 +143,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["草图 11:19:53 AM", "Pad", "Pad2", "PadPreview"]
+          "values": [
+            "草图 11:19:53 AM",
+            "Pad",
+            "Pad2",
+            "PadPreview"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -118,6 +158,19 @@
     }
   ],
   "recompute": {
-    "objs": ["Pad2", "PadPreviewBody"]
+    "objs": [
+      "Pad2",
+      "PadPreviewBody"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:9bd13d4f6a44b8d70e995d5693f882decaae4de8b3a8ea262e910d2f0e6a6431"
   }
 }

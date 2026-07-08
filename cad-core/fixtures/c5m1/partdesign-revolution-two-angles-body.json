@@ -107,5 +107,15 @@
     "objs": [
       "Body"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:5fd701ba515b09816909aedc6157661ab3d5d8c404a8c893f2ae4b8250272b04"
   }
 }

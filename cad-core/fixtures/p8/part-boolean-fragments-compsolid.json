@@ -58,5 +58,15 @@
     "objs": [
       "BooleanFragments"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:f2de403f8c19b4ff9551f9223468117abe917b68c06fe2be54abe5f021e74665"
   }
 }

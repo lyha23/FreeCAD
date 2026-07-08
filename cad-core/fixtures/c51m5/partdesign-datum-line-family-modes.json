@@ -51,8 +51,17 @@
         "Width": 4,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [2, 0, 0],
-          "Rotation": [0, 0.7071067811865475, 0, 0.7071067811865476]
+          "Base": [
+            2,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865476
+          ]
         }
       }
     },
@@ -108,7 +117,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EdgeSource",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -126,11 +137,15 @@
           "SubSet": [
             {
               "value": "PlaneXY",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             },
             {
               "value": "PlaneYZAtX2",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             }
           ]
         },
@@ -172,5 +187,15 @@
       "DatumLineIntersection",
       "DatumLineProximity"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:426bc9db84994cad2b83660d8197e8bb84df46fd272f88a9a34fdf4cdd1bbd38"
   }
 }

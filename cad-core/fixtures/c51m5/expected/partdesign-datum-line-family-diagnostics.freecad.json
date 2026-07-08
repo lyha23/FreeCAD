@@ -1,9 +1,61 @@
 {
-  "diagnostic_codes": [
-    "attachment_support_invalid_shape",
-    "no_intersection",
-    "no_intersection"
-  ],
-  "reference": "C51X DatumLine line-family invalid diagnostics source-backed by FreeCAD AttachEngineLine TwoPointLine/IntersectionLine/ProximityLine branches; diagnostic-only fixture has no native geometry payload",
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "DatumLineIntersectionParallel": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "IntersectionLine",
+        "status": "ok"
+      }
+    },
+    "DatumLineProximityTouching": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "ProximityLine",
+        "status": "ok"
+      }
+    },
+    "DatumLineTwoPointSingle": {
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "map_mode": "TwoPointLine",
+        "status": "ok"
+      }
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-datum-line-family-diagnostics.json; objects: Part::Vertex, Part::Plane, Part::Plane, Part::Vertex, Part::Vertex, PartDesign::Line, PartDesign::Line, PartDesign::Line",
   "schema_version": "cad-core.freecad-expected.v1"
 }

@@ -798,7 +798,7 @@ nlohmann::json capabilityContractJson()
                   // PointCurve, Curve* or Other/default boundaries before solver mapping.
                   {"status", "done_part_geometry_curve_edge_consumer"},
                   {"dto", "PartConicCurveDTO"},
-                  {"payload_keys", {"partGeometryCurve", "partGeometryCurveConsumers"}},
+                  {"type_ids", {"Part::GeometryCurve", "Part::Extrusion", "Part::RuledSurface"}},
                   {"part_geometry_types", {"Part.Hyperbola", "Part.Parabola"}},
                   {"curve_types", {"GeomAbs_Hyperbola", "GeomAbs_Parabola"}},
                   {"covered",
@@ -833,7 +833,7 @@ nlohmann::json capabilityContractJson()
                   {"request_local_boundaries",
                    {"no_part_hyperbola_document_object_executor",
                     "no_part_parabola_document_object_executor",
-                    "conic_edge_is_request_local_producer_not_document_object",
+                    "conic_edge_uses_part_geometry_curve_object_envelope",
                     "sketcher_conic_profile_external_reference_only",
                     "source_shape_recomputed_from_document_graph"}},
                   {"distance_type_publication",
@@ -2736,8 +2736,7 @@ nlohmann::json capabilityContractJson()
              {"schema_parity",
               {
                   {"core_result_producers",
-                   {"cad_core::runtime::recomputeResultJson",
-                    "cad_core::part::partGeometryCurveResultJson"}},
+                   {"cad_core::runtime::recomputeResultJson"}},
                   {"entrypoints",
                    {"cli_recompute", "cad_core_recompute_json", "worker_recompute", "wasm_recompute"}},
                   {"contract", "same_request_local_core_result"},

@@ -19,8 +19,18 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
-              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
             }
           ]
         },
@@ -28,7 +38,7 @@
         "PtsOnCurve": 20,
         "NumIter": 3,
         "Anisotropy": true,
-        "Tol2d": 0.00002,
+        "Tol2d": 2e-05,
         "Tol3d": 0.0002,
         "TolG1": 0.02,
         "TolG2": 0.2,
@@ -38,6 +48,18 @@
     }
   ],
   "recompute": {
-    "objs": ["FilledFace"]
+    "objs": [
+      "FilledFace"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:5ec4e31721ae2b3b148055cc002b1b15bdb15b844608429bc8eda076a7b0a9c1"
   }
 }

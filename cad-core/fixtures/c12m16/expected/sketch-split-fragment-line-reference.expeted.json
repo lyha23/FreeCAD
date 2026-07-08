@@ -1,0 +1,19 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "result_objects": [
+      "BaseSketch",
+      "Consumer"
+    ]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: Invalid shape name g701:split1; not able to add external shape element g701:split1",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_reference_recovery_contract",
+    "reason": "The fixture exercises CAD Core stable split-fragment reference recovery; FreeCADCmd rejects the canonical split stable name as a native external geometry subname.",
+    "reference": "cad-core/fixtures/c12m16/sketch-split-fragment-line-reference.json"
+  },
+  "reference": "CAD Core C12M16 sketch split-fragment reference contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

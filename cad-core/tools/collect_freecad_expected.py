@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
+import re
 import subprocess
 import sys
 import traceback
@@ -18,6 +20,9 @@ SCHEMA_VERSION = "cad-core.freecad-expected.v1"
 ENV_ARG_MARKER = "__cad_core_expected_args_env__"
 ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
 FREECAD_PRECISION_CONFUSION = 1e-7
+FREECAD_MAPPED_NAME_HASH_RE = re.compile(r":H(?!\*)-?[0-9A-Fa-f]+(?::[0-9A-Fa-f]+)?")
+FREECAD_MAPPED_NAME_DELETE_RE = re.compile(r";D(?!\*)[0-9A-Fa-f]+")
+ACTIVE_TOPO_NAMING_STATE: dict[str, Any] | None = None
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
     "App::Line",
@@ -197,6 +202,11 @@ def load_fixture(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def semantic_hash(value: Any) -> str:
+    canonical = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def atomic_write_json(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -244,9 +254,50 @@ def list_field(value: dict, *names: str) -> list:
     return []
 
 
+def state_backed_stable_subname(value: dict, stable_subname: Any) -> str:
+    target_name = value.get("value")
+    if not isinstance(target_name, str) or not target_name:
+        raise UnsupportedFixture("topoNamingState StableSubList item requires a string value target")
+    if ACTIVE_TOPO_NAMING_STATE is None:
+        raise UnsupportedFixture("topoNamingState StableSubList requires fixture topoNamingState")
+
+    objects = ACTIVE_TOPO_NAMING_STATE.get("objects")
+    if not isinstance(objects, dict):
+        raise UnsupportedFixture("topoNamingState.objects must be an object")
+    object_state = objects.get(target_name)
+    if not isinstance(object_state, dict):
+        raise UnsupportedFixture(f"topoNamingState missing object state for {target_name}")
+
+    element_map = object_state.get("elementMap")
+    if not isinstance(element_map, dict):
+        raise UnsupportedFixture(f"topoNamingState object {target_name} missing elementMap")
+    entries = element_map.get("entries")
+    if not isinstance(entries, dict):
+        raise UnsupportedFixture(f"topoNamingState object {target_name} elementMap.entries must be an object")
+
+    token = str(stable_subname)
+    entry = entries.get(token)
+    if not isinstance(entry, dict):
+        raise UnsupportedFixture(f"topoNamingState object {target_name} cannot resolve StableSubList {token}")
+    target = entry.get("target")
+    if not isinstance(target, dict):
+        raise UnsupportedFixture(f"topoNamingState StableSubList {token} missing target")
+    target_object = target.get("object")
+    if target_object != target_name:
+        raise UnsupportedFixture(
+            f"topoNamingState StableSubList {token} resolves to {target_object}, expected {target_name}"
+        )
+    target_subname = target.get("subname")
+    if not isinstance(target_subname, str) or not target_subname:
+        raise UnsupportedFixture(f"topoNamingState StableSubList {token} missing target.subname")
+    return target_subname
+
+
 def native_sub_list(value: dict) -> list:
     stable_sub_list = value.get("StableSubList")
     if isinstance(stable_sub_list, list) and stable_sub_list:
+        if value.get("StableSubListSource") == "topoNamingState":
+            return [state_backed_stable_subname(value, item) for item in stable_sub_list]
         return list(stable_sub_list)
     sub_list = value.get("SubList")
     if sub_list is not None:
@@ -1274,6 +1325,28 @@ def stable_mapped_subname(shape: Any | None, indexed: str) -> str:
     return mapped
 
 
+def canonical_freecad_mapped_name(mapped_name: str) -> str:
+    def replace_hash(match: re.Match[str]) -> str:
+        return ":H*:*" if match.group(0).count(":") > 1 else ":H*"
+
+    normalized = FREECAD_MAPPED_NAME_HASH_RE.sub(replace_hash, mapped_name)
+    return FREECAD_MAPPED_NAME_DELETE_RE.sub(";D*", normalized)
+
+
+def roundtrip_stable_mapped_subname(shape: Any | None, indexed: str, raw_mapped_name: str) -> tuple[str, str]:
+    if shape is None or not raw_mapped_name:
+        return "", ""
+    try:
+        resolved = shape.getElementName(raw_mapped_name)
+    except Exception:
+        return "", ""
+    if not isinstance(resolved, str):
+        resolved = str(resolved)
+    if resolved == indexed:
+        return raw_mapped_name, resolved
+    return "", resolved
+
+
 def object_tip(obj: Any) -> Any | None:
     if getattr(obj, "TypeId", "") != "PartDesign::Body":
         return None
@@ -1294,8 +1367,9 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
     # ::getElementMappedName() exposes ComplexGeoData::getElementName(...), and
     # /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::execute()
     # publishes the Tip shape as Body.Shape while ::getSubObject() delegates child paths.
-    # The collector therefore publishes current FaceN/EdgeN names as subname only, and
-    # publishes stableSubname only when FreeCAD returns a mapped element identity.
+    # The collector therefore publishes current FaceN/EdgeN names as subname only. It keeps
+    # FreeCAD's raw mapped name as evidence, but publishes stableSubname only when the raw
+    # mapped name round-trips through getElementName() back to the current indexed element.
     for kind, attr, prefix in (
         ("Face", "Faces", "Face"),
         ("Edge", "Edges", "Edge"),
@@ -1304,33 +1378,219 @@ def subshape_response_entries(obj: Any, shape: Any) -> list[dict[str, Any]]:
         for index, _ in enumerate(getattr(shape, attr, []), start=1):
             indexed = f"{prefix}{index}"
             subname = indexed
-            stable_subname = stable_mapped_subname(shape, indexed)
+            raw_mapped_name = stable_mapped_subname(shape, indexed)
+            canonical_mapped_name = canonical_freecad_mapped_name(raw_mapped_name) if raw_mapped_name else ""
+            stable_subname, resolved_indexed = roundtrip_stable_mapped_subname(
+                shape,
+                indexed,
+                raw_mapped_name,
+            )
             full_subname = f"{owner}.{indexed}"
-            identity_status = "stable" if stable_subname else "current_only"
+            if stable_subname:
+                identity_status = "stable"
+            elif raw_mapped_name:
+                identity_status = "history_only"
+            else:
+                identity_status = "current_only"
 
             if tip_name:
                 full_subname = f"{owner}.{tip_name}.{indexed}"
                 tip_local_subname = f"{tip_name}.{indexed}"
                 if shape_has_indexed_element(tip_shape, indexed):
-                    tip_stable_subname = stable_mapped_subname(tip_shape, indexed)
+                    tip_raw_mapped_name = stable_mapped_subname(tip_shape, indexed)
+                    tip_canonical_mapped_name = (
+                        canonical_freecad_mapped_name(tip_raw_mapped_name) if tip_raw_mapped_name else ""
+                    )
+                    tip_stable_subname, tip_resolved_indexed = roundtrip_stable_mapped_subname(
+                        tip_shape,
+                        indexed,
+                        tip_raw_mapped_name,
+                    )
                     subname = tip_local_subname
-                    stable_subname = f"{tip_name}.{tip_stable_subname}" if tip_stable_subname else ""
-                    identity_status = "stable" if stable_subname else "body_display_only"
+                    raw_mapped_name = f"{tip_name}.{tip_raw_mapped_name}" if tip_raw_mapped_name else ""
+                    canonical_mapped_name = (
+                        f"{tip_name}.{tip_canonical_mapped_name}" if tip_canonical_mapped_name else ""
+                    )
+                    stable_subname = (
+                        f"{tip_name}.{tip_stable_subname}"
+                        if tip_stable_subname
+                        else ""
+                    )
+                    resolved_indexed = tip_resolved_indexed
+                    if stable_subname:
+                        identity_status = "stable"
+                    elif tip_raw_mapped_name:
+                        identity_status = "history_only"
+                    else:
+                        identity_status = "body_display_only"
 
-            entries.append(
-                {
-                    "id": f"{owner}:{indexed}",
-                    "kind": kind,
-                    "indexed": indexed,
-                    "subname": subname,
-                    "stableSubname": stable_subname,
-                    "identityStatus": identity_status,
-                    "fullSubname": full_subname,
-                    "ShadowSub": [],
-                    "ReferenceShadow": [],
-                }
-            )
+            entry = {
+                "id": f"{owner}:{indexed}",
+                "kind": kind,
+                "indexed": indexed,
+                "subname": subname,
+                "stableSubname": stable_subname,
+                "identityStatus": identity_status,
+                "fullSubname": full_subname,
+                "ShadowSub": [],
+                "ReferenceShadow": [],
+            }
+            if raw_mapped_name:
+                entry["rawFreecadMappedName"] = raw_mapped_name
+                entry["canonicalFreecadMappedName"] = canonical_mapped_name
+            if resolved_indexed:
+                entry["resolvedIndexed"] = resolved_indexed
+            entries.append(entry)
     return entries
+
+
+def fixture_object_specs(fixture: dict) -> dict[str, dict]:
+    return {
+        str(spec.get("Name")): spec
+        for spec in fixture.get("Objects", [])
+        if isinstance(spec, dict) and isinstance(spec.get("Name"), str)
+    }
+
+
+def occt_version_from_runtime(default: str) -> str:
+    try:
+        import Part  # type: ignore
+    except Exception:
+        return default
+    for attr in ("OCC_VERSION", "OCC_VERSION_STRING", "__OCC_VERSION__"):
+        value = getattr(Part, attr, None)
+        if value:
+            return str(value)
+    return default
+
+
+def topo_state_producer(fixture: dict, FreeCAD: Any) -> dict[str, str]:
+    input_state = fixture.get("topoNamingState")
+    input_producer = input_state.get("producer") if isinstance(input_state, dict) else {}
+    if not isinstance(input_producer, dict):
+        input_producer = {}
+    input_occt_version = str(input_producer.get("occtVersion") or "fixture-occt-unspecified")
+    return {
+        "cadCoreVersion": str(input_producer.get("cadCoreVersion") or "fixture-contract-v1"),
+        "freecadVersion": freecad_version(FreeCAD),
+        "occtVersion": occt_version_from_runtime(input_occt_version),
+    }
+
+
+def topo_state_subshape_entry(subshape: dict[str, Any]) -> dict[str, Any]:
+    entry = {
+        "subname": str(subshape.get("subname", "")),
+        "identityStatus": str(subshape.get("identityStatus", "current_only")),
+    }
+    raw_mapped_name = subshape.get("rawFreecadMappedName")
+    if isinstance(raw_mapped_name, str) and raw_mapped_name:
+        entry["rawFreecadMappedName"] = raw_mapped_name
+    canonical_mapped_name = subshape.get("canonicalFreecadMappedName")
+    if isinstance(canonical_mapped_name, str) and canonical_mapped_name:
+        entry["canonicalFreecadMappedName"] = canonical_mapped_name
+    resolved_indexed = subshape.get("resolvedIndexed")
+    if isinstance(resolved_indexed, str) and resolved_indexed:
+        entry["resolvedIndexed"] = resolved_indexed
+    return entry
+
+
+def topo_state_element_map_entry(object_name: str, subshape: dict[str, Any]) -> tuple[str, dict[str, Any]] | None:
+    stable_token = subshape.get("stableSubname") or subshape.get("rawFreecadMappedName")
+    if not isinstance(stable_token, str) or not stable_token:
+        return None
+    subname = subshape.get("subname")
+    if not isinstance(subname, str) or not subname:
+        return None
+    shape_kind = str(subshape.get("kind", "shape")).lower()
+    source_subname = str(subshape.get("indexed") or subname)
+    raw_mapped_name = str(subshape.get("rawFreecadMappedName") or stable_token)
+    canonical_mapped_name = str(
+        subshape.get("canonicalFreecadMappedName") or canonical_freecad_mapped_name(raw_mapped_name)
+    )
+    return stable_token, {
+        "target": {
+            "object": object_name,
+            "subname": subname,
+        },
+        "shapeKind": shape_kind,
+        "source": {
+            "object": object_name,
+            "subname": source_subname,
+        },
+        "mappedName": {
+            "raw": raw_mapped_name,
+            "canonical": canonical_mapped_name,
+        },
+        "recoverability": "resolved",
+        "evidence": {
+            "source": "freecad_expected_collector",
+            "mapperHistoryIds": [],
+            "childElementMapKey": None,
+        },
+    }
+
+
+def topo_state_object_payload(object_name: str, summary: dict[str, Any], object_spec: dict | None) -> dict[str, Any]:
+    subshapes = summary.get("subshapes")
+    if not isinstance(subshapes, list):
+        subshapes = []
+
+    state_subshapes: dict[str, Any] = {}
+    entries: dict[str, Any] = {}
+    for subshape in subshapes:
+        if not isinstance(subshape, dict):
+            continue
+        indexed = subshape.get("indexed")
+        if isinstance(indexed, str) and indexed:
+            state_subshapes[indexed] = topo_state_subshape_entry(subshape)
+        element_map_entry = topo_state_element_map_entry(object_name, subshape)
+        if element_map_entry is not None:
+            token, entry = element_map_entry
+            entries[token] = entry
+
+    return {
+        "objectHash": semantic_hash(object_spec or {"Name": object_name}),
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": state_subshapes,
+        "elementMap": {
+            "encoding": "cad-core.element-map.v1",
+            "status": "history_partial" if entries else "indexed_only",
+            "entries": entries,
+        },
+        "childElementMaps": [],
+        "mapperHistory": [],
+    }
+
+
+def topo_naming_state_response(
+    fixture: dict,
+    FreeCAD: Any,
+    object_payloads: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    specs = fixture_object_specs(fixture)
+    return {
+        "results": [
+            {
+                "object": object_name,
+                **summary,
+            }
+            for object_name, summary in object_payloads.items()
+        ],
+        "topoNamingState": {
+            "schemaVersion": "cad-core.topo-state.v1",
+            "producer": topo_state_producer(fixture, FreeCAD),
+            "documentHash": semantic_hash({
+                "Objects": fixture.get("Objects", []),
+                "recompute": fixture.get("recompute", {}),
+            }),
+            "objects": {
+                object_name: topo_state_object_payload(object_name, summary, specs.get(object_name))
+                for object_name, summary in object_payloads.items()
+            },
+        },
+        "elementReferenceUpdates": [],
+        "diagnostics": [],
+    }
 
 
 def has_part_filled_face_helper(fixture: dict) -> bool:
@@ -2248,26 +2508,66 @@ def collect_part_geomplate_surface_expected(
         FreeCAD.closeDocument(doc.Name)
 
 
+def property_payload_value(value: Any) -> Any:
+    if isinstance(value, dict) and "PropertyType" in value and "value" in value:
+        return value.get("value")
+    return value
+
+
+def object_property_value(spec: dict[str, Any], property_name: str) -> Any:
+    properties = spec.get("Properties", {})
+    if not isinstance(properties, dict):
+        return None
+    return property_payload_value(properties.get(property_name))
+
+
+def part_geometry_curve_dto_from_object(spec: dict[str, Any]) -> dict[str, Any]:
+    dto = {
+        "name": spec.get("Name"),
+        "curveKind": object_property_value(spec, "CurveKind"),
+        "center": object_property_value(spec, "Center"),
+        "normal": object_property_value(spec, "Normal"),
+        "angleXU": object_property_value(spec, "AngleXU"),
+        "startAngle": object_property_value(spec, "StartAngle"),
+        "endAngle": object_property_value(spec, "EndAngle"),
+    }
+    major_radius = object_property_value(spec, "MajorRadius")
+    if major_radius is not None:
+        dto["majorRadius"] = major_radius
+    minor_radius = object_property_value(spec, "MinorRadius")
+    if minor_radius is not None:
+        dto["minorRadius"] = minor_radius
+    focal = object_property_value(spec, "Focal")
+    if focal is not None:
+        dto["focal"] = focal
+    return dto
+
+
 def part_geometry_curve_items(fixture: dict) -> list[dict[str, Any]]:
-    payload = fixture.get("partGeometryCurve")
-    if payload is None:
+    objects = fixture.get("Objects", [])
+    if not isinstance(objects, list):
         return []
-    if isinstance(payload, list):
-        return [item for item in payload if isinstance(item, dict)]
-    if isinstance(payload, dict):
-        return [payload]
-    raise UnsupportedFixture("partGeometryCurve must be an object or a list of objects")
+    return [
+        part_geometry_curve_dto_from_object(item)
+        for item in objects
+        if isinstance(item, dict) and item.get("TypeId") == "Part::GeometryCurve"
+    ]
 
 
 def part_geometry_curve_consumer_items(fixture: dict) -> list[dict[str, Any]]:
-    payload = fixture.get("partGeometryCurveConsumers")
-    if payload is None:
+    objects = fixture.get("Objects", [])
+    if not isinstance(objects, list):
         return []
-    if isinstance(payload, list):
-        return [item for item in payload if isinstance(item, dict)]
-    if isinstance(payload, dict):
-        return [payload]
-    raise UnsupportedFixture("partGeometryCurveConsumers must be an object or a list of objects")
+    return [
+        item
+        for item in objects
+        if isinstance(item, dict)
+        and item.get("TypeId") in {"Part::Extrusion", "Part::Line", "Part::RuledSurface"}
+    ]
+
+
+def has_part_geometry_curve_object(fixture: dict) -> bool:
+    return bool(part_geometry_curve_items(fixture))
 
 
 def set_part_conic_curve_common(FreeCAD: Any, curve: Any, dto: dict[str, Any]) -> None:
@@ -2297,7 +2597,7 @@ def build_part_geometry_curve_shape(FreeCAD: Any, Part: Any, dto: dict[str, Any]
         set_part_conic_curve_common(FreeCAD, curve, dto)
         curve.Focal = float(dto["focal"])
         return Part.ArcOfParabola(curve, float(dto["startAngle"]), float(dto["endAngle"]), True).toShape()
-    raise UnsupportedFixture(f"unsupported partGeometryCurve curveKind {dto.get('curveKind')}")
+    raise UnsupportedFixture(f"unsupported Part::GeometryCurve CurveKind {dto.get('curveKind')}")
 
 
 def part_geometry_curve_metadata(dto: dict[str, Any]) -> dict[str, str]:
@@ -2329,12 +2629,6 @@ def part_geometry_curve_object_expected(shape: Any, dto: dict[str, Any]) -> dict
     return summary
 
 
-def property_payload_value(value: Any) -> Any:
-    if isinstance(value, dict) and "PropertyType" in value and "value" in value:
-        return value.get("value")
-    return value
-
-
 def consumer_property(properties: dict[str, Any], name: str, fallback: Any = None) -> Any:
     if name not in properties:
         return fallback
@@ -2344,28 +2638,28 @@ def consumer_property(properties: dict[str, Any], name: str, fallback: Any = Non
 def consumer_number_property(properties: dict[str, Any], name: str, fallback: float = 0.0) -> float:
     value = consumer_property(properties, name, fallback)
     if not isinstance(value, (int, float)):
-        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be numeric")
+        raise UnsupportedFixture(f"Part::GeometryCurve consumer {name} must be numeric")
     return float(value)
 
 
 def consumer_bool_property(properties: dict[str, Any], name: str, fallback: bool = False) -> bool:
     value = consumer_property(properties, name, fallback)
     if not isinstance(value, bool):
-        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be boolean")
+        raise UnsupportedFixture(f"Part::GeometryCurve consumer {name} must be boolean")
     return value
 
 
 def consumer_vector_property(properties: dict[str, Any], name: str, fallback: list[float]) -> list[float]:
     value = consumer_property(properties, name, fallback)
     if not isinstance(value, list) or len(value) != 3 or not all(isinstance(item, (int, float)) for item in value):
-        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be a three-number vector")
+        raise UnsupportedFixture(f"Part::GeometryCurve consumer {name} must be a three-number vector")
     return [float(item) for item in value]
 
 
 def consumer_link_property(properties: dict[str, Any], name: str) -> str:
     value = consumer_property(properties, name)
     if not isinstance(value, str) or not value:
-        raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be an object link")
+        raise UnsupportedFixture(f"Part::GeometryCurve consumer {name} must be an object link")
     return value
 
 
@@ -2376,29 +2670,29 @@ def collect_part_geometry_curve_extrusion_expected(
     source_metadata: dict[str, dict[str, str]],
 ) -> dict:
     if consumer.get("TypeId") != "Part::Extrusion":
-        raise UnsupportedFixture("partGeometryCurveConsumers expected collection supports Part::Extrusion")
+        raise UnsupportedFixture("Part::GeometryCurve consumer objects expected collection supports Part::Extrusion")
     properties = consumer.get("Properties", {})
     if not isinstance(properties, dict):
-        raise UnsupportedFixture("partGeometryCurve consumer Properties must be an object")
+        raise UnsupportedFixture("Part::GeometryCurve consumer Properties must be an object")
 
     dir_mode = consumer_property(properties, "DirMode", "Custom")
     if dir_mode not in {"Custom", 0}:
-        raise UnsupportedFixture("partGeometryCurve consumer oracle only supports Part::Extrusion DirMode=Custom")
+        raise UnsupportedFixture("Part::GeometryCurve consumer oracle only supports Part::Extrusion DirMode=Custom")
     if consumer_bool_property(properties, "Solid", False):
-        raise UnsupportedFixture("partGeometryCurve consumer oracle only supports Part::Extrusion Solid=false")
+        raise UnsupportedFixture("Part::GeometryCurve consumer oracle only supports Part::Extrusion Solid=false")
     if abs(consumer_number_property(properties, "TaperAngle", 0.0)) > FREECAD_PRECISION_CONFUSION:
-        raise UnsupportedFixture("partGeometryCurve consumer oracle does not publish tapered extrusion")
+        raise UnsupportedFixture("Part::GeometryCurve consumer oracle does not publish tapered extrusion")
     if abs(consumer_number_property(properties, "TaperAngleRev", 0.0)) > FREECAD_PRECISION_CONFUSION:
-        raise UnsupportedFixture("partGeometryCurve consumer oracle does not publish tapered reverse extrusion")
+        raise UnsupportedFixture("Part::GeometryCurve consumer oracle does not publish tapered reverse extrusion")
 
     base_name = consumer_link_property(properties, "Base")
     if base_name not in source_shapes:
-        raise UnsupportedFixture(f"partGeometryCurve consumer Base {base_name} was not created")
+        raise UnsupportedFixture(f"Part::GeometryCurve consumer Base {base_name} was not created")
 
     direction = consumer_vector_property(properties, "Dir", [0.0, 0.0, 1.0])
     magnitude = math.sqrt(sum(component * component for component in direction))
     if magnitude <= FREECAD_PRECISION_CONFUSION:
-        raise UnsupportedFixture("partGeometryCurve consumer Dir must not be zero-length")
+        raise UnsupportedFixture("Part::GeometryCurve consumer Dir must not be zero-length")
     unit = [component / magnitude for component in direction]
     if consumer_bool_property(properties, "Reversed", False):
         unit = [-component for component in unit]
@@ -2411,7 +2705,7 @@ def collect_part_geometry_curve_extrusion_expected(
         length_rev = length_fwd * 0.5
         length_fwd = length_fwd * 0.5
     if abs(length_fwd + length_rev) <= FREECAD_PRECISION_CONFUSION:
-        raise UnsupportedFixture("partGeometryCurve consumer total extrusion length must not be zero")
+        raise UnsupportedFixture("Part::GeometryCurve consumer total extrusion length must not be zero")
 
     source_shape = source_shapes[base_name].copy()
     if abs(length_rev) > FREECAD_PRECISION_CONFUSION:
@@ -2446,10 +2740,10 @@ def collect_part_geometry_curve_line_expected(
     source_metadata: dict[str, dict[str, str]],
 ) -> dict:
     if consumer.get("TypeId") != "Part::Line":
-        raise UnsupportedFixture("partGeometryCurveConsumers line source must be Part::Line")
+        raise UnsupportedFixture("Part::GeometryCurve consumer objects line source must be Part::Line")
     properties = consumer.get("Properties", {})
     if not isinstance(properties, dict):
-        raise UnsupportedFixture("partGeometryCurve line consumer Properties must be an object")
+        raise UnsupportedFixture("Part::GeometryCurve line consumer Properties must be an object")
     start = FreeCAD.Vector(
         consumer_number_property(properties, "X1", 0.0),
         consumer_number_property(properties, "Y1", 0.0),
@@ -2468,6 +2762,7 @@ def collect_part_geometry_curve_line_expected(
     summary["object_fields"] = {
         "status": "ok",
         "shape": shape_kind(shape),
+        "feature": "part_line",
         "primitive": "line",
     }
     return summary
@@ -2481,7 +2776,7 @@ def consumer_enum_property(properties: dict[str, Any], name: str, labels: list[s
         index = int(value)
         if 0 <= index < len(labels):
             return labels[index]
-    raise UnsupportedFixture(f"partGeometryCurve consumer {name} must be one of {', '.join(labels)}")
+    raise UnsupportedFixture(f"Part::GeometryCurve consumer {name} must be one of {', '.join(labels)}")
 
 
 def prefixed_source_metadata(prefix: str, metadata: dict[str, str]) -> dict[str, str]:
@@ -2495,16 +2790,16 @@ def collect_part_geometry_curve_ruled_surface_expected(
     source_metadata: dict[str, dict[str, str]],
 ) -> dict:
     if consumer.get("TypeId") != "Part::RuledSurface":
-        raise UnsupportedFixture("partGeometryCurveConsumers ruled surface source must be Part::RuledSurface")
+        raise UnsupportedFixture("Part::GeometryCurve consumer objects ruled surface source must be Part::RuledSurface")
     properties = consumer.get("Properties", {})
     if not isinstance(properties, dict):
-        raise UnsupportedFixture("partGeometryCurve ruled surface consumer Properties must be an object")
+        raise UnsupportedFixture("Part::GeometryCurve ruled surface consumer Properties must be an object")
 
     curve1 = consumer_link_property(properties, "Curve1")
     curve2 = consumer_link_property(properties, "Curve2")
     for curve in (curve1, curve2):
         if curve not in source_shapes:
-            raise UnsupportedFixture(f"partGeometryCurve consumer Curve source {curve} was not created")
+            raise UnsupportedFixture(f"Part::GeometryCurve consumer Curve source {curve} was not created")
 
     orientation = consumer_enum_property(
         properties,
@@ -2543,9 +2838,9 @@ def collect_part_geometry_curve_expected(fixture_path: Path, fixture: dict) -> d
     items = part_geometry_curve_items(fixture)
     consumers = part_geometry_curve_consumer_items(fixture)
     if not items:
-        raise UnsupportedFixture("partGeometryCurve expected collection requires at least one DTO")
+        raise UnsupportedFixture("Part::GeometryCurve expected collection requires at least one DTO")
     if not consumers and len(items) != 1:
-        raise UnsupportedFixture("partGeometryCurve edge expected collection supports one valid DTO per fixture")
+        raise UnsupportedFixture("Part::GeometryCurve edge expected collection supports one valid DTO per fixture")
 
     source_shapes: dict[str, Any] = {}
     source_metadata: dict[str, dict[str, str]] = {}
@@ -2584,14 +2879,14 @@ def collect_part_geometry_curve_expected(fixture_path: Path, fixture: dict) -> d
             )
         else:
             raise UnsupportedFixture(
-                "partGeometryCurveConsumers expected collection supports Part::Line, "
+                "Part::GeometryCurve consumer objects expected collection supports Part::Line, "
                 "Part::Extrusion and Part::RuledSurface"
             )
 
     payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "reference": (
-            f"FreeCADCmd PartConicCurveDTO oracle from {fixture_path.name}; "
+            f"FreeCADCmd Part::GeometryCurve/PartConicCurveDTO oracle from {fixture_path.name}; "
             "Part::RuledSurface consumers use Part.makeRuledSurface after link-resolved edge inputs"
         ),
         "freecad_version": freecad_version(FreeCAD),
@@ -5387,6 +5682,12 @@ def expected_target_names(path: Path) -> list[str] | None:
     if not path.exists():
         return None
     expected = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(expected.get("results"), list):
+        return [
+            str(item["object"])
+            for item in expected["results"]
+            if isinstance(item, dict) and "object" in item
+        ]
     if "objects" in expected:
         return list(expected["objects"].keys())
     if "object" in expected:
@@ -5547,14 +5848,17 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
 def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = None) -> dict:
     import FreeCAD  # type: ignore
 
+    global ACTIVE_TOPO_NAMING_STATE
     fixture = load_fixture(fixture_path)
+    topo_state = fixture.get("topoNamingState")
+    ACTIVE_TOPO_NAMING_STATE = topo_state if isinstance(topo_state, dict) else None
     if has_part_sweep_wrapper_helper(fixture):
         return collect_part_sweep_wrapper_expected(fixture_path, fixture, requested_targets)
     if has_part_geomplate_surface_helper(fixture):
         return collect_part_geomplate_surface_expected(fixture_path, fixture, requested_targets)
     if has_part_filled_face_helper(fixture):
         return collect_part_filled_face_expected(fixture_path, fixture, requested_targets)
-    if "partGeometryCurve" in fixture:
+    if has_part_geometry_curve_object(fixture):
         return collect_part_geometry_curve_expected(fixture_path, fixture)
     require_native_hole_profile_support(fixture)
     require_native_dressup_body_membership(fixture)
@@ -5587,6 +5891,9 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             if obj is None:
                 raise UnsupportedFixture(f"target object {name} was not created")
             object_payloads[name] = object_expected_payload(obj, fixture, created)
+
+        if ACTIVE_TOPO_NAMING_STATE is not None:
+            return topo_naming_state_response(fixture, FreeCAD, object_payloads)
 
         reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
         payload: dict[str, Any] = {
@@ -5667,6 +5974,16 @@ def compare_expected_value(existing: Any, generated: Any, delta: float) -> bool:
     return existing == generated
 
 
+def canonicalize_freecad_mapped_names(value: Any) -> Any:
+    if isinstance(value, str):
+        return canonical_freecad_mapped_name(value)
+    if isinstance(value, list):
+        return [canonicalize_freecad_mapped_names(item) for item in value]
+    if isinstance(value, dict):
+        return {key: canonicalize_freecad_mapped_names(item) for key, item in value.items()}
+    return value
+
+
 def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     errors: list[str] = []
     bbox_delta = existing.get("bbox_delta", 1e-6)
@@ -5715,7 +6032,9 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
         errors.append("length")
     if "topology_counts" in existing and existing["topology_counts"] != generated["topology_counts"]:
         errors.append("topology_counts")
-    if "subshapes" in existing and existing["subshapes"] != generated.get("subshapes"):
+    if "subshapes" in existing and canonicalize_freecad_mapped_names(
+        existing["subshapes"]
+    ) != canonicalize_freecad_mapped_names(generated.get("subshapes")):
         errors.append("subshapes")
     if "sketch_external" in existing:
         generated_external = generated.get("sketch_external", {})
@@ -5729,23 +6048,37 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
     return errors
 
 
+def result_objects(payload: dict) -> dict[str, dict]:
+    if isinstance(payload.get("results"), list):
+        return {
+            str(item["object"]): item
+            for item in payload["results"]
+            if isinstance(item, dict) and "object" in item
+        }
+    if isinstance(payload.get("objects"), dict):
+        return payload["objects"]
+    if "object" in payload:
+        return {str(payload["object"]): payload}
+    return {}
+
+
 def compare_json(path: Path, payload: dict) -> bool:
     if not path.exists():
         print(f"missing expected: {path}", file=sys.stderr)
         return False
     existing = json.loads(path.read_text(encoding="utf-8"))
     errors: list[str] = []
-    if "objects" in existing:
-        generated_objects = payload.get("objects", {})
-        for object_name, object_expected in existing["objects"].items():
+    existing_objects = result_objects(existing)
+    generated_objects = result_objects(payload)
+    if existing_objects:
+        for object_name, object_expected in existing_objects.items():
             generated = generated_objects.get(object_name)
             if generated is None:
                 errors.append(f"{object_name}:missing")
                 continue
             errors.extend(f"{object_name}:{field}" for field in compare_object_expected(object_expected, generated))
-    else:
-        if existing.get("object") != payload.get("object"):
-            errors.append("object")
+    elif existing.get("object") != payload.get("object"):
+        errors.append("object")
         errors.extend(compare_object_expected(existing, payload))
     if errors:
         print(f"expected differs: {path}: {', '.join(errors)}", file=sys.stderr)
@@ -5755,12 +6088,17 @@ def compare_json(path: Path, payload: dict) -> bool:
 
 def expected_has_native_geometry_payload(path: Path) -> bool:
     expected = json.loads(path.read_text(encoding="utf-8"))
-    return "object" in expected or "objects" in expected
+    return "object" in expected or "objects" in expected or "results" in expected
 
 
 def expected_has_diagnostic_only_payload(path: Path) -> bool:
     expected = json.loads(path.read_text(encoding="utf-8"))
-    return "diagnostic_codes" in expected and "object" not in expected and "objects" not in expected
+    return (
+        "diagnostic_codes" in expected
+        and "object" not in expected
+        and "objects" not in expected
+        and "results" not in expected
+    )
 
 
 def run_inside_freecad(args: argparse.Namespace) -> int:

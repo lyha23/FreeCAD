@@ -26,6 +26,18 @@
     }
   ],
   "recompute": {
-    "objs": ["FilledFace"]
+    "objs": [
+      "FilledFace"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:4d7a6771fe81e5e41fd4070dd73ffd8739e4d0146667935cdf91f13c98aaba76"
   }
 }

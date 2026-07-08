@@ -1,0 +1,40 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P7 fixture contract for mirrored-stable-history-deleted; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "deleted_stable_subname"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "deleted_stable_subname"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Body",
+      "MirrorPlane",
+      "Mirrored",
+      "Pad",
+      "Pocket",
+      "ProbePad",
+      "ProbeSketch",
+      "SketchPad",
+      "SketchPocket"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad",
+      "PartDesign::Pocket",
+      "PartDesign::Body",
+      "PartDesign::Plane",
+      "PartDesign::Mirrored"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_p7_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p7/mirrored-stable-history-deleted.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... Processing...... Processing...... (5 %) Processing...... Processing...... (11 %) (17 %) (23 %) (29 %) (35 %) (41 %) (47 %) (52 %) (58 %) (64 %) Processing...... Processing...... (70 %) Pad: Sub shape not found: CadCoreExpected#SketchPad.g1;SKT;FAC unsupported cad-core/fixtures/p7/mirrored-stable-history-deleted.json: target object ProbePad has no shape"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": []
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: Sub shape not found: Sketch.g1;SKT;FAC; target object Fillet has no shape",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_body_tip_contract",
+    "reason": "This fixture verifies CAD Core Body replacement-tip publication after refine; FreeCADCmd cannot use the CAD Core canonical sketch face token as native input.",
+    "reference": "cad-core/fixtures/c3m5/body-replacement-tip-after-earlier-refine.json"
+  },
+  "reference": "CAD Core C3M5 Body replacement-tip after earlier refine contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

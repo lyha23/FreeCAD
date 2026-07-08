@@ -123,5 +123,15 @@
     "objs": [
       "CompoundNested"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:532c153682ad9d546b25d42b710a8e54dbc1b8331733726aa497406779e0b3c2"
   }
 }

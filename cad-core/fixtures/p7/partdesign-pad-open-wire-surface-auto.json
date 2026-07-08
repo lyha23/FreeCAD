@@ -9,20 +9,38 @@
           {
             "kind": "LineSegment",
             "id": 101,
-            "start": [0, 0],
-            "end": [10, 0]
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
           },
           {
             "kind": "LineSegment",
             "id": 102,
-            "start": [10, 0],
-            "end": [10, 5]
+            "start": [
+              10,
+              0
+            ],
+            "end": [
+              10,
+              5
+            ]
           },
           {
             "kind": "LineSegment",
             "id": 103,
-            "start": [10, 5],
-            "end": [0, 5]
+            "start": [
+              10,
+              5
+            ],
+            "end": [
+              0,
+              5
+            ]
           }
         ],
         "Constraints": []
@@ -38,7 +56,11 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "StableSubList": ["g101", "g102", "g103"]
+              "StableSubList": [
+                "g101",
+                "g102",
+                "g103"
+              ]
             }
           ]
         },
@@ -50,6 +72,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Pad"]
+    "objs": [
+      "Pad"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:bc3eac06ac379f0efd42f7886491780acd2dcc9cb1f526ca29f8a1ee3d2ecdea"
   }
 }

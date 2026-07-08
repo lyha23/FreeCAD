@@ -1,6 +1,6 @@
 {
   "schema_version": "cad-core.expected.v1",
-  "reference": "RS9-M44 cad-core product success contract for Part::Offset2D open-wire no-fill.",
+  "reference": "CAD Core C3M4 Part::Offset2D open-wire no-fill product contract; not a FreeCAD native geometry expected.",
   "diagnostics": [],
   "objects": {
     "Offset2D": {
@@ -29,5 +29,12 @@
         "Sketch.Edge1"
       ]
     }
+  },
+  "oracle_evidence": {
+    "collector_result": "unsupported: Part::Offset2D is not enabled in this collector yet",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_part_workbench_product_contract",
+    "reason": "This fixture verifies CAD Core Part::Offset2D open-wire no-fill product behavior; the native expected collector does not currently collect Part::Offset2D.",
+    "reference": "cad-core/fixtures/c3m4/part-offset2d-open-wire-no-fill.json"
   }
 }

@@ -11,13 +11,32 @@
           "SubSet": [
             {
               "value": "BasePad",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1", "Face2"]
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1",
+                "Face2"
+              ]
             }
           ]
         }
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d25dbc7cdd6bd52639cb30a7e3586508ad46cef1780fe87f41e3c4c19cc102f5"
+  }
 }

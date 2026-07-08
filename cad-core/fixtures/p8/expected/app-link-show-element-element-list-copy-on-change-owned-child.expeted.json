@@ -1,0 +1,28 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P8 fixture contract for app-link-show-element-element-list-copy-on-change-owned-child; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [],
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "recompute_status": "ok",
+    "result_objects": [
+      "ArrayLink",
+      "ArrayLink_i0",
+      "OwnedCopyBox",
+      "SourceBox"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Part::Box",
+      "App::LinkElement",
+      "App::Link"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_link_property_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p8/app-link-show-element-element-list-copy-on-change-owned-child.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/p8/app-link-show-element-element-list-copy-on-change-owned-child.json: failed to set property ElementList: Object attribute 'ElementList' is read-only"
+  }
+}

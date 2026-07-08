@@ -1,5 +1,4 @@
 {
-  "bbox_delta": 0.26,
   "bbox": {
     "max": [
       4.0000001,
@@ -13,26 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "named_shapes": {
-    "RuledSurface": {
-      "element_history_status_contains": [
-        "part_ruled_surface:shared_vertex_edge_relation"
-      ],
-      "element_kind_by_source": {
-        "Line1.Edge1": "edge",
-        "Line2.Edge1": "edge"
-      },
-      "element_map_contains": [
-        "Line1.Edge1",
-        "Line2.Edge1"
-      ],
-      "history_sources_any": [
-        "Line1.Edge1",
-        "Line2.Edge1"
-      ],
-      "owner": "RuledSurface"
-    }
-  },
   "object": "RuledSurface",
   "object_fields": {
     "feature": "part_ruled_surface",

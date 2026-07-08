@@ -33,7 +33,10 @@
       "Properties": {
         "Links": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["PathEdgeA", "PathEdgeB"]
+          "values": [
+            "PathEdgeA",
+            "PathEdgeB"
+          ]
         }
       }
     },
@@ -57,7 +60,9 @@
         },
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["Profile"]
+          "values": [
+            "Profile"
+          ]
         },
         "Solid": false,
         "Frenet": false,
@@ -67,6 +72,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Sweep"]
+    "objs": [
+      "Sweep"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:9dac53a7cdba5b095d8d761a9b1b9063212bf010a8ec5f6409359462d3b5417e"
   }
 }

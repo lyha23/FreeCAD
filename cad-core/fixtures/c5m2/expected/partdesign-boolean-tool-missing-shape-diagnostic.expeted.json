@@ -1,0 +1,28 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "missing_link_target",
+      "missing_link_target",
+      "unsupported_property"
+    ],
+    "result_objects": [
+      "BooleanMissingTool",
+      "BooleanNullShapeTool",
+      "BooleanUnsupportedType"
+    ]
+  },
+  "diagnostic_codes": [
+    "missing_link_target",
+    "missing_link_target",
+    "unsupported_property"
+  ],
+  "oracle_evidence": {
+    "collector_result": "failed: KeyError 'NoSuchTool' while creating FreeCAD objects",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_diagnostics_contract",
+    "reason": "The fixture intentionally contains a missing tool link and CAD Core diagnostic cases; there is no native geometry oracle to collect.",
+    "reference": "cad-core/fixtures/c5m2/partdesign-boolean-tool-missing-shape-diagnostic.json"
+  },
+  "reference": "CAD Core C5M2 PartDesign Boolean missing-tool diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

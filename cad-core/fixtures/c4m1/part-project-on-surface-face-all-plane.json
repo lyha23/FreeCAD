@@ -18,8 +18,17 @@
         "Width": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 1, -2],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            1,
+            -2
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -42,19 +51,27 @@
         },
         "Direction": {
           "PropertyType": "App::PropertyDirection",
-          "value": [0, 0, 1]
+          "value": [
+            0,
+            0,
+            1
+          ]
         },
         "SupportFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Projection": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "ProjectionFace",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             }
           ]
         }
@@ -62,6 +79,18 @@
     }
   ],
   "recompute": {
-    "objs": ["ProjectedAll"]
+    "objs": [
+      "ProjectedAll"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:7a606966d67c3e033bc661491d21c3c2e07c62904058ab8d45b077c558d2ca39"
   }
 }

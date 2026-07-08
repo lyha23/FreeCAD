@@ -32,20 +32,46 @@
           "PropertyType": "App::PropertyPlacementList",
           "value": [
             {
-              "Base": [0, 0, 0],
-              "Rotation": [0, 0, 0, 1]
+              "Base": [
+                0,
+                0,
+                0
+              ],
+              "Rotation": [
+                0,
+                0,
+                0,
+                1
+              ]
             },
             {
-              "Base": [5, 0, 0],
-              "Rotation": [0, 0, 0, 1]
+              "Base": [
+                5,
+                0,
+                0
+              ],
+              "Rotation": [
+                0,
+                0,
+                0,
+                1
+              ]
             }
           ]
         },
         "ScaleList": {
           "PropertyType": "App::PropertyVectorList",
           "value": [
-            [1, 1, 1],
-            [1, 1, 1]
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ]
           ]
         }
       }
@@ -58,18 +84,41 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "ArrayLink",
-          "SubList": ["1.Box.Face1"]
+          "SubList": [
+            "1.Box.Face1"
+          ]
         },
         "LinkTransform": false,
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 10, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            10,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["FaceLink"]
+    "objs": [
+      "FaceLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:35598b933b2a89d585fa538077e80bf191654d752ae8323f4eff394d56f6c475"
   }
 }

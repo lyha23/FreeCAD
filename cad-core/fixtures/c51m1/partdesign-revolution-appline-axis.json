@@ -107,5 +107,15 @@
     "objs": [
       "Revolution"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:845cd62e3761be58f1dea3fd994af7cb2e6938a05b8a2e9d7262faf4606590db"
   }
 }

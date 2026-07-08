@@ -66,7 +66,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "--out",
-        default=str(ROOT / "fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json"),
+        default=str(ROOT / "fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.native-probe.evidence.freecad.json"),
     )
     parser.add_argument("--freecadcmd", default=os.environ.get("FREECADCMD", DEFAULT_FREECADCMD))
     parser.add_argument("--workdir", help="Keep intermediate FCStd files in this directory.")

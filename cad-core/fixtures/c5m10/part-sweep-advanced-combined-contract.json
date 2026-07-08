@@ -335,5 +335,15 @@
       "InvalidCombinedCorrection",
       "PrioritySupportMode"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:6fbb230fef6c67937217dc8ebdcbe35f9bc25b580cbdcaf80fea7330f4d75a59"
   }
 }

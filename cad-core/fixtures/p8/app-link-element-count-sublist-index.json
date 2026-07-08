@@ -32,25 +32,54 @@
           "PropertyType": "App::PropertyPlacementList",
           "value": [
             {
-              "Base": [0, 0, 0],
-              "Rotation": [0, 0, 0, 1]
+              "Base": [
+                0,
+                0,
+                0
+              ],
+              "Rotation": [
+                0,
+                0,
+                0,
+                1
+              ]
             },
             {
-              "Base": [5, 0, 0],
-              "Rotation": [0, 0, 0, 1]
+              "Base": [
+                5,
+                0,
+                0
+              ],
+              "Rotation": [
+                0,
+                0,
+                0,
+                1
+              ]
             }
           ]
         },
         "ScaleList": {
           "PropertyType": "App::PropertyVectorList",
           "value": [
-            [1, 1, 1],
-            [1, 1, 1]
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ]
           ]
         },
         "VisibilityList": {
           "PropertyType": "App::PropertyBoolList",
-          "value": [true, true]
+          "value": [
+            true,
+            true
+          ]
         }
       }
     },
@@ -62,18 +91,41 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "ArrayLink",
-          "SubList": ["1.Face1"]
+          "SubList": [
+            "1.Face1"
+          ]
         },
         "LinkTransform": false,
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 10, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            10,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["FaceLink"]
+    "objs": [
+      "FaceLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:8820a3772ae3e006c1dbaf8c037d7d510e264b23f26d059782360ed87be8a80e"
   }
 }

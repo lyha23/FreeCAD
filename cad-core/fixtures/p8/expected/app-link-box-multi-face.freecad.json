@@ -1,31 +1,29 @@
 {
-  "object": "FaceLink",
-  "reference": "FreeCADCmd geometry-equivalent App::Link compound of Box.Face1 and Box.Face2",
-  "freecad_version": "1.2.0 revision 20260519",
   "bbox": {
-    "min": [
-      0.0,
-      10.0,
-      0.0
-    ],
     "max": [
       2.0,
       13.0,
       4.0
+    ],
+    "min": [
+      0.0,
+      10.0,
+      0.0
     ]
   },
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "FaceLink",
+  "object_fields": {
+    "link": "app_link",
+    "linked_object": "Box",
+    "shape": "occt_compound"
+  },
+  "reference": "FreeCADCmd oracle from app-link-box-multi-face.json; objects: Part::Box, App::Link",
+  "schema_version": "cad-core.freecad-expected.v1",
   "topology_counts": {
-    "faces": 2,
     "edges": 8,
+    "faces": 2,
     "vertices": 8
   },
-  "named_shapes": {
-    "FaceLink": {
-      "element_map_status": "history_partial",
-      "element_map": {
-        "Box.Face1": "Face1",
-        "Box.Face2": "Face2"
-      }
-    }
-  }
+  "volume": 7.999999999999998
 }

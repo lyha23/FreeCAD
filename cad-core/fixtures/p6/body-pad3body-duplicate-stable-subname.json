@@ -262,5 +262,15 @@
     "objs": [
       "Pad3Body"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d22eead9fbb07913c8984c17b36df97ec133902db48d2b1397bb846d46d0eb00"
   }
 }

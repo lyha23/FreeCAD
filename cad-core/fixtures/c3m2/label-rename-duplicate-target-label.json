@@ -36,13 +36,27 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "Box",
-          "SubList": ["$OldPrettyBox.Face1"]
+          "SubList": [
+            "$OldPrettyBox.Face1"
+          ]
         },
         "LinkTransform": false
       }
     }
   ],
   "recompute": {
-    "objs": ["BoxLink"]
+    "objs": [
+      "BoxLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:274aac03ddbe9502244ad7314ceebe2b46a35bda9072e1c90ac3bd4df37c40fc"
   }
 }

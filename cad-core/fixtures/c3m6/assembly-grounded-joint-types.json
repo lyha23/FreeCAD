@@ -124,5 +124,15 @@
     "objs": [
       "Assembly"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:155cd165e881e66016f4827c9f3e5feb94de9dd32d24f2a7a5fb71cd3f0a34e1"
   }
 }

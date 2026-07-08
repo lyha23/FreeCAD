@@ -18,8 +18,17 @@
         "Width": 3,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0.5, -2],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            0.5,
+            -2
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -33,8 +42,17 @@
         "Height": 4,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [2.25, 1.5, -4],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            2.25,
+            1.5,
+            -4
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -73,19 +91,27 @@
         },
         "Direction": {
           "PropertyType": "App::PropertyDirection",
-          "value": [0, 0, 1]
+          "value": [
+            0,
+            0,
+            1
+          ]
         },
         "SupportFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Projection": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "ProjectionFaceWithHole",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             }
           ]
         }
@@ -93,6 +119,18 @@
     }
   ],
   "recompute": {
-    "objs": ["ProjectedFaceWithHole"]
+    "objs": [
+      "ProjectedFaceWithHole"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d513402a4dd4d33a43f6603befd33317f4d05d387c8982c8b74cd02d97b567a0"
   }
 }

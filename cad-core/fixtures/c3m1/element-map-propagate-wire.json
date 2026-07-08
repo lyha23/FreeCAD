@@ -1,4 +1,28 @@
 {
-  "case": "element-map-propagate-wire",
-  "description": "C3-M1 probe for FreeCAD TopoShape::makeElementWires() ElementMapPolicy::Propagate after MakeWire updates connected edge identity."
+  "Objects": [
+    {
+      "Name": "C3M1Probe",
+      "ID": 1,
+      "TypeId": "CadCore::C3M1TopologyProbe",
+      "Properties": {
+        "ProbeCase": "element-map-propagate-wire",
+        "Description": "C3-M1 probe for FreeCAD TopoShape::makeElementWires() ElementMapPolicy::Propagate after MakeWire updates connected edge identity."
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "C3M1Probe"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:c2b7b25a386a0f8070a1891e3fb05ad118dc5e86e470947fc66fbf5577d8fe73"
+  }
 }

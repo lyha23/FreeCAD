@@ -110,5 +110,15 @@
     "objs": [
       "FaceLink"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:108fbbd2cc87606cd68608aa60091f06fd0136823b8940a7b41f3ddf4faadf68"
   }
 }

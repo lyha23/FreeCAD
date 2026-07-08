@@ -1,5 +1,4 @@
 {
-  "bbox_delta": 2.1,
   "bbox": {
     "max": [
       4.0000001,
@@ -13,26 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "named_shapes": {
-    "ReversedRuledSurface": {
-      "element_history_status_contains": [
-        "part_ruled_surface:shared_vertex_edge_relation"
-      ],
-      "element_kind_by_source": {
-        "SkewLine1.Edge1": "edge",
-        "SkewLine2.Edge1": "edge"
-      },
-      "element_map_contains": [
-        "SkewLine1.Edge1",
-        "SkewLine2.Edge1"
-      ],
-      "history_sources_any": [
-        "SkewLine1.Edge1",
-        "SkewLine2.Edge1"
-      ],
-      "owner": "ReversedRuledSurface"
-    }
-  },
   "object": "ReversedRuledSurface",
   "object_fields": {
     "feature": "part_ruled_surface",

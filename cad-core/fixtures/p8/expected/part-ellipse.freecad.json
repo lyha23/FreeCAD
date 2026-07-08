@@ -1,29 +1,48 @@
 {
-  "object": "Ellipse",
-  "reference": "FreeCADCmd geometry-equivalent Part::Ellipse major radius 4 minor radius 2",
-  "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.2,
   "bbox": {
-    "min": [
-      -4.0,
-      -2.0,
-      0.0
-    ],
     "max": [
       4.0,
       2.0,
       0.0
+    ],
+    "min": [
+      -4.0,
+      -2.0,
+      0.0
     ]
   },
-  "volume": 0.0,
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Ellipse",
+  "reference": "FreeCADCmd oracle from part-ellipse.json; objects: Part::Ellipse",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "subshapes": [
+    {
+      "ReferenceShadow": [],
+      "ShadowSub": [],
+      "fullSubname": "Ellipse.Edge1",
+      "id": "Ellipse:Edge1",
+      "identityStatus": "current_only",
+      "indexed": "Edge1",
+      "kind": "Edge",
+      "stableSubname": "",
+      "subname": "Edge1"
+    },
+    {
+      "ReferenceShadow": [],
+      "ShadowSub": [],
+      "fullSubname": "Ellipse.Vertex1",
+      "id": "Ellipse:Vertex1",
+      "identityStatus": "current_only",
+      "indexed": "Vertex1",
+      "kind": "Vertex",
+      "stableSubname": "",
+      "subname": "Vertex1"
+    }
+  ],
   "topology_counts": {
-    "faces": 0,
     "edges": 1,
+    "faces": 0,
     "vertices": 1
   },
-  "named_shapes": {
-    "Ellipse": {
-      "owner": "Ellipse"
-    }
-  }
+  "volume": 0.0
 }

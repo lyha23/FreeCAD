@@ -1,22 +1,175 @@
 {
-  "diagnostic_codes": [
-    "missing_link_target",
-    "attachment_support_invalid_shape",
-    "attachment_support_invalid_shape",
-    "attachment_parameter_invalid",
-    "undefined_frenet_normal",
-    "infinite_curvature_radius"
-  ],
-  "freecadcmd_evidence": {
-    "messages": [
-      "no subshapes specified (need one edge, and an optional vertex)",
-      "Null path in AttachEngine3D::calculateAttachedPlacement()",
-      "Null vertex in AttachEngine3D::calculateAttachedPlacement()",
-      "Frenet-Serret normal is undefined",
-      "path has infinite radius of curvature at the point"
-    ],
-    "version": "1.2.0 revision 20260519"
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "DatumCSInfiniteCurvature": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Concentric",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSMissingSupport": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSUndefinedNormal": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSWrongProjectionSupport": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTB",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSWrongShape": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSZeroDerivative": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "FrenetTN",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    }
   },
-  "reference": "C5-M16 Datum curve-frame invalid diagnostics source-backed by FreeCAD AttachEngine3D curve projection, Frenet and curvature branches; diagnostic-only fixture has no native geometry payload",
+  "reference": "FreeCADCmd oracle from partdesign-datum-curve-frame-diagnostics.json; objects: Part::Line, Part::Vertex, Sketcher::SketchObject, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem",
   "schema_version": "cad-core.freecad-expected.v1"
 }

@@ -33,13 +33,19 @@
         },
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["Profile"]
+          "values": [
+            "Profile"
+          ]
         },
         "AuxiliarySpine": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Path",
-          "SubList": ["Edge1"],
-          "StableSubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ],
+          "StableSubList": [
+            "Edge1"
+          ]
         },
         "Tolerance": {
           "PropertyType": "App::PropertyFloat",
@@ -49,6 +55,18 @@
     }
   ],
   "recompute": {
-    "objs": ["AdvancedSweep"]
+    "objs": [
+      "AdvancedSweep"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:91ebee5af4ce259170726a44920e4053303c5b2278c376caf2d2cafbe5bf63b7"
   }
 }

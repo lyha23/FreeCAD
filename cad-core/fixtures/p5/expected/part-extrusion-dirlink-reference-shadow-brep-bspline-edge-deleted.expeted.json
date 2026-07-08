@@ -1,0 +1,31 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P5 fixture contract for part-extrusion-dirlink-reference-shadow-brep-bspline-edge-deleted; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "subname_deleted"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "subname_deleted"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "BaseLine",
+      "Extrude",
+      "SourceSketch"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Part::Line",
+      "Sketcher::SketchObject",
+      "Part::Extrusion"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_link_property_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p5/part-extrusion-dirlink-reference-shadow-brep-bspline-edge-deleted.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/p5/part-extrusion-dirlink-reference-shadow-brep-bspline-edge-deleted.json: Part::Extrusion is not enabled in this collector yet"
+  }
+}

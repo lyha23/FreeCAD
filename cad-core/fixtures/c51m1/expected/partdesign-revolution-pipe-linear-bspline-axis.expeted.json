@@ -1,0 +1,18 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "result_objects": [
+      "Body"
+    ]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: unsupported Sketch Geometry kind InterpolatedSpline",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_product_extension_contract",
+    "reason": "The current native collector cannot build this InterpolatedSpline-based source path; the fixture remains a CAD Core product-extension contract for linear-BSpline-axis acceptance.",
+    "reference": "cad-core/fixtures/c51m1/partdesign-revolution-pipe-linear-bspline-axis.json"
+  },
+  "reference": "CAD Core C51M1 PartDesign Revolution linear-BSpline-axis product-extension contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

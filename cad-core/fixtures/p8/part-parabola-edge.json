@@ -1,12 +1,41 @@
 {
-  "partGeometryCurve": {
-    "name": "ParabolaEdge",
-    "curveKind": "parabola",
-    "center": [0, 0, 0],
-    "normal": [0, 0, 1],
-    "angleXU": 0.25,
-    "focal": 1.25,
-    "startAngle": -1.2,
-    "endAngle": 1.4
+  "Objects": [
+    {
+      "Name": "ParabolaEdge",
+      "ID": 1,
+      "TypeId": "Part::GeometryCurve",
+      "Properties": {
+        "CurveKind": "parabola",
+        "Center": [
+          0,
+          0,
+          0
+        ],
+        "Normal": [
+          0,
+          0,
+          1
+        ],
+        "AngleXU": 0.25,
+        "StartAngle": -1.2,
+        "EndAngle": 1.4,
+        "Focal": 1.25
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "ParabolaEdge"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:242c03e12c30a00bc56340a42de3c7440e6840b38f594f59ba3f4f21d611cf00"
   }
 }

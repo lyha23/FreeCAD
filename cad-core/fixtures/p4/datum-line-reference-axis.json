@@ -97,12 +97,11 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": [
-                "InternalFace1"
-              ],
+              "SubList": [],
               "StableSubList": [
-                ""
-              ]
+                "g1;SKT;FAC"
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -123,5 +122,58 @@
     "objs": [
       "Pad"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {
+      "Sketch": {
+        "objectHash": "sha256:11e559d08c7a4fdaa8b1e46a51e8434c98e7b8dab0e61b58fe9f97da7cd9c84e",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "InternalFace1": {
+            "subname": "InternalFace1",
+            "rawFreecadMappedName": "g1;SKT;FAC",
+            "canonicalFreecadMappedName": "g1;SKT;FAC",
+            "resolvedIndexed": "InternalFace1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "g1;SKT;FAC": {
+              "target": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              },
+              "mappedName": {
+                "raw": "g1;SKT;FAC",
+                "canonical": "g1;SKT;FAC"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "legacy_internal_face_fixture_migration",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          },
+          "status": "indexed_only"
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
+    "documentHash": "sha256:44195521d89beef72240565fa7b9f92a43c2d6d11a4e8ca5121533990dda8b24"
   }
 }

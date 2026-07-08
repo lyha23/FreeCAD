@@ -4,20 +4,31 @@
       "Name": "BoxA",
       "ID": 1,
       "TypeId": "Part::Box",
-      "Properties": {"Length": 2, "Width": 2, "Height": 2}
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
     },
     {
       "Name": "BoxB",
       "ID": 2,
       "TypeId": "Part::Box",
-      "Properties": {"Length": 2, "Width": 2, "Height": 2}
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
     },
     {
       "Name": "ComponentA",
       "ID": 3,
       "TypeId": "Assembly::AssemblyLink",
       "Properties": {
-        "LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "BoxA"},
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxA"
+        },
         "Rigid": true
       }
     },
@@ -26,9 +37,25 @@
       "ID": 4,
       "TypeId": "Assembly::AssemblyLink",
       "Properties": {
-        "LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "BoxB"},
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxB"
+        },
         "Rigid": true,
-        "Placement": {"PropertyType": "App::PropertyPlacement", "Base": [4, 0, 0], "Rotation": [0, 0, 0, 1]}
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            4,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
       }
     },
     {
@@ -36,7 +63,10 @@
       "ID": 5,
       "TypeId": "App::FeaturePython",
       "Properties": {
-        "ObjectToGround": {"PropertyType": "App::PropertyLinkGlobal", "value": "ComponentA"}
+        "ObjectToGround": {
+          "PropertyType": "App::PropertyLinkGlobal",
+          "value": "ComponentA"
+        }
       }
     },
     {
@@ -44,10 +74,28 @@
       "ID": 6,
       "TypeId": "App::FeaturePython",
       "Properties": {
-        "JointType": {"PropertyType": "App::PropertyEnumeration", "value": "Distance"},
-        "Distance": {"PropertyType": "App::PropertyFloat", "value": 1.5},
-        "Reference1": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentA", "SubList": ["Vertex1"]},
-        "Reference2": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentB", "SubList": ["Face1"]}
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Distance"
+        },
+        "Distance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 1.5
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentA",
+          "SubList": [
+            "Vertex1"
+          ]
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentB",
+          "SubList": [
+            "Face1"
+          ]
+        }
       }
     },
     {
@@ -55,7 +103,13 @@
       "ID": 7,
       "TypeId": "Assembly::JointGroup",
       "Properties": {
-        "Group": {"PropertyType": "App::PropertyLinkList", "values": ["GroundedJoint", "DistanceJoint"]}
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "GroundedJoint",
+            "DistanceJoint"
+          ]
+        }
       }
     },
     {
@@ -63,9 +117,30 @@
       "ID": 8,
       "TypeId": "Assembly::AssemblyObject",
       "Properties": {
-        "Group": {"PropertyType": "App::PropertyLinkList", "values": ["ComponentA", "ComponentB", "Joints"]}
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "ComponentA",
+            "ComponentB",
+            "Joints"
+          ]
+        }
       }
     }
   ],
-  "recompute": {"objs": ["Assembly"]}
+  "recompute": {
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:c4d3a28a234094c12c03c39708b447bc5314cffd7a5314dc2d5f127ebc80d0ea"
+  }
 }

@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": ["invalid_subshape"],
+    "focused_tests": ["cad-core.tests.test_p7_features.CadCoreP7FeatureTest.test_c3m5_body_dressup_rejects_invalid_target_stable_subname"]
+  },
+  "diagnostic_codes": ["invalid_subshape"],
+  "oracle_evidence": {
+    "collector_result": "unsupported: failed to set property Direction: type must be 'Vector' or tuple of three floats, not list",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_diagnostics_contract",
+    "reason": "This fixture verifies CAD Core invalid stable-subname diagnostics for Body DressUp references; the native collector cannot apply the DTO Direction list for this case.",
+    "reference": "cad-core/fixtures/c3m5/body-dressup-invalid-stable-subname.json"
+  },
+  "reference": "CAD Core C3M5 Body DressUp invalid stable-subname diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

@@ -16,7 +16,9 @@
       "Properties": {
         "Links": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["Profile"]
+          "values": [
+            "Profile"
+          ]
         }
       }
     },
@@ -37,6 +39,18 @@
     }
   ],
   "recompute": {
-    "objs": ["FilledFace"]
+    "objs": [
+      "FilledFace"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:c4309476daea9d9f037739946ac0bd2d7a10a49fc661c81aa5925e587e78cb8f"
   }
 }

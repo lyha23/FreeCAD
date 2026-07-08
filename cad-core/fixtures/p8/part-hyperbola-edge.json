@@ -1,13 +1,42 @@
 {
-  "partGeometryCurve": {
-    "name": "HyperbolaEdge",
-    "curveKind": "hyperbola",
-    "center": [0, 0, 0],
-    "normal": [0, 0, 1],
-    "angleXU": 0,
-    "majorRadius": 4,
-    "minorRadius": 1.5,
-    "startAngle": -0.75,
-    "endAngle": 0.85
+  "Objects": [
+    {
+      "Name": "HyperbolaEdge",
+      "ID": 1,
+      "TypeId": "Part::GeometryCurve",
+      "Properties": {
+        "CurveKind": "hyperbola",
+        "Center": [
+          0,
+          0,
+          0
+        ],
+        "Normal": [
+          0,
+          0,
+          1
+        ],
+        "AngleXU": 0,
+        "StartAngle": -0.75,
+        "EndAngle": 0.85,
+        "MajorRadius": 4,
+        "MinorRadius": 1.5
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "HyperbolaEdge"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:0851000127466c13ef1af228dfd31b9d53e28493d734434d0649b3742a42d44c"
   }
 }

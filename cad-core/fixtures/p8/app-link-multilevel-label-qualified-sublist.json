@@ -30,8 +30,17 @@
         "LinkTransform": false,
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            5,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -51,8 +60,17 @@
         "LinkTransform": false,
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 7, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            7,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -64,18 +82,41 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "ChainLink",
-          "SubList": ["$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"]
+          "SubList": [
+            "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"
+          ]
         },
         "LinkTransform": false,
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 10, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            10,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["FaceLink"]
+    "objs": [
+      "FaceLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:10cd64eadb6f515c7e0c90fb0b871ec6d9a20ba0ea9e36e0184a4f288a55ed08"
   }
 }

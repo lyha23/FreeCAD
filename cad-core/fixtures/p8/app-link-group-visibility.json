@@ -102,5 +102,15 @@
     "objs": [
       "LinkGroup"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:5d286837ead80a0621dfbd6e7e0254546edbea3ecdccd2bc688362735e1cecbb"
   }
 }

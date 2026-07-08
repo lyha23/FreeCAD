@@ -1,52 +1,23 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
-    "kind": "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
-    "reason": "C5-M13 S2 re-probed the local FreeCADCmd wrapper call path. Free vertex, profile-coordinate free vertex, profile-owned vertex, spine-owned vertex and open-wire profile location all reach isReady=true/status_before_build=0, then fail at builder.build() with OCCError: NCollection_Array1::Value. Call-order variants also fail, while the same wire profile without Location builds successfully; edge/face profile representatives are rejected at add() as bad section shape types. This is therefore narrowed to the Location overload build-stage OCCT/runtime blocker, not a representative vertex or collector call-order issue.",
-    "freecadcmd_evidence": {
-      "helper": "Part.BRepOffsetAPI_MakePipeShell",
-      "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
+  "diagnostic_codes": [],
+  "diagnostic_split": [
+    {
       "object": "Sweep",
-      "error": "OCCError: NCollection_Array1::Value",
-      "failed_stage": "build",
-      "is_ready_before_build": true,
-      "status_before_build": 0,
-      "probe_script": "docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-04-46-c5m13-s2-sweep-location-combined-probe.py",
-      "probe_command": "FreeCADCmd -c \"exec(compile(open('docs/CADCore5.0-PartDesign-高价值剩余语义/C5-M13-PartWorkbenchSurfaceNarrowedBlockerRecovery主线/docs/temp/6-22-04-46-c5m13-s2-sweep-location-combined-probe.py', encoding='utf-8').read(), 'c5m13_s2_sweep_probe.py', 'exec'))\"",
-      "failing_location_representatives": [
-        "located_free_vertex",
-        "located_profile_owned_vertex",
-        "located_profile_coordinate_free_vertex",
-        "located_spine_owned_vertex",
-        "located_open_wire_profile"
-      ],
-      "failing_call_order_variants": [
-        "located_add_before_frenet",
-        "located_add_before_transition",
-        "located_no_frenet",
-        "located_tolerance_before_add"
-      ],
-      "successful_controls": [
-        "plain_control"
-      ],
-      "rejected_profile_representatives": [
-        "located_edge_profile",
-        "located_face_profile"
-      ],
-      "collector_policy": "Keep the explicit FreeCADCmd wrapper collector blocker; do not fabricate shape_summary from cad-core output."
+      "policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker",
+      "reason": "OCCError: NCollection_Array1::Value"
+    }
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "object_fields": {
+    "advanced": {},
+    "builder_status": {
+      "build_ok": false,
+      "shape_access_ok": false
     },
-    "uncollected_fields": [
-      "object_fields.advanced.sections[].location",
-      "object_fields.advanced.sections[].with_contact",
-      "object_fields.advanced.sections[].with_correction",
-      "shape_summary"
-    ],
-    "next_batch": "Delete only after FreeCADCmd returns stable shape_summary for the BRepOffsetAPI_MakePipeShell add(Profile, Location, WithContact, WithCorrection) overload on a wire-profile representative, or after the upstream FreeCAD/OCCT Location overload build failure is resolved.",
-    "isolation": "The blocker is limited to the Location overload build stage. No-Location plain Sweep wrapper builds successfully, and auxiliary, binormal, tolerance and no-location combined controls use different wrapper paths that already build successfully.",
-    "source_authority": [
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BRepOffsetAPI_MakePipeShellPyImp.cpp::add()"
-    ],
-    "cad_core_fixture": "cad-core/fixtures/c5m10/part-sweep-located-profile-contract.json"
+    "dto": "PartSweepAdvancedPipeShellDTO",
+    "helper": "Part.BRepOffsetAPI_MakePipeShell",
+    "status": "diagnostic_only"
   },
-  "reference": "C5-M11 S2 narrowed FreeCADCmd blocker for located-profile wrapper expected."
+  "reference": "FreeCADCmd wrapper oracle from part-sweep-located-profile-contract.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Part::Vertex, Part::Sweep",
+  "schema_version": "cad-core.freecad-expected.v1"
 }

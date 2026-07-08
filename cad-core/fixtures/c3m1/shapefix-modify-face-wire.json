@@ -1,3 +1,27 @@
 {
-  "case": "shapefix-wireframe-modified-history"
+  "Objects": [
+    {
+      "Name": "C3M1Probe",
+      "ID": 1,
+      "TypeId": "CadCore::C3M1TopologyProbe",
+      "Properties": {
+        "ProbeCase": "shapefix-wireframe-modified-history"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "C3M1Probe"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:47407348a1fe767901e13be1c55e178fedb8d117122a0d80518732fdf376e8f3"
+  }
 }

@@ -9,7 +9,7 @@
     "shape": "occt_sketch_shape",
     "status": "ok"
   },
-  "reference": "FreeCADCmd Sketcher oracle from cad-core/fixtures/c10m1/sketch-near-tangent-arc-line.json. Source: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() calls FaceMakerBuildFace then WireJoiner; /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp::FaceMakerBuildFace::Build_Essence() owns near-tangent arc/line bounded split counts.",
+  "reference": "FreeCADCmd oracle from sketch-near-tangent-arc-line.json; objects: Sketcher::SketchObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "sketch_external": {
     "construction_count": 0,

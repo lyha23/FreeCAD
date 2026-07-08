@@ -54,8 +54,17 @@
         "Rigid": true,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [4, 0, 2],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            4,
+            0,
+            2
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -71,8 +80,17 @@
         "Rigid": true,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [8, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            8,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -144,7 +162,11 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["GroundedJoint", "DistanceJointB", "DistanceJointC"]
+          "values": [
+            "GroundedJoint",
+            "DistanceJointB",
+            "DistanceJointC"
+          ]
         }
       }
     },
@@ -155,12 +177,29 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ComponentA", "ComponentB", "ComponentC", "Joints"]
+          "values": [
+            "ComponentA",
+            "ComponentB",
+            "ComponentC",
+            "Joints"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["Assembly"]
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:35569fe79fddcf04f3473767b2e19f66391fa417de71aa835a7194c68cd3dfbd"
   }
 }

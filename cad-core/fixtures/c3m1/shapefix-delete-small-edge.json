@@ -1,15 +1,59 @@
 {
-  "case": "shapefix-delete-small-edge",
-  "shape": {
-    "kind": "wire",
-    "small_edge_tolerance": 0.0001,
-    "shape_fix_precision": 0.0001,
-    "points": [
-      [0.0, 0.0, 0.0],
-      [0.000001, 0.0, 0.0],
-      [10.0, 0.0, 0.0],
-      [10.0, 5.0, 0.0],
-      [0.0, 5.0, 0.0]
+  "Objects": [
+    {
+      "Name": "C3M1Probe",
+      "ID": 1,
+      "TypeId": "CadCore::C3M1TopologyProbe",
+      "Properties": {
+        "ProbeCase": "shapefix-delete-small-edge",
+        "Shape": {
+          "kind": "wire",
+          "small_edge_tolerance": 0.0001,
+          "shape_fix_precision": 0.0001,
+          "points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1e-06,
+              0.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              10.0,
+              5.0,
+              0.0
+            ],
+            [
+              0.0,
+              5.0,
+              0.0
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "C3M1Probe"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d7048075504b3bc6c0a7a3a8bc66cb525a9fa9643bf08040b6bbbff8fbe3bbf6"
   }
 }

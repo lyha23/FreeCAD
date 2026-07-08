@@ -3451,7 +3451,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_c7m3_reference_shadow_recovery_oracle_remains_blocked(self) -> None:
         expected = self.expected_freecad("c3m5", "dressup-reference-shadow-base-recovery")
-        evidence_path = ROOT / "fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json"
+        evidence_path = ROOT / "fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.native-probe.evidence.freecad.json"
         evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
 
         self.assertNotIn("objects", expected)
@@ -3464,7 +3464,7 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("ReferenceShadow", expected["known_gap"]["delete_condition"])
         self.assertEqual(
             expected["known_gap"]["native_probe_evidence"]["evidence_json"],
-            "cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json",
+            "cad-core/fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.native-probe.evidence.freecad.json",
         )
         self.assertEqual(expected["known_gap"]["native_probe_evidence"]["returncode"], 0)
         self.assertEqual(

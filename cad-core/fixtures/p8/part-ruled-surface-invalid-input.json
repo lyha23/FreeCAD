@@ -54,7 +54,9 @@
         "Curve1": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Line1",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "Orientation": {
           "PropertyType": "App::PropertyEnumeration",
@@ -70,7 +72,9 @@
         "Curve1": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Line1",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "Curve2": {
           "PropertyType": "App::PropertyLinkSub",
@@ -86,12 +90,17 @@
         "Curve1": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Line1",
-          "SubList": ["Edge1", "Edge2"]
+          "SubList": [
+            "Edge1",
+            "Edge2"
+          ]
         },
         "Curve2": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Line2",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         }
       }
     },
@@ -103,12 +112,16 @@
         "Curve1": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "BoxSource",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Curve2": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Line2",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         }
       }
     },
@@ -120,17 +133,37 @@
         "Curve1": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "PointSource",
-          "SubList": ["Vertex1"]
+          "SubList": [
+            "Vertex1"
+          ]
         },
         "Curve2": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Line2",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["MissingCurve", "EmptyLink", "MultiSubname", "NonEdge", "NoEdge"]
+    "objs": [
+      "MissingCurve",
+      "EmptyLink",
+      "MultiSubname",
+      "NonEdge",
+      "NoEdge"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:16b96f6258634cd13c978844e34c20f797d42508f192514b893c24c4b8473203"
   }
 }

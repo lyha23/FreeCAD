@@ -196,5 +196,15 @@
     "objs": [
       "RevolvePreviewBody"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:7f96f0ca9c6fa937e70454da4a6c21a766d4049a753768e652da61e906f9ec7b"
   }
 }

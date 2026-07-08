@@ -1,5 +1,4 @@
 {
-  "bbox_delta": 0.3,
   "bbox": {
     "max": [
       2.0000001,
@@ -13,26 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "named_shapes": {
-    "RuledSurface": {
-      "element_history_status_contains": [
-        "part_ruled_surface:wire_wire_brepfill_shell"
-      ],
-      "element_kind_by_source": {
-        "LowerWire.Edge1": "edge",
-        "UpperWire.Edge1": "edge"
-      },
-      "element_map_contains": [
-        "LowerWire.Edge1",
-        "UpperWire.Edge1"
-      ],
-      "history_sources_any": [
-        "LowerWire.Edge1",
-        "UpperWire.Edge1"
-      ],
-      "owner": "RuledSurface"
-    }
-  },
   "object": "RuledSurface",
   "object_fields": {
     "feature": "part_ruled_surface",

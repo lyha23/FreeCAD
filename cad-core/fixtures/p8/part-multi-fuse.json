@@ -79,5 +79,15 @@
     "objs": [
       "MultiFuse"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:80566364a875833ad89872a9ba2593db82cbe7ddebfd178f18bd5415a878c3b6"
   }
 }

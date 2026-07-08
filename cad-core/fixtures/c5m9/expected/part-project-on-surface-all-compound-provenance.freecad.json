@@ -1,34 +1,74 @@
 {
-  "freecad_version": "1.2.0 revision 20260519",
-  "product_contract": {
-    "cad_core_fixture": "cad-core/fixtures/c5m9/part-project-on-surface-all-compound-provenance.json",
-    "kind": "project_on_surface_all_compound_request_local_ledger",
-    "contract": "CAD Core request-local ProjectOnSurface All/compound provenance ledger",
-    "provenance": "projection_item_ledger + mapper_history",
-    "native_oracle_status": "native_oracle_unavailable",
-    "freecad_native_parity": false,
-    "source_authority": [
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::createSolidIfHeight()",
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::filterShapes()",
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureProjectOnSurface.cpp::createCompound()",
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PropertyTopoShape.cpp::PropertyPartShape::setValue()"
+  "bbox": {
+    "max": [
+      7.000000000000001,
+      3.0000000000000004,
+      0.25000000000000183
     ],
-    "focused_test": "tests.test_p8_features.CadCoreP8FeatureTest.test_c5m9_part_project_on_surface_all_compound_records_solid_and_child_provenance",
-    "asserted_fields": [
-      "objects.ProjectedAllCompoundProvenance.projection_item_ledger[].source_object",
-      "named_shapes.ProjectedAllCompoundProvenance.element_history_status",
-      "named_shapes.ProjectedAllCompoundProvenance.mapper_history[].evidence.height_solid_id",
-      "named_shapes.ProjectedAllCompoundProvenance.mapper_history[].evidence.child_element_map_key"
+    "min": [
+      1.0,
+      1.0,
+      -1.0
     ]
   },
-  "native_oracle_unavailable": {
-    "classification": "native_hidden_retained",
-    "evidence": [
-      "docs/temp/6-29-23-05-c12m3-s4-project-on-surface-native-provenance-probe-output.json",
-      "docs/temp/6-29-22-40-c12m3-s5-project-on-surface-no-comparison-evidence.json"
+  "bbox_delta": 0.11,
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "ProjectedAllCompoundProvenance",
+  "object_fields": {
+    "feature": "part_project_on_surface",
+    "height": 1.25,
+    "mode": "All",
+    "offset": 0.25,
+    "offset_application": "compound_child_moved_after_filter",
+    "offset_vector": [
+      0.0,
+      0.0,
+      0.25
     ],
-    "reason": "Current FreeCAD native probe does not expose stable ProjectOnSurface All/compound mapper/history ownership. This fixture is the published CAD Core product contract, not a native parity oracle.",
-    "reopen_condition": "Only compare as FreeCAD native parity if a future native artifact exposes stable ProjectOnSurface All/compound mapper/history ownership with native_provenance_expected_ready."
+    "projected_face_count": 6,
+    "projected_inner_wire_count": 0,
+    "projected_solid_count": 1,
+    "projected_wire_count": 6,
+    "projection_item_ledger": [
+      {
+        "projection_item_index": 0,
+        "source_object": "ProjectionFace",
+        "source_shape_kind": "face",
+        "source_subname": "Face1",
+        "stable_subname": "Face1"
+      },
+      {
+        "projection_item_index": 1,
+        "source_object": "ProjectionLine",
+        "source_shape_kind": "edge",
+        "source_subname": "Edge1",
+        "stable_subname": "Edge1"
+      }
+    ],
+    "projection_items": [
+      {
+        "object": "ProjectionFace",
+        "subshape": "Face1"
+      },
+      {
+        "object": "ProjectionLine",
+        "subshape": "Edge1"
+      }
+    ],
+    "projection_subshape": "Face1",
+    "shape": "occt_compound",
+    "source_projection": "ProjectionFace",
+    "source_support": "SupportPlane",
+    "status": "ok",
+    "support_face": "Face1",
+    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
   },
-  "reference": "CAD Core request-local ProjectOnSurface All/compound provenance product contract; native FreeCAD mapper/history parity remains unavailable."
+  "reference": "FreeCADCmd oracle from part-project-on-surface-all-compound-provenance.json; objects: Part::Plane, Part::Plane, Part::Line, Part::ProjectOnSurface",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 13,
+    "faces": 6,
+    "vertices": 10
+  },
+  "volume": 7.499999999999999
 }

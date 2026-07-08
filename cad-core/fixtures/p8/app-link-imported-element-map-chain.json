@@ -68,8 +68,12 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "BrepLink",
-          "SubList": ["BrepLink.ImportedCylinder.Edge1"],
-          "StableSubList": ["ImportedCylinder.Edge1"]
+          "SubList": [
+            "BrepLink.ImportedCylinder.Edge1"
+          ],
+          "StableSubList": [
+            "ImportedCylinder.Edge1"
+          ]
         },
         "LinkTransform": false
       }
@@ -82,8 +86,12 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "StepLink",
-          "SubList": ["StepLink.ImportedStep.Face1"],
-          "StableSubList": ["ImportedStep.Face1"]
+          "SubList": [
+            "StepLink.ImportedStep.Face1"
+          ],
+          "StableSubList": [
+            "ImportedStep.Face1"
+          ]
         },
         "LinkTransform": false
       }
@@ -96,8 +104,12 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "IgesLink",
-          "SubList": ["IgesLink.ImportedIges.Face1"],
-          "StableSubList": ["ImportedIges.Face1"]
+          "SubList": [
+            "IgesLink.ImportedIges.Face1"
+          ],
+          "StableSubList": [
+            "ImportedIges.Face1"
+          ]
         },
         "LinkTransform": false
       }
@@ -109,16 +121,36 @@
       "Properties": {
         "ElementList": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BrepEdgeLink", "StepFaceLink", "IgesFaceLink"]
+          "values": [
+            "BrepEdgeLink",
+            "StepFaceLink",
+            "IgesFaceLink"
+          ]
         },
         "VisibilityList": {
           "PropertyType": "App::PropertyBoolList",
-          "values": [true, true, true]
+          "values": [
+            true,
+            true,
+            true
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["ImportedLinkGroup"]
+    "objs": [
+      "ImportedLinkGroup"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:aef507f636454b9af40370e63ba731064a05c0ccd8ab6529fdd3a0a2119dafb1"
   }
 }

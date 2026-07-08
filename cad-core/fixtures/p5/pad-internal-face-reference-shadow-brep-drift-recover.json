@@ -136,5 +136,15 @@
     "objs": [
       "Pad"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d45d1ccbba2c58b4ceebff87135609403caa7d980c165d22294ac7ea9767aa8f"
   }
 }

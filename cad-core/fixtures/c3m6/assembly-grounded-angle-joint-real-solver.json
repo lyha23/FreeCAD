@@ -44,8 +44,17 @@
         "Rigid": true,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [4, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            4,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -92,7 +101,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["GroundedJoint", "AngleJoint"]
+          "values": [
+            "GroundedJoint",
+            "AngleJoint"
+          ]
         }
       }
     },
@@ -103,12 +115,28 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ComponentA", "ComponentB", "Joints"]
+          "values": [
+            "ComponentA",
+            "ComponentB",
+            "Joints"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["Assembly"]
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:0f2541b504fcbe9d9495cef00ab36707c53015d54cda6ed4df3b4443693f3d13"
   }
 }

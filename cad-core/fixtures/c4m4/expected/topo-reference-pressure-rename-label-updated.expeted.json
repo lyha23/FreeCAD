@@ -1,0 +1,29 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core C4M4 fixture contract for topo-reference-pressure-rename-label-updated; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "full_subname_not_stable_identity"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "full_subname_not_stable_identity"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Box",
+      "BoxLink"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Part::Box",
+      "App::Link"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_topo_reference_pressure_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/c4m4/topo-reference-pressure-rename-label-updated.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... (50 %) BoxLink: Link broken! Object: Box unsupported cad-core/fixtures/c4m4/topo-reference-pressure-rename-label-updated.json: target object BoxLink has no shape"
+  }
+}

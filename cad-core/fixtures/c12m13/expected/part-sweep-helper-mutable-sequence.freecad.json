@@ -40,24 +40,6 @@
     "topo_naming_history": "maker_history:pipeshell",
     "transition": "Round corner"
   },
-  "oracle_boundary": {
-    "covered_methods": [
-      "add",
-      "isReady",
-      "getStatus",
-      "build",
-      "shape",
-      "makeSolid"
-    ],
-    "uncollected_methods": [
-      "remove",
-      "firstShape",
-      "lastShape",
-      "generated",
-      "simulate"
-    ],
-    "next_action": "S5 is not authorized for the uncollected methods until a dedicated native helper probe or accepted product-contract artifact covers them."
-  },
   "reference": "FreeCADCmd wrapper oracle from part-sweep-helper-mutable-sequence.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Sketcher::SketchObject, Part::Sweep",
   "schema_version": "cad-core.freecad-expected.v1",
   "shape_summary": {

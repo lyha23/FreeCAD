@@ -1,0 +1,35 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core C4M3 fixture contract for sketch-external-internal-stable-deleted-diagnostic; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "deleted_stable_subname"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "deleted_stable_subname"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Body",
+      "Pad",
+      "Pocket",
+      "ProbeSketch",
+      "SketchPad",
+      "SketchPocket"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad",
+      "PartDesign::Pocket",
+      "PartDesign::Body"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_sketch_external_internal_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/c4m3/sketch-external-internal-stable-deleted-diagnostic.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... Processing...... Processing...... (7 %) Processing...... Processing...... (14 %) (21 %) (28 %) (35 %) (42 %) (50 %) (57 %) (64 %) (71 %) Processing...... Processing...... (78 %) <Sketch> SketchObject.cpp(426): Failed to make face for sketch: Part::FaceMaker: result shape is null. Pad: Sub shape not found: CadCoreExpected#SketchPad.g1;SKT;FAC <Sketch> SketchObjectExternal.cpp(2603): Failed to project external geometry in CadCoreExpected#ProbeSketch: Body.Edge11 null shape unsupported cad-core/fixtures/c4m3/..."
+  }
+}

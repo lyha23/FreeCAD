@@ -5,6 +5,7 @@
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
         "origin": [
           2.0,
           1.0,
@@ -32,6 +33,7 @@
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
         "origin": [
           2.0,
           1.0,
@@ -59,8 +61,9 @@
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
+        "map_mode": "ThreePointsPlane",
         "origin": [
-          1.3333333333333333,
+          1.3333333333333335,
           2.666666666666667,
           1.3333333333333333
         ],
@@ -68,10 +71,10 @@
         "x_axis": [
           -0.7071067811865477,
           0.7071067811865477,
-          5.551115123125783e-17
+          6.705405824221068e-17
         ],
         "y_axis": [
-          -5.551115123125783e-17,
+          -4.854193011101215e-17,
           -1.1102230246251565e-16,
           1.0000000000000002
         ],
@@ -86,26 +89,27 @@
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
+        "map_mode": "ThreePointsNormal",
         "origin": [
           0.0,
-          -4.440892098500626e-16,
+          -4.440892098500627e-16,
           -4.440892098500627e-16
         ],
         "status": "ok",
         "x_axis": [
-          1.0,
+          1.0000000000000002,
           0.0,
           0.0
         ],
         "y_axis": [
           0.0,
-          -0.5547001962252291,
+          -0.5547001962252294,
           0.8320502943378436
         ],
         "z_axis": [
           0.0,
           -0.8320502943378436,
-          -0.5547001962252291
+          -0.5547001962252294
         ]
       }
     },
@@ -113,6 +117,7 @@
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
+        "map_mode": "ThreePointsPlane",
         "origin": [
           1.3333333333333333,
           1.0,
@@ -127,11 +132,11 @@
         "y_axis": [
           0.0,
           0.8320502943378437,
-          0.5547001962252293
+          0.5547001962252294
         ],
         "z_axis": [
           0.0,
-          -0.5547001962252293,
+          -0.5547001962252294,
           0.8320502943378437
         ]
       }
@@ -140,6 +145,7 @@
       "object_fields": {
         "attached": true,
         "datum": "coordinate_system",
+        "map_mode": "Translate",
         "origin": [
           3.0,
           5.0,

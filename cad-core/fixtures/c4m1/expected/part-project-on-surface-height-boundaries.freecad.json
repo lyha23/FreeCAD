@@ -24,13 +24,28 @@
         "projected_inner_wire_count": 0,
         "projected_solid_count": 1,
         "projected_wire_count": 6,
+        "projection_item_ledger": [
+          {
+            "projection_item_index": 0,
+            "source_object": "ProjectionFace",
+            "source_shape_kind": "face",
+            "source_subname": "Face1",
+            "stable_subname": "Face1"
+          }
+        ],
+        "projection_items": [
+          {
+            "object": "ProjectionFace",
+            "subshape": "Face1"
+          }
+        ],
         "projection_subshape": "Face1",
         "shape": "occt_compound",
         "source_projection": "ProjectionFace",
         "source_support": "SupportPlane",
         "status": "ok",
         "support_face": "Face1",
-        "topo_naming_history": "source_backed_projection_item_mapper_history_request_local"
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history"
       },
       "topology_counts": {
         "edges": 12,
@@ -62,13 +77,28 @@
         "projected_inner_wire_count": 0,
         "projected_solid_count": 0,
         "projected_wire_count": 1,
+        "projection_item_ledger": [
+          {
+            "projection_item_index": 0,
+            "source_object": "ProjectionFace",
+            "source_shape_kind": "face",
+            "source_subname": "Face1",
+            "stable_subname": "Face1"
+          }
+        ],
+        "projection_items": [
+          {
+            "object": "ProjectionFace",
+            "subshape": "Face1"
+          }
+        ],
         "projection_subshape": "Face1",
         "shape": "occt_compound",
         "source_projection": "ProjectionFace",
         "source_support": "SupportPlane",
         "status": "ok",
         "support_face": "Face1",
-        "topo_naming_history": "source_backed_projection_item_mapper_history_request_local"
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history"
       },
       "topology_counts": {
         "edges": 4,

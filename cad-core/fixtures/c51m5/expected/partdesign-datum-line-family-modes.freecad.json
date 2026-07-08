@@ -15,6 +15,7 @@
           1.0,
           -2.220446049250313e-16
         ],
+        "map_mode": "IntersectionLine",
         "status": "ok"
       }
     },
@@ -32,6 +33,7 @@
           0.0,
           1.0
         ],
+        "map_mode": "ProximityLine",
         "status": "ok"
       }
     },
@@ -49,6 +51,7 @@
           0.447213595499958,
           0.894427190999916
         ],
+        "map_mode": "TwoPointLine",
         "status": "ok"
       }
     },
@@ -66,6 +69,7 @@
           0.44721359549995804,
           2.7755575615628914e-16
         ],
+        "map_mode": "TwoPointLine",
         "status": "ok"
       }
     }

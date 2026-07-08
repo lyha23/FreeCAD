@@ -70,7 +70,9 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["RackPinionJoint"]
+          "values": [
+            "RackPinionJoint"
+          ]
         }
       }
     },
@@ -81,12 +83,28 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ComponentA", "ComponentB", "Joints"]
+          "values": [
+            "ComponentA",
+            "ComponentB",
+            "Joints"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["Assembly"]
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:62ac302c22200bc21081cbcf52e2777a4f89b3a28177b0e6a86b19d87fbc48a4"
   }
 }

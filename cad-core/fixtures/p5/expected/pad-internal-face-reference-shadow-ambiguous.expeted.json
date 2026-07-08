@@ -1,0 +1,29 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P5 fixture contract for pad-internal-face-reference-shadow-ambiguous; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "unsupported_legacy_internal_sublist"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "unsupported_legacy_internal_sublist"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Pad",
+      "Sketch"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_pad_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p5/pad-internal-face-reference-shadow-ambiguous.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... Processing...... Processing...... <WireJoiner> WireJoiner.cpp(2896): check_2_ 15030076228546899431 <WireJoiner> WireJoiner.cpp(2896): iterate_2_ 5433172535836574481 <WireJoiner> WireJoiner.cpp(2896): check_8_ 18140095819568436399 <WireJoiner> WireJoiner.cpp(2896): iterate_8_ 5433172535836574481 <WireJoiner> WireJoiner.cpp(2896): iwire_9_ 2703916195032138178 <WireJoiner> WireJoiner.cpp(2896): current_9_ 15030076228546899431 <WireJoiner> WireJoiner.cpp(2896): tcheck_9_ 18140095819568436399 <WireJoiner> WireJ..."
+  }
+}

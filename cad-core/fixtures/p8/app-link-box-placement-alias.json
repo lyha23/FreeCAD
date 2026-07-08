@@ -21,13 +21,34 @@
         },
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            5,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["BoxLink"]
+    "objs": [
+      "BoxLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:67e635702d354e694b744d47cedeb86889066f1b541877d84afef84429ad7ed6"
   }
 }

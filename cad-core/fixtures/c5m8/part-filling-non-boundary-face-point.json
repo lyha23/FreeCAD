@@ -18,8 +18,17 @@
         "Width": 4,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [-2, -2, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            -2,
+            -2,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -46,13 +55,21 @@
             },
             {
               "value": "SupportFace",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ]
             },
             {
               "value": "CenterPoint",
-              "SubList": ["Vertex1"],
-              "StableSubList": ["Vertex1"]
+              "SubList": [
+                "Vertex1"
+              ],
+              "StableSubList": [
+                "Vertex1"
+              ]
             }
           ]
         }
@@ -60,6 +77,18 @@
     }
   ],
   "recompute": {
-    "objs": ["FilledFace"]
+    "objs": [
+      "FilledFace"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:5acec7f1d0fe488a9b6bb53651d870cc1c969c729a5d21925d03a8adf0289bec"
   }
 }

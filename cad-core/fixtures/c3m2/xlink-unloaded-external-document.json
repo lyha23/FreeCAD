@@ -8,7 +8,9 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "ExternalBox",
-          "SubList": ["Face1"],
+          "SubList": [
+            "Face1"
+          ],
           "Document": {
             "file": "external.FCStd",
             "name": "ExternalDoc",
@@ -21,6 +23,18 @@
     }
   ],
   "recompute": {
-    "objs": ["ExternalFaceLink"]
+    "objs": [
+      "ExternalFaceLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:a0061964e2041b36398e66fc443a0bcd971c84b366c91ad279e4ead76829de5d"
   }
 }

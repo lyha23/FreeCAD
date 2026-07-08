@@ -190,5 +190,15 @@
     "objs": [
       "AdditivePipeAuxiliaryTangentProduct"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:bebad6b77fdab43d763c2ef251a072f8e53acac4d7dabbb2b263174f61313afd"
   }
 }

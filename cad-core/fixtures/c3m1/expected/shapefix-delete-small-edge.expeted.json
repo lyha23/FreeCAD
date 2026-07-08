@@ -1,0 +1,26 @@
+{
+  "cad_core_contract": {
+    "driver": "cad-core/build/cad-core-c3m1-topology-probe",
+    "objects": {
+      "ShapeFix": {
+        "shape": "shape_fix",
+        "status": "ok"
+      }
+    },
+    "probe_case": "shapefix-delete-small-edge",
+    "required_named_shape_status": {
+      "ShapeFix": [
+        "terminal_history:split_deleted"
+      ]
+    }
+  },
+  "oracle_evidence": {
+    "collector_result": "unsupported: fixture has no Objects",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_topology_probe_contract",
+    "reason": "This case-only fixture is executed by the C3M1 topology probe and has no FreeCAD document graph for native expected collection.",
+    "reference": "cad-core/fixtures/c3m1/shapefix-delete-small-edge.json"
+  },
+  "reference": "CAD Core C3M1 ShapeFix deleted-edge probe contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

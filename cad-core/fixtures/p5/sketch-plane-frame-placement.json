@@ -95,5 +95,15 @@
     "objs": [
       "Sketch"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:cf99ee2a35023dda27b98a162b7606020eae7718c9cb572c63a0d6fe6f41fad5"
   }
 }

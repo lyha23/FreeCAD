@@ -10,6 +10,18 @@
     }
   ],
   "recompute": {
-    "objs": ["ImportedStep"]
+    "objs": [
+      "ImportedStep"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:95fd10cbda616ef1c5b69b961fdc9a8b30b14180bac68d69c62d238b7786a477"
   }
 }

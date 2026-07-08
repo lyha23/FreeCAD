@@ -1,8 +1,29 @@
 {
-  "object": "BoxLink",
-  "reference": "FreeCADCmd geometry-equivalent App::Link to scaled Part Box",
+  "bbox": {
+    "max": [
+      9.0,
+      6.0,
+      8.0
+    ],
+    "min": [
+      5.0,
+      0.0,
+      0.0
+    ]
+  },
   "freecad_version": "1.2.0 revision 20260519",
-  "bbox": {"min": [5.0, 0.0, 0.0], "max": [9.0, 6.0, 8.0]},
-  "volume": 192.0,
-  "topology_counts": {"faces": 6, "edges": 12, "vertices": 8}
+  "object": "BoxLink",
+  "object_fields": {
+    "link": "app_link",
+    "linked_object": "Box",
+    "shape": "occt_solid"
+  },
+  "reference": "FreeCADCmd oracle from app-link-box-scale.json; objects: Part::Box, App::Link",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "topology_counts": {
+    "edges": 12,
+    "faces": 6,
+    "vertices": 8
+  },
+  "volume": 191.99999999999997
 }

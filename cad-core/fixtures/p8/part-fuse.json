@@ -20,8 +20,17 @@
         "Height": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            1,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -43,6 +52,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Fuse"]
+    "objs": [
+      "Fuse"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:abfee5ea912865cc6babb7b106388b8d4d07bdef8fa23e03e507851d26a6cd1d"
   }
 }

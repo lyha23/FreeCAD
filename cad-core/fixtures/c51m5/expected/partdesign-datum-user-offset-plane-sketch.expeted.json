@@ -1,0 +1,21 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "result_objects": [
+      "BasePlane",
+      "OffsetPlane",
+      "SketchOnOffsetPlane",
+      "Body"
+    ]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: Sub shape not found: SketchOnOffsetPlane.g1;SKT;FAC; target object Body has no shape",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_product_contract",
+    "reason": "The fixture uses CAD Core canonical sketch-face identity in StableSubList; FreeCADCmd does not accept that request-local stable face as native input for oracle collection.",
+    "reference": "cad-core/fixtures/c51m5/partdesign-datum-user-offset-plane-sketch.json"
+  },
+  "reference": "CAD Core C51M5 datum offset-plane sketch product contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

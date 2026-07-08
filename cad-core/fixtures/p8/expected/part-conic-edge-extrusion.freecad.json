@@ -151,6 +151,6 @@
       "volume": 1.1717333333333333
     }
   },
-  "reference": "FreeCADCmd PartConicCurveDTO oracle from part-conic-edge-extrusion.json",
+  "reference": "FreeCADCmd PartConicCurveDTO oracle from part-conic-edge-extrusion.json; Part::RuledSurface consumers use Part.makeRuledSurface after link-resolved edge inputs",
   "schema_version": "cad-core.freecad-expected.v1"
 }

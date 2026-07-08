@@ -167,5 +167,15 @@
       "RevolutionUpToFace",
       "GrooveUpToFirst"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:21eaa5fc5ed11c1369965f6968e91b1acb8bb9b6b4e7385023b1eddf7af1b11c"
   }
 }

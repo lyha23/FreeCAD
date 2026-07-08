@@ -11,24 +11,34 @@
           "Geometry": [
             {
               "kind": "ArcOfHyperbola",
-              "center": [0, 0],
+              "center": [
+                0,
+                0
+              ],
               "majorRadius": 4,
               "minorRadius": 2,
               "startAngle": -0.75,
               "endAngle": 0.75,
               "construction": true,
               "Ref": "MissingSource.Edge1",
-              "ExternalFlags": ["Missing"]
+              "ExternalFlags": [
+                "Missing"
+              ]
             },
             {
               "kind": "ArcOfParabola",
-              "center": [6, 0],
+              "center": [
+                6,
+                0
+              ],
               "focal": 1.5,
               "startAngle": -1,
               "endAngle": 1,
               "construction": true,
               "Ref": "MissingSource.Edge2",
-              "ExternalFlags": ["Missing"]
+              "ExternalFlags": [
+                "Missing"
+              ]
             }
           ]
         },
@@ -37,13 +47,21 @@
           "SubSet": [
             {
               "value": "MissingSource",
-              "SubList": ["Edge1"],
-              "ExternalFlags": ["Missing"]
+              "SubList": [
+                "Edge1"
+              ],
+              "ExternalFlags": [
+                "Missing"
+              ]
             },
             {
               "value": "MissingSource",
-              "SubList": ["Edge2"],
-              "ExternalFlags": ["Missing"]
+              "SubList": [
+                "Edge2"
+              ],
+              "ExternalFlags": [
+                "Missing"
+              ]
             }
           ]
         },
@@ -51,5 +69,19 @@
       }
     }
   ],
-  "recompute": {"objs": ["Sketch"]}
+  "recompute": {
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:a937eddb3660a7c57cdc302604a23485b7e4c3c3d210537ba76a9f828127796d"
+  }
 }

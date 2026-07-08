@@ -134,5 +134,15 @@
       "BaseSketch",
       "Consumer"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:cf284083e20fc23c0357681fcd7dc48fbfb13ed1900802c4297b5a22d41e8383"
   }
 }

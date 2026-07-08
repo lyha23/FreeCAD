@@ -112,5 +112,15 @@
     "objs": [
       "Extrude"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:98d2ef4f3cfb4ff7fd32588060ad703f4be3870b5e445dac00bd5b515cce7f79"
   }
 }

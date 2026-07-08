@@ -26,8 +26,17 @@
         "LinkTransform": false,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Scale": {
           "PropertyType": "App::PropertyFloat",
@@ -51,8 +60,17 @@
         "LinkTransform": false,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            5,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Scale": {
           "PropertyType": "App::PropertyFloat",
@@ -80,21 +98,48 @@
         },
         "ElementList": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ArrayLink_i0", "ArrayLink_i1"]
+          "values": [
+            "ArrayLink_i0",
+            "ArrayLink_i1"
+          ]
         },
         "VisibilityList": {
           "PropertyType": "App::PropertyBoolList",
-          "value": [true, true]
+          "value": [
+            true,
+            true
+          ]
         },
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 10, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            10,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["ArrayLink"]
+    "objs": [
+      "ArrayLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:a60ebf60e82ec9793a0a4256dfb37eb1a1c61a70693e5c39a3a6c34fa028879a"
   }
 }

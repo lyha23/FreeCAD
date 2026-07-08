@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "focused_tests": ["cad-core.tests.test_p7_features.CadCoreP7FeatureTest.test_c4m2_partdesign_pipe_advanced_branches_are_supported"]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: AdditivePipeMultisection/AdditivePipeAuxiliary report TopoDS::Wire; target object AdditivePipeMultisection has no shape",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_pipe_product_contract",
+    "reason": "This fixture verifies CAD Core advanced PartDesign Pipe branches; the native collector cannot produce a valid shape oracle for these DTOs.",
+    "reference": "cad-core/fixtures/c4m2/partdesign-pipe-deferred-diagnostics.json"
+  },
+  "reference": "CAD Core C4M2 PartDesign Pipe advanced-branch product contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

@@ -44,14 +44,18 @@
         "SupportFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Projection": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "ProjectionLine",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         }
@@ -69,14 +73,19 @@
         "SupportFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Projection": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "ProjectionLine",
-              "SubList": ["Edge1", "Edge1"]
+              "SubList": [
+                "Edge1",
+                "Edge1"
+              ]
             }
           ]
         }
@@ -94,14 +103,18 @@
         "SupportFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Projection": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "ProjectionLine",
-              "SubList": [""]
+              "SubList": [
+                ""
+              ]
             }
           ]
         }
@@ -119,14 +132,18 @@
         "SupportFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Projection": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "MissingProjectionLine",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         }
@@ -144,14 +161,18 @@
         "SupportFace": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Projection": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "ProjectionVertex",
-              "SubList": ["Vertex1"]
+              "SubList": [
+                "Vertex1"
+              ]
             }
           ]
         }
@@ -171,7 +192,9 @@
           "SubSet": [
             {
               "value": "ProjectionLine",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         }
@@ -187,5 +210,15 @@
       "ProjectionUnsupportedVertex",
       "MissingSupport"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:67ae74f23e12265ff76b5c1b3e50f40bbe041bed0fdf17213a569a06d06a35b3"
   }
 }

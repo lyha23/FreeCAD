@@ -1,0 +1,38 @@
+{
+  "diagnostic_codes": [],
+  "diagnostics": [],
+  "named_shapes": {
+    "Thickness": {
+      "element_history_status_contains": [
+        "part_thickness:make_thick_solid",
+        "history_consumed:generated_modified"
+      ],
+      "element_map_status": "history_partial",
+      "owner": "Thickness"
+    }
+  },
+  "objects": {
+    "Thickness": {
+      "object_fields": {
+        "effective_join": "Arc",
+        "feature": "part_thickness",
+        "intersection": false,
+        "join": "Arc",
+        "mode": "Skin",
+        "shape": "occt_solid",
+        "source": "Box",
+        "status": "ok",
+        "topo_naming_history": "maker_history:thick_solid"
+      }
+    }
+  },
+  "oracle_evidence": {
+    "collector_result": "unsupported: Part::Thickness is not enabled in this collector yet",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_part_workbench_product_contract",
+    "reason": "This fixture verifies CAD Core Part::Thickness single-solid face behavior; the native expected collector does not currently collect Part::Thickness.",
+    "reference": "cad-core/fixtures/c3m4/part-thickness-box-face.json"
+  },
+  "reference": "CAD Core C3M4 Part::Thickness box-face product contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

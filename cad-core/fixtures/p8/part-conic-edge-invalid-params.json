@@ -1,50 +1,121 @@
 {
-  "partGeometryCurve": [
+  "Objects": [
     {
-      "name": "InvalidCurveKind",
-      "curveKind": "ellipse"
+      "Name": "InvalidCurveKind",
+      "ID": 1,
+      "TypeId": "Part::GeometryCurve",
+      "Properties": {
+        "CurveKind": "ellipse"
+      }
     },
     {
-      "name": "InvalidHyperbolaRadius",
-      "curveKind": "hyperbola",
-      "center": [0, 0, 0],
-      "normal": [0, 0, 1],
-      "angleXU": 0,
-      "majorRadius": 0,
-      "minorRadius": 1,
-      "startAngle": -0.2,
-      "endAngle": 0.2
+      "Name": "InvalidHyperbolaRadius",
+      "ID": 2,
+      "TypeId": "Part::GeometryCurve",
+      "Properties": {
+        "CurveKind": "hyperbola",
+        "Center": [
+          0,
+          0,
+          0
+        ],
+        "Normal": [
+          0,
+          0,
+          1
+        ],
+        "AngleXU": 0,
+        "StartAngle": -0.2,
+        "EndAngle": 0.2,
+        "MajorRadius": 0,
+        "MinorRadius": 1
+      }
     },
     {
-      "name": "InvalidParabolaFocal",
-      "curveKind": "parabola",
-      "center": [0, 0, 0],
-      "normal": [0, 0, 1],
-      "angleXU": 0,
-      "focal": 0,
-      "startAngle": -0.2,
-      "endAngle": 0.2
+      "Name": "InvalidParabolaFocal",
+      "ID": 3,
+      "TypeId": "Part::GeometryCurve",
+      "Properties": {
+        "CurveKind": "parabola",
+        "Center": [
+          0,
+          0,
+          0
+        ],
+        "Normal": [
+          0,
+          0,
+          1
+        ],
+        "AngleXU": 0,
+        "StartAngle": -0.2,
+        "EndAngle": 0.2,
+        "Focal": 0
+      }
     },
     {
-      "name": "InvalidTrim",
-      "curveKind": "hyperbola",
-      "center": [0, 0, 0],
-      "normal": [0, 0, 1],
-      "angleXU": 0,
-      "majorRadius": 4,
-      "minorRadius": 1.5,
-      "startAngle": 0.5,
-      "endAngle": 0.5
+      "Name": "InvalidTrim",
+      "ID": 4,
+      "TypeId": "Part::GeometryCurve",
+      "Properties": {
+        "CurveKind": "hyperbola",
+        "Center": [
+          0,
+          0,
+          0
+        ],
+        "Normal": [
+          0,
+          0,
+          1
+        ],
+        "AngleXU": 0,
+        "StartAngle": 0.5,
+        "EndAngle": 0.5,
+        "MajorRadius": 4,
+        "MinorRadius": 1.5
+      }
     },
     {
-      "name": "InvalidNonFiniteCenter",
-      "curveKind": "parabola",
-      "center": [0, "nan", 0],
-      "normal": [0, 0, 1],
-      "angleXU": 0,
-      "focal": 1.25,
-      "startAngle": -0.2,
-      "endAngle": 0.2
+      "Name": "InvalidNonFiniteCenter",
+      "ID": 5,
+      "TypeId": "Part::GeometryCurve",
+      "Properties": {
+        "CurveKind": "parabola",
+        "Center": [
+          0,
+          "nan",
+          0
+        ],
+        "Normal": [
+          0,
+          0,
+          1
+        ],
+        "AngleXU": 0,
+        "StartAngle": -0.2,
+        "EndAngle": 0.2,
+        "Focal": 1.25
+      }
     }
-  ]
+  ],
+  "recompute": {
+    "objs": [
+      "InvalidCurveKind",
+      "InvalidHyperbolaRadius",
+      "InvalidParabolaFocal",
+      "InvalidTrim",
+      "InvalidNonFiniteCenter"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:622dd9f0f13f6487b8e0bb89c0fe0833123b26a7f8712ba645515302ecebddf9"
+  }
 }

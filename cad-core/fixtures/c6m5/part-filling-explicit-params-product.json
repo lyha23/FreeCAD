@@ -19,8 +19,18 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
-              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
             }
           ]
         },
@@ -37,8 +47,18 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
-              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
             }
           ]
         },
@@ -55,8 +75,18 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
-              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
             }
           ]
         },
@@ -74,8 +104,18 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
-              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
             }
           ]
         },
@@ -92,8 +132,18 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1", "Edge2", "Edge3", "Edge4"],
-              "StableSubList": ["Edge1", "Edge2", "Edge3", "Edge4"]
+              "SubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge1",
+                "Edge2",
+                "Edge3",
+                "Edge4"
+              ]
             }
           ]
         },
@@ -101,7 +151,7 @@
         "PtsOnCurve": 20,
         "NumIter": 3,
         "Anisotropy": true,
-        "Tol2d": 0.00002,
+        "Tol2d": 2e-05,
         "Tol3d": 0.0002,
         "TolG1": 0.02,
         "TolG2": 0.2,
@@ -118,5 +168,15 @@
       "MaxSegmentsParams",
       "AllParams"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:fb3cab8619af5adc0df83ae37b28af4e643165f4f794beb45d14b8ac3e9a82b4"
   }
 }

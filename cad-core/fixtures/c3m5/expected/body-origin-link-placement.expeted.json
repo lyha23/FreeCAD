@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "focused_tests": ["cad-core.tests.test_p7_features.CadCoreP7FeatureTest.test_c3m5_body_origin_link_places_origin_from_body"]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: link target Origin was not created",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_body_origin_contract",
+    "reason": "This fixture verifies CAD Core Body origin placement inheritance; the native collector cannot create the request-local Origin link target.",
+    "reference": "cad-core/fixtures/c3m5/body-origin-link-placement.json"
+  },
+  "reference": "CAD Core C3M5 Body origin link placement contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

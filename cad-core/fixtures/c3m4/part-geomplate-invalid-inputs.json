@@ -1,7 +1,28 @@
 {
   "Objects": [
-    {"Name": "LineSource", "ID": 1, "TypeId": "Part::Line", "Properties": {"X1": 0, "Y1": 0, "Z1": 0, "X2": 1, "Y2": 0, "Z2": 0}},
-    {"Name": "PointSource", "ID": 2, "TypeId": "Part::Vertex", "Properties": {"X": 0, "Y": 0, "Z": 0}},
+    {
+      "Name": "LineSource",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 1,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "PointSource",
+      "ID": 2,
+      "TypeId": "Part::Vertex",
+      "Properties": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
     {
       "Name": "EmptyConstraints",
       "ID": 3,
@@ -15,7 +36,11 @@
       "Properties": {
         "CurveConstraints": {
           "PropertyType": "App::PropertyLinkSubList",
-          "SubSet": [{"value": "PointSource"}]
+          "SubSet": [
+            {
+              "value": "PointSource"
+            }
+          ]
         }
       }
     },
@@ -24,7 +49,15 @@
       "ID": 5,
       "TypeId": "Part::GeomPlateSurface",
       "Properties": {
-        "PointConstraints": [{"Point": [0, "bad", 0]}]
+        "PointConstraints": [
+          {
+            "Point": [
+              0,
+              "bad",
+              0
+            ]
+          }
+        ]
       }
     },
     {
@@ -33,7 +66,15 @@
       "TypeId": "Part::GeomPlateSurface",
       "Properties": {
         "Degree": 0,
-        "PointConstraints": [{"Point": [0, 0, 0]}]
+        "PointConstraints": [
+          {
+            "Point": [
+              0,
+              0,
+              0
+            ]
+          }
+        ]
       }
     },
     {
@@ -42,7 +83,15 @@
       "TypeId": "Part::GeomPlateSurface",
       "Properties": {
         "PlateSurfaceCurves": true,
-        "PointConstraints": [{"Point": [0, 0, 0]}]
+        "PointConstraints": [
+          {
+            "Point": [
+              0,
+              0,
+              0
+            ]
+          }
+        ]
       }
     }
   ],
@@ -54,5 +103,15 @@
       "InvalidParameter",
       "UnsupportedPlateSurfaceCurves"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:299d4fd1b35176f8a10b880fb50e9c0bf29bec94997fc91c8a8e90cc9b7bbfcf"
   }
 }

@@ -125,15 +125,21 @@
           "SubSet": [
             {
               "value": "FoldEdgeA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -153,19 +159,27 @@
           "SubSet": [
             {
               "value": "FoldEdgeA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldCircle",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldEdgeB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -185,19 +199,27 @@
           "SubSet": [
             {
               "value": "FoldEdgeA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "DisconnectedEdgeB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -217,19 +239,27 @@
           "SubSet": [
             {
               "value": "FoldEdgeA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisBParallel",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldEdgeB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -249,19 +279,27 @@
           "SubSet": [
             {
               "value": "FoldEdgeAParallel",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldEdgeB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -281,19 +319,27 @@
           "SubSet": [
             {
               "value": "FoldEdgeA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldAxisB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "FoldEdgeBCosineInvalid",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -313,5 +359,15 @@
       "DatumCSFoldingEdgeAxisParallel",
       "DatumCSFoldingCosineInvalid"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:a43e40f2623749657770d7ba61f4e51a365d0db875a0af5a3c8994e338b1594a"
   }
 }

@@ -26,7 +26,10 @@
       "Properties": {
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BaseProfile", "TipVertex"]
+          "values": [
+            "BaseProfile",
+            "TipVertex"
+          ]
         },
         "Solid": false,
         "Ruled": true,
@@ -37,6 +40,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Loft"]
+    "objs": [
+      "Loft"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:01c325648d1da9053705fadcda07113d61414d707c405452b078d4b160871ee2"
   }
 }

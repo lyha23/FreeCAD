@@ -1,13 +1,151 @@
 {
   "Objects": [
-    {"Name": "LineA", "ID": 1, "TypeId": "Part::Line", "Properties": {"X1": 0, "Y1": 0, "Z1": 0, "X2": 0, "Y2": 0, "Z2": 4}},
-    {"Name": "TorusB", "ID": 2, "TypeId": "Part::Torus", "Properties": {"Radius1": 5, "Radius2": 1, "Angle1": -180, "Angle2": 180, "Angle3": 360}},
-    {"Name": "ComponentA", "ID": 3, "TypeId": "Assembly::AssemblyLink", "Properties": {"LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "LineA"}, "Rigid": true}},
-    {"Name": "ComponentB", "ID": 4, "TypeId": "Assembly::AssemblyLink", "Properties": {"LinkedObject": {"PropertyType": "App::PropertyXLink", "value": "TorusB"}, "Rigid": true, "Placement": {"PropertyType": "App::PropertyPlacement", "Base": [8, 0, 0], "Rotation": [0, 0, 0, 1]}}},
-    {"Name": "GroundedJoint", "ID": 5, "TypeId": "App::FeaturePython", "Properties": {"ObjectToGround": {"PropertyType": "App::PropertyLinkGlobal", "value": "ComponentA"}}},
-    {"Name": "DistanceJoint", "ID": 6, "TypeId": "App::FeaturePython", "Properties": {"JointType": {"PropertyType": "App::PropertyEnumeration", "value": "Distance"}, "Distance": {"PropertyType": "App::PropertyFloat", "value": 1.5}, "Reference1": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentA", "SubList": ["Edge1"]}, "Reference2": {"PropertyType": "App::PropertyXLinkSub", "value": "ComponentB", "SubList": ["Face1"]}}},
-    {"Name": "Joints", "ID": 7, "TypeId": "Assembly::JointGroup", "Properties": {"Group": {"PropertyType": "App::PropertyLinkList", "values": ["GroundedJoint", "DistanceJoint"]}}},
-    {"Name": "Assembly", "ID": 8, "TypeId": "Assembly::AssemblyObject", "Properties": {"Group": {"PropertyType": "App::PropertyLinkList", "values": ["ComponentA", "ComponentB", "Joints"]}}}
+    {
+      "Name": "LineA",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 4
+      }
+    },
+    {
+      "Name": "TorusB",
+      "ID": 2,
+      "TypeId": "Part::Torus",
+      "Properties": {
+        "Radius1": 5,
+        "Radius2": 1,
+        "Angle1": -180,
+        "Angle2": 180,
+        "Angle3": 360
+      }
+    },
+    {
+      "Name": "ComponentA",
+      "ID": 3,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "LineA"
+        },
+        "Rigid": true
+      }
+    },
+    {
+      "Name": "ComponentB",
+      "ID": 4,
+      "TypeId": "Assembly::AssemblyLink",
+      "Properties": {
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "TorusB"
+        },
+        "Rigid": true,
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            8,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "GroundedJoint",
+      "ID": 5,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "ObjectToGround": {
+          "PropertyType": "App::PropertyLinkGlobal",
+          "value": "ComponentA"
+        }
+      }
+    },
+    {
+      "Name": "DistanceJoint",
+      "ID": 6,
+      "TypeId": "App::FeaturePython",
+      "Properties": {
+        "JointType": {
+          "PropertyType": "App::PropertyEnumeration",
+          "value": "Distance"
+        },
+        "Distance": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 1.5
+        },
+        "Reference1": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentA",
+          "SubList": [
+            "Edge1"
+          ]
+        },
+        "Reference2": {
+          "PropertyType": "App::PropertyXLinkSub",
+          "value": "ComponentB",
+          "SubList": [
+            "Face1"
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Joints",
+      "ID": 7,
+      "TypeId": "Assembly::JointGroup",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "GroundedJoint",
+            "DistanceJoint"
+          ]
+        }
+      }
+    },
+    {
+      "Name": "Assembly",
+      "ID": 8,
+      "TypeId": "Assembly::AssemblyObject",
+      "Properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "ComponentA",
+            "ComponentB",
+            "Joints"
+          ]
+        }
+      }
+    }
   ],
-  "recompute": {"objs": ["Assembly"]}
+  "recompute": {
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:0e94f281308d617ebf9bf440f4764266c73404262c8a816e4b64ceea7476b250"
+  }
 }

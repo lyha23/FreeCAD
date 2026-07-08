@@ -118,7 +118,7 @@
           "frame": "part_local",
           "jcs_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -147,7 +147,7 @@
           "moving_part": "ComponentB",
           "object_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -162,7 +162,7 @@
           "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
           "part_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -283,7 +283,7 @@
           "frame": "part_local",
           "jcs_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -312,7 +312,7 @@
           "moving_part": "ComponentB",
           "object_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -327,7 +327,7 @@
           "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
           "part_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -352,6 +352,88 @@
         "jcs_swapped_for_solver": true,
         "joint_type": "RackPinion",
         "native_reference1": {
+          "connector_placement": {
+            "Base": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "PropertyType": "App::PropertyPlacement",
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "frame": "part_local",
+          "jcs_global_placement": {
+            "Base": [
+              4.0,
+              0.0,
+              0.0
+            ],
+            "PropertyType": "App::PropertyPlacement",
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "marker_placement": {
+            "Base": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "PropertyType": "App::PropertyPlacement",
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "moving_part": "ComponentB",
+          "object_global_placement": {
+            "Base": [
+              4.0,
+              0.0,
+              0.0
+            ],
+            "PropertyType": "App::PropertyPlacement",
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
+          "part_global_placement": {
+            "Base": [
+              4.0,
+              0.0,
+              0.0
+            ],
+            "PropertyType": "App::PropertyPlacement",
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "reference": {
+            "object": "ComponentB",
+            "subnames": []
+          },
+          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
+          "status": "resolved_native_handle_one_side",
+          "subshape_reference": false
+        },
+        "native_reference2": {
           "connector_placement": {
             "Base": [
               0.0,
@@ -427,88 +509,6 @@
           },
           "reference": {
             "object": "ComponentA",
-            "subnames": []
-          },
-          "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
-          "status": "resolved_native_handle_one_side",
-          "subshape_reference": false
-        },
-        "native_reference2": {
-          "connector_placement": {
-            "Base": [
-              0.0,
-              0.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          },
-          "frame": "part_local",
-          "jcs_global_placement": {
-            "Base": [
-              0.0,
-              0.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          },
-          "marker_placement": {
-            "Base": [
-              0.0,
-              0.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          },
-          "moving_part": "ComponentB",
-          "object_global_placement": {
-            "Base": [
-              0.0,
-              0.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          },
-          "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
-          "part_global_placement": {
-            "Base": [
-              0.0,
-              0.0,
-              0.0
-            ],
-            "PropertyType": "App::PropertyPlacement",
-            "Rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ]
-          },
-          "reference": {
-            "object": "ComponentB",
             "subnames": []
           },
           "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
@@ -616,7 +616,7 @@
           "frame": "part_local",
           "jcs_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -645,7 +645,7 @@
           "moving_part": "ComponentB",
           "object_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],
@@ -660,7 +660,7 @@
           "offset_boundary": "identity_offset_for_two_box_assembly_link_fixture",
           "part_global_placement": {
             "Base": [
-              0.0,
+              4.0,
               0.0,
               0.0
             ],

@@ -21,8 +21,17 @@
         "Label": "PrettyB",
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [3, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            3,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -34,7 +43,9 @@
         "Label": "PrettySub",
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BoxB"]
+          "values": [
+            "BoxB"
+          ]
         }
       }
     },
@@ -45,7 +56,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BoxA", "SubGroup"]
+          "values": [
+            "BoxA",
+            "SubGroup"
+          ]
         }
       }
     },
@@ -60,8 +74,17 @@
         },
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [10, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            10,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -73,12 +96,27 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "GroupLink",
-          "SubList": ["$OldPrettySub.$PrettyB.Face1"]
+          "SubList": [
+            "$OldPrettySub.$PrettyB.Face1"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["GroupLink", "NestedPlainGroupFaceLink"]
+    "objs": [
+      "GroupLink",
+      "NestedPlainGroupFaceLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:0d6fcef36b3c6b397431be3e1223136f428c128a2dea04539ff24ff6358a2cea"
   }
 }

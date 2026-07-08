@@ -34,9 +34,15 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLink",
           "value": "ChildBox",
-          "SubList": ["Face1"],
-          "StableSubList": ["ChildBox.Face1"],
-          "FullSubList": ["ChildBox.Face1"],
+          "SubList": [
+            "Face1"
+          ],
+          "StableSubList": [
+            "ChildBox.Face1"
+          ],
+          "FullSubList": [
+            "ChildBox.Face1"
+          ],
           "ReferenceShadow": [
             {
               "target": "ChildBox",
@@ -58,7 +64,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["SourceLink", "ExternalBox"]
+          "values": [
+            "SourceLink",
+            "ExternalBox"
+          ]
         }
       }
     },
@@ -79,6 +88,18 @@
     }
   ],
   "recompute": {
-    "objs": ["GroupLink"]
+    "objs": [
+      "GroupLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:28acf21a96c06413d250e6a96377e5a7c7c5c32da94532aa99de42cf0cd32306"
   }
 }

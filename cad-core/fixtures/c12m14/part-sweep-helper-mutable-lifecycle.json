@@ -676,5 +676,15 @@
     "objs": [
       "LifecycleSweep"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d6230b9109d6ef3364d0faec40f6cd3a82bf6c54eaa9b1f8865c6d1b24f131a0"
   }
 }

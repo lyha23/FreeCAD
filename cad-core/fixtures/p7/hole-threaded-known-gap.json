@@ -44,5 +44,15 @@
     "objs": [
       "Hole"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:598e1c780a4ec4b22d537d5971f0df8ba5187c8e9b28e705e6eb24682cb9a761"
   }
 }

@@ -30,7 +30,7 @@
     "shape": "occt_edge",
     "status": "ok"
   },
-  "reference": "FreeCADCmd PartConicCurveDTO oracle from part-parabola-edge.json",
+  "reference": "FreeCADCmd PartConicCurveDTO oracle from part-parabola-edge.json; Part::RuledSurface consumers use Part.makeRuledSurface after link-resolved edge inputs",
   "schema_version": "cad-core.freecad-expected.v1",
   "topology_counts": {
     "edges": 1,

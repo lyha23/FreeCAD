@@ -1,0 +1,29 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core C5M1 fixture contract for partdesign-revolved-zero-sum-diagnostic; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "invalid_angle"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "invalid_angle"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "RevolutionZeroSum",
+      "SketchRevolution"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Revolution"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_revolution_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/c5m1/partdesign-revolved-zero-sum-diagnostic.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... Processing...... Processing...... (50 %) RevolutionZeroSum: Angles of revolution nullify each other unsupported cad-core/fixtures/c5m1/partdesign-revolved-zero-sum-diagnostic.json: target object RevolutionZeroSum has no shape"
+  }
+}

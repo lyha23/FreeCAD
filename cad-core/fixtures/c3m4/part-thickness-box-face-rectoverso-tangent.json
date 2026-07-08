@@ -18,7 +18,9 @@
         "Faces": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "Box",
-          "SubList": ["Face6"]
+          "SubList": [
+            "Face6"
+          ]
         },
         "Value": -0.2,
         "Mode": "RectoVerso",
@@ -29,6 +31,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Thickness"]
+    "objs": [
+      "Thickness"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:ae2a7c9b19654aa907389189933d620fdeda672c86a4061b07ba6a4dd119381a"
   }
 }

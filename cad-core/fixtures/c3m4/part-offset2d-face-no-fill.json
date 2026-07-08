@@ -27,6 +27,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Offset2D"]
+    "objs": [
+      "Offset2D"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:a9410392b703824779071f0feb10d015630616af8aa29e173137b5e00bfbbaa4"
   }
 }

@@ -31,8 +31,17 @@
         "Circumradius": 1.0,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 5],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            5
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -47,7 +56,10 @@
         },
         "Sections": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["LowerProfile", "UpperProfile"]
+          "values": [
+            "LowerProfile",
+            "UpperProfile"
+          ]
         },
         "Solid": false,
         "Frenet": true,
@@ -57,6 +69,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Sweep"]
+    "objs": [
+      "Sweep"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:301cde14d4c6a9186571df280c4b3e3f8ecd5afd59228cf0dcdb1a4429cd9118"
   }
 }

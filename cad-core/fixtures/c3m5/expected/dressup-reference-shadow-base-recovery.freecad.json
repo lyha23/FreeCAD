@@ -12,11 +12,11 @@
     "cad_core_fixture": "cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.json",
     "native_probe_evidence": {
       "probe_case": "dressup_reference_shadow_base_recovery_native_fcstd_xml_restore",
-      "command": "cd cad-core && FREECADCMD=/Users/li/.cargo/bin/freecadcmd python3 tools/c7m4_reference_shadow_native_probe.py fixtures/c3m5/dressup-reference-shadow-base-recovery.json --out fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json",
+      "command": "cd cad-core && FREECADCMD=/Users/li/.cargo/bin/freecadcmd python3 tools/c7m4_reference_shadow_native_probe.py fixtures/c3m5/dressup-reference-shadow-base-recovery.json --out fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.native-probe.evidence.freecad.json",
       "returncode": 0,
       "route": "native_oracle_blocked",
       "blocker_layer": "python_property_api",
-      "evidence_json": "cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json",
+      "evidence_json": "cad-core/fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.native-probe.evidence.freecad.json",
       "property_tag": "LinkSub",
       "patched_xml": {
         "link_attrs": {

@@ -85,5 +85,15 @@
     "objs": [
       "RevolutionZeroSum"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:655248f50b50b40c8d55c0125ee1ddb278d5e8832966221fec9d386082d83120"
   }
 }

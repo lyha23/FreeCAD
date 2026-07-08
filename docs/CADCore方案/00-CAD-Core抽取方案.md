@@ -1,26 +1,28 @@
 # CAD Core 抽取方案
 
-本文是 CAD Core 抽取总纲。目标是从本地 FreeCAD 源码中抽出一个独立、无状态、可重建、可验证的参数化几何内核，而不是复刻 FreeCAD 的 GUI、Workbench 或 Web 服务。
+本文是 CAD Core 抽取总纲。目标是从本地 FreeCAD 源码中抽出一个独立、服务端无会话、可重建、可验证的参数化几何内核，而不是复刻 FreeCAD 的 GUI、Workbench 或 Web 服务。
 
 ## 架构边界
 
 ```text
 调用方 / 前端
   保存和编辑完整 DocumentObject graph
-  发起 recompute 请求
+  保存上次响应的 topoNamingState 快照
+  发起 graph + topoNamingState recompute 请求
   消费 mesh、subshape、stable subname 和 diagnostics
 
 CAD Core
   document / graph / runtime / features / geometry / topo
-  只根据本次请求中的 DocumentObject graph 计算结果
-  不保存跨请求 shape、BREP、mesh、NamedShape 或 ElementMap
+  只根据本次请求中的 DocumentObject graph 建模和计算几何结果
+  可消费调用方携带的 topoNamingState 做旧引用恢复
+  返回新的 topoNamingState，但服务端不保存 session 状态
 
 Adapters
   CLI / C ABI / 测试 harness / 后续 Web、Worker、WASM 桥接
   只做协议转换，不承载 FreeCAD 业务语义
 ```
 
-持久数据只有 FreeCAD 风格 `DocumentObject graph`。BREP、`TopoDS_Shape`、mesh、`NamedShape`、`ElementMap`、subshape map 都是一次 recompute 的运行产物，请求结束后丢弃。前后端协议不把 BREP 当成长期状态传递。
+建模事实仍然只有 FreeCAD 风格 `DocumentObject graph`。`topoNamingState` 是客户端携带的协议状态快照，用来把上一次响应中的 `NamedShape` / `ElementMap` / MapperHistory 证据带回下一次 recompute，辅助 `StableSubList`、`ShadowSub` 和引用更新恢复；它不能作为建模几何输入，也不能替代 graph。BREP、`TopoDS_Shape`、mesh 和完整 shape 缓存仍是单次 recompute 的运行产物，请求结束后由 CAD Core 丢弃。除 `ReferenceShadow.brep` 单个被引用 subshape 旧快照外，前后端协议不把 BREP 当成长期状态传递。
 
 CAD Core 不依赖 Qt、`src/Gui`、Workbench、ViewProvider、TaskPanel、Web route、用户会话、数据库或前端缓存。
 
@@ -150,11 +152,15 @@ geometry -> topo
   ],
   "recompute": {
     "objs": ["Body"]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "objects": {}
   }
 }
 ```
 
-`Objects[]` 是唯一建模源数据，`recompute.objs` 只选择本次目标。不要新增与 FreeCAD 平行的 `featureType`、`operation`、`params` 数据树。
+`Objects[]` 是唯一建模源数据，`recompute.objs` 只选择本次目标。`topoNamingState` 是可选的旧拓扑命名快照，只参与旧引用解析、split / deleted / ambiguous 判断和更新建议；不得用它构造 shape、bbox、mesh 或完整对象 BREP。不要新增与 FreeCAD 平行的 `featureType`、`operation`、`params` 数据树。
 
 输出只暴露显示、拾取和诊断需要的运行结果：
 
@@ -163,6 +169,9 @@ objects[name]
   status
   bbox / volume / mesh summary
   feature-specific result fields
+
+topoNamingState
+  本次 recompute 后的新完整拓扑命名快照
 
 subshapes[name]
   FaceN / EdgeN / VertexN / Internal*

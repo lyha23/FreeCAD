@@ -71,7 +71,8 @@
               "SubList": [],
               "StableSubList": [
                 "g1;SKT;FAC"
-              ]
+              ],
+              "StableSubListSource": "topoNamingState"
             }
           ]
         },
@@ -160,5 +161,58 @@
     "objs": [
       "Body"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {
+      "SketchPad": {
+        "objectHash": "sha256:6ee743abe9458646bcf75a43df0a11c16268ab9cc9084d074399a60d68d70b1b",
+        "elementMapVersion": "cad-core.element-map.v1",
+        "subshapes": {
+          "InternalFace1": {
+            "subname": "InternalFace1",
+            "rawFreecadMappedName": "g1;SKT;FAC",
+            "canonicalFreecadMappedName": "g1;SKT;FAC",
+            "resolvedIndexed": "InternalFace1",
+            "identityStatus": "stable"
+          }
+        },
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "g1;SKT;FAC": {
+              "target": {
+                "object": "SketchPad",
+                "subname": "InternalFace1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "SketchPad",
+                "subname": "InternalFace1"
+              },
+              "mappedName": {
+                "raw": "g1;SKT;FAC",
+                "canonical": "g1;SKT;FAC"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "legacy_internal_face_fixture_migration",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          },
+          "status": "indexed_only"
+        },
+        "childElementMaps": [],
+        "mapperHistory": []
+      }
+    },
+    "documentHash": "sha256:de482423e778e5ce490edd65447d1b3911975d609807be7cdc6fe61948ef6615"
   }
 }

@@ -1,32 +1,16 @@
 {
+  "diagnostic_codes": [
+    "unsupported_property"
+  ],
   "freecad_version": "1.2.0 revision 20260519",
-  "known_gap": {
-    "kind": "part_filling_initial_surface_native_helper_oracle_blocked",
-    "reason": "Do not freeze Part.makeFilledFace(surface=...) geometry from cad-core output. C5-M13 S3 recovered only the collector-fixable constructor parameter representatives; the initial-surface helper path still terminates FreeCADCmd before a shape_summary is available.",
-    "source_authority": [
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp::makeFilledFace()",
-      "/Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace()"
-    ],
-    "cad_core_fixture": "cad-core/fixtures/c5m8/part-filling-initial-surface-boundary.json",
-    "freecadcmd_evidence": {
-      "helper": "Part.makeFilledFace",
-      "probe_case": "filling_surface_only",
-      "returncode": -11,
-      "shell_exit": 139,
-      "error": "process_exit_139",
-      "failed_field": "surface"
-    },
-    "c5m13_expected_backed_param_subsets": [
-      "cad-core/fixtures/c5m13/part-filling-param-degree-only.json",
-      "cad-core/fixtures/c5m13/part-filling-param-num-iter-only.json",
-      "cad-core/fixtures/c5m13/part-filling-param-tol2d-tol3d-only.json",
-      "cad-core/fixtures/c5m13/part-filling-param-max-degree-only.json"
-    ],
-    "uncollected_fields": [
-      "shape_summary for Part.makeFilledFace(surface=face)",
-      "object_fields.initial_surface_source_evidence expected-backed geometry"
-    ],
-    "delete_condition": "Replace this known_gap with a FreeCAD expected geometry payload only after Part.makeFilledFace(surface=...) returns stably from FreeCADCmd with shape_summary and object_fields.initial_surface_source_evidence."
+  "native_error": "Unsupported Part.makeFilledFace kwargs: Surface",
+  "native_error_code": "unsupported_property",
+  "object": "FilledFace",
+  "object_fields": {
+    "feature": "part_filled_face",
+    "helper": "Part.makeFilledFace",
+    "status": "error"
   },
-  "reference": "Native FreeCAD helper kwargs oracle is blocked for this fixture; cad-core source-backed implementation is covered by focused source-evidence tests."
+  "reference": "FreeCADCmd oracle from part-filling-initial-surface-boundary.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::Plane, Part::FilledFace",
+  "schema_version": "cad-core.freecad-expected.v1"
 }

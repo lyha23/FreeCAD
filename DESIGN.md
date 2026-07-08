@@ -365,3 +365,65 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
   - 固定 MEDFile 到 med-file@4.1.1_py312
   - 修复 Homebrew PySide/Shiboken 的兼容 symlink
   - 默认 BUILD_BIM=OFF，绕过 lark 依赖
+
+---
+
+可以，那就把它明确成：服务端无会话，但协议有状态。
+
+  也就是：
+
+  - 后端不保存 session。
+  - 每次 recompute 返回完整 topoNamingState。
+  - 前端下次请求把上一次的 topoNamingState 原样带回来。
+  - 后端用“旧 state + 当前 graph”做拓扑引用续接。
+
+  关键规则要定死：
+
+  1. topoNamingState 不是建模几何输入
+     建模仍然只看 DocumentObject graph。state 只用于解析旧引用、判断 split/deleted/renamed。
+
+  2. stableSubname 可以引用 state 里的 token
+     比如 Face1;:H551,F;CSD... 这种 raw mapped name，只有在配套旧 state 一起传回时才有意义。
+
+  3. state 必须 versioned
+     要包含 schemaVersion、FreeCAD/OCCT 版本、collector/cad-core topo state 版本、object revision/hash。版本不匹配就降级为不可恢复或重新建
+     立引用。
+
+  4. 客户端携带的 state 不能完全信任
+     后端要校验它和当前 graph/object 是否匹配，不能让前端伪造 state 影响几何建模结果。
+
+  建议协议先长这样：
+
+  {
+    "graph": { "...": "DocumentObject graph" },
+    "topoNamingState": {
+      "schemaVersion": "cad-core.topo-state.v1",
+      "kernelVersion": "FreeCAD 1.2.0 / OCCT ...",
+      "documentHash": "...",
+      "objects": {
+        "BooleanFragments": {
+          "objectHash": "...",
+          "elementMap": {},
+          "childElementMaps": [],
+          "rawMappedNames": {},
+          "canonicalMappedNames": {},
+          "history": []
+        }
+      }
+    }
+  }
+
+  响应里返回新的：
+
+  {
+    "results": [...],
+    "topoNamingState": { "...new full snapshot..." },
+    "elementReferenceUpdates": [...]
+  然后引用字段可以变成：
+
+  {
+  大白话说：可以把旧账本随请求带回来，但要把它当“旧账本快照”，不是裸字符串。 裸 rawFreecadMappedName 下次不可靠；rawFreecadMappedName +
+  topoNamingState 才有恢复意义。
+
+  下一步应该先改接口方案文档，把当前“纯无状态、ElementMap 不长期保存”的规则改成“客户端携带 topoNamingState 的协议有状态模式”，再动
+  collector / recompute DTO / response schema。

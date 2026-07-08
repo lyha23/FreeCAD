@@ -14,6 +14,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Helix"]
+    "objs": [
+      "Helix"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:8da766087d71e77a52413caaefe6e2a0e73e1775c670c94a05d40d658e84fd28"
   }
 }

@@ -25,13 +25,21 @@
       "Properties": {
         "Boundary": {
           "PropertyType": "App::PropertyLinkSubList",
-          "SubSet": [{"value": "Profile"}]
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
         },
         "Surface": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"],
-          "StableSubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ],
+          "StableSubList": [
+            "Face1"
+          ]
         }
       }
     },
@@ -42,15 +50,23 @@
       "Properties": {
         "Boundary": {
           "PropertyType": "App::PropertyLinkSubList",
-          "SubSet": [{"value": "Profile"}]
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
         },
         "Supports": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "SupportPlane",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ]
             }
           ]
         }
@@ -63,15 +79,23 @@
       "Properties": {
         "Boundary": {
           "PropertyType": "App::PropertyLinkSubList",
-          "SubSet": [{"value": "Profile"}]
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
         },
         "Orders": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1"],
-              "StableSubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ]
             }
           ]
         }
@@ -84,7 +108,11 @@
       "Properties": {
         "Boundary": {
           "PropertyType": "App::PropertyLinkSubList",
-          "SubSet": [{"value": "Profile"}]
+          "SubSet": [
+            {
+              "value": "Profile"
+            }
+          ]
         },
         "Degree": 4
       }
@@ -97,5 +125,15 @@
       "OrdersDeferred",
       "NonDefaultParamsDeferred"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:c7af6e7ecad182c8e730860f50bae63fd1a88a4812342d58b3615cfdc3f4b06c"
   }
 }

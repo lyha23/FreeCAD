@@ -1,4 +1,11 @@
 {
+  "backendGap": {
+    "delete_condition": "S6 implements source-backed non-identity objectPartMap.offsetPlc marker and writeback parity, focused expected tests pass, and the C9-M2 matrices are updated from backend_gap_candidate to expected-backed current match.",
+    "ids": [
+      "C9M2-BG-101"
+    ],
+    "route": "backend_gap_candidate"
+  },
   "bbox": {
     "max": [
       8.0,
@@ -133,7 +140,7 @@
       }
     ],
     "collector_mode": "source_backed_bundled_offsetPlc_evidence",
-    "route": "expected_backed_current_match",
+    "route": "backend_gap_candidate",
     "scope_ids": [
       "C9M2-SCOPE-101"
     ],
@@ -143,10 +150,10 @@
       "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::handleOneSideOfJoint()",
       "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::validateNewPlacements()",
       "/home/user/Chili3DProject/FreeCAD/src/Mod/Assembly/App/AssemblyObject.cpp::AssemblyObject::setNewPlacements()"
-    ],
-    "close_condition": "C9-M2 S6 current cad-core marker and writeback parity matches this native expected."
+    ]
   },
   "freecad_version": "1.2.0 revision 20260519",
+  "known_gap": "C9M2-BLOCKER-301: C9-M2 S3 native FreeCAD bundled offsetPlc oracle is checked in for C9M2-SCOPE-101; current cad-core still treats bundled offsetPlc as an identity boundary. Keep this as backend_gap_candidate evidence for S6 instead of claiming support in S3.",
   "native_marker_oracle": {
     "requires_cad_core_marker_parity": true,
     "solver_joints": [

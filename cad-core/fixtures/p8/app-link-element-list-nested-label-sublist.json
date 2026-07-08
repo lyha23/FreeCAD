@@ -46,8 +46,17 @@
         "LinkTransform": false,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            5,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -58,7 +67,10 @@
       "Properties": {
         "ElementList": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["LinkA", "LinkB"]
+          "values": [
+            "LinkA",
+            "LinkB"
+          ]
         }
       }
     },
@@ -70,18 +82,41 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "LinkGroup",
-          "SubList": ["LinkGroup.$PrettyB.$PrettyBox.Face1"]
+          "SubList": [
+            "LinkGroup.$PrettyB.$PrettyBox.Face1"
+          ]
         },
         "LinkTransform": false,
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 10, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            10,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["FaceLink"]
+    "objs": [
+      "FaceLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:daabd2bd29526a3193640cccb3c58156dac3050888879b82f97726d681bc414a"
   }
 }

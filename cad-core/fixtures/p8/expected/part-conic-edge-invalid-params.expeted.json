@@ -1,0 +1,36 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P8 fixture contract for part-conic-edge-invalid-params; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "invalid_part_conic_curve_kind",
+    "invalid_part_conic_radius",
+    "invalid_part_conic_focal",
+    "invalid_part_conic_trim",
+    "invalid_part_conic_number"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "invalid_part_conic_curve_kind",
+      "invalid_part_conic_radius",
+      "invalid_part_conic_focal",
+      "invalid_part_conic_trim",
+      "invalid_part_conic_number"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "InvalidCurveKind",
+      "InvalidHyperbolaRadius",
+      "InvalidNonFiniteCenter",
+      "InvalidParabolaFocal",
+      "InvalidTrim"
+    ],
+    "recompute_rc": 0
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_part_workbench_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p8/part-conic-edge-invalid-params.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/p8/part-conic-edge-invalid-params.json: partGeometryCurve edge expected collection supports one valid DTO per fixture"
+  }
+}

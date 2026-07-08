@@ -1,0 +1,34 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P3A fixture contract for pocket-up-to-face-intersects-sketch; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "unsupported_legacy_internal_sublist"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "unsupported_legacy_internal_sublist"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Body",
+      "Pad",
+      "Pocket",
+      "SketchPad",
+      "SketchPocket"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad",
+      "PartDesign::Pocket",
+      "PartDesign::Body"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_pocket_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p3a/pocket-up-to-face-intersects-sketch.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... Processing...... Processing...... (7 %) Processing...... Processing...... (15 %) Processing...... Processing...... (23 %) Processing...... Processing...... (30 %) (38 %) (46 %) (53 %) (61 %) (69 %) (76 %) (84 %) Pocket: SketchBased: Up to face: Must not intersect sketch! unsupported cad-core/fixtures/p3a/pocket-up-to-face-intersects-sketch.json: target object Body has no shape"
+  }
+}

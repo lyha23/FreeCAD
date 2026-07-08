@@ -19,6 +19,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Wedge"]
+    "objs": [
+      "Wedge"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:63a360fdf79461d181d4ad41d7c8dfd2b92d35f8286bc2084fc174f7a9892767"
   }
 }

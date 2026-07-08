@@ -187,5 +187,15 @@
       "DatumCSUndefinedNormal",
       "DatumCSInfiniteCurvature"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:fd6cc544d4cf73ad85e9b33eb9d14358e3ef35d23c9dd939b223650161caf36f"
   }
 }

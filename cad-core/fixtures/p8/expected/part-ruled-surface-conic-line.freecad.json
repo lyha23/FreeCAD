@@ -6,21 +6,6 @@
       "owner": "BridgeLine"
     },
     "ConicRuledSurface": {
-      "element_history_status_contains": [
-        "part_ruled_surface:shared_vertex_edge_relation"
-      ],
-      "element_kind_by_source": {
-        "BridgeLine.Edge1": "edge",
-        "HyperbolaEdge.Edge1": "edge"
-      },
-      "element_map_contains": [
-        "HyperbolaEdge.Edge1",
-        "BridgeLine.Edge1"
-      ],
-      "history_sources_any": [
-        "HyperbolaEdge.Edge1",
-        "BridgeLine.Edge1"
-      ],
       "owner": "ConicRuledSurface"
     },
     "HyperbolaEdge": {

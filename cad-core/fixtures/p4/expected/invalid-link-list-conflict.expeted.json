@@ -1,0 +1,27 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P4 fixture contract for invalid-link-list-conflict; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "invalid_link_value"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "invalid_link_value"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Body"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "PartDesign::Body"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_link_property_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p4/invalid-link-list-conflict.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/p4/invalid-link-list-conflict.json: body member Sketch was not created"
+  }
+}

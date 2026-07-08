@@ -32,8 +32,17 @@
         "Rigid": true,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [1, 2, 0],
-          "Rotation": [0, 0, 0.25881904510252074, 0.9659258262890683]
+          "Base": [
+            1,
+            2,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0.25881904510252074,
+            0.9659258262890683
+          ]
         }
       }
     },
@@ -49,8 +58,17 @@
         "Rigid": true,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, -1, 1],
-          "Rotation": [0, 0, -0.3826834323650898, 0.9238795325112867]
+          "Base": [
+            5,
+            -1,
+            1
+          ],
+          "Rotation": [
+            0,
+            0,
+            -0.3826834323650898,
+            0.9238795325112867
+          ]
         }
       }
     },
@@ -77,12 +95,23 @@
         "Reference1": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "ComponentA",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Placement1": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0.25, 0.5, 0.75],
-          "Rotation": [0, 0, 0.3826834323650898, 0.9238795325112867]
+          "Base": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "Rotation": [
+            0,
+            0,
+            0.3826834323650898,
+            0.9238795325112867
+          ]
         },
         "Detach1": {
           "PropertyType": "App::PropertyBool",
@@ -91,12 +120,23 @@
         "Reference2": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "ComponentB",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "Placement2": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0.5, -0.25, 0.25],
-          "Rotation": [0, 0, -0.25881904510252074, 0.9659258262890683]
+          "Base": [
+            0.5,
+            -0.25,
+            0.25
+          ],
+          "Rotation": [
+            0,
+            0,
+            -0.25881904510252074,
+            0.9659258262890683
+          ]
         },
         "Detach2": {
           "PropertyType": "App::PropertyBool",
@@ -111,7 +151,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["GroundedJoint", "FixedJoint"]
+          "values": [
+            "GroundedJoint",
+            "FixedJoint"
+          ]
         }
       }
     },
@@ -122,12 +165,28 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ComponentA", "ComponentB", "Joints"]
+          "values": [
+            "ComponentA",
+            "ComponentB",
+            "Joints"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["Assembly"]
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:03bd2ebd74ed4d524b14f862ca27ca6f71a1616e8a987d7fdc0093e0eaf92f5b"
   }
 }

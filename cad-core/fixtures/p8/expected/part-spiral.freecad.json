@@ -1,29 +1,81 @@
 {
-  "object": "Spiral",
-  "reference": "FreeCADCmd geometry-equivalent Part::Spiral growth 1, radius 1 to 3, 2 rotations",
-  "freecad_version": "1.2.0 revision 20260519",
-  "bbox_delta": 0.2,
   "bbox": {
-    "min": [
-      -2.6,
-      -2.84,
-      0.0
-    ],
     "max": [
-      3.0,
-      2.35,
-      0.0
+      3.0000000999999994,
+      2.255603495554722,
+      1e-07
+    ],
+    "min": [
+      -2.5050474911933076,
+      -2.7545915630404547,
+      -1e-07
     ]
   },
-  "volume": 0.0,
+  "freecad_version": "1.2.0 revision 20260519",
+  "object": "Spiral",
+  "reference": "FreeCADCmd oracle from part-spiral.json; objects: Part::Spiral",
+  "schema_version": "cad-core.freecad-expected.v1",
+  "subshapes": [
+    {
+      "ReferenceShadow": [],
+      "ShadowSub": [],
+      "fullSubname": "Spiral.Edge1",
+      "id": "Spiral:Edge1",
+      "identityStatus": "current_only",
+      "indexed": "Edge1",
+      "kind": "Edge",
+      "stableSubname": "",
+      "subname": "Edge1"
+    },
+    {
+      "ReferenceShadow": [],
+      "ShadowSub": [],
+      "fullSubname": "Spiral.Edge2",
+      "id": "Spiral:Edge2",
+      "identityStatus": "current_only",
+      "indexed": "Edge2",
+      "kind": "Edge",
+      "stableSubname": "",
+      "subname": "Edge2"
+    },
+    {
+      "ReferenceShadow": [],
+      "ShadowSub": [],
+      "fullSubname": "Spiral.Vertex1",
+      "id": "Spiral:Vertex1",
+      "identityStatus": "current_only",
+      "indexed": "Vertex1",
+      "kind": "Vertex",
+      "stableSubname": "",
+      "subname": "Vertex1"
+    },
+    {
+      "ReferenceShadow": [],
+      "ShadowSub": [],
+      "fullSubname": "Spiral.Vertex2",
+      "id": "Spiral:Vertex2",
+      "identityStatus": "current_only",
+      "indexed": "Vertex2",
+      "kind": "Vertex",
+      "stableSubname": "",
+      "subname": "Vertex2"
+    },
+    {
+      "ReferenceShadow": [],
+      "ShadowSub": [],
+      "fullSubname": "Spiral.Vertex3",
+      "id": "Spiral:Vertex3",
+      "identityStatus": "current_only",
+      "indexed": "Vertex3",
+      "kind": "Vertex",
+      "stableSubname": "",
+      "subname": "Vertex3"
+    }
+  ],
   "topology_counts": {
-    "faces": 0,
     "edges": 2,
+    "faces": 0,
     "vertices": 3
   },
-  "named_shapes": {
-    "Spiral": {
-      "owner": "Spiral"
-    }
-  }
+  "volume": 0.0
 }

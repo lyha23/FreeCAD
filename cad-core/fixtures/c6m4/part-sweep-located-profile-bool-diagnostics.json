@@ -184,5 +184,15 @@
       "InvalidWithContact",
       "InvalidWithCorrection"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:d5085169d7de542f4d2ceec2827517e30543c90c623539fdd9e26637410a9dc6"
   }
 }

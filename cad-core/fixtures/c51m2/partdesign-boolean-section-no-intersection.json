@@ -20,8 +20,17 @@
         "Height": 2,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [10, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            10,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -33,7 +42,9 @@
         "Type": "Section",
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ToolBox"]
+          "values": [
+            "ToolBox"
+          ]
         },
         "BaseFeature": {
           "PropertyType": "App::PropertyLink",
@@ -45,6 +56,18 @@
     }
   ],
   "recompute": {
-    "objs": ["BooleanSection"]
+    "objs": [
+      "BooleanSection"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:74cd3275e78cfaae98bff282a5238b9c0cc766f90c1f68feec6cf17e313e3662"
   }
 }

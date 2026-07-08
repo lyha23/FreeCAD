@@ -2,5 +2,15 @@
   "Objects": [],
   "recompute": {
     "objs": []
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:8ce65f60f8d6576eecdad82f5660f7bd7710a6d9c318b9a48f64522a72c196bd"
   }
 }

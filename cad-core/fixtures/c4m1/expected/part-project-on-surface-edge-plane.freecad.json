@@ -21,14 +21,30 @@
     "offset": 0.0,
     "projected_face_count": 0,
     "projected_inner_wire_count": 0,
+    "projected_solid_count": 0,
     "projected_wire_count": 0,
+    "projection_item_ledger": [
+      {
+        "projection_item_index": 0,
+        "source_object": "ProjectionLine",
+        "source_shape_kind": "edge",
+        "source_subname": "Edge1",
+        "stable_subname": "Edge1"
+      }
+    ],
+    "projection_items": [
+      {
+        "object": "ProjectionLine",
+        "subshape": "Edge1"
+      }
+    ],
     "projection_subshape": "Edge1",
     "shape": "occt_compound",
     "source_projection": "ProjectionLine",
     "source_support": "SupportPlane",
     "status": "ok",
     "support_face": "Face1",
-    "topo_naming_history": "source_backed_projection_item_mapper_history_request_local"
+    "topo_naming_history": "indexed_projected_edges_no_mapper_history"
   },
   "reference": "FreeCADCmd oracle from part-project-on-surface-edge-plane.json; objects: Part::Plane, Part::Line, Part::ProjectOnSurface",
   "schema_version": "cad-core.freecad-expected.v1",

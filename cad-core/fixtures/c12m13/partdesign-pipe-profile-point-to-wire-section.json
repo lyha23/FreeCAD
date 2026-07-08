@@ -185,5 +185,15 @@
       "AdditivePipeProfilePoint",
       "Body"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:76bf4c79643945cb63307f2e541edb5f4620166cafb7f6ca999a0540b7d04db7"
   }
 }

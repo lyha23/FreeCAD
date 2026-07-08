@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": ["sketch_solver_redundant"],
+    "result_objects": ["Sketch"]
+  },
+  "diagnostic_codes": ["sketch_solver_redundant"],
+  "oracle_evidence": {
+    "collector_result": "unsupported: Sketch Constraints are not enabled in this collector yet",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_sketch_solver_contract",
+    "reason": "This fixture verifies CAD Core solver-facing sketch constraint diagnostics; the native expected collector does not currently collect Sketch Constraints.",
+    "reference": "cad-core/fixtures/c3m3/sketch-redundant-constraints.json"
+  },
+  "reference": "CAD Core C3M3 sketch redundant-constraints diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

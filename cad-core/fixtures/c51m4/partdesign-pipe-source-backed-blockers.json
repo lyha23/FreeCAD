@@ -200,5 +200,15 @@
       "AdditivePipeSpineTangent",
       "AdditivePipeAuxiliaryTangent"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:e3a67ec762c83e8c82da828979b33e13d7f07a648f2be674ffd34f1add868772"
   }
 }

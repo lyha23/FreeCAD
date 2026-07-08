@@ -9,8 +9,14 @@
           {
             "kind": "LineSegment",
             "id": 100001,
-            "start": [0, 0],
-            "end": [10, 0]
+            "start": [
+              0,
+              0
+            ],
+            "end": [
+              10,
+              0
+            ]
           }
         ],
         "Constraints": []
@@ -26,7 +32,9 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "StableSubList": ["g100001"]
+              "StableSubList": [
+                "g100001"
+              ]
             }
           ]
         },
@@ -50,9 +58,15 @@
           "SubSet": [
             {
               "value": "Pad",
-              "SubList": ["Edge4"],
-              "StableSubList": ["Edge4"],
-              "FullSubList": ["Edge4"]
+              "SubList": [
+                "Edge4"
+              ],
+              "StableSubList": [
+                "Edge4"
+              ],
+              "FullSubList": [
+                "Edge4"
+              ]
             }
           ]
         },
@@ -73,7 +87,11 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["Sketch", "Pad", "Pad2"]
+          "values": [
+            "Sketch",
+            "Pad",
+            "Pad2"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -83,6 +101,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:6cc9449fd6781bf0537d0d57f3d557bedfd475e5fa65101703cfe219a96e644d"
   }
 }

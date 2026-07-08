@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": ["sketch_solver_partially_redundant"],
+    "result_objects": ["Sketch"]
+  },
+  "diagnostic_codes": ["sketch_solver_partially_redundant"],
+  "oracle_evidence": {
+    "collector_result": "unsupported: Sketch Constraints are not enabled in this collector yet",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_sketch_solver_contract",
+    "reason": "This fixture verifies CAD Core solver-facing partial redundancy diagnostics; the native expected collector does not currently collect Sketch Constraints.",
+    "reference": "cad-core/fixtures/c3m3/sketch-partially-redundant-block-horizontal.json"
+  },
+  "reference": "CAD Core C3M3 sketch partial redundancy diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

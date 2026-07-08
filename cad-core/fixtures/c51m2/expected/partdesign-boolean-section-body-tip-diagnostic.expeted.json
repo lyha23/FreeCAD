@@ -1,0 +1,32 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core C51M2 fixture contract for partdesign-boolean-section-body-tip-diagnostic; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "partdesign_body_tip_non_solid"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "partdesign_body_tip_non_solid"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "BaseBox",
+      "BooleanSection",
+      "MainBody",
+      "ToolBox"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Part::Box",
+      "PartDesign::Boolean",
+      "PartDesign::Body"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_part_boolean_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/c51m2/partdesign-boolean-section-body-tip-diagnostic.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/c51m2/partdesign-boolean-section-body-tip-diagnostic.json: failed to set property Type: 'Section' is not part of the enumeration in CadCoreExpected#BooleanSection.Type"
+  }
+}

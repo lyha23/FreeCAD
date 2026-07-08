@@ -44,8 +44,17 @@
         "Rigid": true,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [4, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            4,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -80,8 +89,17 @@
         },
         "Placement1": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         },
         "Reference2": {
           "PropertyType": "App::PropertyXLinkSub",
@@ -90,8 +108,17 @@
         },
         "Placement2": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -115,8 +142,17 @@
         },
         "Placement1": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0.3826834323650898, 0.9238795325112867]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0.3826834323650898,
+            0.9238795325112867
+          ]
         },
         "Reference2": {
           "PropertyType": "App::PropertyXLinkSub",
@@ -125,8 +161,17 @@
         },
         "Placement2": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -150,8 +195,17 @@
         },
         "Placement1": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0.7071067811865475, 0.7071067811865476]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0.7071067811865475,
+            0.7071067811865476
+          ]
         },
         "Reference2": {
           "PropertyType": "App::PropertyXLinkSub",
@@ -160,8 +214,17 @@
         },
         "Placement2": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -172,7 +235,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["GroundedJoint", "SliderJoint", "ScrewJoint", "RackPinionJoint"]
+          "values": [
+            "GroundedJoint",
+            "SliderJoint",
+            "ScrewJoint",
+            "RackPinionJoint"
+          ]
         }
       }
     },
@@ -183,12 +251,28 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["ComponentA", "ComponentB", "Joints"]
+          "values": [
+            "ComponentA",
+            "ComponentB",
+            "Joints"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["Assembly"]
+    "objs": [
+      "Assembly"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:9fa93ddffddf5223eac516ceee8fb68a7641d7077c703496cb58bb7d408b8763"
   }
 }

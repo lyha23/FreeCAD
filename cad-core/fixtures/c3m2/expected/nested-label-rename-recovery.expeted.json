@@ -1,0 +1,20 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "element_reference_update_count": 1,
+    "result_objects": [
+      "GroupLink",
+      "NestedPlainGroupFaceLink"
+    ]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: App::DocumentObjectGroup is not enabled in this collector yet",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_reference_recovery_contract",
+    "reason": "This fixture verifies CAD Core nested label-qualified subname rewrite behavior; the native collector cannot instantiate the required group objects.",
+    "reference": "cad-core/fixtures/c3m2/nested-label-rename-recovery.json"
+  },
+  "reference": "CAD Core C3M2 nested label recovery contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

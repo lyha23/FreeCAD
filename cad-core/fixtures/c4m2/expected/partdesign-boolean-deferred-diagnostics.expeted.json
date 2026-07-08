@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": ["missing_target", "unsupported_property"],
+    "focused_tests": ["cad-core.tests.test_p7_features.CadCoreP7FeatureTest.test_c4m2_boolean_deferred_boundaries_are_diagnostic"]
+  },
+  "diagnostic_codes": ["missing_target", "unsupported_property"],
+  "oracle_evidence": {
+    "collector_result": "unsupported: failed to set property Type: 'Fragments' is not part of the enumeration",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_diagnostics_contract",
+    "reason": "This fixture verifies PartDesign Boolean deferred diagnostics; the DTO intentionally uses unsupported/missing values that do not produce a native geometry oracle.",
+    "reference": "cad-core/fixtures/c4m2/partdesign-boolean-deferred-diagnostics.json"
+  },
+  "reference": "CAD Core C4M2 PartDesign Boolean deferred diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

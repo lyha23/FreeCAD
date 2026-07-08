@@ -46,8 +46,12 @@
           "SubSet": [
             {
               "value": "SupportPlane",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"],
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ],
               "Order": "C0"
             }
           ]
@@ -67,8 +71,12 @@
             },
             {
               "value": "CenterPoint",
-              "SubList": ["Vertex1"],
-              "StableSubList": ["Vertex1"]
+              "SubList": [
+                "Vertex1"
+              ],
+              "StableSubList": [
+                "Vertex1"
+              ]
             }
           ]
         },
@@ -77,8 +85,12 @@
           "SubSet": [
             {
               "value": "CenterPoint",
-              "SubList": ["Vertex1"],
-              "StableSubList": ["Vertex1"],
+              "SubList": [
+                "Vertex1"
+              ],
+              "StableSubList": [
+                "Vertex1"
+              ],
               "Order": "G1"
             }
           ]
@@ -98,8 +110,12 @@
             },
             {
               "value": "SupportPlane",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ]
             }
           ]
         },
@@ -108,13 +124,21 @@
           "SubSet": [
             {
               "value": "SupportPlane",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"],
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
-                "SubList": ["Face1"],
-                "StableSubList": ["Face1"]
+                "SubList": [
+                  "Face1"
+                ],
+                "StableSubList": [
+                  "Face1"
+                ]
               }
             }
           ]
@@ -128,5 +152,15 @@
       "VertexOrder",
       "FaceSupportTarget"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:e4b8c1e3c1ac8cdd89bf099c0841be7659383ac92c44c5af26158b3c7694f3ce"
   }
 }

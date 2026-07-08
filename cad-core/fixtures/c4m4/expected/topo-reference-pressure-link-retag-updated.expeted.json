@@ -1,0 +1,33 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core C4M4 fixture contract for topo-reference-pressure-link-retag-updated; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [],
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Body",
+      "BodyLink",
+      "Pad",
+      "Pocket",
+      "ProbeSketch",
+      "SketchPad",
+      "SketchPocket"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad",
+      "PartDesign::Pocket",
+      "PartDesign::Body",
+      "App::Link"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_topo_reference_pressure_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/c4m4/topo-reference-pressure-link-retag-updated.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... Processing...... Processing...... (6 %) Processing...... Processing...... (13 %) (20 %) (26 %) (33 %) (40 %) (46 %) (53 %) (60 %) (66 %) Processing...... Processing...... (73 %) <Sketch> SketchObject.cpp(426): Failed to make face for sketch: Part::FaceMaker: result shape is null. Pad: Sub shape not found: CadCoreExpected#SketchPad.g1;SKT;FAC <Sketch> SketchObjectExternal.cpp(2603): Failed to project external geometry in CadCoreExpected#ProbeSketch: BodyLink.Edge1 Datum feature type is not yet supported as ..."
+  }
+}

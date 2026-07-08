@@ -17,7 +17,7 @@
     "solver_joints": [
       {
         "current_value": {
-          "linear_distance_from_jcs_placements": 4.272001872658765,
+          "linear_distance_from_jcs_placements": 4.0,
           "source": "/Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py::getJointDistance()"
         },
         "jcs_swapped_for_solver": false,
@@ -126,7 +126,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -155,7 +155,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -170,7 +170,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -295,7 +295,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -324,7 +324,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [
@@ -339,7 +339,7 @@
             "Base": [
               4.0,
               0.0,
-              1.5
+              0.0
             ],
             "PropertyType": "App::PropertyPlacement",
             "Rotation": [

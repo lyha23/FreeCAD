@@ -23,6 +23,7 @@
 #include "cad_core/part_design/feature_multi_transform.h"
 #include "cad_core/part/part_boolean.h"
 #include "cad_core/part/part_feature.h"
+#include "cad_core/part/part_geometry_curve.h"
 #include "cad_core/part_design/feature_pad.h"
 #include "cad_core/part_design/feature_pipe.h"
 #include "cad_core/part_design/feature_pocket.h"
@@ -89,6 +90,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::Torus", part::executePartTorus);
     registry.registerExecutor("Part::Wedge", part::executePartWedge);
     registry.registerExecutor("Part::Ellipse", part::executePartEllipse);
+    registry.registerExecutor("Part::GeometryCurve", part::executePartGeometryCurve);
     registry.registerExecutor("Part::Helix", part::executePartHelix);
     registry.registerExecutor("Part::Spiral", part::executePartSpiral);
     registry.registerExecutor("Part::Compound", part::executePartCompound);

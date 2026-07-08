@@ -18,8 +18,17 @@
         "Width": 3,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [6, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            6,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -30,7 +39,10 @@
       "Properties": {
         "Links": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["PlaneA", "PlaneB"]
+          "values": [
+            "PlaneA",
+            "PlaneB"
+          ]
         }
       }
     },
@@ -52,6 +64,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Offset2D"]
+    "objs": [
+      "Offset2D"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:54d886e11375959453b1dfcfb308c6174aff167491ddb4c8ada1354ebc7f7768"
   }
 }

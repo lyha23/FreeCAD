@@ -1,0 +1,36 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P6 fixture contract for body-dressup-fillet-target-local-stable-edge; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "unstable_subshape_reference"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "unstable_subshape_reference"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "FilletPreview",
+      "Pad",
+      "Pad2",
+      "Pad2Body",
+      "Revolution",
+      "草图 7:55:12 PM"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad",
+      "PartDesign::Revolution",
+      "PartDesign::Fillet",
+      "PartDesign::Body"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_p6_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p6/body-dressup-fillet-target-local-stable-edge.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/p6/body-dressup-fillet-target-local-stable-edge.json: failed to set property Direction: type must be 'Vector' or tuple of three floats, not list"
+  }
+}

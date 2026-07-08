@@ -87,6 +87,31 @@ def load_fixture(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def property_payload(value: Any) -> Any:
+    if isinstance(value, dict) and "PropertyType" in value and "value" in value:
+        return value.get("value")
+    return value
+
+
+def native_probe_contract(fixture: dict[str, Any]) -> dict[str, Any]:
+    objects = fixture.get("Objects")
+    if not isinstance(objects, list):
+        raise ValueError("C9-M5 native probe fixture must use top-level Objects")
+    for spec in objects:
+        if not isinstance(spec, dict) or spec.get("TypeId") != "CadCore::NativeProbe":
+            continue
+        properties = spec.get("Properties", {})
+        if not isinstance(properties, dict):
+            raise ValueError("CadCore::NativeProbe fixture object requires Properties")
+        return {
+            "fixture_group": property_payload(properties.get("FixtureGroup")) or "c9m5",
+            "native_case": property_payload(properties.get("NativeCase")),
+            "oracle_ids": property_payload(properties.get("OracleIds")) or [],
+            "freecad_authority": property_payload(properties.get("FreecadAuthority")) or [],
+        }
+    raise ValueError("C9-M5 native probe fixture is missing CadCore::NativeProbe object")
+
+
 def display_path(path: Path) -> str:
     try:
         return str(path.resolve().relative_to(Path.cwd().resolve()))
@@ -350,6 +375,7 @@ def make_box(doc: Any, name: str) -> Any:
 def collect_probe_payload(FreeCAD: Any, args: argparse.Namespace, command: list[str]) -> dict[str, Any]:
     fixture_path = Path(args.fixture)
     fixture = load_fixture(fixture_path)
+    contract = native_probe_contract(fixture)
     version, revision = freecad_version_string(FreeCAD)
     work_root = Path(args.workdir) if args.workdir else Path(tempfile.mkdtemp(prefix="c9m5-copyonchange-probe-"))
     work_root.mkdir(parents=True, exist_ok=True)
@@ -362,10 +388,10 @@ def collect_probe_payload(FreeCAD: Any, args: argparse.Namespace, command: list[
         "freecad_revision": revision,
         "source_fixture": display_path(fixture_path),
         "source_fixture_name": fixture_path.name,
-        "fixture_group": fixture.get("fixture_group", "c9m5"),
-        "native_case": fixture.get("c9m5_case"),
-        "oracle_ids": fixture.get("oracle_ids", []),
-        "freecad_authority": fixture.get("freecad_authority", []),
+        "fixture_group": contract["fixture_group"],
+        "native_case": contract["native_case"],
+        "oracle_ids": contract["oracle_ids"],
+        "freecad_authority": contract["freecad_authority"],
         "command": {
             "argv": command,
             "returncode": 0,

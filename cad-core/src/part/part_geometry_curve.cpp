@@ -39,8 +39,7 @@ namespace cad_core::part
 namespace
 {
 
-constexpr const char* kPayloadKey = "partGeometryCurve";
-constexpr const char* kConsumerPayloadKey = "partGeometryCurveConsumers";
+constexpr const char* kPayloadKey = "Part::GeometryCurve";
 constexpr const char* kDefaultObjectName = "PartConicCurve";
 
 enum class CurveKind
@@ -181,7 +180,7 @@ std::optional<CurveKind> readCurveKind(
 )
 {
     const auto it = payload.find("curveKind");
-    constexpr const char* property = "partGeometryCurve.curveKind";
+    constexpr const char* property = "Part::GeometryCurve.CurveKind";
     if (it == payload.end() || !it->is_string()) {
         rejectDto(context, objectName, "missing_property", "PartConicCurveDTO requires curveKind", property);
         return std::nullopt;
@@ -211,7 +210,7 @@ std::optional<PartConicCurveDTO> parsePartConicCurveDTO(
 {
     std::string objectName = kDefaultObjectName;
     if (!payload.is_object()) {
-        rejectDto(context, objectName, "parse_error", "partGeometryCurve entries must be JSON objects", kPayloadKey);
+        rejectDto(context, objectName, "parse_error", "Part::GeometryCurve properties must form a JSON object", kPayloadKey);
         return std::nullopt;
     }
     const auto nameIt = payload.find("name");
@@ -241,7 +240,7 @@ std::optional<PartConicCurveDTO> parsePartConicCurveDTO(
             objectName,
             "invalid_part_conic_axis",
             "PartConicCurveDTO normal must be non-zero",
-            "partGeometryCurve.normal"
+            "Part::GeometryCurve.Normal"
         );
         return std::nullopt;
     }
@@ -264,7 +263,7 @@ std::optional<PartConicCurveDTO> parsePartConicCurveDTO(
             objectName,
             "invalid_part_conic_trim",
             "PartConicCurveDTO startAngle and endAngle must define a finite edge",
-            "partGeometryCurve.startAngle"
+            "Part::GeometryCurve.StartAngle"
         );
         return std::nullopt;
     }
@@ -293,7 +292,7 @@ std::optional<PartConicCurveDTO> parsePartConicCurveDTO(
                 objectName,
                 "invalid_part_conic_radius",
                 "PartConicCurveDTO hyperbola majorRadius must be positive",
-                "partGeometryCurve.majorRadius"
+                "Part::GeometryCurve.MajorRadius"
             );
             return std::nullopt;
         }
@@ -303,7 +302,7 @@ std::optional<PartConicCurveDTO> parsePartConicCurveDTO(
                 objectName,
                 "invalid_part_conic_radius",
                 "PartConicCurveDTO hyperbola minorRadius must be positive",
-                "partGeometryCurve.minorRadius"
+                "Part::GeometryCurve.MinorRadius"
             );
             return std::nullopt;
         }
@@ -321,7 +320,7 @@ std::optional<PartConicCurveDTO> parsePartConicCurveDTO(
                 objectName,
                 "invalid_part_conic_focal",
                 "PartConicCurveDTO parabola focal must be positive",
-                "partGeometryCurve.focal"
+                "Part::GeometryCurve.Focal"
             );
             return std::nullopt;
         }
@@ -346,6 +345,47 @@ const char* curveKindName(CurveKind kind)
 const char* partGeometryTypeName(CurveKind kind)
 {
     return kind == CurveKind::Hyperbola ? "Part.Hyperbola" : "Part.Parabola";
+}
+
+const nlohmann::json* propertyPayload(const app::DocumentObject& object, const std::string& property)
+{
+    const auto it = object.properties.find(property);
+    if (it == object.properties.end()) {
+        return nullptr;
+    }
+    const nlohmann::json& raw = it.value();
+    if (raw.is_object() && raw.contains("PropertyType") && raw.contains("value")) {
+        return &raw.at("value");
+    }
+    return &raw;
+}
+
+void copyObjectProperty(
+    nlohmann::json& payload,
+    const app::DocumentObject& object,
+    const std::string& property,
+    const std::string& dtoField
+)
+{
+    const nlohmann::json* value = propertyPayload(object, property);
+    if (value != nullptr) {
+        payload[dtoField] = *value;
+    }
+}
+
+nlohmann::json partConicCurvePayloadForObject(const app::DocumentObject& object)
+{
+    nlohmann::json payload = {{"name", object.name}};
+    copyObjectProperty(payload, object, "CurveKind", "curveKind");
+    copyObjectProperty(payload, object, "Center", "center");
+    copyObjectProperty(payload, object, "Normal", "normal");
+    copyObjectProperty(payload, object, "AngleXU", "angleXU");
+    copyObjectProperty(payload, object, "StartAngle", "startAngle");
+    copyObjectProperty(payload, object, "EndAngle", "endAngle");
+    copyObjectProperty(payload, object, "MajorRadius", "majorRadius");
+    copyObjectProperty(payload, object, "MinorRadius", "minorRadius");
+    copyObjectProperty(payload, object, "Focal", "focal");
+    return payload;
 }
 
 std::string geomAbsCurveTypeName(const TopoDS_Edge& edge)
@@ -482,184 +522,11 @@ void executePartConicCurveDTO(const nlohmann::json& payload, runtime::ComputeCon
     part_feature_detail::publishPartShape(object, context, *edge, metadataForDTO(*dto, *edge));
 }
 
-std::vector<nlohmann::json> requestItems(const nlohmann::json& raw)
-{
-    const auto it = raw.find(kPayloadKey);
-    if (it == raw.end()) {
-        return {};
-    }
-    if (it->is_array()) {
-        return it->get<std::vector<nlohmann::json>>();
-    }
-    return {*it};
-}
-
-std::vector<nlohmann::json> requestConsumerItems(
-    const nlohmann::json& raw,
-    runtime::ComputeContext& context
-)
-{
-    const auto it = raw.find(kConsumerPayloadKey);
-    if (it == raw.end()) {
-        return {};
-    }
-    if (it->is_array()) {
-        return it->get<std::vector<nlohmann::json>>();
-    }
-    if (it->is_object()) {
-        return {*it};
-    }
-    runtime::addDiagnostic(
-        context.diagnostics,
-        "error",
-        "parse_error",
-        "partGeometryCurveConsumers must be an object or a list of objects",
-        {},
-        kConsumerPayloadKey,
-        "parse"
-    );
-    return {};
-}
-
-void executePartGeometryCurveConsumers(const nlohmann::json& raw, runtime::ComputeContext& context)
-{
-    const auto consumerItems = requestConsumerItems(raw, context);
-    if (consumerItems.empty()) {
-        return;
-    }
-
-    const nlohmann::json consumerDocument = {{"Objects", consumerItems}};
-    auto [document, diagnostics] = app::parseDocument(consumerDocument);
-    context.diagnostics.insert(context.diagnostics.end(), diagnostics.begin(), diagnostics.end());
-
-    for (const auto& object : document.objects) {
-        if (object.typeId != "Part::Extrusion" && object.typeId != "Part::Line"
-            && object.typeId != "Part::RuledSurface") {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "unsupported_type",
-                "partGeometryCurveConsumers currently supports Part::Extrusion, Part::Line and Part::RuledSurface",
-                object.name,
-                "TypeId",
-                "parse"
-            );
-            context.objects[object.name] = {{"status", "error"}};
-            continue;
-        }
-        if (object.typeId == "Part::Line") {
-            executePartLine(object, context);
-            if (auto item = context.objects.find(object.name); item != context.objects.end()) {
-                item->second["feature"] = "part_line";
-            }
-            continue;
-        }
-        if (object.typeId == "Part::RuledSurface") {
-            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
-            // ::RuledSurface::execute(), after Curve1/Curve2 link resolution, calls
-            // "res.makeElementRuledSurface(shapes, Orientation.getValue())". This
-            // request-local bridge seeds typed conic edges first and still invokes the normal
-            // Part::RuledSurface executor instead of registering fake Part::Hyperbola or
-            // Part::Parabola DocumentObjects.
-            executePartRuledSurface(object, context);
-            continue;
-        }
-        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeatureExtrusion.cpp
-        // ::Extrusion::extrudeShape(), the regular consumer path calls
-        // "result.makeElementPrism(myShape, vec)". This request-local bridge seeds typed conic
-        // edges first, then invokes the existing Part::Extrusion executor instead of registering
-        // fake Part::Hyperbola or Part::Parabola DocumentObjects.
-        executePartExtrusion(object, context);
-    }
-}
-
-nlohmann::json meshForObject(const runtime::ComputeContext& context, const std::string& objectName)
-{
-    const auto it = context.mesh.find(objectName);
-    return it == context.mesh.end() ? nlohmann::json(nullptr) : it->second;
-}
-
-nlohmann::json subshapesForObject(const runtime::ComputeContext& context, const std::string& objectName)
-{
-    const auto it = context.subshapes.find(objectName);
-    return it == context.subshapes.end() ? nlohmann::json::object() : it->second;
-}
-
 }  // namespace
 
-bool isPartGeometryCurveRequest(const nlohmann::json& raw)
+void executePartGeometryCurve(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
-    return raw.is_object() && raw.contains(kPayloadKey);
-}
-
-runtime::ComputeContext computePartGeometryCurveRequest(const nlohmann::json& raw)
-{
-    runtime::ComputeContext context;
-    if (!isPartGeometryCurveRequest(raw)) {
-        runtime::addDiagnostic(
-            context.diagnostics,
-            "error",
-            "parse_error",
-            "Document root must contain partGeometryCurve",
-            {},
-            kPayloadKey,
-            "parse"
-        );
-        return context;
-    }
-
-    const auto items = requestItems(raw);
-    if (items.empty()) {
-        runtime::addDiagnostic(
-            context.diagnostics,
-            "error",
-            "parse_error",
-            "partGeometryCurve must be an object or non-empty array",
-            {},
-            kPayloadKey,
-            "parse"
-        );
-        return context;
-    }
-    for (const auto& item : items) {
-        executePartConicCurveDTO(item, context);
-    }
-    executePartGeometryCurveConsumers(raw, context);
-    return context;
-}
-
-nlohmann::json partGeometryCurveResultJson(const runtime::ComputeContext& context)
-{
-    nlohmann::json results = nlohmann::json::array();
-    for (const auto& [objectName, object] : context.objects) {
-        (void)object;
-        results.push_back({
-            {"object", objectName},
-            {"mesh", meshForObject(context, objectName)},
-            {"subshapes", subshapesForObject(context, objectName)},
-        });
-    }
-
-    return {
-        {"results", std::move(results)},
-        {"elementReferenceUpdates", context.elementReferenceUpdates},
-        {"documentObjectUpdates", context.documentObjectUpdates},
-        {"diagnostics", runtime::diagnosticsToJson(context.diagnostics)},
-        {"binaryPayloads", nlohmann::json::array()},
-    };
-}
-
-nlohmann::json partGeometryCurveLegacyResultJson(const runtime::ComputeContext& context)
-{
-    return {
-        {"objects", context.objects},
-        {"mesh", context.mesh},
-        {"subshapes", context.subshapes},
-        {"named_shapes", part::namedShapesToJson(context.namedShapes)},
-        {"elementReferenceUpdates", context.elementReferenceUpdates},
-        {"documentObjectUpdates", context.documentObjectUpdates},
-        {"diagnostics", runtime::diagnosticsToJson(context.diagnostics)},
-    };
+    executePartConicCurveDTO(partConicCurvePayloadForObject(object), context);
 }
 
 }  // namespace cad_core::part

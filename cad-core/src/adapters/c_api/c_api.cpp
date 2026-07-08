@@ -1,7 +1,6 @@
 #include "cad_core/adapters/c_api.h"
 
 #include "cad_core/app/document.h"
-#include "cad_core/part/part_geometry_curve.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/runtime/capability_contract.h"
 #include "cad_core/runtime/diagnostics.h"
@@ -307,16 +306,6 @@ CadCoreResult recomputeJsonEntrypoint(
     try {
         const std::string payload(request_json, request_json_len);
         const nlohmann::json raw = nlohmann::json::parse(payload);
-        if (cad_core::part::isPartGeometryCurveRequest(raw)) {
-            cad_core::runtime::ComputeContext context
-                = cad_core::part::computePartGeometryCurveRequest(raw);
-            nlohmann::json result = cad_core::part::partGeometryCurveResultJson(context);
-            if (!adapterName.empty()) {
-                result["adapter"] = adapterName;
-            }
-            applyStreamingMeshLimits(result, raw);
-            return makeJsonResult(result);
-        }
         auto [document, diagnostics] = cad_core::app::parseDocument(raw);
         nlohmann::json result = cad_core::runtime::recompute(document, std::move(diagnostics));
         if (!adapterName.empty()) {

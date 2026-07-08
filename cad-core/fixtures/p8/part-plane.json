@@ -11,6 +11,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Plane"]
+    "objs": [
+      "Plane"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:dce6e816fd004c770f170df40945db77120b5a6b6996a914942d9e35974529be"
   }
 }

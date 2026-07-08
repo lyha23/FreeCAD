@@ -172,5 +172,15 @@
     "objs": [
       "Sweep"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:b7d3f23d7e4d633debd582861ee9eaf8131267c6886c48b3b50fa3b0d434dd6f"
   }
 }

@@ -14,7 +14,8 @@ class CadCoreFeatureFlowTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_rect_pad_pocket_outputs_cut_body(self) -> None:
         result = self.run_recompute("rect-pad-pocket", "p2")
         expected = self.expected_freecad("p2", "rect-pad-pocket")
-        mesh = result["mesh"][expected["object"]]
+        expected_object = next(iter(self.expected_result_objects(expected)))
+        mesh = result["mesh"][expected_object]
 
         self.assertEqual(result["diagnostics"], [])
         self.assert_object_matches_expected(result, "p2", "rect-pad-pocket")

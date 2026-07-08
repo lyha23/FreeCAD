@@ -1,12 +1,175 @@
 {
-  "diagnostic_codes": [
-    "attachment_support_invalid_shape",
-    "attachment_support_invalid_shape",
-    "attachment_parameter_invalid",
-    "attachment_parameter_invalid",
-    "attachment_support_invalid_shape",
-    "attachment_support_invalid_shape"
-  ],
-  "reference": "C5-M15 DatumPlane/DatumCS 3D AttachEngine invalid diagnostics source-backed by FreeCAD AttachEngine3D Translate/TangentPlane/ThreePoints branches; diagnostic-only fixture has no native geometry payload",
+  "freecad_version": "1.2.0 revision 20260519",
+  "objects": {
+    "DatumCSTangentMissingVertex": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSTangentWrongShapes": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSThreePointsCoincident": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "ThreePointsPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSThreePointsCollinear": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "ThreePointsNormal",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSThreePointsMissingThird": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "ThreePointsPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "DatumCSTranslateWrongShape": {
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Translate",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    }
+  },
+  "reference": "FreeCADCmd oracle from partdesign-datum-3d-plane-diagnostics.json; objects: Part::Vertex, Part::Vertex, Part::Vertex, Part::Vertex, Part::Plane, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem, PartDesign::CoordinateSystem",
   "schema_version": "cad-core.freecad-expected.v1"
 }

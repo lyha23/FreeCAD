@@ -3,7 +3,7 @@
     "unsupported_wrapper_lifecycle"
   ],
   "freecad_version": "1.2.0 revision 20260519",
-  "native_error": "Part.BRepOffsetAPI.MakeFilling Add(U, V, Support, Order) is a direct wrapper UV point-on-support branch, not a Part.makeFilledFace helper input.",
+  "native_error": "Part.BRepOffsetAPI.MakeFilling direct wrapper requires a mutable Python add/build/shape lifecycle; cad-core only supports request-local Part.makeFilledFace DTO inputs here.",
   "native_error_code": "unsupported_wrapper_lifecycle",
   "object": "WrapperUvPointOnSupport",
   "object_fields": {
@@ -14,6 +14,6 @@
     "status": "error",
     "wrapper_lifecycle": "python_mutable_builder_unsupported"
   },
-  "reference": "Diagnostic-backed boundary record for direct Part.BRepOffsetAPI.MakeFilling UV point-on-support lifecycle; delete only after a request-local DTO replaces mutable wrapper state.",
+  "reference": "FreeCADCmd oracle from part-filling-wrapper-uv-point-boundary.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::Plane, Part::FilledFace",
   "schema_version": "cad-core.freecad-expected.v1"
 }

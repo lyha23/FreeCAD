@@ -34,12 +34,16 @@
         "Curve1": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SkewLine1",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "Curve2": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SkewLine2",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "Orientation": {
           "PropertyType": "App::PropertyEnumeration",
@@ -49,6 +53,18 @@
     }
   ],
   "recompute": {
-    "objs": ["ReversedRuledSurface"]
+    "objs": [
+      "ReversedRuledSurface"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:b337422c2bf1dd88d0681cbddea80a5106d528a22b8f4fc6d7d7566199f790de"
   }
 }

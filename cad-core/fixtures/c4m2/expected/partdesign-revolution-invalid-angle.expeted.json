@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": ["invalid_angle"],
+    "focused_tests": ["cad-core.tests.test_p7_features.CadCoreP7FeatureTest.test_c4m2_revolution_invalid_angle_is_diagnostic"]
+  },
+  "diagnostic_codes": ["invalid_angle"],
+  "oracle_evidence": {
+    "collector_result": "unsupported: Revolution: Angle of revolution too small; target object Revolution has no shape",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_diagnostics_contract",
+    "reason": "This fixture verifies CAD Core Revolution invalid-angle diagnostics; the invalid native feature has no geometry oracle.",
+    "reference": "cad-core/fixtures/c4m2/partdesign-revolution-invalid-angle.json"
+  },
+  "reference": "CAD Core C4M2 Revolution invalid-angle diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

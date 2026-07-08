@@ -19,8 +19,12 @@
           "SubSet": [
             {
               "value": "Profile",
-              "SubList": ["Edge1"],
-              "StableSubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ]
             }
           ]
         }
@@ -28,6 +32,18 @@
     }
   ],
   "recompute": {
-    "objs": ["WrapperBoundary"]
+    "objs": [
+      "WrapperBoundary"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:18e41afcf91d479d7a8849d9b717eae15eb6a29a7b2356c13df34f6363abb428"
   }
 }

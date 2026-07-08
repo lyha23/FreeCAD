@@ -18,8 +18,17 @@
         "Circumradius": 1.25,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0.25, 0.5, 3.0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0.25,
+            0.5,
+            3.0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -44,6 +53,18 @@
     }
   ],
   "recompute": {
-    "objs": ["RuledSurface"]
+    "objs": [
+      "RuledSurface"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:f67005e86ca39a54b517a6f4543290e733b137ae9734c4c5a4a45afc3ab48efd"
   }
 }

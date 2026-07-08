@@ -1,16 +1,78 @@
 {
   "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
   "c8m1_case": "shape-binder-face-edge-vertex-multi-subshape",
-  "oracle_ids": ["C8M1-ORACLE-102"],
+  "oracle_ids": [
+    "C8M1-ORACLE-102"
+  ],
   "freecad_authority": [
     "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::getFilteredReferences()",
     "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::buildShapeFromReferences()"
   ],
   "Objects": [
-    {"Name": "SupportBox", "ID": 1, "TypeId": "Part::Box", "Properties": {"Length": 3, "Width": 4, "Height": 5}},
-    {"Name": "ShapeBinderFace", "ID": 2, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Face1"]}]}}},
-    {"Name": "ShapeBinderEdge", "ID": 3, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Edge1"]}]}}},
-    {"Name": "ShapeBinderVertex", "ID": 4, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": ["Vertex1"]}]}}},
+    {
+      "Name": "SupportBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 3,
+        "Width": 4,
+        "Height": 5
+      }
+    },
+    {
+      "Name": "ShapeBinderFace",
+      "ID": 2,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportBox",
+              "SubList": [
+                "Face1"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ShapeBinderEdge",
+      "ID": 3,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportBox",
+              "SubList": [
+                "Edge1"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ShapeBinderVertex",
+      "ID": 4,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportBox",
+              "SubList": [
+                "Vertex1"
+              ]
+            }
+          ]
+        }
+      }
+    },
     {
       "Name": "ShapeBinderMulti",
       "ID": 5,
@@ -19,13 +81,45 @@
         "Support": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
-            {"value": "SupportBox", "SubList": ["Face1"]},
-            {"value": "SupportBox", "SubList": ["Edge1"]},
-            {"value": "SupportBox", "SubList": ["Vertex1"]}
+            {
+              "value": "SupportBox",
+              "SubList": [
+                "Face1"
+              ]
+            },
+            {
+              "value": "SupportBox",
+              "SubList": [
+                "Edge1"
+              ]
+            },
+            {
+              "value": "SupportBox",
+              "SubList": [
+                "Vertex1"
+              ]
+            }
           ]
         }
       }
     }
   ],
-  "recompute": {"objs": ["ShapeBinderFace", "ShapeBinderEdge", "ShapeBinderVertex", "ShapeBinderMulti"]}
+  "recompute": {
+    "objs": [
+      "ShapeBinderFace",
+      "ShapeBinderEdge",
+      "ShapeBinderVertex",
+      "ShapeBinderMulti"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:61084911a60b7edbacea02d356acaedc6d15fae2c564bc20d9439101a09eb800"
+  }
 }

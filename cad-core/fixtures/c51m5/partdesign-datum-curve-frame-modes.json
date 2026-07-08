@@ -59,7 +59,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EllipsePath",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -81,7 +83,9 @@
           "SubSet": [
             {
               "value": "EllipsePath",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "ProjectionVertex",
@@ -109,7 +113,9 @@
             },
             {
               "value": "EllipsePath",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -127,7 +133,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "CirclePath",
-          "SubList": ["Edge2"]
+          "SubList": [
+            "Edge2"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -147,7 +155,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "ArcPath",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -167,7 +177,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "CirclePath",
-          "SubList": ["Edge2"]
+          "SubList": [
+            "Edge2"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -187,7 +199,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EllipsePath",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -207,7 +221,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "EllipsePath",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -227,7 +243,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "CirclePath",
-          "SubList": ["Edge2"]
+          "SubList": [
+            "Edge2"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -252,5 +270,15 @@
       "DatumLineBinormal",
       "DatumPointCenterOfCurvature"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:f64604a37da7026920c563c660f480f20c1028b22cf576df9f6db99d4257cae6"
   }
 }

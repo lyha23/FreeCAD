@@ -149,11 +149,15 @@
           "SubSet": [
             {
               "value": "EdgeA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "EdgeB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -173,11 +177,15 @@
           "SubSet": [
             {
               "value": "EdgeA",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "EdgeB",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -197,11 +205,15 @@
           "SubSet": [
             {
               "value": "HitEdge",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "PlaneXY",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             }
           ]
         },
@@ -221,11 +233,15 @@
           "SubSet": [
             {
               "value": "PlaneXY",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             },
             {
               "value": "HitEdge",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             }
           ]
         },
@@ -245,11 +261,15 @@
           "SubSet": [
             {
               "value": "NoHitEdge",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "PlaneXY",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             }
           ]
         },
@@ -269,11 +289,15 @@
           "SubSet": [
             {
               "value": "NoHitEdge",
-              "SubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "PlaneXY",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             }
           ]
         },
@@ -293,8 +317,12 @@
           "SubSet": [
             {
               "value": "RecoveryBox",
-              "SubList": ["MissingVertex1"],
-              "StableSubList": ["Vertex1"],
+              "SubList": [
+                "MissingVertex1"
+              ],
+              "StableSubList": [
+                "Vertex1"
+              ],
               "ShadowSub": [
                 {
                   "oldName": "MissingVertex1",
@@ -327,5 +355,15 @@
       "DatumPointProximityEdgeFaceNoHit2",
       "DatumPointProximityRecoveredSupport"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:346f55d43332e010fa90213540aa2ca0e38985ae8537c4bde404d1165730f7e6"
   }
 }

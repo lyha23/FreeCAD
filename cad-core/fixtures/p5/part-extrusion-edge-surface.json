@@ -22,7 +22,11 @@
           "PropertyType": "App::PropertyLink",
           "value": "Line"
         },
-        "Dir": [0, 0, 1],
+        "Dir": [
+          0,
+          0,
+          1
+        ],
         "LengthFwd": 5,
         "LengthRev": 0,
         "Solid": false,
@@ -31,5 +35,19 @@
       }
     }
   ],
-  "recompute": {"objs": ["Extrude"]}
+  "recompute": {
+    "objs": [
+      "Extrude"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:3c0563103d432481b34a520ff070a35d68dad1848b8629ac97e5879f4fe4ee5c"
+  }
 }

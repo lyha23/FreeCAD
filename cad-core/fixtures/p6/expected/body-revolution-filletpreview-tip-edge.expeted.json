@@ -1,0 +1,32 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P6 fixture contract for body-revolution-filletpreview-tip-edge; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [],
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Fillet",
+      "FilletPreview",
+      "Pad",
+      "Revolution",
+      "RevolutionBody",
+      "草图 11:10:17 AM"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Pad",
+      "PartDesign::Fillet",
+      "PartDesign::Revolution",
+      "PartDesign::Body"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_partdesign_revolution_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p6/body-revolution-filletpreview-tip-edge.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. Recompute...... Processing...... Processing...... (7 %) (14 %) (21 %) (28 %) (35 %) (42 %) (50 %) (57 %) (64 %) Pad: Sub shape not found: CadCoreExpected#草图_11_10_17_AM.g100001;SKT;FAC unsupported cad-core/fixtures/p6/body-revolution-filletpreview-tip-edge.json: target object Fillet has no shape"
+  }
+}

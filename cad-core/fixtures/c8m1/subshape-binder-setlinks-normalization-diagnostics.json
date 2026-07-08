@@ -1,14 +1,70 @@
 {
   "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
   "c8m1_case": "subshape-binder-setlinks-normalization-diagnostics",
-  "oracle_ids": ["C8M1-ORACLE-203"],
+  "oracle_ids": [
+    "C8M1-ORACLE-203"
+  ],
   "freecad_authority": [
     "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::SubShapeBinder::setLinks()"
   ],
   "Objects": [
-    {"Name": "SupportBox", "ID": 1, "TypeId": "Part::Box", "Properties": {"Length": 2, "Width": 2, "Height": 2}},
-    {"Name": "SubShapeBinderEmptySubList", "ID": 2, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SupportBox", "SubList": []}]}}},
-    {"Name": "SubShapeBinderCycle", "ID": 3, "TypeId": "PartDesign::SubShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyXLinkSubList", "SubSet": [{"value": "SubShapeBinderCycle", "SubList": []}]}}}
+    {
+      "Name": "SupportBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 2,
+        "Height": 2
+      }
+    },
+    {
+      "Name": "SubShapeBinderEmptySubList",
+      "ID": 2,
+      "TypeId": "PartDesign::SubShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "SupportBox",
+              "SubList": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "SubShapeBinderCycle",
+      "ID": 3,
+      "TypeId": "PartDesign::SubShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyXLinkSubList",
+          "SubSet": [
+            {
+              "value": "SubShapeBinderCycle",
+              "SubList": []
+            }
+          ]
+        }
+      }
+    }
   ],
-  "recompute": {"objs": ["SubShapeBinderEmptySubList", "SubShapeBinderCycle"]}
+  "recompute": {
+    "objs": [
+      "SubShapeBinderEmptySubList",
+      "SubShapeBinderCycle"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:6677534f4a26f88a44ae60ce57ee47b278a3733a6d27fb6a29319ad41ba3ae7b"
+  }
 }

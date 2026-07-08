@@ -11,8 +11,12 @@
           "SubSet": [
             {
               "value": "MissingBox",
-              "SubList": ["Face5"],
-              "ExternalFlags": ["Frozen"],
+              "SubList": [
+                "Face5"
+              ],
+              "ExternalFlags": [
+                "Frozen"
+              ],
               "ReferenceShadow": [
                 {
                   "target": "MissingBox",
@@ -42,6 +46,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Sketch"]
+    "objs": [
+      "Sketch"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:406e1c3c18791226e6931a7add0b65748c6e1671878649c531c6d967e05e9a2e"
   }
 }

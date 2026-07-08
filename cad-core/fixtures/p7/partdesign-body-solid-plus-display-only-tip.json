@@ -9,15 +9,30 @@
           {
             "kind": "LineSegment",
             "id": 100001,
-            "start": [-668.3540451419151, 313.6310109022231],
-            "end": [-412.7123053422735, -521.6363257745604]
+            "start": [
+              -668.3540451419151,
+              313.6310109022231
+            ],
+            "end": [
+              -412.7123053422735,
+              -521.6363257745604
+            ]
           }
         ],
         "Constraints": [],
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [0, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            0,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -31,8 +46,12 @@
           "SubSet": [
             {
               "value": "Sketch",
-              "SubList": ["Edge1"],
-              "StableSubList": ["g100001"],
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "g100001"
+              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -46,7 +65,11 @@
         "SideType": "One side",
         "UseCustomVector": true,
         "AlongSketchNormal": true,
-        "Direction": [0, 0, 1],
+        "Direction": [
+          0,
+          0,
+          1
+        ],
         "FuzzyTolerance": 0,
         "Refine": false
       }
@@ -61,8 +84,12 @@
           "SubSet": [
             {
               "value": "Pad",
-              "SubList": ["Face1"],
-              "StableSubList": ["g100001"],
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "g100001"
+              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -75,7 +102,11 @@
         "SideType": "One side",
         "UseCustomVector": true,
         "AlongSketchNormal": true,
-        "Direction": [0.9562167257841456, 0.2926594835822822, 0],
+        "Direction": [
+          0.9562167257841456,
+          0.2926594835822822,
+          0
+        ],
         "FuzzyTolerance": 0,
         "Refine": false
       }
@@ -90,8 +121,12 @@
           "SubSet": [
             {
               "value": "Pad2",
-              "SubList": ["Edge12"],
-              "StableSubList": ["Edge12"],
+              "SubList": [
+                "Edge12"
+              ],
+              "StableSubList": [
+                "Edge12"
+              ],
               "FullSubList": [],
               "ShadowSub": [],
               "ReferenceShadow": []
@@ -114,7 +149,12 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["Sketch", "Pad", "Pad2", "Pad3"]
+          "values": [
+            "Sketch",
+            "Pad",
+            "Pad2",
+            "Pad3"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -124,6 +164,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Pad3Body"]
+    "objs": [
+      "Pad3Body"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:7921cb11fa76bfe175aea672fcb02fbecfcb208c44e1c8bdf3b199b917ce4a4a"
   }
 }

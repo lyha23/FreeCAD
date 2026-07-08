@@ -1,0 +1,19 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "element_reference_update_count": 1,
+    "result_objects": [
+      "ProbePad"
+    ]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: link target Body was not created",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_reference_recovery_contract",
+    "reason": "This fixture verifies ReferenceShadow target-id source-object rename recovery; the native collector cannot instantiate the stale target graph as a shape oracle.",
+    "reference": "cad-core/fixtures/c3m2/source-object-rename-recovery.json"
+  },
+  "reference": "CAD Core C3M2 source object rename recovery contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

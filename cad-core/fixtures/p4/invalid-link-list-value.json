@@ -7,7 +7,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "value": ["Sketch", "Pad"]
+          "value": [
+            "Sketch",
+            "Pad"
+          ]
         },
         "Tip": {
           "PropertyType": "App::PropertyLink",
@@ -16,5 +19,19 @@
       }
     }
   ],
-  "recompute": {"objs": ["Body"]}
+  "recompute": {
+    "objs": [
+      "Body"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:fd915add83c9d9d4bedba25308e23cae9185d11c2b77c081230889b990b3d9cd"
+  }
 }

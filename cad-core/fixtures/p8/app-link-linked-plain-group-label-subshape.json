@@ -21,8 +21,17 @@
         "Label": "PrettyB",
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [3, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            3,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -33,7 +42,10 @@
       "Properties": {
         "Group": {
           "PropertyType": "App::PropertyLinkList",
-          "values": ["BoxA", "BoxB"]
+          "values": [
+            "BoxA",
+            "BoxB"
+          ]
         }
       }
     },
@@ -48,8 +60,17 @@
         },
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [10, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            10,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -61,12 +82,26 @@
         "LinkedObject": {
           "PropertyType": "App::PropertyXLinkSub",
           "value": "GroupLink",
-          "SubList": ["$PrettyB.Face1"]
+          "SubList": [
+            "$PrettyB.Face1"
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["PlainGroupFaceLink"]
+    "objs": [
+      "PlainGroupFaceLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:ae499206d39d06f59a8b26891887f1efddf923b48ca5c09cc863a22fb880221f"
   }
 }

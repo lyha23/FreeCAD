@@ -108,5 +108,15 @@
     "objs": [
       "AdditivePipeSShapeProduct"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:02745602efd46bc0b844e0cf9a89b1d64df7110adc000586fdcf9feff95d05e9"
   }
 }

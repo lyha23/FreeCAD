@@ -1,0 +1,16 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [],
+    "result_objects": ["Extrude"]
+  },
+  "diagnostic_codes": [],
+  "oracle_evidence": {
+    "collector_result": "unsupported: Sketch Constraints are not enabled in this collector yet",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_sketch_solver_contract",
+    "reason": "This fixture verifies CAD Core solver-facing sketch constraint behavior; the native expected collector does not currently collect Sketch Constraints.",
+    "reference": "cad-core/fixtures/c3m3/sketch-symmetric-center-point-solver-geometry-update.json"
+  },
+  "reference": "CAD Core C3M3 sketch symmetric center-point solver geometry update contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

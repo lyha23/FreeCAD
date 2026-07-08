@@ -1,9 +1,57 @@
 {
   "Objects": [
-    {"Name": "BoundaryA", "ID": 1, "TypeId": "Part::Line", "Properties": {"X1": 0, "Y1": 0, "Z1": 0, "X2": 4, "Y2": 0, "Z2": 0}},
-    {"Name": "BoundaryB", "ID": 2, "TypeId": "Part::Line", "Properties": {"X1": 4, "Y1": 0, "Z1": 0, "X2": 4, "Y2": 4, "Z2": 0}},
-    {"Name": "BoundaryC", "ID": 3, "TypeId": "Part::Line", "Properties": {"X1": 4, "Y1": 4, "Z1": 0, "X2": 0, "Y2": 4, "Z2": 0}},
-    {"Name": "BoundaryD", "ID": 4, "TypeId": "Part::Line", "Properties": {"X1": 0, "Y1": 4, "Z1": 0, "X2": 0, "Y2": 0, "Z2": 0}},
+    {
+      "Name": "BoundaryA",
+      "ID": 1,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 4,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "BoundaryB",
+      "ID": 2,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 4,
+        "Y1": 0,
+        "Z1": 0,
+        "X2": 4,
+        "Y2": 4,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "BoundaryC",
+      "ID": 3,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 4,
+        "Y1": 4,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 4,
+        "Z2": 0
+      }
+    },
+    {
+      "Name": "BoundaryD",
+      "ID": 4,
+      "TypeId": "Part::Line",
+      "Properties": {
+        "X1": 0,
+        "Y1": 4,
+        "Z1": 0,
+        "X2": 0,
+        "Y2": 0,
+        "Z2": 0
+      }
+    },
     {
       "Name": "GeomPlate",
       "ID": 5,
@@ -12,15 +60,71 @@
         "CurveConstraints": {
           "PropertyType": "App::PropertyLinkSubList",
           "SubSet": [
-            {"value": "BoundaryA", "SubList": ["Edge1"], "StableSubList": ["Edge1"], "Order": 0, "NbPts": 10, "TolDist": 0.0001, "TolAng": 0.01, "TolCurv": 0.1},
-            {"value": "BoundaryB", "SubList": ["Edge1"], "StableSubList": ["Edge1"], "Order": 0, "NbPts": 10, "TolDist": 0.0001, "TolAng": 0.01, "TolCurv": 0.1},
-            {"value": "BoundaryC", "SubList": ["Edge1"], "StableSubList": ["Edge1"], "Order": 0, "NbPts": 10, "TolDist": 0.0001, "TolAng": 0.01, "TolCurv": 0.1},
-            {"value": "BoundaryD", "SubList": ["Edge1"], "StableSubList": ["Edge1"], "Order": 0, "NbPts": 10, "TolDist": 0.0001, "TolAng": 0.01, "TolCurv": 0.1}
+            {
+              "value": "BoundaryA",
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
+              "Order": 0,
+              "NbPts": 10,
+              "TolDist": 0.0001,
+              "TolAng": 0.01,
+              "TolCurv": 0.1
+            },
+            {
+              "value": "BoundaryB",
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
+              "Order": 0,
+              "NbPts": 10,
+              "TolDist": 0.0001,
+              "TolAng": 0.01,
+              "TolCurv": 0.1
+            },
+            {
+              "value": "BoundaryC",
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
+              "Order": 0,
+              "NbPts": 10,
+              "TolDist": 0.0001,
+              "TolAng": 0.01,
+              "TolCurv": 0.1
+            },
+            {
+              "value": "BoundaryD",
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
+              "Order": 0,
+              "NbPts": 10,
+              "TolDist": 0.0001,
+              "TolAng": 0.01,
+              "TolCurv": 0.1
+            }
           ]
         },
         "PointConstraints": [
           {
-            "Point": [2, 2, 1],
+            "Point": [
+              2,
+              2,
+              1
+            ],
             "Order": 0,
             "TolDist": 0.0001,
             "G0Criterion": 0.05,
@@ -32,6 +136,18 @@
     }
   ],
   "recompute": {
-    "objs": ["GeomPlate"]
+    "objs": [
+      "GeomPlate"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:385fba72a14640b3bdc99ec4e5809e1104daa025817d61c1467a8f26fbe2ee3f"
   }
 }

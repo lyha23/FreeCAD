@@ -40,8 +40,17 @@
         "Width": 4,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [-2, -2, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            -2,
+            -2,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -54,8 +63,17 @@
         "Width": 1,
         "Placement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [-0.5, -0.5, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            -0.5,
+            -0.5,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -72,16 +90,24 @@
             },
             {
               "value": "ConstraintEdge",
-              "SubList": ["Edge1"],
-              "StableSubList": ["Edge1"]
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ]
             },
             {
               "value": "ConstraintWire"
             },
             {
               "value": "SupportFace",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ]
             }
           ]
         },
@@ -90,24 +116,40 @@
           "SubSet": [
             {
               "value": "ConstraintEdge",
-              "SubList": ["Edge1"],
-              "StableSubList": ["Edge1"],
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
-                "SubList": ["Face1"],
-                "StableSubList": ["Face1"]
+                "SubList": [
+                  "Face1"
+                ],
+                "StableSubList": [
+                  "Face1"
+                ]
               }
             },
             {
               "value": "ConstraintWire",
-              "SubList": ["Edge1"],
-              "StableSubList": ["Edge1"],
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
               "Support": {
                 "PropertyType": "App::PropertyLinkSub",
                 "value": "SupportPlane",
-                "SubList": ["Face1"],
-                "StableSubList": ["Face1"]
+                "SubList": [
+                  "Face1"
+                ],
+                "StableSubList": [
+                  "Face1"
+                ]
               }
             }
           ]
@@ -117,20 +159,32 @@
           "SubSet": [
             {
               "value": "ConstraintEdge",
-              "SubList": ["Edge1"],
-              "StableSubList": ["Edge1"],
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
               "Order": "G1"
             },
             {
               "value": "ConstraintWire",
-              "SubList": ["Edge1"],
-              "StableSubList": ["Edge1"],
+              "SubList": [
+                "Edge1"
+              ],
+              "StableSubList": [
+                "Edge1"
+              ],
               "Order": "G2"
             },
             {
               "value": "SupportFace",
-              "SubList": ["Face1"],
-              "StableSubList": ["Face1"],
+              "SubList": [
+                "Face1"
+              ],
+              "StableSubList": [
+                "Face1"
+              ],
               "Order": "C0"
             }
           ]
@@ -139,6 +193,18 @@
     }
   ],
   "recompute": {
-    "objs": ["FilledFace"]
+    "objs": [
+      "FilledFace"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:6b2c97ea772493fa381b0d3c311e5363f0e9eafe32bed766f285d250d7d4cb2b"
   }
 }

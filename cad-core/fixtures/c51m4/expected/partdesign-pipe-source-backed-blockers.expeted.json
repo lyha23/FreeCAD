@@ -1,0 +1,30 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "unsupported_property",
+      "unsupported_property",
+      "missing_pipe_law_samples"
+    ],
+    "result_objects": [
+      "AdditivePipeLinearScaling",
+      "AdditivePipeSShapeScaling",
+      "AdditivePipeInterpolation",
+      "AdditivePipeSpineTangent",
+      "AdditivePipeAuxiliaryTangent"
+    ]
+  },
+  "diagnostic_codes": [
+    "unsupported_property",
+    "unsupported_property",
+    "missing_pipe_law_samples"
+  ],
+  "oracle_evidence": {
+    "collector_result": "unsupported: AdditivePipe* variants report TopoDS::Wire; target object AdditivePipeLinearScaling has no shape",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_diagnostics_contract",
+    "reason": "This fixture keeps source-backed PartDesign Pipe blocker diagnostics; the native collector cannot produce a valid shape oracle for these DTOs.",
+    "reference": "cad-core/fixtures/c51m4/partdesign-pipe-source-backed-blockers.json"
+  },
+  "reference": "CAD Core C51M4 PartDesign Pipe source-backed blocker diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

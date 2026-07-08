@@ -18,7 +18,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportBox",
-          "SubList": ["Vertex1"]
+          "SubList": [
+            "Vertex1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -34,7 +36,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportBox",
-          "SubList": ["Edge1"]
+          "SubList": [
+            "Edge1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -50,7 +54,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportBox",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -66,7 +72,9 @@
         "AttachmentSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportBox",
-          "SubList": ["Face1"]
+          "SubList": [
+            "Face1"
+          ]
         },
         "MapMode": {
           "PropertyType": "App::PropertyEnumeration",
@@ -76,6 +84,21 @@
     }
   ],
   "recompute": {
-    "objs": ["DatumPointOnVertex", "DatumLineOnEdge", "DatumPlaneOnFace", "DatumCSOnFace"]
+    "objs": [
+      "DatumPointOnVertex",
+      "DatumLineOnEdge",
+      "DatumPlaneOnFace",
+      "DatumCSOnFace"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:672768129f7477486752eff15529422d5ec930a6ebfa36397986146f8d1ceb8e"
   }
 }

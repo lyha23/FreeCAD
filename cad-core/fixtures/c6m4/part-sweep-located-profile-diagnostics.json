@@ -255,5 +255,15 @@
       "NonVertexLocation",
       "MultiSubnameLocation"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:da35033c8b54a4b96788a12cdd5b1cd6bdba27622aa0716fa518f3124b010e01"
   }
 }

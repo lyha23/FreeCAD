@@ -1,5 +1,4 @@
 {
-  "bbox_delta": 0.18,
   "bbox": {
     "max": [
       4.0000001,
@@ -13,14 +12,6 @@
     ]
   },
   "freecad_version": "1.2.0 revision 20260519",
-  "named_shapes": {
-    "Loft": {
-      "element_history_status_contains": [
-        "part_loft:thru_sections_history"
-      ],
-      "owner": "Loft"
-    }
-  },
   "object": "Loft",
   "object_fields": {
     "closed": false,

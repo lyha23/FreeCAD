@@ -22,17 +22,42 @@
         "Scale": 3,
         "ScaleVector": {
           "PropertyType": "App::PropertyVector",
-          "value": [2, 1, 0.5]
+          "value": [
+            2,
+            1,
+            0.5
+          ]
         },
         "LinkPlacement": {
           "PropertyType": "App::PropertyPlacement",
-          "Base": [5, 0, 0],
-          "Rotation": [0, 0, 0, 1]
+          "Base": [
+            5,
+            0,
+            0
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     }
   ],
   "recompute": {
-    "objs": ["BoxLink"]
+    "objs": [
+      "BoxLink"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:5fd9fa865032257f37c4e972b48b606d96f75c5ca79272b01dd12519c5a2b2fa"
   }
 }

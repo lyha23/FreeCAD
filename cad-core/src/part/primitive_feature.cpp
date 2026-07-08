@@ -410,7 +410,7 @@ void executePartLine(const app::DocumentObject& object, runtime::ComputeContext&
             object,
             context,
             maker.Shape(),
-            {{"primitive", "line"}, {"start", {x1, y1, z1}}, {"end", {x2, y2, z2}}},
+            {{"primitive", "line"}, {"feature", "part_line"}, {"start", {x1, y1, z1}}, {"end", {x2, y2, z2}}},
             runtime::ShapeValue::Kind::PartPrimitive,
             "occt_edge"
         );

@@ -1,0 +1,23 @@
+{
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "external_document_pending_reload"
+    ],
+    "element_reference_update_count": 0,
+    "result_objects": [
+      "ExternalFaceLink"
+    ]
+  },
+  "diagnostic_codes": [
+    "external_document_pending_reload"
+  ],
+  "oracle_evidence": {
+    "collector_result": "unsupported: link target ExternalBox was not created",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_diagnostics_contract",
+    "reason": "This fixture verifies CAD Core XLink pending external-document diagnostics; there is no native external target shape to collect.",
+    "reference": "cad-core/fixtures/c3m2/xlink-pending-external-document.json"
+  },
+  "reference": "CAD Core C3M2 pending external document diagnostics contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

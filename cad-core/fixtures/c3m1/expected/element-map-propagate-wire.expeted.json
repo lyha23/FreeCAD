@@ -1,0 +1,27 @@
+{
+  "cad_core_contract": {
+    "driver": "cad-core/build/cad-core-c3m1-topology-probe",
+    "objects": {
+      "Wire": {
+        "shape": "occt_wire",
+        "status": "ok"
+      }
+    },
+    "probe_case": "element-map-propagate-wire",
+    "required_named_shape_status": {
+      "Wire": [
+        "element_map_policy_propagate:make_element_wires",
+        "history_consumed:merge"
+      ]
+    }
+  },
+  "oracle_evidence": {
+    "collector_result": "unsupported: fixture has no Objects",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_topology_probe_contract",
+    "reason": "This case-only fixture is executed by the C3M1 topology probe and has no FreeCAD document graph for native expected collection.",
+    "reference": "cad-core/fixtures/c3m1/element-map-propagate-wire.json"
+  },
+  "reference": "CAD Core C3M1 ElementMapPolicy Propagate wire probe contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

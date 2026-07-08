@@ -1,27 +1,16 @@
 {
   "diagnostic_codes": [
-    "invalid_surface_source",
-    "invalid_support_target",
-    "invalid_support_source",
-    "invalid_order_target",
-    "invalid_order_source"
+    "unsupported_property",
+    "unsupported_property",
+    "unsupported_property",
+    "unsupported_property",
+    "unsupported_property"
   ],
+  "freecad_version": "1.2.0 revision 20260519",
   "objects": {
-    "InvalidSurface": {
-      "object_fields": {
-        "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
-      }
-    },
-    "InvalidSupportTarget": {
-      "object_fields": {
-        "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
-      }
-    },
-    "InvalidSupportSource": {
+    "InvalidOrderSource": {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
+      "native_error_code": "unsupported_property",
       "object_fields": {
         "feature": "part_filled_face",
         "helper": "Part.makeFilledFace",
@@ -29,13 +18,35 @@
       }
     },
     "InvalidOrderTarget": {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
+      "native_error_code": "unsupported_property",
       "object_fields": {
         "feature": "part_filled_face",
         "helper": "Part.makeFilledFace",
         "status": "error"
       }
     },
-    "InvalidOrderSource": {
+    "InvalidSupportSource": {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
+      "native_error_code": "unsupported_property",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidSupportTarget": {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
+      "native_error_code": "unsupported_property",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      }
+    },
+    "InvalidSurface": {
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Surface",
+      "native_error_code": "unsupported_property",
       "object_fields": {
         "feature": "part_filled_face",
         "helper": "Part.makeFilledFace",
@@ -43,7 +54,6 @@
       }
     }
   },
-  "oracle_kind": "cad_core_product_contract_diagnostics",
-  "reference": "CAD Core C6-M5 Surface/Supports/Orders diagnostic fixture; native helper oracle remains notCollected, so this file freezes request-local validation diagnostics only.",
+  "reference": "FreeCADCmd oracle from part-filling-surface-support-order-invalid-product.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::Plane, Part::FilledFace, Part::FilledFace, Part::FilledFace, Part::FilledFace, Part::FilledFace",
   "schema_version": "cad-core.freecad-expected.v1"
 }

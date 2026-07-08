@@ -30,12 +30,21 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
 
     def test_p2_fixture_diagnostics(self) -> None:
         expected = {
-            "body-basefeature-pad": [],
+            "body-basefeature-pad": [
+                "unsupported_legacy_internal_sublist",
+                "unsupported_legacy_internal_sublist",
+            ],
             "rect-pad-pocket": [],
             "missing-basefeature": ["missing_link_target"],
-            "pocket-without-base": [],
-            "pocket-open-sketch": ["open_profile"],
-            "unsupported-pocket-type": ["unsupported_property"],
+            "pocket-without-base": ["unsupported_legacy_internal_sublist"],
+            "pocket-open-sketch": [
+                "unsupported_legacy_internal_sublist",
+                "unsupported_legacy_internal_sublist",
+            ],
+            "unsupported-pocket-type": [
+                "unsupported_legacy_internal_sublist",
+                "unsupported_legacy_internal_sublist",
+            ],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):

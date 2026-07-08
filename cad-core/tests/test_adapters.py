@@ -1579,7 +1579,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["adapters"]["schema_parity"]["core_result_producers"],
-            ["cad_core::runtime::recomputeResultJson", "cad_core::part::partGeometryCurveResultJson"],
+            ["cad_core::runtime::recomputeResultJson"],
         )
         self.assertEqual(
             capabilities["adapters"]["stateless_result_channels"],
@@ -3084,8 +3084,9 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         conic_curves = capabilities["part_workbench"]["conic_curves"]
         self.assertEqual(conic_curves["status"], "done_part_geometry_curve_edge_consumer")
         self.assertEqual(conic_curves["dto"], "PartConicCurveDTO")
-        self.assertIn("partGeometryCurve", conic_curves["payload_keys"])
-        self.assertIn("partGeometryCurveConsumers", conic_curves["payload_keys"])
+        self.assertIn("Part::GeometryCurve", conic_curves["type_ids"])
+        self.assertIn("Part::Extrusion", conic_curves["type_ids"])
+        self.assertIn("Part::RuledSurface", conic_curves["type_ids"])
         self.assertIn("Part.Hyperbola", conic_curves["part_geometry_types"])
         self.assertIn("Part.Parabola", conic_curves["part_geometry_types"])
         self.assertIn("GeomAbs_Hyperbola", conic_curves["curve_types"])
@@ -3120,7 +3121,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             conic_curves["request_local_boundaries"],
         )
         self.assertIn(
-            "conic_edge_is_request_local_producer_not_document_object",
+            "conic_edge_uses_part_geometry_curve_object_envelope",
             conic_curves["request_local_boundaries"],
         )
         self.assertIn(

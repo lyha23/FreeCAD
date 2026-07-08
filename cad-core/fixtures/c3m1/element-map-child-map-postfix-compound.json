@@ -1,3 +1,27 @@
 {
-  "case": "element-map-child-map-postfix-compound"
+  "Objects": [
+    {
+      "Name": "C3M1Probe",
+      "ID": 1,
+      "TypeId": "CadCore::C3M1TopologyProbe",
+      "Properties": {
+        "ProbeCase": "element-map-child-map-postfix-compound"
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "C3M1Probe"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:22748eea2ca29dbc76572c1119afd0e70aed5f629885fc46ef73077d854ed5d6"
+  }
 }

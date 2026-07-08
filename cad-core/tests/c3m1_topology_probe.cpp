@@ -39,6 +39,42 @@ gp_Pnt pointFromJson(const nlohmann::json& value)
     return gp_Pnt(value.at(0).get<double>(), value.at(1).get<double>(), value.at(2).get<double>());
 }
 
+const nlohmann::json& propertyPayload(const nlohmann::json& value)
+{
+    if (value.is_object() && value.contains("PropertyType") && value.contains("value")) {
+        return value.at("value");
+    }
+    return value;
+}
+
+nlohmann::json normalizedProbeFixture(const nlohmann::json& fixture)
+{
+    if (!fixture.is_object() || !fixture.contains("Objects") || !fixture.at("Objects").is_array()) {
+        throw std::runtime_error("C3-M1 topology probe fixture must use top-level Objects");
+    }
+    for (const auto& object : fixture.at("Objects")) {
+        if (!object.is_object() || object.value("TypeId", "") != "CadCore::C3M1TopologyProbe") {
+            continue;
+        }
+        const auto propertiesIt = object.find("Properties");
+        if (propertiesIt == object.end() || !propertiesIt->is_object()) {
+            throw std::runtime_error("C3-M1 topology probe object requires Properties");
+        }
+        const auto caseIt = propertiesIt->find("ProbeCase");
+        if (caseIt == propertiesIt->end() || !propertyPayload(*caseIt).is_string()) {
+            throw std::runtime_error("C3-M1 topology probe object requires string ProbeCase");
+        }
+
+        nlohmann::json normalized = {{"case", propertyPayload(*caseIt).get<std::string>()}};
+        const auto shapeIt = propertiesIt->find("Shape");
+        if (shapeIt != propertiesIt->end()) {
+            normalized["shape"] = propertyPayload(*shapeIt);
+        }
+        return normalized;
+    }
+    throw std::runtime_error("C3-M1 topology probe fixture is missing CadCore::C3M1TopologyProbe object");
+}
+
 TopoDS_Shape polygonShapeFromFixture(const nlohmann::json& fixture)
 {
     const auto& shape = fixture.at("shape");
@@ -507,33 +543,34 @@ nlohmann::json runMakeElementSolidFromShell(const nlohmann::json& fixture)
 
 nlohmann::json runFixture(const nlohmann::json& fixture)
 {
-    const std::string fixtureCase = fixture.at("case").get<std::string>();
+    const nlohmann::json normalized = normalizedProbeFixture(fixture);
+    const std::string fixtureCase = normalized.at("case").get<std::string>();
     if (fixtureCase == "shapefix-delete-small-edge") {
-        return runShapeFixDeleteSmallEdge(fixture);
+        return runShapeFixDeleteSmallEdge(normalized);
     }
     if (fixtureCase == "element-map-policy-drop") {
-        return runElementMapPolicyDrop(fixture);
+        return runElementMapPolicyDrop(normalized);
     }
     if (fixtureCase == "element-map-propagate-wire") {
-        return runElementMapPolicyPropagateWire(fixture);
+        return runElementMapPolicyPropagateWire(normalized);
     }
     if (fixtureCase == "element-map-propagate-shell") {
-        return runElementMapPolicyPropagateShell(fixture);
+        return runElementMapPolicyPropagateShell(normalized);
     }
     if (fixtureCase == "element-map-child-map-postfix-compound") {
-        return runElementMapChildMapPostfix(fixture);
+        return runElementMapChildMapPostfix(normalized);
     }
     if (fixtureCase == "element-map-child-map-hash-key-compound") {
-        return runElementMapChildMapHashKey(fixture);
+        return runElementMapChildMapHashKey(normalized);
     }
     if (fixtureCase == "shapefix-wireframe-modified-history") {
-        return runShapeFixWireframeModifiedHistory(fixture);
+        return runShapeFixWireframeModifiedHistory(normalized);
     }
     if (fixtureCase == "mapper-history-ambiguous-split") {
-        return runMapperHistoryAmbiguousSplit(fixture);
+        return runMapperHistoryAmbiguousSplit(normalized);
     }
     if (fixtureCase == "make-element-solid-from-shell") {
-        return runMakeElementSolidFromShell(fixture);
+        return runMakeElementSolidFromShell(normalized);
     }
     throw std::runtime_error("unsupported C3-M1 topology probe case: " + fixtureCase);
 }

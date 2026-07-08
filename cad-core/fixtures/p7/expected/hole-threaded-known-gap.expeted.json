@@ -1,0 +1,29 @@
+{
+  "schema_version": "cad-core.expected.v1",
+  "reference": "CAD Core P7 fixture contract for hole-threaded-known-gap; not a FreeCAD native geometry expected.",
+  "diagnostic_codes": [
+    "execution_failed"
+  ],
+  "cad_core_contract": {
+    "diagnostic_codes": [
+      "execution_failed"
+    ],
+    "recompute_status": "ok",
+    "result_objects": [
+      "Hole",
+      "SketchHole"
+    ],
+    "recompute_rc": 0,
+    "fixture_type_ids": [
+      "Sketcher::SketchObject",
+      "PartDesign::Hole"
+    ]
+  },
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_p7_contract",
+    "reason": "The FreeCAD expected collector did not produce a native oracle for this fixture; this file records only CAD Core diagnostic/product contract evidence.",
+    "reference": "cad-core/fixtures/p7/hole-threaded-known-gap.json",
+    "collector_result": "FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow) (C) 2001-2026 FreeCAD contributors FreeCAD is free and open-source software licensed under the terms of LGPL2+ license. unsupported cad-core/fixtures/p7/hole-threaded-known-gap.json: PartDesign::Hole native oracle requires the Profile sketch AttachmentSupport/Support; detached placement-only Hole fixtures are geometry-equivalent CAD Core cases"
+  }
+}

@@ -12,6 +12,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Ellipsoid"]
+    "objs": [
+      "Ellipsoid"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:a1477da2f6466d923aa4718513feb0eb70d22160eac15b6bc275a3232cab54a5"
   }
 }

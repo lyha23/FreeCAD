@@ -108,5 +108,15 @@
     "objs": [
       "Loft"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:807f9d72a7eac663bb7012e25e6dd63aecb791949afae48c9fe8bc9df4244067"
   }
 }

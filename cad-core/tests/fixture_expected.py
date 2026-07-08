@@ -73,6 +73,19 @@ class ExpectedFixtureAssertions:
     def expected_freecad(self, group: str, fixture: str) -> dict:
         return json.loads((ROOT / "fixtures" / group / "expected" / f"{fixture}.freecad.json").read_text())
 
+    def expected_result_objects(self, expected: dict) -> dict[str, dict]:
+        if isinstance(expected.get("results"), list):
+            return {
+                str(item["object"]): item
+                for item in expected["results"]
+                if isinstance(item, dict) and "object" in item
+            }
+        if "objects" in expected:
+            return expected["objects"]
+        if "object" in expected:
+            return {str(expected["object"]): expected}
+        return {}
+
     def assert_sketch_internal_matches_expected(
         self,
         result: dict,
@@ -284,12 +297,9 @@ class ExpectedFixtureAssertions:
         expected = self.expected_freecad(group, fixture)
         if "known_gap" in expected:
             self.skipTest(f"{group}/{fixture}: {expected['known_gap']}")
-        if "objects" in expected:
-            default_bbox_delta = expected.get("bbox_delta", 1e-6)
-            for object_name, object_expected in expected["objects"].items():
-                self.assert_expected_object(result, object_name, object_expected, default_bbox_delta)
-        elif "object" in expected:
-            self.assert_expected_object(result, expected["object"], expected)
+        default_bbox_delta = expected.get("bbox_delta", 1e-6)
+        for object_name, object_expected in self.expected_result_objects(expected).items():
+            self.assert_expected_object(result, object_name, object_expected, default_bbox_delta)
 
         for object_name, named_shape_expected in expected.get("named_shapes", {}).items():
             self.assert_named_shape_matches_expected(result, object_name, named_shape_expected)

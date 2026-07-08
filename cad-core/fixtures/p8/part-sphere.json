@@ -13,6 +13,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Sphere"]
+    "objs": [
+      "Sphere"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:8312ee0b41b2ba522dbb749109801189e9373ab04fe0c87486c06887235594d8"
   }
 }

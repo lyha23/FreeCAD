@@ -1,18 +1,141 @@
 {
   "schema_version": "cad-core.c8m1-shapebinder-fixture.v1",
   "c8m1_case": "shape-binder-datum-fallback-line-plane-point",
-  "oracle_ids": ["C8M1-ORACLE-104"],
+  "oracle_ids": [
+    "C8M1-ORACLE-104"
+  ],
   "freecad_authority": [
     "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::getFilteredReferences()",
     "/home/user/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp::ShapeBinder::buildShapeFromReferences()"
   ],
   "Objects": [
-    {"Name": "AppLine", "ID": 1, "TypeId": "App::Line", "Properties": {"Placement": {"PropertyType": "App::PropertyPlacement", "Base": [1, 2, 3], "Rotation": [0, 0, 0, 1]}}},
-    {"Name": "AppPlane", "ID": 2, "TypeId": "App::Plane", "Properties": {"Placement": {"PropertyType": "App::PropertyPlacement", "Base": [4, 5, 6], "Rotation": [0, 0, 0, 1]}}},
-    {"Name": "AppPoint", "ID": 3, "TypeId": "App::Point", "Properties": {"Placement": {"PropertyType": "App::PropertyPlacement", "Base": [7, 8, 9], "Rotation": [0, 0, 0, 1]}}},
-    {"Name": "ShapeBinderLine", "ID": 4, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "AppLine", "SubList": []}]}}},
-    {"Name": "ShapeBinderPlane", "ID": 5, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "AppPlane", "SubList": []}]}}},
-    {"Name": "ShapeBinderPoint", "ID": 6, "TypeId": "PartDesign::ShapeBinder", "Properties": {"Support": {"PropertyType": "App::PropertyLinkSubList", "SubSet": [{"value": "AppPoint", "SubList": []}]}}}
+    {
+      "Name": "AppLine",
+      "ID": 1,
+      "TypeId": "App::Line",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            1,
+            2,
+            3
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "AppPlane",
+      "ID": 2,
+      "TypeId": "App::Plane",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            4,
+            5,
+            6
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "AppPoint",
+      "ID": 3,
+      "TypeId": "App::Point",
+      "Properties": {
+        "Placement": {
+          "PropertyType": "App::PropertyPlacement",
+          "Base": [
+            7,
+            8,
+            9
+          ],
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ShapeBinderLine",
+      "ID": 4,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "AppLine",
+              "SubList": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ShapeBinderPlane",
+      "ID": 5,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "AppPlane",
+              "SubList": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "Name": "ShapeBinderPoint",
+      "ID": 6,
+      "TypeId": "PartDesign::ShapeBinder",
+      "Properties": {
+        "Support": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "value": "AppPoint",
+              "SubList": []
+            }
+          ]
+        }
+      }
+    }
   ],
-  "recompute": {"objs": ["ShapeBinderLine", "ShapeBinderPlane", "ShapeBinderPoint"]}
+  "recompute": {
+    "objs": [
+      "ShapeBinderLine",
+      "ShapeBinderPlane",
+      "ShapeBinderPoint"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:c8f8fda6aefc035c0ad1c820e60e5eedaee17f23dc3510c99abd78ac52ed0931"
+  }
 }

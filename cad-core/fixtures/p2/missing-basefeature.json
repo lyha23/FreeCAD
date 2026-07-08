@@ -13,6 +13,18 @@
     }
   ],
   "recompute": {
-    "objs": ["BaseFeature"]
+    "objs": [
+      "BaseFeature"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:22d40569633b8c41cc4bebb56a2c25fef8930fae174dd93f0ee308e80c6bd5cf"
   }
 }

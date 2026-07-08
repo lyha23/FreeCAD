@@ -8,16 +8,34 @@
         "Type": "UpToShape",
         "UpToShape": {
           "PropertyType": "App::PropertyLinkSubList",
-          "value": ["BasePad"],
+          "value": [
+            "BasePad"
+          ],
           "SubSet": [
             {
               "value": "BasePad",
-              "SubList": ["Face1"]
+              "SubList": [
+                "Face1"
+              ]
             }
           ]
         }
       }
     }
   ],
-  "recompute": {"objs": ["Pad"]}
+  "recompute": {
+    "objs": [
+      "Pad"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:566f184e725a6a7c1acb6444997f1efa26b491c8f42cc040481b6b0f4f6f5fdc"
+  }
 }

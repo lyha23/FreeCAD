@@ -12,6 +12,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Box"]
+    "objs": [
+      "Box"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:ef962d13640cfceda5030dd23f0539f7c40aaf35ba5e4069c45723b615ad7465"
   }
 }

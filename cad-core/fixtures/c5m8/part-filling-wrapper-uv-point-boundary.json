@@ -17,8 +17,12 @@
         "BRepOffsetAPIMakeFillingUvPointOnSupport": {
           "PropertyType": "App::PropertyLinkSub",
           "value": "SupportPlane",
-          "SubList": ["Face1"],
-          "StableSubList": ["Face1"],
+          "SubList": [
+            "Face1"
+          ],
+          "StableSubList": [
+            "Face1"
+          ],
           "U": 0.5,
           "V": 0.5,
           "Order": "G1"
@@ -27,6 +31,18 @@
     }
   ],
   "recompute": {
-    "objs": ["WrapperUvPointOnSupport"]
+    "objs": [
+      "WrapperUvPointOnSupport"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:19b72c332fd993859ed7cf0b908ad0f1f5b74638cc5e0a74ded0181c0e57387c"
   }
 }

@@ -8,34 +8,67 @@
         "Constraints": [],
         "Geometry": [
           {
-            "end": [-1159.2030710329814, 505.6791233964473],
+            "end": [
+              -1159.2030710329814,
+              505.6791233964473
+            ],
             "id": 100001,
             "kind": "LineSegment",
-            "start": [-576.8599910448104, 505.6791233964473]
+            "start": [
+              -576.8599910448104,
+              505.6791233964473
+            ]
           },
           {
-            "end": [-1159.2030710329814, 177.90738250277218],
+            "end": [
+              -1159.2030710329814,
+              177.90738250277218
+            ],
             "id": 100002,
             "kind": "LineSegment",
-            "start": [-1159.2030710329814, 505.6791233964473]
+            "start": [
+              -1159.2030710329814,
+              505.6791233964473
+            ]
           },
           {
-            "end": [-576.8599910448104, 177.90738250277218],
+            "end": [
+              -576.8599910448104,
+              177.90738250277218
+            ],
             "id": 100003,
             "kind": "LineSegment",
-            "start": [-1159.2030710329814, 177.90738250277218]
+            "start": [
+              -1159.2030710329814,
+              177.90738250277218
+            ]
           },
           {
-            "end": [-576.8599910448104, 505.6791233964473],
+            "end": [
+              -576.8599910448104,
+              505.6791233964473
+            ],
             "id": 100004,
             "kind": "LineSegment",
-            "start": [-576.8599910448104, 177.90738250277218]
+            "start": [
+              -576.8599910448104,
+              177.90738250277218
+            ]
           }
         ],
         "Placement": {
-          "Base": [0, 0, 0],
+          "Base": [
+            0,
+            0,
+            0
+          ],
           "PropertyType": "App::PropertyPlacement",
-          "Rotation": [0, 0, 0, 1]
+          "Rotation": [
+            0,
+            0,
+            0,
+            1
+          ]
         }
       }
     },
@@ -47,21 +80,45 @@
         "Constraints": [],
         "Geometry": [
           {
-            "endTangent": [-21.51502514978904, -45.13428511457721],
+            "endTangent": [
+              -21.51502514978904,
+              -45.13428511457721
+            ],
             "id": 600001,
             "kind": "InterpolatedSpline",
             "points": [
-              [392.6107826879536, 450.32623967833206],
-              [771.9201355514127, -94.30988559694116],
-              [511.8191212394367, -639.9505835192742]
+              [
+                392.6107826879536,
+                450.32623967833206
+              ],
+              [
+                771.9201355514127,
+                -94.30988559694116
+              ],
+              [
+                511.8191212394367,
+                -639.9505835192742
+              ]
             ],
-            "startTangent": [28.575154107353796, -41.02999595102324]
+            "startTangent": [
+              28.575154107353796,
+              -41.02999595102324
+            ]
           }
         ],
         "Placement": {
-          "Base": [0, 0, 0],
+          "Base": [
+            0,
+            0,
+            0
+          ],
           "PropertyType": "App::PropertyPlacement",
-          "Rotation": [0.5, 0.5, 0.5, 0.5]
+          "Rotation": [
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ]
         }
       }
     },
@@ -87,8 +144,12 @@
           "PropertyType": "App::PropertyLinkSub",
           "ReferenceShadow": [],
           "ShadowSub": [],
-          "StableSubList": ["g600001"],
-          "SubList": ["Edge1"],
+          "StableSubList": [
+            "g600001"
+          ],
+          "SubList": [
+            "Edge1"
+          ],
           "value": "SketchPipeSpine"
         },
         "Transformation": "Constant",
@@ -111,8 +172,12 @@
               "FullSubList": [],
               "ReferenceShadow": [],
               "ShadowSub": [],
-              "StableSubList": ["AdditivePipe.FrontFace.Face1"],
-              "SubList": ["Face5"],
+              "StableSubList": [
+                "AdditivePipe.FrontFace.Face1"
+              ],
+              "SubList": [
+                "Face5"
+              ],
               "value": "AdditivePipe"
             }
           ]
@@ -122,8 +187,12 @@
           "PropertyType": "App::PropertyLinkSub",
           "ReferenceShadow": [],
           "ShadowSub": [],
-          "StableSubList": ["AdditivePipe.BackFace.Edge2"],
-          "SubList": ["Edge7"],
+          "StableSubList": [
+            "AdditivePipe.BackFace.Edge2"
+          ],
+          "SubList": [
+            "Edge7"
+          ],
           "value": "AdditivePipe"
         },
         "Refine": false,
@@ -153,6 +222,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Body"]
+    "objs": [
+      "Body"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:1515623dd69c28a834063f6dd2049851a72cd143cd9840fb93f8c847864bdcdc"
   }
 }

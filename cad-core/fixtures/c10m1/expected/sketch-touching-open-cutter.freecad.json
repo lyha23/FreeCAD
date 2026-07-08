@@ -9,7 +9,7 @@
     "shape": "occt_sketch_shape",
     "status": "ok"
   },
-  "reference": "FreeCADCmd Sketcher oracle from cad-core/fixtures/c10m1/sketch-touching-open-cutter.json. Source: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildInternals() calls FaceMakerBuildFace then WireJoiner; /home/user/Chili3DProject/FreeCAD/src/Mod/Part/App/WireJoiner.cpp::WireJoiner::getOpenWires() owns open cutter export after bounded FaceMaker split.",
+  "reference": "FreeCADCmd oracle from sketch-touching-open-cutter.json; objects: Sketcher::SketchObject",
   "schema_version": "cad-core.freecad-expected.v1",
   "sketch_external": {
     "construction_count": 0,

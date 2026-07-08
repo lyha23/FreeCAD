@@ -14,6 +14,18 @@
     }
   ],
   "recompute": {
-    "objs": ["Cylinder"]
+    "objs": [
+      "Cylinder"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:f941c2ee082ea6afed82a97775db498cffeba6cc914992c8083376afa0282f13"
   }
 }

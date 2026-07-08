@@ -1,41 +1,16 @@
 {
+  "diagnostic_codes": [
+    "unsupported_property"
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
+  "native_error": "Unsupported Part.makeFilledFace kwargs: Surface",
+  "native_error_code": "unsupported_property",
   "object": "FilledFace",
   "object_fields": {
-    "boundary_edge_count": 4,
-    "boundary_mode": "closed_wire",
     "feature": "part_filled_face",
-    "freecad_native_document_object": false,
     "helper": "Part.makeFilledFace",
-    "initial_surface_source_evidence": {
-      "object": "SupportPlane",
-      "shape_kind": "face",
-      "stable_subname": "Face1",
-      "subname": "Face1"
-    },
-    "shape": "occt_face",
-    "source_backed_helper": true,
-    "status": "ok",
-    "surface_source_status": "cad_core_product_contract_covered",
-    "surface_support_order_status": "source_backed_native_helper_oracle_known_gap",
-    "support_order_source_evidence": [],
-    "support_order_source_status": "not_used",
-    "topo_naming_history": "maker_history:filling"
+    "status": "error"
   },
-  "oracle_kind": "cad_core_product_contract",
-  "reference": "CAD Core C6-M5 Surface product-contract fixture; FreeCAD source authority is AppPartPy.cpp::makeFilledFace() surface kwarg and TopoShapeExpansion.cpp::makeElementFilledFace() LoadInitSurface(face). Native helper oracle remains notCollected.",
-  "schema_version": "cad-core.freecad-expected.v1",
-  "shape_summary": {
-    "topology_counts": {
-      "edges": 4,
-      "faces": 1,
-      "vertices": 4
-    },
-    "volume": 0.0
-  },
-  "topology_counts": {
-    "edges": 4,
-    "faces": 1,
-    "vertices": 4
-  },
-  "volume": 0.0
+  "reference": "FreeCADCmd oracle from part-filling-surface-initial-face-product.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::Plane, Part::FilledFace",
+  "schema_version": "cad-core.freecad-expected.v1"
 }

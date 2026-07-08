@@ -25,6 +25,26 @@
   },
   "reference": "FreeCADCmd oracle from part-filling-boundary-edges-default.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::FilledFace",
   "schema_version": "cad-core.freecad-expected.v1",
+  "shape_summary": {
+    "bbox": {
+      "max": [
+        2.0,
+        2.0,
+        1e-07
+      ],
+      "min": [
+        -2.0,
+        -2.0000000000000004,
+        -1e-07
+      ]
+    },
+    "topology_counts": {
+      "edges": 4,
+      "faces": 1,
+      "vertices": 4
+    },
+    "volume": 0.0
+  },
   "topology_counts": {
     "edges": 4,
     "faces": 1,

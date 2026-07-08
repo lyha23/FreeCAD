@@ -196,5 +196,15 @@
       "AdditivePipeAuxiliary",
       "AdditivePipeBinormal"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:fd21d425c0ff8146942d4058ded963b186beb9300dcd8696da7368bbb8ccd024"
   }
 }

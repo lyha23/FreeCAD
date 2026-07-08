@@ -1,0 +1,28 @@
+{
+  "cad_core_contract": {
+    "driver": "cad-core/build/cad-core-c3m1-topology-probe",
+    "objects": {
+      "Split": {
+        "shape": "splitter",
+        "status": "ok"
+      }
+    },
+    "probe_case": "mapper-history-ambiguous-split",
+    "required_named_shape_status": {
+      "Split": [
+        "history_consumed:generated_modified",
+        "terminal_history:split_deleted",
+        "subname_split_requires_reselect"
+      ]
+    }
+  },
+  "oracle_evidence": {
+    "collector_result": "unsupported: fixture has no Objects",
+    "freecad_native_parity": false,
+    "owner_class": "cad_core_topology_probe_contract",
+    "reason": "This case-only fixture is executed by the C3M1 topology probe and has no FreeCAD document graph for native expected collection.",
+    "reference": "cad-core/fixtures/c3m1/mapper-history-ambiguous-split.json"
+  },
+  "reference": "CAD Core C3M1 MapperHistory ambiguous split probe contract; not a FreeCAD native geometry expected.",
+  "schema_version": "cad-core.expected.v1"
+}

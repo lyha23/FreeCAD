@@ -129,5 +129,15 @@
       "Revolution",
       "Body"
     ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:de9c77c4e09881fc2c2672b3d19d3112c77294c6ce3f0aff76c5debd8abb36c2"
   }
 }

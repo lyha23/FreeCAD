@@ -5,6 +5,7 @@
       "object_fields": {
         "attached": true,
         "datum": "point",
+        "map_mode": "CenterOfMass",
         "point": [
           4.999999999999999,
           4.0,
@@ -17,6 +18,7 @@
       "object_fields": {
         "attached": true,
         "datum": "point",
+        "map_mode": "OnEdge",
         "point": [
           0.0,
           0.0,
@@ -29,6 +31,7 @@
       "object_fields": {
         "attached": true,
         "datum": "point",
+        "map_mode": "Vertex",
         "point": [
           0.0,
           0.0,

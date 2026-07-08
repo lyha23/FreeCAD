@@ -1,91 +1,23 @@
 {
-  "schema_version": "cad-core.freecad-expected.v1",
-  "reference": "CAD Core C6-M4 Part::Sweep located profile product-contract oracle; not FreeCAD native parity.",
-  "oracle_evidence": {
-    "contract": "SectionOptions[].Location profile placement request-local CAD Core product contract",
-    "freecad_native_parity": false,
-    "freecadcmd_location_overload_status": "notCollected",
-    "owner_class": "cad_core_product_contract"
-  },
-  "object": "Sweep",
+  "diagnostic_codes": [],
+  "diagnostic_split": [
+    {
+      "object": "Sweep",
+      "policy": "S2 must keep or document an explicit FreeCADCmd wrapper collector blocker",
+      "reason": "OCCError: NCollection_Array1::Value"
+    }
+  ],
+  "freecad_version": "1.2.0 revision 20260519",
   "object_fields": {
-    "status": "ok",
-    "feature": "part_sweep",
-    "shape": "occt_shell",
-    "spine": "PipeSpine",
-    "sections": [
-      "SketchPipeProfile"
-    ],
-    "solid": false,
-    "frenet": true,
-    "transition": "Transformed",
-    "linearize": false,
-    "topo_naming_history": "maker_history:pipeshell",
-    "contract": "cad_core_product_contract",
-    "contract_provenance": "cad_core_product_contract_non_parity",
-    "freecadcmd_location_overload_status": "notCollected",
-    "location_overload": {
-      "source_authority": "BRepOffsetAPI_MakePipeShellPyImp.cpp::add(Profile, Location, WithContact, WithCorrection)",
-      "product_strategy": "anchor_location_vertex_to_spine_start",
-      "freecadcmd_error": "OCCError: NCollection_Array1::Value",
-      "native_parity": false
+    "advanced": {},
+    "builder_status": {
+      "build_ok": false,
+      "shape_access_ok": false
     },
-    "advanced": {
-      "sections": [
-        {
-          "profile": "SketchPipeProfile",
-          "location": {
-            "target": "ProfileLocation",
-            "subname": "Vertex1"
-          },
-          "profile_placement": {
-            "contract": "cad_core_product_contract",
-            "source": "cad_core_product_contract",
-            "strategy": "anchor_location_vertex_to_spine_start",
-            "location_overload": "cad_core_product_contract_non_parity",
-            "freecadcmd_location_overload_status": "notCollected"
-          },
-          "with_contact": true,
-          "with_correction": true
-        }
-      ]
-    }
+    "dto": "PartSweepAdvancedPipeShellDTO",
+    "helper": "Part.BRepOffsetAPI_MakePipeShell",
+    "status": "diagnostic_only"
   },
-  "bbox": {
-    "min": [
-      0.0,
-      -0.5,
-      0.0
-    ],
-    "max": [
-      1.0,
-      0.5000000000000009,
-      4.0
-    ]
-  },
-  "topology_counts": {
-    "faces": 4,
-    "edges": 12,
-    "vertices": 8
-  },
-  "volume": 2.6666666666666665,
-  "named_shapes": {
-    "Sweep": {
-      "element_map_status": "history_partial",
-      "element_history_status_contains": [
-        "part_sweep:pipeshell_history",
-        "part_sweep:location_product_contract_profile_placement",
-        "history_consumed:generated_modified"
-      ],
-      "history_kinds_include": [
-        "generated",
-        "split"
-      ],
-      "history_source_prefixes": [
-        "PipeSpine",
-        "SketchPipeProfile"
-      ],
-      "elements_equal_subshapes": true
-    }
-  }
+  "reference": "FreeCADCmd wrapper oracle from part-sweep-located-profile-product.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Part::Vertex, Part::Sweep",
+  "schema_version": "cad-core.freecad-expected.v1"
 }

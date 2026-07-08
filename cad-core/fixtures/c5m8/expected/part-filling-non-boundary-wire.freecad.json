@@ -19,12 +19,34 @@
     "feature": "part_filled_face",
     "freecad_native_document_object": false,
     "helper": "Part.makeFilledFace",
+    "non_boundary_constraint_count": 3,
+    "non_boundary_constraints_status": "freecad_expected_backed",
     "source_backed_helper": true,
     "status": "ok",
     "topo_naming_history": "maker_history:filling"
   },
   "reference": "FreeCADCmd oracle from part-filling-non-boundary-wire.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::RegularPolygon, Part::FilledFace",
   "schema_version": "cad-core.freecad-expected.v1",
+  "shape_summary": {
+    "bbox": {
+      "max": [
+        2.0,
+        2.0,
+        0.0
+      ],
+      "min": [
+        -2.0,
+        -2.0000000000000004,
+        0.0
+      ]
+    },
+    "topology_counts": {
+      "edges": 4,
+      "faces": 1,
+      "vertices": 4
+    },
+    "volume": 0.0
+  },
   "topology_counts": {
     "edges": 4,
     "faces": 1,
