@@ -1,6 +1,7 @@
 id	non_goal	reason	reopen_condition	status
-C13M1-NONGOAL-001	FreeCAD mapped-name byte-level encoder	S1 confirmed C13-M1 is the response state publisher; raw #...:H... parity needs separate source audit and tests	User opens C13-M2 mapped-name parity	active
-C13M1-NONGOAL-002	Full fixture expected parity	S1 confirmed all phases contain many geometry/history families; first close focused round-trip output	Focused C13-M1 output is green and user asks for full parity	active
+C13M1-NONGOAL-001	FreeCAD mapped-name byte-level encoder	S1 confirmed C13-M1 is the response state publisher; raw #...:H... parity needs separate source audit and tests	User opens C13-M2 mapped-name parity	active_gap_classified_s4
+C13M1-NONGOAL-002	Full fixture expected parity	S1 confirmed all phases contain many geometry/history families; first close focused round-trip output	Focused C13-M1 output is green and user asks for full parity	active_after_s4
 C13M1-NONGOAL-003	Frontend my-chili3d consumer sync	S1 confirmed this repo owns cad-core response; frontend consumption belongs in my-chili3d	User switches repo/task to frontend	active
 C13M1-NONGOAL-004	Persistent backend topology cache	S1 confirmed CAD Core is stateless; topo state travels through request/response	Architecture boundary is explicitly changed	active
 C13M1-NONGOAL-005	Changing subname/fullSubname/stableSubname response semantics	S1 confirmed C13-M1 publishes state around existing response semantics; changing them risks frontend contract drift	Focused regression proves current semantics wrong	active
+C13M1-NONGOAL-006	Backfilling expected mapped-name strings from cad-core-res	S4 confirmed focused remaining differences are encoding and evidence projection gaps, not missing response state	User explicitly asks for a temporary fixture-string compatibility layer	active_s4

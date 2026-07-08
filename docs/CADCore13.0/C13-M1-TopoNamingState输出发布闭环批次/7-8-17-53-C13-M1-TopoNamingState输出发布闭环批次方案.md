@@ -2,9 +2,9 @@
 
 ## 背景
 
-`cad-core/fixtures/<phase>/expected/*.freecad.json` 已经普遍包含 `topoNamingState`，但当前 `cad-core` 正式 recompute response 没有输出该字段。现有代码只完成了输入侧：请求里的 `topoNamingState` 会进入 `Document` / `ComputeContext`，并在 `registerIndexedNamedShape()` 阶段把 persisted `elementMap.entries` 合并到当前 `NamedShape.elementMap`，用于 stable reference 恢复。
+`cad-core/fixtures/<phase>/expected/*.freecad.json` 已经普遍包含 `topoNamingState`。S3/S4 已补齐第一轮输出发布闭环：请求里的 `topoNamingState` 会进入 `Document` / `ComputeContext`，并在 `registerIndexedNamedShape()` 阶段把 persisted `elementMap.entries` 合并到当前 `NamedShape.elementMap`，用于 stable reference 恢复；正式 response 也会发布新的顶层 `topoNamingState`。
 
-C13-M1 要补齐反向路径：本轮 recompute 结束时，把 `NamedShape` / `ElementMap` / `mapperHistory` / response subshapes 汇总成新的 `topoNamingState`，返回给前端或下一次请求。
+C13-M1 后续 S5 只做发布闸门和 follow-up 拆分；FreeCAD raw mapped-name、child map key、mapper history id 字节级 parity 不在 S4 从 expected 字符串反推实现。
 
 ## 问题定义
 

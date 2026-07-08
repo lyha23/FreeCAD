@@ -500,5 +500,1226 @@
         }
       ]
     }
-  ]
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:433599b32b93b5f340f45f08c126a49762a01f261880620de46409b44b5d8ec6",
+    "objects": {
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "g1": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  8
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "g1",
+                "raw": "g1"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch",
+                "subname": "g1"
+              },
+              "target": {
+                "object": "Sketch",
+                "subname": "Edge1"
+              }
+            },
+            "g2": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  9
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "g2",
+                "raw": "g2"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch",
+                "subname": "g2"
+              },
+              "target": {
+                "object": "Sketch",
+                "subname": "Edge2"
+              }
+            },
+            "g3": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  10
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "g3",
+                "raw": "g3"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch",
+                "subname": "g3"
+              },
+              "target": {
+                "object": "Sketch",
+                "subname": "Edge3"
+              }
+            },
+            "g4": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  11
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "g4",
+                "raw": "g4"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch",
+                "subname": "g4"
+              },
+              "target": {
+                "object": "Sketch",
+                "subname": "Edge4"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge1",
+              "element_map": true,
+              "stable_subname": "g1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge2",
+              "element_map": true,
+              "stable_subname": "g2"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g2"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge3",
+              "element_map": true,
+              "stable_subname": "g3"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g3"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge4",
+              "element_map": true,
+              "stable_subname": "g4"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g4"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            }
+          }
+        ],
+        "objectHash": "sha256:f9eb89a5470a6ce9d04496976c2527e2dd11cc358b25eb25f7cff747630d79b3",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "Edge1",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "Edge2",
+            "sourceStableSubname": "g2",
+            "stableSubname": "g2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "Edge3",
+            "sourceStableSubname": "g3",
+            "stableSubname": "g3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "Edge4",
+            "sourceStableSubname": "g4",
+            "stableSubname": "g4",
+            "subname": "Edge4"
+          },
+          "InternalEdge1": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalEdge1",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1",
+            "subname": "InternalEdge1"
+          },
+          "InternalEdge2": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalEdge2",
+            "sourceStableSubname": "g2",
+            "stableSubname": "g2",
+            "subname": "InternalEdge2"
+          },
+          "InternalEdge3": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalEdge3",
+            "sourceStableSubname": "g3",
+            "stableSubname": "g3",
+            "subname": "InternalEdge3"
+          },
+          "InternalEdge4": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalEdge4",
+            "sourceStableSubname": "g4",
+            "stableSubname": "g4",
+            "subname": "InternalEdge4"
+          },
+          "InternalFace1": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalFace1",
+            "stableSubname": "g1;SKT;FAC",
+            "subname": "InternalFace1"
+          },
+          "InternalVertex1": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalVertex1",
+            "stableSubname": "Vertex1",
+            "subname": "InternalVertex1"
+          },
+          "InternalVertex2": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalVertex2",
+            "stableSubname": "Vertex2",
+            "subname": "InternalVertex2"
+          },
+          "InternalVertex3": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalVertex3",
+            "stableSubname": "Vertex3",
+            "subname": "InternalVertex3"
+          },
+          "InternalVertex4": {
+            "identityStatus": "stable",
+            "resolvedIndexed": "InternalVertex4",
+            "stableSubname": "Vertex4",
+            "subname": "InternalVertex4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "resolvedIndexed": "Vertex1",
+            "stableSubname": "",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "resolvedIndexed": "Vertex2",
+            "stableSubname": "",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "resolvedIndexed": "Vertex3",
+            "stableSubname": "",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "resolvedIndexed": "Vertex4",
+            "stableSubname": "",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "Sketch.InternalShape": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Edge1": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  13
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Edge1",
+                "raw": "Edge1"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalEdge1"
+              }
+            },
+            "Edge2": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  14
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Edge2",
+                "raw": "Edge2"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalEdge2"
+              }
+            },
+            "Edge3": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  15
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Edge3",
+                "raw": "Edge3"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalEdge3"
+              }
+            },
+            "Edge4": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  16
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Edge4",
+                "raw": "Edge4"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalEdge4"
+              }
+            },
+            "Vertex1": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  17
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Vertex1",
+                "raw": "Vertex1"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalVertex1"
+              }
+            },
+            "Vertex2": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  18
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Vertex2",
+                "raw": "Vertex2"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalVertex2"
+              }
+            },
+            "Vertex3": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  19
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Vertex3",
+                "raw": "Vertex3"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalVertex3"
+              }
+            },
+            "Vertex4": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  20
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Vertex4",
+                "raw": "Vertex4"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalVertex4"
+              }
+            },
+            "g1;SKT;FAC": {
+              "evidence": {
+                "mapperHistoryIndexes": [
+                  25
+                ],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "g1;SKT;FAC",
+                "raw": "g1;SKT;FAC"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Sketch.InternalShape",
+                "subname": "g1;SKT;FAC"
+              },
+              "target": {
+                "object": "Sketch.InternalShape",
+                "subname": "InternalFace1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge4",
+              "source_edge_index": 4,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge3",
+              "source_edge_index": 3,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge2",
+              "source_edge_index": 2,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge1",
+              "source_edge_index": 1,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge1",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge2",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge3",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge4",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex1",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex2",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex3",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex4",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "InternalFace1",
+              "element_map": true,
+              "stable_subname": "g1;SKT;FAC"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "g1;SKT;FAC"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          }
+        ],
+        "objectHash": "sha256:932804ce571e878d520068ae7274d2ec8b1ce22bb2e761339252c04469026a67",
+        "subshapes": {
+          "InternalEdge1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge1",
+            "subname": "InternalEdge1"
+          },
+          "InternalEdge2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge2",
+            "subname": "InternalEdge2"
+          },
+          "InternalEdge3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge3",
+            "subname": "InternalEdge3"
+          },
+          "InternalEdge4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge4",
+            "subname": "InternalEdge4"
+          },
+          "InternalFace1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalFace1",
+            "subname": "InternalFace1"
+          },
+          "InternalVertex1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex1",
+            "subname": "InternalVertex1"
+          },
+          "InternalVertex2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex2",
+            "subname": "InternalVertex2"
+          },
+          "InternalVertex3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex3",
+            "subname": "InternalVertex3"
+          },
+          "InternalVertex4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex4",
+            "subname": "InternalVertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

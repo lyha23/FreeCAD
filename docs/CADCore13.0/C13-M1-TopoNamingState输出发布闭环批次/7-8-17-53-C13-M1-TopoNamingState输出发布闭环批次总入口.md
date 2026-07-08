@@ -15,8 +15,8 @@
 
 - `ComputeContext` 已经保存输入 `topoNamingState`。
 - `runtime/recompute.cpp` 已经用输入 state 合并旧 `ElementMap` alias。
-- 正式 response 尚未发布新的 `topoNamingState`。
-- 本批次先补发布闭环，不做 FreeCAD mapped-name 字节级 parity。
+- 正式 response 已发布新的顶层 `topoNamingState`，S4 已验证 focused outputs、adapter channel、round-trip 消费和 legacy output branch。
+- 本批次先收口发布闭环；FreeCAD mapped-name、child map key、mapper history id 字节级 parity 继续作为后续 gap，不在 C13-M1 S4 反推 expected 字符串实现。
 
 ## 使用方式
 

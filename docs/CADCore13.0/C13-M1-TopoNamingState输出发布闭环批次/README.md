@@ -2,7 +2,7 @@
 
 C13-M1 目标是让 `cad-core recompute` 的正式 response 携带可消费的 `topoNamingState`，并让输出结构对齐 `cad-core/fixtures/<phase>/expected/*.freecad.json` 中的 `topoNamingState` schema。
 
-当前代码已经有一半闭环：`app::parseDocument()` 会读取请求侧 `topoNamingState`，`ComputeContext` 会保存它，`runtime/recompute.cpp` 会用输入 state 的 `elementMap.entries` 补回 `NamedShape.elementMap`，reference resolution 也已经优先消费 `NamedShape` / `ElementMap`。缺口在反向发布：正式 `recomputeResultJson()` 当前只返回 `results`、`elementReferenceUpdates`、`documentObjectUpdates`、`diagnostics` 和 `binaryPayloads`，没有把本轮 `context.namedShapes`、`responseSubshapes()` 和对象 hash 打包成新的 `topoNamingState`。
+当前 S4 已验证输出闭环：`app::parseDocument()` 会读取请求侧 `topoNamingState`，`ComputeContext` 会保存它，`runtime/recompute.cpp` 会用输入 state 的 `elementMap.entries` 补回 `NamedShape.elementMap`，reference resolution 优先消费 `NamedShape` / `ElementMap`；正式 `recomputeResultJson()` 现在会把本轮 `context.namedShapes`、`responseSubshapes()` 和对象 hash 打包成新的顶层 `topoNamingState`。剩余 mapped-name、child map key、mapper history id 字节级 parity 已归类为后续 gap，不在 C13-M1 S4 扩大实现。
 
 ## 当前基线
 
@@ -73,7 +73,7 @@ C13-M1 目标是让 `cad-core recompute` 的正式 response 携带可消费的 `
 - S1：复核 FreeCAD / collector 输出合同，确认哪些字段是 C13-M1 必须对齐，哪些进入后续 mapped-name parity。
 - S2：补 focused red tests：正式 response 必须带 `topoNamingState`，且 persisted state 可被下一次 recompute 消费。
 - S3：实现 runtime topo state 发布器，并接入 `recomputeResultJson()`。
-- S4：验证 adapters、fixture expected 小范围和 reference update 不回退。
+- S4：验证 adapters、fixture expected 小范围和 reference update 不回退。（已完成：focused output、adapter channel、round-trip、legacy branch 均通过，剩余 expected 差异已分类。）
 - S5：发布闸门：更新矩阵、capability/docs，记录剩余 mapped-name gap。
 
 ## 非目标
