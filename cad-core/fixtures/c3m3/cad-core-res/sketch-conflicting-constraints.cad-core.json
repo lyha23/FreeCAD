@@ -1,0 +1,23 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "sketch_solver_conflict",
+      "message": "Sketch has conflicting constraints",
+      "object": "Sketch",
+      "property": "Constraints",
+      "severity": "error",
+      "stage": "solver",
+      "target": "Constraints[1,2]"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Sketch",
+      "subshapes": []
+    }
+  ]
+}

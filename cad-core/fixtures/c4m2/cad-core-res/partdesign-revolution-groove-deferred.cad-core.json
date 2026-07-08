@@ -1,0 +1,1456 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_property",
+      "message": "UpToFace Type requires an App::PropertyLinkSub UpToFace property",
+      "object": "GrooveUpToFace",
+      "property": "UpToFace",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "RevolutionTwoAngles:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                1.4142135623730951,
+                0.0,
+                1.414213562373095
+              ],
+              [
+                1.5036796149579548,
+                0.0,
+                1.3186916302001375
+              ],
+              [
+                1.5867066805824703,
+                0.0,
+                1.217522858017441
+              ],
+              [
+                1.6629392246050905,
+                0.0,
+                1.1111404660392044
+              ],
+              [
+                1.7320508075688774,
+                0.0,
+                0.9999999999999999
+              ],
+              [
+                1.7937454830653767,
+                0.0,
+                0.8845773804380024
+              ],
+              [
+                1.8477590650225735,
+                0.0,
+                0.7653668647301793
+              ],
+              [
+                1.8938602589902114,
+                0.0,
+                0.6428789306063232
+              ],
+              [
+                1.9318516525781366,
+                0.0,
+                0.5176380902050416
+              ],
+              [
+                1.9615705608064609,
+                0.0,
+                0.3901806440322565
+              ],
+              [
+                1.982889722747621,
+                0.0,
+                0.261052384440103
+              ],
+              [
+                1.9957178464772072,
+                0.0,
+                0.13080625846028615
+              ],
+              [
+                2.0,
+                0.0,
+                -2.0293072715139053e-17
+              ],
+              [
+                1.995717846477207,
+                0.0,
+                -0.1308062584602863
+              ],
+              [
+                1.9828897227476208,
+                0.0,
+                -0.2610523844401033
+              ],
+              [
+                1.9615705608064609,
+                0.0,
+                -0.3901806440322563
+              ],
+              [
+                1.9318516525781366,
+                0.0,
+                -0.5176380902050416
+              ],
+              [
+                1.8938602589902112,
+                0.0,
+                -0.6428789306063234
+              ],
+              [
+                1.8477590650225735,
+                0.0,
+                -0.7653668647301796
+              ],
+              [
+                1.7937454830653765,
+                0.0,
+                -0.8845773804380024
+              ],
+              [
+                1.7320508075688772,
+                0.0,
+                -1.0000000000000002
+              ],
+              [
+                1.6629392246050905,
+                0.0,
+                -1.1111404660392044
+              ],
+              [
+                1.5867066805824703,
+                0.0,
+                -1.217522858017441
+              ],
+              [
+                1.5036796149579548,
+                0.0,
+                -1.3186916302001375
+              ],
+              [
+                1.414213562373095,
+                0.0,
+                -1.4142135623730951
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                2.121320343559643,
+                0.0,
+                2.1213203435596424
+              ],
+              [
+                2.255519422436932,
+                0.0,
+                1.9780374453002063
+              ],
+              [
+                2.3800600208737053,
+                0.0,
+                1.8262842870261615
+              ],
+              [
+                2.4944088369076356,
+                0.0,
+                1.6667106990588065
+              ],
+              [
+                2.598076211353316,
+                0.0,
+                1.5
+              ],
+              [
+                2.6906182245980648,
+                0.0,
+                1.3268660706570037
+              ],
+              [
+                2.77163859753386,
+                0.0,
+                1.148050297095269
+              ],
+              [
+                2.840790388485317,
+                0.0,
+                0.9643183959094848
+              ],
+              [
+                2.8977774788672046,
+                0.0,
+                0.7764571353075622
+              ],
+              [
+                2.9423558412096913,
+                0.0,
+                0.5852709660483846
+              ],
+              [
+                2.9743345841214315,
+                0.0,
+                0.3915785766601546
+              ],
+              [
+                2.9935767697158107,
+                0.0,
+                0.19620938769042925
+              ],
+              [
+                3.0,
+                0.0,
+                4.806501386148017e-17
+              ],
+              [
+                2.99357676971581,
+                0.0,
+                -0.19620938769042942
+              ],
+              [
+                2.9743345841214315,
+                0.0,
+                -0.39157857666015516
+              ],
+              [
+                2.9423558412096917,
+                0.0,
+                -0.5852709660483845
+              ],
+              [
+                2.897777478867205,
+                0.0,
+                -0.7764571353075623
+              ],
+              [
+                2.840790388485317,
+                0.0,
+                -0.9643183959094854
+              ],
+              [
+                2.77163859753386,
+                0.0,
+                -1.148050297095269
+              ],
+              [
+                2.6906182245980648,
+                0.0,
+                -1.3268660706570037
+              ],
+              [
+                2.598076211353316,
+                0.0,
+                -1.5000000000000007
+              ],
+              [
+                2.4944088369076356,
+                0.0,
+                -1.666710699058807
+              ],
+              [
+                2.3800600208737057,
+                0.0,
+                -1.8262842870261615
+              ],
+              [
+                2.255519422436932,
+                0.0,
+                -1.9780374453002059
+              ],
+              [
+                2.1213203435596424,
+                0.0,
+                -2.121320343559643
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                1.4142135623730951,
+                0.0,
+                1.414213562373095
+              ],
+              [
+                2.121320343559643,
+                0.0,
+                2.1213203435596424
+              ]
+            ],
+            "stableSubname": "SketchRevolution.Edge1"
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                1.4142135623730951,
+                0.0,
+                -1.414213562373095
+              ],
+              [
+                2.121320343559643,
+                0.0,
+                -2.1213203435596424
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                2.121320343559643,
+                1.0,
+                2.1213203435596424
+              ],
+              [
+                2.255519422436932,
+                1.0,
+                1.9780374453002063
+              ],
+              [
+                2.3800600208737053,
+                1.0,
+                1.8262842870261615
+              ],
+              [
+                2.4944088369076356,
+                1.0,
+                1.6667106990588065
+              ],
+              [
+                2.598076211353316,
+                1.0,
+                1.5
+              ],
+              [
+                2.6906182245980648,
+                1.0,
+                1.3268660706570037
+              ],
+              [
+                2.77163859753386,
+                1.0,
+                1.148050297095269
+              ],
+              [
+                2.840790388485317,
+                1.0,
+                0.9643183959094848
+              ],
+              [
+                2.8977774788672046,
+                1.0,
+                0.7764571353075622
+              ],
+              [
+                2.9423558412096913,
+                1.0,
+                0.5852709660483846
+              ],
+              [
+                2.9743345841214315,
+                1.0,
+                0.3915785766601546
+              ],
+              [
+                2.9935767697158107,
+                1.0,
+                0.19620938769042925
+              ],
+              [
+                3.0,
+                1.0,
+                4.806501386148017e-17
+              ],
+              [
+                2.99357676971581,
+                1.0,
+                -0.19620938769042942
+              ],
+              [
+                2.9743345841214315,
+                1.0,
+                -0.39157857666015516
+              ],
+              [
+                2.9423558412096917,
+                1.0,
+                -0.5852709660483845
+              ],
+              [
+                2.897777478867205,
+                1.0,
+                -0.7764571353075623
+              ],
+              [
+                2.840790388485317,
+                1.0,
+                -0.9643183959094854
+              ],
+              [
+                2.77163859753386,
+                1.0,
+                -1.148050297095269
+              ],
+              [
+                2.6906182245980648,
+                1.0,
+                -1.3268660706570037
+              ],
+              [
+                2.598076211353316,
+                1.0,
+                -1.5000000000000007
+              ],
+              [
+                2.4944088369076356,
+                1.0,
+                -1.666710699058807
+              ],
+              [
+                2.3800600208737057,
+                1.0,
+                -1.8262842870261615
+              ],
+              [
+                2.255519422436932,
+                1.0,
+                -1.9780374453002059
+              ],
+              [
+                2.1213203435596424,
+                1.0,
+                -2.121320343559643
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                2.121320343559643,
+                0.0,
+                2.1213203435596424
+              ],
+              [
+                2.121320343559643,
+                1.0,
+                2.1213203435596424
+              ]
+            ],
+            "stableSubname": "SketchRevolution.Edge2"
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                2.121320343559643,
+                0.0,
+                -2.1213203435596424
+              ],
+              [
+                2.121320343559643,
+                1.0,
+                -2.1213203435596424
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                1.4142135623730951,
+                1.0,
+                1.414213562373095
+              ],
+              [
+                1.5036796149579548,
+                1.0,
+                1.3186916302001375
+              ],
+              [
+                1.5867066805824703,
+                1.0,
+                1.217522858017441
+              ],
+              [
+                1.6629392246050905,
+                1.0,
+                1.1111404660392044
+              ],
+              [
+                1.7320508075688774,
+                1.0,
+                0.9999999999999999
+              ],
+              [
+                1.7937454830653767,
+                1.0,
+                0.8845773804380024
+              ],
+              [
+                1.8477590650225735,
+                1.0,
+                0.7653668647301793
+              ],
+              [
+                1.8938602589902114,
+                1.0,
+                0.6428789306063232
+              ],
+              [
+                1.9318516525781366,
+                1.0,
+                0.5176380902050416
+              ],
+              [
+                1.9615705608064609,
+                1.0,
+                0.3901806440322565
+              ],
+              [
+                1.982889722747621,
+                1.0,
+                0.261052384440103
+              ],
+              [
+                1.9957178464772072,
+                1.0,
+                0.13080625846028615
+              ],
+              [
+                2.0,
+                1.0,
+                -2.0293072715139053e-17
+              ],
+              [
+                1.995717846477207,
+                1.0,
+                -0.1308062584602863
+              ],
+              [
+                1.9828897227476208,
+                1.0,
+                -0.2610523844401033
+              ],
+              [
+                1.9615705608064609,
+                1.0,
+                -0.3901806440322563
+              ],
+              [
+                1.9318516525781366,
+                1.0,
+                -0.5176380902050416
+              ],
+              [
+                1.8938602589902112,
+                1.0,
+                -0.6428789306063234
+              ],
+              [
+                1.8477590650225735,
+                1.0,
+                -0.7653668647301796
+              ],
+              [
+                1.7937454830653765,
+                1.0,
+                -0.8845773804380024
+              ],
+              [
+                1.7320508075688772,
+                1.0,
+                -1.0000000000000002
+              ],
+              [
+                1.6629392246050905,
+                1.0,
+                -1.1111404660392044
+              ],
+              [
+                1.5867066805824703,
+                1.0,
+                -1.217522858017441
+              ],
+              [
+                1.5036796149579548,
+                1.0,
+                -1.3186916302001375
+              ],
+              [
+                1.414213562373095,
+                1.0,
+                -1.4142135623730951
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                2.121320343559643,
+                1.0,
+                2.1213203435596424
+              ],
+              [
+                1.4142135623730954,
+                1.0,
+                1.414213562373095
+              ]
+            ],
+            "stableSubname": "SketchRevolution.Edge3"
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                2.121320343559643,
+                1.0,
+                -2.1213203435596424
+              ],
+              [
+                1.4142135623730951,
+                1.0,
+                -1.4142135623730951
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                1.4142135623730951,
+                1.0,
+                1.414213562373095
+              ],
+              [
+                1.4142135623730951,
+                0.0,
+                1.414213562373095
+              ]
+            ],
+            "stableSubname": "SketchRevolution.Edge4"
+          },
+          {
+            "id": "RevolutionTwoAngles:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                1.4142135623730951,
+                1.0,
+                -1.414213562373095
+              ],
+              [
+                1.4142135623730951,
+                0.0,
+                -1.414213562373095
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face1",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face2",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face3",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face4",
+          "RevolutionTwoAngles:Face5",
+          "RevolutionTwoAngles:Face5",
+          "RevolutionTwoAngles:Face6",
+          "RevolutionTwoAngles:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          5,
+          1,
+          4,
+          1,
+          0,
+          6,
+          7,
+          5,
+          6,
+          5,
+          4,
+          8,
+          6,
+          9,
+          8,
+          7,
+          6,
+          10,
+          9,
+          11,
+          10,
+          8,
+          9,
+          12,
+          11,
+          13,
+          12,
+          10,
+          11,
+          14,
+          13,
+          15,
+          14,
+          12,
+          13,
+          16,
+          2,
+          1,
+          16,
+          17,
+          2,
+          18,
+          1,
+          5,
+          18,
+          16,
+          1,
+          19,
+          5,
+          7,
+          19,
+          18,
+          5,
+          20,
+          7,
+          8,
+          20,
+          19,
+          7,
+          21,
+          8,
+          10,
+          21,
+          20,
+          8,
+          22,
+          10,
+          12,
+          22,
+          21,
+          10,
+          23,
+          12,
+          14,
+          23,
+          22,
+          12,
+          23,
+          24,
+          25,
+          22,
+          25,
+          26,
+          22,
+          23,
+          25,
+          16,
+          27,
+          28,
+          16,
+          29,
+          27,
+          16,
+          28,
+          17,
+          21,
+          22,
+          26,
+          18,
+          29,
+          16,
+          20,
+          26,
+          30,
+          20,
+          21,
+          26,
+          19,
+          31,
+          29,
+          19,
+          30,
+          31,
+          19,
+          29,
+          18,
+          19,
+          20,
+          30,
+          0,
+          28,
+          27,
+          0,
+          3,
+          28,
+          4,
+          27,
+          29,
+          4,
+          0,
+          27,
+          6,
+          29,
+          31,
+          6,
+          4,
+          29,
+          9,
+          31,
+          30,
+          9,
+          6,
+          31,
+          11,
+          30,
+          26,
+          11,
+          9,
+          30,
+          13,
+          26,
+          25,
+          13,
+          11,
+          26,
+          15,
+          25,
+          24,
+          15,
+          13,
+          25,
+          17,
+          3,
+          2,
+          17,
+          28,
+          3,
+          15,
+          23,
+          14,
+          24,
+          23,
+          15
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "RevolutionTwoAngles:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              1.4142135623730951,
+              0.0,
+              1.414213562373095
+            ]
+          },
+          {
+            "id": "RevolutionTwoAngles:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.4142135623730951,
+              0.0,
+              -1.414213562373095
+            ]
+          },
+          {
+            "id": "RevolutionTwoAngles:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              2.121320343559643,
+              0.0,
+              2.1213203435596424
+            ]
+          },
+          {
+            "id": "RevolutionTwoAngles:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              2.121320343559643,
+              0.0,
+              -2.1213203435596424
+            ]
+          },
+          {
+            "id": "RevolutionTwoAngles:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              2.121320343559643,
+              1.0,
+              2.1213203435596424
+            ]
+          },
+          {
+            "id": "RevolutionTwoAngles:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              2.121320343559643,
+              1.0,
+              -2.1213203435596424
+            ]
+          },
+          {
+            "id": "RevolutionTwoAngles:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              1.4142135623730951,
+              1.0,
+              1.414213562373095
+            ]
+          },
+          {
+            "id": "RevolutionTwoAngles:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              1.4142135623730951,
+              1.0,
+              -1.414213562373095
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            1.6934483984565685,
+            0.0,
+            1.064064153030673
+          ],
+          [
+            2.540172597684853,
+            0.0,
+            1.5960962295460095
+          ],
+          [
+            2.121320343559643,
+            0.0,
+            2.1213203435596424
+          ],
+          [
+            1.4142135623730951,
+            0.0,
+            1.414213562373095
+          ],
+          [
+            1.8877666606167351,
+            0.0,
+            0.6605581239103341
+          ],
+          [
+            2.831649990925103,
+            0.0,
+            0.9908371858655012
+          ],
+          [
+            1.987424419786485,
+            0.0,
+            0.22392895220661557
+          ],
+          [
+            2.9811366296797277,
+            0.0,
+            0.33589342830992336
+          ],
+          [
+            2.9811366296797277,
+            0.0,
+            -0.3358934283099235
+          ],
+          [
+            1.9874244197864852,
+            0.0,
+            -0.22392895220661582
+          ],
+          [
+            2.831649990925103,
+            0.0,
+            -0.9908371858655014
+          ],
+          [
+            1.8877666606167351,
+            0.0,
+            -0.6605581239103343
+          ],
+          [
+            2.5401725976848524,
+            0.0,
+            -1.59609622954601
+          ],
+          [
+            1.6934483984565685,
+            0.0,
+            -1.0640641530306734
+          ],
+          [
+            2.121320343559643,
+            0.0,
+            -2.1213203435596424
+          ],
+          [
+            1.4142135623730951,
+            0.0,
+            -1.414213562373095
+          ],
+          [
+            2.540172597684853,
+            1.0,
+            1.5960962295460095
+          ],
+          [
+            2.121320343559643,
+            1.0,
+            2.1213203435596424
+          ],
+          [
+            2.831649990925103,
+            1.0,
+            0.9908371858655012
+          ],
+          [
+            2.9811366296797277,
+            1.0,
+            0.33589342830992336
+          ],
+          [
+            2.9811366296797277,
+            1.0,
+            -0.3358934283099235
+          ],
+          [
+            2.831649990925103,
+            1.0,
+            -0.9908371858655014
+          ],
+          [
+            2.5401725976848524,
+            1.0,
+            -1.59609622954601
+          ],
+          [
+            2.121320343559643,
+            1.0,
+            -2.1213203435596424
+          ],
+          [
+            1.4142135623730951,
+            1.0,
+            -1.414213562373095
+          ],
+          [
+            1.6934483984565685,
+            1.0,
+            -1.0640641530306734
+          ],
+          [
+            1.8877666606167351,
+            1.0,
+            -0.6605581239103343
+          ],
+          [
+            1.6934483984565685,
+            1.0,
+            1.064064153030673
+          ],
+          [
+            1.4142135623730951,
+            1.0,
+            1.414213562373095
+          ],
+          [
+            1.8877666606167351,
+            1.0,
+            0.6605581239103341
+          ],
+          [
+            1.9874244197864852,
+            1.0,
+            -0.22392895220661582
+          ],
+          [
+            1.987424419786485,
+            1.0,
+            0.22392895220661557
+          ]
+        ]
+      },
+      "object": "RevolutionTwoAngles",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Edge11",
+          "id": "RevolutionTwoAngles:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "SketchRevolution.Edge4",
+          "subname": "SketchRevolution.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Edge3",
+          "id": "RevolutionTwoAngles:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "SketchRevolution.Edge1",
+          "subname": "SketchRevolution.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Edge6",
+          "id": "RevolutionTwoAngles:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "SketchRevolution.Edge2",
+          "subname": "SketchRevolution.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Edge9",
+          "id": "RevolutionTwoAngles:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "SketchRevolution.Edge3",
+          "subname": "SketchRevolution.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Face5",
+          "id": "RevolutionTwoAngles:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "SketchRevolution.Face1",
+          "subname": "SketchRevolution.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Vertex1",
+          "id": "RevolutionTwoAngles:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "SketchRevolution.Vertex1",
+          "subname": "SketchRevolution.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Vertex3",
+          "id": "RevolutionTwoAngles:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "SketchRevolution.Vertex2",
+          "subname": "SketchRevolution.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Vertex5",
+          "id": "RevolutionTwoAngles:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "SketchRevolution.Vertex3",
+          "subname": "SketchRevolution.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "RevolutionTwoAngles.SketchRevolution.Vertex7",
+          "id": "RevolutionTwoAngles:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "SketchRevolution.Vertex4",
+          "subname": "SketchRevolution.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RevolutionTwoAngles:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        }
+      ]
+    },
+    {
+      "mesh": null,
+      "object": "GrooveUpToFace",
+      "subshapes": []
+    }
+  ]
+}

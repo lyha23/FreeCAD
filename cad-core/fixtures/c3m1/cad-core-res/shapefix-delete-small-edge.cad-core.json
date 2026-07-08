@@ -1,0 +1,20 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_type",
+      "message": "Unsupported TypeId CadCore::C3M1TopologyProbe",
+      "object": "C3M1Probe",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "C3M1Probe",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_surface_source",
+      "message": "Part.makeFilledFace initial surface must resolve to a face",
+      "object": "InvalidSurface",
+      "property": "Surface",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge1",
+      "target": "Profile"
+    },
+    {
+      "code": "invalid_support_target",
+      "message": "Part.makeFilledFace support target must resolve to an edge",
+      "object": "InvalidSupportTarget",
+      "property": "Supports",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face1",
+      "target": "SupportPlane"
+    },
+    {
+      "code": "invalid_support_source",
+      "message": "Part.makeFilledFace support face must resolve to a face",
+      "object": "InvalidSupportSource",
+      "property": "Supports",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge1",
+      "target": "Profile"
+    },
+    {
+      "code": "invalid_order_target",
+      "message": "Part.makeFilledFace Orders target must reference a Boundary source",
+      "object": "InvalidOrderTarget",
+      "property": "Orders",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face1",
+      "target": "SupportPlane"
+    },
+    {
+      "code": "invalid_order_source",
+      "message": "Part.makeFilledFace Orders order must be C0/G1/C1/G2/C2/C3/CN or matching enum index",
+      "object": "InvalidOrderSource",
+      "property": "Orders",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge1",
+      "target": "Profile"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "InvalidSurface",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidSupportTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidSupportSource",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidOrderTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidOrderSource",
+      "subshapes": []
+    }
+  ]
+}

@@ -14,5 +14,9 @@
     "status": "error"
   },
   "reference": "FreeCADCmd oracle from part-geomplate-g1-curve-on-surface.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Plane, Part::Line, Part::Line, Part::Line, Part::GeomPlateSurface",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "schema_version": "cad-core.freecad-expected.v1",
+  "known_gap": {
+    "kind": "geomplate_g1_curve_on_surface_native_oracle_blocked",
+    "delete_condition": "Delete after FreeCADCmd can expose stable Adaptor3d_CurveOnSurface G1 curve-on-surface oracle evidence."
+  }
 }

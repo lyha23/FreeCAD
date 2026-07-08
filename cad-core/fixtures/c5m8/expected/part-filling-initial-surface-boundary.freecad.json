@@ -12,5 +12,12 @@
     "status": "error"
   },
   "reference": "FreeCADCmd oracle from part-filling-initial-surface-boundary.json; Part::FilledFace is a cad-core helper translated to Part.makeFilledFace(...); objects: Part::RegularPolygon, Part::Plane, Part::FilledFace",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "schema_version": "cad-core.freecad-expected.v1",
+  "known_gap": {
+    "kind": "part_filling_initial_surface_native_helper_oracle_blocked",
+    "cad_core_contract": {
+      "status": "request_local_source_backed_product_contract"
+    },
+    "delete_condition": "Delete after Part.makeFilledFace native helper oracle supports these kwargs and returns stable expected JSON."
+  }
 }

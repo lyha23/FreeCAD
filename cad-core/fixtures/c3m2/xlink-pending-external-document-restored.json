@@ -30,7 +30,10 @@
             "currentLabel": "External Assembly",
             "currentStatus": "restored",
             "allowPartial": true
-          }
+          },
+          "StableSubList": [
+            "ExternalBox.Face1"
+          ]
         },
         "LinkTransform": false
       }
@@ -48,7 +51,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "ExternalBox": {
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "indexed_only",
+          "entries": {
+            "ExternalBox.Face1": {
+              "target": {
+                "object": "ExternalBox",
+                "subname": "Face1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "ExternalBox",
+                "subname": "Face1"
+              },
+              "mappedName": {
+                "raw": "ExternalBox.Face1",
+                "canonical": "ExternalBox.Face1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        }
+      }
+    },
     "documentHash": "sha256:fcaef2c17cec71c2cf4a6061fb8d204fb36502b6e845109740a88ee80f62a3be"
   }
 }

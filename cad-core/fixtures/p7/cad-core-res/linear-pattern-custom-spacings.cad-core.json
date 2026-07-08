@@ -1,0 +1,2024 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Body:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                7.0,
+                0.0,
+                1.5543122344752192e-15
+              ],
+              [
+                7.0,
+                0.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge1"
+          },
+          {
+            "id": "Body:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                9.0,
+                0.0,
+                1.5543122344752192e-15
+              ],
+              [
+                9.0,
+                0.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge2"
+          },
+          {
+            "id": "Body:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                7.0,
+                0.0,
+                1.5543122344752192e-15
+              ],
+              [
+                9.0,
+                0.0,
+                1.5543122344752192e-15
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge1",
+            "stableSubname": "LinearPattern.Edge3"
+          },
+          {
+            "id": "Body:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                7.0,
+                0.0,
+                2.0000000000000018
+              ],
+              [
+                9.0,
+                0.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge4"
+          },
+          {
+            "id": "Body:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                9.0,
+                2.0,
+                1.5543122344752192e-15
+              ],
+              [
+                9.0,
+                2.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge5"
+          },
+          {
+            "id": "Body:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                9.0,
+                0.0,
+                1.5543122344752192e-15
+              ],
+              [
+                9.0,
+                2.0,
+                1.5543122344752192e-15
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge2",
+            "stableSubname": "LinearPattern.Edge6"
+          },
+          {
+            "id": "Body:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                9.0,
+                0.0,
+                2.0000000000000018
+              ],
+              [
+                9.0,
+                2.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge7"
+          },
+          {
+            "id": "Body:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                7.0,
+                2.0,
+                1.5543122344752192e-15
+              ],
+              [
+                7.0,
+                2.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge8"
+          },
+          {
+            "id": "Body:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                9.0,
+                2.0,
+                1.5543122344752192e-15
+              ],
+              [
+                7.0,
+                2.0,
+                1.5543122344752192e-15
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge3",
+            "stableSubname": "LinearPattern.Edge9"
+          },
+          {
+            "id": "Body:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                9.0,
+                2.0,
+                2.0000000000000018
+              ],
+              [
+                7.0,
+                2.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge10"
+          },
+          {
+            "id": "Body:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                7.0,
+                2.0,
+                1.5543122344752192e-15
+              ],
+              [
+                7.0,
+                0.0,
+                1.5543122344752192e-15
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge4",
+            "stableSubname": "LinearPattern.Edge11"
+          },
+          {
+            "id": "Body:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                7.0,
+                2.0,
+                2.0000000000000018
+              ],
+              [
+                7.0,
+                0.0,
+                2.0000000000000018
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge12"
+          },
+          {
+            "id": "Body:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge13"
+          },
+          {
+            "id": "Body:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge14"
+          },
+          {
+            "id": "Body:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge15"
+          },
+          {
+            "id": "Body:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                0.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge16"
+          },
+          {
+            "id": "Body:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge17"
+          },
+          {
+            "id": "Body:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge18"
+          },
+          {
+            "id": "Body:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                2.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge19"
+          },
+          {
+            "id": "Body:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge20"
+          },
+          {
+            "id": "Body:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge21"
+          },
+          {
+            "id": "Body:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                2.0,
+                2.0,
+                2.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge22"
+          },
+          {
+            "id": "Body:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge23"
+          },
+          {
+            "id": "Body:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                0.0,
+                2.0,
+                2.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "LinearPattern.Edge24"
+          },
+          {
+            "id": "Body:Edge25",
+            "identityStatus": "stable",
+            "indexed": "Edge25",
+            "points": [
+              [
+                3.0,
+                0.0,
+                6.661338147750939e-16
+              ],
+              [
+                3.0,
+                0.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge1"
+          },
+          {
+            "id": "Body:Edge26",
+            "identityStatus": "stable",
+            "indexed": "Edge26",
+            "points": [
+              [
+                5.0,
+                0.0,
+                6.661338147750939e-16
+              ],
+              [
+                5.0,
+                0.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge2"
+          },
+          {
+            "id": "Body:Edge27",
+            "identityStatus": "stable",
+            "indexed": "Edge27",
+            "points": [
+              [
+                3.0,
+                0.0,
+                6.661338147750939e-16
+              ],
+              [
+                5.0,
+                0.0,
+                6.661338147750939e-16
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge3"
+          },
+          {
+            "id": "Body:Edge28",
+            "identityStatus": "stable",
+            "indexed": "Edge28",
+            "points": [
+              [
+                3.0,
+                0.0,
+                2.000000000000001
+              ],
+              [
+                5.0,
+                0.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge4"
+          },
+          {
+            "id": "Body:Edge29",
+            "identityStatus": "stable",
+            "indexed": "Edge29",
+            "points": [
+              [
+                5.0,
+                2.0,
+                6.661338147750939e-16
+              ],
+              [
+                5.0,
+                2.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge5"
+          },
+          {
+            "id": "Body:Edge30",
+            "identityStatus": "stable",
+            "indexed": "Edge30",
+            "points": [
+              [
+                5.0,
+                0.0,
+                6.661338147750939e-16
+              ],
+              [
+                5.0,
+                2.0,
+                6.661338147750939e-16
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge6"
+          },
+          {
+            "id": "Body:Edge31",
+            "identityStatus": "stable",
+            "indexed": "Edge31",
+            "points": [
+              [
+                5.0,
+                0.0,
+                2.000000000000001
+              ],
+              [
+                5.0,
+                2.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge7"
+          },
+          {
+            "id": "Body:Edge32",
+            "identityStatus": "stable",
+            "indexed": "Edge32",
+            "points": [
+              [
+                3.0,
+                2.0,
+                6.661338147750939e-16
+              ],
+              [
+                3.0,
+                2.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge8"
+          },
+          {
+            "id": "Body:Edge33",
+            "identityStatus": "stable",
+            "indexed": "Edge33",
+            "points": [
+              [
+                5.0,
+                2.0,
+                6.661338147750939e-16
+              ],
+              [
+                3.0,
+                2.0,
+                6.661338147750939e-16
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge9"
+          },
+          {
+            "id": "Body:Edge34",
+            "identityStatus": "stable",
+            "indexed": "Edge34",
+            "points": [
+              [
+                5.0,
+                2.0,
+                2.000000000000001
+              ],
+              [
+                3.0,
+                2.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge10"
+          },
+          {
+            "id": "Body:Edge35",
+            "identityStatus": "stable",
+            "indexed": "Edge35",
+            "points": [
+              [
+                3.0,
+                2.0,
+                6.661338147750939e-16
+              ],
+              [
+                3.0,
+                0.0,
+                6.661338147750939e-16
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge11"
+          },
+          {
+            "id": "Body:Edge36",
+            "identityStatus": "stable",
+            "indexed": "Edge36",
+            "points": [
+              [
+                3.0,
+                2.0,
+                2.000000000000001
+              ],
+              [
+                3.0,
+                0.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "LinearPattern.Transform1.Edge12"
+          }
+        ],
+        "faceIds": [
+          "Body:Face1",
+          "Body:Face1",
+          "Body:Face2",
+          "Body:Face2",
+          "Body:Face3",
+          "Body:Face3",
+          "Body:Face4",
+          "Body:Face4",
+          "Body:Face5",
+          "Body:Face5",
+          "Body:Face6",
+          "Body:Face6",
+          "Body:Face7",
+          "Body:Face7",
+          "Body:Face8",
+          "Body:Face8",
+          "Body:Face9",
+          "Body:Face9",
+          "Body:Face10",
+          "Body:Face10",
+          "Body:Face11",
+          "Body:Face11",
+          "Body:Face12",
+          "Body:Face12",
+          "Body:Face13",
+          "Body:Face13",
+          "Body:Face14",
+          "Body:Face14",
+          "Body:Face15",
+          "Body:Face15",
+          "Body:Face16",
+          "Body:Face16",
+          "Body:Face17",
+          "Body:Face17",
+          "Body:Face18",
+          "Body:Face18"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          1,
+          4,
+          3,
+          3,
+          4,
+          5,
+          4,
+          6,
+          5,
+          5,
+          6,
+          7,
+          6,
+          0,
+          7,
+          7,
+          0,
+          2,
+          0,
+          4,
+          1,
+          6,
+          4,
+          0,
+          5,
+          2,
+          3,
+          5,
+          7,
+          2,
+          8,
+          9,
+          10,
+          10,
+          9,
+          11,
+          9,
+          12,
+          11,
+          11,
+          12,
+          13,
+          12,
+          14,
+          13,
+          13,
+          14,
+          15,
+          14,
+          8,
+          15,
+          15,
+          8,
+          10,
+          8,
+          12,
+          9,
+          14,
+          12,
+          8,
+          13,
+          10,
+          11,
+          13,
+          15,
+          10,
+          16,
+          17,
+          18,
+          18,
+          17,
+          19,
+          17,
+          20,
+          19,
+          19,
+          20,
+          21,
+          20,
+          22,
+          21,
+          21,
+          22,
+          23,
+          22,
+          16,
+          23,
+          23,
+          16,
+          18,
+          16,
+          20,
+          17,
+          22,
+          20,
+          16,
+          21,
+          18,
+          19,
+          21,
+          23,
+          18
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Body:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              7.0,
+              0.0,
+              1.5543122344752192e-15
+            ]
+          },
+          {
+            "id": "Body:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              7.0,
+              0.0,
+              2.0000000000000018
+            ]
+          },
+          {
+            "id": "Body:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              9.0,
+              0.0,
+              1.5543122344752192e-15
+            ]
+          },
+          {
+            "id": "Body:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              9.0,
+              0.0,
+              2.0000000000000018
+            ]
+          },
+          {
+            "id": "Body:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              9.0,
+              2.0,
+              1.5543122344752192e-15
+            ]
+          },
+          {
+            "id": "Body:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              9.0,
+              2.0,
+              2.0000000000000018
+            ]
+          },
+          {
+            "id": "Body:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              7.0,
+              2.0,
+              1.5543122344752192e-15
+            ]
+          },
+          {
+            "id": "Body:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              7.0,
+              2.0,
+              2.0000000000000018
+            ]
+          },
+          {
+            "id": "Body:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              0.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              2.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              2.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              2.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              0.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              0.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              3.0,
+              0.0,
+              6.661338147750939e-16
+            ]
+          },
+          {
+            "id": "Body:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              3.0,
+              0.0,
+              2.000000000000001
+            ]
+          },
+          {
+            "id": "Body:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              5.0,
+              0.0,
+              6.661338147750939e-16
+            ]
+          },
+          {
+            "id": "Body:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              5.0,
+              0.0,
+              2.000000000000001
+            ]
+          },
+          {
+            "id": "Body:Vertex21",
+            "indexed": "Vertex21",
+            "point": [
+              5.0,
+              2.0,
+              6.661338147750939e-16
+            ]
+          },
+          {
+            "id": "Body:Vertex22",
+            "indexed": "Vertex22",
+            "point": [
+              5.0,
+              2.0,
+              2.000000000000001
+            ]
+          },
+          {
+            "id": "Body:Vertex23",
+            "indexed": "Vertex23",
+            "point": [
+              3.0,
+              2.0,
+              6.661338147750939e-16
+            ]
+          },
+          {
+            "id": "Body:Vertex24",
+            "indexed": "Vertex24",
+            "point": [
+              3.0,
+              2.0,
+              2.000000000000001
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            7.0,
+            0.0,
+            1.5543122344752192e-15
+          ],
+          [
+            9.0,
+            0.0,
+            1.5543122344752192e-15
+          ],
+          [
+            7.0,
+            0.0,
+            2.0000000000000018
+          ],
+          [
+            9.0,
+            0.0,
+            2.0000000000000018
+          ],
+          [
+            9.0,
+            2.0,
+            1.5543122344752192e-15
+          ],
+          [
+            9.0,
+            2.0,
+            2.0000000000000018
+          ],
+          [
+            7.0,
+            2.0,
+            1.5543122344752192e-15
+          ],
+          [
+            7.0,
+            2.0,
+            2.0000000000000018
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            2.0
+          ],
+          [
+            2.0,
+            0.0,
+            2.0
+          ],
+          [
+            2.0,
+            2.0,
+            0.0
+          ],
+          [
+            2.0,
+            2.0,
+            2.0
+          ],
+          [
+            0.0,
+            2.0,
+            0.0
+          ],
+          [
+            0.0,
+            2.0,
+            2.0
+          ],
+          [
+            3.0,
+            0.0,
+            6.661338147750939e-16
+          ],
+          [
+            5.0,
+            0.0,
+            6.661338147750939e-16
+          ],
+          [
+            3.0,
+            0.0,
+            2.000000000000001
+          ],
+          [
+            5.0,
+            0.0,
+            2.000000000000001
+          ],
+          [
+            5.0,
+            2.0,
+            6.661338147750939e-16
+          ],
+          [
+            5.0,
+            2.0,
+            2.000000000000001
+          ],
+          [
+            3.0,
+            2.0,
+            6.661338147750939e-16
+          ],
+          [
+            3.0,
+            2.0,
+            2.000000000000001
+          ]
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge1",
+          "subname": "LinearPattern.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge10",
+          "subname": "LinearPattern.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge4",
+          "stableSubname": "LinearPattern.Edge11",
+          "subname": "LinearPattern.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge12",
+          "subname": "LinearPattern.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge13",
+          "id": "Body:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge13",
+          "subname": "LinearPattern.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge14",
+          "id": "Body:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge14",
+          "subname": "LinearPattern.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge15",
+          "id": "Body:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge15",
+          "subname": "LinearPattern.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge16",
+          "id": "Body:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge16",
+          "subname": "LinearPattern.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge17",
+          "id": "Body:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge17",
+          "subname": "LinearPattern.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge18",
+          "id": "Body:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge18",
+          "subname": "LinearPattern.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge19",
+          "id": "Body:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge19",
+          "subname": "LinearPattern.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge2",
+          "subname": "LinearPattern.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge20",
+          "id": "Body:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge20",
+          "subname": "LinearPattern.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge21",
+          "id": "Body:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge21",
+          "subname": "LinearPattern.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge22",
+          "id": "Body:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge22",
+          "subname": "LinearPattern.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge23",
+          "id": "Body:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge23",
+          "subname": "LinearPattern.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge24",
+          "id": "Body:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge24",
+          "subname": "LinearPattern.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge25",
+          "id": "Body:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge1",
+          "subname": "LinearPattern.Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge26",
+          "id": "Body:Edge26",
+          "identityStatus": "stable",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge2",
+          "subname": "LinearPattern.Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge27",
+          "id": "Body:Edge27",
+          "identityStatus": "stable",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge3",
+          "subname": "LinearPattern.Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge28",
+          "id": "Body:Edge28",
+          "identityStatus": "stable",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge4",
+          "subname": "LinearPattern.Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge29",
+          "id": "Body:Edge29",
+          "identityStatus": "stable",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge5",
+          "subname": "LinearPattern.Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge1",
+          "stableSubname": "LinearPattern.Edge3",
+          "subname": "LinearPattern.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge30",
+          "id": "Body:Edge30",
+          "identityStatus": "stable",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge6",
+          "subname": "LinearPattern.Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge31",
+          "id": "Body:Edge31",
+          "identityStatus": "stable",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge7",
+          "subname": "LinearPattern.Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge32",
+          "id": "Body:Edge32",
+          "identityStatus": "stable",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge8",
+          "subname": "LinearPattern.Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge33",
+          "id": "Body:Edge33",
+          "identityStatus": "stable",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge9",
+          "subname": "LinearPattern.Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge34",
+          "id": "Body:Edge34",
+          "identityStatus": "stable",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge10",
+          "subname": "LinearPattern.Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge35",
+          "id": "Body:Edge35",
+          "identityStatus": "stable",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge11",
+          "subname": "LinearPattern.Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge36",
+          "id": "Body:Edge36",
+          "identityStatus": "stable",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Transform1.Edge12",
+          "subname": "LinearPattern.Edge36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge4",
+          "subname": "LinearPattern.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge5",
+          "subname": "LinearPattern.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge2",
+          "stableSubname": "LinearPattern.Edge6",
+          "subname": "LinearPattern.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge7",
+          "subname": "LinearPattern.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "LinearPattern.Edge8",
+          "subname": "LinearPattern.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge3",
+          "stableSubname": "LinearPattern.Edge9",
+          "subname": "LinearPattern.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face1",
+          "subname": "LinearPattern.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face10",
+          "id": "Body:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face10",
+          "subname": "LinearPattern.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face11",
+          "id": "Body:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face11",
+          "subname": "LinearPattern.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face12",
+          "id": "Body:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face12",
+          "subname": "LinearPattern.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face13",
+          "id": "Body:Face13",
+          "identityStatus": "stable",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Transform1.Face1",
+          "subname": "LinearPattern.Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face14",
+          "id": "Body:Face14",
+          "identityStatus": "stable",
+          "indexed": "Face14",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Transform1.Face2",
+          "subname": "LinearPattern.Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face15",
+          "id": "Body:Face15",
+          "identityStatus": "stable",
+          "indexed": "Face15",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Transform1.Face3",
+          "subname": "LinearPattern.Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face16",
+          "id": "Body:Face16",
+          "identityStatus": "stable",
+          "indexed": "Face16",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Transform1.Face4",
+          "subname": "LinearPattern.Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face17",
+          "id": "Body:Face17",
+          "identityStatus": "stable",
+          "indexed": "Face17",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Transform1.Face5",
+          "subname": "LinearPattern.Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face18",
+          "id": "Body:Face18",
+          "identityStatus": "stable",
+          "indexed": "Face18",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Transform1.Face6",
+          "subname": "LinearPattern.Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face2",
+          "subname": "LinearPattern.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face3",
+          "subname": "LinearPattern.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face4",
+          "subname": "LinearPattern.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "sourceStableSubname": "SketchPad.Face1",
+          "stableSubname": "LinearPattern.Face5",
+          "subname": "LinearPattern.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face6",
+          "subname": "LinearPattern.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face7",
+          "id": "Body:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face7",
+          "subname": "LinearPattern.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face8",
+          "id": "Body:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face8",
+          "subname": "LinearPattern.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Face9",
+          "id": "Body:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "LinearPattern.Face9",
+          "subname": "LinearPattern.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform2.Vertex1",
+          "subname": "LinearPattern.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex10",
+          "id": "Body:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex10",
+          "subname": "LinearPattern.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex11",
+          "id": "Body:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex11",
+          "subname": "LinearPattern.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex12",
+          "id": "Body:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex12",
+          "subname": "LinearPattern.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex13",
+          "id": "Body:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex13",
+          "subname": "LinearPattern.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex14",
+          "id": "Body:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex14",
+          "subname": "LinearPattern.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex15",
+          "id": "Body:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex15",
+          "subname": "LinearPattern.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex16",
+          "id": "Body:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex16",
+          "subname": "LinearPattern.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex17",
+          "id": "Body:Vertex17",
+          "identityStatus": "stable",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex1",
+          "subname": "LinearPattern.Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex18",
+          "id": "Body:Vertex18",
+          "identityStatus": "stable",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex2",
+          "subname": "LinearPattern.Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex19",
+          "id": "Body:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex3",
+          "subname": "LinearPattern.Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform2.Vertex2",
+          "subname": "LinearPattern.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex20",
+          "id": "Body:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex4",
+          "subname": "LinearPattern.Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex21",
+          "id": "Body:Vertex21",
+          "identityStatus": "stable",
+          "indexed": "Vertex21",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex5",
+          "subname": "LinearPattern.Vertex21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex22",
+          "id": "Body:Vertex22",
+          "identityStatus": "stable",
+          "indexed": "Vertex22",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex6",
+          "subname": "LinearPattern.Vertex22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex23",
+          "id": "Body:Vertex23",
+          "identityStatus": "stable",
+          "indexed": "Vertex23",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex7",
+          "subname": "LinearPattern.Vertex23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex24",
+          "id": "Body:Vertex24",
+          "identityStatus": "stable",
+          "indexed": "Vertex24",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform1.Vertex8",
+          "subname": "LinearPattern.Vertex24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchPad.Vertex2",
+          "stableSubname": "LinearPattern.Vertex3",
+          "subname": "LinearPattern.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform2.Vertex4",
+          "subname": "LinearPattern.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchPad.Vertex3",
+          "stableSubname": "LinearPattern.Vertex5",
+          "subname": "LinearPattern.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform2.Vertex6",
+          "subname": "LinearPattern.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchPad.Vertex4",
+          "stableSubname": "LinearPattern.Vertex7",
+          "subname": "LinearPattern.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Transform2.Vertex8",
+          "subname": "LinearPattern.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.LinearPattern.Vertex9",
+          "id": "Body:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "LinearPattern.Vertex9",
+          "subname": "LinearPattern.Vertex9"
+        }
+      ]
+    }
+  ]
+}

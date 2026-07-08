@@ -1,0 +1,89 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ProjectedEdgesOffset:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                5.0,
+                2.0,
+                0.75
+              ],
+              [
+                0.9999999999999998,
+                0.9999999999999999,
+                0.75
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ProjectedEdgesOffset:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              5.0,
+              2.0,
+              0.75
+            ]
+          },
+          {
+            "id": "ProjectedEdgesOffset:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.0,
+              1.0,
+              0.75
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "ProjectedEdgesOffset",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedEdgesOffset:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedEdgesOffset:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedEdgesOffset:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        }
+      ]
+    }
+  ]
+}

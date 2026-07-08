@@ -84,6 +84,9 @@
           "value": "ChainLink",
           "SubList": [
             "$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"
+          ],
+          "StableSubList": [
+            "BoxLink.Box.Face1"
           ]
         },
         "LinkTransform": false,

@@ -1,0 +1,1806 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "MainBody:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge1",
+            "stableSubname": "BooleanFuse.Edge1"
+          },
+          {
+            "id": "MainBody:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                8.0,
+                0.0,
+                0.0
+              ],
+              [
+                8.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge2",
+            "stableSubname": "BooleanFuse.Edge2"
+          },
+          {
+            "id": "MainBody:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                8.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceStableSubname": "SketchBase.Edge1",
+            "stableSubname": "BooleanFuse.Edge3"
+          },
+          {
+            "id": "MainBody:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                0.0,
+                4.0
+              ],
+              [
+                8.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge4",
+            "stableSubname": "BooleanFuse.Edge4"
+          },
+          {
+            "id": "MainBody:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.0,
+                6.0,
+                0.0
+              ],
+              [
+                0.0,
+                6.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge8",
+            "stableSubname": "BooleanFuse.Edge5"
+          },
+          {
+            "id": "MainBody:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                0.0,
+                6.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge11",
+            "stableSubname": "BooleanFuse.Edge6"
+          },
+          {
+            "id": "MainBody:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.0,
+                6.0,
+                4.0
+              ],
+              [
+                0.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge12",
+            "stableSubname": "BooleanFuse.Edge7"
+          },
+          {
+            "id": "MainBody:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                8.0,
+                0.0,
+                0.0
+              ],
+              [
+                8.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge8"
+          },
+          {
+            "id": "MainBody:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                8.0,
+                1.0,
+                4.0
+              ],
+              [
+                8.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge9"
+          },
+          {
+            "id": "MainBody:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                8.0,
+                0.0,
+                4.0
+              ],
+              [
+                8.0,
+                1.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge10"
+          },
+          {
+            "id": "MainBody:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                8.0,
+                6.0,
+                0.0
+              ],
+              [
+                0.0,
+                6.0,
+                0.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge9",
+            "stableSubname": "BooleanFuse.Edge11"
+          },
+          {
+            "id": "MainBody:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                8.0,
+                5.0,
+                0.0
+              ],
+              [
+                8.0,
+                6.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge12"
+          },
+          {
+            "id": "MainBody:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                8.0,
+                5.0,
+                0.0
+              ],
+              [
+                6.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge13"
+          },
+          {
+            "id": "MainBody:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                6.0,
+                5.0,
+                0.0
+              ],
+              [
+                6.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "sourceStableSubname": "SketchTool.Edge4",
+            "stableSubname": "BooleanFuse.Edge14"
+          },
+          {
+            "id": "MainBody:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                6.0,
+                1.0,
+                0.0
+              ],
+              [
+                8.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge15"
+          },
+          {
+            "id": "MainBody:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                8.0,
+                6.0,
+                4.0
+              ],
+              [
+                0.0,
+                6.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge10",
+            "stableSubname": "BooleanFuse.Edge16"
+          },
+          {
+            "id": "MainBody:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                8.0,
+                5.0,
+                4.0
+              ],
+              [
+                8.0,
+                6.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge17"
+          },
+          {
+            "id": "MainBody:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                8.0,
+                5.0,
+                4.0
+              ],
+              [
+                6.0,
+                5.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge18"
+          },
+          {
+            "id": "MainBody:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                6.0,
+                5.0,
+                4.0
+              ],
+              [
+                6.0,
+                1.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "ToolBody.Edge12",
+            "stableSubname": "BooleanFuse.Edge19"
+          },
+          {
+            "id": "MainBody:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                6.0,
+                1.0,
+                4.0
+              ],
+              [
+                8.0,
+                1.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge20"
+          },
+          {
+            "id": "MainBody:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                8.0,
+                6.0,
+                0.0
+              ],
+              [
+                8.0,
+                6.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "BasePad.Edge5",
+            "stableSubname": "BooleanFuse.Edge21"
+          },
+          {
+            "id": "MainBody:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                8.0,
+                1.0,
+                0.0
+              ],
+              [
+                10.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge22"
+          },
+          {
+            "id": "MainBody:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                10.0,
+                1.0,
+                0.0
+              ],
+              [
+                10.0,
+                1.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "ToolBody.Edge2",
+            "stableSubname": "BooleanFuse.Edge23"
+          },
+          {
+            "id": "MainBody:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                8.0,
+                1.0,
+                4.0
+              ],
+              [
+                10.0,
+                1.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge24"
+          },
+          {
+            "id": "MainBody:Edge25",
+            "identityStatus": "stable",
+            "indexed": "Edge25",
+            "points": [
+              [
+                8.0,
+                5.0,
+                0.0
+              ],
+              [
+                8.0,
+                5.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge25"
+          },
+          {
+            "id": "MainBody:Edge26",
+            "identityStatus": "stable",
+            "indexed": "Edge26",
+            "points": [
+              [
+                8.0,
+                1.0,
+                0.0
+              ],
+              [
+                8.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge26"
+          },
+          {
+            "id": "MainBody:Edge27",
+            "identityStatus": "stable",
+            "indexed": "Edge27",
+            "points": [
+              [
+                8.0,
+                1.0,
+                4.0
+              ],
+              [
+                8.0,
+                5.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge27"
+          },
+          {
+            "id": "MainBody:Edge28",
+            "identityStatus": "stable",
+            "indexed": "Edge28",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                8.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge28"
+          },
+          {
+            "id": "MainBody:Edge29",
+            "identityStatus": "stable",
+            "indexed": "Edge29",
+            "points": [
+              [
+                10.0,
+                1.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "sourceStableSubname": "SketchTool.Edge2",
+            "stableSubname": "BooleanFuse.Edge29"
+          },
+          {
+            "id": "MainBody:Edge30",
+            "identityStatus": "stable",
+            "indexed": "Edge30",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "ToolBody.Edge5",
+            "stableSubname": "BooleanFuse.Edge30"
+          },
+          {
+            "id": "MainBody:Edge31",
+            "identityStatus": "stable",
+            "indexed": "Edge31",
+            "points": [
+              [
+                10.0,
+                1.0,
+                4.0
+              ],
+              [
+                10.0,
+                5.0,
+                4.0
+              ]
+            ],
+            "sourceStableSubname": "ToolBody.Edge7",
+            "stableSubname": "BooleanFuse.Edge31"
+          },
+          {
+            "id": "MainBody:Edge32",
+            "identityStatus": "stable",
+            "indexed": "Edge32",
+            "points": [
+              [
+                10.0,
+                5.0,
+                4.0
+              ],
+              [
+                8.0,
+                5.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BooleanFuse.Edge32"
+          }
+        ],
+        "faceIds": [
+          "MainBody:Face1",
+          "MainBody:Face1",
+          "MainBody:Face2",
+          "MainBody:Face2",
+          "MainBody:Face3",
+          "MainBody:Face3",
+          "MainBody:Face4",
+          "MainBody:Face4",
+          "MainBody:Face4",
+          "MainBody:Face4",
+          "MainBody:Face4",
+          "MainBody:Face4",
+          "MainBody:Face5",
+          "MainBody:Face5",
+          "MainBody:Face5",
+          "MainBody:Face5",
+          "MainBody:Face5",
+          "MainBody:Face5",
+          "MainBody:Face6",
+          "MainBody:Face6",
+          "MainBody:Face7",
+          "MainBody:Face7",
+          "MainBody:Face8",
+          "MainBody:Face8",
+          "MainBody:Face9",
+          "MainBody:Face9",
+          "MainBody:Face10",
+          "MainBody:Face10",
+          "MainBody:Face11",
+          "MainBody:Face11",
+          "MainBody:Face12",
+          "MainBody:Face12",
+          "MainBody:Face13",
+          "MainBody:Face13",
+          "MainBody:Face14",
+          "MainBody:Face14"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          0,
+          5,
+          5,
+          0,
+          2,
+          1,
+          6,
+          3,
+          3,
+          6,
+          7,
+          8,
+          1,
+          0,
+          8,
+          6,
+          1,
+          4,
+          9,
+          0,
+          0,
+          9,
+          8,
+          9,
+          10,
+          11,
+          4,
+          10,
+          9,
+          3,
+          12,
+          2,
+          7,
+          12,
+          3,
+          13,
+          5,
+          2,
+          13,
+          2,
+          12,
+          14,
+          13,
+          15,
+          14,
+          5,
+          13,
+          10,
+          4,
+          14,
+          14,
+          4,
+          5,
+          6,
+          16,
+          7,
+          7,
+          16,
+          17,
+          11,
+          10,
+          15,
+          15,
+          10,
+          14,
+          8,
+          11,
+          6,
+          9,
+          11,
+          8,
+          15,
+          12,
+          7,
+          15,
+          13,
+          12,
+          11,
+          18,
+          6,
+          6,
+          18,
+          16,
+          16,
+          18,
+          17,
+          17,
+          18,
+          19,
+          19,
+          15,
+          7,
+          19,
+          7,
+          17,
+          18,
+          11,
+          19,
+          19,
+          11,
+          15
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "MainBody:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              0.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              8.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              8.0,
+              0.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              0.0,
+              6.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              0.0,
+              6.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              8.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              8.0,
+              1.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              8.0,
+              6.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              8.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              6.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              6.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              8.0,
+              6.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              8.0,
+              5.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              6.0,
+              5.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              6.0,
+              1.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              10.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              10.0,
+              1.0,
+              4.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MainBody:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              10.0,
+              5.0,
+              4.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            8.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            4.0
+          ],
+          [
+            8.0,
+            0.0,
+            4.0
+          ],
+          [
+            0.0,
+            6.0,
+            0.0
+          ],
+          [
+            0.0,
+            6.0,
+            4.0
+          ],
+          [
+            8.0,
+            1.0,
+            0.0
+          ],
+          [
+            8.0,
+            1.0,
+            4.0
+          ],
+          [
+            6.0,
+            1.0,
+            0.0
+          ],
+          [
+            6.0,
+            5.0,
+            0.0
+          ],
+          [
+            8.0,
+            6.0,
+            0.0
+          ],
+          [
+            8.0,
+            5.0,
+            0.0
+          ],
+          [
+            6.0,
+            1.0,
+            4.0
+          ],
+          [
+            6.0,
+            5.0,
+            4.0
+          ],
+          [
+            8.0,
+            6.0,
+            4.0
+          ],
+          [
+            8.0,
+            5.0,
+            4.0
+          ],
+          [
+            10.0,
+            1.0,
+            0.0
+          ],
+          [
+            10.0,
+            1.0,
+            4.0
+          ],
+          [
+            10.0,
+            5.0,
+            0.0
+          ],
+          [
+            10.0,
+            5.0,
+            4.0
+          ]
+        ]
+      },
+      "object": "MainBody",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge1",
+          "id": "MainBody:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge1",
+          "stableSubname": "BooleanFuse.Edge1",
+          "subname": "BooleanFuse.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge10",
+          "id": "MainBody:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge10",
+          "subname": "BooleanFuse.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge11",
+          "id": "MainBody:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge9",
+          "stableSubname": "BooleanFuse.Edge11",
+          "subname": "BooleanFuse.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge12",
+          "id": "MainBody:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge12",
+          "subname": "BooleanFuse.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge13",
+          "id": "MainBody:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge13",
+          "subname": "BooleanFuse.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge14",
+          "id": "MainBody:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchTool.Edge4",
+          "stableSubname": "BooleanFuse.Edge14",
+          "subname": "BooleanFuse.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge15",
+          "id": "MainBody:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge15",
+          "subname": "BooleanFuse.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge16",
+          "id": "MainBody:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge10",
+          "stableSubname": "BooleanFuse.Edge16",
+          "subname": "BooleanFuse.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge17",
+          "id": "MainBody:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge17",
+          "subname": "BooleanFuse.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge18",
+          "id": "MainBody:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge18",
+          "subname": "BooleanFuse.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge19",
+          "id": "MainBody:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "sourceStableSubname": "ToolBody.Edge12",
+          "stableSubname": "BooleanFuse.Edge19",
+          "subname": "BooleanFuse.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge2",
+          "id": "MainBody:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge2",
+          "stableSubname": "BooleanFuse.Edge2",
+          "subname": "BooleanFuse.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge20",
+          "id": "MainBody:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge20",
+          "subname": "BooleanFuse.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge21",
+          "id": "MainBody:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge5",
+          "stableSubname": "BooleanFuse.Edge21",
+          "subname": "BooleanFuse.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge22",
+          "id": "MainBody:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge22",
+          "subname": "BooleanFuse.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge23",
+          "id": "MainBody:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "sourceStableSubname": "ToolBody.Edge2",
+          "stableSubname": "BooleanFuse.Edge23",
+          "subname": "BooleanFuse.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge24",
+          "id": "MainBody:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge24",
+          "subname": "BooleanFuse.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge25",
+          "id": "MainBody:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge25",
+          "subname": "BooleanFuse.Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge26",
+          "id": "MainBody:Edge26",
+          "identityStatus": "stable",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge26",
+          "subname": "BooleanFuse.Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge27",
+          "id": "MainBody:Edge27",
+          "identityStatus": "stable",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge27",
+          "subname": "BooleanFuse.Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge28",
+          "id": "MainBody:Edge28",
+          "identityStatus": "stable",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge28",
+          "subname": "BooleanFuse.Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge29",
+          "id": "MainBody:Edge29",
+          "identityStatus": "stable",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchTool.Edge2",
+          "stableSubname": "BooleanFuse.Edge29",
+          "subname": "BooleanFuse.Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge3",
+          "id": "MainBody:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchBase.Edge1",
+          "stableSubname": "BooleanFuse.Edge3",
+          "subname": "BooleanFuse.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge30",
+          "id": "MainBody:Edge30",
+          "identityStatus": "stable",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "sourceStableSubname": "ToolBody.Edge5",
+          "stableSubname": "BooleanFuse.Edge30",
+          "subname": "BooleanFuse.Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge31",
+          "id": "MainBody:Edge31",
+          "identityStatus": "stable",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "sourceStableSubname": "ToolBody.Edge7",
+          "stableSubname": "BooleanFuse.Edge31",
+          "subname": "BooleanFuse.Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge32",
+          "id": "MainBody:Edge32",
+          "identityStatus": "stable",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge32",
+          "subname": "BooleanFuse.Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge4",
+          "id": "MainBody:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge4",
+          "stableSubname": "BooleanFuse.Edge4",
+          "subname": "BooleanFuse.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge5",
+          "id": "MainBody:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge8",
+          "stableSubname": "BooleanFuse.Edge5",
+          "subname": "BooleanFuse.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge6",
+          "id": "MainBody:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge11",
+          "stableSubname": "BooleanFuse.Edge6",
+          "subname": "BooleanFuse.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge7",
+          "id": "MainBody:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "sourceStableSubname": "BasePad.Edge12",
+          "stableSubname": "BooleanFuse.Edge7",
+          "subname": "BooleanFuse.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge8",
+          "id": "MainBody:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge8",
+          "subname": "BooleanFuse.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Edge9",
+          "id": "MainBody:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "BooleanFuse.Edge9",
+          "subname": "BooleanFuse.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face1",
+          "id": "MainBody:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "sourceStableSubname": "BasePad.Face1",
+          "stableSubname": "BooleanFuse.Face1",
+          "subname": "BooleanFuse.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face10",
+          "id": "MainBody:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face10",
+          "subname": "BooleanFuse.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face11",
+          "id": "MainBody:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face11",
+          "subname": "BooleanFuse.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face12",
+          "id": "MainBody:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "sourceStableSubname": "ToolBody.Face2",
+          "stableSubname": "BooleanFuse.Face12",
+          "subname": "BooleanFuse.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face13",
+          "id": "MainBody:Face13",
+          "identityStatus": "stable",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face13",
+          "subname": "BooleanFuse.Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face14",
+          "id": "MainBody:Face14",
+          "identityStatus": "stable",
+          "indexed": "Face14",
+          "kind": "Face",
+          "sourceStableSubname": "ToolBody.Face3",
+          "stableSubname": "BooleanFuse.Face14",
+          "subname": "BooleanFuse.Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face2",
+          "id": "MainBody:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "sourceStableSubname": "BasePad.Face4",
+          "stableSubname": "BooleanFuse.Face2",
+          "subname": "BooleanFuse.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face3",
+          "id": "MainBody:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face3",
+          "subname": "BooleanFuse.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face4",
+          "id": "MainBody:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face4",
+          "subname": "BooleanFuse.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face5",
+          "id": "MainBody:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face5",
+          "subname": "BooleanFuse.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face6",
+          "id": "MainBody:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "sourceStableSubname": "BasePad.Face3",
+          "stableSubname": "BooleanFuse.Face6",
+          "subname": "BooleanFuse.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face7",
+          "id": "MainBody:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "sourceStableSubname": "ToolBody.Face1",
+          "stableSubname": "BooleanFuse.Face7",
+          "subname": "BooleanFuse.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face8",
+          "id": "MainBody:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face8",
+          "subname": "BooleanFuse.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Face9",
+          "id": "MainBody:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "BooleanFuse.Face9",
+          "subname": "BooleanFuse.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex1",
+          "id": "MainBody:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "sourceStableSubname": "BasePad.Vertex1",
+          "stableSubname": "BooleanFuse.Vertex1",
+          "subname": "BooleanFuse.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex10",
+          "id": "MainBody:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFuse.Vertex10",
+          "subname": "BooleanFuse.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex11",
+          "id": "MainBody:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchTool.Vertex4",
+          "stableSubname": "BooleanFuse.Vertex11",
+          "subname": "BooleanFuse.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex12",
+          "id": "MainBody:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchTool.Vertex1",
+          "stableSubname": "BooleanFuse.Vertex12",
+          "subname": "BooleanFuse.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex13",
+          "id": "MainBody:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "sourceStableSubname": "BasePad.Vertex6",
+          "stableSubname": "BooleanFuse.Vertex13",
+          "subname": "BooleanFuse.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex14",
+          "id": "MainBody:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFuse.Vertex14",
+          "subname": "BooleanFuse.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex15",
+          "id": "MainBody:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "sourceStableSubname": "ToolBody.Vertex8",
+          "stableSubname": "BooleanFuse.Vertex15",
+          "subname": "BooleanFuse.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex16",
+          "id": "MainBody:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "sourceStableSubname": "ToolBody.Vertex2",
+          "stableSubname": "BooleanFuse.Vertex16",
+          "subname": "BooleanFuse.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex17",
+          "id": "MainBody:Vertex17",
+          "identityStatus": "stable",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchTool.Vertex2",
+          "stableSubname": "BooleanFuse.Vertex17",
+          "subname": "BooleanFuse.Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex18",
+          "id": "MainBody:Vertex18",
+          "identityStatus": "stable",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "sourceStableSubname": "ToolBody.Vertex4",
+          "stableSubname": "BooleanFuse.Vertex18",
+          "subname": "BooleanFuse.Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex19",
+          "id": "MainBody:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchTool.Vertex3",
+          "stableSubname": "BooleanFuse.Vertex19",
+          "subname": "BooleanFuse.Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex2",
+          "id": "MainBody:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "sourceStableSubname": "BasePad.Vertex2",
+          "stableSubname": "BooleanFuse.Vertex2",
+          "subname": "BooleanFuse.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex20",
+          "id": "MainBody:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "sourceStableSubname": "ToolBody.Vertex6",
+          "stableSubname": "BooleanFuse.Vertex20",
+          "subname": "BooleanFuse.Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex3",
+          "id": "MainBody:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchBase.Vertex2",
+          "stableSubname": "BooleanFuse.Vertex3",
+          "subname": "BooleanFuse.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex4",
+          "id": "MainBody:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "sourceStableSubname": "BasePad.Vertex4",
+          "stableSubname": "BooleanFuse.Vertex4",
+          "subname": "BooleanFuse.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex5",
+          "id": "MainBody:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "sourceStableSubname": "BasePad.Vertex7",
+          "stableSubname": "BooleanFuse.Vertex5",
+          "subname": "BooleanFuse.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex6",
+          "id": "MainBody:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "sourceStableSubname": "BasePad.Vertex8",
+          "stableSubname": "BooleanFuse.Vertex6",
+          "subname": "BooleanFuse.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex7",
+          "id": "MainBody:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFuse.Vertex7",
+          "subname": "BooleanFuse.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex8",
+          "id": "MainBody:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFuse.Vertex8",
+          "subname": "BooleanFuse.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MainBody.BooleanFuse.Vertex9",
+          "id": "MainBody:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "sourceStableSubname": "BasePad.Vertex5",
+          "stableSubname": "BooleanFuse.Vertex9",
+          "subname": "BooleanFuse.Vertex9"
+        }
+      ]
+    }
+  ]
+}

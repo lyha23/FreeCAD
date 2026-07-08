@@ -1,0 +1,20 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_type",
+      "message": "Unsupported TypeId Part::Unknown",
+      "object": "Mystery",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Mystery",
+      "subshapes": []
+    }
+  ]
+}

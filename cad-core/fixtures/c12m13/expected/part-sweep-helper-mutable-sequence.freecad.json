@@ -107,5 +107,12 @@
     "helper": "Part.BRepOffsetAPI_MakePipeShell",
     "runtime_helper": "Part.BRepOffsetAPI.MakePipeShell",
     "spine_subname": "Edge1"
+  },
+  "oracle_boundary": {
+    "uncollected_methods": [
+      "simulate",
+      "generated"
+    ],
+    "reason": "C12-M13 helper sequence collected build/isReady/status/shape; mutable simulate/generated lifecycle is covered by C12-M14."
   }
 }

@@ -1,0 +1,283 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [
+    {
+      "action": "assembly_set_placement",
+      "assembly": "Assembly",
+      "joint": "OndselSolver",
+      "joint_type": "solver_result",
+      "object": "ComponentB",
+      "objectId": 4,
+      "properties": {
+        "Placement": {
+          "Base": [
+            6.0,
+            0.0,
+            1.5
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      },
+      "reason": "assembly_solver_placement_writeback",
+      "typeId": "Assembly::AssemblyLink"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Assembly:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.8637033051562732,
+                0.5176380902050415,
+                0.0
+              ],
+              [
+                3.464101615137755,
+                0.9999999999999999,
+                0.0
+              ],
+              [
+                2.8284271247461903,
+                1.414213562373095,
+                0.0
+              ],
+              [
+                2.0000000000000004,
+                1.7320508075688772,
+                0.0
+              ],
+              [
+                1.035276180410083,
+                1.9318516525781366,
+                0.0
+              ],
+              [
+                2.4492935982947064e-16,
+                2.0,
+                0.0
+              ],
+              [
+                -1.0352761804100825,
+                1.9318516525781366,
+                0.0
+              ],
+              [
+                -1.9999999999999993,
+                1.7320508075688774,
+                0.0
+              ],
+              [
+                -2.82842712474619,
+                1.4142135623730951,
+                0.0
+              ],
+              [
+                -3.464101615137755,
+                0.9999999999999999,
+                0.0
+              ],
+              [
+                -3.863703305156273,
+                0.517638090205042,
+                0.0
+              ],
+              [
+                -4.0,
+                2.4492935982947064e-16,
+                0.0
+              ],
+              [
+                -3.8637033051562732,
+                -0.5176380902050416,
+                0.0
+              ],
+              [
+                -3.4641016151377553,
+                -0.9999999999999996,
+                0.0
+              ],
+              [
+                -2.8284271247461916,
+                -1.4142135623730943,
+                0.0
+              ],
+              [
+                -2.0000000000000018,
+                -1.7320508075688767,
+                0.0
+              ],
+              [
+                -1.0352761804100825,
+                -1.9318516525781366,
+                0.0
+              ],
+              [
+                -7.347880794884119e-16,
+                -2.0,
+                0.0
+              ],
+              [
+                1.0352761804100812,
+                -1.9318516525781368,
+                0.0
+              ],
+              [
+                2.0000000000000004,
+                -1.7320508075688772,
+                0.0
+              ],
+              [
+                2.8284271247461894,
+                -1.4142135623730954,
+                0.0
+              ],
+              [
+                3.4641016151377535,
+                -1.0000000000000009,
+                0.0
+              ],
+              [
+                3.8637033051562724,
+                -0.5176380902050431,
+                0.0
+              ],
+              [
+                4.0,
+                -4.898587196589413e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "ComponentA.Edge1"
+          },
+          {
+            "id": "Assembly:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                7.0,
+                0.0,
+                1.5
+              ],
+              [
+                7.0,
+                0.0,
+                5.5
+              ]
+            ],
+            "stableSubname": "ComponentB.Edge1"
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Assembly:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              4.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Assembly:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              7.0,
+              0.0,
+              1.5
+            ]
+          },
+          {
+            "id": "Assembly:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              7.0,
+              0.0,
+              5.5
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "Assembly",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Assembly.ComponentA.Edge1",
+          "id": "Assembly:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "ComponentA.Edge1",
+          "subname": "ComponentA.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Assembly.ComponentB.Edge2",
+          "id": "Assembly:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "ComponentB.Edge1",
+          "subname": "ComponentB.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Assembly.ComponentA.Vertex1",
+          "id": "Assembly:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "ComponentA.Vertex1",
+          "subname": "ComponentA.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Assembly.ComponentB.Vertex2",
+          "id": "Assembly:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "ComponentB.Vertex1",
+          "subname": "ComponentB.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Assembly.ComponentB.Vertex3",
+          "id": "Assembly:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "ComponentB.Vertex2",
+          "subname": "ComponentB.Vertex3"
+        }
+      ]
+    }
+  ]
+}

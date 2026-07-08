@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "full_subname_not_stable_identity",
+      "message": "LinkedObject target Box uses FullSubList Face99 as display path only; FullSubList is not stable topology identity",
+      "object": "BoxLink",
+      "property": "LinkedObject",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face99",
+      "target": "Box"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "BoxLink",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,38 +1,46 @@
 {
   "diagnostic_codes": [
-    "missing_link_target",
-    "missing_link_target",
-    "missing_link_target",
-    "missing_link_target"
+    "invalid_parameter",
+    "invalid_parameter",
+    "invalid_parameter",
+    "invalid_parameter"
   ],
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "InvalidMaxSegments": {
       "native_error": "Part.makeFilledFace MaxSegments must be a positive integer",
-      "native_error_code": "missing_link_target",
+      "native_error_code": "invalid_parameter",
       "object_fields": {
-        "status": "error"
+        "status": "error",
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace"
       }
     },
     "InvalidPtsOnCurve": {
       "native_error": "Part.makeFilledFace PtsOnCurve must be a positive integer",
-      "native_error_code": "missing_link_target",
+      "native_error_code": "invalid_parameter",
       "object_fields": {
-        "status": "error"
+        "status": "error",
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace"
       }
     },
     "InvalidTolG1": {
       "native_error": "Part.makeFilledFace TolG1 must be a positive number",
-      "native_error_code": "missing_link_target",
+      "native_error_code": "invalid_parameter",
       "object_fields": {
-        "status": "error"
+        "status": "error",
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace"
       }
     },
     "InvalidTolG2": {
       "native_error": "Part.makeFilledFace TolG2 must be numeric",
-      "native_error_code": "missing_link_target",
+      "native_error_code": "invalid_parameter",
       "object_fields": {
-        "status": "error"
+        "status": "error",
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace"
       }
     }
   },

@@ -1,0 +1,2790 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "message": "PartDesign Pipe scaling-law Transformation is source-blocked until a C6 PipeLaw ScalingData DTO is provided",
+      "object": "AdditivePipeLinearScaling",
+      "property": "Transformation",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "AdditivePipeLinearScaling"
+    },
+    {
+      "code": "unsupported_property",
+      "message": "PartDesign Pipe scaling-law Transformation is source-blocked until a C6 PipeLaw ScalingData DTO is provided",
+      "object": "AdditivePipeSShapeScaling",
+      "property": "Transformation",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "AdditivePipeSShapeScaling"
+    },
+    {
+      "code": "missing_pipe_law_samples",
+      "message": "PartDesign Pipe Transformation=Interpolation requires LawSamples array pairs [parameter, scale]",
+      "object": "AdditivePipeInterpolation",
+      "property": "LawSamples",
+      "severity": "error",
+      "stage": "runtime"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "AdditivePipeLinearScaling",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "AdditivePipeSShapeScaling",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "AdditivePipeInterpolation",
+      "subshapes": []
+    },
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "AdditivePipeSpineTangent:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                -0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge1"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                -0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                0.5,
+                -0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge1"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge3"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                -0.5,
+                -0.5,
+                4.0
+              ],
+              [
+                0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge1"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                0.5,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge2"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                0.5,
+                0.5,
+                0.0
+              ],
+              [
+                0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge6"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.5,
+                -0.5,
+                4.0
+              ],
+              [
+                0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge2"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                0.5,
+                0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge3"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                -0.5,
+                0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge9"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.5,
+                0.5,
+                4.0
+              ],
+              [
+                -0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge3"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                -0.5,
+                0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge4"
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                -0.5,
+                0.5,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge4"
+          }
+        ],
+        "faceIds": [
+          "AdditivePipeSpineTangent:Face1",
+          "AdditivePipeSpineTangent:Face1",
+          "AdditivePipeSpineTangent:Face2",
+          "AdditivePipeSpineTangent:Face2",
+          "AdditivePipeSpineTangent:Face3",
+          "AdditivePipeSpineTangent:Face3",
+          "AdditivePipeSpineTangent:Face4",
+          "AdditivePipeSpineTangent:Face4",
+          "AdditivePipeSpineTangent:Face5",
+          "AdditivePipeSpineTangent:Face5",
+          "AdditivePipeSpineTangent:Face6",
+          "AdditivePipeSpineTangent:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          0,
+          3,
+          4,
+          3,
+          5,
+          6,
+          4,
+          5,
+          6,
+          5,
+          7,
+          1,
+          6,
+          7,
+          1,
+          7,
+          2,
+          2,
+          5,
+          3,
+          7,
+          5,
+          2,
+          4,
+          1,
+          0,
+          4,
+          6,
+          1
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "AdditivePipeSpineTangent:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              -0.5,
+              -0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              -0.5,
+              -0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.5,
+              -0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.5,
+              -0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              0.5,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              0.5,
+              0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              -0.5,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeSpineTangent:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              -0.5,
+              0.5,
+              4.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.5,
+            -0.5,
+            4.0
+          ],
+          [
+            -0.5,
+            -0.5,
+            4.0
+          ],
+          [
+            -0.5,
+            -0.5,
+            0.0
+          ],
+          [
+            0.5,
+            -0.5,
+            0.0
+          ],
+          [
+            0.5,
+            0.5,
+            4.0
+          ],
+          [
+            0.5,
+            0.5,
+            0.0
+          ],
+          [
+            -0.5,
+            0.5,
+            4.0
+          ],
+          [
+            -0.5,
+            0.5,
+            0.0
+          ]
+        ]
+      },
+      "object": "AdditivePipeSpineTangent",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge1",
+          "id": "AdditivePipeSpineTangent:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge1",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge10",
+          "id": "AdditivePipeSpineTangent:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge3",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge11",
+          "id": "AdditivePipeSpineTangent:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge4",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge12",
+          "id": "AdditivePipeSpineTangent:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge4",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge2",
+          "id": "AdditivePipeSpineTangent:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge1",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge3",
+          "id": "AdditivePipeSpineTangent:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge3",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge4",
+          "id": "AdditivePipeSpineTangent:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge1",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge5",
+          "id": "AdditivePipeSpineTangent:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge2",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge6",
+          "id": "AdditivePipeSpineTangent:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge6",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge7",
+          "id": "AdditivePipeSpineTangent:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Edge2",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge8",
+          "id": "AdditivePipeSpineTangent:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Edge3",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Edge9",
+          "id": "AdditivePipeSpineTangent:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeSpineTangent.Sewing.Edge9",
+          "subname": "AdditivePipeSpineTangent.Sewing.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Face1",
+          "id": "AdditivePipeSpineTangent:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "g1",
+          "subname": "AdditivePipeSpineTangent.Sewing.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Face2",
+          "id": "AdditivePipeSpineTangent:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "g2",
+          "subname": "AdditivePipeSpineTangent.Sewing.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Face3",
+          "id": "AdditivePipeSpineTangent:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "g3",
+          "subname": "AdditivePipeSpineTangent.Sewing.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Face4",
+          "id": "AdditivePipeSpineTangent:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "g4",
+          "subname": "AdditivePipeSpineTangent.Sewing.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Face5",
+          "id": "AdditivePipeSpineTangent:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Face1",
+          "subname": "AdditivePipeSpineTangent.Sewing.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Face6",
+          "id": "AdditivePipeSpineTangent:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Face1",
+          "subname": "AdditivePipeSpineTangent.Sewing.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.FrontFace.Vertex1",
+          "id": "AdditivePipeSpineTangent:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Vertex1",
+          "subname": "AdditivePipeSpineTangent.FrontFace.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Vertex2",
+          "id": "AdditivePipeSpineTangent:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Vertex1",
+          "subname": "AdditivePipeSpineTangent.Sewing.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Vertex3",
+          "id": "AdditivePipeSpineTangent:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Vertex2",
+          "subname": "AdditivePipeSpineTangent.Sewing.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Vertex4",
+          "id": "AdditivePipeSpineTangent:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Vertex2",
+          "subname": "AdditivePipeSpineTangent.Sewing.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Vertex5",
+          "id": "AdditivePipeSpineTangent:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Vertex3",
+          "subname": "AdditivePipeSpineTangent.Sewing.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Vertex6",
+          "id": "AdditivePipeSpineTangent:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Vertex3",
+          "subname": "AdditivePipeSpineTangent.Sewing.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Vertex7",
+          "id": "AdditivePipeSpineTangent:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.FrontFace.Vertex4",
+          "subname": "AdditivePipeSpineTangent.Sewing.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeSpineTangent.Sewing.Vertex8",
+          "id": "AdditivePipeSpineTangent:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeSpineTangent.BackFace.Vertex4",
+          "subname": "AdditivePipeSpineTangent.Sewing.Vertex8"
+        }
+      ]
+    },
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                -0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                0.16666666666666666
+              ],
+              [
+                -0.5,
+                -0.5,
+                0.3333333333333333
+              ],
+              [
+                -0.5,
+                -0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                -0.5,
+                0.6666666666666666
+              ],
+              [
+                -0.5,
+                -0.5,
+                0.8333333333333334
+              ],
+              [
+                -0.5,
+                -0.5,
+                1.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                1.1666666666666667
+              ],
+              [
+                -0.5,
+                -0.5,
+                1.3333333333333333
+              ],
+              [
+                -0.5,
+                -0.5,
+                1.5
+              ],
+              [
+                -0.5,
+                -0.5,
+                1.6666666666666667
+              ],
+              [
+                -0.5,
+                -0.5,
+                1.8333333333333333
+              ],
+              [
+                -0.5,
+                -0.5,
+                2.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                2.1666666666666665
+              ],
+              [
+                -0.5,
+                -0.5,
+                2.3333333333333335
+              ],
+              [
+                -0.5,
+                -0.5,
+                2.5
+              ],
+              [
+                -0.5,
+                -0.5,
+                2.6666666666666665
+              ],
+              [
+                -0.5,
+                -0.5,
+                2.8333333333333335
+              ],
+              [
+                -0.5,
+                -0.5,
+                3.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                3.1666666666666665
+              ],
+              [
+                -0.5,
+                -0.5,
+                3.3333333333333335
+              ],
+              [
+                -0.5,
+                -0.5,
+                3.5
+              ],
+              [
+                -0.5,
+                -0.5,
+                3.6666666666666665
+              ],
+              [
+                -0.5,
+                -0.5,
+                3.8333333333333335
+              ],
+              [
+                -0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge1"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                -0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.4583333333333333,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.4166666666666667,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.375,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.33333333333333337,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.29166666666666663,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.25,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.20833333333333331,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.16666666666666669,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.125,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.08333333333333331,
+                -0.5,
+                0.0
+              ],
+              [
+                -0.041666666666666685,
+                -0.5,
+                0.0
+              ],
+              [
+                0.0,
+                -0.5,
+                0.0
+              ],
+              [
+                0.04166666666666663,
+                -0.5,
+                0.0
+              ],
+              [
+                0.08333333333333337,
+                -0.5,
+                0.0
+              ],
+              [
+                0.125,
+                -0.5,
+                0.0
+              ],
+              [
+                0.16666666666666663,
+                -0.5,
+                0.0
+              ],
+              [
+                0.20833333333333337,
+                -0.5,
+                0.0
+              ],
+              [
+                0.25,
+                -0.5,
+                0.0
+              ],
+              [
+                0.29166666666666663,
+                -0.5,
+                0.0
+              ],
+              [
+                0.33333333333333337,
+                -0.5,
+                0.0
+              ],
+              [
+                0.375,
+                -0.5,
+                0.0
+              ],
+              [
+                0.41666666666666663,
+                -0.5,
+                0.0
+              ],
+              [
+                0.45833333333333337,
+                -0.5,
+                0.0
+              ],
+              [
+                0.5,
+                -0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge1"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                0.5,
+                -0.5,
+                0.16666666666666666
+              ],
+              [
+                0.5,
+                -0.5,
+                0.3333333333333333
+              ],
+              [
+                0.5,
+                -0.5,
+                0.5
+              ],
+              [
+                0.5,
+                -0.5,
+                0.6666666666666666
+              ],
+              [
+                0.5,
+                -0.5,
+                0.8333333333333334
+              ],
+              [
+                0.5,
+                -0.5,
+                1.0
+              ],
+              [
+                0.5,
+                -0.5,
+                1.1666666666666667
+              ],
+              [
+                0.5,
+                -0.5,
+                1.3333333333333333
+              ],
+              [
+                0.5,
+                -0.5,
+                1.5
+              ],
+              [
+                0.5,
+                -0.5,
+                1.6666666666666667
+              ],
+              [
+                0.5,
+                -0.5,
+                1.8333333333333333
+              ],
+              [
+                0.5,
+                -0.5,
+                2.0
+              ],
+              [
+                0.5,
+                -0.5,
+                2.1666666666666665
+              ],
+              [
+                0.5,
+                -0.5,
+                2.3333333333333335
+              ],
+              [
+                0.5,
+                -0.5,
+                2.5
+              ],
+              [
+                0.5,
+                -0.5,
+                2.6666666666666665
+              ],
+              [
+                0.5,
+                -0.5,
+                2.8333333333333335
+              ],
+              [
+                0.5,
+                -0.5,
+                3.0
+              ],
+              [
+                0.5,
+                -0.5,
+                3.1666666666666665
+              ],
+              [
+                0.5,
+                -0.5,
+                3.3333333333333335
+              ],
+              [
+                0.5,
+                -0.5,
+                3.5
+              ],
+              [
+                0.5,
+                -0.5,
+                3.6666666666666665
+              ],
+              [
+                0.5,
+                -0.5,
+                3.8333333333333335
+              ],
+              [
+                0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge3"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                -0.5,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.4583333333333333,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.4166666666666667,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.375,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.33333333333333337,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.29166666666666663,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.25,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.20833333333333331,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.16666666666666669,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.125,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.08333333333333331,
+                -0.5,
+                4.0
+              ],
+              [
+                -0.041666666666666685,
+                -0.5,
+                4.0
+              ],
+              [
+                0.0,
+                -0.5,
+                4.0
+              ],
+              [
+                0.04166666666666663,
+                -0.5,
+                4.0
+              ],
+              [
+                0.08333333333333337,
+                -0.5,
+                4.0
+              ],
+              [
+                0.125,
+                -0.5,
+                4.0
+              ],
+              [
+                0.16666666666666663,
+                -0.5,
+                4.0
+              ],
+              [
+                0.20833333333333337,
+                -0.5,
+                4.0
+              ],
+              [
+                0.25,
+                -0.5,
+                4.0
+              ],
+              [
+                0.29166666666666663,
+                -0.5,
+                4.0
+              ],
+              [
+                0.33333333333333337,
+                -0.5,
+                4.0
+              ],
+              [
+                0.375,
+                -0.5,
+                4.0
+              ],
+              [
+                0.41666666666666663,
+                -0.5,
+                4.0
+              ],
+              [
+                0.45833333333333337,
+                -0.5,
+                4.0
+              ],
+              [
+                0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge1"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.5,
+                -0.5,
+                0.0
+              ],
+              [
+                0.5,
+                -0.4583333333333333,
+                0.0
+              ],
+              [
+                0.5,
+                -0.4166666666666667,
+                0.0
+              ],
+              [
+                0.5,
+                -0.375,
+                0.0
+              ],
+              [
+                0.5,
+                -0.33333333333333337,
+                0.0
+              ],
+              [
+                0.5,
+                -0.29166666666666663,
+                0.0
+              ],
+              [
+                0.5,
+                -0.25,
+                0.0
+              ],
+              [
+                0.5,
+                -0.20833333333333331,
+                0.0
+              ],
+              [
+                0.5,
+                -0.16666666666666669,
+                0.0
+              ],
+              [
+                0.5,
+                -0.125,
+                0.0
+              ],
+              [
+                0.5,
+                -0.08333333333333331,
+                0.0
+              ],
+              [
+                0.5,
+                -0.041666666666666685,
+                0.0
+              ],
+              [
+                0.5,
+                0.0,
+                0.0
+              ],
+              [
+                0.5,
+                0.04166666666666663,
+                0.0
+              ],
+              [
+                0.5,
+                0.08333333333333337,
+                0.0
+              ],
+              [
+                0.5,
+                0.125,
+                0.0
+              ],
+              [
+                0.5,
+                0.16666666666666663,
+                0.0
+              ],
+              [
+                0.5,
+                0.20833333333333337,
+                0.0
+              ],
+              [
+                0.5,
+                0.25,
+                0.0
+              ],
+              [
+                0.5,
+                0.29166666666666663,
+                0.0
+              ],
+              [
+                0.5,
+                0.33333333333333337,
+                0.0
+              ],
+              [
+                0.5,
+                0.375,
+                0.0
+              ],
+              [
+                0.5,
+                0.41666666666666663,
+                0.0
+              ],
+              [
+                0.5,
+                0.45833333333333337,
+                0.0
+              ],
+              [
+                0.5,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge2"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                0.5,
+                0.5,
+                0.0
+              ],
+              [
+                0.5,
+                0.5,
+                0.16666666666666666
+              ],
+              [
+                0.5,
+                0.5,
+                0.3333333333333333
+              ],
+              [
+                0.5,
+                0.5,
+                0.5
+              ],
+              [
+                0.5,
+                0.5,
+                0.6666666666666666
+              ],
+              [
+                0.5,
+                0.5,
+                0.8333333333333334
+              ],
+              [
+                0.5,
+                0.5,
+                1.0
+              ],
+              [
+                0.5,
+                0.5,
+                1.1666666666666667
+              ],
+              [
+                0.5,
+                0.5,
+                1.3333333333333333
+              ],
+              [
+                0.5,
+                0.5,
+                1.5
+              ],
+              [
+                0.5,
+                0.5,
+                1.6666666666666667
+              ],
+              [
+                0.5,
+                0.5,
+                1.8333333333333333
+              ],
+              [
+                0.5,
+                0.5,
+                2.0
+              ],
+              [
+                0.5,
+                0.5,
+                2.1666666666666665
+              ],
+              [
+                0.5,
+                0.5,
+                2.3333333333333335
+              ],
+              [
+                0.5,
+                0.5,
+                2.5
+              ],
+              [
+                0.5,
+                0.5,
+                2.6666666666666665
+              ],
+              [
+                0.5,
+                0.5,
+                2.8333333333333335
+              ],
+              [
+                0.5,
+                0.5,
+                3.0
+              ],
+              [
+                0.5,
+                0.5,
+                3.1666666666666665
+              ],
+              [
+                0.5,
+                0.5,
+                3.3333333333333335
+              ],
+              [
+                0.5,
+                0.5,
+                3.5
+              ],
+              [
+                0.5,
+                0.5,
+                3.6666666666666665
+              ],
+              [
+                0.5,
+                0.5,
+                3.8333333333333335
+              ],
+              [
+                0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge6"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.5,
+                -0.5,
+                4.0
+              ],
+              [
+                0.5,
+                -0.4583333333333333,
+                4.0
+              ],
+              [
+                0.5,
+                -0.4166666666666667,
+                4.0
+              ],
+              [
+                0.5,
+                -0.375,
+                4.0
+              ],
+              [
+                0.5,
+                -0.33333333333333337,
+                4.0
+              ],
+              [
+                0.5,
+                -0.29166666666666663,
+                4.0
+              ],
+              [
+                0.5,
+                -0.25,
+                4.0
+              ],
+              [
+                0.5,
+                -0.20833333333333331,
+                4.0
+              ],
+              [
+                0.5,
+                -0.16666666666666669,
+                4.0
+              ],
+              [
+                0.5,
+                -0.125,
+                4.0
+              ],
+              [
+                0.5,
+                -0.08333333333333331,
+                4.0
+              ],
+              [
+                0.5,
+                -0.041666666666666685,
+                4.0
+              ],
+              [
+                0.5,
+                0.0,
+                4.0
+              ],
+              [
+                0.5,
+                0.04166666666666663,
+                4.0
+              ],
+              [
+                0.5,
+                0.08333333333333337,
+                4.0
+              ],
+              [
+                0.5,
+                0.125,
+                4.0
+              ],
+              [
+                0.5,
+                0.16666666666666663,
+                4.0
+              ],
+              [
+                0.5,
+                0.20833333333333337,
+                4.0
+              ],
+              [
+                0.5,
+                0.25,
+                4.0
+              ],
+              [
+                0.5,
+                0.29166666666666663,
+                4.0
+              ],
+              [
+                0.5,
+                0.33333333333333337,
+                4.0
+              ],
+              [
+                0.5,
+                0.375,
+                4.0
+              ],
+              [
+                0.5,
+                0.41666666666666663,
+                4.0
+              ],
+              [
+                0.5,
+                0.45833333333333337,
+                4.0
+              ],
+              [
+                0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge2"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                0.5,
+                0.5,
+                0.0
+              ],
+              [
+                0.4583333333333333,
+                0.5,
+                0.0
+              ],
+              [
+                0.4166666666666667,
+                0.5,
+                0.0
+              ],
+              [
+                0.375,
+                0.5,
+                0.0
+              ],
+              [
+                0.33333333333333337,
+                0.5,
+                0.0
+              ],
+              [
+                0.29166666666666663,
+                0.5,
+                0.0
+              ],
+              [
+                0.25,
+                0.5,
+                0.0
+              ],
+              [
+                0.20833333333333331,
+                0.5,
+                0.0
+              ],
+              [
+                0.16666666666666669,
+                0.5,
+                0.0
+              ],
+              [
+                0.125,
+                0.5,
+                0.0
+              ],
+              [
+                0.08333333333333331,
+                0.5,
+                0.0
+              ],
+              [
+                0.041666666666666685,
+                0.5,
+                0.0
+              ],
+              [
+                0.0,
+                0.5,
+                0.0
+              ],
+              [
+                -0.04166666666666663,
+                0.5,
+                0.0
+              ],
+              [
+                -0.08333333333333337,
+                0.5,
+                0.0
+              ],
+              [
+                -0.125,
+                0.5,
+                0.0
+              ],
+              [
+                -0.16666666666666663,
+                0.5,
+                0.0
+              ],
+              [
+                -0.20833333333333337,
+                0.5,
+                0.0
+              ],
+              [
+                -0.25,
+                0.5,
+                0.0
+              ],
+              [
+                -0.29166666666666663,
+                0.5,
+                0.0
+              ],
+              [
+                -0.33333333333333337,
+                0.5,
+                0.0
+              ],
+              [
+                -0.375,
+                0.5,
+                0.0
+              ],
+              [
+                -0.41666666666666663,
+                0.5,
+                0.0
+              ],
+              [
+                -0.45833333333333337,
+                0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge3"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                -0.5,
+                0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                0.5,
+                0.16666666666666666
+              ],
+              [
+                -0.5,
+                0.5,
+                0.3333333333333333
+              ],
+              [
+                -0.5,
+                0.5,
+                0.5
+              ],
+              [
+                -0.5,
+                0.5,
+                0.6666666666666666
+              ],
+              [
+                -0.5,
+                0.5,
+                0.8333333333333334
+              ],
+              [
+                -0.5,
+                0.5,
+                1.0
+              ],
+              [
+                -0.5,
+                0.5,
+                1.1666666666666667
+              ],
+              [
+                -0.5,
+                0.5,
+                1.3333333333333333
+              ],
+              [
+                -0.5,
+                0.5,
+                1.5
+              ],
+              [
+                -0.5,
+                0.5,
+                1.6666666666666667
+              ],
+              [
+                -0.5,
+                0.5,
+                1.8333333333333333
+              ],
+              [
+                -0.5,
+                0.5,
+                2.0
+              ],
+              [
+                -0.5,
+                0.5,
+                2.1666666666666665
+              ],
+              [
+                -0.5,
+                0.5,
+                2.3333333333333335
+              ],
+              [
+                -0.5,
+                0.5,
+                2.5
+              ],
+              [
+                -0.5,
+                0.5,
+                2.6666666666666665
+              ],
+              [
+                -0.5,
+                0.5,
+                2.8333333333333335
+              ],
+              [
+                -0.5,
+                0.5,
+                3.0
+              ],
+              [
+                -0.5,
+                0.5,
+                3.1666666666666665
+              ],
+              [
+                -0.5,
+                0.5,
+                3.3333333333333335
+              ],
+              [
+                -0.5,
+                0.5,
+                3.5
+              ],
+              [
+                -0.5,
+                0.5,
+                3.6666666666666665
+              ],
+              [
+                -0.5,
+                0.5,
+                3.8333333333333335
+              ],
+              [
+                -0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge9"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.5,
+                0.5,
+                4.0
+              ],
+              [
+                0.4583333333333333,
+                0.5,
+                4.0
+              ],
+              [
+                0.4166666666666667,
+                0.5,
+                4.0
+              ],
+              [
+                0.375,
+                0.5,
+                4.0
+              ],
+              [
+                0.33333333333333337,
+                0.5,
+                4.0
+              ],
+              [
+                0.29166666666666663,
+                0.5,
+                4.0
+              ],
+              [
+                0.25,
+                0.5,
+                4.0
+              ],
+              [
+                0.20833333333333331,
+                0.5,
+                4.0
+              ],
+              [
+                0.16666666666666669,
+                0.5,
+                4.0
+              ],
+              [
+                0.125,
+                0.5,
+                4.0
+              ],
+              [
+                0.08333333333333331,
+                0.5,
+                4.0
+              ],
+              [
+                0.041666666666666685,
+                0.5,
+                4.0
+              ],
+              [
+                0.0,
+                0.5,
+                4.0
+              ],
+              [
+                -0.04166666666666663,
+                0.5,
+                4.0
+              ],
+              [
+                -0.08333333333333337,
+                0.5,
+                4.0
+              ],
+              [
+                -0.125,
+                0.5,
+                4.0
+              ],
+              [
+                -0.16666666666666663,
+                0.5,
+                4.0
+              ],
+              [
+                -0.20833333333333337,
+                0.5,
+                4.0
+              ],
+              [
+                -0.25,
+                0.5,
+                4.0
+              ],
+              [
+                -0.29166666666666663,
+                0.5,
+                4.0
+              ],
+              [
+                -0.33333333333333337,
+                0.5,
+                4.0
+              ],
+              [
+                -0.375,
+                0.5,
+                4.0
+              ],
+              [
+                -0.41666666666666663,
+                0.5,
+                4.0
+              ],
+              [
+                -0.45833333333333337,
+                0.5,
+                4.0
+              ],
+              [
+                -0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge3"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                -0.5,
+                0.5,
+                0.0
+              ],
+              [
+                -0.5,
+                0.4583333333333333,
+                0.0
+              ],
+              [
+                -0.5,
+                0.4166666666666667,
+                0.0
+              ],
+              [
+                -0.5,
+                0.375,
+                0.0
+              ],
+              [
+                -0.5,
+                0.33333333333333337,
+                0.0
+              ],
+              [
+                -0.5,
+                0.29166666666666663,
+                0.0
+              ],
+              [
+                -0.5,
+                0.25,
+                0.0
+              ],
+              [
+                -0.5,
+                0.20833333333333331,
+                0.0
+              ],
+              [
+                -0.5,
+                0.16666666666666669,
+                0.0
+              ],
+              [
+                -0.5,
+                0.125,
+                0.0
+              ],
+              [
+                -0.5,
+                0.08333333333333331,
+                0.0
+              ],
+              [
+                -0.5,
+                0.041666666666666685,
+                0.0
+              ],
+              [
+                -0.5,
+                0.0,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.04166666666666663,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.08333333333333337,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.125,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.16666666666666663,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.20833333333333337,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.25,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.29166666666666663,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.33333333333333337,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.375,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.41666666666666663,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.45833333333333337,
+                0.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge4"
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                -0.5,
+                0.5,
+                4.0
+              ],
+              [
+                -0.5,
+                0.4583333333333333,
+                4.0
+              ],
+              [
+                -0.5,
+                0.4166666666666667,
+                4.0
+              ],
+              [
+                -0.5,
+                0.375,
+                4.0
+              ],
+              [
+                -0.5,
+                0.33333333333333337,
+                4.0
+              ],
+              [
+                -0.5,
+                0.29166666666666663,
+                4.0
+              ],
+              [
+                -0.5,
+                0.25,
+                4.0
+              ],
+              [
+                -0.5,
+                0.20833333333333331,
+                4.0
+              ],
+              [
+                -0.5,
+                0.16666666666666669,
+                4.0
+              ],
+              [
+                -0.5,
+                0.125,
+                4.0
+              ],
+              [
+                -0.5,
+                0.08333333333333331,
+                4.0
+              ],
+              [
+                -0.5,
+                0.041666666666666685,
+                4.0
+              ],
+              [
+                -0.5,
+                0.0,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.04166666666666663,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.08333333333333337,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.125,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.16666666666666663,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.20833333333333337,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.25,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.29166666666666663,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.33333333333333337,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.375,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.41666666666666663,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.45833333333333337,
+                4.0
+              ],
+              [
+                -0.5,
+                -0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge4"
+          }
+        ],
+        "faceIds": [
+          "AdditivePipeAuxiliaryTangent:Face1",
+          "AdditivePipeAuxiliaryTangent:Face1",
+          "AdditivePipeAuxiliaryTangent:Face2",
+          "AdditivePipeAuxiliaryTangent:Face2",
+          "AdditivePipeAuxiliaryTangent:Face3",
+          "AdditivePipeAuxiliaryTangent:Face3",
+          "AdditivePipeAuxiliaryTangent:Face4",
+          "AdditivePipeAuxiliaryTangent:Face4",
+          "AdditivePipeAuxiliaryTangent:Face5",
+          "AdditivePipeAuxiliaryTangent:Face5",
+          "AdditivePipeAuxiliaryTangent:Face6",
+          "AdditivePipeAuxiliaryTangent:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          0,
+          3,
+          4,
+          3,
+          5,
+          6,
+          4,
+          5,
+          6,
+          5,
+          7,
+          1,
+          6,
+          7,
+          1,
+          7,
+          2,
+          2,
+          5,
+          3,
+          7,
+          5,
+          2,
+          4,
+          1,
+          0,
+          4,
+          6,
+          1
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              -0.5,
+              -0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              -0.5,
+              -0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.5,
+              -0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.5,
+              -0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              0.5,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              0.5,
+              0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              -0.5,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "AdditivePipeAuxiliaryTangent:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              -0.5,
+              0.5,
+              4.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.5,
+            -0.5,
+            4.0
+          ],
+          [
+            -0.5,
+            -0.5,
+            4.0
+          ],
+          [
+            -0.5,
+            -0.5,
+            0.0
+          ],
+          [
+            0.5,
+            -0.5,
+            0.0
+          ],
+          [
+            0.5,
+            0.5,
+            4.0
+          ],
+          [
+            0.5,
+            0.5,
+            0.0
+          ],
+          [
+            -0.5,
+            0.5,
+            4.0
+          ],
+          [
+            -0.5,
+            0.5,
+            0.0
+          ]
+        ]
+      },
+      "object": "AdditivePipeAuxiliaryTangent",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge1",
+          "id": "AdditivePipeAuxiliaryTangent:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge1",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge10",
+          "id": "AdditivePipeAuxiliaryTangent:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge3",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge11",
+          "id": "AdditivePipeAuxiliaryTangent:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge4",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge12",
+          "id": "AdditivePipeAuxiliaryTangent:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge4",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge2",
+          "id": "AdditivePipeAuxiliaryTangent:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge1",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge3",
+          "id": "AdditivePipeAuxiliaryTangent:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge3",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge4",
+          "id": "AdditivePipeAuxiliaryTangent:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge1",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge5",
+          "id": "AdditivePipeAuxiliaryTangent:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge2",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge6",
+          "id": "AdditivePipeAuxiliaryTangent:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge6",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge7",
+          "id": "AdditivePipeAuxiliaryTangent:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Edge2",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge8",
+          "id": "AdditivePipeAuxiliaryTangent:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Edge3",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge9",
+          "id": "AdditivePipeAuxiliaryTangent:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.Sewing.Edge9",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Face1",
+          "id": "AdditivePipeAuxiliaryTangent:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "g1",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Face2",
+          "id": "AdditivePipeAuxiliaryTangent:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "g2",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Face3",
+          "id": "AdditivePipeAuxiliaryTangent:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "g3",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Face4",
+          "id": "AdditivePipeAuxiliaryTangent:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "g4",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Face5",
+          "id": "AdditivePipeAuxiliaryTangent:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Face1",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Face6",
+          "id": "AdditivePipeAuxiliaryTangent:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Face1",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Vertex1",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Vertex1",
+          "subname": "AdditivePipeAuxiliaryTangent.FrontFace.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex2",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Vertex1",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex3",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Vertex2",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex4",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Vertex2",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex5",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Vertex3",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex6",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Vertex3",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex7",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.FrontFace.Vertex4",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex8",
+          "id": "AdditivePipeAuxiliaryTangent:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "AdditivePipeAuxiliaryTangent.BackFace.Vertex4",
+          "subname": "AdditivePipeAuxiliaryTangent.Sewing.Vertex8"
+        }
+      ]
+    }
+  ]
+}

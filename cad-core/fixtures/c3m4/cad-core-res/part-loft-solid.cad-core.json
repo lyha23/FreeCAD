@@ -1,0 +1,1454 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Loft:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                2.2,
+                0.0,
+                0.0
+              ],
+              [
+                0.6798373876248844,
+                2.0923243358493377,
+                0.0
+              ]
+            ],
+            "stableSubname": "LowerProfile.Edge1"
+          },
+          {
+            "id": "Loft:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.6798373876248844,
+                2.0923243358493377,
+                0.0
+              ],
+              [
+                0.6823407753826993,
+                2.0570675788524766,
+                0.14583333333333331
+              ],
+              [
+                0.6848441631405142,
+                2.0218108218556154,
+                0.29166666666666663
+              ],
+              [
+                0.6873475508983291,
+                1.986554064858754,
+                0.4375
+              ],
+              [
+                0.689850938656144,
+                1.951297307861893,
+                0.5833333333333333
+              ],
+              [
+                0.6923543264139589,
+                1.9160405508650318,
+                0.7291666666666667
+              ],
+              [
+                0.6948577141717738,
+                1.8807837938681706,
+                0.875
+              ],
+              [
+                0.6973611019295888,
+                1.8455270368713093,
+                1.0208333333333335
+              ],
+              [
+                0.6998644896874037,
+                1.810270279874448,
+                1.1666666666666665
+              ],
+              [
+                0.7023678774452186,
+                1.775013522877587,
+                1.3125
+              ],
+              [
+                0.7048712652030334,
+                1.7397567658807258,
+                1.4583333333333335
+              ],
+              [
+                0.7073746529608483,
+                1.7045000088838647,
+                1.6041666666666665
+              ],
+              [
+                0.7098780407186632,
+                1.6692432518870035,
+                1.75
+              ],
+              [
+                0.7123814284764781,
+                1.6339864948901421,
+                1.8958333333333333
+              ],
+              [
+                0.714884816234293,
+                1.598729737893281,
+                2.041666666666667
+              ],
+              [
+                0.7173882039921079,
+                1.5634729808964198,
+                2.1875
+              ],
+              [
+                0.7198915917499228,
+                1.5282162238995587,
+                2.333333333333333
+              ],
+              [
+                0.7223949795077377,
+                1.4929594669026973,
+                2.479166666666667
+              ],
+              [
+                0.7248983672655527,
+                1.4577027099058362,
+                2.625
+              ],
+              [
+                0.7274017550233676,
+                1.422445952908975,
+                2.770833333333333
+              ],
+              [
+                0.7299051427811825,
+                1.3871891959121139,
+                2.916666666666667
+              ],
+              [
+                0.7324085305389973,
+                1.3519324389152527,
+                3.0625
+              ],
+              [
+                0.7349119182968122,
+                1.3166756819183916,
+                3.208333333333333
+              ],
+              [
+                0.7374153060546271,
+                1.2814189249215302,
+                3.354166666666667
+              ],
+              [
+                0.739918693812442,
+                1.246162167924669,
+                3.5
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Loft:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                1.5,
+                0.2,
+                3.5
+              ],
+              [
+                0.739918693812442,
+                1.246162167924669,
+                3.5
+              ]
+            ],
+            "stableSubname": "UpperProfile.Edge1"
+          },
+          {
+            "id": "Loft:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                2.2,
+                0.0,
+                0.0
+              ],
+              [
+                2.1708333333333334,
+                0.008333333333333333,
+                0.14583333333333331
+              ],
+              [
+                2.141666666666667,
+                0.016666666666666666,
+                0.29166666666666663
+              ],
+              [
+                2.1125000000000003,
+                0.025,
+                0.4375
+              ],
+              [
+                2.0833333333333335,
+                0.03333333333333333,
+                0.5833333333333333
+              ],
+              [
+                2.0541666666666667,
+                0.04166666666666667,
+                0.7291666666666667
+              ],
+              [
+                2.0250000000000004,
+                0.05,
+                0.875
+              ],
+              [
+                1.9958333333333333,
+                0.05833333333333334,
+                1.0208333333333335
+              ],
+              [
+                1.9666666666666668,
+                0.06666666666666667,
+                1.1666666666666665
+              ],
+              [
+                1.9375,
+                0.07500000000000001,
+                1.3125
+              ],
+              [
+                1.9083333333333334,
+                0.08333333333333334,
+                1.4583333333333335
+              ],
+              [
+                1.8791666666666669,
+                0.09166666666666667,
+                1.6041666666666665
+              ],
+              [
+                1.85,
+                0.1,
+                1.75
+              ],
+              [
+                1.8208333333333335,
+                0.10833333333333334,
+                1.8958333333333333
+              ],
+              [
+                1.7916666666666667,
+                0.11666666666666668,
+                2.041666666666667
+              ],
+              [
+                1.7625000000000002,
+                0.125,
+                2.1875
+              ],
+              [
+                1.7333333333333334,
+                0.13333333333333333,
+                2.333333333333333
+              ],
+              [
+                1.7041666666666666,
+                0.1416666666666667,
+                2.479166666666667
+              ],
+              [
+                1.675,
+                0.15000000000000002,
+                2.625
+              ],
+              [
+                1.6458333333333335,
+                0.15833333333333333,
+                2.770833333333333
+              ],
+              [
+                1.6166666666666667,
+                0.16666666666666669,
+                2.916666666666667
+              ],
+              [
+                1.5875,
+                0.17500000000000002,
+                3.0625
+              ],
+              [
+                1.5583333333333333,
+                0.18333333333333335,
+                3.208333333333333
+              ],
+              [
+                1.5291666666666666,
+                0.19166666666666668,
+                3.354166666666667
+              ],
+              [
+                1.5,
+                0.2,
+                3.5
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Loft:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.6798373876248844,
+                2.0923243358493377,
+                0.0
+              ],
+              [
+                -1.7798373876248845,
+                1.2931275550434413,
+                0.0
+              ]
+            ],
+            "stableSubname": "LowerProfile.Edge2"
+          },
+          {
+            "id": "Loft:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                -1.7798373876248845,
+                1.2931275550434413,
+                0.0
+              ],
+              [
+                -1.7260907753826995,
+                1.2745207309800364,
+                0.14583333333333331
+              ],
+              [
+                -1.6723441631405143,
+                1.2559139069166312,
+                0.29166666666666663
+              ],
+              [
+                -1.6185975508983292,
+                1.2373070828532262,
+                0.4375
+              ],
+              [
+                -1.5648509386561442,
+                1.2187002587898212,
+                0.5833333333333333
+              ],
+              [
+                -1.511104326413959,
+                1.2000934347264163,
+                0.7291666666666667
+              ],
+              [
+                -1.457357714171774,
+                1.181486610663011,
+                0.875
+              ],
+              [
+                -1.403611101929589,
+                1.1628797865996061,
+                1.0208333333333335
+              ],
+              [
+                -1.3498644896874037,
+                1.1442729625362011,
+                1.1666666666666665
+              ],
+              [
+                -1.2961178774452187,
+                1.1256661384727962,
+                1.3125
+              ],
+              [
+                -1.2423712652030336,
+                1.107059314409391,
+                1.4583333333333335
+              ],
+              [
+                -1.1886246529608484,
+                1.088452490345986,
+                1.6041666666666665
+              ],
+              [
+                -1.1348780407186634,
+                1.069845666282581,
+                1.75
+              ],
+              [
+                -1.0811314284764784,
+                1.051238842219176,
+                1.8958333333333333
+              ],
+              [
+                -1.0273848162342931,
+                1.0326320181557709,
+                2.041666666666667
+              ],
+              [
+                -0.9736382039921081,
+                1.014025194092366,
+                2.1875
+              ],
+              [
+                -0.9198915917499231,
+                0.9954183700289608,
+                2.333333333333333
+              ],
+              [
+                -0.8661449795077378,
+                0.9768115459655559,
+                2.479166666666667
+              ],
+              [
+                -0.8123983672655528,
+                0.9582047219021508,
+                2.625
+              ],
+              [
+                -0.7586517550233678,
+                0.9395978978387458,
+                2.770833333333333
+              ],
+              [
+                -0.7049051427811825,
+                0.9209910737753407,
+                2.916666666666667
+              ],
+              [
+                -0.6511585305389975,
+                0.9023842497119358,
+                3.0625
+              ],
+              [
+                -0.5974119182968125,
+                0.8837774256485307,
+                3.208333333333333
+              ],
+              [
+                -0.5436653060546273,
+                0.8651706015851256,
+                3.354166666666667
+              ],
+              [
+                -0.4899186938124422,
+                0.8465637775217206,
+                3.5
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Loft:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.7399186938124422,
+                1.2461621679246688,
+                3.5
+              ],
+              [
+                -0.4899186938124422,
+                0.8465637775217206,
+                3.5
+              ]
+            ],
+            "stableSubname": "UpperProfile.Edge2"
+          },
+          {
+            "id": "Loft:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                -1.7798373876248843,
+                1.2931275550434413,
+                0.0
+              ],
+              [
+                -1.7798373876248845,
+                -1.293127555043441,
+                0.0
+              ]
+            ],
+            "stableSubname": "LowerProfile.Edge3"
+          },
+          {
+            "id": "Loft:Edge9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "points": [
+              [
+                -1.7798373876248845,
+                -1.293127555043441,
+                0.0
+              ],
+              [
+                -1.7260907753826995,
+                -1.2578540643133693,
+                0.14583333333333331
+              ],
+              [
+                -1.6723441631405143,
+                -1.2225805735832975,
+                0.29166666666666663
+              ],
+              [
+                -1.6185975508983292,
+                -1.1873070828532257,
+                0.4375
+              ],
+              [
+                -1.5648509386561442,
+                -1.1520335921231541,
+                0.5833333333333333
+              ],
+              [
+                -1.511104326413959,
+                -1.1167601013930823,
+                0.7291666666666667
+              ],
+              [
+                -1.457357714171774,
+                -1.0814866106630108,
+                0.875
+              ],
+              [
+                -1.403611101929589,
+                -1.046213119932939,
+                1.0208333333333335
+              ],
+              [
+                -1.3498644896874037,
+                -1.0109396292028674,
+                1.1666666666666665
+              ],
+              [
+                -1.2961178774452187,
+                -0.9756661384727957,
+                1.3125
+              ],
+              [
+                -1.2423712652030336,
+                -0.940392647742724,
+                1.4583333333333335
+              ],
+              [
+                -1.1886246529608484,
+                -0.9051191570126523,
+                1.6041666666666665
+              ],
+              [
+                -1.1348780407186634,
+                -0.8698456662825806,
+                1.75
+              ],
+              [
+                -1.0811314284764784,
+                -0.834572175552509,
+                1.8958333333333333
+              ],
+              [
+                -1.0273848162342931,
+                -0.7992986848224373,
+                2.041666666666667
+              ],
+              [
+                -0.9736382039921081,
+                -0.7640251940923656,
+                2.1875
+              ],
+              [
+                -0.9198915917499231,
+                -0.7287517033622939,
+                2.333333333333333
+              ],
+              [
+                -0.8661449795077378,
+                -0.6934782126322222,
+                2.479166666666667
+              ],
+              [
+                -0.8123983672655528,
+                -0.6582047219021505,
+                2.625
+              ],
+              [
+                -0.7586517550233678,
+                -0.6229312311720788,
+                2.770833333333333
+              ],
+              [
+                -0.7049051427811825,
+                -0.5876577404420071,
+                2.916666666666667
+              ],
+              [
+                -0.6511585305389975,
+                -0.5523842497119354,
+                3.0625
+              ],
+              [
+                -0.5974119182968125,
+                -0.5171107589818638,
+                3.208333333333333
+              ],
+              [
+                -0.5436653060546273,
+                -0.481837268251792,
+                3.354166666666667
+              ],
+              [
+                -0.48991869381244224,
+                -0.4465637775217204,
+                3.5
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Loft:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                -0.48991869381244213,
+                0.8465637775217207,
+                3.5
+              ],
+              [
+                -0.48991869381244224,
+                -0.4465637775217204,
+                3.5
+              ]
+            ],
+            "stableSubname": "UpperProfile.Edge3"
+          },
+          {
+            "id": "Loft:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                -1.7798373876248845,
+                -1.2931275550434407,
+                0.0
+              ],
+              [
+                0.6798373876248841,
+                -2.092324335849338,
+                0.0
+              ]
+            ],
+            "stableSubname": "LowerProfile.Edge4"
+          },
+          {
+            "id": "Loft:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.6798373876248841,
+                -2.092324335849338,
+                0.0
+              ],
+              [
+                0.682340775382699,
+                -2.0404009121858104,
+                0.14583333333333331
+              ],
+              [
+                0.6848441631405139,
+                -1.9884774885222825,
+                0.29166666666666663
+              ],
+              [
+                0.6873475508983289,
+                -1.9365540648587545,
+                0.4375
+              ],
+              [
+                0.6898509386561438,
+                -1.8846306411952267,
+                0.5833333333333333
+              ],
+              [
+                0.6923543264139587,
+                -1.8327072175316987,
+                0.7291666666666667
+              ],
+              [
+                0.6948577141717736,
+                -1.7807837938681708,
+                0.875
+              ],
+              [
+                0.6973611019295884,
+                -1.728860370204643,
+                1.0208333333333335
+              ],
+              [
+                0.6998644896874034,
+                -1.676936946541115,
+                1.1666666666666665
+              ],
+              [
+                0.7023678774452183,
+                -1.6250135228775873,
+                1.3125
+              ],
+              [
+                0.7048712652030332,
+                -1.5730900992140593,
+                1.4583333333333335
+              ],
+              [
+                0.7073746529608481,
+                -1.5211666755505315,
+                1.6041666666666665
+              ],
+              [
+                0.7098780407186631,
+                -1.4692432518870036,
+                1.75
+              ],
+              [
+                0.712381428476478,
+                -1.4173198282234758,
+                1.8958333333333333
+              ],
+              [
+                0.7148848162342929,
+                -1.3653964045599478,
+                2.041666666666667
+              ],
+              [
+                0.7173882039921078,
+                -1.3134729808964198,
+                2.1875
+              ],
+              [
+                0.7198915917499227,
+                -1.261549557232892,
+                2.333333333333333
+              ],
+              [
+                0.7223949795077377,
+                -1.209626133569364,
+                2.479166666666667
+              ],
+              [
+                0.7248983672655526,
+                -1.1577027099058363,
+                2.625
+              ],
+              [
+                0.7274017550233675,
+                -1.1057792862423084,
+                2.770833333333333
+              ],
+              [
+                0.7299051427811823,
+                -1.0538558625787804,
+                2.916666666666667
+              ],
+              [
+                0.7324085305389972,
+                -1.0019324389152526,
+                3.0625
+              ],
+              [
+                0.7349119182968122,
+                -0.9500090152517248,
+                3.208333333333333
+              ],
+              [
+                0.7374153060546271,
+                -0.8980855915881968,
+                3.354166666666667
+              ],
+              [
+                0.739918693812442,
+                -0.846162167924669,
+                3.5
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Loft:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                -0.48991869381244224,
+                -0.44656377752172033,
+                3.5
+              ],
+              [
+                0.739918693812442,
+                -0.846162167924669,
+                3.5
+              ]
+            ],
+            "stableSubname": "UpperProfile.Edge4"
+          },
+          {
+            "id": "Loft:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                0.679837387624884,
+                -2.092324335849338,
+                0.0
+              ],
+              [
+                2.2,
+                1.2593618133699512e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "LowerProfile.Edge5"
+          },
+          {
+            "id": "Loft:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                0.739918693812442,
+                -0.8461621679246691,
+                3.5
+              ],
+              [
+                1.5000000000000002,
+                0.2,
+                3.5
+              ]
+            ],
+            "stableSubname": "UpperProfile.Edge5"
+          }
+        ],
+        "faceIds": [
+          "Loft:Face1",
+          "Loft:Face1",
+          "Loft:Face2",
+          "Loft:Face2",
+          "Loft:Face3",
+          "Loft:Face3",
+          "Loft:Face3",
+          "Loft:Face3",
+          "Loft:Face4",
+          "Loft:Face4",
+          "Loft:Face4",
+          "Loft:Face4",
+          "Loft:Face5",
+          "Loft:Face5",
+          "Loft:Face5",
+          "Loft:Face5",
+          "Loft:Face6",
+          "Loft:Face6",
+          "Loft:Face6",
+          "Loft:Face7",
+          "Loft:Face7",
+          "Loft:Face7"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          3,
+          1,
+          4,
+          2,
+          5,
+          4,
+          0,
+          2,
+          6,
+          5,
+          7,
+          6,
+          7,
+          8,
+          6,
+          8,
+          4,
+          6,
+          4,
+          5,
+          9,
+          7,
+          10,
+          9,
+          10,
+          11,
+          9,
+          11,
+          8,
+          9,
+          8,
+          7,
+          12,
+          10,
+          1,
+          12,
+          1,
+          3,
+          12,
+          3,
+          11,
+          12,
+          11,
+          10,
+          1,
+          7,
+          2,
+          2,
+          7,
+          5,
+          10,
+          7,
+          1,
+          8,
+          3,
+          0,
+          8,
+          0,
+          4,
+          8,
+          11,
+          3
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Loft:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              2.2,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.6798373876248844,
+              2.0923243358493377,
+              0.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.7399186938124422,
+              1.2461621679246688,
+              3.5
+            ]
+          },
+          {
+            "id": "Loft:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              1.5,
+              0.2,
+              3.5
+            ]
+          },
+          {
+            "id": "Loft:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              -1.7798373876248843,
+              1.2931275550434413,
+              0.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              -0.48991869381244213,
+              0.8465637775217207,
+              3.5
+            ]
+          },
+          {
+            "id": "Loft:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              -1.7798373876248845,
+              -1.2931275550434407,
+              0.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              -0.48991869381244224,
+              -0.44656377752172033,
+              3.5
+            ]
+          },
+          {
+            "id": "Loft:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              0.679837387624884,
+              -2.092324335849338,
+              0.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              0.739918693812442,
+              -0.8461621679246691,
+              3.5
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.7399186938124422,
+            1.2461621679246688,
+            3.5
+          ],
+          [
+            2.2,
+            0.0,
+            0.0
+          ],
+          [
+            0.6798373876248844,
+            2.0923243358493377,
+            0.0
+          ],
+          [
+            1.5,
+            0.2,
+            3.5
+          ],
+          [
+            -0.48991869381244213,
+            0.8465637775217207,
+            3.5
+          ],
+          [
+            -1.7798373876248843,
+            1.2931275550434413,
+            0.0
+          ],
+          [
+            -1.1348780407186632,
+            0.10000000000000031,
+            1.75
+          ],
+          [
+            -1.7798373876248845,
+            -1.2931275550434407,
+            0.0
+          ],
+          [
+            -0.48991869381244224,
+            -0.44656377752172033,
+            3.5
+          ],
+          [
+            -0.2125000000000002,
+            -1.169544459084792,
+            1.75
+          ],
+          [
+            0.679837387624884,
+            -2.092324335849338,
+            0.0
+          ],
+          [
+            0.739918693812442,
+            -0.8461621679246691,
+            3.5
+          ],
+          [
+            1.2799390203593315,
+            -0.6846216259435018,
+            1.75
+          ]
+        ]
+      },
+      "object": "Loft",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Edge1",
+          "id": "Loft:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "LowerProfile.Edge1",
+          "subname": "LowerProfile.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Edge10",
+          "id": "Loft:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "UpperProfile.Edge3",
+          "subname": "UpperProfile.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Edge11",
+          "id": "Loft:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "LowerProfile.Edge4",
+          "subname": "LowerProfile.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Edge13",
+          "id": "Loft:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "UpperProfile.Edge4",
+          "subname": "UpperProfile.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Edge14",
+          "id": "Loft:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "LowerProfile.Edge5",
+          "subname": "LowerProfile.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Edge15",
+          "id": "Loft:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "UpperProfile.Edge5",
+          "subname": "UpperProfile.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Edge3",
+          "id": "Loft:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "UpperProfile.Edge1",
+          "subname": "UpperProfile.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Edge5",
+          "id": "Loft:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "LowerProfile.Edge2",
+          "subname": "LowerProfile.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Edge7",
+          "id": "Loft:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "UpperProfile.Edge2",
+          "subname": "UpperProfile.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Edge8",
+          "id": "Loft:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "LowerProfile.Edge3",
+          "subname": "LowerProfile.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face7",
+          "identityStatus": "current_only",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Vertex1",
+          "id": "Loft:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "LowerProfile.Vertex1",
+          "subname": "LowerProfile.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Vertex10",
+          "id": "Loft:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "UpperProfile.Vertex5",
+          "subname": "UpperProfile.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Vertex2",
+          "id": "Loft:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "LowerProfile.Vertex2",
+          "subname": "LowerProfile.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Vertex3",
+          "id": "Loft:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "UpperProfile.Vertex2",
+          "subname": "UpperProfile.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Vertex4",
+          "id": "Loft:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "UpperProfile.Vertex1",
+          "subname": "UpperProfile.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Vertex5",
+          "id": "Loft:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "LowerProfile.Vertex3",
+          "subname": "LowerProfile.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Vertex6",
+          "id": "Loft:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "UpperProfile.Vertex3",
+          "subname": "UpperProfile.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Vertex7",
+          "id": "Loft:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "LowerProfile.Vertex4",
+          "subname": "LowerProfile.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperProfile.Vertex8",
+          "id": "Loft:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "UpperProfile.Vertex4",
+          "subname": "UpperProfile.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerProfile.Vertex9",
+          "id": "Loft:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "LowerProfile.Vertex5",
+          "subname": "LowerProfile.Vertex9"
+        }
+      ]
+    }
+  ]
+}

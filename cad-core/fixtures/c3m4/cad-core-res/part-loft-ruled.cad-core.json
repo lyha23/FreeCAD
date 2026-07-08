@@ -1,0 +1,514 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Loft:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "LowerEdge.Edge1"
+          },
+          {
+            "id": "Loft:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.9791666666666665,
+                0.10416666666666666,
+                0.08333333333333333
+              ],
+              [
+                3.9583333333333335,
+                0.20833333333333331,
+                0.16666666666666666
+              ],
+              [
+                3.9375,
+                0.3125,
+                0.25
+              ],
+              [
+                3.9166666666666665,
+                0.41666666666666663,
+                0.3333333333333333
+              ],
+              [
+                3.8958333333333335,
+                0.5208333333333334,
+                0.4166666666666667
+              ],
+              [
+                3.875,
+                0.625,
+                0.5
+              ],
+              [
+                3.8541666666666665,
+                0.7291666666666667,
+                0.5833333333333334
+              ],
+              [
+                3.8333333333333335,
+                0.8333333333333333,
+                0.6666666666666666
+              ],
+              [
+                3.8125,
+                0.9375,
+                0.75
+              ],
+              [
+                3.7916666666666665,
+                1.0416666666666667,
+                0.8333333333333334
+              ],
+              [
+                3.7708333333333335,
+                1.1458333333333333,
+                0.9166666666666666
+              ],
+              [
+                3.75,
+                1.25,
+                1.0
+              ],
+              [
+                3.7291666666666665,
+                1.3541666666666665,
+                1.0833333333333333
+              ],
+              [
+                3.7083333333333335,
+                1.4583333333333335,
+                1.1666666666666667
+              ],
+              [
+                3.6875,
+                1.5625,
+                1.25
+              ],
+              [
+                3.6666666666666665,
+                1.6666666666666665,
+                1.3333333333333333
+              ],
+              [
+                3.6458333333333335,
+                1.7708333333333335,
+                1.4166666666666667
+              ],
+              [
+                3.625,
+                1.875,
+                1.5
+              ],
+              [
+                3.6041666666666665,
+                1.9791666666666665,
+                1.5833333333333333
+              ],
+              [
+                3.5833333333333335,
+                2.0833333333333335,
+                1.6666666666666667
+              ],
+              [
+                3.5625,
+                2.1875,
+                1.75
+              ],
+              [
+                3.5416666666666665,
+                2.2916666666666665,
+                1.8333333333333333
+              ],
+              [
+                3.5208333333333335,
+                2.3958333333333335,
+                1.9166666666666667
+              ],
+              [
+                3.5,
+                2.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Loft:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.5,
+                2.0,
+                1.0
+              ],
+              [
+                3.5,
+                2.5,
+                2.0
+              ]
+            ],
+            "stableSubname": "UpperEdge.Edge1"
+          },
+          {
+            "id": "Loft:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.020833333333333332,
+                0.08333333333333333,
+                0.041666666666666664
+              ],
+              [
+                0.041666666666666664,
+                0.16666666666666666,
+                0.08333333333333333
+              ],
+              [
+                0.0625,
+                0.25,
+                0.125
+              ],
+              [
+                0.08333333333333333,
+                0.3333333333333333,
+                0.16666666666666666
+              ],
+              [
+                0.10416666666666667,
+                0.4166666666666667,
+                0.20833333333333334
+              ],
+              [
+                0.125,
+                0.5,
+                0.25
+              ],
+              [
+                0.14583333333333334,
+                0.5833333333333334,
+                0.2916666666666667
+              ],
+              [
+                0.16666666666666666,
+                0.6666666666666666,
+                0.3333333333333333
+              ],
+              [
+                0.1875,
+                0.75,
+                0.375
+              ],
+              [
+                0.20833333333333334,
+                0.8333333333333334,
+                0.4166666666666667
+              ],
+              [
+                0.22916666666666666,
+                0.9166666666666666,
+                0.4583333333333333
+              ],
+              [
+                0.25,
+                1.0,
+                0.5
+              ],
+              [
+                0.2708333333333333,
+                1.0833333333333333,
+                0.5416666666666666
+              ],
+              [
+                0.2916666666666667,
+                1.1666666666666667,
+                0.5833333333333334
+              ],
+              [
+                0.3125,
+                1.25,
+                0.625
+              ],
+              [
+                0.3333333333333333,
+                1.3333333333333333,
+                0.6666666666666666
+              ],
+              [
+                0.3541666666666667,
+                1.4166666666666667,
+                0.7083333333333334
+              ],
+              [
+                0.375,
+                1.5,
+                0.75
+              ],
+              [
+                0.3958333333333333,
+                1.5833333333333333,
+                0.7916666666666666
+              ],
+              [
+                0.4166666666666667,
+                1.6666666666666667,
+                0.8333333333333334
+              ],
+              [
+                0.4375,
+                1.75,
+                0.875
+              ],
+              [
+                0.4583333333333333,
+                1.8333333333333333,
+                0.9166666666666666
+              ],
+              [
+                0.4791666666666667,
+                1.9166666666666667,
+                0.9583333333333334
+              ],
+              [
+                0.5,
+                2.0,
+                1.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "Loft:Face1",
+          "Loft:Face1",
+          "Loft:Face1",
+          "Loft:Face1",
+          "Loft:Face1",
+          "Loft:Face1"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          3,
+          5,
+          4,
+          5,
+          1,
+          4,
+          1,
+          0,
+          4,
+          0,
+          3
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Loft:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              4.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              3.5,
+              2.5,
+              2.0
+            ]
+          },
+          {
+            "id": "Loft:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.5,
+              2.0,
+              1.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            1.4444444444444444,
+            1.4444444444444444,
+            0.8888888888888888
+          ],
+          [
+            3.5,
+            2.5,
+            2.0
+          ],
+          [
+            0.5,
+            2.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            1.125,
+            0.75
+          ],
+          [
+            4.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "object": "Loft",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerEdge.Edge1",
+          "id": "Loft:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "LowerEdge.Edge1",
+          "subname": "LowerEdge.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperEdge.Edge3",
+          "id": "Loft:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "UpperEdge.Edge1",
+          "subname": "UpperEdge.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Loft:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerEdge.Vertex1",
+          "id": "Loft:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "LowerEdge.Vertex1",
+          "subname": "LowerEdge.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.LowerEdge.Vertex2",
+          "id": "Loft:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "LowerEdge.Vertex2",
+          "subname": "LowerEdge.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperEdge.Vertex3",
+          "id": "Loft:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "UpperEdge.Vertex2",
+          "subname": "UpperEdge.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Loft.UpperEdge.Vertex4",
+          "id": "Loft:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "UpperEdge.Vertex1",
+          "subname": "UpperEdge.Vertex4"
+        }
+      ]
+    }
+  ]
+}

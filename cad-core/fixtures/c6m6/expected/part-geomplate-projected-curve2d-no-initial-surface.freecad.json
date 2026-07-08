@@ -41,5 +41,20 @@
     "faces": 1,
     "vertices": 4
   },
-  "volume": 0.200476187212551
+  "volume": 0.200476187212551,
+  "known_gap": {
+    "kind": "geomplate_projected_curve2d_no_initial_surface_native_oracle_blocked",
+    "cad_core_contract": {
+      "status": "request_local_source_backed_not_freecad_expected",
+      "expected_native_shape": false
+    },
+    "freecadcmd_evidence": {
+      "error": "RuntimeError: Geom_RectangularTrimmedSurface::V1==V2"
+    },
+    "s5_publication": {
+      "status": "published_c6m6_product_contract_non_parity",
+      "active_remaining_gap": false
+    },
+    "delete_condition": "Delete after no-InitialSurface ProjectedCurve2d native oracle becomes collectable and expected-backed."
+  }
 }

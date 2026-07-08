@@ -1,0 +1,1274 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Offset2D:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Compound.Edge1"
+          },
+          {
+            "id": "Offset2D:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Compound.Edge2"
+          },
+          {
+            "id": "Offset2D:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                10.5,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                10.5,
+                2.5,
+                0.0
+              ],
+              [
+                10.5,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                10.5,
+                0.0,
+                0.0
+              ],
+              [
+                10.5,
+                2.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                10.5,
+                3.061616997868383e-17,
+                0.0
+              ],
+              [
+                10.498929461619301,
+                -0.03270156461507146,
+                0.0
+              ],
+              [
+                10.495722430686905,
+                -0.0652630961100258,
+                0.0
+              ],
+              [
+                10.490392640201616,
+                -0.0975451610080641,
+                0.0
+              ],
+              [
+                10.482962913144535,
+                -0.12940952255126031,
+                0.0
+              ],
+              [
+                10.473465064747552,
+                -0.1607197326515808,
+                0.0
+              ],
+              [
+                10.461939766255643,
+                -0.19134171618254486,
+                0.0
+              ],
+              [
+                10.448436370766345,
+                -0.22114434510950057,
+                0.0
+              ],
+              [
+                10.433012701892219,
+                -0.24999999999999992,
+                0.0
+              ],
+              [
+                10.415734806151272,
+                -0.277785116509801,
+                0.0
+              ],
+              [
+                10.396676670145618,
+                -0.30438071450436033,
+                0.0
+              ],
+              [
+                10.375919903739488,
+                -0.3296729075500344,
+                0.0
+              ],
+              [
+                10.353553390593273,
+                -0.35355339059327373,
+                0.0
+              ],
+              [
+                10.329672907550034,
+                -0.37591990373948864,
+                0.0
+              ],
+              [
+                10.30438071450436,
+                -0.3966766701456175,
+                0.0
+              ],
+              [
+                10.2777851165098,
+                -0.4157348061512725,
+                0.0
+              ],
+              [
+                10.25,
+                -0.43301270189221924,
+                0.0
+              ],
+              [
+                10.2211443451095,
+                -0.44843637076634413,
+                0.0
+              ],
+              [
+                10.191341716182546,
+                -0.46193976625564337,
+                0.0
+              ],
+              [
+                10.16071973265158,
+                -0.4734650647475528,
+                0.0
+              ],
+              [
+                10.12940952255126,
+                -0.48296291314453416,
+                0.0
+              ],
+              [
+                10.097545161008064,
+                -0.4903926402016152,
+                0.0
+              ],
+              [
+                10.065263096110026,
+                -0.4957224306869052,
+                0.0
+              ],
+              [
+                10.032701564615072,
+                -0.49892946161930174,
+                0.0
+              ],
+              [
+                10.0,
+                -0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.0,
+                -0.5000000000000001,
+                0.0
+              ],
+              [
+                10.0,
+                -0.5000000000000001,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                0.0,
+                -0.5000000000000001,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                20.0,
+                0.0,
+                0.0
+              ],
+              [
+                30.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Compound.Edge3"
+          },
+          {
+            "id": "Offset2D:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                30.0,
+                0.0,
+                0.0
+              ],
+              [
+                30.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Compound.Edge4"
+          },
+          {
+            "id": "Offset2D:Edge11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "points": [
+              [
+                30.0,
+                5.0,
+                0.0
+              ],
+              [
+                30.5,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                30.5,
+                2.5,
+                0.0
+              ],
+              [
+                30.5,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge13",
+            "identityStatus": "current_only",
+            "indexed": "Edge13",
+            "points": [
+              [
+                30.5,
+                0.0,
+                0.0
+              ],
+              [
+                30.5,
+                2.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge14",
+            "identityStatus": "current_only",
+            "indexed": "Edge14",
+            "points": [
+              [
+                30.5,
+                3.061616997868383e-17,
+                0.0
+              ],
+              [
+                30.4989294616193,
+                -0.03270156461507146,
+                0.0
+              ],
+              [
+                30.495722430686904,
+                -0.0652630961100258,
+                0.0
+              ],
+              [
+                30.490392640201616,
+                -0.0975451610080641,
+                0.0
+              ],
+              [
+                30.482962913144533,
+                -0.12940952255126031,
+                0.0
+              ],
+              [
+                30.473465064747554,
+                -0.1607197326515808,
+                0.0
+              ],
+              [
+                30.461939766255643,
+                -0.19134171618254486,
+                0.0
+              ],
+              [
+                30.448436370766345,
+                -0.22114434510950057,
+                0.0
+              ],
+              [
+                30.43301270189222,
+                -0.24999999999999992,
+                0.0
+              ],
+              [
+                30.415734806151274,
+                -0.277785116509801,
+                0.0
+              ],
+              [
+                30.396676670145617,
+                -0.30438071450436033,
+                0.0
+              ],
+              [
+                30.37591990373949,
+                -0.3296729075500344,
+                0.0
+              ],
+              [
+                30.353553390593273,
+                -0.35355339059327373,
+                0.0
+              ],
+              [
+                30.329672907550034,
+                -0.37591990373948864,
+                0.0
+              ],
+              [
+                30.30438071450436,
+                -0.3966766701456175,
+                0.0
+              ],
+              [
+                30.2777851165098,
+                -0.4157348061512725,
+                0.0
+              ],
+              [
+                30.25,
+                -0.43301270189221924,
+                0.0
+              ],
+              [
+                30.2211443451095,
+                -0.44843637076634413,
+                0.0
+              ],
+              [
+                30.191341716182546,
+                -0.46193976625564337,
+                0.0
+              ],
+              [
+                30.160719732651582,
+                -0.4734650647475528,
+                0.0
+              ],
+              [
+                30.12940952255126,
+                -0.48296291314453416,
+                0.0
+              ],
+              [
+                30.097545161008064,
+                -0.4903926402016152,
+                0.0
+              ],
+              [
+                30.065263096110026,
+                -0.4957224306869052,
+                0.0
+              ],
+              [
+                30.03270156461507,
+                -0.49892946161930174,
+                0.0
+              ],
+              [
+                30.0,
+                -0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge15",
+            "identityStatus": "current_only",
+            "indexed": "Edge15",
+            "points": [
+              [
+                20.0,
+                -0.5000000000000001,
+                0.0
+              ],
+              [
+                30.0,
+                -0.5000000000000001,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Offset2D:Edge16",
+            "identityStatus": "current_only",
+            "indexed": "Edge16",
+            "points": [
+              [
+                20.0,
+                -0.5000000000000001,
+                0.0
+              ],
+              [
+                20.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face1",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2",
+          "Offset2D:Face2"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          0,
+          3,
+          4,
+          0,
+          4,
+          5,
+          0,
+          5,
+          6,
+          0,
+          6,
+          7,
+          0,
+          7,
+          8,
+          9,
+          1,
+          0,
+          10,
+          11,
+          9,
+          12,
+          8,
+          13,
+          12,
+          0,
+          8,
+          0,
+          10,
+          9,
+          14,
+          15,
+          16,
+          14,
+          16,
+          17,
+          14,
+          17,
+          18,
+          14,
+          18,
+          19,
+          14,
+          19,
+          20,
+          14,
+          20,
+          21,
+          14,
+          21,
+          22,
+          23,
+          15,
+          14,
+          24,
+          25,
+          23,
+          26,
+          22,
+          27,
+          26,
+          14,
+          22,
+          14,
+          24,
+          23
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Offset2D:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              10.5,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              10.5,
+              2.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              10.5,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              10.0,
+              -0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              0.0,
+              -0.5000000000000001,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              20.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              30.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              30.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              30.5,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              30.5,
+              2.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              30.5,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              30.0,
+              -0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Offset2D:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              20.0,
+              -0.5000000000000001,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            10.0,
+            0.0,
+            0.0
+          ],
+          [
+            10.5,
+            0.0,
+            0.0
+          ],
+          [
+            10.487463956090911,
+            -0.11126046697815717,
+            0.0
+          ],
+          [
+            10.45048443395121,
+            -0.21694186955877903,
+            0.0
+          ],
+          [
+            10.390915741234014,
+            -0.31174490092936674,
+            0.0
+          ],
+          [
+            10.311744900929368,
+            -0.39091574123401485,
+            0.0
+          ],
+          [
+            10.216941869558779,
+            -0.4504844339512095,
+            0.0
+          ],
+          [
+            10.111260466978157,
+            -0.4874639560909118,
+            0.0
+          ],
+          [
+            10.0,
+            -0.5,
+            0.0
+          ],
+          [
+            10.5,
+            2.5,
+            0.0
+          ],
+          [
+            10.0,
+            5.0,
+            0.0
+          ],
+          [
+            10.5,
+            5.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            -0.5000000000000001,
+            0.0
+          ],
+          [
+            30.0,
+            0.0,
+            0.0
+          ],
+          [
+            30.5,
+            0.0,
+            0.0
+          ],
+          [
+            30.487463956090913,
+            -0.11126046697815717,
+            0.0
+          ],
+          [
+            30.45048443395121,
+            -0.21694186955877903,
+            0.0
+          ],
+          [
+            30.390915741234014,
+            -0.31174490092936674,
+            0.0
+          ],
+          [
+            30.311744900929366,
+            -0.39091574123401485,
+            0.0
+          ],
+          [
+            30.21694186955878,
+            -0.4504844339512095,
+            0.0
+          ],
+          [
+            30.11126046697816,
+            -0.4874639560909118,
+            0.0
+          ],
+          [
+            30.0,
+            -0.5,
+            0.0
+          ],
+          [
+            30.5,
+            2.5,
+            0.0
+          ],
+          [
+            30.0,
+            5.0,
+            0.0
+          ],
+          [
+            30.5,
+            5.0,
+            0.0
+          ],
+          [
+            20.0,
+            0.0,
+            0.0
+          ],
+          [
+            20.0,
+            -0.5000000000000001,
+            0.0
+          ]
+        ]
+      },
+      "object": "Offset2D",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Edge1",
+          "id": "Offset2D:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "Compound.Edge1",
+          "subname": "Compound.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Edge10",
+          "id": "Offset2D:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "Compound.Edge4",
+          "subname": "Compound.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge13",
+          "identityStatus": "current_only",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge14",
+          "identityStatus": "current_only",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge15",
+          "identityStatus": "current_only",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge16",
+          "identityStatus": "current_only",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Edge2",
+          "id": "Offset2D:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "Compound.Edge2",
+          "subname": "Compound.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Edge9",
+          "id": "Offset2D:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "Compound.Edge3",
+          "subname": "Compound.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Vertex1",
+          "id": "Offset2D:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "Compound.Vertex1",
+          "subname": "Compound.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Vertex10",
+          "id": "Offset2D:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "Compound.Vertex5",
+          "subname": "Compound.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Vertex11",
+          "id": "Offset2D:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "Compound.Vertex6",
+          "subname": "Compound.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex12",
+          "identityStatus": "current_only",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex13",
+          "identityStatus": "current_only",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex14",
+          "identityStatus": "current_only",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex15",
+          "identityStatus": "current_only",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex16",
+          "identityStatus": "current_only",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Vertex2",
+          "id": "Offset2D:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "Compound.Vertex2",
+          "subname": "Compound.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Vertex3",
+          "id": "Offset2D:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "Compound.Vertex3",
+          "subname": "Compound.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Offset2D:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset2D.Compound.Vertex9",
+          "id": "Offset2D:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "Compound.Vertex4",
+          "subname": "Compound.Vertex9"
+        }
+      ]
+    }
+  ]
+}

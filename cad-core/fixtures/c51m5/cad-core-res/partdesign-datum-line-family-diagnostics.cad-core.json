@@ -1,0 +1,52 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "attachment_support_invalid_shape",
+      "message": "TwoPointLine requires two vertex points or one edge support",
+      "object": "DatumLineTwoPointSingle",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SinglePoint"
+    },
+    {
+      "code": "no_intersection",
+      "message": "IntersectionLine support faces do not intersect",
+      "object": "DatumLineIntersectionParallel",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face1",
+      "target": "ParallelPlaneA"
+    },
+    {
+      "code": "no_intersection",
+      "message": "ProximityLine cannot derive a line because support shapes touch or intersect",
+      "object": "DatumLineProximityTouching",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "TouchPointA"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "DatumLineTwoPointSingle",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumLineIntersectionParallel",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumLineProximityTouching",
+      "subshapes": []
+    }
+  ]
+}

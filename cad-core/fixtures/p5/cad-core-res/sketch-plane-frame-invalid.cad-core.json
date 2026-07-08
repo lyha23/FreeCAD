@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_property_type",
+      "message": "SketchPlaneFrame Normal and XDirection must be non-zero",
+      "object": "Sketch",
+      "property": "SketchPlaneFrame",
+      "severity": "error",
+      "stage": "runtime"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Sketch",
+      "subshapes": []
+    }
+  ]
+}

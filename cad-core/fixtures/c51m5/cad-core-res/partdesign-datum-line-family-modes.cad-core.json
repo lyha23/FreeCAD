@@ -1,0 +1,32 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineTwoPointVertices",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineTwoPointEdge",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineIntersection",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineProximity",
+      "subshapes": []
+    }
+  ]
+}

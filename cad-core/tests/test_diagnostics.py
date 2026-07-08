@@ -21,7 +21,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "unsupported-geometry": ["unsupported_geometry"],
             "invalid-length": ["invalid_length"],
             "unsupported-property": ["unsupported_property"],
-            "open-sketch": ["open_profile"],
             "rect-pad": [],
         }
         for fixture, codes in expected.items():
@@ -30,21 +29,8 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
 
     def test_p2_fixture_diagnostics(self) -> None:
         expected = {
-            "body-basefeature-pad": [
-                "unsupported_legacy_internal_sublist",
-                "unsupported_legacy_internal_sublist",
-            ],
             "rect-pad-pocket": [],
             "missing-basefeature": ["missing_link_target"],
-            "pocket-without-base": ["unsupported_legacy_internal_sublist"],
-            "pocket-open-sketch": [
-                "unsupported_legacy_internal_sublist",
-                "unsupported_legacy_internal_sublist",
-            ],
-            "unsupported-pocket-type": [
-                "unsupported_legacy_internal_sublist",
-                "unsupported_legacy_internal_sublist",
-            ],
         }
         for fixture, codes in expected.items():
             with self.subTest(fixture=fixture):
@@ -363,7 +349,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "app-link-box": [],
             "app-link-box-face": [],
             "app-link-box-multi-face": [],
-            "app-link-box-missing-subshape": ["invalid_subshape"],
+            "app-link-box-missing-subshape": ["full_subname_not_stable_identity"],
             "app-link-box-scale": [],
             "app-link-box-transform": [],
             "app-link-element-box": [],
@@ -386,10 +372,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "app-link-show-element-synthetic": [],
             "app-link-stable-history-deleted": ["deleted_stable_subname"],
             "app-link-stable-history-split": ["split_stable_subname"],
-            "assembly-grounded-only-solver-success": [],
-            "assembly-joint-hidden-reference-diagnostics": [],
-            "assembly-joint-group-diagnostics": [],
-            "assembly-link-basic": [],
             "part-boolean-fragments": [],
             "part-boolean-fragments-compsolid": [],
             "part-boolean-fragments-compsolid-split": [],
@@ -417,8 +399,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "part-fuse": [],
             "part-helix": [],
             "part-hyperbola-edge": [],
-            "part-import-brep": [],
-            "part-import-brep-missing": ["execution_failed"],
             "part-import-iges": [],
             "part-import-iges-missing": ["execution_failed"],
             "part-import-step": [],

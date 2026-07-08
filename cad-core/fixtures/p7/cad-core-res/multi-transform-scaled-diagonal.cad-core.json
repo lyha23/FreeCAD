@@ -1,0 +1,2024 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Body:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                5.5,
+                -0.5,
+                -0.49999999999999867
+              ],
+              [
+                5.5,
+                -0.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge1"
+          },
+          {
+            "id": "Body:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                7.5,
+                -0.5,
+                -0.49999999999999867
+              ],
+              [
+                7.5,
+                -0.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge2"
+          },
+          {
+            "id": "Body:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                5.5,
+                -0.5,
+                -0.49999999999999867
+              ],
+              [
+                7.5,
+                -0.5,
+                -0.49999999999999867
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge1",
+            "stableSubname": "MultiTransform.Edge3"
+          },
+          {
+            "id": "Body:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                5.5,
+                -0.5,
+                1.5000000000000013
+              ],
+              [
+                7.5,
+                -0.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge4"
+          },
+          {
+            "id": "Body:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                7.5,
+                1.5,
+                -0.49999999999999867
+              ],
+              [
+                7.5,
+                1.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge5"
+          },
+          {
+            "id": "Body:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                7.5,
+                -0.5,
+                -0.49999999999999867
+              ],
+              [
+                7.5,
+                1.5,
+                -0.49999999999999867
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge2",
+            "stableSubname": "MultiTransform.Edge6"
+          },
+          {
+            "id": "Body:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                7.5,
+                -0.5,
+                1.5000000000000013
+              ],
+              [
+                7.5,
+                1.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge7"
+          },
+          {
+            "id": "Body:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                5.5,
+                1.5,
+                -0.49999999999999867
+              ],
+              [
+                5.5,
+                1.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge8"
+          },
+          {
+            "id": "Body:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                7.5,
+                1.5,
+                -0.49999999999999867
+              ],
+              [
+                5.5,
+                1.5,
+                -0.49999999999999867
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge3",
+            "stableSubname": "MultiTransform.Edge9"
+          },
+          {
+            "id": "Body:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                7.5,
+                1.5,
+                1.5000000000000013
+              ],
+              [
+                5.5,
+                1.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge10"
+          },
+          {
+            "id": "Body:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                5.5,
+                1.5,
+                -0.49999999999999867
+              ],
+              [
+                5.5,
+                -0.5,
+                -0.49999999999999867
+              ]
+            ],
+            "sourceStableSubname": "SketchPad.Edge4",
+            "stableSubname": "MultiTransform.Edge11"
+          },
+          {
+            "id": "Body:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                5.5,
+                1.5,
+                1.5000000000000013
+              ],
+              [
+                5.5,
+                -0.5,
+                1.5000000000000013
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge12"
+          },
+          {
+            "id": "Body:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge13"
+          },
+          {
+            "id": "Body:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge14"
+          },
+          {
+            "id": "Body:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge15"
+          },
+          {
+            "id": "Body:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                1.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge16"
+          },
+          {
+            "id": "Body:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                1.0,
+                1.0,
+                0.0
+              ],
+              [
+                1.0,
+                1.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge17"
+          },
+          {
+            "id": "Body:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge18"
+          },
+          {
+            "id": "Body:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                1.0,
+                0.0,
+                1.0
+              ],
+              [
+                1.0,
+                1.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge19"
+          },
+          {
+            "id": "Body:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge20"
+          },
+          {
+            "id": "Body:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                1.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge21"
+          },
+          {
+            "id": "Body:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                1.0,
+                1.0,
+                1.0
+              ],
+              [
+                0.0,
+                1.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge22"
+          },
+          {
+            "id": "Body:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge23"
+          },
+          {
+            "id": "Body:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                0.0,
+                1.0,
+                1.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "MultiTransform.Edge24"
+          },
+          {
+            "id": "Body:Edge25",
+            "identityStatus": "stable",
+            "indexed": "Edge25",
+            "points": [
+              [
+                2.75,
+                -0.25,
+                -0.24999999999999933
+              ],
+              [
+                2.75,
+                -0.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge1"
+          },
+          {
+            "id": "Body:Edge26",
+            "identityStatus": "stable",
+            "indexed": "Edge26",
+            "points": [
+              [
+                4.25,
+                -0.25,
+                -0.24999999999999933
+              ],
+              [
+                4.25,
+                -0.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge2"
+          },
+          {
+            "id": "Body:Edge27",
+            "identityStatus": "stable",
+            "indexed": "Edge27",
+            "points": [
+              [
+                2.75,
+                -0.25,
+                -0.24999999999999933
+              ],
+              [
+                4.25,
+                -0.25,
+                -0.24999999999999933
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge3"
+          },
+          {
+            "id": "Body:Edge28",
+            "identityStatus": "stable",
+            "indexed": "Edge28",
+            "points": [
+              [
+                2.75,
+                -0.25,
+                1.2500000000000007
+              ],
+              [
+                4.25,
+                -0.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge4"
+          },
+          {
+            "id": "Body:Edge29",
+            "identityStatus": "stable",
+            "indexed": "Edge29",
+            "points": [
+              [
+                4.25,
+                1.25,
+                -0.24999999999999933
+              ],
+              [
+                4.25,
+                1.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge5"
+          },
+          {
+            "id": "Body:Edge30",
+            "identityStatus": "stable",
+            "indexed": "Edge30",
+            "points": [
+              [
+                4.25,
+                -0.25,
+                -0.24999999999999933
+              ],
+              [
+                4.25,
+                1.25,
+                -0.24999999999999933
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge6"
+          },
+          {
+            "id": "Body:Edge31",
+            "identityStatus": "stable",
+            "indexed": "Edge31",
+            "points": [
+              [
+                4.25,
+                -0.25,
+                1.2500000000000007
+              ],
+              [
+                4.25,
+                1.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge7"
+          },
+          {
+            "id": "Body:Edge32",
+            "identityStatus": "stable",
+            "indexed": "Edge32",
+            "points": [
+              [
+                2.75,
+                1.25,
+                -0.24999999999999933
+              ],
+              [
+                2.75,
+                1.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge8"
+          },
+          {
+            "id": "Body:Edge33",
+            "identityStatus": "stable",
+            "indexed": "Edge33",
+            "points": [
+              [
+                4.25,
+                1.25,
+                -0.24999999999999933
+              ],
+              [
+                2.75,
+                1.25,
+                -0.24999999999999933
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge9"
+          },
+          {
+            "id": "Body:Edge34",
+            "identityStatus": "stable",
+            "indexed": "Edge34",
+            "points": [
+              [
+                4.25,
+                1.25,
+                1.2500000000000007
+              ],
+              [
+                2.75,
+                1.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge10"
+          },
+          {
+            "id": "Body:Edge35",
+            "identityStatus": "stable",
+            "indexed": "Edge35",
+            "points": [
+              [
+                2.75,
+                1.25,
+                -0.24999999999999933
+              ],
+              [
+                2.75,
+                -0.25,
+                -0.24999999999999933
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge11"
+          },
+          {
+            "id": "Body:Edge36",
+            "identityStatus": "stable",
+            "indexed": "Edge36",
+            "points": [
+              [
+                2.75,
+                1.25,
+                1.2500000000000007
+              ],
+              [
+                2.75,
+                -0.25,
+                1.2500000000000007
+              ]
+            ],
+            "stableSubname": "MultiTransform.Transform1.Edge12"
+          }
+        ],
+        "faceIds": [
+          "Body:Face1",
+          "Body:Face1",
+          "Body:Face2",
+          "Body:Face2",
+          "Body:Face3",
+          "Body:Face3",
+          "Body:Face4",
+          "Body:Face4",
+          "Body:Face5",
+          "Body:Face5",
+          "Body:Face6",
+          "Body:Face6",
+          "Body:Face7",
+          "Body:Face7",
+          "Body:Face8",
+          "Body:Face8",
+          "Body:Face9",
+          "Body:Face9",
+          "Body:Face10",
+          "Body:Face10",
+          "Body:Face11",
+          "Body:Face11",
+          "Body:Face12",
+          "Body:Face12",
+          "Body:Face13",
+          "Body:Face13",
+          "Body:Face14",
+          "Body:Face14",
+          "Body:Face15",
+          "Body:Face15",
+          "Body:Face16",
+          "Body:Face16",
+          "Body:Face17",
+          "Body:Face17",
+          "Body:Face18",
+          "Body:Face18"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          1,
+          4,
+          3,
+          3,
+          4,
+          5,
+          4,
+          6,
+          5,
+          5,
+          6,
+          7,
+          6,
+          0,
+          7,
+          7,
+          0,
+          2,
+          0,
+          4,
+          1,
+          6,
+          4,
+          0,
+          5,
+          2,
+          3,
+          5,
+          7,
+          2,
+          8,
+          9,
+          10,
+          10,
+          9,
+          11,
+          9,
+          12,
+          11,
+          11,
+          12,
+          13,
+          12,
+          14,
+          13,
+          13,
+          14,
+          15,
+          14,
+          8,
+          15,
+          15,
+          8,
+          10,
+          8,
+          12,
+          9,
+          14,
+          12,
+          8,
+          13,
+          10,
+          11,
+          13,
+          15,
+          10,
+          16,
+          17,
+          18,
+          18,
+          17,
+          19,
+          17,
+          20,
+          19,
+          19,
+          20,
+          21,
+          20,
+          22,
+          21,
+          21,
+          22,
+          23,
+          22,
+          16,
+          23,
+          23,
+          16,
+          18,
+          16,
+          20,
+          17,
+          22,
+          20,
+          16,
+          21,
+          18,
+          19,
+          21,
+          23,
+          18
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Body:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              5.5,
+              -0.5,
+              -0.49999999999999867
+            ]
+          },
+          {
+            "id": "Body:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              5.5,
+              -0.5,
+              1.5000000000000013
+            ]
+          },
+          {
+            "id": "Body:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              7.5,
+              -0.5,
+              -0.49999999999999867
+            ]
+          },
+          {
+            "id": "Body:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              7.5,
+              -0.5,
+              1.5000000000000013
+            ]
+          },
+          {
+            "id": "Body:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              7.5,
+              1.5,
+              -0.49999999999999867
+            ]
+          },
+          {
+            "id": "Body:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              7.5,
+              1.5,
+              1.5000000000000013
+            ]
+          },
+          {
+            "id": "Body:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              5.5,
+              1.5,
+              -0.49999999999999867
+            ]
+          },
+          {
+            "id": "Body:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              5.5,
+              1.5,
+              1.5000000000000013
+            ]
+          },
+          {
+            "id": "Body:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "id": "Body:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              1.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "id": "Body:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              1.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          {
+            "id": "Body:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              0.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              0.0,
+              1.0,
+              1.0
+            ]
+          },
+          {
+            "id": "Body:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              2.75,
+              -0.25,
+              -0.24999999999999933
+            ]
+          },
+          {
+            "id": "Body:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              2.75,
+              -0.25,
+              1.2500000000000007
+            ]
+          },
+          {
+            "id": "Body:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              4.25,
+              -0.25,
+              -0.24999999999999933
+            ]
+          },
+          {
+            "id": "Body:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              4.25,
+              -0.25,
+              1.2500000000000007
+            ]
+          },
+          {
+            "id": "Body:Vertex21",
+            "indexed": "Vertex21",
+            "point": [
+              4.25,
+              1.25,
+              -0.24999999999999933
+            ]
+          },
+          {
+            "id": "Body:Vertex22",
+            "indexed": "Vertex22",
+            "point": [
+              4.25,
+              1.25,
+              1.2500000000000007
+            ]
+          },
+          {
+            "id": "Body:Vertex23",
+            "indexed": "Vertex23",
+            "point": [
+              2.75,
+              1.25,
+              -0.24999999999999933
+            ]
+          },
+          {
+            "id": "Body:Vertex24",
+            "indexed": "Vertex24",
+            "point": [
+              2.75,
+              1.25,
+              1.2500000000000007
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            5.5,
+            -0.5,
+            -0.49999999999999867
+          ],
+          [
+            7.5,
+            -0.5,
+            -0.49999999999999867
+          ],
+          [
+            5.5,
+            -0.5,
+            1.5000000000000013
+          ],
+          [
+            7.5,
+            -0.5,
+            1.5000000000000013
+          ],
+          [
+            7.5,
+            1.5,
+            -0.49999999999999867
+          ],
+          [
+            7.5,
+            1.5,
+            1.5000000000000013
+          ],
+          [
+            5.5,
+            1.5,
+            -0.49999999999999867
+          ],
+          [
+            5.5,
+            1.5,
+            1.5000000000000013
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            1.0,
+            0.0
+          ],
+          [
+            1.0,
+            1.0,
+            1.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            1.0
+          ],
+          [
+            2.75,
+            -0.25,
+            -0.24999999999999933
+          ],
+          [
+            4.25,
+            -0.25,
+            -0.24999999999999933
+          ],
+          [
+            2.75,
+            -0.25,
+            1.2500000000000007
+          ],
+          [
+            4.25,
+            -0.25,
+            1.2500000000000007
+          ],
+          [
+            4.25,
+            1.25,
+            -0.24999999999999933
+          ],
+          [
+            4.25,
+            1.25,
+            1.2500000000000007
+          ],
+          [
+            2.75,
+            1.25,
+            -0.24999999999999933
+          ],
+          [
+            2.75,
+            1.25,
+            1.2500000000000007
+          ]
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge1",
+          "subname": "MultiTransform.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge10",
+          "subname": "MultiTransform.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge4",
+          "stableSubname": "MultiTransform.Edge11",
+          "subname": "MultiTransform.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge12",
+          "subname": "MultiTransform.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge13",
+          "id": "Body:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge13",
+          "subname": "MultiTransform.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge14",
+          "id": "Body:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge14",
+          "subname": "MultiTransform.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge15",
+          "id": "Body:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge15",
+          "subname": "MultiTransform.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge16",
+          "id": "Body:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge16",
+          "subname": "MultiTransform.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge17",
+          "id": "Body:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge17",
+          "subname": "MultiTransform.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge18",
+          "id": "Body:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge18",
+          "subname": "MultiTransform.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge19",
+          "id": "Body:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge19",
+          "subname": "MultiTransform.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge2",
+          "subname": "MultiTransform.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge20",
+          "id": "Body:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge20",
+          "subname": "MultiTransform.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge21",
+          "id": "Body:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge21",
+          "subname": "MultiTransform.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge22",
+          "id": "Body:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge22",
+          "subname": "MultiTransform.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge23",
+          "id": "Body:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge23",
+          "subname": "MultiTransform.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge24",
+          "id": "Body:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge24",
+          "subname": "MultiTransform.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge25",
+          "id": "Body:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge1",
+          "subname": "MultiTransform.Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge26",
+          "id": "Body:Edge26",
+          "identityStatus": "stable",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge2",
+          "subname": "MultiTransform.Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge27",
+          "id": "Body:Edge27",
+          "identityStatus": "stable",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge3",
+          "subname": "MultiTransform.Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge28",
+          "id": "Body:Edge28",
+          "identityStatus": "stable",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge4",
+          "subname": "MultiTransform.Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge29",
+          "id": "Body:Edge29",
+          "identityStatus": "stable",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge5",
+          "subname": "MultiTransform.Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge1",
+          "stableSubname": "MultiTransform.Edge3",
+          "subname": "MultiTransform.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge30",
+          "id": "Body:Edge30",
+          "identityStatus": "stable",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge6",
+          "subname": "MultiTransform.Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge31",
+          "id": "Body:Edge31",
+          "identityStatus": "stable",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge7",
+          "subname": "MultiTransform.Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge32",
+          "id": "Body:Edge32",
+          "identityStatus": "stable",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge8",
+          "subname": "MultiTransform.Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge33",
+          "id": "Body:Edge33",
+          "identityStatus": "stable",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge9",
+          "subname": "MultiTransform.Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge34",
+          "id": "Body:Edge34",
+          "identityStatus": "stable",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge10",
+          "subname": "MultiTransform.Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge35",
+          "id": "Body:Edge35",
+          "identityStatus": "stable",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge11",
+          "subname": "MultiTransform.Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge36",
+          "id": "Body:Edge36",
+          "identityStatus": "stable",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Transform1.Edge12",
+          "subname": "MultiTransform.Edge36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge4",
+          "subname": "MultiTransform.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge5",
+          "subname": "MultiTransform.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge2",
+          "stableSubname": "MultiTransform.Edge6",
+          "subname": "MultiTransform.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge7",
+          "subname": "MultiTransform.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "MultiTransform.Edge8",
+          "subname": "MultiTransform.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "sourceStableSubname": "SketchPad.Edge3",
+          "stableSubname": "MultiTransform.Edge9",
+          "subname": "MultiTransform.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face1",
+          "subname": "MultiTransform.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face10",
+          "id": "Body:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face10",
+          "subname": "MultiTransform.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face11",
+          "id": "Body:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face11",
+          "subname": "MultiTransform.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face12",
+          "id": "Body:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face12",
+          "subname": "MultiTransform.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face13",
+          "id": "Body:Face13",
+          "identityStatus": "stable",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Transform1.Face1",
+          "subname": "MultiTransform.Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face14",
+          "id": "Body:Face14",
+          "identityStatus": "stable",
+          "indexed": "Face14",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Transform1.Face2",
+          "subname": "MultiTransform.Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face15",
+          "id": "Body:Face15",
+          "identityStatus": "stable",
+          "indexed": "Face15",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Transform1.Face3",
+          "subname": "MultiTransform.Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face16",
+          "id": "Body:Face16",
+          "identityStatus": "stable",
+          "indexed": "Face16",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Transform1.Face4",
+          "subname": "MultiTransform.Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face17",
+          "id": "Body:Face17",
+          "identityStatus": "stable",
+          "indexed": "Face17",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Transform1.Face5",
+          "subname": "MultiTransform.Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face18",
+          "id": "Body:Face18",
+          "identityStatus": "stable",
+          "indexed": "Face18",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Transform1.Face6",
+          "subname": "MultiTransform.Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face2",
+          "subname": "MultiTransform.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face3",
+          "subname": "MultiTransform.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face4",
+          "subname": "MultiTransform.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "sourceStableSubname": "SketchPad.Face1",
+          "stableSubname": "MultiTransform.Face5",
+          "subname": "MultiTransform.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face6",
+          "subname": "MultiTransform.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face7",
+          "id": "Body:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face7",
+          "subname": "MultiTransform.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face8",
+          "id": "Body:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face8",
+          "subname": "MultiTransform.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Face9",
+          "id": "Body:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "MultiTransform.Face9",
+          "subname": "MultiTransform.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform2.Vertex1",
+          "subname": "MultiTransform.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex10",
+          "id": "Body:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex10",
+          "subname": "MultiTransform.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex11",
+          "id": "Body:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex11",
+          "subname": "MultiTransform.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex12",
+          "id": "Body:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex12",
+          "subname": "MultiTransform.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex13",
+          "id": "Body:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex13",
+          "subname": "MultiTransform.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex14",
+          "id": "Body:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex14",
+          "subname": "MultiTransform.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex15",
+          "id": "Body:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex15",
+          "subname": "MultiTransform.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex16",
+          "id": "Body:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex16",
+          "subname": "MultiTransform.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex17",
+          "id": "Body:Vertex17",
+          "identityStatus": "stable",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex1",
+          "subname": "MultiTransform.Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex18",
+          "id": "Body:Vertex18",
+          "identityStatus": "stable",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex2",
+          "subname": "MultiTransform.Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex19",
+          "id": "Body:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex3",
+          "subname": "MultiTransform.Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform2.Vertex2",
+          "subname": "MultiTransform.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex20",
+          "id": "Body:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex4",
+          "subname": "MultiTransform.Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex21",
+          "id": "Body:Vertex21",
+          "identityStatus": "stable",
+          "indexed": "Vertex21",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex5",
+          "subname": "MultiTransform.Vertex21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex22",
+          "id": "Body:Vertex22",
+          "identityStatus": "stable",
+          "indexed": "Vertex22",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex6",
+          "subname": "MultiTransform.Vertex22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex23",
+          "id": "Body:Vertex23",
+          "identityStatus": "stable",
+          "indexed": "Vertex23",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex7",
+          "subname": "MultiTransform.Vertex23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex24",
+          "id": "Body:Vertex24",
+          "identityStatus": "stable",
+          "indexed": "Vertex24",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform1.Vertex8",
+          "subname": "MultiTransform.Vertex24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchPad.Vertex2",
+          "stableSubname": "MultiTransform.Vertex3",
+          "subname": "MultiTransform.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform2.Vertex4",
+          "subname": "MultiTransform.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchPad.Vertex3",
+          "stableSubname": "MultiTransform.Vertex5",
+          "subname": "MultiTransform.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform2.Vertex6",
+          "subname": "MultiTransform.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "sourceStableSubname": "SketchPad.Vertex4",
+          "stableSubname": "MultiTransform.Vertex7",
+          "subname": "MultiTransform.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Transform2.Vertex8",
+          "subname": "MultiTransform.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.MultiTransform.Vertex9",
+          "id": "Body:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "MultiTransform.Vertex9",
+          "subname": "MultiTransform.Vertex9"
+        }
+      ]
+    }
+  ]
+}

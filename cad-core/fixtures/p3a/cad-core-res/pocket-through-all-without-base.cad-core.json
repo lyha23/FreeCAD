@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "execution_failed",
+      "message": "Pocket ThroughAll requires a previous base solid",
+      "object": "Pocket",
+      "property": "Type",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Body",
+      "subshapes": []
+    }
+  ]
+}

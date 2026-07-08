@@ -151,6 +151,10 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
         return {document, diagnostics};
     }
     document.displayMeshDeflection = readDisplayMeshDeflection(raw, diagnostics);
+    const auto topoStateIt = raw.find("topoNamingState");
+    if (topoStateIt != raw.end() && topoStateIt->is_object()) {
+        document.topoNamingState = *topoStateIt;
+    }
 
     std::set<std::string> seenNames;
     std::set<long long> seenIds;

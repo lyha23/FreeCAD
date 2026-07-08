@@ -1,0 +1,779 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [
+    {
+      "action": "update",
+      "object": "BoxLink_CopyOnChangeGroup",
+      "objectId": 3,
+      "owner": "BoxLink",
+      "ownerId": 2,
+      "properties": {
+        "Group": {
+          "PropertyType": "App::PropertyLinkList",
+          "values": [
+            "BoxLink_CopyOnChangeObject"
+          ]
+        }
+      },
+      "reason": "copy_on_change_group_sync",
+      "typeId": "App::DocumentObjectGroup"
+    },
+    {
+      "action": "update",
+      "dependencyRewrite": {
+        "Box": "BoxLink_CopyOnChangeObject"
+      },
+      "group": "BoxLink_CopyOnChangeGroup",
+      "historyPreserve": {
+        "fullSubList": "not_present",
+        "linkRelink": "copied_subtree",
+        "propertyTree": "deep_copy",
+        "referenceShadow": "not_present",
+        "stableSubList": "not_present"
+      },
+      "object": "BoxLink_CopyOnChangeObject",
+      "objectId": 4,
+      "properties": {
+        "Height": 4,
+        "Length": 2,
+        "Visibility": {
+          "PropertyType": "App::PropertyBool",
+          "value": false
+        },
+        "Width": 3,
+        "_CopyOnChangeOwner": {
+          "PropertyType": "App::PropertyString",
+          "value": "BoxLink"
+        },
+        "_CopyOnChangeSourceId": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 1
+        },
+        "_CopyOnChangeSourceObject": {
+          "PropertyType": "App::PropertyString",
+          "value": "Box"
+        }
+      },
+      "reason": "copy_on_change_deep_copy_lifecycle",
+      "sourceObject": "Box",
+      "sourceObjectId": 1,
+      "typeId": "Part::Box"
+    },
+    {
+      "action": "update",
+      "copyObject": "BoxLink_CopyOnChangeObject",
+      "group": "BoxLink_CopyOnChangeGroup",
+      "object": "BoxLink",
+      "objectId": 2,
+      "properties": {
+        "LinkCopyOnChange": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 3
+        },
+        "LinkCopyOnChangeGroup": {
+          "PropertyType": "App::PropertyLink",
+          "value": "BoxLink_CopyOnChangeGroup"
+        },
+        "LinkCopyOnChangeSource": {
+          "PropertyType": "App::PropertyLink",
+          "value": "Box"
+        },
+        "LinkCopyOnChangeTouched": {
+          "PropertyType": "App::PropertyBool",
+          "value": false
+        },
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "BoxLink_CopyOnChangeObject"
+        }
+      },
+      "reason": "copy_on_change_deep_copy_lifecycle",
+      "sourceObject": "Box",
+      "typeId": "App::Link"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "BoxLink:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge1"
+          },
+          {
+            "id": "BoxLink:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                0.0,
+                4.0
+              ],
+              [
+                0.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge2"
+          },
+          {
+            "id": "BoxLink:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                3.0,
+                0.0
+              ],
+              [
+                0.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge3"
+          },
+          {
+            "id": "BoxLink:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge4"
+          },
+          {
+            "id": "BoxLink:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge5"
+          },
+          {
+            "id": "BoxLink:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                2.0,
+                0.0,
+                4.0
+              ],
+              [
+                2.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge6"
+          },
+          {
+            "id": "BoxLink:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                2.0,
+                3.0,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge7"
+          },
+          {
+            "id": "BoxLink:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge8"
+          },
+          {
+            "id": "BoxLink:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge9"
+          },
+          {
+            "id": "BoxLink:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.0,
+                0.0,
+                4.0
+              ],
+              [
+                2.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge10"
+          },
+          {
+            "id": "BoxLink:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.0,
+                3.0,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge11"
+          },
+          {
+            "id": "BoxLink:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.0,
+                3.0,
+                4.0
+              ],
+              [
+                2.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "BoxLink_CopyOnChangeObject.Edge12"
+          }
+        ],
+        "faceIds": [
+          "BoxLink:Face1",
+          "BoxLink:Face1",
+          "BoxLink:Face2",
+          "BoxLink:Face2",
+          "BoxLink:Face3",
+          "BoxLink:Face3",
+          "BoxLink:Face4",
+          "BoxLink:Face4",
+          "BoxLink:Face5",
+          "BoxLink:Face5",
+          "BoxLink:Face6",
+          "BoxLink:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          5,
+          6,
+          4,
+          6,
+          7,
+          5,
+          4,
+          0,
+          0,
+          4,
+          1,
+          7,
+          6,
+          2,
+          7,
+          2,
+          3,
+          2,
+          6,
+          0,
+          0,
+          6,
+          5,
+          7,
+          3,
+          1,
+          7,
+          1,
+          4
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "BoxLink:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              4.0
+            ]
+          },
+          {
+            "id": "BoxLink:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BoxLink:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              3.0,
+              4.0
+            ]
+          },
+          {
+            "id": "BoxLink:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BoxLink:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              2.0,
+              0.0,
+              4.0
+            ]
+          },
+          {
+            "id": "BoxLink:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BoxLink:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              2.0,
+              3.0,
+              4.0
+            ]
+          },
+          {
+            "id": "BoxLink:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              2.0,
+              3.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            4.0
+          ],
+          [
+            0.0,
+            3.0,
+            0.0
+          ],
+          [
+            0.0,
+            3.0,
+            4.0
+          ],
+          [
+            2.0,
+            0.0,
+            4.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            3.0,
+            0.0
+          ],
+          [
+            2.0,
+            3.0,
+            4.0
+          ]
+        ]
+      },
+      "object": "BoxLink",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge1",
+          "id": "BoxLink:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge1",
+          "subname": "BoxLink_CopyOnChangeObject.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge10",
+          "id": "BoxLink:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge10",
+          "subname": "BoxLink_CopyOnChangeObject.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge11",
+          "id": "BoxLink:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge11",
+          "subname": "BoxLink_CopyOnChangeObject.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge12",
+          "id": "BoxLink:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge12",
+          "subname": "BoxLink_CopyOnChangeObject.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge2",
+          "id": "BoxLink:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge2",
+          "subname": "BoxLink_CopyOnChangeObject.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge3",
+          "id": "BoxLink:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge3",
+          "subname": "BoxLink_CopyOnChangeObject.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge4",
+          "id": "BoxLink:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge4",
+          "subname": "BoxLink_CopyOnChangeObject.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge5",
+          "id": "BoxLink:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge5",
+          "subname": "BoxLink_CopyOnChangeObject.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge6",
+          "id": "BoxLink:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge6",
+          "subname": "BoxLink_CopyOnChangeObject.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge7",
+          "id": "BoxLink:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge7",
+          "subname": "BoxLink_CopyOnChangeObject.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge8",
+          "id": "BoxLink:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge8",
+          "subname": "BoxLink_CopyOnChangeObject.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Edge9",
+          "id": "BoxLink:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Edge9",
+          "subname": "BoxLink_CopyOnChangeObject.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Face1",
+          "id": "BoxLink:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Face1",
+          "subname": "BoxLink_CopyOnChangeObject.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Face2",
+          "id": "BoxLink:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Face2",
+          "subname": "BoxLink_CopyOnChangeObject.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Face3",
+          "id": "BoxLink:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Face3",
+          "subname": "BoxLink_CopyOnChangeObject.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Face4",
+          "id": "BoxLink:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Face4",
+          "subname": "BoxLink_CopyOnChangeObject.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Face5",
+          "id": "BoxLink:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Face5",
+          "subname": "BoxLink_CopyOnChangeObject.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Face6",
+          "id": "BoxLink:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Face6",
+          "subname": "BoxLink_CopyOnChangeObject.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex1",
+          "id": "BoxLink:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex1",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex2",
+          "id": "BoxLink:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex2",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex3",
+          "id": "BoxLink:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex3",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex4",
+          "id": "BoxLink:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex4",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex5",
+          "id": "BoxLink:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex5",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex6",
+          "id": "BoxLink:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex6",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex7",
+          "id": "BoxLink:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex7",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.BoxLink_CopyOnChangeObject.Vertex8",
+          "id": "BoxLink:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "BoxLink_CopyOnChangeObject.Vertex8",
+          "subname": "BoxLink_CopyOnChangeObject.Vertex8"
+        }
+      ]
+    }
+  ]
+}

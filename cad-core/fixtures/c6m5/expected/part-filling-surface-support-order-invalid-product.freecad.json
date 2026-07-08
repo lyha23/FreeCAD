@@ -1,56 +1,56 @@
 {
   "diagnostic_codes": [
-    "unsupported_property",
-    "unsupported_property",
-    "unsupported_property",
-    "unsupported_property",
-    "unsupported_property"
+    "invalid_surface_source",
+    "invalid_support_target",
+    "invalid_support_source",
+    "invalid_order_target",
+    "invalid_order_source"
   ],
   "freecad_version": "1.2.0 revision 20260519",
   "objects": {
     "InvalidOrderSource": {
       "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
-      "native_error_code": "unsupported_property",
+      "native_error_code": "invalid_order_source",
       "object_fields": {
+        "status": "error",
         "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
+        "helper": "Part.makeFilledFace"
       }
     },
     "InvalidOrderTarget": {
       "native_error": "Unsupported Part.makeFilledFace kwargs: Orders",
-      "native_error_code": "unsupported_property",
+      "native_error_code": "invalid_order_target",
       "object_fields": {
+        "status": "error",
         "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
+        "helper": "Part.makeFilledFace"
       }
     },
     "InvalidSupportSource": {
       "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
-      "native_error_code": "unsupported_property",
+      "native_error_code": "invalid_support_source",
       "object_fields": {
+        "status": "error",
         "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
+        "helper": "Part.makeFilledFace"
       }
     },
     "InvalidSupportTarget": {
       "native_error": "Unsupported Part.makeFilledFace kwargs: Supports",
-      "native_error_code": "unsupported_property",
+      "native_error_code": "invalid_support_target",
       "object_fields": {
+        "status": "error",
         "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
+        "helper": "Part.makeFilledFace"
       }
     },
     "InvalidSurface": {
       "native_error": "Unsupported Part.makeFilledFace kwargs: Surface",
-      "native_error_code": "unsupported_property",
+      "native_error_code": "invalid_surface_source",
       "object_fields": {
+        "status": "error",
         "feature": "part_filled_face",
-        "helper": "Part.makeFilledFace",
-        "status": "error"
+        "helper": "Part.makeFilledFace"
       }
     }
   },

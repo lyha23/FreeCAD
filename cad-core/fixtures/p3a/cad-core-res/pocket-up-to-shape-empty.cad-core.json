@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_subshape",
+      "message": "UpToShape must reference at least one shape or face",
+      "object": "Pocket",
+      "property": "UpToShape",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pocket",
+      "subshapes": []
+    }
+  ]
+}

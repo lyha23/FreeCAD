@@ -1,0 +1,571 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "BooleanFragments:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.5000000000000002,
+                1.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge1"
+          },
+          {
+            "id": "BooleanFragments:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.49999999999999983,
+                -1.5,
+                0.0
+              ],
+              [
+                2.0000000000000004,
+                2.734323463064769e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge6"
+          },
+          {
+            "id": "BooleanFragments:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.5000000000000002,
+                1.5,
+                0.0
+              ],
+              [
+                3.546046371670331e-16,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge2"
+          },
+          {
+            "id": "BooleanFragments:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                1.2246467991473532e-16,
+                2.0,
+                0.0
+              ],
+              [
+                -1.9999999999999998,
+                3.546046371670331e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge3"
+          },
+          {
+            "id": "BooleanFragments:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                -2.0,
+                2.4492935982947064e-16,
+                0.0
+              ],
+              [
+                -3.5460463716703314e-16,
+                -2.0000000000000004,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge4"
+          },
+          {
+            "id": "BooleanFragments:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                -3.6739403974420594e-16,
+                -2.0,
+                0.0
+              ],
+              [
+                0.49999999999999983,
+                -1.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge5"
+          },
+          {
+            "id": "BooleanFragments:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0000000000000004,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolyB.Edge1"
+          },
+          {
+            "id": "BooleanFragments:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                0.9999999999999997,
+                -2.0,
+                0.0
+              ],
+              [
+                3.0000000000000004,
+                -4.0586145430278105e-17,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge12"
+          },
+          {
+            "id": "BooleanFragments:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                0.4999999999999995,
+                -1.5,
+                0.0
+              ],
+              [
+                0.9999999999999997,
+                -2.0000000000000004,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge11"
+          },
+          {
+            "id": "BooleanFragments:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                1.0000000000000002,
+                2.0,
+                0.0
+              ],
+              [
+                0.5000000000000002,
+                1.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge8"
+          },
+          {
+            "id": "BooleanFragments:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.5000000000000002,
+                1.5,
+                0.0
+              ],
+              [
+                -0.9999999999999998,
+                3.546046371670331e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge9"
+          },
+          {
+            "id": "BooleanFragments:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                -1.0,
+                2.4492935982947064e-16,
+                0.0
+              ],
+              [
+                0.4999999999999995,
+                -1.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "BooleanFragments.GeneralFuse.Edge10"
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "BooleanFragments:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.5000000000000002,
+              1.5,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.4999999999999998,
+              -1.5,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              1.2246467991473532e-16,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              -2.0,
+              2.4492935982947064e-16,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              -3.6739403974420594e-16,
+              -2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              3.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              1.0000000000000002,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              0.9999999999999997,
+              -2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BooleanFragments:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              -1.0,
+              2.4492935982947064e-16,
+              0.0
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "BooleanFragments",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge1",
+          "id": "BooleanFragments:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge1",
+          "subname": "BooleanFragments.GeneralFuse.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge10",
+          "id": "BooleanFragments:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge8",
+          "subname": "BooleanFragments.GeneralFuse.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge11",
+          "id": "BooleanFragments:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge9",
+          "subname": "BooleanFragments.GeneralFuse.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge12",
+          "id": "BooleanFragments:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge10",
+          "subname": "BooleanFragments.GeneralFuse.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge2",
+          "id": "BooleanFragments:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge6",
+          "subname": "BooleanFragments.GeneralFuse.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge3",
+          "id": "BooleanFragments:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge2",
+          "subname": "BooleanFragments.GeneralFuse.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge4",
+          "id": "BooleanFragments:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge3",
+          "subname": "BooleanFragments.GeneralFuse.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge5",
+          "id": "BooleanFragments:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge4",
+          "subname": "BooleanFragments.GeneralFuse.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge6",
+          "id": "BooleanFragments:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge5",
+          "subname": "BooleanFragments.GeneralFuse.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge7",
+          "id": "BooleanFragments:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "PolyB.Edge1",
+          "subname": "BooleanFragments.GeneralFuse.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge8",
+          "id": "BooleanFragments:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge12",
+          "subname": "BooleanFragments.GeneralFuse.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Edge9",
+          "id": "BooleanFragments:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "BooleanFragments.GeneralFuse.Edge11",
+          "subname": "BooleanFragments.GeneralFuse.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex1",
+          "id": "BooleanFragments:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex1",
+          "subname": "BooleanFragments.GeneralFuse.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex10",
+          "id": "BooleanFragments:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex9",
+          "subname": "BooleanFragments.GeneralFuse.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex2",
+          "id": "BooleanFragments:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex2",
+          "subname": "BooleanFragments.GeneralFuse.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex3",
+          "id": "BooleanFragments:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex6",
+          "subname": "BooleanFragments.GeneralFuse.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex4",
+          "id": "BooleanFragments:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex3",
+          "subname": "BooleanFragments.GeneralFuse.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex5",
+          "id": "BooleanFragments:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex4",
+          "subname": "BooleanFragments.GeneralFuse.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex6",
+          "id": "BooleanFragments:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex5",
+          "subname": "BooleanFragments.GeneralFuse.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex7",
+          "id": "BooleanFragments:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "PolyB.Vertex1",
+          "subname": "BooleanFragments.GeneralFuse.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex8",
+          "id": "BooleanFragments:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "PolyB.Vertex2",
+          "subname": "BooleanFragments.GeneralFuse.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BooleanFragments.GeneralFuse.Vertex9",
+          "id": "BooleanFragments:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "BooleanFragments.GeneralFuse.Vertex10",
+          "subname": "BooleanFragments.GeneralFuse.Vertex9"
+        }
+      ]
+    }
+  ]
+}

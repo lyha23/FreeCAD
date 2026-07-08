@@ -1,0 +1,80 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineEllipseDirectrix1",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineEllipseDirectrix2",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointEllipseFocus1",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointEllipseFocus2",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineHyperbolaDirectrix1",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineHyperbolaDirectrix2",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineHyperbolaAsymptote1",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineHyperbolaAsymptote2",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointHyperbolaFocus1",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointHyperbolaFocus2",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineParabolaDirectrix1",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointParabolaFocus1",
+      "subshapes": []
+    }
+  ]
+}

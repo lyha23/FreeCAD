@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_subshape",
+      "message": "Invalid dress-up Base subshape Fillet2.Edge42",
+      "object": "Fillet3",
+      "property": "Base",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Fillet2.Edge42",
+      "target": "Pad5"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad5Body",
+      "subshapes": []
+    }
+  ]
+}

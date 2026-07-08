@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_subshape",
+      "message": "ExternalGeometry target DatumLine has no subshape Face1",
+      "object": "Sketch",
+      "property": "ExternalGeometry",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face1",
+      "target": "DatumLine"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Sketch",
+      "subshapes": []
+    }
+  ]
+}

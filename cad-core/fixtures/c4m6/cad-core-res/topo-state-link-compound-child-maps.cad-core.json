@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "execution_failed",
+      "message": "Standard_ConstructionError: Bnd_Box is void",
+      "object": "Compound",
+      "severity": "error",
+      "stage": "runtime"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "CompoundLink",
+      "subshapes": []
+    }
+  ]
+}

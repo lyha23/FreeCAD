@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_stable_subname",
+      "message": "Profile target Sketch has stable subname g1;SKT;FAC, but it is not in the current ElementMap",
+      "object": "Pad",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "g1;SKT;FAC",
+      "target": "Sketch"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

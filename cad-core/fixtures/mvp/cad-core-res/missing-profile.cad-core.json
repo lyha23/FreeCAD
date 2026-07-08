@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_property",
+      "message": "Pad Profile must be App::PropertyLinkSubList with SubSet[] entries",
+      "object": "Pad",
+      "property": "Profile",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

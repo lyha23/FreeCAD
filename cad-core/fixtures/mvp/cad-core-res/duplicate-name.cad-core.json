@@ -1,0 +1,512 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "duplicate_object_name",
+      "message": "Duplicate object name Sketch",
+      "object": "Sketch",
+      "severity": "error",
+      "stage": "parse"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Sketch:InternalEdge1",
+            "identityStatus": "stable",
+            "indexed": "InternalEdge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 1,
+            "sourceGeometryIndex": 0,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1"
+          },
+          {
+            "id": "Sketch:InternalEdge2",
+            "identityStatus": "stable",
+            "indexed": "InternalEdge2",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 2,
+            "sourceGeometryIndex": 1,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g2",
+            "stableSubname": "g2"
+          },
+          {
+            "id": "Sketch:InternalEdge3",
+            "identityStatus": "stable",
+            "indexed": "InternalEdge3",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 3,
+            "sourceGeometryIndex": 2,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g3",
+            "stableSubname": "g3"
+          },
+          {
+            "id": "Sketch:InternalEdge4",
+            "identityStatus": "stable",
+            "indexed": "InternalEdge4",
+            "points": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 4,
+            "sourceGeometryIndex": 3,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g4",
+            "stableSubname": "g4"
+          },
+          {
+            "id": "Sketch:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 1,
+            "sourceGeometryIndex": 0,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1"
+          },
+          {
+            "id": "Sketch:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 2,
+            "sourceGeometryIndex": 1,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g2",
+            "stableSubname": "g2"
+          },
+          {
+            "id": "Sketch:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 3,
+            "sourceGeometryIndex": 2,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g3",
+            "stableSubname": "g3"
+          },
+          {
+            "id": "Sketch:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 4,
+            "sourceGeometryIndex": 3,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g4",
+            "stableSubname": "g4"
+          }
+        ],
+        "faceIds": [
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          3,
+          1
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Sketch:InternalVertex1",
+            "indexed": "InternalVertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:InternalVertex2",
+            "indexed": "InternalVertex2",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:InternalVertex3",
+            "indexed": "InternalVertex3",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:InternalVertex4",
+            "indexed": "InternalVertex4",
+            "point": [
+              0.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              5.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            10.0,
+            5.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            10.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.0,
+            0.0
+          ]
+        ]
+      },
+      "object": "Sketch",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "sourceGeometryId": 1,
+          "sourceGeometryIndex": 0,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g1",
+          "stableSubname": "g1",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "sourceGeometryId": 2,
+          "sourceGeometryIndex": 1,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g2",
+          "stableSubname": "g2",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "sourceGeometryId": 3,
+          "sourceGeometryIndex": 2,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g3",
+          "stableSubname": "g3",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "sourceGeometryId": 4,
+          "sourceGeometryIndex": 3,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g4",
+          "stableSubname": "g4",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalEdge1",
+          "identityStatus": "stable",
+          "indexed": "InternalEdge1",
+          "kind": "Edge",
+          "sourceGeometryId": 1,
+          "sourceGeometryIndex": 0,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g1",
+          "stableSubname": "g1",
+          "subname": "InternalEdge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalEdge2",
+          "identityStatus": "stable",
+          "indexed": "InternalEdge2",
+          "kind": "Edge",
+          "sourceGeometryId": 2,
+          "sourceGeometryIndex": 1,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g2",
+          "stableSubname": "g2",
+          "subname": "InternalEdge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalEdge3",
+          "identityStatus": "stable",
+          "indexed": "InternalEdge3",
+          "kind": "Edge",
+          "sourceGeometryId": 3,
+          "sourceGeometryIndex": 2,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g3",
+          "stableSubname": "g3",
+          "subname": "InternalEdge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalEdge4",
+          "identityStatus": "stable",
+          "indexed": "InternalEdge4",
+          "kind": "Edge",
+          "sourceGeometryId": 4,
+          "sourceGeometryIndex": 3,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g4",
+          "stableSubname": "g4",
+          "subname": "InternalEdge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalFace1",
+          "identityStatus": "stable",
+          "indexed": "InternalFace1",
+          "kind": "Face",
+          "stableSubname": "g1;SKT;FAC",
+          "subname": "InternalFace1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalVertex1",
+          "identityStatus": "stable",
+          "indexed": "InternalVertex1",
+          "kind": "Vertex",
+          "stableSubname": "Vertex1",
+          "subname": "InternalVertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalVertex2",
+          "identityStatus": "stable",
+          "indexed": "InternalVertex2",
+          "kind": "Vertex",
+          "stableSubname": "Vertex2",
+          "subname": "InternalVertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalVertex3",
+          "identityStatus": "stable",
+          "indexed": "InternalVertex3",
+          "kind": "Vertex",
+          "stableSubname": "Vertex3",
+          "subname": "InternalVertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalVertex4",
+          "identityStatus": "stable",
+          "indexed": "InternalVertex4",
+          "kind": "Vertex",
+          "stableSubname": "Vertex4",
+          "subname": "InternalVertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        }
+      ]
+    }
+  ]
+}

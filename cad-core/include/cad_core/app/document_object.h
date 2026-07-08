@@ -29,6 +29,10 @@ struct Document {
     std::map<std::string, std::size_t> indexByName;
     std::map<std::string, std::string> parentGroupByObject;
     std::optional<double> displayMeshDeflection;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PropertyTopoShape.cpp
+    // stores topological element identity in the shape's "ElementMap". cad-core fixtures carry
+    // request-side snapshots under "topoNamingState.objects[*].elementMap.entries".
+    nlohmann::json topoNamingState = nlohmann::json::object();
 };
 
 }  // namespace cad_core::app

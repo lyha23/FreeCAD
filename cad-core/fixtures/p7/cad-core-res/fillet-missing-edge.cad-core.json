@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_subshape",
+      "message": "Base target Pad has no subshape Edge99",
+      "object": "Fillet",
+      "property": "Base",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge99",
+      "target": "Pad"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Fillet",
+      "subshapes": []
+    }
+  ]
+}

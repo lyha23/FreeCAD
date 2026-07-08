@@ -1,0 +1,662 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ProjectedAllHeightOffset:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                1.0,
+                3.0,
+                0.25
+              ],
+              [
+                1.0,
+                3.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                1.0,
+                1.0,
+                0.25
+              ],
+              [
+                1.0,
+                1.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                1.0,
+                3.0,
+                0.25
+              ],
+              [
+                1.0,
+                1.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                1.0,
+                3.0,
+                -1.25
+              ],
+              [
+                1.0,
+                1.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                4.0,
+                1.0,
+                0.25
+              ],
+              [
+                4.0,
+                1.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                4.0,
+                1.0,
+                0.25
+              ],
+              [
+                1.0,
+                1.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                4.0,
+                1.0,
+                -1.25
+              ],
+              [
+                1.0,
+                1.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.25
+              ],
+              [
+                4.0,
+                3.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.25
+              ],
+              [
+                4.0,
+                1.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                4.0,
+                3.0,
+                -1.25
+              ],
+              [
+                4.0,
+                1.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.25
+              ],
+              [
+                1.0,
+                3.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                4.0,
+                3.0,
+                -1.25
+              ],
+              [
+                1.0,
+                3.0,
+                -1.25
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "ProjectedAllHeightOffset:Face1",
+          "ProjectedAllHeightOffset:Face1",
+          "ProjectedAllHeightOffset:Face2",
+          "ProjectedAllHeightOffset:Face2",
+          "ProjectedAllHeightOffset:Face3",
+          "ProjectedAllHeightOffset:Face3",
+          "ProjectedAllHeightOffset:Face4",
+          "ProjectedAllHeightOffset:Face4",
+          "ProjectedAllHeightOffset:Face5",
+          "ProjectedAllHeightOffset:Face5",
+          "ProjectedAllHeightOffset:Face6",
+          "ProjectedAllHeightOffset:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          0,
+          5,
+          5,
+          0,
+          3,
+          6,
+          4,
+          7,
+          7,
+          4,
+          5,
+          1,
+          6,
+          7,
+          1,
+          7,
+          2,
+          6,
+          1,
+          0,
+          6,
+          0,
+          4,
+          2,
+          7,
+          3,
+          3,
+          7,
+          5
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ProjectedAllHeightOffset:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              1.0,
+              3.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.0,
+              3.0,
+              -1.25
+            ]
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              1.0,
+              1.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              1.0,
+              1.0,
+              -1.25
+            ]
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              4.0,
+              1.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              4.0,
+              1.0,
+              -1.25
+            ]
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              4.0,
+              3.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllHeightOffset:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              4.0,
+              3.0,
+              -1.25
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            1.0,
+            1.0,
+            0.25
+          ],
+          [
+            1.0,
+            3.0,
+            0.25
+          ],
+          [
+            1.0,
+            3.0,
+            -1.25
+          ],
+          [
+            1.0,
+            1.0,
+            -1.25
+          ],
+          [
+            4.0,
+            1.0,
+            0.25
+          ],
+          [
+            4.0,
+            1.0,
+            -1.25
+          ],
+          [
+            4.0,
+            3.0,
+            0.25
+          ],
+          [
+            4.0,
+            3.0,
+            -1.25
+          ]
+        ]
+      },
+      "object": "ProjectedAllHeightOffset",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllHeightOffset:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        }
+      ]
+    }
+  ]
+}

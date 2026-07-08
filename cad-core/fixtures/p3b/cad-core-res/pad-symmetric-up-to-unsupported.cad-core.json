@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "message": "Symmetric currently supports Type=Length; mirrored UpTo is tracked for later P3b work",
+      "object": "Pad",
+      "property": "SideType",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,0 +1,2694 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "BodyLink:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                12.0,
+                0.0,
+                2.6645352591003757e-15
+              ],
+              [
+                12.0,
+                0.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.Edge1"
+          },
+          {
+            "id": "BodyLink:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                22.0,
+                0.0,
+                2.6645352591003757e-15
+              ],
+              [
+                22.0,
+                0.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.Edge2"
+          },
+          {
+            "id": "BodyLink:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                12.0,
+                0.0,
+                2.6645352591003757e-15
+              ],
+              [
+                22.0,
+                0.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.Edge3"
+          },
+          {
+            "id": "BodyLink:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                12.0,
+                0.0,
+                10.000000000000004
+              ],
+              [
+                22.0,
+                0.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.Edge4"
+          },
+          {
+            "id": "BodyLink:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                12.0,
+                5.0,
+                2.6645352591003757e-15
+              ],
+              [
+                12.0,
+                5.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge8"
+          },
+          {
+            "id": "BodyLink:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                12.0,
+                5.0,
+                2.6645352591003757e-15
+              ],
+              [
+                12.0,
+                0.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge11"
+          },
+          {
+            "id": "BodyLink:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                12.0,
+                5.0,
+                10.000000000000004
+              ],
+              [
+                12.0,
+                0.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge12"
+          },
+          {
+            "id": "BodyLink:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                22.0,
+                5.0,
+                2.6645352591003757e-15
+              ],
+              [
+                22.0,
+                5.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge5"
+          },
+          {
+            "id": "BodyLink:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                22.0,
+                0.0,
+                2.6645352591003757e-15
+              ],
+              [
+                22.0,
+                5.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge6"
+          },
+          {
+            "id": "BodyLink:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                22.0,
+                0.0,
+                10.000000000000004
+              ],
+              [
+                22.0,
+                5.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge7"
+          },
+          {
+            "id": "BodyLink:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                22.0,
+                5.0,
+                2.6645352591003757e-15
+              ],
+              [
+                12.0,
+                5.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge9"
+          },
+          {
+            "id": "BodyLink:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                14.0,
+                1.0,
+                2.6645352591003757e-15
+              ],
+              [
+                20.0,
+                1.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge3"
+          },
+          {
+            "id": "BodyLink:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                20.0,
+                1.0,
+                2.6645352591003757e-15
+              ],
+              [
+                20.0,
+                4.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge6"
+          },
+          {
+            "id": "BodyLink:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                20.0,
+                4.0,
+                2.6645352591003757e-15
+              ],
+              [
+                14.0,
+                4.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge9"
+          },
+          {
+            "id": "BodyLink:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                14.0,
+                4.0,
+                2.6645352591003757e-15
+              ],
+              [
+                14.0,
+                1.0,
+                2.6645352591003757e-15
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge11"
+          },
+          {
+            "id": "BodyLink:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                22.0,
+                5.0,
+                10.000000000000004
+              ],
+              [
+                12.0,
+                5.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform1.Edge10"
+          },
+          {
+            "id": "BodyLink:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                14.0,
+                1.0,
+                10.000000000000004
+              ],
+              [
+                20.0,
+                1.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge4"
+          },
+          {
+            "id": "BodyLink:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                20.0,
+                1.0,
+                10.000000000000004
+              ],
+              [
+                20.0,
+                4.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge7"
+          },
+          {
+            "id": "BodyLink:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                20.0,
+                4.0,
+                10.000000000000004
+              ],
+              [
+                14.0,
+                4.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge10"
+          },
+          {
+            "id": "BodyLink:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                14.0,
+                4.0,
+                10.000000000000004
+              ],
+              [
+                14.0,
+                1.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge12"
+          },
+          {
+            "id": "BodyLink:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                14.0,
+                1.0,
+                2.6645352591003757e-15
+              ],
+              [
+                14.0,
+                1.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge1"
+          },
+          {
+            "id": "BodyLink:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                20.0,
+                1.0,
+                2.6645352591003757e-15
+              ],
+              [
+                20.0,
+                1.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge2"
+          },
+          {
+            "id": "BodyLink:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                20.0,
+                4.0,
+                2.6645352591003757e-15
+              ],
+              [
+                20.0,
+                4.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge5"
+          },
+          {
+            "id": "BodyLink:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                14.0,
+                4.0,
+                2.6645352591003757e-15
+              ],
+              [
+                14.0,
+                4.0,
+                10.000000000000004
+              ]
+            ],
+            "stableSubname": "Body.LinearPattern.Transform2.Edge8"
+          },
+          {
+            "id": "BodyLink:Edge25",
+            "identityStatus": "stable",
+            "indexed": "Edge25",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge25"
+          },
+          {
+            "id": "BodyLink:Edge26",
+            "identityStatus": "stable",
+            "indexed": "Edge26",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge26"
+          },
+          {
+            "id": "BodyLink:Edge27",
+            "identityStatus": "stable",
+            "indexed": "Edge27",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.Edge27"
+          },
+          {
+            "id": "BodyLink:Edge28",
+            "identityStatus": "stable",
+            "indexed": "Edge28",
+            "points": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                10.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge28"
+          },
+          {
+            "id": "BodyLink:Edge29",
+            "identityStatus": "stable",
+            "indexed": "Edge29",
+            "points": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge29"
+          },
+          {
+            "id": "BodyLink:Edge30",
+            "identityStatus": "stable",
+            "indexed": "Edge30",
+            "points": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.Edge30"
+          },
+          {
+            "id": "BodyLink:Edge31",
+            "identityStatus": "stable",
+            "indexed": "Edge31",
+            "points": [
+              [
+                0.0,
+                5.0,
+                10.0
+              ],
+              [
+                0.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge31"
+          },
+          {
+            "id": "BodyLink:Edge32",
+            "identityStatus": "stable",
+            "indexed": "Edge32",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge32"
+          },
+          {
+            "id": "BodyLink:Edge33",
+            "identityStatus": "stable",
+            "indexed": "Edge33",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.Edge33"
+          },
+          {
+            "id": "BodyLink:Edge34",
+            "identityStatus": "stable",
+            "indexed": "Edge34",
+            "points": [
+              [
+                10.0,
+                0.0,
+                10.0
+              ],
+              [
+                10.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge34"
+          },
+          {
+            "id": "BodyLink:Edge35",
+            "identityStatus": "stable",
+            "indexed": "Edge35",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.Edge35"
+          },
+          {
+            "id": "BodyLink:Edge36",
+            "identityStatus": "stable",
+            "indexed": "Edge36",
+            "points": [
+              [
+                2.0,
+                1.0,
+                0.0
+              ],
+              [
+                8.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.SketchPocket.Edge1"
+          },
+          {
+            "id": "BodyLink:Edge37",
+            "identityStatus": "stable",
+            "indexed": "Edge37",
+            "points": [
+              [
+                8.0,
+                1.0,
+                0.0
+              ],
+              [
+                8.0,
+                4.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge13"
+          },
+          {
+            "id": "BodyLink:Edge38",
+            "identityStatus": "stable",
+            "indexed": "Edge38",
+            "points": [
+              [
+                8.0,
+                4.0,
+                0.0
+              ],
+              [
+                2.0,
+                4.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge14"
+          },
+          {
+            "id": "BodyLink:Edge39",
+            "identityStatus": "stable",
+            "indexed": "Edge39",
+            "points": [
+              [
+                2.0,
+                4.0,
+                0.0
+              ],
+              [
+                2.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge15"
+          },
+          {
+            "id": "BodyLink:Edge40",
+            "identityStatus": "stable",
+            "indexed": "Edge40",
+            "points": [
+              [
+                10.0,
+                5.0,
+                10.0
+              ],
+              [
+                0.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge16"
+          },
+          {
+            "id": "BodyLink:Edge41",
+            "identityStatus": "stable",
+            "indexed": "Edge41",
+            "points": [
+              [
+                2.0,
+                1.0,
+                10.0
+              ],
+              [
+                8.0,
+                1.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge17"
+          },
+          {
+            "id": "BodyLink:Edge42",
+            "identityStatus": "stable",
+            "indexed": "Edge42",
+            "points": [
+              [
+                8.0,
+                1.0,
+                10.0
+              ],
+              [
+                8.0,
+                4.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge18"
+          },
+          {
+            "id": "BodyLink:Edge43",
+            "identityStatus": "stable",
+            "indexed": "Edge43",
+            "points": [
+              [
+                8.0,
+                4.0,
+                10.0
+              ],
+              [
+                2.0,
+                4.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge19"
+          },
+          {
+            "id": "BodyLink:Edge44",
+            "identityStatus": "stable",
+            "indexed": "Edge44",
+            "points": [
+              [
+                2.0,
+                4.0,
+                10.0
+              ],
+              [
+                2.0,
+                1.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge20"
+          },
+          {
+            "id": "BodyLink:Edge45",
+            "identityStatus": "stable",
+            "indexed": "Edge45",
+            "points": [
+              [
+                2.0,
+                1.0,
+                0.0
+              ],
+              [
+                2.0,
+                1.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge21"
+          },
+          {
+            "id": "BodyLink:Edge46",
+            "identityStatus": "stable",
+            "indexed": "Edge46",
+            "points": [
+              [
+                8.0,
+                1.0,
+                0.0
+              ],
+              [
+                8.0,
+                1.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge22"
+          },
+          {
+            "id": "BodyLink:Edge47",
+            "identityStatus": "stable",
+            "indexed": "Edge47",
+            "points": [
+              [
+                8.0,
+                4.0,
+                0.0
+              ],
+              [
+                8.0,
+                4.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge23"
+          },
+          {
+            "id": "BodyLink:Edge48",
+            "identityStatus": "stable",
+            "indexed": "Edge48",
+            "points": [
+              [
+                2.0,
+                4.0,
+                0.0
+              ],
+              [
+                2.0,
+                4.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Pocket.Edge24"
+          }
+        ],
+        "faceIds": [
+          "BodyLink:Face1",
+          "BodyLink:Face1",
+          "BodyLink:Face2",
+          "BodyLink:Face2",
+          "BodyLink:Face3",
+          "BodyLink:Face3",
+          "BodyLink:Face4",
+          "BodyLink:Face4",
+          "BodyLink:Face4",
+          "BodyLink:Face4",
+          "BodyLink:Face4",
+          "BodyLink:Face4",
+          "BodyLink:Face4",
+          "BodyLink:Face4",
+          "BodyLink:Face5",
+          "BodyLink:Face5",
+          "BodyLink:Face5",
+          "BodyLink:Face5",
+          "BodyLink:Face5",
+          "BodyLink:Face5",
+          "BodyLink:Face5",
+          "BodyLink:Face5",
+          "BodyLink:Face6",
+          "BodyLink:Face6",
+          "BodyLink:Face7",
+          "BodyLink:Face7",
+          "BodyLink:Face8",
+          "BodyLink:Face8",
+          "BodyLink:Face9",
+          "BodyLink:Face9",
+          "BodyLink:Face10",
+          "BodyLink:Face10",
+          "BodyLink:Face11",
+          "BodyLink:Face11",
+          "BodyLink:Face12",
+          "BodyLink:Face12",
+          "BodyLink:Face13",
+          "BodyLink:Face13",
+          "BodyLink:Face14",
+          "BodyLink:Face14",
+          "BodyLink:Face14",
+          "BodyLink:Face14",
+          "BodyLink:Face14",
+          "BodyLink:Face14",
+          "BodyLink:Face14",
+          "BodyLink:Face14",
+          "BodyLink:Face15",
+          "BodyLink:Face15",
+          "BodyLink:Face15",
+          "BodyLink:Face15",
+          "BodyLink:Face15",
+          "BodyLink:Face15",
+          "BodyLink:Face15",
+          "BodyLink:Face15",
+          "BodyLink:Face16",
+          "BodyLink:Face16",
+          "BodyLink:Face17",
+          "BodyLink:Face17",
+          "BodyLink:Face18",
+          "BodyLink:Face18",
+          "BodyLink:Face19",
+          "BodyLink:Face19",
+          "BodyLink:Face20",
+          "BodyLink:Face20"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          0,
+          5,
+          5,
+          0,
+          2,
+          1,
+          6,
+          3,
+          3,
+          6,
+          7,
+          4,
+          8,
+          0,
+          0,
+          8,
+          9,
+          9,
+          10,
+          0,
+          10,
+          1,
+          0,
+          11,
+          6,
+          10,
+          10,
+          6,
+          1,
+          4,
+          6,
+          8,
+          8,
+          6,
+          11,
+          12,
+          5,
+          2,
+          12,
+          2,
+          13,
+          14,
+          13,
+          2,
+          3,
+          14,
+          2,
+          7,
+          15,
+          14,
+          7,
+          14,
+          3,
+          7,
+          5,
+          12,
+          7,
+          12,
+          15,
+          6,
+          4,
+          7,
+          7,
+          4,
+          5,
+          10,
+          9,
+          13,
+          10,
+          13,
+          14,
+          11,
+          10,
+          14,
+          11,
+          14,
+          15,
+          8,
+          11,
+          15,
+          8,
+          15,
+          12,
+          9,
+          8,
+          12,
+          9,
+          12,
+          13,
+          16,
+          17,
+          18,
+          18,
+          17,
+          19,
+          20,
+          16,
+          21,
+          21,
+          16,
+          18,
+          17,
+          22,
+          19,
+          19,
+          22,
+          23,
+          20,
+          24,
+          16,
+          16,
+          24,
+          25,
+          25,
+          26,
+          16,
+          26,
+          17,
+          16,
+          27,
+          22,
+          26,
+          26,
+          22,
+          17,
+          20,
+          22,
+          24,
+          24,
+          22,
+          27,
+          28,
+          21,
+          18,
+          28,
+          18,
+          29,
+          30,
+          29,
+          18,
+          19,
+          30,
+          18,
+          23,
+          31,
+          30,
+          23,
+          30,
+          19,
+          23,
+          21,
+          28,
+          23,
+          28,
+          31,
+          22,
+          20,
+          23,
+          23,
+          20,
+          21,
+          26,
+          25,
+          29,
+          26,
+          29,
+          30,
+          26,
+          30,
+          31,
+          27,
+          26,
+          31,
+          24,
+          27,
+          31,
+          24,
+          31,
+          28,
+          24,
+          28,
+          29,
+          25,
+          24,
+          29
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "BodyLink:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              12.0,
+              0.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              12.0,
+              0.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              22.0,
+              0.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              22.0,
+              0.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              12.0,
+              5.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              12.0,
+              5.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              22.0,
+              5.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              22.0,
+              5.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              14.0,
+              1.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              20.0,
+              1.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              20.0,
+              4.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              14.0,
+              4.0,
+              2.6645352591003757e-15
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              14.0,
+              1.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              20.0,
+              1.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              20.0,
+              4.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              14.0,
+              4.0,
+              10.000000000000004
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              0.0,
+              0.0,
+              10.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              10.0,
+              0.0,
+              10.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex21",
+            "indexed": "Vertex21",
+            "point": [
+              0.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex22",
+            "indexed": "Vertex22",
+            "point": [
+              0.0,
+              5.0,
+              10.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex23",
+            "indexed": "Vertex23",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex24",
+            "indexed": "Vertex24",
+            "point": [
+              10.0,
+              5.0,
+              10.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex25",
+            "indexed": "Vertex25",
+            "point": [
+              2.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex26",
+            "indexed": "Vertex26",
+            "point": [
+              8.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex27",
+            "indexed": "Vertex27",
+            "point": [
+              8.0,
+              4.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex28",
+            "indexed": "Vertex28",
+            "point": [
+              2.0,
+              4.0,
+              0.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex29",
+            "indexed": "Vertex29",
+            "point": [
+              2.0,
+              1.0,
+              10.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex30",
+            "indexed": "Vertex30",
+            "point": [
+              8.0,
+              1.0,
+              10.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex31",
+            "indexed": "Vertex31",
+            "point": [
+              8.0,
+              4.0,
+              10.0
+            ]
+          },
+          {
+            "id": "BodyLink:Vertex32",
+            "indexed": "Vertex32",
+            "point": [
+              2.0,
+              4.0,
+              10.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            12.0,
+            0.0,
+            2.6645352591003757e-15
+          ],
+          [
+            22.0,
+            0.0,
+            2.6645352591003757e-15
+          ],
+          [
+            12.0,
+            0.0,
+            10.000000000000004
+          ],
+          [
+            22.0,
+            0.0,
+            10.000000000000004
+          ],
+          [
+            12.0,
+            5.0,
+            2.6645352591003757e-15
+          ],
+          [
+            12.0,
+            5.0,
+            10.000000000000004
+          ],
+          [
+            22.0,
+            5.0,
+            2.6645352591003757e-15
+          ],
+          [
+            22.0,
+            5.0,
+            10.000000000000004
+          ],
+          [
+            14.0,
+            4.0,
+            2.6645352591003757e-15
+          ],
+          [
+            14.0,
+            1.0,
+            2.6645352591003757e-15
+          ],
+          [
+            20.0,
+            1.0,
+            2.6645352591003757e-15
+          ],
+          [
+            20.0,
+            4.0,
+            2.6645352591003757e-15
+          ],
+          [
+            14.0,
+            4.0,
+            10.000000000000004
+          ],
+          [
+            14.0,
+            1.0,
+            10.000000000000004
+          ],
+          [
+            20.0,
+            1.0,
+            10.000000000000004
+          ],
+          [
+            20.0,
+            4.0,
+            10.000000000000004
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            10.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.0
+          ],
+          [
+            10.0,
+            0.0,
+            10.0
+          ],
+          [
+            0.0,
+            5.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.0,
+            10.0
+          ],
+          [
+            10.0,
+            5.0,
+            0.0
+          ],
+          [
+            10.0,
+            5.0,
+            10.0
+          ],
+          [
+            2.0,
+            4.0,
+            0.0
+          ],
+          [
+            2.0,
+            1.0,
+            0.0
+          ],
+          [
+            8.0,
+            1.0,
+            0.0
+          ],
+          [
+            8.0,
+            4.0,
+            0.0
+          ],
+          [
+            2.0,
+            4.0,
+            10.0
+          ],
+          [
+            2.0,
+            1.0,
+            10.0
+          ],
+          [
+            8.0,
+            1.0,
+            10.0
+          ],
+          [
+            8.0,
+            4.0,
+            10.0
+          ]
+        ]
+      },
+      "object": "BodyLink",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge1",
+          "id": "BodyLink:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge1",
+          "subname": "Body.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge10",
+          "id": "BodyLink:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge7",
+          "subname": "Body.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge11",
+          "id": "BodyLink:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge9",
+          "subname": "Body.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge12",
+          "id": "BodyLink:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge3",
+          "subname": "Body.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge13",
+          "id": "BodyLink:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge6",
+          "subname": "Body.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge14",
+          "id": "BodyLink:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge9",
+          "subname": "Body.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge15",
+          "id": "BodyLink:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge11",
+          "subname": "Body.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge16",
+          "id": "BodyLink:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge10",
+          "subname": "Body.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge17",
+          "id": "BodyLink:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge4",
+          "subname": "Body.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge18",
+          "id": "BodyLink:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge7",
+          "subname": "Body.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge19",
+          "id": "BodyLink:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge10",
+          "subname": "Body.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge2",
+          "id": "BodyLink:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge2",
+          "subname": "Body.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge20",
+          "id": "BodyLink:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge12",
+          "subname": "Body.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge21",
+          "id": "BodyLink:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge1",
+          "subname": "Body.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge22",
+          "id": "BodyLink:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge2",
+          "subname": "Body.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge23",
+          "id": "BodyLink:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge5",
+          "subname": "Body.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge24",
+          "id": "BodyLink:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform2.Edge8",
+          "subname": "Body.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge25",
+          "id": "BodyLink:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge25",
+          "subname": "Body.Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge26",
+          "id": "BodyLink:Edge26",
+          "identityStatus": "stable",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge26",
+          "subname": "Body.Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge27",
+          "id": "BodyLink:Edge27",
+          "identityStatus": "stable",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge27",
+          "subname": "Body.Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge28",
+          "id": "BodyLink:Edge28",
+          "identityStatus": "stable",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge28",
+          "subname": "Body.Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge29",
+          "id": "BodyLink:Edge29",
+          "identityStatus": "stable",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge29",
+          "subname": "Body.Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge3",
+          "id": "BodyLink:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge3",
+          "subname": "Body.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge30",
+          "id": "BodyLink:Edge30",
+          "identityStatus": "stable",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge30",
+          "subname": "Body.Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge31",
+          "id": "BodyLink:Edge31",
+          "identityStatus": "stable",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge31",
+          "subname": "Body.Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge32",
+          "id": "BodyLink:Edge32",
+          "identityStatus": "stable",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge32",
+          "subname": "Body.Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge33",
+          "id": "BodyLink:Edge33",
+          "identityStatus": "stable",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge33",
+          "subname": "Body.Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge34",
+          "id": "BodyLink:Edge34",
+          "identityStatus": "stable",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge34",
+          "subname": "Body.Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge35",
+          "id": "BodyLink:Edge35",
+          "identityStatus": "stable",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge35",
+          "subname": "Body.Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge36",
+          "id": "BodyLink:Edge36",
+          "identityStatus": "stable",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "stableSubname": "Body.SketchPocket.Edge1",
+          "subname": "Body.Edge36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge37",
+          "id": "BodyLink:Edge37",
+          "identityStatus": "stable",
+          "indexed": "Edge37",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge13",
+          "subname": "Body.Edge37"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge38",
+          "id": "BodyLink:Edge38",
+          "identityStatus": "stable",
+          "indexed": "Edge38",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge14",
+          "subname": "Body.Edge38"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge39",
+          "id": "BodyLink:Edge39",
+          "identityStatus": "stable",
+          "indexed": "Edge39",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge15",
+          "subname": "Body.Edge39"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge4",
+          "id": "BodyLink:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge4",
+          "subname": "Body.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge40",
+          "id": "BodyLink:Edge40",
+          "identityStatus": "stable",
+          "indexed": "Edge40",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge16",
+          "subname": "Body.Edge40"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge41",
+          "id": "BodyLink:Edge41",
+          "identityStatus": "stable",
+          "indexed": "Edge41",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge17",
+          "subname": "Body.Edge41"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge42",
+          "id": "BodyLink:Edge42",
+          "identityStatus": "stable",
+          "indexed": "Edge42",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge18",
+          "subname": "Body.Edge42"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge43",
+          "id": "BodyLink:Edge43",
+          "identityStatus": "stable",
+          "indexed": "Edge43",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge19",
+          "subname": "Body.Edge43"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge44",
+          "id": "BodyLink:Edge44",
+          "identityStatus": "stable",
+          "indexed": "Edge44",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge20",
+          "subname": "Body.Edge44"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge45",
+          "id": "BodyLink:Edge45",
+          "identityStatus": "stable",
+          "indexed": "Edge45",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge21",
+          "subname": "Body.Edge45"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge46",
+          "id": "BodyLink:Edge46",
+          "identityStatus": "stable",
+          "indexed": "Edge46",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge22",
+          "subname": "Body.Edge46"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge47",
+          "id": "BodyLink:Edge47",
+          "identityStatus": "stable",
+          "indexed": "Edge47",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge23",
+          "subname": "Body.Edge47"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge48",
+          "id": "BodyLink:Edge48",
+          "identityStatus": "stable",
+          "indexed": "Edge48",
+          "kind": "Edge",
+          "stableSubname": "Body.Pocket.Edge24",
+          "subname": "Body.Edge48"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge5",
+          "id": "BodyLink:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge8",
+          "subname": "Body.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge6",
+          "id": "BodyLink:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge11",
+          "subname": "Body.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge7",
+          "id": "BodyLink:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge12",
+          "subname": "Body.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge8",
+          "id": "BodyLink:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge5",
+          "subname": "Body.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Edge9",
+          "id": "BodyLink:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "Body.LinearPattern.Transform1.Edge6",
+          "subname": "Body.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face1",
+          "id": "BodyLink:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "Body.Face1",
+          "subname": "Body.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face10",
+          "id": "BodyLink:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform2.Face4",
+          "subname": "Body.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face11",
+          "id": "BodyLink:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "Body.Face11",
+          "subname": "Body.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face12",
+          "id": "BodyLink:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "Body.Face12",
+          "subname": "Body.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face13",
+          "id": "BodyLink:Face13",
+          "identityStatus": "stable",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "Body.Face13",
+          "subname": "Body.Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face14",
+          "id": "BodyLink:Face14",
+          "identityStatus": "stable",
+          "indexed": "Face14",
+          "kind": "Face",
+          "stableSubname": "Body.Face14",
+          "subname": "Body.Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face15",
+          "id": "BodyLink:Face15",
+          "identityStatus": "stable",
+          "indexed": "Face15",
+          "kind": "Face",
+          "stableSubname": "Body.Pocket.Face5",
+          "subname": "Body.Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face16",
+          "id": "BodyLink:Face16",
+          "identityStatus": "stable",
+          "indexed": "Face16",
+          "kind": "Face",
+          "stableSubname": "Body.Pocket.Face6",
+          "subname": "Body.Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face17",
+          "id": "BodyLink:Face17",
+          "identityStatus": "stable",
+          "indexed": "Face17",
+          "kind": "Face",
+          "stableSubname": "Body.Pocket.Face7",
+          "subname": "Body.Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face18",
+          "id": "BodyLink:Face18",
+          "identityStatus": "stable",
+          "indexed": "Face18",
+          "kind": "Face",
+          "stableSubname": "Body.Pocket.Face8",
+          "subname": "Body.Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face19",
+          "id": "BodyLink:Face19",
+          "identityStatus": "stable",
+          "indexed": "Face19",
+          "kind": "Face",
+          "stableSubname": "Body.Pocket.Face9",
+          "subname": "Body.Face19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face2",
+          "id": "BodyLink:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform1.Face4",
+          "subname": "Body.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face20",
+          "id": "BodyLink:Face20",
+          "identityStatus": "stable",
+          "indexed": "Face20",
+          "kind": "Face",
+          "stableSubname": "Body.Pocket.Face10",
+          "subname": "Body.Face20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face3",
+          "id": "BodyLink:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform1.Face2",
+          "subname": "Body.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face4",
+          "id": "BodyLink:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform1.Face5",
+          "subname": "Body.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face5",
+          "id": "BodyLink:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform1.Face6",
+          "subname": "Body.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face6",
+          "id": "BodyLink:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform1.Face3",
+          "subname": "Body.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face7",
+          "id": "BodyLink:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform2.Face1",
+          "subname": "Body.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face8",
+          "id": "BodyLink:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform2.Face2",
+          "subname": "Body.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.Face9",
+          "id": "BodyLink:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "Body.LinearPattern.Transform2.Face3",
+          "subname": "Body.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Transform1.Vertex1",
+          "id": "BodyLink:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex1",
+          "subname": "Body.LinearPattern.Transform1.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex10",
+          "id": "BodyLink:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex3",
+          "subname": "Body.LinearPattern.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex11",
+          "id": "BodyLink:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex5",
+          "subname": "Body.LinearPattern.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex12",
+          "id": "BodyLink:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex7",
+          "subname": "Body.LinearPattern.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex13",
+          "id": "BodyLink:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex2",
+          "subname": "Body.LinearPattern.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex14",
+          "id": "BodyLink:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex4",
+          "subname": "Body.LinearPattern.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex15",
+          "id": "BodyLink:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex6",
+          "subname": "Body.LinearPattern.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex16",
+          "id": "BodyLink:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex8",
+          "subname": "Body.LinearPattern.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex17",
+          "id": "BodyLink:Vertex17",
+          "identityStatus": "stable",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex17",
+          "subname": "Body.LinearPattern.Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex18",
+          "id": "BodyLink:Vertex18",
+          "identityStatus": "stable",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex18",
+          "subname": "Body.LinearPattern.Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex19",
+          "id": "BodyLink:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex19",
+          "subname": "Body.LinearPattern.Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Transform1.Vertex2",
+          "id": "BodyLink:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex2",
+          "subname": "Body.LinearPattern.Transform1.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex20",
+          "id": "BodyLink:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex20",
+          "subname": "Body.LinearPattern.Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex21",
+          "id": "BodyLink:Vertex21",
+          "identityStatus": "stable",
+          "indexed": "Vertex21",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex21",
+          "subname": "Body.LinearPattern.Vertex21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex22",
+          "id": "BodyLink:Vertex22",
+          "identityStatus": "stable",
+          "indexed": "Vertex22",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex22",
+          "subname": "Body.LinearPattern.Vertex22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex23",
+          "id": "BodyLink:Vertex23",
+          "identityStatus": "stable",
+          "indexed": "Vertex23",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex23",
+          "subname": "Body.LinearPattern.Vertex23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex24",
+          "id": "BodyLink:Vertex24",
+          "identityStatus": "stable",
+          "indexed": "Vertex24",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Vertex24",
+          "subname": "Body.LinearPattern.Vertex24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex25",
+          "id": "BodyLink:Vertex25",
+          "identityStatus": "stable",
+          "indexed": "Vertex25",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex9",
+          "subname": "Body.LinearPattern.Vertex25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex26",
+          "id": "BodyLink:Vertex26",
+          "identityStatus": "stable",
+          "indexed": "Vertex26",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex10",
+          "subname": "Body.LinearPattern.Vertex26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex27",
+          "id": "BodyLink:Vertex27",
+          "identityStatus": "stable",
+          "indexed": "Vertex27",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex11",
+          "subname": "Body.LinearPattern.Vertex27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex28",
+          "id": "BodyLink:Vertex28",
+          "identityStatus": "stable",
+          "indexed": "Vertex28",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex12",
+          "subname": "Body.LinearPattern.Vertex28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex29",
+          "id": "BodyLink:Vertex29",
+          "identityStatus": "stable",
+          "indexed": "Vertex29",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex13",
+          "subname": "Body.LinearPattern.Vertex29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Transform1.Vertex3",
+          "id": "BodyLink:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex3",
+          "subname": "Body.LinearPattern.Transform1.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex30",
+          "id": "BodyLink:Vertex30",
+          "identityStatus": "stable",
+          "indexed": "Vertex30",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex14",
+          "subname": "Body.LinearPattern.Vertex30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex31",
+          "id": "BodyLink:Vertex31",
+          "identityStatus": "stable",
+          "indexed": "Vertex31",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex15",
+          "subname": "Body.LinearPattern.Vertex31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex32",
+          "id": "BodyLink:Vertex32",
+          "identityStatus": "stable",
+          "indexed": "Vertex32",
+          "kind": "Vertex",
+          "stableSubname": "Body.Pocket.Vertex16",
+          "subname": "Body.LinearPattern.Vertex32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Transform1.Vertex4",
+          "id": "BodyLink:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex4",
+          "subname": "Body.LinearPattern.Transform1.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex5",
+          "id": "BodyLink:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex7",
+          "subname": "Body.LinearPattern.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex6",
+          "id": "BodyLink:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex8",
+          "subname": "Body.LinearPattern.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex7",
+          "id": "BodyLink:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex5",
+          "subname": "Body.LinearPattern.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex8",
+          "id": "BodyLink:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform1.Vertex6",
+          "subname": "Body.LinearPattern.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BodyLink.Body.LinearPattern.Vertex9",
+          "id": "BodyLink:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "Body.LinearPattern.Transform2.Vertex1",
+          "subname": "Body.LinearPattern.Vertex9"
+        }
+      ]
+    }
+  ]
+}

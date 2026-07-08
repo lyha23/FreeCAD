@@ -1,0 +1,673 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "label_reference_ambiguous",
+      "message": "LinkedObject target Box label-qualified subname $OldPrettyBox.Face1 is ambiguous: current target Label is not unique",
+      "object": "BoxLink",
+      "property": "LinkedObject",
+      "severity": "error",
+      "stage": "parse",
+      "subname": "$OldPrettyBox.Face1",
+      "target": "Box"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Box:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                0.0,
+                4.0
+              ],
+              [
+                0.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                3.0,
+                0.0
+              ],
+              [
+                0.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                2.0,
+                0.0,
+                4.0
+              ],
+              [
+                2.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                2.0,
+                3.0,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.0,
+                0.0,
+                4.0
+              ],
+              [
+                2.0,
+                0.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.0,
+                3.0,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Box:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.0,
+                3.0,
+                4.0
+              ],
+              [
+                2.0,
+                3.0,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "Box:Face1",
+          "Box:Face1",
+          "Box:Face2",
+          "Box:Face2",
+          "Box:Face3",
+          "Box:Face3",
+          "Box:Face4",
+          "Box:Face4",
+          "Box:Face5",
+          "Box:Face5",
+          "Box:Face6",
+          "Box:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          5,
+          6,
+          4,
+          6,
+          7,
+          5,
+          4,
+          0,
+          0,
+          4,
+          1,
+          7,
+          6,
+          2,
+          7,
+          2,
+          3,
+          2,
+          6,
+          0,
+          0,
+          6,
+          5,
+          7,
+          3,
+          1,
+          7,
+          1,
+          4
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Box:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              4.0
+            ]
+          },
+          {
+            "id": "Box:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Box:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              3.0,
+              4.0
+            ]
+          },
+          {
+            "id": "Box:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Box:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              2.0,
+              0.0,
+              4.0
+            ]
+          },
+          {
+            "id": "Box:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Box:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              2.0,
+              3.0,
+              4.0
+            ]
+          },
+          {
+            "id": "Box:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              2.0,
+              3.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            4.0
+          ],
+          [
+            0.0,
+            3.0,
+            0.0
+          ],
+          [
+            0.0,
+            3.0,
+            4.0
+          ],
+          [
+            2.0,
+            0.0,
+            4.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            3.0,
+            0.0
+          ],
+          [
+            2.0,
+            3.0,
+            4.0
+          ]
+        ]
+      },
+      "object": "Box",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Box:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        }
+      ]
+    }
+  ]
+}

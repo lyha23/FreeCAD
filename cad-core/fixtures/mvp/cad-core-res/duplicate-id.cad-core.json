@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "duplicate_object_id",
+      "message": "Duplicate object ID 1",
+      "object": "SketchB",
+      "property": "ID",
+      "severity": "error",
+      "stage": "parse"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "SketchA",
+      "subshapes": []
+    }
+  ]
+}

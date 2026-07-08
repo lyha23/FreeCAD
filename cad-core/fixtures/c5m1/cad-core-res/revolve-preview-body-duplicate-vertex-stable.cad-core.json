@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unstable_subshape_reference",
+      "message": "Profile target Fillet subshape Face5 only names the current shape and has no NamedShape/ElementMap identity evidence",
+      "object": "RevolvePreview",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face5",
+      "target": "Fillet"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "RevolvePreviewBody",
+      "subshapes": []
+    }
+  ]
+}

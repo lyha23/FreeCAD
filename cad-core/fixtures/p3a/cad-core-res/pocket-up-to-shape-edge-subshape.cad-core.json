@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_subshape_kind",
+      "message": "UpToShape requires a face subshape, not edge",
+      "object": "Pocket",
+      "property": "UpToShape",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge1",
+      "target": "Pad"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pocket",
+      "subshapes": []
+    }
+  ]
+}

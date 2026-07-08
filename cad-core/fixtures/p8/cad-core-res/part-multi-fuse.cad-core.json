@@ -1,0 +1,1880 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "MultiFuse:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge1"
+          },
+          {
+            "id": "MultiFuse:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                0.0,
+                2.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge2"
+          },
+          {
+            "id": "MultiFuse:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge3"
+          },
+          {
+            "id": "MultiFuse:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge4"
+          },
+          {
+            "id": "MultiFuse:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge1"
+          },
+          {
+            "id": "MultiFuse:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.0,
+                0.0,
+                2.0
+              ],
+              [
+                1.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                0.0,
+                2.0,
+                2.0
+              ],
+              [
+                1.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                1.0,
+                0.0,
+                2.0
+              ],
+              [
+                1.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge2"
+          },
+          {
+            "id": "MultiFuse:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                1.0,
+                2.0,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge3"
+          },
+          {
+            "id": "MultiFuse:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge4"
+          },
+          {
+            "id": "MultiFuse:Edge13",
+            "identityStatus": "current_only",
+            "indexed": "Edge13",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge5"
+          },
+          {
+            "id": "MultiFuse:Edge15",
+            "identityStatus": "current_only",
+            "indexed": "Edge15",
+            "points": [
+              [
+                1.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge16",
+            "identityStatus": "current_only",
+            "indexed": "Edge16",
+            "points": [
+              [
+                1.0,
+                2.0,
+                2.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                2.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge6"
+          },
+          {
+            "id": "MultiFuse:Edge18",
+            "identityStatus": "current_only",
+            "indexed": "Edge18",
+            "points": [
+              [
+                1.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge7"
+          },
+          {
+            "id": "MultiFuse:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge8"
+          },
+          {
+            "id": "MultiFuse:Edge21",
+            "identityStatus": "current_only",
+            "indexed": "Edge21",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge5"
+          },
+          {
+            "id": "MultiFuse:Edge23",
+            "identityStatus": "current_only",
+            "indexed": "Edge23",
+            "points": [
+              [
+                2.0,
+                0.0,
+                2.0
+              ],
+              [
+                3.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge24",
+            "identityStatus": "current_only",
+            "indexed": "Edge24",
+            "points": [
+              [
+                2.0,
+                2.0,
+                2.0
+              ],
+              [
+                3.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge25",
+            "identityStatus": "stable",
+            "indexed": "Edge25",
+            "points": [
+              [
+                3.0,
+                0.0,
+                2.0
+              ],
+              [
+                3.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge6"
+          },
+          {
+            "id": "MultiFuse:Edge26",
+            "identityStatus": "current_only",
+            "indexed": "Edge26",
+            "points": [
+              [
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                3.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge27",
+            "identityStatus": "stable",
+            "indexed": "Edge27",
+            "points": [
+              [
+                3.0,
+                2.0,
+                0.0
+              ],
+              [
+                3.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge7"
+          },
+          {
+            "id": "MultiFuse:Edge28",
+            "identityStatus": "stable",
+            "indexed": "Edge28",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge8"
+          },
+          {
+            "id": "MultiFuse:Edge29",
+            "identityStatus": "current_only",
+            "indexed": "Edge29",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge30",
+            "identityStatus": "stable",
+            "indexed": "Edge30",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge5"
+          },
+          {
+            "id": "MultiFuse:Edge31",
+            "identityStatus": "current_only",
+            "indexed": "Edge31",
+            "points": [
+              [
+                3.0,
+                0.0,
+                2.0
+              ],
+              [
+                4.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge32",
+            "identityStatus": "current_only",
+            "indexed": "Edge32",
+            "points": [
+              [
+                3.0,
+                2.0,
+                2.0
+              ],
+              [
+                4.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge33",
+            "identityStatus": "stable",
+            "indexed": "Edge33",
+            "points": [
+              [
+                4.0,
+                0.0,
+                2.0
+              ],
+              [
+                4.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge6"
+          },
+          {
+            "id": "MultiFuse:Edge34",
+            "identityStatus": "current_only",
+            "indexed": "Edge34",
+            "points": [
+              [
+                3.0,
+                2.0,
+                0.0
+              ],
+              [
+                4.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "MultiFuse:Edge35",
+            "identityStatus": "stable",
+            "indexed": "Edge35",
+            "points": [
+              [
+                4.0,
+                2.0,
+                0.0
+              ],
+              [
+                4.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge7"
+          },
+          {
+            "id": "MultiFuse:Edge36",
+            "identityStatus": "stable",
+            "indexed": "Edge36",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge8"
+          }
+        ],
+        "faceIds": [
+          "MultiFuse:Face1",
+          "MultiFuse:Face1",
+          "MultiFuse:Face2",
+          "MultiFuse:Face2",
+          "MultiFuse:Face3",
+          "MultiFuse:Face3",
+          "MultiFuse:Face4",
+          "MultiFuse:Face4",
+          "MultiFuse:Face5",
+          "MultiFuse:Face5",
+          "MultiFuse:Face6",
+          "MultiFuse:Face6",
+          "MultiFuse:Face7",
+          "MultiFuse:Face7",
+          "MultiFuse:Face8",
+          "MultiFuse:Face8",
+          "MultiFuse:Face9",
+          "MultiFuse:Face9",
+          "MultiFuse:Face10",
+          "MultiFuse:Face10",
+          "MultiFuse:Face11",
+          "MultiFuse:Face11",
+          "MultiFuse:Face12",
+          "MultiFuse:Face12",
+          "MultiFuse:Face13",
+          "MultiFuse:Face13",
+          "MultiFuse:Face14",
+          "MultiFuse:Face14",
+          "MultiFuse:Face15",
+          "MultiFuse:Face15",
+          "MultiFuse:Face16",
+          "MultiFuse:Face16",
+          "MultiFuse:Face17",
+          "MultiFuse:Face17",
+          "MultiFuse:Face18",
+          "MultiFuse:Face18"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          5,
+          0,
+          0,
+          5,
+          1,
+          6,
+          3,
+          1,
+          6,
+          1,
+          5,
+          6,
+          7,
+          2,
+          6,
+          2,
+          3,
+          2,
+          7,
+          0,
+          0,
+          7,
+          4,
+          8,
+          9,
+          4,
+          4,
+          9,
+          5,
+          10,
+          6,
+          5,
+          10,
+          5,
+          9,
+          10,
+          11,
+          7,
+          10,
+          7,
+          6,
+          7,
+          11,
+          4,
+          4,
+          11,
+          8,
+          12,
+          13,
+          8,
+          8,
+          13,
+          9,
+          14,
+          10,
+          9,
+          14,
+          9,
+          13,
+          14,
+          15,
+          11,
+          14,
+          11,
+          10,
+          11,
+          15,
+          8,
+          8,
+          15,
+          12,
+          16,
+          17,
+          12,
+          12,
+          17,
+          13,
+          18,
+          14,
+          13,
+          18,
+          13,
+          17,
+          18,
+          19,
+          15,
+          18,
+          15,
+          14,
+          15,
+          19,
+          12,
+          12,
+          19,
+          16,
+          17,
+          16,
+          19,
+          17,
+          19,
+          18
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "MultiFuse:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              1.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              1.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              2.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              2.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              2.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              3.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              3.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              3.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              3.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              4.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              4.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              4.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "MultiFuse:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              4.0,
+              2.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            2.0
+          ],
+          [
+            0.0,
+            2.0,
+            0.0
+          ],
+          [
+            0.0,
+            2.0,
+            2.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            2.0
+          ],
+          [
+            1.0,
+            2.0,
+            2.0
+          ],
+          [
+            1.0,
+            2.0,
+            0.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            0.0,
+            2.0
+          ],
+          [
+            2.0,
+            2.0,
+            2.0
+          ],
+          [
+            2.0,
+            2.0,
+            0.0
+          ],
+          [
+            3.0,
+            0.0,
+            0.0
+          ],
+          [
+            3.0,
+            0.0,
+            2.0
+          ],
+          [
+            3.0,
+            2.0,
+            2.0
+          ],
+          [
+            3.0,
+            2.0,
+            0.0
+          ],
+          [
+            4.0,
+            0.0,
+            0.0
+          ],
+          [
+            4.0,
+            0.0,
+            2.0
+          ],
+          [
+            4.0,
+            2.0,
+            2.0
+          ],
+          [
+            4.0,
+            2.0,
+            0.0
+          ]
+        ]
+      },
+      "object": "MultiFuse",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge1",
+          "id": "MultiFuse:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge1",
+          "subname": "BoxA.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge11",
+          "id": "MultiFuse:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge3",
+          "subname": "BoxB.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge12",
+          "id": "MultiFuse:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge4",
+          "subname": "BoxB.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge13",
+          "identityStatus": "current_only",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge14",
+          "id": "MultiFuse:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge5",
+          "subname": "BoxA.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge15",
+          "identityStatus": "current_only",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge16",
+          "identityStatus": "current_only",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge17",
+          "id": "MultiFuse:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge6",
+          "subname": "BoxA.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge18",
+          "identityStatus": "current_only",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge19",
+          "id": "MultiFuse:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge7",
+          "subname": "BoxA.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge2",
+          "id": "MultiFuse:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge2",
+          "subname": "BoxA.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge20",
+          "id": "MultiFuse:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge8",
+          "subname": "BoxA.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge21",
+          "identityStatus": "current_only",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge22",
+          "id": "MultiFuse:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge5",
+          "subname": "BoxB.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge23",
+          "identityStatus": "current_only",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge24",
+          "identityStatus": "current_only",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge25",
+          "id": "MultiFuse:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge6",
+          "subname": "BoxB.Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge26",
+          "identityStatus": "current_only",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge27",
+          "id": "MultiFuse:Edge27",
+          "identityStatus": "stable",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge7",
+          "subname": "BoxB.Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge28",
+          "id": "MultiFuse:Edge28",
+          "identityStatus": "stable",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge8",
+          "subname": "BoxB.Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge29",
+          "identityStatus": "current_only",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge3",
+          "id": "MultiFuse:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge3",
+          "subname": "BoxA.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Edge30",
+          "id": "MultiFuse:Edge30",
+          "identityStatus": "stable",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge5",
+          "subname": "BoxC.Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge31",
+          "identityStatus": "current_only",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge32",
+          "identityStatus": "current_only",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Edge33",
+          "id": "MultiFuse:Edge33",
+          "identityStatus": "stable",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge6",
+          "subname": "BoxC.Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge34",
+          "identityStatus": "current_only",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Edge35",
+          "id": "MultiFuse:Edge35",
+          "identityStatus": "stable",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge7",
+          "subname": "BoxC.Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Edge36",
+          "id": "MultiFuse:Edge36",
+          "identityStatus": "stable",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge8",
+          "subname": "BoxC.Edge36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Edge4",
+          "id": "MultiFuse:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge4",
+          "subname": "BoxA.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge6",
+          "id": "MultiFuse:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge1",
+          "subname": "BoxB.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Edge9",
+          "id": "MultiFuse:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge2",
+          "subname": "BoxB.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Face1",
+          "id": "MultiFuse:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face1",
+          "subname": "BoxA.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face10",
+          "identityStatus": "current_only",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face11",
+          "identityStatus": "current_only",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face12",
+          "identityStatus": "current_only",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face13",
+          "identityStatus": "current_only",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face14",
+          "identityStatus": "current_only",
+          "indexed": "Face14",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face15",
+          "identityStatus": "current_only",
+          "indexed": "Face15",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face16",
+          "identityStatus": "current_only",
+          "indexed": "Face16",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face17",
+          "identityStatus": "current_only",
+          "indexed": "Face17",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Face18",
+          "id": "MultiFuse:Face18",
+          "identityStatus": "stable",
+          "indexed": "Face18",
+          "kind": "Face",
+          "stableSubname": "BoxC.Face2",
+          "subname": "BoxC.Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face7",
+          "identityStatus": "current_only",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face8",
+          "identityStatus": "current_only",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "MultiFuse:Face9",
+          "identityStatus": "current_only",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex1",
+          "id": "MultiFuse:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex1",
+          "subname": "BoxA.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex10",
+          "id": "MultiFuse:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex5",
+          "subname": "BoxA.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex11",
+          "id": "MultiFuse:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex7",
+          "subname": "BoxA.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex12",
+          "id": "MultiFuse:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex8",
+          "subname": "BoxA.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex13",
+          "id": "MultiFuse:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex6",
+          "subname": "BoxB.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex14",
+          "id": "MultiFuse:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex5",
+          "subname": "BoxB.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex15",
+          "id": "MultiFuse:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex7",
+          "subname": "BoxB.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex16",
+          "id": "MultiFuse:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex8",
+          "subname": "BoxB.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Vertex17",
+          "id": "MultiFuse:Vertex17",
+          "identityStatus": "stable",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex6",
+          "subname": "BoxC.Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Vertex18",
+          "id": "MultiFuse:Vertex18",
+          "identityStatus": "stable",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex5",
+          "subname": "BoxC.Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Vertex19",
+          "id": "MultiFuse:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex7",
+          "subname": "BoxC.Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex2",
+          "id": "MultiFuse:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex2",
+          "subname": "BoxA.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxC.Vertex20",
+          "id": "MultiFuse:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex8",
+          "subname": "BoxC.Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex3",
+          "id": "MultiFuse:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex3",
+          "subname": "BoxA.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex4",
+          "id": "MultiFuse:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex4",
+          "subname": "BoxA.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex5",
+          "id": "MultiFuse:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex2",
+          "subname": "BoxB.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex6",
+          "id": "MultiFuse:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex1",
+          "subname": "BoxB.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex7",
+          "id": "MultiFuse:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex3",
+          "subname": "BoxB.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxB.Vertex8",
+          "id": "MultiFuse:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex4",
+          "subname": "BoxB.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "MultiFuse.BoxA.Vertex9",
+          "id": "MultiFuse:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex6",
+          "subname": "BoxA.Vertex9"
+        }
+      ]
+    }
+  ]
+}

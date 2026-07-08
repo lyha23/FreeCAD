@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "subname_resolve_ambiguous",
+      "message": "UpToFace target ImportedStep subname OldImportFace matches multiple ReferenceShadow fingerprint candidates",
+      "object": "ProbePad",
+      "property": "UpToFace",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "OldImportFace",
+      "target": "ImportedStep"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ProbePad",
+      "subshapes": []
+    }
+  ]
+}

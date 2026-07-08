@@ -1,0 +1,67 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSFolding",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSFoldingReversedSupports",
+      "subshapes": []
+    },
+    {
+      "datum": "plane",
+      "frame": {
+        "normal": [
+          0.0,
+          -0.8602325267042626,
+          0.5099019513592786
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumPlaneFolding",
+      "subshapes": []
+    }
+  ]
+}

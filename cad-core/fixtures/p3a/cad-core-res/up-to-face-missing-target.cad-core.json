@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object MissingPad",
+      "object": "Pocket",
+      "property": "UpToFace",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "Face6",
+      "target": "MissingPad"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pocket",
+      "subshapes": []
+    }
+  ]
+}

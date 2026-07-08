@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_property_type",
+      "message": "Property Length has an invalid App::PropertyLength value",
+      "object": "Pad",
+      "property": "Length",
+      "severity": "error",
+      "stage": "parse"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

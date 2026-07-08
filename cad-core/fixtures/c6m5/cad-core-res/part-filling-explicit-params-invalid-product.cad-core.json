@@ -1,0 +1,69 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_parameter",
+      "message": "Part.makeFilledFace PtsOnCurve must be a positive integer",
+      "object": "InvalidPtsOnCurve",
+      "property": "PtsOnCurve",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "PtsOnCurve",
+      "target": "InvalidPtsOnCurve"
+    },
+    {
+      "code": "invalid_parameter",
+      "message": "Part.makeFilledFace TolG1 must be a positive number",
+      "object": "InvalidTolG1",
+      "property": "TolG1",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "TolG1",
+      "target": "InvalidTolG1"
+    },
+    {
+      "code": "invalid_parameter",
+      "message": "Part.makeFilledFace TolG2 must be a positive number",
+      "object": "InvalidTolG2",
+      "property": "TolG2",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "TolG2",
+      "target": "InvalidTolG2"
+    },
+    {
+      "code": "invalid_parameter",
+      "message": "Part.makeFilledFace MaxSegments must be a positive integer",
+      "object": "InvalidMaxSegments",
+      "property": "MaxSegments",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "MaxSegments",
+      "target": "InvalidMaxSegments"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "InvalidPtsOnCurve",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidTolG1",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidTolG2",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidMaxSegments",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "execution_failed",
+      "message": "Hole requires a previous base solid",
+      "object": "Hole",
+      "property": "Profile",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Hole",
+      "subshapes": []
+    }
+  ]
+}

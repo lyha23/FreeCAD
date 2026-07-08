@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "split_stable_subname",
+      "message": "UpToFace target Mirrored has stable subname Pad.Face5, but current ElementMap history marks it as split",
+      "object": "ProbePad",
+      "property": "UpToFace",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Pad.Face5",
+      "target": "Mirrored"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ProbePad",
+      "subshapes": []
+    }
+  ]
+}

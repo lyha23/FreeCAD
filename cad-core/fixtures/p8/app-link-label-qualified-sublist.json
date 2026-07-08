@@ -24,6 +24,9 @@
           "value": "Box",
           "SubList": [
             "$PrettyBox.Face1"
+          ],
+          "StableSubList": [
+            "Box.Face1"
           ]
         },
         "LinkTransform": false,
@@ -56,7 +59,39 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "objects": {},
+    "objects": {
+      "Box": {
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "status": "indexed_only",
+          "entries": {
+            "Box.Face1": {
+              "target": {
+                "object": "Box",
+                "subname": "Face1"
+              },
+              "shapeKind": "face",
+              "source": {
+                "object": "Box",
+                "subname": "Face1"
+              },
+              "mappedName": {
+                "raw": "Box.Face1",
+                "canonical": "Box.Face1"
+              },
+              "recoverability": "resolved",
+              "evidence": {
+                "source": "fixture_topo_state_contract",
+                "mapperHistoryIds": [],
+                "childElementMapKey": null
+              }
+            }
+          }
+        }
+      }
+    },
     "documentHash": "sha256:0ba9fc2d34f3180a817d647c46f320be2bcb4ecc644f21ab4082c05f6645f065"
   }
 }

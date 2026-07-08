@@ -1,0 +1,69 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object MissingVertex",
+      "object": "MissingLocationTarget",
+      "property": "SectionOptions",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "Vertex1",
+      "target": "MissingVertex"
+    },
+    {
+      "code": "invalid_subshape",
+      "message": "Invalid SectionOptions Location",
+      "object": "InvalidLocationSubname",
+      "property": "SectionOptions[0].Location",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Vertex99",
+      "target": "ProfileLocation"
+    },
+    {
+      "code": "invalid_subshape",
+      "message": "Part::Sweep SectionOptions Location must resolve to a vertex",
+      "object": "NonVertexLocation",
+      "property": "SectionOptions[0].Location",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge1",
+      "target": "PipeSpine"
+    },
+    {
+      "code": "invalid_location_subname_count",
+      "message": "Part::Sweep SectionOptions Location must reference exactly one vertex",
+      "object": "MultiSubnameLocation",
+      "property": "SectionOptions[0].Location",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Vertex1",
+      "target": "ProfileLocation"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "MissingLocationTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidLocationSubname",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "NonVertexLocation",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "MultiSubnameLocation",
+      "subshapes": []
+    }
+  ]
+}

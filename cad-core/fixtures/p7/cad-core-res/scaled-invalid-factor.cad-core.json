@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_length",
+      "message": "Scaling factor too small",
+      "object": "Scaled",
+      "property": "Factor",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Scaled",
+      "subshapes": []
+    }
+  ]
+}

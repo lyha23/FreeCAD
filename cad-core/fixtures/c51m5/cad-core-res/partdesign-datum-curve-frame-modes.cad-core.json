@@ -1,0 +1,122 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          2.8284271247461903,
+          1.414213562373095,
+          0.0
+        ],
+        "x_axis": [
+          0.447213595499958,
+          0.8944271909999159,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSFrenetNBParameter",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          1.5477068476291544,
+          1.8442209407905703,
+          0.0
+        ],
+        "x_axis": [
+          -0.9786918708739049,
+          0.2053344147612278,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSFrenetTNVertexProjection",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          -2.0000000000000004,
+          3.0000000000000004,
+          0.0
+        ],
+        "x_axis": [
+          -0.9729268372225408,
+          -0.23111332590775407,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSFrenetTBVertexFirst",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          -1.0,
+          6.123233995736766e-17,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSConcentricCircle",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          0.0,
+          -5.333333333333334,
+          0.0
+        ],
+        "x_axis": [
+          3.6739403974420595e-17,
+          1.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSSectionArc",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineAxisOfCurvature",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineNormal",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineBinormal",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointCenterOfCurvature",
+      "subshapes": []
+    }
+  ]
+}

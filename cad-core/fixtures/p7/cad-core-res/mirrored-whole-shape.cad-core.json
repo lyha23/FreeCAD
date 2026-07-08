@@ -1,0 +1,688 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Mirrored:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge5"
+          },
+          {
+            "id": "Mirrored:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge1"
+          },
+          {
+            "id": "Mirrored:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge6"
+          },
+          {
+            "id": "Mirrored:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                2.0,
+                2.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge7"
+          },
+          {
+            "id": "Mirrored:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge3"
+          },
+          {
+            "id": "Mirrored:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                4.0,
+                0.0,
+                8.881784197001252e-16
+              ],
+              [
+                3.999999999999999,
+                0.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge8"
+          },
+          {
+            "id": "Mirrored:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                3.999999999999999,
+                0.0,
+                2.000000000000001
+              ],
+              [
+                0.0,
+                0.0,
+                1.9999999999999991
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge10"
+          },
+          {
+            "id": "Mirrored:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                4.0,
+                2.0,
+                8.881784197001252e-16
+              ],
+              [
+                3.999999999999999,
+                2.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge16"
+          },
+          {
+            "id": "Mirrored:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                4.0,
+                2.0,
+                8.881784197001252e-16
+              ],
+              [
+                4.0,
+                0.0,
+                8.881784197001252e-16
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge17"
+          },
+          {
+            "id": "Mirrored:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                3.999999999999999,
+                2.0,
+                2.000000000000001
+              ],
+              [
+                3.999999999999999,
+                0.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge18"
+          },
+          {
+            "id": "Mirrored:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                4.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge12"
+          },
+          {
+            "id": "Mirrored:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.0,
+                2.0,
+                1.9999999999999991
+              ],
+              [
+                3.999999999999999,
+                2.0,
+                2.000000000000001
+              ]
+            ],
+            "stableSubname": "Mirrored.Edge14"
+          }
+        ],
+        "faceIds": [
+          "Mirrored:Face1",
+          "Mirrored:Face1",
+          "Mirrored:Face2",
+          "Mirrored:Face2",
+          "Mirrored:Face3",
+          "Mirrored:Face3",
+          "Mirrored:Face4",
+          "Mirrored:Face4",
+          "Mirrored:Face5",
+          "Mirrored:Face5",
+          "Mirrored:Face6",
+          "Mirrored:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          3,
+          1,
+          4,
+          5,
+          3,
+          4,
+          6,
+          7,
+          4,
+          7,
+          5,
+          0,
+          4,
+          1,
+          0,
+          6,
+          4,
+          7,
+          3,
+          5,
+          7,
+          2,
+          3,
+          7,
+          0,
+          2,
+          7,
+          6,
+          0
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Mirrored:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Mirrored:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Mirrored:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Mirrored:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Mirrored:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              4.0,
+              0.0,
+              8.881784197001252e-16
+            ]
+          },
+          {
+            "id": "Mirrored:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              3.999999999999999,
+              0.0,
+              2.000000000000001
+            ]
+          },
+          {
+            "id": "Mirrored:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              4.0,
+              2.0,
+              8.881784197001252e-16
+            ]
+          },
+          {
+            "id": "Mirrored:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              3.999999999999999,
+              2.0,
+              2.000000000000001
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            2.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            2.0,
+            2.0
+          ],
+          [
+            0.0,
+            0.0,
+            2.0
+          ],
+          [
+            4.0,
+            0.0,
+            8.881784197001252e-16
+          ],
+          [
+            3.999999999999999,
+            0.0,
+            2.000000000000001
+          ],
+          [
+            4.0,
+            2.0,
+            8.881784197001252e-16
+          ],
+          [
+            3.999999999999999,
+            2.0,
+            2.000000000000001
+          ]
+        ]
+      },
+      "object": "Mirrored",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge1",
+          "id": "Mirrored:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge5",
+          "subname": "Mirrored.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge10",
+          "id": "Mirrored:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge18",
+          "subname": "Mirrored.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge11",
+          "id": "Mirrored:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge12",
+          "subname": "Mirrored.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge12",
+          "id": "Mirrored:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge14",
+          "subname": "Mirrored.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge2",
+          "id": "Mirrored:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge1",
+          "subname": "Mirrored.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge3",
+          "id": "Mirrored:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge6",
+          "subname": "Mirrored.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge4",
+          "id": "Mirrored:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge7",
+          "subname": "Mirrored.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge5",
+          "id": "Mirrored:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge3",
+          "subname": "Mirrored.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge6",
+          "id": "Mirrored:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge8",
+          "subname": "Mirrored.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge7",
+          "id": "Mirrored:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge10",
+          "subname": "Mirrored.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Transform1.Edge8",
+          "id": "Mirrored:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge16",
+          "subname": "Mirrored.Transform1.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Edge9",
+          "id": "Mirrored:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "Mirrored.Edge17",
+          "subname": "Mirrored.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Face1",
+          "id": "Mirrored:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "Mirrored.Face2",
+          "subname": "Mirrored.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Face2",
+          "id": "Mirrored:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "Mirrored.Face1",
+          "subname": "Mirrored.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Face3",
+          "id": "Mirrored:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "Mirrored.Face7",
+          "subname": "Mirrored.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Face4",
+          "id": "Mirrored:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "Mirrored.Face8",
+          "subname": "Mirrored.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Face5",
+          "id": "Mirrored:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "Mirrored.Face9",
+          "subname": "Mirrored.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Face6",
+          "id": "Mirrored:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "Mirrored.Face10",
+          "subname": "Mirrored.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Vertex1",
+          "id": "Mirrored:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Vertex5",
+          "subname": "Mirrored.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Vertex2",
+          "id": "Mirrored:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Vertex6",
+          "subname": "Mirrored.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Vertex3",
+          "id": "Mirrored:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Vertex1",
+          "subname": "Mirrored.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Vertex4",
+          "id": "Mirrored:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Vertex2",
+          "subname": "Mirrored.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Transform1.Vertex5",
+          "id": "Mirrored:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Transform1.Vertex1",
+          "subname": "Mirrored.Transform1.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Transform1.Vertex6",
+          "id": "Mirrored:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Transform1.Vertex2",
+          "subname": "Mirrored.Transform1.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Transform1.Vertex7",
+          "id": "Mirrored:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Vertex11",
+          "subname": "Mirrored.Transform1.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Mirrored.Transform1.Vertex8",
+          "id": "Mirrored:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "Mirrored.Vertex12",
+          "subname": "Mirrored.Transform1.Vertex8"
+        }
+      ]
+    }
+  ]
+}

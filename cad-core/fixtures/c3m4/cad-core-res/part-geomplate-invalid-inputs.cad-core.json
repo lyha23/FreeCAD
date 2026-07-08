@@ -1,0 +1,76 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_constraints",
+      "message": "Part.GeomPlate.BuildPlateSurface requires curve or point constraints",
+      "object": "EmptyConstraints",
+      "property": "CurveConstraints",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "invalid_curve_source",
+      "message": "Curve constraint source must resolve to one 3D edge",
+      "object": "InvalidCurveSource",
+      "property": "CurveConstraints",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "invalid_point_constraint",
+      "message": "PointConstraints[0] must contain finite numbers",
+      "object": "InvalidPoint",
+      "property": "PointConstraints",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "invalid_parameter",
+      "message": "Part.GeomPlate.BuildPlateSurface Degree must be a positive integer",
+      "object": "InvalidParameter",
+      "property": "Degree",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "message": "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; FreeCAD PlateSurfacePyImp.cpp still leaves Curves as TODO and GeomPlateSurface persistence is NotImplementedError",
+      "object": "UnsupportedPlateSurfaceCurves",
+      "property": "PlateSurfaceCurves",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "PlateSurfaceCurves",
+      "target": "UnsupportedPlateSurfaceCurves"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "EmptyConstraints",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidCurveSource",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidPoint",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidParameter",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "UnsupportedPlateSurfaceCurves",
+      "subshapes": []
+    }
+  ]
+}

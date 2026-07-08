@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_link_value",
+      "message": "Property Profile has an invalid App::PropertyLinkSubList value",
+      "object": "Pad",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "parse"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

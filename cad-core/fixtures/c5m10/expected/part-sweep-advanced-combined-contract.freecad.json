@@ -44,5 +44,21 @@
     "status": "diagnostic_only"
   },
   "reference": "FreeCADCmd wrapper oracle from part-sweep-advanced-combined-contract.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Sketcher::SketchObject, Part::Vertex, Part::Sweep, Part::Sweep, Part::Sweep, Part::Sweep, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "schema_version": "cad-core.freecad-expected.v1",
+  "known_gap": {
+    "kind": "part_sweep_advanced_combined_freecadcmd_wrapper_build_blocker",
+    "freecadcmd_evidence": {
+      "error": "OCCError: NCollection_Array1::Value",
+      "failed_stage": "build",
+      "collector_policy": "do not fabricate combined expected from cad-core output",
+      "depends_on": "BRepOffsetAPI_MakePipeShell add(Profile, Location, WithContact, WithCorrection) overload",
+      "failing_combined_call_orders": [
+        "combined_aux_tolerance_add"
+      ],
+      "successful_controls": [
+        "combined_no_location_control"
+      ]
+    },
+    "delete_condition": "Delete after the combined auxiliary/tolerance located-profile wrapper oracle returns stable expected JSON."
+  }
 }

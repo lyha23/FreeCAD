@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "subname_deleted",
+      "message": "DirLink target Sketch subname Vertex99 is deleted from current ReferenceShadow.brep candidates",
+      "object": "Extrude",
+      "property": "DirLink",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Vertex99",
+      "target": "Sketch"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Extrude",
+      "subshapes": []
+    }
+  ]
+}

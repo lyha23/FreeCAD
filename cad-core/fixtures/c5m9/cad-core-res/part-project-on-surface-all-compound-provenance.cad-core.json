@@ -1,0 +1,728 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                1.0,
+                3.0,
+                0.25
+              ],
+              [
+                1.0,
+                3.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                1.0,
+                1.0,
+                0.25
+              ],
+              [
+                1.0,
+                1.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                1.0,
+                3.0,
+                0.25
+              ],
+              [
+                1.0,
+                1.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                1.0,
+                3.0,
+                -1.0
+              ],
+              [
+                1.0,
+                1.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                4.0,
+                1.0,
+                0.25
+              ],
+              [
+                4.0,
+                1.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                4.0,
+                1.0,
+                0.25
+              ],
+              [
+                1.0,
+                1.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                4.0,
+                1.0,
+                -1.0
+              ],
+              [
+                1.0,
+                1.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.25
+              ],
+              [
+                4.0,
+                3.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.25
+              ],
+              [
+                4.0,
+                1.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                4.0,
+                3.0,
+                -1.0
+              ],
+              [
+                4.0,
+                1.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.25
+              ],
+              [
+                1.0,
+                3.0,
+                0.25
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                4.0,
+                3.0,
+                -1.0
+              ],
+              [
+                1.0,
+                3.0,
+                -1.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Edge13",
+            "identityStatus": "current_only",
+            "indexed": "Edge13",
+            "points": [
+              [
+                7.000000000000001,
+                3.0000000000000004,
+                0.25000000000000183
+              ],
+              [
+                5.0,
+                1.0,
+                0.25000000000000183
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "ProjectedAllCompoundProvenance:Face1",
+          "ProjectedAllCompoundProvenance:Face1",
+          "ProjectedAllCompoundProvenance:Face2",
+          "ProjectedAllCompoundProvenance:Face2",
+          "ProjectedAllCompoundProvenance:Face3",
+          "ProjectedAllCompoundProvenance:Face3",
+          "ProjectedAllCompoundProvenance:Face4",
+          "ProjectedAllCompoundProvenance:Face4",
+          "ProjectedAllCompoundProvenance:Face5",
+          "ProjectedAllCompoundProvenance:Face5",
+          "ProjectedAllCompoundProvenance:Face6",
+          "ProjectedAllCompoundProvenance:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          0,
+          5,
+          5,
+          0,
+          3,
+          6,
+          4,
+          7,
+          7,
+          4,
+          5,
+          1,
+          6,
+          7,
+          1,
+          7,
+          2,
+          6,
+          1,
+          0,
+          6,
+          0,
+          4,
+          2,
+          7,
+          3,
+          3,
+          7,
+          5
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              1.0,
+              3.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.0,
+              3.0,
+              -1.0
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              1.0,
+              1.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              1.0,
+              1.0,
+              -1.0
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              4.0,
+              1.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              4.0,
+              1.0,
+              -1.0
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              4.0,
+              3.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              4.0,
+              3.0,
+              -1.0
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              7.0,
+              3.0,
+              0.25
+            ]
+          },
+          {
+            "id": "ProjectedAllCompoundProvenance:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              5.0,
+              1.0,
+              0.25
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            1.0,
+            1.0,
+            0.25
+          ],
+          [
+            1.0,
+            3.0,
+            0.25
+          ],
+          [
+            1.0,
+            3.0,
+            -1.0
+          ],
+          [
+            1.0,
+            1.0,
+            -1.0
+          ],
+          [
+            4.0,
+            1.0,
+            0.25
+          ],
+          [
+            4.0,
+            1.0,
+            -1.0
+          ],
+          [
+            4.0,
+            3.0,
+            0.25
+          ],
+          [
+            4.0,
+            3.0,
+            -1.0
+          ]
+        ]
+      },
+      "object": "ProjectedAllCompoundProvenance",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge13",
+          "identityStatus": "current_only",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex10",
+          "identityStatus": "current_only",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedAllCompoundProvenance:Vertex9",
+          "identityStatus": "current_only",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex9"
+        }
+      ]
+    }
+  ]
+}

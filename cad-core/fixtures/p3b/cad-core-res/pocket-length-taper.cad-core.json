@@ -1,0 +1,1862 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Body:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge1"
+          },
+          {
+            "id": "Body:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge2"
+          },
+          {
+            "id": "Body:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "SketchPad.Edge1"
+          },
+          {
+            "id": "Body:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                10.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Body.Edge4"
+          },
+          {
+            "id": "Body:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge8"
+          },
+          {
+            "id": "Body:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge11"
+          },
+          {
+            "id": "Body:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.0,
+                5.0,
+                10.0
+              ],
+              [
+                0.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge12"
+          },
+          {
+            "id": "Body:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge5"
+          },
+          {
+            "id": "Body:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge6"
+          },
+          {
+            "id": "Body:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                10.0,
+                0.0,
+                10.0
+              ],
+              [
+                10.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge7"
+          },
+          {
+            "id": "Body:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge9"
+          },
+          {
+            "id": "Body:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                10.0,
+                5.0,
+                10.0
+              ],
+              [
+                0.0,
+                5.0,
+                10.0
+              ]
+            ],
+            "stableSubname": "Pad.Edge10"
+          },
+          {
+            "id": "Body:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                2.0,
+                1.0,
+                2.0
+              ],
+              [
+                8.0,
+                1.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "g1"
+          },
+          {
+            "id": "Body:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                8.0,
+                1.0,
+                2.0
+              ],
+              [
+                8.018226804901234,
+                0.9817731950987658,
+                2.2083333333333335
+              ],
+              [
+                8.036453609802468,
+                0.9635463901975316,
+                2.4166666666666665
+              ],
+              [
+                8.054680414703702,
+                0.9453195852962974,
+                2.625
+              ],
+              [
+                8.072907219604936,
+                0.9270927803950634,
+                2.8333333333333335
+              ],
+              [
+                8.09113402450617,
+                0.9088659754938292,
+                3.0416666666666665
+              ],
+              [
+                8.109360829407404,
+                0.890639170592595,
+                3.25
+              ],
+              [
+                8.12758763430864,
+                0.8724123656913608,
+                3.4583333333333335
+              ],
+              [
+                8.145814439209873,
+                0.8541855607901266,
+                3.6666666666666665
+              ],
+              [
+                8.164041244111107,
+                0.8359587558888926,
+                3.875
+              ],
+              [
+                8.182268049012341,
+                0.8177319509876584,
+                4.083333333333333
+              ],
+              [
+                8.200494853913575,
+                0.7995051460864242,
+                4.291666666666667
+              ],
+              [
+                8.21872165881481,
+                0.78127834118519,
+                4.5
+              ],
+              [
+                8.236948463716043,
+                0.7630515362839558,
+                4.708333333333333
+              ],
+              [
+                8.255175268617277,
+                0.7448247313827216,
+                4.916666666666667
+              ],
+              [
+                8.273402073518511,
+                0.7265979264814875,
+                5.125
+              ],
+              [
+                8.291628878419745,
+                0.7083711215802534,
+                5.333333333333333
+              ],
+              [
+                8.30985568332098,
+                0.6901443166790192,
+                5.541666666666667
+              ],
+              [
+                8.328082488222215,
+                0.671917511777785,
+                5.75
+              ],
+              [
+                8.346309293123449,
+                0.6536907068765508,
+                5.958333333333333
+              ],
+              [
+                8.364536098024683,
+                0.6354639019753167,
+                6.166666666666667
+              ],
+              [
+                8.382762902925917,
+                0.6172370970740826,
+                6.375
+              ],
+              [
+                8.40098970782715,
+                0.5990102921728484,
+                6.583333333333333
+              ],
+              [
+                8.419216512728385,
+                0.5807834872716142,
+                6.791666666666667
+              ],
+              [
+                8.437443317629619,
+                0.56255668237038,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge2"
+          },
+          {
+            "id": "Body:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                1.56255668237038,
+                0.56255668237038,
+                7.0
+              ],
+              [
+                8.437443317629619,
+                0.56255668237038,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge3"
+          },
+          {
+            "id": "Body:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                2.0,
+                1.0,
+                2.0
+              ],
+              [
+                1.9817731950987658,
+                0.9817731950987658,
+                2.2083333333333335
+              ],
+              [
+                1.9635463901975316,
+                0.9635463901975316,
+                2.4166666666666665
+              ],
+              [
+                1.9453195852962974,
+                0.9453195852962974,
+                2.625
+              ],
+              [
+                1.9270927803950633,
+                0.9270927803950634,
+                2.8333333333333335
+              ],
+              [
+                1.908865975493829,
+                0.9088659754938292,
+                3.0416666666666665
+              ],
+              [
+                1.890639170592595,
+                0.890639170592595,
+                3.25
+              ],
+              [
+                1.872412365691361,
+                0.8724123656913608,
+                3.4583333333333335
+              ],
+              [
+                1.8541855607901268,
+                0.8541855607901266,
+                3.6666666666666665
+              ],
+              [
+                1.8359587558888926,
+                0.8359587558888926,
+                3.875
+              ],
+              [
+                1.8177319509876584,
+                0.8177319509876584,
+                4.083333333333333
+              ],
+              [
+                1.7995051460864242,
+                0.7995051460864242,
+                4.291666666666667
+              ],
+              [
+                1.78127834118519,
+                0.78127834118519,
+                4.5
+              ],
+              [
+                1.7630515362839558,
+                0.7630515362839558,
+                4.708333333333333
+              ],
+              [
+                1.7448247313827216,
+                0.7448247313827216,
+                4.916666666666667
+              ],
+              [
+                1.7265979264814875,
+                0.7265979264814875,
+                5.125
+              ],
+              [
+                1.7083711215802533,
+                0.7083711215802534,
+                5.333333333333333
+              ],
+              [
+                1.690144316679019,
+                0.6901443166790192,
+                5.541666666666667
+              ],
+              [
+                1.6719175117777851,
+                0.671917511777785,
+                5.75
+              ],
+              [
+                1.653690706876551,
+                0.6536907068765508,
+                5.958333333333333
+              ],
+              [
+                1.6354639019753168,
+                0.6354639019753167,
+                6.166666666666667
+              ],
+              [
+                1.6172370970740826,
+                0.6172370970740826,
+                6.375
+              ],
+              [
+                1.5990102921728484,
+                0.5990102921728484,
+                6.583333333333333
+              ],
+              [
+                1.5807834872716142,
+                0.5807834872716142,
+                6.791666666666667
+              ],
+              [
+                1.56255668237038,
+                0.56255668237038,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge4"
+          },
+          {
+            "id": "Body:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                8.0,
+                1.0,
+                2.0
+              ],
+              [
+                8.0,
+                4.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "g2"
+          },
+          {
+            "id": "Body:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                8.0,
+                4.0,
+                2.0
+              ],
+              [
+                2.0,
+                4.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "g3"
+          },
+          {
+            "id": "Body:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                2.0,
+                4.0,
+                2.0
+              ],
+              [
+                2.0,
+                1.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "g4"
+          },
+          {
+            "id": "Body:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                8.0,
+                4.0,
+                2.0
+              ],
+              [
+                8.018226804901234,
+                4.018226804901234,
+                2.2083333333333335
+              ],
+              [
+                8.036453609802468,
+                4.036453609802468,
+                2.4166666666666665
+              ],
+              [
+                8.054680414703702,
+                4.054680414703703,
+                2.625
+              ],
+              [
+                8.072907219604936,
+                4.072907219604937,
+                2.8333333333333335
+              ],
+              [
+                8.091134024506172,
+                4.091134024506171,
+                3.0416666666666665
+              ],
+              [
+                8.109360829407406,
+                4.109360829407405,
+                3.25
+              ],
+              [
+                8.12758763430864,
+                4.127587634308639,
+                3.4583333333333335
+              ],
+              [
+                8.145814439209873,
+                4.1458144392098735,
+                3.6666666666666665
+              ],
+              [
+                8.164041244111107,
+                4.164041244111107,
+                3.875
+              ],
+              [
+                8.182268049012341,
+                4.182268049012341,
+                4.083333333333333
+              ],
+              [
+                8.200494853913575,
+                4.200494853913575,
+                4.291666666666667
+              ],
+              [
+                8.218721658814811,
+                4.218721658814809,
+                4.5
+              ],
+              [
+                8.236948463716045,
+                4.236948463716044,
+                4.708333333333333
+              ],
+              [
+                8.255175268617279,
+                4.255175268617278,
+                4.916666666666667
+              ],
+              [
+                8.273402073518513,
+                4.273402073518512,
+                5.125
+              ],
+              [
+                8.291628878419747,
+                4.291628878419746,
+                5.333333333333333
+              ],
+              [
+                8.309855683320981,
+                4.309855683320981,
+                5.541666666666667
+              ],
+              [
+                8.328082488222215,
+                4.328082488222215,
+                5.75
+              ],
+              [
+                8.346309293123449,
+                4.346309293123449,
+                5.958333333333333
+              ],
+              [
+                8.364536098024685,
+                4.364536098024683,
+                6.166666666666667
+              ],
+              [
+                8.382762902925919,
+                4.382762902925917,
+                6.375
+              ],
+              [
+                8.400989707827152,
+                4.400989707827152,
+                6.583333333333333
+              ],
+              [
+                8.419216512728386,
+                4.419216512728386,
+                6.791666666666667
+              ],
+              [
+                8.43744331762962,
+                4.4374433176296195,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge6"
+          },
+          {
+            "id": "Body:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                8.43744331762962,
+                0.56255668237038,
+                7.0
+              ],
+              [
+                8.43744331762962,
+                4.4374433176296195,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge7"
+          },
+          {
+            "id": "Body:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                8.43744331762962,
+                4.43744331762962,
+                7.0
+              ],
+              [
+                1.5625566823703814,
+                4.43744331762962,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge10"
+          },
+          {
+            "id": "Body:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                1.56255668237038,
+                4.43744331762962,
+                7.0
+              ],
+              [
+                1.56255668237038,
+                0.5625566823703805,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge12"
+          },
+          {
+            "id": "Body:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                2.0,
+                4.0,
+                2.0
+              ],
+              [
+                1.9817731950987658,
+                4.018226804901234,
+                2.2083333333333335
+              ],
+              [
+                1.9635463901975316,
+                4.036453609802468,
+                2.4166666666666665
+              ],
+              [
+                1.9453195852962977,
+                4.054680414703703,
+                2.625
+              ],
+              [
+                1.9270927803950635,
+                4.072907219604937,
+                2.8333333333333335
+              ],
+              [
+                1.9088659754938293,
+                4.091134024506171,
+                3.0416666666666665
+              ],
+              [
+                1.8906391705925951,
+                4.1093608294074055,
+                3.25
+              ],
+              [
+                1.872412365691361,
+                4.1275876343086395,
+                3.4583333333333335
+              ],
+              [
+                1.8541855607901268,
+                4.1458144392098735,
+                3.6666666666666665
+              ],
+              [
+                1.8359587558888926,
+                4.164041244111107,
+                3.875
+              ],
+              [
+                1.8177319509876586,
+                4.182268049012342,
+                4.083333333333333
+              ],
+              [
+                1.7995051460864244,
+                4.200494853913576,
+                4.291666666666667
+              ],
+              [
+                1.7812783411851902,
+                4.21872165881481,
+                4.5
+              ],
+              [
+                1.763051536283956,
+                4.236948463716044,
+                4.708333333333333
+              ],
+              [
+                1.7448247313827219,
+                4.255175268617279,
+                4.916666666666667
+              ],
+              [
+                1.726597926481488,
+                4.273402073518513,
+                5.125
+              ],
+              [
+                1.7083711215802537,
+                4.291628878419747,
+                5.333333333333333
+              ],
+              [
+                1.6901443166790195,
+                4.309855683320981,
+                5.541666666666667
+              ],
+              [
+                1.6719175117777854,
+                4.328082488222215,
+                5.75
+              ],
+              [
+                1.6536907068765512,
+                4.34630929312345,
+                5.958333333333333
+              ],
+              [
+                1.635463901975317,
+                4.364536098024684,
+                6.166666666666667
+              ],
+              [
+                1.6172370970740828,
+                4.382762902925918,
+                6.375
+              ],
+              [
+                1.5990102921728488,
+                4.400989707827152,
+                6.583333333333333
+              ],
+              [
+                1.5807834872716147,
+                4.4192165127283864,
+                6.791666666666667
+              ],
+              [
+                1.5625566823703805,
+                4.43744331762962,
+                7.0
+              ]
+            ],
+            "stableSubname": "Pocket.Edge9"
+          }
+        ],
+        "faceIds": [
+          "Body:Face1",
+          "Body:Face1",
+          "Body:Face2",
+          "Body:Face2",
+          "Body:Face3",
+          "Body:Face3",
+          "Body:Face4",
+          "Body:Face4",
+          "Body:Face5",
+          "Body:Face5",
+          "Body:Face6",
+          "Body:Face6",
+          "Body:Face7",
+          "Body:Face7",
+          "Body:Face7",
+          "Body:Face7",
+          "Body:Face8",
+          "Body:Face8",
+          "Body:Face9",
+          "Body:Face9",
+          "Body:Face9",
+          "Body:Face9",
+          "Body:Face10",
+          "Body:Face10",
+          "Body:Face11",
+          "Body:Face11",
+          "Body:Face11",
+          "Body:Face11",
+          "Body:Face12",
+          "Body:Face12",
+          "Body:Face12",
+          "Body:Face12"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          0,
+          5,
+          5,
+          0,
+          2,
+          1,
+          6,
+          3,
+          3,
+          6,
+          7,
+          0,
+          6,
+          1,
+          4,
+          6,
+          0,
+          7,
+          2,
+          3,
+          7,
+          5,
+          2,
+          6,
+          4,
+          7,
+          7,
+          4,
+          5,
+          8,
+          9,
+          10,
+          10,
+          9,
+          11,
+          11,
+          9,
+          12,
+          12,
+          9,
+          8,
+          8,
+          13,
+          14,
+          8,
+          10,
+          13,
+          10,
+          15,
+          13,
+          13,
+          15,
+          16,
+          16,
+          15,
+          11,
+          11,
+          15,
+          10,
+          16,
+          12,
+          17,
+          11,
+          12,
+          16,
+          14,
+          18,
+          8,
+          8,
+          18,
+          12,
+          12,
+          18,
+          17,
+          17,
+          18,
+          14,
+          13,
+          19,
+          14,
+          14,
+          19,
+          17,
+          17,
+          19,
+          16,
+          16,
+          19,
+          13
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Body:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              0.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Body:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              10.0,
+              0.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Body:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              0.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              0.0,
+              5.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Body:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              10.0,
+              5.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Body:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              2.0,
+              1.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              8.0,
+              1.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              8.437443317629619,
+              0.56255668237038,
+              7.0
+            ]
+          },
+          {
+            "id": "Body:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              1.56255668237038,
+              0.56255668237038,
+              7.0
+            ]
+          },
+          {
+            "id": "Body:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              8.0,
+              4.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              2.0,
+              4.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Body:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              8.43744331762962,
+              4.4374433176296195,
+              7.0
+            ]
+          },
+          {
+            "id": "Body:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              1.5625566823703805,
+              4.43744331762962,
+              7.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            10.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.0
+          ],
+          [
+            10.0,
+            0.0,
+            10.0
+          ],
+          [
+            0.0,
+            5.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.0,
+            10.0
+          ],
+          [
+            10.0,
+            5.0,
+            0.0
+          ],
+          [
+            10.0,
+            5.0,
+            10.0
+          ],
+          [
+            2.0,
+            1.0,
+            2.0
+          ],
+          [
+            5.0,
+            0.78127834118519,
+            4.5
+          ],
+          [
+            8.0,
+            1.0,
+            2.0
+          ],
+          [
+            8.437443317629619,
+            0.56255668237038,
+            7.0
+          ],
+          [
+            1.56255668237038,
+            0.56255668237038,
+            7.0
+          ],
+          [
+            8.0,
+            4.0,
+            2.0
+          ],
+          [
+            2.0,
+            4.0,
+            2.0
+          ],
+          [
+            8.218721658814811,
+            2.5,
+            4.5
+          ],
+          [
+            8.43744331762962,
+            4.4374433176296195,
+            7.0
+          ],
+          [
+            1.5625566823703805,
+            4.43744331762962,
+            7.0
+          ],
+          [
+            1.78127834118519,
+            2.5000000000000004,
+            4.5
+          ],
+          [
+            5.0,
+            4.21872165881481,
+            4.5
+          ]
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge1",
+          "subname": "Body.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge7",
+          "subname": "Pad.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge9",
+          "subname": "Pad.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge10",
+          "subname": "Pad.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge13",
+          "id": "Body:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "g1",
+          "subname": "Body.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge14",
+          "id": "Body:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge2",
+          "subname": "Body.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge15",
+          "id": "Body:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge3",
+          "subname": "Body.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge16",
+          "id": "Body:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge4",
+          "subname": "Body.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge17",
+          "id": "Body:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "g2",
+          "subname": "Body.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge18",
+          "id": "Body:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "g3",
+          "subname": "Body.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge19",
+          "id": "Body:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "g4",
+          "subname": "Body.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge2",
+          "subname": "Body.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge20",
+          "id": "Body:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge6",
+          "subname": "Body.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge21",
+          "id": "Body:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge7",
+          "subname": "Body.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge22",
+          "id": "Body:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge10",
+          "subname": "Body.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge23",
+          "id": "Body:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge12",
+          "subname": "Body.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge24",
+          "id": "Body:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "Pocket.Edge9",
+          "subname": "Body.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "SketchPad.Edge1",
+          "subname": "Body.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "Body.Edge4",
+          "subname": "Body.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge8",
+          "subname": "Pad.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge11",
+          "subname": "Pad.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge12",
+          "subname": "Pad.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge5",
+          "subname": "Pad.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "Pad.Edge6",
+          "subname": "Pad.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "Body.Face1",
+          "subname": "Body.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Face10",
+          "id": "Body:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "Pocket.Face6",
+          "subname": "Body.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Face11",
+          "id": "Body:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "Pocket.Face4",
+          "subname": "Body.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Face12",
+          "id": "Body:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "Pocket.Face3",
+          "subname": "Body.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "Pad.Face4",
+          "subname": "Pad.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "Pad.Face2",
+          "subname": "Pad.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "Pad.Face5",
+          "subname": "Pad.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "Pad.Face6",
+          "subname": "Pad.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "Pad.Face3",
+          "subname": "Pad.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Face7",
+          "id": "Body:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "Pocket.Face1",
+          "subname": "Body.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Face8",
+          "id": "Body:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "Pocket.Face5",
+          "subname": "Body.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Face9",
+          "id": "Body:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "Pocket.Face2",
+          "subname": "Body.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "Body.Vertex1",
+          "subname": "Body.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex10",
+          "id": "Body:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.Vertex2",
+          "subname": "Body.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex11",
+          "id": "Body:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.TaperSection2.Vertex3",
+          "subname": "Body.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex12",
+          "id": "Body:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.TaperSection2.Vertex2",
+          "subname": "Body.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex13",
+          "id": "Body:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.Vertex5",
+          "subname": "Body.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex14",
+          "id": "Body:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.Vertex7",
+          "subname": "Body.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex15",
+          "id": "Body:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.TaperSection2.Vertex4",
+          "subname": "Body.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex16",
+          "id": "Body:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.TaperSection2.Vertex1",
+          "subname": "Body.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "Body.Vertex2",
+          "subname": "Body.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "SketchPad.Vertex2",
+          "subname": "Body.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "Body.Vertex4",
+          "subname": "Body.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "Pad.Vertex7",
+          "subname": "Pad.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "Pad.Vertex8",
+          "subname": "Pad.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "Pad.Vertex5",
+          "subname": "Pad.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Pad.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "Pad.Vertex6",
+          "subname": "Pad.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.Vertex9",
+          "id": "Body:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "Pocket.Vertex1",
+          "subname": "Body.Vertex9"
+        }
+      ]
+    }
+  ]
+}

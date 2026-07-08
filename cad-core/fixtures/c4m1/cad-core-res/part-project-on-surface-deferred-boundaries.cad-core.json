@@ -1,0 +1,95 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object MissingProjectionLine",
+      "object": "ProjectionMissingTarget",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "Edge1",
+      "target": "MissingProjectionLine"
+    },
+    {
+      "code": "execution_failed",
+      "message": "Part::ProjectOnSurface did not produce projected shapes for the requested Mode",
+      "object": "ModeFacesDeferred",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "ProjectionLine"
+    },
+    {
+      "code": "invalid_subshape",
+      "message": "Part::ProjectOnSurface Projection object/subname counts differ",
+      "object": "ProjectionCountMismatch",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge1",
+      "target": "ProjectionLine"
+    },
+    {
+      "code": "invalid_subshape",
+      "message": "Part::ProjectOnSurface Projection must reference a non-empty subshape",
+      "object": "ProjectionEmptySubname",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "ProjectionLine"
+    },
+    {
+      "code": "unsupported_subshape_kind",
+      "message": "Part::ProjectOnSurface projects only edges, wires and faces",
+      "object": "ProjectionUnsupportedVertex",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Vertex1",
+      "target": "ProjectionVertex"
+    },
+    {
+      "code": "missing_property",
+      "message": "Part::ProjectOnSurface SupportFace must be specified",
+      "object": "MissingSupport",
+      "property": "SupportFace",
+      "severity": "error",
+      "stage": "runtime"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ModeFacesDeferred",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "ProjectionCountMismatch",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "ProjectionEmptySubname",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "ProjectionMissingTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "ProjectionUnsupportedVertex",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "MissingSupport",
+      "subshapes": []
+    }
+  ]
+}

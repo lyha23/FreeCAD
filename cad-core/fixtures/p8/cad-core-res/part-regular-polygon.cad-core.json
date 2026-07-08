@@ -1,0 +1,305 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "RegularPolygon:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0000000000000002,
+                1.7320508075688772,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RegularPolygon:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                1.0000000000000002,
+                1.7320508075688772,
+                0.0
+              ],
+              [
+                -0.9999999999999998,
+                1.7320508075688774,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RegularPolygon:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                -0.9999999999999997,
+                1.7320508075688774,
+                0.0
+              ],
+              [
+                -2.0,
+                2.220446049250313e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RegularPolygon:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                -2.0,
+                2.4492935982947064e-16,
+                0.0
+              ],
+              [
+                -1.0000000000000009,
+                -1.7320508075688765,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RegularPolygon:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                -1.0000000000000009,
+                -1.7320508075688767,
+                0.0
+              ],
+              [
+                1.0,
+                -1.7320508075688772,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "RegularPolygon:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                1.0000000000000002,
+                -1.7320508075688772,
+                0.0
+              ],
+              [
+                2.0,
+                2.97483362866749e-17,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "RegularPolygon:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "RegularPolygon:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.0000000000000002,
+              1.7320508075688772,
+              0.0
+            ]
+          },
+          {
+            "id": "RegularPolygon:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              -0.9999999999999997,
+              1.7320508075688774,
+              0.0
+            ]
+          },
+          {
+            "id": "RegularPolygon:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              -2.0,
+              2.4492935982947064e-16,
+              0.0
+            ]
+          },
+          {
+            "id": "RegularPolygon:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              -1.0000000000000009,
+              -1.7320508075688767,
+              0.0
+            ]
+          },
+          {
+            "id": "RegularPolygon:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              1.0000000000000002,
+              -1.7320508075688772,
+              0.0
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "RegularPolygon",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "RegularPolygon:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        }
+      ]
+    }
+  ]
+}

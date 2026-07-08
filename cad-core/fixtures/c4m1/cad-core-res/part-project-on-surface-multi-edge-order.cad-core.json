@@ -1,0 +1,155 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ProjectedMultiEdges:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                7.0,
+                1.5,
+                0.0
+              ],
+              [
+                5.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedMultiEdges:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                2.0,
+                4.0,
+                1.6700843220614548e-15
+              ],
+              [
+                1.0,
+                3.0,
+                1.6700843220614548e-15
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ProjectedMultiEdges:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              7.0,
+              1.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedMultiEdges:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              5.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedMultiEdges:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              2.0,
+              4.0,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedMultiEdges:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              1.0,
+              3.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "ProjectedMultiEdges",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedMultiEdges:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedMultiEdges:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedMultiEdges:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedMultiEdges:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedMultiEdges:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedMultiEdges:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        }
+      ]
+    }
+  ]
+}

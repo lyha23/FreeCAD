@@ -1,0 +1,75 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_subshape",
+      "message": "Invalid dress-up Base subshape OldFilletEdge1",
+      "object": "Chamfer",
+      "property": "Base",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "OldFilletEdge1",
+      "target": "Fillet"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [
+    {
+      "PropertyType": "App::PropertyLinkSub",
+      "ReferenceShadow": [
+        {
+          "fingerprint": {
+            "bboxMax": [
+              2.1,
+              0.1,
+              0.1
+            ],
+            "bboxMin": [
+              0.09999999999999998,
+              -0.10000000000000003,
+              -0.1
+            ],
+            "centroid": [
+              1.1,
+              0.0,
+              0.0
+            ],
+            "edgeCount": 1,
+            "length": 1.8,
+            "shapeType": "Edge",
+            "vertexCount": 2
+          },
+          "indexed": "Edge1",
+          "property": "Shape",
+          "shapeType": "Edge",
+          "stableSubname": "Edge1",
+          "subname": "Edge1",
+          "target": "Fillet",
+          "targetId": 3
+        }
+      ],
+      "ShadowSub": [
+        {
+          "newName": "Edge1",
+          "oldName": "Edge1"
+        }
+      ],
+      "StableSubList": [
+        "Edge1"
+      ],
+      "SubList": [
+        "Edge1"
+      ],
+      "object": "Chamfer",
+      "property": "Base",
+      "value": "Fillet"
+    }
+  ],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Body",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_subshape",
+      "message": "Pad Profile target Sketch has split InternalFace regions; Profile.StableSubList must select one backend stable alias",
+      "object": "Pad",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "Sketch"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

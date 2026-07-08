@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_length",
+      "message": "Chamfer Size must be greater than zero",
+      "object": "Chamfer",
+      "property": "Size",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Chamfer",
+      "subshapes": []
+    }
+  ]
+}

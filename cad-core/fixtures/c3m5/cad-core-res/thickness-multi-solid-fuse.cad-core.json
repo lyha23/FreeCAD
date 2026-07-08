@@ -1,0 +1,2684 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Thickness:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge5"
+          },
+          {
+            "id": "Thickness:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                2.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge6"
+          },
+          {
+            "id": "Thickness:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge7"
+          },
+          {
+            "id": "Thickness:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge8"
+          },
+          {
+            "id": "Thickness:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge9"
+          },
+          {
+            "id": "Thickness:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                0.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge10"
+          },
+          {
+            "id": "Thickness:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge1"
+          },
+          {
+            "id": "Thickness:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                0.0,
+                0.0,
+                2.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge2"
+          },
+          {
+            "id": "Thickness:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge3"
+          },
+          {
+            "id": "Thickness:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge4"
+          },
+          {
+            "id": "Thickness:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge11"
+          },
+          {
+            "id": "Thickness:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.0,
+                2.0,
+                2.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge12"
+          },
+          {
+            "id": "Thickness:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                1.8,
+                0.2,
+                2.0
+              ],
+              [
+                1.8,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge13"
+          },
+          {
+            "id": "Thickness:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                0.2,
+                0.2,
+                2.0
+              ],
+              [
+                1.8,
+                0.2,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge14"
+          },
+          {
+            "id": "Thickness:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                0.2,
+                0.2,
+                2.0
+              ],
+              [
+                0.2,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge15"
+          },
+          {
+            "id": "Thickness:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                0.2,
+                1.8,
+                2.0
+              ],
+              [
+                1.8,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge16"
+          },
+          {
+            "id": "Thickness:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                0.2,
+                0.2,
+                0.2
+              ],
+              [
+                0.2,
+                0.2,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge17"
+          },
+          {
+            "id": "Thickness:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                0.2,
+                1.8,
+                0.2
+              ],
+              [
+                0.2,
+                0.19999999999999996,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge18"
+          },
+          {
+            "id": "Thickness:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                0.2,
+                1.8,
+                0.2
+              ],
+              [
+                0.2,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge19"
+          },
+          {
+            "id": "Thickness:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                1.8,
+                1.8,
+                0.2
+              ],
+              [
+                1.8,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge20"
+          },
+          {
+            "id": "Thickness:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                0.2,
+                1.8,
+                0.2
+              ],
+              [
+                1.8,
+                1.8,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge21"
+          },
+          {
+            "id": "Thickness:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                1.8,
+                0.2,
+                0.2
+              ],
+              [
+                1.8,
+                0.2,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge22"
+          },
+          {
+            "id": "Thickness:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                1.8,
+                1.8,
+                0.2
+              ],
+              [
+                1.8,
+                0.19999999999999996,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge23"
+          },
+          {
+            "id": "Thickness:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                0.2,
+                0.2,
+                0.2
+              ],
+              [
+                1.8,
+                0.2,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid1.Edge24"
+          },
+          {
+            "id": "Thickness:Edge25",
+            "identityStatus": "stable",
+            "indexed": "Edge25",
+            "points": [
+              [
+                6.0,
+                0.0,
+                0.0
+              ],
+              [
+                6.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge5"
+          },
+          {
+            "id": "Thickness:Edge26",
+            "identityStatus": "stable",
+            "indexed": "Edge26",
+            "points": [
+              [
+                6.0,
+                0.0,
+                2.0
+              ],
+              [
+                6.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge6"
+          },
+          {
+            "id": "Thickness:Edge27",
+            "identityStatus": "stable",
+            "indexed": "Edge27",
+            "points": [
+              [
+                6.0,
+                2.0,
+                0.0
+              ],
+              [
+                6.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge7"
+          },
+          {
+            "id": "Thickness:Edge28",
+            "identityStatus": "stable",
+            "indexed": "Edge28",
+            "points": [
+              [
+                6.0,
+                0.0,
+                0.0
+              ],
+              [
+                6.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge8"
+          },
+          {
+            "id": "Thickness:Edge29",
+            "identityStatus": "stable",
+            "indexed": "Edge29",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                6.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge9"
+          },
+          {
+            "id": "Thickness:Edge30",
+            "identityStatus": "stable",
+            "indexed": "Edge30",
+            "points": [
+              [
+                4.0,
+                0.0,
+                2.0
+              ],
+              [
+                6.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge10"
+          },
+          {
+            "id": "Thickness:Edge31",
+            "identityStatus": "stable",
+            "indexed": "Edge31",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge1"
+          },
+          {
+            "id": "Thickness:Edge32",
+            "identityStatus": "stable",
+            "indexed": "Edge32",
+            "points": [
+              [
+                4.0,
+                0.0,
+                2.0
+              ],
+              [
+                4.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge2"
+          },
+          {
+            "id": "Thickness:Edge33",
+            "identityStatus": "stable",
+            "indexed": "Edge33",
+            "points": [
+              [
+                4.0,
+                2.0,
+                0.0
+              ],
+              [
+                4.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge3"
+          },
+          {
+            "id": "Thickness:Edge34",
+            "identityStatus": "stable",
+            "indexed": "Edge34",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge4"
+          },
+          {
+            "id": "Thickness:Edge35",
+            "identityStatus": "stable",
+            "indexed": "Edge35",
+            "points": [
+              [
+                4.0,
+                2.0,
+                0.0
+              ],
+              [
+                6.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge11"
+          },
+          {
+            "id": "Thickness:Edge36",
+            "identityStatus": "stable",
+            "indexed": "Edge36",
+            "points": [
+              [
+                4.0,
+                2.0,
+                2.0
+              ],
+              [
+                6.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge12"
+          },
+          {
+            "id": "Thickness:Edge37",
+            "identityStatus": "stable",
+            "indexed": "Edge37",
+            "points": [
+              [
+                5.8,
+                0.2,
+                2.0
+              ],
+              [
+                5.8,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge13"
+          },
+          {
+            "id": "Thickness:Edge38",
+            "identityStatus": "stable",
+            "indexed": "Edge38",
+            "points": [
+              [
+                4.2,
+                0.2,
+                2.0
+              ],
+              [
+                5.8,
+                0.2,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge14"
+          },
+          {
+            "id": "Thickness:Edge39",
+            "identityStatus": "stable",
+            "indexed": "Edge39",
+            "points": [
+              [
+                4.2,
+                0.2,
+                2.0
+              ],
+              [
+                4.2,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge15"
+          },
+          {
+            "id": "Thickness:Edge40",
+            "identityStatus": "stable",
+            "indexed": "Edge40",
+            "points": [
+              [
+                4.2,
+                1.8,
+                2.0
+              ],
+              [
+                5.8,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge16"
+          },
+          {
+            "id": "Thickness:Edge41",
+            "identityStatus": "stable",
+            "indexed": "Edge41",
+            "points": [
+              [
+                4.2,
+                0.2,
+                0.2
+              ],
+              [
+                4.2,
+                0.2,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge17"
+          },
+          {
+            "id": "Thickness:Edge42",
+            "identityStatus": "stable",
+            "indexed": "Edge42",
+            "points": [
+              [
+                4.2,
+                1.8,
+                0.2
+              ],
+              [
+                4.2,
+                0.19999999999999996,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge18"
+          },
+          {
+            "id": "Thickness:Edge43",
+            "identityStatus": "stable",
+            "indexed": "Edge43",
+            "points": [
+              [
+                4.2,
+                1.8,
+                0.2
+              ],
+              [
+                4.2,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge19"
+          },
+          {
+            "id": "Thickness:Edge44",
+            "identityStatus": "stable",
+            "indexed": "Edge44",
+            "points": [
+              [
+                5.8,
+                1.8,
+                0.2
+              ],
+              [
+                5.8,
+                1.8,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge20"
+          },
+          {
+            "id": "Thickness:Edge45",
+            "identityStatus": "stable",
+            "indexed": "Edge45",
+            "points": [
+              [
+                4.2,
+                1.8,
+                0.2
+              ],
+              [
+                5.8,
+                1.8,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge21"
+          },
+          {
+            "id": "Thickness:Edge46",
+            "identityStatus": "stable",
+            "indexed": "Edge46",
+            "points": [
+              [
+                5.8,
+                0.2,
+                0.2
+              ],
+              [
+                5.8,
+                0.2,
+                2.0
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge22"
+          },
+          {
+            "id": "Thickness:Edge47",
+            "identityStatus": "stable",
+            "indexed": "Edge47",
+            "points": [
+              [
+                5.8,
+                1.8,
+                0.2
+              ],
+              [
+                5.8,
+                0.19999999999999996,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge23"
+          },
+          {
+            "id": "Thickness:Edge48",
+            "identityStatus": "stable",
+            "indexed": "Edge48",
+            "points": [
+              [
+                4.2,
+                0.2,
+                0.2
+              ],
+              [
+                5.8,
+                0.2,
+                0.2
+              ]
+            ],
+            "stableSubname": "Thickness.Solid2.Edge24"
+          }
+        ],
+        "faceIds": [
+          "Thickness:Face1",
+          "Thickness:Face1",
+          "Thickness:Face2",
+          "Thickness:Face2",
+          "Thickness:Face3",
+          "Thickness:Face3",
+          "Thickness:Face4",
+          "Thickness:Face4",
+          "Thickness:Face5",
+          "Thickness:Face5",
+          "Thickness:Face6",
+          "Thickness:Face6",
+          "Thickness:Face6",
+          "Thickness:Face6",
+          "Thickness:Face6",
+          "Thickness:Face6",
+          "Thickness:Face6",
+          "Thickness:Face6",
+          "Thickness:Face7",
+          "Thickness:Face7",
+          "Thickness:Face8",
+          "Thickness:Face8",
+          "Thickness:Face9",
+          "Thickness:Face9",
+          "Thickness:Face10",
+          "Thickness:Face10",
+          "Thickness:Face11",
+          "Thickness:Face11",
+          "Thickness:Face12",
+          "Thickness:Face12",
+          "Thickness:Face13",
+          "Thickness:Face13",
+          "Thickness:Face14",
+          "Thickness:Face14",
+          "Thickness:Face15",
+          "Thickness:Face15",
+          "Thickness:Face16",
+          "Thickness:Face16",
+          "Thickness:Face17",
+          "Thickness:Face17",
+          "Thickness:Face17",
+          "Thickness:Face17",
+          "Thickness:Face17",
+          "Thickness:Face17",
+          "Thickness:Face17",
+          "Thickness:Face17",
+          "Thickness:Face18",
+          "Thickness:Face18",
+          "Thickness:Face19",
+          "Thickness:Face19",
+          "Thickness:Face20",
+          "Thickness:Face20",
+          "Thickness:Face21",
+          "Thickness:Face21",
+          "Thickness:Face22",
+          "Thickness:Face22"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          1,
+          0,
+          4,
+          4,
+          0,
+          5,
+          4,
+          5,
+          6,
+          6,
+          5,
+          7,
+          3,
+          2,
+          6,
+          3,
+          6,
+          7,
+          6,
+          2,
+          4,
+          4,
+          2,
+          1,
+          8,
+          5,
+          0,
+          8,
+          9,
+          5,
+          10,
+          7,
+          5,
+          10,
+          5,
+          9,
+          3,
+          11,
+          8,
+          3,
+          8,
+          0,
+          3,
+          7,
+          10,
+          3,
+          10,
+          11,
+          9,
+          12,
+          13,
+          9,
+          13,
+          10,
+          14,
+          11,
+          13,
+          13,
+          11,
+          10,
+          15,
+          8,
+          14,
+          14,
+          8,
+          11,
+          8,
+          15,
+          12,
+          8,
+          12,
+          9,
+          14,
+          13,
+          12,
+          14,
+          12,
+          15,
+          16,
+          17,
+          18,
+          16,
+          18,
+          19,
+          17,
+          16,
+          20,
+          20,
+          16,
+          21,
+          20,
+          21,
+          22,
+          22,
+          21,
+          23,
+          19,
+          18,
+          22,
+          19,
+          22,
+          23,
+          22,
+          18,
+          20,
+          20,
+          18,
+          17,
+          24,
+          21,
+          16,
+          24,
+          25,
+          21,
+          26,
+          23,
+          21,
+          26,
+          21,
+          25,
+          19,
+          27,
+          24,
+          19,
+          24,
+          16,
+          19,
+          23,
+          26,
+          19,
+          26,
+          27,
+          25,
+          28,
+          29,
+          25,
+          29,
+          26,
+          30,
+          27,
+          29,
+          29,
+          27,
+          26,
+          31,
+          24,
+          30,
+          30,
+          24,
+          27,
+          24,
+          31,
+          28,
+          24,
+          28,
+          25,
+          30,
+          29,
+          28,
+          30,
+          28,
+          31
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Thickness:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              2.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              2.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              2.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              0.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              0.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              0.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              1.8,
+              0.20000000000000004,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              1.8,
+              1.8,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              0.20000000000000004,
+              0.20000000000000004,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              0.20000000000000004,
+              1.8,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              0.20000000000000004,
+              0.20000000000000004,
+              0.20000000000000004
+            ]
+          },
+          {
+            "id": "Thickness:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              0.20000000000000004,
+              1.8,
+              0.20000000000000004
+            ]
+          },
+          {
+            "id": "Thickness:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              1.8,
+              1.8,
+              0.20000000000000004
+            ]
+          },
+          {
+            "id": "Thickness:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              1.8,
+              0.20000000000000004,
+              0.20000000000000004
+            ]
+          },
+          {
+            "id": "Thickness:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              6.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              6.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              6.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              6.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex21",
+            "indexed": "Vertex21",
+            "point": [
+              4.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex22",
+            "indexed": "Vertex22",
+            "point": [
+              4.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex23",
+            "indexed": "Vertex23",
+            "point": [
+              4.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex24",
+            "indexed": "Vertex24",
+            "point": [
+              4.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex25",
+            "indexed": "Vertex25",
+            "point": [
+              5.8,
+              0.20000000000000004,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex26",
+            "indexed": "Vertex26",
+            "point": [
+              5.8,
+              1.8,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex27",
+            "indexed": "Vertex27",
+            "point": [
+              4.2,
+              0.20000000000000004,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex28",
+            "indexed": "Vertex28",
+            "point": [
+              4.2,
+              1.8,
+              2.0
+            ]
+          },
+          {
+            "id": "Thickness:Vertex29",
+            "indexed": "Vertex29",
+            "point": [
+              4.2,
+              0.20000000000000004,
+              0.20000000000000004
+            ]
+          },
+          {
+            "id": "Thickness:Vertex30",
+            "indexed": "Vertex30",
+            "point": [
+              4.2,
+              1.8,
+              0.20000000000000004
+            ]
+          },
+          {
+            "id": "Thickness:Vertex31",
+            "indexed": "Vertex31",
+            "point": [
+              5.8,
+              1.8,
+              0.20000000000000004
+            ]
+          },
+          {
+            "id": "Thickness:Vertex32",
+            "indexed": "Vertex32",
+            "point": [
+              5.8,
+              0.20000000000000004,
+              0.20000000000000004
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            2.0,
+            0.0,
+            2.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            2.0,
+            0.0
+          ],
+          [
+            2.0,
+            2.0,
+            2.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            2.0
+          ],
+          [
+            0.0,
+            2.0,
+            0.0
+          ],
+          [
+            0.0,
+            2.0,
+            2.0
+          ],
+          [
+            1.8,
+            0.20000000000000004,
+            2.0
+          ],
+          [
+            0.20000000000000004,
+            0.20000000000000004,
+            2.0
+          ],
+          [
+            0.20000000000000004,
+            1.8,
+            2.0
+          ],
+          [
+            1.8,
+            1.8,
+            2.0
+          ],
+          [
+            0.20000000000000004,
+            0.20000000000000004,
+            0.20000000000000004
+          ],
+          [
+            0.20000000000000004,
+            1.8,
+            0.20000000000000004
+          ],
+          [
+            1.8,
+            1.8,
+            0.20000000000000004
+          ],
+          [
+            1.8,
+            0.20000000000000004,
+            0.20000000000000004
+          ],
+          [
+            6.0,
+            0.0,
+            2.0
+          ],
+          [
+            6.0,
+            0.0,
+            0.0
+          ],
+          [
+            6.0,
+            2.0,
+            0.0
+          ],
+          [
+            6.0,
+            2.0,
+            2.0
+          ],
+          [
+            4.0,
+            0.0,
+            0.0
+          ],
+          [
+            4.0,
+            0.0,
+            2.0
+          ],
+          [
+            4.0,
+            2.0,
+            0.0
+          ],
+          [
+            4.0,
+            2.0,
+            2.0
+          ],
+          [
+            5.8,
+            0.20000000000000004,
+            2.0
+          ],
+          [
+            4.2,
+            0.20000000000000004,
+            2.0
+          ],
+          [
+            4.2,
+            1.8,
+            2.0
+          ],
+          [
+            5.8,
+            1.8,
+            2.0
+          ],
+          [
+            4.2,
+            0.20000000000000004,
+            0.20000000000000004
+          ],
+          [
+            4.2,
+            1.8,
+            0.20000000000000004
+          ],
+          [
+            5.8,
+            1.8,
+            0.20000000000000004
+          ],
+          [
+            5.8,
+            0.20000000000000004,
+            0.20000000000000004
+          ]
+        ]
+      },
+      "object": "Thickness",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge1",
+          "id": "Thickness:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge5",
+          "subname": "Thickness.Solid1.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge10",
+          "id": "Thickness:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge4",
+          "subname": "Thickness.Solid1.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxA.Edge11",
+          "id": "Thickness:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge11",
+          "subname": "BoxA.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxA.Edge12",
+          "id": "Thickness:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge12",
+          "subname": "BoxA.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge13",
+          "id": "Thickness:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge13",
+          "subname": "Thickness.Solid1.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge14",
+          "id": "Thickness:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge14",
+          "subname": "Thickness.Solid1.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge15",
+          "id": "Thickness:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge15",
+          "subname": "Thickness.Solid1.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge16",
+          "id": "Thickness:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge16",
+          "subname": "Thickness.Solid1.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge17",
+          "id": "Thickness:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge17",
+          "subname": "Thickness.Solid1.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge18",
+          "id": "Thickness:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge18",
+          "subname": "Thickness.Solid1.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge19",
+          "id": "Thickness:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge19",
+          "subname": "Thickness.Solid1.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge2",
+          "id": "Thickness:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge6",
+          "subname": "Thickness.Solid1.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge20",
+          "id": "Thickness:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge20",
+          "subname": "Thickness.Solid1.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge21",
+          "id": "Thickness:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge21",
+          "subname": "Thickness.Solid1.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge22",
+          "id": "Thickness:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge22",
+          "subname": "Thickness.Solid1.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge23",
+          "id": "Thickness:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge23",
+          "subname": "Thickness.Solid1.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge24",
+          "id": "Thickness:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid1.Edge24",
+          "subname": "Thickness.Solid1.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge25",
+          "id": "Thickness:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge5",
+          "subname": "BoxB.Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge26",
+          "id": "Thickness:Edge26",
+          "identityStatus": "stable",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge6",
+          "subname": "BoxB.Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge27",
+          "id": "Thickness:Edge27",
+          "identityStatus": "stable",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge7",
+          "subname": "BoxB.Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge28",
+          "id": "Thickness:Edge28",
+          "identityStatus": "stable",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge8",
+          "subname": "BoxB.Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge29",
+          "id": "Thickness:Edge29",
+          "identityStatus": "stable",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge9",
+          "subname": "BoxB.Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge3",
+          "id": "Thickness:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge7",
+          "subname": "Thickness.Solid1.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge30",
+          "id": "Thickness:Edge30",
+          "identityStatus": "stable",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge10",
+          "subname": "BoxB.Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge31",
+          "id": "Thickness:Edge31",
+          "identityStatus": "stable",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge1",
+          "subname": "BoxB.Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge32",
+          "id": "Thickness:Edge32",
+          "identityStatus": "stable",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge2",
+          "subname": "BoxB.Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge33",
+          "id": "Thickness:Edge33",
+          "identityStatus": "stable",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge3",
+          "subname": "BoxB.Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge34",
+          "id": "Thickness:Edge34",
+          "identityStatus": "stable",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge4",
+          "subname": "BoxB.Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge35",
+          "id": "Thickness:Edge35",
+          "identityStatus": "stable",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge11",
+          "subname": "BoxB.Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Edge36",
+          "id": "Thickness:Edge36",
+          "identityStatus": "stable",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge12",
+          "subname": "BoxB.Edge36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge37",
+          "id": "Thickness:Edge37",
+          "identityStatus": "stable",
+          "indexed": "Edge37",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge13",
+          "subname": "Thickness.Solid2.Edge37"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge38",
+          "id": "Thickness:Edge38",
+          "identityStatus": "stable",
+          "indexed": "Edge38",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge14",
+          "subname": "Thickness.Solid2.Edge38"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge39",
+          "id": "Thickness:Edge39",
+          "identityStatus": "stable",
+          "indexed": "Edge39",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge15",
+          "subname": "Thickness.Solid2.Edge39"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge4",
+          "id": "Thickness:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge8",
+          "subname": "Thickness.Solid1.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge40",
+          "id": "Thickness:Edge40",
+          "identityStatus": "stable",
+          "indexed": "Edge40",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge16",
+          "subname": "Thickness.Solid2.Edge40"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge41",
+          "id": "Thickness:Edge41",
+          "identityStatus": "stable",
+          "indexed": "Edge41",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge17",
+          "subname": "Thickness.Solid2.Edge41"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge42",
+          "id": "Thickness:Edge42",
+          "identityStatus": "stable",
+          "indexed": "Edge42",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge18",
+          "subname": "Thickness.Solid2.Edge42"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge43",
+          "id": "Thickness:Edge43",
+          "identityStatus": "stable",
+          "indexed": "Edge43",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge19",
+          "subname": "Thickness.Solid2.Edge43"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge44",
+          "id": "Thickness:Edge44",
+          "identityStatus": "stable",
+          "indexed": "Edge44",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge20",
+          "subname": "Thickness.Solid2.Edge44"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge45",
+          "id": "Thickness:Edge45",
+          "identityStatus": "stable",
+          "indexed": "Edge45",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge21",
+          "subname": "Thickness.Solid2.Edge45"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge46",
+          "id": "Thickness:Edge46",
+          "identityStatus": "stable",
+          "indexed": "Edge46",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge22",
+          "subname": "Thickness.Solid2.Edge46"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge47",
+          "id": "Thickness:Edge47",
+          "identityStatus": "stable",
+          "indexed": "Edge47",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge23",
+          "subname": "Thickness.Solid2.Edge47"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Edge48",
+          "id": "Thickness:Edge48",
+          "identityStatus": "stable",
+          "indexed": "Edge48",
+          "kind": "Edge",
+          "stableSubname": "Thickness.Solid2.Edge24",
+          "subname": "Thickness.Solid2.Edge48"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge5",
+          "id": "Thickness:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge9",
+          "subname": "Thickness.Solid1.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge6",
+          "id": "Thickness:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge10",
+          "subname": "Thickness.Solid1.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge7",
+          "id": "Thickness:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge1",
+          "subname": "Thickness.Solid1.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge8",
+          "id": "Thickness:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge2",
+          "subname": "Thickness.Solid1.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Edge9",
+          "id": "Thickness:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge3",
+          "subname": "Thickness.Solid1.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face1",
+          "id": "Thickness:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face2",
+          "subname": "Thickness.Solid1.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face10",
+          "id": "Thickness:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid1.Face10",
+          "subname": "Thickness.Solid1.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face11",
+          "id": "Thickness:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid1.Face11",
+          "subname": "Thickness.Solid1.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Face12",
+          "id": "Thickness:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "BoxB.Face2",
+          "subname": "BoxB.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Face13",
+          "id": "Thickness:Face13",
+          "identityStatus": "stable",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "BoxB.Face3",
+          "subname": "BoxB.Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Face14",
+          "id": "Thickness:Face14",
+          "identityStatus": "stable",
+          "indexed": "Face14",
+          "kind": "Face",
+          "stableSubname": "BoxB.Face1",
+          "subname": "BoxB.Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Face15",
+          "id": "Thickness:Face15",
+          "identityStatus": "stable",
+          "indexed": "Face15",
+          "kind": "Face",
+          "stableSubname": "BoxB.Face4",
+          "subname": "BoxB.Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Face16",
+          "id": "Thickness:Face16",
+          "identityStatus": "stable",
+          "indexed": "Face16",
+          "kind": "Face",
+          "stableSubname": "BoxB.Face5",
+          "subname": "BoxB.Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Face17",
+          "id": "Thickness:Face17",
+          "identityStatus": "stable",
+          "indexed": "Face17",
+          "kind": "Face",
+          "stableSubname": "BoxB.Face6",
+          "subname": "BoxB.Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Face18",
+          "id": "Thickness:Face18",
+          "identityStatus": "stable",
+          "indexed": "Face18",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid2.Face7",
+          "subname": "Thickness.Solid2.Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Face19",
+          "id": "Thickness:Face19",
+          "identityStatus": "stable",
+          "indexed": "Face19",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid2.Face8",
+          "subname": "Thickness.Solid2.Face19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face2",
+          "id": "Thickness:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face3",
+          "subname": "Thickness.Solid1.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Face20",
+          "id": "Thickness:Face20",
+          "identityStatus": "stable",
+          "indexed": "Face20",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid2.Face9",
+          "subname": "Thickness.Solid2.Face20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Face21",
+          "id": "Thickness:Face21",
+          "identityStatus": "stable",
+          "indexed": "Face21",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid2.Face10",
+          "subname": "Thickness.Solid2.Face21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Face22",
+          "id": "Thickness:Face22",
+          "identityStatus": "stable",
+          "indexed": "Face22",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid2.Face11",
+          "subname": "Thickness.Solid2.Face22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face3",
+          "id": "Thickness:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face1",
+          "subname": "Thickness.Solid1.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxA.Face4",
+          "id": "Thickness:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face4",
+          "subname": "BoxA.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxA.Face5",
+          "id": "Thickness:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face5",
+          "subname": "BoxA.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxA.Face6",
+          "id": "Thickness:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face6",
+          "subname": "BoxA.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face7",
+          "id": "Thickness:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid1.Face7",
+          "subname": "Thickness.Solid1.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face8",
+          "id": "Thickness:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid1.Face8",
+          "subname": "Thickness.Solid1.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Face9",
+          "id": "Thickness:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "Thickness.Solid1.Face9",
+          "subname": "Thickness.Solid1.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex1",
+          "id": "Thickness:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex5",
+          "subname": "Thickness.Solid1.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex10",
+          "id": "Thickness:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex10",
+          "subname": "Thickness.Solid1.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex11",
+          "id": "Thickness:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex11",
+          "subname": "Thickness.Solid1.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex12",
+          "id": "Thickness:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex12",
+          "subname": "Thickness.Solid1.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex13",
+          "id": "Thickness:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex13",
+          "subname": "Thickness.Solid1.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex14",
+          "id": "Thickness:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex14",
+          "subname": "Thickness.Solid1.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex15",
+          "id": "Thickness:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex15",
+          "subname": "Thickness.Solid1.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex16",
+          "id": "Thickness:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex16",
+          "subname": "Thickness.Solid1.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex17",
+          "id": "Thickness:Vertex17",
+          "identityStatus": "stable",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex5",
+          "subname": "BoxB.Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex18",
+          "id": "Thickness:Vertex18",
+          "identityStatus": "stable",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex6",
+          "subname": "BoxB.Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex19",
+          "id": "Thickness:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex7",
+          "subname": "BoxB.Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex2",
+          "id": "Thickness:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex6",
+          "subname": "Thickness.Solid1.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex20",
+          "id": "Thickness:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex8",
+          "subname": "BoxB.Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex21",
+          "id": "Thickness:Vertex21",
+          "identityStatus": "stable",
+          "indexed": "Vertex21",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex2",
+          "subname": "BoxB.Vertex21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex22",
+          "id": "Thickness:Vertex22",
+          "identityStatus": "stable",
+          "indexed": "Vertex22",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex1",
+          "subname": "BoxB.Vertex22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex23",
+          "id": "Thickness:Vertex23",
+          "identityStatus": "stable",
+          "indexed": "Vertex23",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex3",
+          "subname": "BoxB.Vertex23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.BoxB.Vertex24",
+          "id": "Thickness:Vertex24",
+          "identityStatus": "stable",
+          "indexed": "Vertex24",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex4",
+          "subname": "BoxB.Vertex24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex25",
+          "id": "Thickness:Vertex25",
+          "identityStatus": "stable",
+          "indexed": "Vertex25",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex9",
+          "subname": "Thickness.Solid2.Vertex25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex26",
+          "id": "Thickness:Vertex26",
+          "identityStatus": "stable",
+          "indexed": "Vertex26",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex10",
+          "subname": "Thickness.Solid2.Vertex26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex27",
+          "id": "Thickness:Vertex27",
+          "identityStatus": "stable",
+          "indexed": "Vertex27",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex11",
+          "subname": "Thickness.Solid2.Vertex27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex28",
+          "id": "Thickness:Vertex28",
+          "identityStatus": "stable",
+          "indexed": "Vertex28",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex12",
+          "subname": "Thickness.Solid2.Vertex28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex29",
+          "id": "Thickness:Vertex29",
+          "identityStatus": "stable",
+          "indexed": "Vertex29",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex13",
+          "subname": "Thickness.Solid2.Vertex29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex3",
+          "id": "Thickness:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex7",
+          "subname": "Thickness.Solid1.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex30",
+          "id": "Thickness:Vertex30",
+          "identityStatus": "stable",
+          "indexed": "Vertex30",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex14",
+          "subname": "Thickness.Solid2.Vertex30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex31",
+          "id": "Thickness:Vertex31",
+          "identityStatus": "stable",
+          "indexed": "Vertex31",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex15",
+          "subname": "Thickness.Solid2.Vertex31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid2.Vertex32",
+          "id": "Thickness:Vertex32",
+          "identityStatus": "stable",
+          "indexed": "Vertex32",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid2.Vertex16",
+          "subname": "Thickness.Solid2.Vertex32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex4",
+          "id": "Thickness:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex8",
+          "subname": "Thickness.Solid1.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex5",
+          "id": "Thickness:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex2",
+          "subname": "Thickness.Solid1.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex6",
+          "id": "Thickness:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex1",
+          "subname": "Thickness.Solid1.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex7",
+          "id": "Thickness:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex3",
+          "subname": "Thickness.Solid1.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex8",
+          "id": "Thickness:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex4",
+          "subname": "Thickness.Solid1.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Thickness.Solid1.Vertex9",
+          "id": "Thickness:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "Thickness.Solid1.Vertex9",
+          "subname": "Thickness.Solid1.Vertex9"
+        }
+      ]
+    }
+  ]
+}

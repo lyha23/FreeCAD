@@ -1,0 +1,20 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_type",
+      "message": "Unsupported TypeId CadCore::NativeProbe",
+      "object": "C8M2CopyOnChangeNativeProbe",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "C8M2CopyOnChangeNativeProbe",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "plane",
+      "frame": {
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumPlaneFlatFace",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSObjectXY",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSObjectXZ",
+      "subshapes": []
+    },
+    {
+      "datum": "coordinate_system",
+      "frame": {
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "DatumCSObjectYZ",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointOrigin",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineObjectX",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineObjectY",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineObjectZ",
+      "subshapes": []
+    },
+    {
+      "datum": "line",
+      "mesh": null,
+      "object": "DatumLineNormalToEdge",
+      "subshapes": []
+    }
+  ]
+}

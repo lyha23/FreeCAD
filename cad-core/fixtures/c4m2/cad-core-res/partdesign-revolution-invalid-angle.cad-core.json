@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_angle",
+      "message": "Angle of revolution too small",
+      "object": "Revolution",
+      "property": "Angle",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Revolution",
+      "subshapes": []
+    }
+  ]
+}

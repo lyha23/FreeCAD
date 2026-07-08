@@ -1,0 +1,23 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "multiple_solids_disallowed",
+      "message": "Result has multiple solids: enable 'Allow Compound' in the active body.",
+      "object": "BooleanRejected",
+      "property": "AllowCompound",
+      "severity": "error",
+      "stage": "part_design.single_solid_rule",
+      "target": "MainBody"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "BooleanRejected",
+      "subshapes": []
+    }
+  ]
+}

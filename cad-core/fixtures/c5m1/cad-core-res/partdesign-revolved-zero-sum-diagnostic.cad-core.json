@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_angle",
+      "message": "Angles of revolution nullify each other",
+      "object": "RevolutionZeroSum",
+      "property": "Angle2",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "RevolutionZeroSum",
+      "subshapes": []
+    }
+  ]
+}

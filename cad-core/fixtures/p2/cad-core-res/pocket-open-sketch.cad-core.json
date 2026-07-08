@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_stable_subname",
+      "message": "Pocket Profile.StableSubList cannot reference request-local g1;SKT;FAC without Sketch.InternalShape NamedShape/ElementMap evidence",
+      "object": "Pocket",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "g1;SKT;FAC",
+      "target": "OpenPocketSketch"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Body",
+      "subshapes": []
+    }
+  ]
+}

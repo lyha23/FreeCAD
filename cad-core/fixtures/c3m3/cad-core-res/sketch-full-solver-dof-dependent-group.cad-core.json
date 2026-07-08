@@ -1,0 +1,676 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Sketch:InternalEdge1",
+            "identityStatus": "stable",
+            "indexed": "InternalEdge1",
+            "points": [
+              [
+                3.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.965925826289068,
+                2.2588190451025207,
+                0.0
+              ],
+              [
+                2.866025403784439,
+                2.5,
+                0.0
+              ],
+              [
+                2.7071067811865475,
+                2.7071067811865475,
+                0.0
+              ],
+              [
+                2.5,
+                2.8660254037844384,
+                0.0
+              ],
+              [
+                2.2588190451025207,
+                2.965925826289068,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                0.0
+              ],
+              [
+                1.7411809548974793,
+                2.965925826289068,
+                0.0
+              ],
+              [
+                1.5000000000000002,
+                2.866025403784439,
+                0.0
+              ],
+              [
+                1.2928932188134525,
+                2.7071067811865475,
+                0.0
+              ],
+              [
+                1.1339745962155612,
+                2.5,
+                0.0
+              ],
+              [
+                1.0340741737109318,
+                2.258819045102521,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                0.0
+              ],
+              [
+                1.0340741737109318,
+                1.7411809548974793,
+                0.0
+              ],
+              [
+                1.1339745962155612,
+                1.5000000000000002,
+                0.0
+              ],
+              [
+                1.292893218813452,
+                1.292893218813453,
+                0.0
+              ],
+              [
+                1.4999999999999996,
+                1.1339745962155616,
+                0.0
+              ],
+              [
+                1.7411809548974793,
+                1.0340741737109318,
+                0.0
+              ],
+              [
+                1.9999999999999998,
+                1.0,
+                0.0
+              ],
+              [
+                2.2588190451025203,
+                1.0340741737109316,
+                0.0
+              ],
+              [
+                2.5,
+                1.1339745962155614,
+                0.0
+              ],
+              [
+                2.7071067811865475,
+                1.2928932188134523,
+                0.0
+              ],
+              [
+                2.8660254037844384,
+                1.4999999999999996,
+                0.0
+              ],
+              [
+                2.965925826289068,
+                1.7411809548974784,
+                0.0
+              ],
+              [
+                3.0,
+                1.9999999999999998,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 3,
+            "sourceGeometryIndex": 2,
+            "sourceGeometryKind": "Circle",
+            "sourceStableSubname": "g3",
+            "stableSubname": "g3"
+          },
+          {
+            "id": "Sketch:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 1,
+            "sourceGeometryIndex": 0,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1"
+          },
+          {
+            "id": "Sketch:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                3.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.965925826289068,
+                2.2588190451025207,
+                0.0
+              ],
+              [
+                2.866025403784439,
+                2.5,
+                0.0
+              ],
+              [
+                2.7071067811865475,
+                2.7071067811865475,
+                0.0
+              ],
+              [
+                2.5,
+                2.8660254037844384,
+                0.0
+              ],
+              [
+                2.2588190451025207,
+                2.965925826289068,
+                0.0
+              ],
+              [
+                2.0,
+                3.0,
+                0.0
+              ],
+              [
+                1.7411809548974793,
+                2.965925826289068,
+                0.0
+              ],
+              [
+                1.5000000000000002,
+                2.866025403784439,
+                0.0
+              ],
+              [
+                1.2928932188134525,
+                2.7071067811865475,
+                0.0
+              ],
+              [
+                1.1339745962155612,
+                2.5,
+                0.0
+              ],
+              [
+                1.0340741737109318,
+                2.258819045102521,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                0.0
+              ],
+              [
+                1.0340741737109318,
+                1.7411809548974793,
+                0.0
+              ],
+              [
+                1.1339745962155612,
+                1.5000000000000002,
+                0.0
+              ],
+              [
+                1.292893218813452,
+                1.292893218813453,
+                0.0
+              ],
+              [
+                1.4999999999999996,
+                1.1339745962155616,
+                0.0
+              ],
+              [
+                1.7411809548974793,
+                1.0340741737109318,
+                0.0
+              ],
+              [
+                1.9999999999999998,
+                1.0,
+                0.0
+              ],
+              [
+                2.2588190451025203,
+                1.0340741737109316,
+                0.0
+              ],
+              [
+                2.5,
+                1.1339745962155614,
+                0.0
+              ],
+              [
+                2.7071067811865475,
+                1.2928932188134523,
+                0.0
+              ],
+              [
+                2.8660254037844384,
+                1.4999999999999996,
+                0.0
+              ],
+              [
+                2.965925826289068,
+                1.7411809548974784,
+                0.0
+              ],
+              [
+                3.0,
+                1.9999999999999998,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 3,
+            "sourceGeometryIndex": 2,
+            "sourceGeometryKind": "Circle",
+            "sourceStableSubname": "g3",
+            "stableSubname": "g3"
+          }
+        ],
+        "faceIds": [
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1",
+          "Sketch:InternalFace1"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          0,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          6,
+          5,
+          9,
+          10,
+          11,
+          9,
+          11,
+          0,
+          12,
+          8,
+          13,
+          12,
+          6,
+          8,
+          14,
+          15,
+          9,
+          14,
+          4,
+          16,
+          14,
+          16,
+          17,
+          14,
+          17,
+          18,
+          14,
+          18,
+          19,
+          14,
+          19,
+          20,
+          14,
+          20,
+          21,
+          14,
+          21,
+          22,
+          14,
+          22,
+          23,
+          14,
+          23,
+          24,
+          14,
+          24,
+          25,
+          14,
+          25,
+          6,
+          14,
+          0,
+          4,
+          14,
+          6,
+          12,
+          14,
+          9,
+          0
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Sketch:InternalVertex1",
+            "indexed": "InternalVertex1",
+            "point": [
+              3.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              4.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              3.0,
+              2.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            1.6453951129574644,
+            2.935016242685415,
+            0.0
+          ],
+          [
+            1.4319352532688443,
+            2.8229838658936566,
+            0.0
+          ],
+          [
+            1.2514892518288991,
+            2.6631226582407956,
+            0.0
+          ],
+          [
+            1.1145439743467904,
+            2.4647231720437692,
+            0.0
+          ],
+          [
+            1.0290581825739482,
+            2.2393156642875587,
+            0.0
+          ],
+          [
+            2.970941817426051,
+            1.7606843357124387,
+            0.0
+          ],
+          [
+            2.748510748171099,
+            1.3368773417592024,
+            0.0
+          ],
+          [
+            2.8854560256532085,
+            1.5352768279562286,
+            0.0
+          ],
+          [
+            3.0,
+            2.0,
+            0.0
+          ],
+          [
+            2.3546048870425356,
+            2.935016242685415,
+            0.0
+          ],
+          [
+            2.120536680255323,
+            2.992708874098054,
+            0.0
+          ],
+          [
+            1.879463319744677,
+            2.992708874098054,
+            0.0
+          ],
+          [
+            2.88545602565321,
+            2.4647231720437683,
+            0.0
+          ],
+          [
+            2.970941817426052,
+            2.239315664287558,
+            0.0
+          ],
+          [
+            2.748510748171101,
+            2.663122658240795,
+            0.0
+          ],
+          [
+            2.5680647467311557,
+            2.822983865893656,
+            0.0
+          ],
+          [
+            1.0,
+            2.000000000000001,
+            0.0
+          ],
+          [
+            1.0290581825739475,
+            1.7606843357124435,
+            0.0
+          ],
+          [
+            1.1145439743467893,
+            1.5352768279562328,
+            0.0
+          ],
+          [
+            1.2514892518288978,
+            1.3368773417592061,
+            0.0
+          ],
+          [
+            1.4319352532688425,
+            1.1770161341063448,
+            0.0
+          ],
+          [
+            1.6453951129574624,
+            1.064983757314586,
+            0.0
+          ],
+          [
+            1.8794633197446746,
+            1.0072911259019461,
+            0.0
+          ],
+          [
+            2.1205366802553205,
+            1.0072911259019457,
+            0.0
+          ],
+          [
+            2.354604887042533,
+            1.0649837573145842,
+            0.0
+          ],
+          [
+            2.5680647467311535,
+            1.177016134106342,
+            0.0
+          ]
+        ]
+      },
+      "object": "Sketch",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "sourceGeometryId": 1,
+          "sourceGeometryIndex": 0,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g1",
+          "stableSubname": "g1",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "sourceGeometryId": 3,
+          "sourceGeometryIndex": 2,
+          "sourceGeometryKind": "Circle",
+          "sourceStableSubname": "g3",
+          "stableSubname": "g3",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalEdge1",
+          "identityStatus": "stable",
+          "indexed": "InternalEdge1",
+          "kind": "Edge",
+          "sourceGeometryId": 3,
+          "sourceGeometryIndex": 2,
+          "sourceGeometryKind": "Circle",
+          "sourceStableSubname": "g3",
+          "stableSubname": "g3",
+          "subname": "InternalEdge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalFace1",
+          "identityStatus": "stable",
+          "indexed": "InternalFace1",
+          "kind": "Face",
+          "stableSubname": "g3;SKT;FAC",
+          "subname": "InternalFace1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:InternalVertex1",
+          "identityStatus": "stable",
+          "indexed": "InternalVertex1",
+          "kind": "Vertex",
+          "stableSubname": "Vertex3",
+          "subname": "InternalVertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        }
+      ]
+    }
+  ]
+}

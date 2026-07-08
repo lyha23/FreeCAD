@@ -1,0 +1,103 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object NoSuchPath",
+      "object": "InvalidSpineTarget",
+      "property": "Spine",
+      "severity": "error",
+      "stage": "graph",
+      "target": "NoSuchPath"
+    },
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object NoSuchProfile",
+      "object": "InvalidSectionLink",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "graph",
+      "target": "NoSuchProfile"
+    },
+    {
+      "code": "missing_property",
+      "message": "No sections linked.",
+      "object": "EmptySections",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "missing_property",
+      "message": "No spine",
+      "object": "MissingSpine",
+      "property": "Spine",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "invalid_subshape",
+      "message": "Invalid spine",
+      "object": "InvalidSpineSubList",
+      "property": "Spine",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "PathWire"
+    },
+    {
+      "code": "execution_failed",
+      "message": "Spine shape cannot form a single wire",
+      "object": "DisconnectedSpine",
+      "property": "Spine",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "execution_failed",
+      "message": "Multi-wire PipeShell lanes require PartDesign cap/sewing flow",
+      "object": "NonProfileSection",
+      "property": "Spine",
+      "severity": "error",
+      "stage": "runtime"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "EmptySections",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "MissingSpine",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidSpineTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidSpineSubList",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DisconnectedSpine",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidSectionLink",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "NonProfileSection",
+      "subshapes": []
+    }
+  ]
+}

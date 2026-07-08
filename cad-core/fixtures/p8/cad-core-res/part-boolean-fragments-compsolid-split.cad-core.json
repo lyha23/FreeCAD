@@ -1,0 +1,3467 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Split:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.5,
+                2.0,
+                2.0
+              ],
+              [
+                1.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                1.0,
+                0.5,
+                2.0
+              ],
+              [
+                1.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.5,
+                0.5,
+                2.0
+              ],
+              [
+                1.0,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.5,
+                0.5,
+                2.0
+              ],
+              [
+                0.5,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.5,
+                2.0,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                1.0,
+                2.0,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge3"
+          },
+          {
+            "id": "Split:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.5,
+                2.0,
+                2.0
+              ],
+              [
+                0.5,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                1.0,
+                0.5,
+                0.0
+              ],
+              [
+                1.0,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "points": [
+              [
+                1.0,
+                0.5,
+                0.0
+              ],
+              [
+                1.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.5,
+                0.5,
+                0.0
+              ],
+              [
+                1.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.5,
+                0.5,
+                0.0
+              ],
+              [
+                0.5,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge1"
+          },
+          {
+            "id": "Split:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.5,
+                0.5,
+                0.0
+              ],
+              [
+                0.5,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge13",
+            "identityStatus": "current_only",
+            "indexed": "Edge13",
+            "points": [
+              [
+                0.5,
+                2.0,
+                2.0
+              ],
+              [
+                0.5,
+                2.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                0.5,
+                2.5,
+                0.0
+              ],
+              [
+                0.5,
+                2.5,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge3"
+          },
+          {
+            "id": "Split:Edge15",
+            "identityStatus": "current_only",
+            "indexed": "Edge15",
+            "points": [
+              [
+                0.5,
+                2.0,
+                0.0
+              ],
+              [
+                0.5,
+                2.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                0.5,
+                2.5,
+                2.0
+              ],
+              [
+                2.5,
+                2.5,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge12"
+          },
+          {
+            "id": "Split:Edge17",
+            "identityStatus": "current_only",
+            "indexed": "Edge17",
+            "points": [
+              [
+                2.5,
+                2.0,
+                2.0
+              ],
+              [
+                2.5,
+                2.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge18",
+            "identityStatus": "current_only",
+            "indexed": "Edge18",
+            "points": [
+              [
+                2.0,
+                2.0,
+                2.0
+              ],
+              [
+                2.5,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                1.0,
+                2.0,
+                2.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge20"
+          },
+          {
+            "id": "Split:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                0.5,
+                2.5,
+                0.0
+              ],
+              [
+                2.5,
+                2.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge11"
+          },
+          {
+            "id": "Split:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                2.5,
+                2.5,
+                0.0
+              ],
+              [
+                2.5,
+                2.5,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge7"
+          },
+          {
+            "id": "Split:Edge22",
+            "identityStatus": "current_only",
+            "indexed": "Edge22",
+            "points": [
+              [
+                2.5,
+                2.0,
+                0.0
+              ],
+              [
+                2.5,
+                2.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge23",
+            "identityStatus": "current_only",
+            "indexed": "Edge23",
+            "points": [
+              [
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.5,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                1.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge16"
+          },
+          {
+            "id": "Split:Edge25",
+            "identityStatus": "stable",
+            "indexed": "Edge25",
+            "points": [
+              [
+                2.0,
+                2.0,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge7"
+          },
+          {
+            "id": "Split:Edge26",
+            "identityStatus": "current_only",
+            "indexed": "Edge26",
+            "points": [
+              [
+                2.5,
+                2.0,
+                2.0
+              ],
+              [
+                2.5,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge27",
+            "identityStatus": "current_only",
+            "indexed": "Edge27",
+            "points": [
+              [
+                2.0,
+                0.5,
+                0.0
+              ],
+              [
+                2.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge28",
+            "identityStatus": "current_only",
+            "indexed": "Edge28",
+            "points": [
+              [
+                1.0,
+                0.5,
+                0.0
+              ],
+              [
+                2.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge29",
+            "identityStatus": "current_only",
+            "indexed": "Edge29",
+            "points": [
+              [
+                2.0,
+                0.5,
+                0.0
+              ],
+              [
+                2.0,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge30",
+            "identityStatus": "current_only",
+            "indexed": "Edge30",
+            "points": [
+              [
+                2.0,
+                0.5,
+                2.0
+              ],
+              [
+                2.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge31",
+            "identityStatus": "current_only",
+            "indexed": "Edge31",
+            "points": [
+              [
+                1.0,
+                0.5,
+                2.0
+              ],
+              [
+                2.0,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge32",
+            "identityStatus": "current_only",
+            "indexed": "Edge32",
+            "points": [
+              [
+                2.5,
+                0.5,
+                0.0
+              ],
+              [
+                2.5,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge33",
+            "identityStatus": "current_only",
+            "indexed": "Edge33",
+            "points": [
+              [
+                2.0,
+                0.5,
+                0.0
+              ],
+              [
+                2.5,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge34",
+            "identityStatus": "stable",
+            "indexed": "Edge34",
+            "points": [
+              [
+                2.5,
+                0.5,
+                0.0
+              ],
+              [
+                2.5,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxC.Edge5"
+          },
+          {
+            "id": "Split:Edge35",
+            "identityStatus": "current_only",
+            "indexed": "Edge35",
+            "points": [
+              [
+                2.5,
+                0.5,
+                2.0
+              ],
+              [
+                2.5,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge36",
+            "identityStatus": "current_only",
+            "indexed": "Edge36",
+            "points": [
+              [
+                2.0,
+                0.5,
+                2.0
+              ],
+              [
+                2.5,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge37",
+            "identityStatus": "stable",
+            "indexed": "Edge37",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge1"
+          },
+          {
+            "id": "Split:Edge38",
+            "identityStatus": "stable",
+            "indexed": "Edge38",
+            "points": [
+              [
+                0.0,
+                0.0,
+                2.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge2"
+          },
+          {
+            "id": "Split:Edge39",
+            "identityStatus": "stable",
+            "indexed": "Edge39",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge3"
+          },
+          {
+            "id": "Split:Edge40",
+            "identityStatus": "stable",
+            "indexed": "Edge40",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge4"
+          },
+          {
+            "id": "Split:Edge41",
+            "identityStatus": "stable",
+            "indexed": "Edge41",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge5"
+          },
+          {
+            "id": "Split:Edge42",
+            "identityStatus": "stable",
+            "indexed": "Edge42",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge1"
+          },
+          {
+            "id": "Split:Edge43",
+            "identityStatus": "stable",
+            "indexed": "Edge43",
+            "points": [
+              [
+                0.0,
+                0.0,
+                2.0
+              ],
+              [
+                1.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge7"
+          },
+          {
+            "id": "Split:Edge44",
+            "identityStatus": "current_only",
+            "indexed": "Edge44",
+            "points": [
+              [
+                0.0,
+                2.0,
+                2.0
+              ],
+              [
+                0.5,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge45",
+            "identityStatus": "current_only",
+            "indexed": "Edge45",
+            "points": [
+              [
+                1.0,
+                0.0,
+                2.0
+              ],
+              [
+                1.0,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge46",
+            "identityStatus": "current_only",
+            "indexed": "Edge46",
+            "points": [
+              [
+                0.0,
+                2.0,
+                0.0
+              ],
+              [
+                0.5,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge47",
+            "identityStatus": "current_only",
+            "indexed": "Edge47",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge48",
+            "identityStatus": "stable",
+            "indexed": "Edge48",
+            "points": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge13"
+          },
+          {
+            "id": "Split:Edge49",
+            "identityStatus": "stable",
+            "indexed": "Edge49",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxA.Edge5"
+          },
+          {
+            "id": "Split:Edge50",
+            "identityStatus": "stable",
+            "indexed": "Edge50",
+            "points": [
+              [
+                1.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge15"
+          },
+          {
+            "id": "Split:Edge51",
+            "identityStatus": "current_only",
+            "indexed": "Edge51",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge52",
+            "identityStatus": "current_only",
+            "indexed": "Edge52",
+            "points": [
+              [
+                2.0,
+                0.0,
+                2.0
+              ],
+              [
+                2.0,
+                0.5,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge53",
+            "identityStatus": "stable",
+            "indexed": "Edge53",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge21"
+          },
+          {
+            "id": "Split:Edge54",
+            "identityStatus": "stable",
+            "indexed": "Edge54",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge5"
+          },
+          {
+            "id": "Split:Edge55",
+            "identityStatus": "stable",
+            "indexed": "Edge55",
+            "points": [
+              [
+                2.0,
+                0.0,
+                2.0
+              ],
+              [
+                3.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "Comp.Edge23"
+          },
+          {
+            "id": "Split:Edge56",
+            "identityStatus": "current_only",
+            "indexed": "Edge56",
+            "points": [
+              [
+                2.5,
+                2.0,
+                0.0
+              ],
+              [
+                3.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Split:Edge57",
+            "identityStatus": "stable",
+            "indexed": "Edge57",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge8"
+          },
+          {
+            "id": "Split:Edge58",
+            "identityStatus": "stable",
+            "indexed": "Edge58",
+            "points": [
+              [
+                3.0,
+                0.0,
+                2.0
+              ],
+              [
+                3.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge6"
+          },
+          {
+            "id": "Split:Edge59",
+            "identityStatus": "stable",
+            "indexed": "Edge59",
+            "points": [
+              [
+                3.0,
+                2.0,
+                0.0
+              ],
+              [
+                3.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "BoxB.Edge7"
+          },
+          {
+            "id": "Split:Edge60",
+            "identityStatus": "current_only",
+            "indexed": "Edge60",
+            "points": [
+              [
+                2.5,
+                2.0,
+                2.0
+              ],
+              [
+                3.0,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "Split:Face1",
+          "Split:Face1",
+          "Split:Face2",
+          "Split:Face2",
+          "Split:Face3",
+          "Split:Face3",
+          "Split:Face4",
+          "Split:Face4",
+          "Split:Face5",
+          "Split:Face5",
+          "Split:Face6",
+          "Split:Face6",
+          "Split:Face7",
+          "Split:Face7",
+          "Split:Face8",
+          "Split:Face8",
+          "Split:Face9",
+          "Split:Face9",
+          "Split:Face9",
+          "Split:Face9",
+          "Split:Face10",
+          "Split:Face10",
+          "Split:Face11",
+          "Split:Face11",
+          "Split:Face11",
+          "Split:Face11",
+          "Split:Face12",
+          "Split:Face12",
+          "Split:Face13",
+          "Split:Face13",
+          "Split:Face14",
+          "Split:Face14",
+          "Split:Face15",
+          "Split:Face15",
+          "Split:Face16",
+          "Split:Face16",
+          "Split:Face17",
+          "Split:Face17",
+          "Split:Face18",
+          "Split:Face18",
+          "Split:Face19",
+          "Split:Face19",
+          "Split:Face20",
+          "Split:Face20",
+          "Split:Face21",
+          "Split:Face21",
+          "Split:Face22",
+          "Split:Face22",
+          "Split:Face23",
+          "Split:Face23",
+          "Split:Face24",
+          "Split:Face24",
+          "Split:Face25",
+          "Split:Face25",
+          "Split:Face26",
+          "Split:Face26",
+          "Split:Face27",
+          "Split:Face27",
+          "Split:Face28",
+          "Split:Face28",
+          "Split:Face29",
+          "Split:Face29",
+          "Split:Face29",
+          "Split:Face29",
+          "Split:Face30",
+          "Split:Face30",
+          "Split:Face31",
+          "Split:Face31",
+          "Split:Face31",
+          "Split:Face31",
+          "Split:Face32",
+          "Split:Face32",
+          "Split:Face33",
+          "Split:Face33",
+          "Split:Face34",
+          "Split:Face34",
+          "Split:Face35",
+          "Split:Face35",
+          "Split:Face36",
+          "Split:Face36",
+          "Split:Face37",
+          "Split:Face37",
+          "Split:Face38",
+          "Split:Face38",
+          "Split:Face39",
+          "Split:Face39",
+          "Split:Face40",
+          "Split:Face40",
+          "Split:Face41",
+          "Split:Face41",
+          "Split:Face42",
+          "Split:Face42",
+          "Split:Face43",
+          "Split:Face43",
+          "Split:Face44",
+          "Split:Face44",
+          "Split:Face45",
+          "Split:Face45",
+          "Split:Face46",
+          "Split:Face46",
+          "Split:Face47",
+          "Split:Face47",
+          "Split:Face48",
+          "Split:Face48",
+          "Split:Face49",
+          "Split:Face49",
+          "Split:Face50",
+          "Split:Face50",
+          "Split:Face51",
+          "Split:Face51",
+          "Split:Face52",
+          "Split:Face52",
+          "Split:Face53",
+          "Split:Face53",
+          "Split:Face54",
+          "Split:Face54",
+          "Split:Face54",
+          "Split:Face54",
+          "Split:Face55",
+          "Split:Face55",
+          "Split:Face56",
+          "Split:Face56",
+          "Split:Face56",
+          "Split:Face56",
+          "Split:Face57",
+          "Split:Face57",
+          "Split:Face58",
+          "Split:Face58",
+          "Split:Face59",
+          "Split:Face59",
+          "Split:Face60",
+          "Split:Face60",
+          "Split:Face61",
+          "Split:Face61",
+          "Split:Face62",
+          "Split:Face62",
+          "Split:Face63",
+          "Split:Face63",
+          "Split:Face64",
+          "Split:Face64",
+          "Split:Face65",
+          "Split:Face65",
+          "Split:Face66",
+          "Split:Face66"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          0,
+          4,
+          5,
+          0,
+          5,
+          1,
+          3,
+          6,
+          4,
+          3,
+          4,
+          0,
+          6,
+          3,
+          7,
+          7,
+          3,
+          2,
+          7,
+          2,
+          5,
+          5,
+          2,
+          1,
+          5,
+          4,
+          7,
+          7,
+          4,
+          6,
+          5,
+          1,
+          8,
+          8,
+          1,
+          9,
+          4,
+          0,
+          5,
+          5,
+          0,
+          1,
+          0,
+          9,
+          1,
+          10,
+          0,
+          11,
+          10,
+          11,
+          12,
+          10,
+          9,
+          0,
+          10,
+          13,
+          8,
+          10,
+          8,
+          9,
+          8,
+          4,
+          5,
+          4,
+          13,
+          14,
+          14,
+          13,
+          15,
+          8,
+          13,
+          4,
+          14,
+          11,
+          4,
+          4,
+          11,
+          0,
+          12,
+          15,
+          13,
+          12,
+          13,
+          10,
+          15,
+          12,
+          14,
+          14,
+          12,
+          11,
+          4,
+          14,
+          6,
+          6,
+          14,
+          16,
+          11,
+          14,
+          4,
+          11,
+          4,
+          0,
+          17,
+          16,
+          14,
+          17,
+          14,
+          11,
+          16,
+          17,
+          6,
+          6,
+          17,
+          3,
+          6,
+          3,
+          4,
+          4,
+          3,
+          0,
+          11,
+          0,
+          3,
+          11,
+          3,
+          17,
+          14,
+          15,
+          16,
+          16,
+          15,
+          18,
+          16,
+          17,
+          14,
+          14,
+          17,
+          11,
+          12,
+          15,
+          14,
+          12,
+          14,
+          11,
+          19,
+          18,
+          15,
+          19,
+          15,
+          12,
+          18,
+          19,
+          16,
+          16,
+          19,
+          17,
+          12,
+          11,
+          17,
+          12,
+          17,
+          19,
+          20,
+          21,
+          22,
+          22,
+          21,
+          23,
+          24,
+          25,
+          20,
+          20,
+          25,
+          21,
+          25,
+          2,
+          21,
+          3,
+          2,
+          25,
+          23,
+          21,
+          2,
+          1,
+          23,
+          2,
+          1,
+          5,
+          22,
+          1,
+          22,
+          23,
+          7,
+          24,
+          20,
+          7,
+          6,
+          24,
+          20,
+          22,
+          7,
+          22,
+          5,
+          7,
+          25,
+          24,
+          6,
+          25,
+          6,
+          3,
+          2,
+          7,
+          5,
+          2,
+          5,
+          1,
+          3,
+          6,
+          7,
+          3,
+          7,
+          2,
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          0,
+          4,
+          5,
+          0,
+          5,
+          1,
+          3,
+          6,
+          4,
+          3,
+          4,
+          0,
+          6,
+          3,
+          7,
+          7,
+          3,
+          2,
+          7,
+          2,
+          5,
+          5,
+          2,
+          1,
+          5,
+          4,
+          7,
+          7,
+          4,
+          6,
+          26,
+          27,
+          24,
+          24,
+          27,
+          25,
+          6,
+          16,
+          24,
+          24,
+          16,
+          26,
+          27,
+          26,
+          16,
+          27,
+          16,
+          17,
+          17,
+          3,
+          25,
+          17,
+          25,
+          27,
+          24,
+          25,
+          6,
+          6,
+          25,
+          3,
+          17,
+          16,
+          6,
+          17,
+          6,
+          3,
+          4,
+          14,
+          6,
+          6,
+          14,
+          16,
+          11,
+          14,
+          4,
+          11,
+          4,
+          0,
+          17,
+          16,
+          14,
+          17,
+          14,
+          11,
+          16,
+          17,
+          6,
+          6,
+          17,
+          3,
+          6,
+          3,
+          4,
+          4,
+          3,
+          0,
+          11,
+          0,
+          3,
+          11,
+          3,
+          17,
+          28,
+          29,
+          26,
+          26,
+          29,
+          27,
+          16,
+          18,
+          26,
+          18,
+          28,
+          26,
+          15,
+          30,
+          18,
+          18,
+          30,
+          28,
+          29,
+          28,
+          30,
+          29,
+          30,
+          31,
+          19,
+          17,
+          27,
+          29,
+          19,
+          27,
+          31,
+          12,
+          19,
+          31,
+          19,
+          29,
+          26,
+          27,
+          16,
+          16,
+          27,
+          17,
+          19,
+          18,
+          16,
+          19,
+          16,
+          17,
+          18,
+          19,
+          15,
+          15,
+          19,
+          12,
+          31,
+          30,
+          15,
+          31,
+          15,
+          12,
+          14,
+          15,
+          16,
+          16,
+          15,
+          18,
+          16,
+          17,
+          14,
+          14,
+          17,
+          11,
+          12,
+          15,
+          14,
+          12,
+          14,
+          11,
+          19,
+          18,
+          15,
+          19,
+          15,
+          12,
+          18,
+          19,
+          16,
+          16,
+          19,
+          17,
+          12,
+          11,
+          17,
+          12,
+          17,
+          19
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Split:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.5,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              1.0,
+              0.5,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.5,
+              0.5,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              0.5,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              1.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              1.0,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              0.5,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              0.5,
+              2.5,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              0.5,
+              2.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              2.5,
+              2.5,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              2.5,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              2.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              2.5,
+              2.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              2.5,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              2.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              2.0,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              2.0,
+              0.5,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              2.5,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              2.5,
+              0.5,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex21",
+            "indexed": "Vertex21",
+            "point": [
+              0.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex22",
+            "indexed": "Vertex22",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex23",
+            "indexed": "Vertex23",
+            "point": [
+              0.0,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex24",
+            "indexed": "Vertex24",
+            "point": [
+              0.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex25",
+            "indexed": "Vertex25",
+            "point": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex26",
+            "indexed": "Vertex26",
+            "point": [
+              1.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex27",
+            "indexed": "Vertex27",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex28",
+            "indexed": "Vertex28",
+            "point": [
+              2.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex29",
+            "indexed": "Vertex29",
+            "point": [
+              3.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex30",
+            "indexed": "Vertex30",
+            "point": [
+              3.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "Split:Vertex31",
+            "indexed": "Vertex31",
+            "point": [
+              3.0,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Split:Vertex32",
+            "indexed": "Vertex32",
+            "point": [
+              3.0,
+              2.0,
+              2.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            1.0,
+            2.0,
+            2.0
+          ],
+          [
+            0.5,
+            2.0,
+            2.0
+          ],
+          [
+            0.5,
+            0.5,
+            2.0
+          ],
+          [
+            1.0,
+            0.5,
+            2.0
+          ],
+          [
+            1.0,
+            2.0,
+            0.0
+          ],
+          [
+            0.5,
+            2.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.5,
+            0.0
+          ],
+          [
+            0.5,
+            0.5,
+            0.0
+          ],
+          [
+            0.5,
+            2.5,
+            0.0
+          ],
+          [
+            0.5,
+            2.5,
+            2.0
+          ],
+          [
+            2.5,
+            2.5,
+            2.0
+          ],
+          [
+            2.0,
+            2.0,
+            2.0
+          ],
+          [
+            2.5,
+            2.0,
+            2.0
+          ],
+          [
+            2.5,
+            2.5,
+            0.0
+          ],
+          [
+            2.0,
+            2.0,
+            0.0
+          ],
+          [
+            2.5,
+            2.0,
+            0.0
+          ],
+          [
+            2.0,
+            0.5,
+            0.0
+          ],
+          [
+            2.0,
+            0.5,
+            2.0
+          ],
+          [
+            2.5,
+            0.5,
+            0.0
+          ],
+          [
+            2.5,
+            0.5,
+            2.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            2.0
+          ],
+          [
+            0.0,
+            2.0,
+            0.0
+          ],
+          [
+            0.0,
+            2.0,
+            2.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            2.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            0.0,
+            2.0
+          ],
+          [
+            3.0,
+            0.0,
+            0.0
+          ],
+          [
+            3.0,
+            0.0,
+            2.0
+          ],
+          [
+            3.0,
+            2.0,
+            0.0
+          ],
+          [
+            3.0,
+            2.0,
+            2.0
+          ]
+        ]
+      },
+      "object": "Split",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Edge11",
+          "id": "Split:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge1",
+          "subname": "BoxC.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge13",
+          "identityStatus": "current_only",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Edge14",
+          "id": "Split:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge3",
+          "subname": "BoxC.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge15",
+          "identityStatus": "current_only",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Edge16",
+          "id": "Split:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge12",
+          "subname": "BoxC.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge17",
+          "identityStatus": "current_only",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge18",
+          "identityStatus": "current_only",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge19",
+          "id": "Split:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge20",
+          "subname": "Comp.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Edge20",
+          "id": "Split:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge11",
+          "subname": "BoxC.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Edge21",
+          "id": "Split:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge7",
+          "subname": "BoxC.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge22",
+          "identityStatus": "current_only",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge23",
+          "identityStatus": "current_only",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge24",
+          "id": "Split:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge16",
+          "subname": "Comp.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Edge25",
+          "id": "Split:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge7",
+          "subname": "BoxA.Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge26",
+          "identityStatus": "current_only",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge27",
+          "identityStatus": "current_only",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge28",
+          "identityStatus": "current_only",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge29",
+          "identityStatus": "current_only",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge30",
+          "identityStatus": "current_only",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge31",
+          "identityStatus": "current_only",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge32",
+          "identityStatus": "current_only",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge33",
+          "identityStatus": "current_only",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Edge34",
+          "id": "Split:Edge34",
+          "identityStatus": "stable",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "stableSubname": "BoxC.Edge5",
+          "subname": "BoxC.Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge35",
+          "identityStatus": "current_only",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge36",
+          "identityStatus": "current_only",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Edge37",
+          "id": "Split:Edge37",
+          "identityStatus": "stable",
+          "indexed": "Edge37",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge1",
+          "subname": "BoxA.Edge37"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Edge38",
+          "id": "Split:Edge38",
+          "identityStatus": "stable",
+          "indexed": "Edge38",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge2",
+          "subname": "BoxA.Edge38"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Edge39",
+          "id": "Split:Edge39",
+          "identityStatus": "stable",
+          "indexed": "Edge39",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge3",
+          "subname": "BoxA.Edge39"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Edge40",
+          "id": "Split:Edge40",
+          "identityStatus": "stable",
+          "indexed": "Edge40",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge4",
+          "subname": "BoxA.Edge40"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge41",
+          "id": "Split:Edge41",
+          "identityStatus": "stable",
+          "indexed": "Edge41",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge5",
+          "subname": "Comp.Edge41"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Edge42",
+          "id": "Split:Edge42",
+          "identityStatus": "stable",
+          "indexed": "Edge42",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge1",
+          "subname": "BoxB.Edge42"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge43",
+          "id": "Split:Edge43",
+          "identityStatus": "stable",
+          "indexed": "Edge43",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge7",
+          "subname": "Comp.Edge43"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge44",
+          "identityStatus": "current_only",
+          "indexed": "Edge44",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge44"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge45",
+          "identityStatus": "current_only",
+          "indexed": "Edge45",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge45"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge46",
+          "identityStatus": "current_only",
+          "indexed": "Edge46",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge46"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge47",
+          "identityStatus": "current_only",
+          "indexed": "Edge47",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge47"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge48",
+          "id": "Split:Edge48",
+          "identityStatus": "stable",
+          "indexed": "Edge48",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge13",
+          "subname": "Comp.Edge48"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Edge49",
+          "id": "Split:Edge49",
+          "identityStatus": "stable",
+          "indexed": "Edge49",
+          "kind": "Edge",
+          "stableSubname": "BoxA.Edge5",
+          "subname": "BoxA.Edge49"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge50",
+          "id": "Split:Edge50",
+          "identityStatus": "stable",
+          "indexed": "Edge50",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge15",
+          "subname": "Comp.Edge50"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge51",
+          "identityStatus": "current_only",
+          "indexed": "Edge51",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge51"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge52",
+          "identityStatus": "current_only",
+          "indexed": "Edge52",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge52"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge53",
+          "id": "Split:Edge53",
+          "identityStatus": "stable",
+          "indexed": "Edge53",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge21",
+          "subname": "Comp.Edge53"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Edge54",
+          "id": "Split:Edge54",
+          "identityStatus": "stable",
+          "indexed": "Edge54",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge5",
+          "subname": "BoxB.Edge54"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Edge55",
+          "id": "Split:Edge55",
+          "identityStatus": "stable",
+          "indexed": "Edge55",
+          "kind": "Edge",
+          "stableSubname": "Comp.Edge23",
+          "subname": "Comp.Edge55"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge56",
+          "identityStatus": "current_only",
+          "indexed": "Edge56",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge56"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Edge57",
+          "id": "Split:Edge57",
+          "identityStatus": "stable",
+          "indexed": "Edge57",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge8",
+          "subname": "BoxB.Edge57"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Edge58",
+          "id": "Split:Edge58",
+          "identityStatus": "stable",
+          "indexed": "Edge58",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge6",
+          "subname": "BoxB.Edge58"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Edge59",
+          "id": "Split:Edge59",
+          "identityStatus": "stable",
+          "indexed": "Edge59",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge7",
+          "subname": "BoxB.Edge59"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Edge6",
+          "id": "Split:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "BoxB.Edge3",
+          "subname": "BoxB.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge60",
+          "identityStatus": "current_only",
+          "indexed": "Edge60",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge60"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face10",
+          "identityStatus": "current_only",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Face11",
+          "id": "Split:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "Comp.Face11",
+          "subname": "Comp.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face12",
+          "identityStatus": "current_only",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face13",
+          "identityStatus": "current_only",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face14",
+          "identityStatus": "current_only",
+          "indexed": "Face14",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face15",
+          "identityStatus": "current_only",
+          "indexed": "Face15",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face16",
+          "identityStatus": "current_only",
+          "indexed": "Face16",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face17",
+          "identityStatus": "current_only",
+          "indexed": "Face17",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face18",
+          "identityStatus": "current_only",
+          "indexed": "Face18",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face19",
+          "identityStatus": "current_only",
+          "indexed": "Face19",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face20",
+          "identityStatus": "current_only",
+          "indexed": "Face20",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face21",
+          "identityStatus": "current_only",
+          "indexed": "Face21",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Face22",
+          "id": "Split:Face22",
+          "identityStatus": "stable",
+          "indexed": "Face22",
+          "kind": "Face",
+          "stableSubname": "BoxA.Face1",
+          "subname": "BoxA.Face22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Face23",
+          "id": "Split:Face23",
+          "identityStatus": "stable",
+          "indexed": "Face23",
+          "kind": "Face",
+          "stableSubname": "Comp.Face2",
+          "subname": "Comp.Face23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face24",
+          "identityStatus": "current_only",
+          "indexed": "Face24",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face25",
+          "identityStatus": "current_only",
+          "indexed": "Face25",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face26",
+          "identityStatus": "current_only",
+          "indexed": "Face26",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face27",
+          "identityStatus": "current_only",
+          "indexed": "Face27",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Face28",
+          "id": "Split:Face28",
+          "identityStatus": "stable",
+          "indexed": "Face28",
+          "kind": "Face",
+          "stableSubname": "Comp.Face7",
+          "subname": "Comp.Face28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face29",
+          "identityStatus": "current_only",
+          "indexed": "Face29",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face30",
+          "identityStatus": "current_only",
+          "indexed": "Face30",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face31",
+          "identityStatus": "current_only",
+          "indexed": "Face31",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.Comp.Face32",
+          "id": "Split:Face32",
+          "identityStatus": "stable",
+          "indexed": "Face32",
+          "kind": "Face",
+          "stableSubname": "Comp.Face12",
+          "subname": "Comp.Face32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face33",
+          "identityStatus": "current_only",
+          "indexed": "Face33",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Face34",
+          "id": "Split:Face34",
+          "identityStatus": "stable",
+          "indexed": "Face34",
+          "kind": "Face",
+          "stableSubname": "BoxB.Face2",
+          "subname": "BoxB.Face34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face35",
+          "identityStatus": "current_only",
+          "indexed": "Face35",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face36",
+          "identityStatus": "current_only",
+          "indexed": "Face36",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face7",
+          "identityStatus": "current_only",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Face8",
+          "identityStatus": "current_only",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Face9",
+          "id": "Split:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "BoxC.Face4",
+          "subname": "BoxC.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex10",
+          "id": "Split:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex4",
+          "subname": "BoxC.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex11",
+          "id": "Split:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex7",
+          "subname": "BoxC.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex12",
+          "identityStatus": "current_only",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex13",
+          "id": "Split:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex7",
+          "subname": "BoxA.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex14",
+          "id": "Split:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex8",
+          "subname": "BoxC.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex15",
+          "identityStatus": "current_only",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex16",
+          "id": "Split:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex8",
+          "subname": "BoxA.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex17",
+          "identityStatus": "current_only",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex18",
+          "identityStatus": "current_only",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex19",
+          "id": "Split:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex6",
+          "subname": "BoxC.Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex2",
+          "id": "Split:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex3",
+          "subname": "BoxB.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex20",
+          "id": "Split:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex5",
+          "subname": "BoxC.Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex21",
+          "id": "Split:Vertex21",
+          "identityStatus": "stable",
+          "indexed": "Vertex21",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex1",
+          "subname": "BoxA.Vertex21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex22",
+          "id": "Split:Vertex22",
+          "identityStatus": "stable",
+          "indexed": "Vertex22",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex2",
+          "subname": "BoxA.Vertex22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex23",
+          "id": "Split:Vertex23",
+          "identityStatus": "stable",
+          "indexed": "Vertex23",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex3",
+          "subname": "BoxA.Vertex23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex24",
+          "id": "Split:Vertex24",
+          "identityStatus": "stable",
+          "indexed": "Vertex24",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex4",
+          "subname": "BoxA.Vertex24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex25",
+          "id": "Split:Vertex25",
+          "identityStatus": "stable",
+          "indexed": "Vertex25",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex2",
+          "subname": "BoxB.Vertex25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex26",
+          "id": "Split:Vertex26",
+          "identityStatus": "stable",
+          "indexed": "Vertex26",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex1",
+          "subname": "BoxB.Vertex26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex27",
+          "id": "Split:Vertex27",
+          "identityStatus": "stable",
+          "indexed": "Vertex27",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex6",
+          "subname": "BoxA.Vertex27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxA.Vertex28",
+          "id": "Split:Vertex28",
+          "identityStatus": "stable",
+          "indexed": "Vertex28",
+          "kind": "Vertex",
+          "stableSubname": "BoxA.Vertex5",
+          "subname": "BoxA.Vertex28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex29",
+          "id": "Split:Vertex29",
+          "identityStatus": "stable",
+          "indexed": "Vertex29",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex6",
+          "subname": "BoxB.Vertex29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex30",
+          "id": "Split:Vertex30",
+          "identityStatus": "stable",
+          "indexed": "Vertex30",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex5",
+          "subname": "BoxB.Vertex30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex31",
+          "id": "Split:Vertex31",
+          "identityStatus": "stable",
+          "indexed": "Vertex31",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex8",
+          "subname": "BoxB.Vertex31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex32",
+          "id": "Split:Vertex32",
+          "identityStatus": "stable",
+          "indexed": "Vertex32",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex7",
+          "subname": "BoxB.Vertex32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex4",
+          "id": "Split:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex1",
+          "subname": "BoxC.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxB.Vertex6",
+          "id": "Split:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "BoxB.Vertex4",
+          "subname": "BoxB.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Split:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex8",
+          "id": "Split:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex2",
+          "subname": "BoxC.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Split.BoxC.Vertex9",
+          "id": "Split:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "BoxC.Vertex3",
+          "subname": "BoxC.Vertex9"
+        }
+      ]
+    }
+  ]
+}

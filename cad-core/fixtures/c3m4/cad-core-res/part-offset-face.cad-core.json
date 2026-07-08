@@ -1,0 +1,261 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Offset:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.2
+              ],
+              [
+                0.0,
+                3.0,
+                0.2
+              ]
+            ],
+            "stableSubname": "Plane.Edge1"
+          },
+          {
+            "id": "Offset:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.2
+              ],
+              [
+                4.0,
+                0.0,
+                0.2
+              ]
+            ],
+            "stableSubname": "Plane.Edge2"
+          },
+          {
+            "id": "Offset:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.2
+              ],
+              [
+                4.0,
+                3.0,
+                0.2
+              ]
+            ],
+            "stableSubname": "Plane.Edge3"
+          },
+          {
+            "id": "Offset:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                3.0,
+                0.2
+              ],
+              [
+                4.0,
+                3.0,
+                0.2
+              ]
+            ],
+            "stableSubname": "Plane.Edge4"
+          }
+        ],
+        "faceIds": [
+          "Offset:Face1",
+          "Offset:Face1"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Offset:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.2
+            ]
+          },
+          {
+            "id": "Offset:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              3.0,
+              0.2
+            ]
+          },
+          {
+            "id": "Offset:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              4.0,
+              0.0,
+              0.2
+            ]
+          },
+          {
+            "id": "Offset:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              4.0,
+              3.0,
+              0.2
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            4.0,
+            3.0,
+            0.2
+          ],
+          [
+            0.0,
+            3.0,
+            0.2
+          ],
+          [
+            0.0,
+            0.0,
+            0.2
+          ],
+          [
+            4.0,
+            0.0,
+            0.2
+          ]
+        ]
+      },
+      "object": "Offset",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Edge1",
+          "id": "Offset:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "Plane.Edge1",
+          "subname": "Plane.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Edge2",
+          "id": "Offset:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "Plane.Edge2",
+          "subname": "Plane.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Edge3",
+          "id": "Offset:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "Plane.Edge3",
+          "subname": "Plane.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Edge4",
+          "id": "Offset:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "Plane.Edge4",
+          "subname": "Plane.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Face1",
+          "id": "Offset:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "Plane.Face1",
+          "subname": "Plane.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Vertex1",
+          "id": "Offset:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "Plane.Vertex1",
+          "subname": "Plane.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Vertex2",
+          "id": "Offset:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "Plane.Vertex2",
+          "subname": "Plane.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Vertex3",
+          "id": "Offset:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "Plane.Vertex3",
+          "subname": "Plane.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Offset.Plane.Vertex4",
+          "id": "Offset:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "Plane.Vertex4",
+          "subname": "Plane.Vertex4"
+        }
+      ]
+    }
+  ]
+}

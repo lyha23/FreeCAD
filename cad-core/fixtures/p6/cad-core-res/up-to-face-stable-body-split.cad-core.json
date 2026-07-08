@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "execution_failed",
+      "message": "Up-to face must not intersect the sketch profile",
+      "object": "ProbePad",
+      "property": "UpToFace",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ProbePad",
+      "subshapes": []
+    }
+  ]
+}

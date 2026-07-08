@@ -1,0 +1,312 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "FilledFace:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.546046371670331e-16,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Profile.Edge1"
+          },
+          {
+            "id": "FilledFace:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                1.2246467991473532e-16,
+                2.0,
+                0.0
+              ],
+              [
+                -1.9999999999999998,
+                3.546046371670331e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "Profile.Edge2"
+          },
+          {
+            "id": "FilledFace:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                -2.0,
+                2.4492935982947064e-16,
+                0.0
+              ],
+              [
+                -3.5460463716703314e-16,
+                -2.0000000000000004,
+                0.0
+              ]
+            ],
+            "stableSubname": "Profile.Edge3"
+          },
+          {
+            "id": "FilledFace:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                -3.6739403974420594e-16,
+                -2.0,
+                0.0
+              ],
+              [
+                2.0,
+                -4.0586145430278105e-17,
+                0.0
+              ]
+            ],
+            "stableSubname": "Profile.Edge4"
+          }
+        ],
+        "faceIds": [
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1",
+          "FilledFace:Face1"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          2,
+          5,
+          4,
+          3,
+          2,
+          4,
+          0,
+          3,
+          6,
+          7,
+          1,
+          6,
+          5,
+          7,
+          6,
+          1,
+          0,
+          6,
+          4,
+          5,
+          6,
+          0,
+          4
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "FilledFace:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "FilledFace:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.2246467991473532e-16,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "FilledFace:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              -2.0,
+              2.4492935982947064e-16,
+              0.0
+            ]
+          },
+          {
+            "id": "FilledFace:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              -3.6739403974420594e-16,
+              -2.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            -1.1507966297069123e-14,
+            0.6666666666666023,
+            0.0
+          ],
+          [
+            1.2246467991473532e-16,
+            2.0,
+            0.0
+          ],
+          [
+            -2.0,
+            2.4492935982947064e-16,
+            0.0
+          ],
+          [
+            -0.6666666666666873,
+            -1.0338665950285125e-13,
+            0.0
+          ],
+          [
+            -1.5095332391486712e-14,
+            -0.6666666666667562,
+            0.0
+          ],
+          [
+            -3.6739403974420594e-16,
+            -2.0,
+            0.0
+          ],
+          [
+            0.6666666666666593,
+            -5.0121859524751655e-14,
+            0.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "object": "FilledFace",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Edge1",
+          "id": "FilledFace:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "Profile.Edge1",
+          "subname": "Profile.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Edge2",
+          "id": "FilledFace:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "Profile.Edge2",
+          "subname": "Profile.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Edge3",
+          "id": "FilledFace:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "Profile.Edge3",
+          "subname": "Profile.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Edge4",
+          "id": "FilledFace:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "Profile.Edge4",
+          "subname": "Profile.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "FilledFace:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Vertex1",
+          "id": "FilledFace:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "Profile.Vertex1",
+          "subname": "Profile.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Vertex2",
+          "id": "FilledFace:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "Profile.Vertex2",
+          "subname": "Profile.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Vertex3",
+          "id": "FilledFace:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "Profile.Vertex3",
+          "subname": "Profile.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "FilledFace.Profile.Vertex4",
+          "id": "FilledFace:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "Profile.Vertex4",
+          "subname": "Profile.Vertex4"
+        }
+      ]
+    }
+  ]
+}

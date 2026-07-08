@@ -1,0 +1,484 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ProjectedFaceWithHole:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                1.0,
+                3.5,
+                0.0
+              ],
+              [
+                1.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedFaceWithHole:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                5.0,
+                0.5,
+                0.0
+              ],
+              [
+                1.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedFaceWithHole:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                5.0,
+                3.5,
+                0.0
+              ],
+              [
+                5.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedFaceWithHole:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                5.0,
+                3.5,
+                0.0
+              ],
+              [
+                1.0,
+                3.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedFaceWithHole:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                2.25,
+                1.5,
+                0.0
+              ],
+              [
+                3.25,
+                1.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedFaceWithHole:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                3.25,
+                2.5,
+                0.0
+              ],
+              [
+                3.25,
+                1.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedFaceWithHole:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                2.25,
+                2.5,
+                0.0
+              ],
+              [
+                3.25,
+                2.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ProjectedFaceWithHole:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                2.25,
+                2.5,
+                0.0
+              ],
+              [
+                2.25,
+                1.5,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "ProjectedFaceWithHole:Face1",
+          "ProjectedFaceWithHole:Face1",
+          "ProjectedFaceWithHole:Face1",
+          "ProjectedFaceWithHole:Face1",
+          "ProjectedFaceWithHole:Face1",
+          "ProjectedFaceWithHole:Face1",
+          "ProjectedFaceWithHole:Face1",
+          "ProjectedFaceWithHole:Face1"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          3,
+          2,
+          5,
+          4,
+          2,
+          6,
+          1,
+          0,
+          7,
+          6,
+          4,
+          7,
+          1,
+          6,
+          7,
+          4,
+          5
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ProjectedFaceWithHole:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              1.0,
+              3.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedFaceWithHole:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.0,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedFaceWithHole:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              5.0,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedFaceWithHole:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              5.0,
+              3.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedFaceWithHole:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              2.25,
+              1.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedFaceWithHole:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              3.25,
+              1.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedFaceWithHole:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              3.25,
+              2.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ProjectedFaceWithHole:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              2.25,
+              2.5,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            2.25,
+            2.5,
+            0.0
+          ],
+          [
+            1.0,
+            3.5,
+            0.0
+          ],
+          [
+            1.0,
+            0.5,
+            0.0
+          ],
+          [
+            2.25,
+            1.5,
+            0.0
+          ],
+          [
+            3.25,
+            1.5,
+            0.0
+          ],
+          [
+            5.0,
+            0.5,
+            0.0
+          ],
+          [
+            3.25,
+            2.5,
+            0.0
+          ],
+          [
+            5.0,
+            3.5,
+            0.0
+          ]
+        ]
+      },
+      "object": "ProjectedFaceWithHole",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ProjectedFaceWithHole:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        }
+      ]
+    }
+  ]
+}

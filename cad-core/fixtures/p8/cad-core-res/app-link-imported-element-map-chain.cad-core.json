@@ -1,0 +1,1124 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ImportedLinkGroup:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                2.0,
+                0.0,
+                10.0
+              ],
+              [
+                1.9318516525781364,
+                0.5176380902050418,
+                10.0
+              ],
+              [
+                1.732050807568877,
+                1.0000000000000004,
+                10.0
+              ],
+              [
+                1.4142135623730945,
+                1.4142135623730956,
+                10.0
+              ],
+              [
+                0.999999999999999,
+                1.7320508075688779,
+                10.0
+              ],
+              [
+                0.5176380902050401,
+                1.9318516525781368,
+                10.0
+              ],
+              [
+                -1.6538921594855151e-15,
+                2.0,
+                10.0
+              ],
+              [
+                -0.5176380902050429,
+                1.9318516525781362,
+                10.0
+              ],
+              [
+                -1.000000000000002,
+                1.732050807568876,
+                10.0
+              ],
+              [
+                -1.4142135623730967,
+                1.4142135623730934,
+                10.0
+              ],
+              [
+                -1.7320508075688787,
+                0.9999999999999977,
+                10.0
+              ],
+              [
+                -1.9318516525781373,
+                0.5176380902050386,
+                10.0
+              ],
+              [
+                -2.0,
+                -3.3077843189710302e-15,
+                10.0
+              ],
+              [
+                -1.9318516525781357,
+                -0.517638090205045,
+                10.0
+              ],
+              [
+                -1.7320508075688759,
+                -1.0000000000000027,
+                10.0
+              ],
+              [
+                -1.414213562373092,
+                -1.414213562373098,
+                10.0
+              ],
+              [
+                -0.9999999999999962,
+                -1.7320508075688794,
+                10.0
+              ],
+              [
+                -0.5176380902050361,
+                -1.931851652578138,
+                10.0
+              ],
+              [
+                4.961676478456545e-15,
+                -2.0,
+                10.0
+              ],
+              [
+                0.5176380902050457,
+                -1.9318516525781355,
+                10.0
+              ],
+              [
+                1.0000000000000049,
+                -1.7320508075688745,
+                10.0
+              ],
+              [
+                1.4142135623730985,
+                -1.4142135623730916,
+                10.0
+              ],
+              [
+                1.7320508075688803,
+                -0.9999999999999948,
+                10.0
+              ],
+              [
+                1.931851652578138,
+                -0.5176380902050363,
+                10.0
+              ],
+              [
+                2.0,
+                6.6155686379420605e-15,
+                10.0
+              ]
+            ],
+            "stableSubname": "0.Edge1"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                155.0,
+                70.0,
+                29.9999999996
+              ],
+              [
+                154.3473705444883,
+                70.04277975159336,
+                29.99999999960017
+              ],
+              [
+                153.70591125416084,
+                70.1703873801225,
+                29.999999999602366
+              ],
+              [
+                153.0865925041594,
+                70.38062567319676,
+                29.999999999610157
+              ],
+              [
+                152.50000709361987,
+                70.66988923834302,
+                29.999999999626336
+              ],
+              [
+                151.95619466011,
+                71.03323723292661,
+                29.999999999650235
+              ],
+              [
+                151.46446609406712,
+                71.46446609407212,
+                29.999999999675
+              ],
+              [
+                151.03323723292164,
+                71.9561946601151,
+                29.999999999690125
+              ],
+              [
+                150.66988923833836,
+                72.50000709362502,
+                29.999999999699074
+              ],
+              [
+                150.38062567319298,
+                73.08659250416449,
+                29.999999999709377
+              ],
+              [
+                150.17038738012013,
+                73.70591125416564,
+                29.999999999726235
+              ],
+              [
+                150.04277975159255,
+                74.34737054449198,
+                29.999999999750234
+              ],
+              [
+                150.0,
+                75.0,
+                29.999999999775
+              ],
+              [
+                150.04277975159255,
+                75.65262945550803,
+                29.999999999790127
+              ],
+              [
+                150.17038738012013,
+                76.29408874583436,
+                29.999999999799076
+              ],
+              [
+                150.38062567319298,
+                76.91340749583553,
+                29.99999999980938
+              ],
+              [
+                150.66988923833836,
+                77.49999290637498,
+                29.999999999826237
+              ],
+              [
+                151.03323723292164,
+                78.0438053398849,
+                29.999999999850235
+              ],
+              [
+                151.46446609406712,
+                78.53553390592788,
+                29.999999999875005
+              ],
+              [
+                151.95619466011,
+                78.9667627670734,
+                29.999999999893504
+              ],
+              [
+                152.50000709361987,
+                79.33011076165698,
+                29.999999999917698
+              ],
+              [
+                153.0865925041594,
+                79.61937432680324,
+                29.99999999994922
+              ],
+              [
+                153.70591125416087,
+                79.82961261987751,
+                29.99999999997891
+              ],
+              [
+                154.3473705444883,
+                79.95722024840666,
+                29.999999999996447
+              ],
+              [
+                155.0,
+                80.0,
+                30.0
+              ]
+            ],
+            "stableSubname": "1.Edge1"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                154.99999999999997,
+                80.0,
+                30.0
+              ],
+              [
+                154.99999999999997,
+                80.0,
+                19.999999999599993
+              ]
+            ],
+            "stableSubname": "1.Edge2"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                155.0,
+                80.0,
+                20.0
+              ],
+              [
+                154.3473705444883,
+                79.95722024840666,
+                19.999999999996447
+              ],
+              [
+                153.70591125416084,
+                79.82961261987751,
+                19.99999999997891
+              ],
+              [
+                153.0865925041594,
+                79.61937432680324,
+                19.99999999994922
+              ],
+              [
+                152.50000709361987,
+                79.33011076165698,
+                19.999999999917698
+              ],
+              [
+                151.95619466011,
+                78.9667627670734,
+                19.999999999893504
+              ],
+              [
+                151.46446609406712,
+                78.53553390592789,
+                19.999999999875
+              ],
+              [
+                151.03323723292164,
+                78.04380533988491,
+                19.999999999850232
+              ],
+              [
+                150.66988923833836,
+                77.499992906375,
+                19.999999999826237
+              ],
+              [
+                150.38062567319298,
+                76.91340749583553,
+                19.999999999809376
+              ],
+              [
+                150.17038738012013,
+                76.29408874583436,
+                19.999999999799073
+              ],
+              [
+                150.04277975159255,
+                75.65262945550803,
+                19.999999999790123
+              ],
+              [
+                150.0,
+                75.0,
+                19.999999999775
+              ],
+              [
+                150.04277975159255,
+                74.34737054449198,
+                19.99999999975023
+              ],
+              [
+                150.17038738012013,
+                73.70591125416566,
+                19.999999999726235
+              ],
+              [
+                150.38062567319298,
+                73.08659250416449,
+                19.999999999709377
+              ],
+              [
+                150.66988923833836,
+                72.50000709362502,
+                19.999999999699074
+              ],
+              [
+                151.03323723292164,
+                71.9561946601151,
+                19.999999999690125
+              ],
+              [
+                151.46446609406712,
+                71.46446609407212,
+                19.999999999675
+              ],
+              [
+                151.95619466011,
+                71.03323723292661,
+                19.999999999650235
+              ],
+              [
+                152.50000709361987,
+                70.66988923834303,
+                19.999999999626336
+              ],
+              [
+                153.0865925041594,
+                70.38062567319676,
+                19.999999999610157
+              ],
+              [
+                153.70591125416084,
+                70.1703873801225,
+                19.999999999602366
+              ],
+              [
+                154.3473705444883,
+                70.04277975159336,
+                19.99999999960017
+              ],
+              [
+                155.0,
+                70.0,
+                19.9999999996
+              ]
+            ],
+            "stableSubname": "1.Edge3"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                154.99999999999997,
+                70.0,
+                29.999999999599993
+              ],
+              [
+                154.99999999999997,
+                70.0,
+                19.999999999599993
+              ]
+            ],
+            "stableSubname": "1.Edge4"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                3.7717909578,
+                -1.7516416409820001,
+                0.00999999999996
+              ],
+              [
+                3.7717909578,
+                1.7483583590039995,
+                0.00999999999996
+              ]
+            ],
+            "stableSubname": "2.Edge1"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                3.7717909578,
+                1.7483583590039997,
+                0.00999999999996
+              ],
+              [
+                6.2617909562,
+                1.7483583590039997,
+                0.00999999999996
+              ]
+            ],
+            "stableSubname": "2.Edge2"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                6.2617909562,
+                1.7483583590039997,
+                0.00999999999996
+              ],
+              [
+                6.2617909562,
+                -1.751641640982,
+                0.00999999999996
+              ]
+            ],
+            "stableSubname": "2.Edge3"
+          },
+          {
+            "id": "ImportedLinkGroup:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                6.2617909562,
+                -1.7516416409820001,
+                0.00999999999996
+              ],
+              [
+                3.7717909578,
+                -1.7516416409820001,
+                0.00999999999996
+              ]
+            ],
+            "stableSubname": "2.Edge4"
+          }
+        ],
+        "faceIds": [
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face1",
+          "ImportedLinkGroup:Face2",
+          "ImportedLinkGroup:Face2"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          1,
+          0,
+          2,
+          4,
+          5,
+          1,
+          4,
+          2,
+          5,
+          6,
+          7,
+          4,
+          6,
+          5,
+          7,
+          8,
+          9,
+          6,
+          8,
+          7,
+          9,
+          10,
+          11,
+          8,
+          10,
+          9,
+          11,
+          12,
+          13,
+          10,
+          12,
+          11,
+          13,
+          14,
+          15,
+          12,
+          14,
+          13,
+          15,
+          16,
+          17,
+          14,
+          16,
+          15,
+          17,
+          18,
+          19,
+          16,
+          18,
+          17,
+          19,
+          20,
+          21,
+          18,
+          20,
+          19,
+          21,
+          22,
+          23,
+          20,
+          22,
+          21,
+          23,
+          24,
+          25,
+          22,
+          24,
+          23,
+          25,
+          26,
+          27,
+          24,
+          26,
+          25,
+          27,
+          28,
+          29,
+          26,
+          28,
+          27,
+          30,
+          31,
+          32,
+          30,
+          32,
+          33
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ImportedLinkGroup:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              2.0,
+              -4.89842541528951e-16,
+              10.0
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              155.0,
+              70.0,
+              29.9999999996
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              155.0,
+              80.0,
+              30.0
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              155.0,
+              80.0,
+              19.9999999996
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              155.0,
+              70.0,
+              19.9999999996
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              3.7717909578,
+              1.7483583590039995,
+              0.00999999999996
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              3.7717909578,
+              -1.7516416409820001,
+              0.00999999999996
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              6.2617909562,
+              1.7483583590039997,
+              0.00999999999996
+            ]
+          },
+          {
+            "id": "ImportedLinkGroup:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              6.2617909562,
+              -1.7516416409820001,
+              0.00999999999996
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            155.0,
+            69.99999999999999,
+            29.999999999600004
+          ],
+          [
+            154.02537996198384,
+            70.09591895035125,
+            19.999999999600806
+          ],
+          [
+            153.86448684127492,
+            70.13066034089591,
+            29.999999999601442
+          ],
+          [
+            155.0,
+            69.99999999999999,
+            19.999999999600004
+          ],
+          [
+            153.08815208986573,
+            70.37997997998342,
+            19.99999999961013
+          ],
+          [
+            152.7883133188599,
+            70.51578208408495,
+            29.99999999961714
+          ],
+          [
+            152.08887237958518,
+            70.93487213332563,
+            19.999999999643723
+          ],
+          [
+            151.82770827501403,
+            71.13521736841709,
+            29.999999999656808
+          ],
+          [
+            151.24172921674074,
+            71.7022137906735,
+            19.9999999996838
+          ],
+          [
+            151.0328947431918,
+            71.95664106771284,
+            29.99999999969014
+          ],
+          [
+            150.59100968889024,
+            72.64190812664035,
+            19.99999999970125
+          ],
+          [
+            150.44541346805659,
+            72.93711507375356,
+            29.999999999706343
+          ],
+          [
+            150.1706787754627,
+            73.70482432877603,
+            19.999999999726203
+          ],
+          [
+            150.0959189503497,
+            74.02537996198825,
+            29.999999999737586
+          ],
+          [
+            150.00270947484577,
+            74.83542050404897,
+            19.99999999976938
+          ],
+          [
+            150.00270947484577,
+            75.16457949595102,
+            29.999999999779824
+          ],
+          [
+            150.0959189503497,
+            75.97462003801174,
+            19.999999999794866
+          ],
+          [
+            150.1706787754627,
+            76.29517567122396,
+            29.999999999799094
+          ],
+          [
+            150.44541346805659,
+            77.06288492624643,
+            19.999999999812843
+          ],
+          [
+            150.59100968889024,
+            77.35809187335964,
+            29.999999999821316
+          ],
+          [
+            151.0328947431918,
+            78.04335893228715,
+            19.999999999850214
+          ],
+          [
+            151.24172921674077,
+            78.29778620932649,
+            29.999999999863313
+          ],
+          [
+            151.82770827501403,
+            78.8647826315829,
+            19.999999999888775
+          ],
+          [
+            152.08887237958518,
+            79.06512786667436,
+            29.999999999898733
+          ],
+          [
+            152.7883133188599,
+            79.48421791591502,
+            19.999999999932964
+          ],
+          [
+            153.08815208986573,
+            79.62002002001655,
+            29.999999999949306
+          ],
+          [
+            153.86448684127492,
+            79.86933965910407,
+            19.999999999984723
+          ],
+          [
+            154.02537996198384,
+            79.90408104964874,
+            29.99999999998965
+          ],
+          [
+            155.0,
+            79.99999999999999,
+            19.999999999600004
+          ],
+          [
+            155.0,
+            79.99999999999999,
+            30.000000000000004
+          ],
+          [
+            3.7717909578,
+            1.7483583590039995,
+            0.00999999999996
+          ],
+          [
+            6.2617909562,
+            1.7483583590039997,
+            0.00999999999996
+          ],
+          [
+            6.2617909562,
+            -1.7516416409820001,
+            0.00999999999996
+          ],
+          [
+            3.7717909578,
+            -1.7516416409820001,
+            0.00999999999996
+          ]
+        ]
+      },
+      "object": "ImportedLinkGroup",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.0.Edge1",
+          "id": "ImportedLinkGroup:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "0.Edge1",
+          "subname": "0.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Edge2",
+          "id": "ImportedLinkGroup:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "1.Edge1",
+          "subname": "1.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Edge3",
+          "id": "ImportedLinkGroup:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "1.Edge2",
+          "subname": "1.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Edge4",
+          "id": "ImportedLinkGroup:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "1.Edge3",
+          "subname": "1.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Edge5",
+          "id": "ImportedLinkGroup:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "1.Edge4",
+          "subname": "1.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Edge6",
+          "id": "ImportedLinkGroup:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "2.Edge1",
+          "subname": "2.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Edge7",
+          "id": "ImportedLinkGroup:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "2.Edge2",
+          "subname": "2.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Edge8",
+          "id": "ImportedLinkGroup:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "2.Edge3",
+          "subname": "2.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Edge9",
+          "id": "ImportedLinkGroup:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "2.Edge4",
+          "subname": "2.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Face1",
+          "id": "ImportedLinkGroup:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "1.Face1",
+          "subname": "1.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Face2",
+          "id": "ImportedLinkGroup:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "2.Face1",
+          "subname": "2.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.0.Vertex1",
+          "id": "ImportedLinkGroup:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex1",
+          "subname": "0.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Vertex2",
+          "id": "ImportedLinkGroup:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex1",
+          "subname": "1.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Vertex3",
+          "id": "ImportedLinkGroup:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex2",
+          "subname": "1.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Vertex4",
+          "id": "ImportedLinkGroup:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex3",
+          "subname": "1.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.1.Vertex5",
+          "id": "ImportedLinkGroup:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex4",
+          "subname": "1.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Vertex6",
+          "id": "ImportedLinkGroup:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "2.Vertex1",
+          "subname": "2.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Vertex7",
+          "id": "ImportedLinkGroup:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "2.Vertex2",
+          "subname": "2.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Vertex8",
+          "id": "ImportedLinkGroup:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "2.Vertex3",
+          "subname": "2.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ImportedLinkGroup.2.Vertex9",
+          "id": "ImportedLinkGroup:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "2.Vertex4",
+          "subname": "2.Vertex9"
+        }
+      ]
+    }
+  ]
+}

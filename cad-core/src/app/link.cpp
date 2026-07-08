@@ -1197,7 +1197,7 @@ std::optional<LinkShapeBuild> linkedSubshapeAt(const app::DocumentObject& object
     const std::string rawFullSubname =
         index < link.fullSubnames.size() ? link.fullSubnames.at(index) : rawSubname;
     const std::string subname = stripLinkedObjectPrefix(rawSubname, link, context);
-    const std::string stableSubname = stripLinkedObjectPrefix(rawStableSubname, link, context);
+    std::string stableSubname = stripLinkedObjectPrefix(rawStableSubname, link, context);
     if (const auto selected = linkedGroupElementSubshape(object,
                                                         context,
                                                         link,
@@ -1211,6 +1211,14 @@ std::optional<LinkShapeBuild> linkedSubshapeAt(const app::DocumentObject& object
     const auto namedShapeIt = context.namedShapes.find(link.object);
     const part::NamedShape* namedShape =
         namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
+    if (namedShape != nullptr
+        && topo::hasStableElementMapEvidence(namedShape, subname, rawStableSubname)) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/PropertyLinks.cpp
+        // ::PropertyLinkBase::_updateElementReference(), resolves the persisted stable element
+        // name in the target object's ElementMap. Do not strip a target-qualified stable alias
+        // such as "Box.Face1" when that alias is itself the durable ElementMap key.
+        stableSubname = rawStableSubname;
+    }
     std::string resolvedElement = subname;
     std::optional<TopoDS_Shape> shape;
     if (subname.empty()) {

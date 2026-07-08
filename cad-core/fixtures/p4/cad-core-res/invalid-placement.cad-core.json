@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_placement",
+      "message": "Property Placement has an invalid App::PropertyPlacement value",
+      "object": "Sketch",
+      "property": "Placement",
+      "severity": "error",
+      "stage": "parse"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

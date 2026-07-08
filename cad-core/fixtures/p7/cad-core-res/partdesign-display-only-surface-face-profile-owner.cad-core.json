@@ -1,0 +1,38 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "open_profile_surface_display_only",
+      "message": "Pad open wire profile was extruded as display-only surface geometry; Body solid was not modified",
+      "object": "Pad",
+      "property": "Profile",
+      "severity": "warning",
+      "stage": "runtime",
+      "target": "草图 11:19:53 AM"
+    },
+    {
+      "code": "unstable_subshape_reference",
+      "message": "Profile target Pad subshape Edge4 only names the current shape and has no NamedShape/ElementMap identity evidence",
+      "object": "Pad2",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge4",
+      "target": "Pad"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad2",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "PadPreviewBody",
+      "subshapes": []
+    }
+  ]
+}

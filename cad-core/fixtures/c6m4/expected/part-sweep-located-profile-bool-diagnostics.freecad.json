@@ -27,5 +27,19 @@
     "status": "diagnostic_only"
   },
   "reference": "FreeCADCmd wrapper oracle from part-sweep-located-profile-bool-diagnostics.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Part::Vertex, Part::Sweep, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "schema_version": "cad-core.freecad-expected.v1",
+  "objects": {
+    "InvalidWithContact": {
+      "object_fields": {
+        "status": "error",
+        "feature": "part_sweep"
+      }
+    },
+    "InvalidWithCorrection": {
+      "object_fields": {
+        "status": "error",
+        "feature": "part_sweep"
+      }
+    }
+  }
 }

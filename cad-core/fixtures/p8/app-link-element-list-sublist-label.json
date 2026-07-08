@@ -94,6 +94,9 @@
           "value": "LinkGroup",
           "SubList": [
             "$PrettyB.Face1"
+          ],
+          "StableSubList": [
+            "LinkB.Face1"
           ]
         },
         "LinkTransform": false,

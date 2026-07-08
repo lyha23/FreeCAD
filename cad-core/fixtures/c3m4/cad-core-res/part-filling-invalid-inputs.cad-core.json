@@ -1,0 +1,76 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object DoesNotExist",
+      "object": "MissingTarget",
+      "property": "Boundary",
+      "severity": "error",
+      "stage": "graph",
+      "target": "DoesNotExist"
+    },
+    {
+      "code": "missing_property",
+      "message": "No input shape",
+      "object": "EmptyBoundary",
+      "property": "Boundary",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "execution_failed",
+      "message": "No boundary wire",
+      "object": "FaceOnlyBoundary",
+      "property": "Boundary",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "execution_failed",
+      "message": "No boundary wire",
+      "object": "DisconnectedBoundary",
+      "property": "Boundary",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "invalid_support_target",
+      "message": "Part.makeFilledFace support target must resolve to an edge",
+      "object": "UnsupportedKwargs",
+      "property": "Supports",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "Plane"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "EmptyBoundary",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "MissingTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "FaceOnlyBoundary",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DisconnectedBoundary",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "UnsupportedKwargs",
+      "subshapes": []
+    }
+  ]
+}

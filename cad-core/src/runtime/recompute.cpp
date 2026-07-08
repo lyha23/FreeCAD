@@ -140,14 +140,96 @@ void markOcctExecutionFailure(const app::DocumentObject& object,
     };
 }
 
+void mergeTopoNamingStateElementMap(const std::string& name, ComputeContext& context)
+{
+    auto namedShapeIt = context.namedShapes.find(name);
+    if (namedShapeIt == context.namedShapes.end() || !context.topoNamingState.is_object()) {
+        return;
+    }
+    const auto objectsIt = context.topoNamingState.find("objects");
+    if (objectsIt == context.topoNamingState.end() || !objectsIt->is_object()) {
+        return;
+    }
+    const auto objectIt = objectsIt->find(name);
+    if (objectIt == objectsIt->end() || !objectIt->is_object()) {
+        return;
+    }
+    const auto elementMapIt = objectIt->find("elementMap");
+    if (elementMapIt == objectIt->end() || !elementMapIt->is_object()) {
+        return;
+    }
+    const auto entriesIt = elementMapIt->find("entries");
+    if (entriesIt == elementMapIt->end() || !entriesIt->is_object()) {
+        return;
+    }
+
+    part::NamedShape& namedShape = namedShapeIt->second;
+    for (const auto& entryItem : entriesIt->items()) {
+        const std::string stableSubname = entryItem.key();
+        const nlohmann::json& entry = entryItem.value();
+        if (stableSubname.empty() || !entry.is_object()) {
+            continue;
+        }
+        const auto targetIt = entry.find("target");
+        if (targetIt == entry.end() || !targetIt->is_object()) {
+            continue;
+        }
+        if (targetIt->value("object", "") != name) {
+            continue;
+        }
+        const std::string currentSubname = targetIt->value("subname", "");
+        if (currentSubname.empty() || namedShape.elements.count(currentSubname) == 0U) {
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/PropertyLinks.cpp
+        // ::PropertyLinkBase::_updateElementReference(), resolves a persisted stable name
+        // through the target object's ElementMap before validating the current subname.
+        namedShape.elementMap[stableSubname] = currentSubname;
+    }
+}
+
+bool isCopyOnChangeCreatedObject(const std::string& name, const ComputeContext& context)
+{
+    const auto objectIt = context.documentObjects.find(name);
+    if (objectIt == context.documentObjects.end() || objectIt->second == nullptr) {
+        return false;
+    }
+    const auto sourceIt = objectIt->second->properties.find("_CopyOnChangeSourceObject");
+    return sourceIt != objectIt->second->properties.end() && sourceIt->is_object();
+}
+
+void mergeCopyOnChangeElementMapAliases(const std::string& name, ComputeContext& context)
+{
+    auto namedShapeIt = context.namedShapes.find(name);
+    if (namedShapeIt == context.namedShapes.end() || !isCopyOnChangeCreatedObject(name, context)) {
+        return;
+    }
+
+    part::NamedShape& namedShape = namedShapeIt->second;
+    for (const auto& [elementName, element] : namedShape.elements) {
+        if (!topo::topologicalElementKind(elementName)) {
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Link.cpp
+        // ::LinkBaseExtension::copyOnChangeCopyObject(), copies linked children while preserving
+        // subelement references. cad-core's immutable document update replay needs a request-local
+        // ElementMap alias for the newly-created copied object name.
+        namedShape.elementMap[name + "." + elementName] = element.name;
+    }
+}
+
 void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
 {
     if (context.namedShapes.count(name) != 0U) {
+        mergeTopoNamingStateElementMap(name, context);
+        mergeCopyOnChangeElementMapAliases(name, context);
         return;
     }
     const auto shapeIt = context.shapes.find(name);
     if (shapeIt != context.shapes.end()) {
         context.namedShapes[name] = part::indexedNamedShapeForObject(name, shapeIt->second.shape);
+        mergeTopoNamingStateElementMap(name, context);
+        mergeCopyOnChangeElementMapAliases(name, context);
         return;
     }
     const auto addSubIt = context.addSubShapes.find(name);
@@ -166,6 +248,8 @@ void registerIndexedNamedShape(const std::string& name, ComputeContext& context)
     else if (addSubIt->second.subShape) {
         context.namedShapes[name] = part::indexedNamedShapeForObject(name, *addSubIt->second.subShape);
     }
+    mergeTopoNamingStateElementMap(name, context);
+    mergeCopyOnChangeElementMapAliases(name, context);
 }
 
 std::string displayKind(const nlohmann::json& subshape)
@@ -1232,6 +1316,7 @@ ComputeContext recomputeContext(const app::Document& document,
     context.parentGroupByObject = document.parentGroupByObject;
     context.targetObjects = std::set<std::string>(document.targets.begin(), document.targets.end());
     context.displayMeshDeflection = document.displayMeshDeflection.value_or(context.displayMeshDeflection);
+    context.topoNamingState = document.topoNamingState;
     context.transformationTemplateObjects = findTransformationTemplateObjects(document);
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/GeoFeature.cpp
     // ::GeoFeature::getGlobalPlacement() returns parent GeoFeatureGroup::globalGroupPlacement()

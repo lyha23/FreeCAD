@@ -1,0 +1,1166 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Extrude:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                -0.524931981155544,
+                5.524931981155544,
+                -6.0
+              ],
+              [
+                -0.524931981155544,
+                -0.524931981155544,
+                -6.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                -0.524931981155544,
+                -0.524931981155544,
+                -6.0
+              ],
+              [
+                -0.503059815274063,
+                -0.503059815274063,
+                -5.75
+              ],
+              [
+                -0.48118764939258196,
+                -0.48118764939258196,
+                -5.5
+              ],
+              [
+                -0.45931548351110096,
+                -0.45931548351110096,
+                -5.25
+              ],
+              [
+                -0.43744331762961997,
+                -0.43744331762961997,
+                -5.0
+              ],
+              [
+                -0.41557115174813897,
+                -0.41557115174813897,
+                -4.75
+              ],
+              [
+                -0.39369898586665797,
+                -0.39369898586665797,
+                -4.5
+              ],
+              [
+                -0.37182681998517697,
+                -0.37182681998517697,
+                -4.25
+              ],
+              [
+                -0.349954654103696,
+                -0.349954654103696,
+                -4.0
+              ],
+              [
+                -0.328082488222215,
+                -0.328082488222215,
+                -3.75
+              ],
+              [
+                -0.306210322340734,
+                -0.306210322340734,
+                -3.5
+              ],
+              [
+                -0.284338156459253,
+                -0.284338156459253,
+                -3.25
+              ],
+              [
+                -0.262465990577772,
+                -0.262465990577772,
+                -3.0
+              ],
+              [
+                -0.240593824696291,
+                -0.240593824696291,
+                -2.75
+              ],
+              [
+                -0.21872165881480995,
+                -0.21872165881480995,
+                -2.5
+              ],
+              [
+                -0.19684949293332898,
+                -0.19684949293332898,
+                -2.25
+              ],
+              [
+                -0.17497732705184801,
+                -0.17497732705184801,
+                -2.0
+              ],
+              [
+                -0.15310516117036696,
+                -0.15310516117036696,
+                -1.7499999999999998
+              ],
+              [
+                -0.131232995288886,
+                -0.131232995288886,
+                -1.5
+              ],
+              [
+                -0.109360829407405,
+                -0.109360829407405,
+                -1.2500000000000002
+              ],
+              [
+                -0.08748866352592398,
+                -0.08748866352592398,
+                -0.9999999999999998
+              ],
+              [
+                -0.065616497644443,
+                -0.065616497644443,
+                -0.75
+              ],
+              [
+                -0.04374433176296202,
+                -0.04374433176296202,
+                -0.5000000000000002
+              ],
+              [
+                -0.021872165881480977,
+                -0.021872165881480977,
+                -0.24999999999999978
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "g4"
+          },
+          {
+            "id": "Extrude:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                -0.524931981155544,
+                5.524931981155544,
+                -6.0
+              ],
+              [
+                -0.503059815274063,
+                5.503059815274063,
+                -5.75
+              ],
+              [
+                -0.48118764939258196,
+                5.481187649392582,
+                -5.5
+              ],
+              [
+                -0.45931548351110096,
+                5.459315483511101,
+                -5.25
+              ],
+              [
+                -0.43744331762961997,
+                5.43744331762962,
+                -5.0
+              ],
+              [
+                -0.41557115174813897,
+                5.415571151748139,
+                -4.75
+              ],
+              [
+                -0.39369898586665797,
+                5.393698985866658,
+                -4.5
+              ],
+              [
+                -0.37182681998517697,
+                5.371826819985177,
+                -4.25
+              ],
+              [
+                -0.349954654103696,
+                5.349954654103696,
+                -4.0
+              ],
+              [
+                -0.328082488222215,
+                5.328082488222215,
+                -3.75
+              ],
+              [
+                -0.306210322340734,
+                5.306210322340734,
+                -3.5
+              ],
+              [
+                -0.284338156459253,
+                5.284338156459253,
+                -3.25
+              ],
+              [
+                -0.262465990577772,
+                5.2624659905777715,
+                -3.0
+              ],
+              [
+                -0.240593824696291,
+                5.240593824696291,
+                -2.75
+              ],
+              [
+                -0.21872165881480995,
+                5.21872165881481,
+                -2.5
+              ],
+              [
+                -0.19684949293332898,
+                5.196849492933329,
+                -2.25
+              ],
+              [
+                -0.17497732705184801,
+                5.174977327051848,
+                -2.0
+              ],
+              [
+                -0.15310516117036696,
+                5.153105161170367,
+                -1.7499999999999998
+              ],
+              [
+                -0.131232995288886,
+                5.131232995288886,
+                -1.5
+              ],
+              [
+                -0.109360829407405,
+                5.109360829407405,
+                -1.2500000000000002
+              ],
+              [
+                -0.08748866352592398,
+                5.0874886635259235,
+                -0.9999999999999998
+              ],
+              [
+                -0.065616497644443,
+                5.065616497644443,
+                -0.75
+              ],
+              [
+                -0.04374433176296202,
+                5.043744331762962,
+                -0.5000000000000002
+              ],
+              [
+                -0.021872165881480977,
+                5.021872165881481,
+                -0.24999999999999978
+              ],
+              [
+                0.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                -0.524931981155544,
+                -0.524931981155544,
+                -6.0
+              ],
+              [
+                10.524931981155543,
+                -0.524931981155544,
+                -6.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                10.524931981155543,
+                -0.524931981155544,
+                -6.0
+              ],
+              [
+                10.503059815274062,
+                -0.503059815274063,
+                -5.75
+              ],
+              [
+                10.48118764939258,
+                -0.48118764939258196,
+                -5.5
+              ],
+              [
+                10.4593154835111,
+                -0.45931548351110096,
+                -5.25
+              ],
+              [
+                10.437443317629619,
+                -0.43744331762961997,
+                -5.0
+              ],
+              [
+                10.415571151748138,
+                -0.41557115174813897,
+                -4.75
+              ],
+              [
+                10.393698985866656,
+                -0.39369898586665797,
+                -4.5
+              ],
+              [
+                10.371826819985177,
+                -0.37182681998517697,
+                -4.25
+              ],
+              [
+                10.349954654103696,
+                -0.349954654103696,
+                -4.0
+              ],
+              [
+                10.328082488222215,
+                -0.328082488222215,
+                -3.75
+              ],
+              [
+                10.306210322340734,
+                -0.306210322340734,
+                -3.5
+              ],
+              [
+                10.284338156459253,
+                -0.284338156459253,
+                -3.25
+              ],
+              [
+                10.262465990577772,
+                -0.262465990577772,
+                -3.0
+              ],
+              [
+                10.24059382469629,
+                -0.240593824696291,
+                -2.75
+              ],
+              [
+                10.21872165881481,
+                -0.21872165881480995,
+                -2.5
+              ],
+              [
+                10.196849492933328,
+                -0.19684949293332898,
+                -2.25
+              ],
+              [
+                10.174977327051847,
+                -0.17497732705184801,
+                -2.0
+              ],
+              [
+                10.153105161170366,
+                -0.15310516117036696,
+                -1.7499999999999998
+              ],
+              [
+                10.131232995288887,
+                -0.131232995288886,
+                -1.5
+              ],
+              [
+                10.109360829407406,
+                -0.109360829407405,
+                -1.2500000000000002
+              ],
+              [
+                10.087488663525924,
+                -0.08748866352592398,
+                -0.9999999999999998
+              ],
+              [
+                10.065616497644443,
+                -0.065616497644443,
+                -0.75
+              ],
+              [
+                10.043744331762962,
+                -0.04374433176296202,
+                -0.5000000000000002
+              ],
+              [
+                10.021872165881481,
+                -0.021872165881480977,
+                -0.24999999999999978
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "g1"
+          },
+          {
+            "id": "Extrude:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                10.524931981155543,
+                -0.524931981155544,
+                -6.0
+              ],
+              [
+                10.524931981155543,
+                5.524931981155544,
+                -6.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "points": [
+              [
+                10.524931981155543,
+                5.524931981155544,
+                -6.0
+              ],
+              [
+                10.503059815274062,
+                5.503059815274063,
+                -5.75
+              ],
+              [
+                10.48118764939258,
+                5.481187649392582,
+                -5.5
+              ],
+              [
+                10.4593154835111,
+                5.459315483511101,
+                -5.25
+              ],
+              [
+                10.437443317629619,
+                5.43744331762962,
+                -5.0
+              ],
+              [
+                10.415571151748138,
+                5.415571151748139,
+                -4.75
+              ],
+              [
+                10.393698985866656,
+                5.393698985866658,
+                -4.5
+              ],
+              [
+                10.371826819985177,
+                5.371826819985177,
+                -4.25
+              ],
+              [
+                10.349954654103696,
+                5.349954654103696,
+                -4.0
+              ],
+              [
+                10.328082488222215,
+                5.328082488222215,
+                -3.75
+              ],
+              [
+                10.306210322340734,
+                5.306210322340734,
+                -3.5
+              ],
+              [
+                10.284338156459253,
+                5.284338156459253,
+                -3.25
+              ],
+              [
+                10.262465990577772,
+                5.2624659905777715,
+                -3.0
+              ],
+              [
+                10.24059382469629,
+                5.240593824696291,
+                -2.75
+              ],
+              [
+                10.21872165881481,
+                5.21872165881481,
+                -2.5
+              ],
+              [
+                10.196849492933328,
+                5.196849492933329,
+                -2.25
+              ],
+              [
+                10.174977327051847,
+                5.174977327051848,
+                -2.0
+              ],
+              [
+                10.153105161170366,
+                5.153105161170367,
+                -1.7499999999999998
+              ],
+              [
+                10.131232995288887,
+                5.131232995288886,
+                -1.5
+              ],
+              [
+                10.109360829407406,
+                5.109360829407405,
+                -1.2500000000000002
+              ],
+              [
+                10.087488663525924,
+                5.0874886635259235,
+                -0.9999999999999998
+              ],
+              [
+                10.065616497644443,
+                5.065616497644443,
+                -0.75
+              ],
+              [
+                10.043744331762962,
+                5.043744331762962,
+                -0.5000000000000002
+              ],
+              [
+                10.021872165881481,
+                5.021872165881481,
+                -0.24999999999999978
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "g2"
+          },
+          {
+            "id": "Extrude:Edge11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "points": [
+              [
+                10.524931981155543,
+                5.524931981155544,
+                -6.0
+              ],
+              [
+                -0.5249319811555431,
+                5.524931981155544,
+                -6.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Extrude:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                10.0,
+                5.0,
+                0.0
+              ],
+              [
+                0.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "g3"
+          }
+        ],
+        "faceIds": [
+          "Extrude:Face1",
+          "Extrude:Face1",
+          "Extrude:Face1",
+          "Extrude:Face1",
+          "Extrude:Face2",
+          "Extrude:Face2",
+          "Extrude:Face2",
+          "Extrude:Face2",
+          "Extrude:Face3",
+          "Extrude:Face3",
+          "Extrude:Face4",
+          "Extrude:Face4",
+          "Extrude:Face4",
+          "Extrude:Face4",
+          "Extrude:Face5",
+          "Extrude:Face5",
+          "Extrude:Face6",
+          "Extrude:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          0,
+          3,
+          4,
+          0,
+          4,
+          1,
+          5,
+          2,
+          6,
+          5,
+          6,
+          7,
+          5,
+          7,
+          3,
+          5,
+          3,
+          2,
+          8,
+          6,
+          9,
+          8,
+          7,
+          6,
+          10,
+          9,
+          1,
+          10,
+          1,
+          4,
+          10,
+          4,
+          8,
+          10,
+          8,
+          9,
+          2,
+          1,
+          9,
+          6,
+          2,
+          9,
+          4,
+          7,
+          8,
+          3,
+          7,
+          4
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Extrude:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              -0.5249319811555431,
+              5.524931981155544,
+              -6.0
+            ]
+          },
+          {
+            "id": "Extrude:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              -0.524931981155544,
+              -0.524931981155544,
+              -6.0
+            ]
+          },
+          {
+            "id": "Extrude:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Extrude:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Extrude:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              10.524931981155543,
+              -0.524931981155544,
+              -6.0
+            ]
+          },
+          {
+            "id": "Extrude:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Extrude:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              10.524931981155543,
+              5.524931981155544,
+              -6.0
+            ]
+          },
+          {
+            "id": "Extrude:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            -0.262465990577772,
+            2.5,
+            -3.0
+          ],
+          [
+            -0.5249319811555431,
+            5.524931981155544,
+            -6.0
+          ],
+          [
+            -0.524931981155544,
+            -0.524931981155544,
+            -6.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.0,
+            0.0
+          ],
+          [
+            5.000000000000001,
+            -0.262465990577772,
+            -3.0
+          ],
+          [
+            10.524931981155543,
+            -0.524931981155544,
+            -6.0
+          ],
+          [
+            10.0,
+            0.0,
+            0.0
+          ],
+          [
+            10.0,
+            5.0,
+            0.0
+          ],
+          [
+            10.524931981155543,
+            5.524931981155544,
+            -6.0
+          ],
+          [
+            4.999999999999999,
+            5.2624659905777715,
+            -3.0
+          ]
+        ]
+      },
+      "object": "Extrude",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "g2",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "g3",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "g4",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "g1",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Extrude.Sketch.Face5",
+          "id": "Extrude:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "Sketch.Face1",
+          "subname": "Sketch.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Extrude.TaperSection2.Vertex3",
+          "id": "Extrude:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "Extrude.TaperSection2.Vertex1",
+          "subname": "Extrude.TaperSection2.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Extrude.TaperSection2.Vertex4",
+          "id": "Extrude:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "Extrude.TaperSection2.Vertex4",
+          "subname": "Extrude.TaperSection2.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Extrude.TaperSection2.Vertex6",
+          "id": "Extrude:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "Extrude.TaperSection2.Vertex2",
+          "subname": "Extrude.TaperSection2.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Extrude:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Extrude.TaperSection2.Vertex8",
+          "id": "Extrude:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "Extrude.TaperSection2.Vertex3",
+          "subname": "Extrude.TaperSection2.Vertex8"
+        }
+      ]
+    }
+  ]
+}

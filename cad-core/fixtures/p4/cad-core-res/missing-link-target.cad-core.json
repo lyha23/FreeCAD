@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object MissingSketch",
+      "object": "Pad",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "InternalFace1",
+      "target": "MissingSketch"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

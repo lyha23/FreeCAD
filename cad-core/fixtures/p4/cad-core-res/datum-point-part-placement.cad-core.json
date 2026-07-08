@@ -1,0 +1,14 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPoint",
+      "subshapes": []
+    }
+  ]
+}

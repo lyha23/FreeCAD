@@ -1,0 +1,730 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [
+    {
+      "action": "update",
+      "index": 0,
+      "object": "ArrayLink_i0",
+      "owner": "ArrayLink",
+      "ownerId": 2,
+      "properties": {
+        "LinkTransform": {
+          "PropertyType": "App::PropertyBool",
+          "value": false
+        },
+        "LinkedObject": {
+          "PropertyType": "App::PropertyXLink",
+          "value": "Box"
+        },
+        "Placement": {
+          "Base": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "PropertyType": "App::PropertyPlacement",
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "Scale": {
+          "PropertyType": "App::PropertyFloat",
+          "value": 1.0
+        },
+        "_LinkOwner": {
+          "PropertyType": "App::PropertyInteger",
+          "value": 2
+        }
+      },
+      "reason": "show_element_child_sync",
+      "typeId": "App::LinkElement"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ArrayLink:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                0.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge1"
+          },
+          {
+            "id": "ArrayLink:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                10.0,
+                4.0
+              ],
+              [
+                0.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge2"
+          },
+          {
+            "id": "ArrayLink:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                13.0,
+                0.0
+              ],
+              [
+                0.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge3"
+          },
+          {
+            "id": "ArrayLink:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                0.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge4"
+          },
+          {
+            "id": "ArrayLink:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                2.0,
+                10.0,
+                0.0
+              ],
+              [
+                2.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge5"
+          },
+          {
+            "id": "ArrayLink:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                2.0,
+                10.0,
+                4.0
+              ],
+              [
+                2.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge6"
+          },
+          {
+            "id": "ArrayLink:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                2.0,
+                13.0,
+                0.0
+              ],
+              [
+                2.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge7"
+          },
+          {
+            "id": "ArrayLink:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                2.0,
+                10.0,
+                0.0
+              ],
+              [
+                2.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge8"
+          },
+          {
+            "id": "ArrayLink:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                2.0,
+                10.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge9"
+          },
+          {
+            "id": "ArrayLink:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.0,
+                10.0,
+                4.0
+              ],
+              [
+                2.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge10"
+          },
+          {
+            "id": "ArrayLink:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.0,
+                13.0,
+                0.0
+              ],
+              [
+                2.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge11"
+          },
+          {
+            "id": "ArrayLink:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.0,
+                13.0,
+                4.0
+              ],
+              [
+                2.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Box.Edge12"
+          }
+        ],
+        "faceIds": [
+          "ArrayLink:Face1",
+          "ArrayLink:Face1",
+          "ArrayLink:Face2",
+          "ArrayLink:Face2",
+          "ArrayLink:Face3",
+          "ArrayLink:Face3",
+          "ArrayLink:Face4",
+          "ArrayLink:Face4",
+          "ArrayLink:Face5",
+          "ArrayLink:Face5",
+          "ArrayLink:Face6",
+          "ArrayLink:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          5,
+          6,
+          4,
+          6,
+          7,
+          5,
+          4,
+          0,
+          0,
+          4,
+          1,
+          7,
+          6,
+          2,
+          7,
+          2,
+          3,
+          2,
+          6,
+          0,
+          0,
+          6,
+          5,
+          7,
+          3,
+          1,
+          7,
+          1,
+          4
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ArrayLink:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              10.0,
+              4.0
+            ]
+          },
+          {
+            "id": "ArrayLink:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "ArrayLink:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              13.0,
+              4.0
+            ]
+          },
+          {
+            "id": "ArrayLink:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              13.0,
+              0.0
+            ]
+          },
+          {
+            "id": "ArrayLink:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              2.0,
+              10.0,
+              4.0
+            ]
+          },
+          {
+            "id": "ArrayLink:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              2.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "ArrayLink:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              2.0,
+              13.0,
+              4.0
+            ]
+          },
+          {
+            "id": "ArrayLink:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              2.0,
+              13.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            4.0
+          ],
+          [
+            0.0,
+            13.0,
+            0.0
+          ],
+          [
+            0.0,
+            13.0,
+            4.0
+          ],
+          [
+            2.0,
+            10.0,
+            4.0
+          ],
+          [
+            2.0,
+            10.0,
+            0.0
+          ],
+          [
+            2.0,
+            13.0,
+            0.0
+          ],
+          [
+            2.0,
+            13.0,
+            4.0
+          ]
+        ]
+      },
+      "object": "ArrayLink",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge1",
+          "id": "ArrayLink:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge1",
+          "subname": "0.Box.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge10",
+          "id": "ArrayLink:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge10",
+          "subname": "0.Box.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge11",
+          "id": "ArrayLink:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge11",
+          "subname": "0.Box.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge12",
+          "id": "ArrayLink:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge12",
+          "subname": "0.Box.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge2",
+          "id": "ArrayLink:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge2",
+          "subname": "0.Box.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge3",
+          "id": "ArrayLink:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge3",
+          "subname": "0.Box.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge4",
+          "id": "ArrayLink:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge4",
+          "subname": "0.Box.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge5",
+          "id": "ArrayLink:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge5",
+          "subname": "0.Box.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge6",
+          "id": "ArrayLink:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge6",
+          "subname": "0.Box.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge7",
+          "id": "ArrayLink:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge7",
+          "subname": "0.Box.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge8",
+          "id": "ArrayLink:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge8",
+          "subname": "0.Box.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Edge9",
+          "id": "ArrayLink:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "0.Box.Edge9",
+          "subname": "0.Box.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Face1",
+          "id": "ArrayLink:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "0.Box.Face1",
+          "subname": "0.Box.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Face2",
+          "id": "ArrayLink:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "0.Box.Face2",
+          "subname": "0.Box.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Face3",
+          "id": "ArrayLink:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "0.Box.Face3",
+          "subname": "0.Box.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Face4",
+          "id": "ArrayLink:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "0.Box.Face4",
+          "subname": "0.Box.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Face5",
+          "id": "ArrayLink:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "0.Box.Face5",
+          "subname": "0.Box.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Face6",
+          "id": "ArrayLink:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "0.Box.Face6",
+          "subname": "0.Box.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex1",
+          "id": "ArrayLink:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex1",
+          "subname": "0.Box.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex2",
+          "id": "ArrayLink:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex2",
+          "subname": "0.Box.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex3",
+          "id": "ArrayLink:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex3",
+          "subname": "0.Box.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex4",
+          "id": "ArrayLink:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex4",
+          "subname": "0.Box.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex5",
+          "id": "ArrayLink:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex5",
+          "subname": "0.Box.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex6",
+          "id": "ArrayLink:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex6",
+          "subname": "0.Box.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex7",
+          "id": "ArrayLink:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex7",
+          "subname": "0.Box.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ArrayLink.0.Box.Vertex8",
+          "id": "ArrayLink:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "0.Box.Vertex8",
+          "subname": "0.Box.Vertex8"
+        }
+      ]
+    }
+  ]
+}

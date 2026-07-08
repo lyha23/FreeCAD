@@ -1,0 +1,33 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unstable_subshape_reference",
+      "message": "Profile target Pad subshape Face6 only names the current shape and has no NamedShape/ElementMap identity evidence",
+      "object": "LoftPreview",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face6",
+      "target": "Pad"
+    },
+    {
+      "code": "open_profile",
+      "message": "Loft: Creating a face from sketch failed",
+      "object": "LoftPreview",
+      "property": "Profile",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "Pad"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "LoftPreviewBody",
+      "subshapes": []
+    }
+  ]
+}

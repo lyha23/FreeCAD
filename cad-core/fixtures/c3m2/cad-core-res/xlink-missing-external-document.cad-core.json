@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_external_document",
+      "message": "XLink target ExternalBox from linked document missing.FCStd is not available",
+      "object": "ExternalFaceLink",
+      "property": "LinkedObject",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "Face1",
+      "target": "ExternalBox"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ExternalFaceLink",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Sketch:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                5.424627697302464,
+                -0.312266709867448,
+                0.0
+              ],
+              [
+                5.1958434001124445,
+                -0.20686458163388777,
+                0.0
+              ],
+              [
+                4.98736197392098,
+                -0.10227078124850539,
+                0.0
+              ],
+              [
+                4.798368773024647,
+                0.001923393836668131,
+                0.0
+              ],
+              [
+                4.628125302383867,
+                0.10612508462505611,
+                0.0
+              ],
+              [
+                4.475966331937495,
+                0.21074146148785636,
+                0.0
+              ],
+              [
+                4.341297297201893,
+                0.3161813151911138,
+                0.0
+              ],
+              [
+                4.223591975997294,
+                0.42285665425452257,
+                0.0
+              ],
+              [
+                4.122390432223199,
+                0.5311843148836706,
+                0.0
+              ],
+              [
+                4.037297218648064,
+                0.641587589766571,
+                0.0
+              ],
+              [
+                3.9679798316906547,
+                0.7544978820990392,
+                0.0
+              ],
+              [
+                3.914167412155077,
+                0.8703563913020559,
+                0.0
+              ],
+              [
+                3.875649686842579,
+                0.9896158370180917,
+                0.0
+              ],
+              [
+                3.8522761469044613,
+                1.1127422281229493,
+                0.0
+              ],
+              [
+                3.843955459725477,
+                1.2402166836655717,
+                0.0
+              ],
+              [
+                3.8506551120396546,
+                1.372537312851182,
+                0.0
+              ],
+              [
+                3.872401282884004,
+                1.5102211614138263,
+                0.0
+              ],
+              [
+                3.909278945893673,
+                1.6538062319838176,
+                0.0
+              ],
+              [
+                3.961432201338273,
+                1.8038535863447036,
+                0.0
+              ],
+              [
+                4.029064839196813,
+                1.9609495377943782,
+                0.0
+              ],
+              [
+                4.112441135471474,
+                2.125707942177036,
+                0.0
+              ],
+              [
+                4.211886884851826,
+                2.298772596538223,
+                0.0
+              ],
+              [
+                4.327790673764663,
+                2.4808197547757804,
+                0.0
+              ],
+              [
+                4.460605398783904,
+                2.67256077011665,
+                0.0
+              ],
+              [
+                4.610850036333806,
+                2.874744874745064,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 1,
+            "sourceGeometryIndex": 0,
+            "sourceGeometryKind": "ArcOfHyperbola",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1"
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Sketch:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              5.424627697302464,
+              -0.312266709867448,
+              0.0
+            ]
+          },
+          {
+            "id": "Sketch:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              4.610850036333806,
+              2.874744874745064,
+              0.0
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "Sketch",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "sourceGeometryId": 1,
+          "sourceGeometryIndex": 0,
+          "sourceGeometryKind": "ArcOfHyperbola",
+          "sourceStableSubname": "g1",
+          "stableSubname": "g1",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sketch:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        }
+      ]
+    }
+  ]
+}

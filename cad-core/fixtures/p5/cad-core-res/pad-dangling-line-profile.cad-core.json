@@ -1,0 +1,831 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Pad:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                0.0,
+                10.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Sketch.Edge1"
+          },
+          {
+            "id": "Pad:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                10.0,
+                10.0
+              ],
+              [
+                0.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                10.0,
+                10.0,
+                0.0
+              ],
+              [
+                10.0,
+                10.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                10.0,
+                10.0,
+                0.0
+              ],
+              [
+                0.0,
+                10.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Sketch.Edge2"
+          },
+          {
+            "id": "Pad:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                10.0,
+                10.0,
+                10.0
+              ],
+              [
+                0.0,
+                10.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                10.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Sketch.Edge3"
+          },
+          {
+            "id": "Pad:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                10.0,
+                0.0,
+                10.0
+              ],
+              [
+                10.0,
+                10.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "points": [
+              [
+                5.0,
+                0.0,
+                0.0
+              ],
+              [
+                5.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                5.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Sketch.Edge4"
+          },
+          {
+            "id": "Pad:Edge13",
+            "identityStatus": "current_only",
+            "indexed": "Edge13",
+            "points": [
+              [
+                5.0,
+                0.0,
+                10.0
+              ],
+              [
+                10.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Pad:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                5.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "Sketch.Edge5"
+          },
+          {
+            "id": "Pad:Edge15",
+            "identityStatus": "current_only",
+            "indexed": "Edge15",
+            "points": [
+              [
+                0.0,
+                0.0,
+                10.0
+              ],
+              [
+                5.0,
+                0.0,
+                10.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "Pad:Face1",
+          "Pad:Face1",
+          "Pad:Face2",
+          "Pad:Face2",
+          "Pad:Face3",
+          "Pad:Face3",
+          "Pad:Face4",
+          "Pad:Face4",
+          "Pad:Face5",
+          "Pad:Face5",
+          "Pad:Face6",
+          "Pad:Face6",
+          "Pad:Face6",
+          "Pad:Face7",
+          "Pad:Face7",
+          "Pad:Face7"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          0,
+          5,
+          5,
+          0,
+          2,
+          6,
+          4,
+          7,
+          7,
+          4,
+          5,
+          8,
+          6,
+          9,
+          9,
+          6,
+          7,
+          1,
+          8,
+          3,
+          3,
+          8,
+          9,
+          1,
+          0,
+          8,
+          8,
+          4,
+          6,
+          0,
+          4,
+          8,
+          2,
+          3,
+          9,
+          5,
+          9,
+          7,
+          5,
+          2,
+          9
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Pad:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              10.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              0.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              10.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              10.0,
+              10.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              10.0,
+              0.0,
+              10.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              5.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Pad:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              5.0,
+              0.0,
+              10.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            10.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.0
+          ],
+          [
+            10.0,
+            10.0,
+            0.0
+          ],
+          [
+            10.0,
+            10.0,
+            10.0
+          ],
+          [
+            10.0,
+            0.0,
+            0.0
+          ],
+          [
+            10.0,
+            0.0,
+            10.0
+          ],
+          [
+            5.0,
+            0.0,
+            0.0
+          ],
+          [
+            5.0,
+            0.0,
+            10.0
+          ]
+        ]
+      },
+      "object": "Pad",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Edge12",
+          "id": "Pad:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "Sketch.Edge4",
+          "subname": "Sketch.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge13",
+          "identityStatus": "current_only",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Edge14",
+          "id": "Pad:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "Sketch.Edge5",
+          "subname": "Sketch.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge15",
+          "identityStatus": "current_only",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Edge3",
+          "id": "Pad:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "Sketch.Edge1",
+          "subname": "Sketch.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Edge6",
+          "id": "Pad:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "Sketch.Edge2",
+          "subname": "Sketch.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Edge9",
+          "id": "Pad:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "Sketch.Edge3",
+          "subname": "Sketch.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Face6",
+          "id": "Pad:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "Sketch.Face1",
+          "subname": "Sketch.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Face7",
+          "identityStatus": "current_only",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Vertex1",
+          "id": "Pad:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "Sketch.Vertex1",
+          "subname": "Sketch.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Vertex10",
+          "identityStatus": "current_only",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Vertex3",
+          "id": "Pad:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "Sketch.Vertex2",
+          "subname": "Sketch.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Vertex5",
+          "id": "Pad:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "Sketch.Vertex3",
+          "subname": "Sketch.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Vertex7",
+          "id": "Pad:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "Sketch.Vertex4",
+          "subname": "Sketch.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Pad:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Pad.Sketch.Vertex9",
+          "id": "Pad:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "Sketch.Vertex5",
+          "subname": "Sketch.Vertex9"
+        }
+      ]
+    }
+  ]
+}

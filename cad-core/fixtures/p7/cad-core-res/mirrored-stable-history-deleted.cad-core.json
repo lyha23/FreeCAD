@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "deleted_stable_subname",
+      "message": "UpToFace target Mirrored has stable subname Pocket.Face5, but current ElementMap history marks it as deleted",
+      "object": "ProbePad",
+      "property": "UpToFace",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Pocket.Face5",
+      "target": "Mirrored"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ProbePad",
+      "subshapes": []
+    }
+  ]
+}

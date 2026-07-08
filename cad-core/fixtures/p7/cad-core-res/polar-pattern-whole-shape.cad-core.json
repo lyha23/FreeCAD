@@ -1,0 +1,2648 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "PolarPattern:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                -4.440892098500626e-16,
+                -2.0,
+                0.0
+              ],
+              [
+                -4.440892098500626e-16,
+                -2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge1"
+          },
+          {
+            "id": "PolarPattern:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                -6.661338147750939e-16,
+                -3.0,
+                0.0
+              ],
+              [
+                -6.661338147750939e-16,
+                -3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge2"
+          },
+          {
+            "id": "PolarPattern:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                -4.440892098500626e-16,
+                -2.0,
+                0.0
+              ],
+              [
+                -6.661338147750939e-16,
+                -3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge3"
+          },
+          {
+            "id": "PolarPattern:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                -4.440892098500626e-16,
+                -2.0,
+                2.0
+              ],
+              [
+                -6.661338147750939e-16,
+                -3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge4"
+          },
+          {
+            "id": "PolarPattern:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                0.9999999999999993,
+                -3.0,
+                0.0
+              ],
+              [
+                0.9999999999999993,
+                -3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge5"
+          },
+          {
+            "id": "PolarPattern:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                -6.661338147750939e-16,
+                -3.0,
+                0.0
+              ],
+              [
+                0.9999999999999993,
+                -3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge6"
+          },
+          {
+            "id": "PolarPattern:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                -6.661338147750939e-16,
+                -3.0,
+                2.0
+              ],
+              [
+                0.9999999999999993,
+                -3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge7"
+          },
+          {
+            "id": "PolarPattern:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                0.9999999999999996,
+                -2.0,
+                0.0
+              ],
+              [
+                0.9999999999999996,
+                -2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge8"
+          },
+          {
+            "id": "PolarPattern:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                0.9999999999999993,
+                -3.0,
+                0.0
+              ],
+              [
+                0.9999999999999996,
+                -2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge9"
+          },
+          {
+            "id": "PolarPattern:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.9999999999999993,
+                -3.0,
+                2.0
+              ],
+              [
+                0.9999999999999996,
+                -2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge10"
+          },
+          {
+            "id": "PolarPattern:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.9999999999999996,
+                -2.0,
+                0.0
+              ],
+              [
+                -4.440892098500626e-16,
+                -1.9999999999999998,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge11"
+          },
+          {
+            "id": "PolarPattern:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.9999999999999996,
+                -2.0,
+                2.0
+              ],
+              [
+                -4.440892098500626e-16,
+                -1.9999999999999998,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Edge12"
+          },
+          {
+            "id": "PolarPattern:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                -2.0,
+                2.4492935982947064e-16,
+                0.0
+              ],
+              [
+                -2.0,
+                2.4492935982947064e-16,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge1"
+          },
+          {
+            "id": "PolarPattern:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                -3.0,
+                3.6739403974420594e-16,
+                0.0
+              ],
+              [
+                -3.0,
+                3.6739403974420594e-16,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge2"
+          },
+          {
+            "id": "PolarPattern:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                -2.0,
+                2.4492935982947064e-16,
+                0.0
+              ],
+              [
+                -3.0,
+                3.6739403974420594e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge3"
+          },
+          {
+            "id": "PolarPattern:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                -2.0,
+                2.4492935982947064e-16,
+                2.0
+              ],
+              [
+                -3.0,
+                3.6739403974420594e-16,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge4"
+          },
+          {
+            "id": "PolarPattern:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                -3.0,
+                -0.9999999999999997,
+                0.0
+              ],
+              [
+                -3.0,
+                -0.9999999999999997,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge5"
+          },
+          {
+            "id": "PolarPattern:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                -3.0,
+                3.6739403974420594e-16,
+                0.0
+              ],
+              [
+                -3.0,
+                -0.9999999999999997,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge6"
+          },
+          {
+            "id": "PolarPattern:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                -3.0,
+                3.6739403974420594e-16,
+                2.0
+              ],
+              [
+                -3.0,
+                -0.9999999999999997,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge7"
+          },
+          {
+            "id": "PolarPattern:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                -2.0,
+                -0.9999999999999998,
+                0.0
+              ],
+              [
+                -2.0,
+                -0.9999999999999998,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge8"
+          },
+          {
+            "id": "PolarPattern:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                -3.0,
+                -0.9999999999999997,
+                0.0
+              ],
+              [
+                -2.0,
+                -0.9999999999999998,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge9"
+          },
+          {
+            "id": "PolarPattern:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                -3.0,
+                -0.9999999999999997,
+                2.0
+              ],
+              [
+                -2.0,
+                -0.9999999999999998,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge10"
+          },
+          {
+            "id": "PolarPattern:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                -2.0,
+                -0.9999999999999998,
+                0.0
+              ],
+              [
+                -1.9999999999999998,
+                2.220446049250313e-16,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge11"
+          },
+          {
+            "id": "PolarPattern:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                -2.0,
+                -0.9999999999999998,
+                2.0
+              ],
+              [
+                -1.9999999999999998,
+                2.220446049250313e-16,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform2.Edge12"
+          },
+          {
+            "id": "PolarPattern:Edge25",
+            "identityStatus": "current_only",
+            "indexed": "Edge25",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge26",
+            "identityStatus": "current_only",
+            "indexed": "Edge26",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge27",
+            "identityStatus": "current_only",
+            "indexed": "Edge27",
+            "points": [
+              [
+                2.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge28",
+            "identityStatus": "current_only",
+            "indexed": "Edge28",
+            "points": [
+              [
+                2.0,
+                0.0,
+                2.0
+              ],
+              [
+                3.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge29",
+            "identityStatus": "current_only",
+            "indexed": "Edge29",
+            "points": [
+              [
+                3.0,
+                1.0,
+                0.0
+              ],
+              [
+                3.0,
+                1.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge30",
+            "identityStatus": "current_only",
+            "indexed": "Edge30",
+            "points": [
+              [
+                3.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge31",
+            "identityStatus": "current_only",
+            "indexed": "Edge31",
+            "points": [
+              [
+                3.0,
+                0.0,
+                2.0
+              ],
+              [
+                3.0,
+                1.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge32",
+            "identityStatus": "current_only",
+            "indexed": "Edge32",
+            "points": [
+              [
+                2.0,
+                1.0,
+                0.0
+              ],
+              [
+                2.0,
+                1.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge33",
+            "identityStatus": "current_only",
+            "indexed": "Edge33",
+            "points": [
+              [
+                3.0,
+                1.0,
+                0.0
+              ],
+              [
+                2.0,
+                1.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge34",
+            "identityStatus": "current_only",
+            "indexed": "Edge34",
+            "points": [
+              [
+                3.0,
+                1.0,
+                2.0
+              ],
+              [
+                2.0,
+                1.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge35",
+            "identityStatus": "current_only",
+            "indexed": "Edge35",
+            "points": [
+              [
+                2.0,
+                1.0,
+                0.0
+              ],
+              [
+                2.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge36",
+            "identityStatus": "current_only",
+            "indexed": "Edge36",
+            "points": [
+              [
+                2.0,
+                1.0,
+                2.0
+              ],
+              [
+                2.0,
+                0.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "PolarPattern:Edge37",
+            "identityStatus": "stable",
+            "indexed": "Edge37",
+            "points": [
+              [
+                2.220446049250313e-16,
+                2.0,
+                0.0
+              ],
+              [
+                2.220446049250313e-16,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge1"
+          },
+          {
+            "id": "PolarPattern:Edge38",
+            "identityStatus": "stable",
+            "indexed": "Edge38",
+            "points": [
+              [
+                3.3306690738754696e-16,
+                3.0,
+                0.0
+              ],
+              [
+                3.3306690738754696e-16,
+                3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge2"
+          },
+          {
+            "id": "PolarPattern:Edge39",
+            "identityStatus": "stable",
+            "indexed": "Edge39",
+            "points": [
+              [
+                2.220446049250313e-16,
+                2.0,
+                0.0
+              ],
+              [
+                3.3306690738754696e-16,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge3"
+          },
+          {
+            "id": "PolarPattern:Edge40",
+            "identityStatus": "stable",
+            "indexed": "Edge40",
+            "points": [
+              [
+                2.220446049250313e-16,
+                2.0,
+                2.0
+              ],
+              [
+                3.3306690738754696e-16,
+                3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge4"
+          },
+          {
+            "id": "PolarPattern:Edge41",
+            "identityStatus": "stable",
+            "indexed": "Edge41",
+            "points": [
+              [
+                -0.9999999999999997,
+                3.0,
+                0.0
+              ],
+              [
+                -0.9999999999999997,
+                3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge5"
+          },
+          {
+            "id": "PolarPattern:Edge42",
+            "identityStatus": "stable",
+            "indexed": "Edge42",
+            "points": [
+              [
+                3.3306690738754696e-16,
+                3.0,
+                0.0
+              ],
+              [
+                -0.9999999999999997,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge6"
+          },
+          {
+            "id": "PolarPattern:Edge43",
+            "identityStatus": "stable",
+            "indexed": "Edge43",
+            "points": [
+              [
+                3.3306690738754696e-16,
+                3.0,
+                2.0
+              ],
+              [
+                -0.9999999999999997,
+                3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge7"
+          },
+          {
+            "id": "PolarPattern:Edge44",
+            "identityStatus": "stable",
+            "indexed": "Edge44",
+            "points": [
+              [
+                -0.9999999999999998,
+                2.0,
+                0.0
+              ],
+              [
+                -0.9999999999999998,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge8"
+          },
+          {
+            "id": "PolarPattern:Edge45",
+            "identityStatus": "stable",
+            "indexed": "Edge45",
+            "points": [
+              [
+                -0.9999999999999997,
+                3.0,
+                0.0
+              ],
+              [
+                -0.9999999999999998,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge9"
+          },
+          {
+            "id": "PolarPattern:Edge46",
+            "identityStatus": "stable",
+            "indexed": "Edge46",
+            "points": [
+              [
+                -0.9999999999999997,
+                3.0,
+                2.0
+              ],
+              [
+                -0.9999999999999998,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge10"
+          },
+          {
+            "id": "PolarPattern:Edge47",
+            "identityStatus": "stable",
+            "indexed": "Edge47",
+            "points": [
+              [
+                -0.9999999999999998,
+                2.0,
+                0.0
+              ],
+              [
+                2.220446049250313e-16,
+                2.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge11"
+          },
+          {
+            "id": "PolarPattern:Edge48",
+            "identityStatus": "stable",
+            "indexed": "Edge48",
+            "points": [
+              [
+                -0.9999999999999998,
+                2.0,
+                2.0
+              ],
+              [
+                2.220446049250313e-16,
+                2.0,
+                2.0
+              ]
+            ],
+            "stableSubname": "PolarPattern.Transform1.Edge12"
+          }
+        ],
+        "faceIds": [
+          "PolarPattern:Face1",
+          "PolarPattern:Face1",
+          "PolarPattern:Face2",
+          "PolarPattern:Face2",
+          "PolarPattern:Face3",
+          "PolarPattern:Face3",
+          "PolarPattern:Face4",
+          "PolarPattern:Face4",
+          "PolarPattern:Face5",
+          "PolarPattern:Face5",
+          "PolarPattern:Face6",
+          "PolarPattern:Face6",
+          "PolarPattern:Face7",
+          "PolarPattern:Face7",
+          "PolarPattern:Face8",
+          "PolarPattern:Face8",
+          "PolarPattern:Face9",
+          "PolarPattern:Face9",
+          "PolarPattern:Face10",
+          "PolarPattern:Face10",
+          "PolarPattern:Face11",
+          "PolarPattern:Face11",
+          "PolarPattern:Face12",
+          "PolarPattern:Face12",
+          "PolarPattern:Face13",
+          "PolarPattern:Face13",
+          "PolarPattern:Face14",
+          "PolarPattern:Face14",
+          "PolarPattern:Face15",
+          "PolarPattern:Face15",
+          "PolarPattern:Face16",
+          "PolarPattern:Face16",
+          "PolarPattern:Face17",
+          "PolarPattern:Face17",
+          "PolarPattern:Face18",
+          "PolarPattern:Face18",
+          "PolarPattern:Face19",
+          "PolarPattern:Face19",
+          "PolarPattern:Face20",
+          "PolarPattern:Face20",
+          "PolarPattern:Face21",
+          "PolarPattern:Face21",
+          "PolarPattern:Face22",
+          "PolarPattern:Face22",
+          "PolarPattern:Face23",
+          "PolarPattern:Face23",
+          "PolarPattern:Face24",
+          "PolarPattern:Face24"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          1,
+          4,
+          3,
+          3,
+          4,
+          5,
+          4,
+          6,
+          5,
+          5,
+          6,
+          7,
+          6,
+          0,
+          7,
+          7,
+          0,
+          2,
+          0,
+          4,
+          1,
+          6,
+          4,
+          0,
+          5,
+          2,
+          3,
+          5,
+          7,
+          2,
+          8,
+          9,
+          10,
+          10,
+          9,
+          11,
+          9,
+          12,
+          11,
+          11,
+          12,
+          13,
+          12,
+          14,
+          13,
+          13,
+          14,
+          15,
+          14,
+          8,
+          15,
+          15,
+          8,
+          10,
+          8,
+          12,
+          9,
+          14,
+          12,
+          8,
+          13,
+          10,
+          11,
+          13,
+          15,
+          10,
+          16,
+          17,
+          18,
+          18,
+          17,
+          19,
+          17,
+          20,
+          19,
+          19,
+          20,
+          21,
+          20,
+          22,
+          21,
+          21,
+          22,
+          23,
+          22,
+          16,
+          23,
+          23,
+          16,
+          18,
+          16,
+          20,
+          17,
+          22,
+          20,
+          16,
+          21,
+          18,
+          19,
+          21,
+          23,
+          18,
+          24,
+          25,
+          26,
+          26,
+          25,
+          27,
+          25,
+          28,
+          27,
+          27,
+          28,
+          29,
+          28,
+          30,
+          29,
+          29,
+          30,
+          31,
+          30,
+          24,
+          31,
+          31,
+          24,
+          26,
+          24,
+          28,
+          25,
+          30,
+          28,
+          24,
+          29,
+          26,
+          27,
+          29,
+          31,
+          26
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "PolarPattern:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              -4.440892098500626e-16,
+              -2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              -4.440892098500626e-16,
+              -2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              -6.661338147750939e-16,
+              -3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              -6.661338147750939e-16,
+              -3.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              0.9999999999999993,
+              -3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              0.9999999999999993,
+              -3.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              0.9999999999999996,
+              -2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              0.9999999999999996,
+              -2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              -2.0,
+              2.4492935982947064e-16,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              -2.0,
+              2.4492935982947064e-16,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              -3.0,
+              3.6739403974420594e-16,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              -3.0,
+              3.6739403974420594e-16,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              -3.0,
+              -0.9999999999999997,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              -3.0,
+              -0.9999999999999997,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              -2.0,
+              -0.9999999999999998,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              -2.0,
+              -0.9999999999999998,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex17",
+            "indexed": "Vertex17",
+            "point": [
+              2.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex18",
+            "indexed": "Vertex18",
+            "point": [
+              2.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex19",
+            "indexed": "Vertex19",
+            "point": [
+              3.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex20",
+            "indexed": "Vertex20",
+            "point": [
+              3.0,
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex21",
+            "indexed": "Vertex21",
+            "point": [
+              3.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex22",
+            "indexed": "Vertex22",
+            "point": [
+              3.0,
+              1.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex23",
+            "indexed": "Vertex23",
+            "point": [
+              2.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex24",
+            "indexed": "Vertex24",
+            "point": [
+              2.0,
+              1.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex25",
+            "indexed": "Vertex25",
+            "point": [
+              2.220446049250313e-16,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex26",
+            "indexed": "Vertex26",
+            "point": [
+              2.220446049250313e-16,
+              2.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex27",
+            "indexed": "Vertex27",
+            "point": [
+              3.3306690738754696e-16,
+              3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex28",
+            "indexed": "Vertex28",
+            "point": [
+              3.3306690738754696e-16,
+              3.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex29",
+            "indexed": "Vertex29",
+            "point": [
+              -0.9999999999999997,
+              3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex30",
+            "indexed": "Vertex30",
+            "point": [
+              -0.9999999999999997,
+              3.0,
+              2.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex31",
+            "indexed": "Vertex31",
+            "point": [
+              -0.9999999999999998,
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "id": "PolarPattern:Vertex32",
+            "indexed": "Vertex32",
+            "point": [
+              -0.9999999999999998,
+              2.0,
+              2.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            -4.440892098500626e-16,
+            -2.0,
+            0.0
+          ],
+          [
+            -6.661338147750939e-16,
+            -3.0,
+            0.0
+          ],
+          [
+            -4.440892098500626e-16,
+            -2.0,
+            2.0
+          ],
+          [
+            -6.661338147750939e-16,
+            -3.0,
+            2.0
+          ],
+          [
+            0.9999999999999993,
+            -3.0,
+            0.0
+          ],
+          [
+            0.9999999999999993,
+            -3.0,
+            2.0
+          ],
+          [
+            0.9999999999999996,
+            -2.0,
+            0.0
+          ],
+          [
+            0.9999999999999996,
+            -2.0,
+            2.0
+          ],
+          [
+            -2.0,
+            2.4492935982947064e-16,
+            0.0
+          ],
+          [
+            -3.0,
+            3.6739403974420594e-16,
+            0.0
+          ],
+          [
+            -2.0,
+            2.4492935982947064e-16,
+            2.0
+          ],
+          [
+            -3.0,
+            3.6739403974420594e-16,
+            2.0
+          ],
+          [
+            -3.0,
+            -0.9999999999999997,
+            0.0
+          ],
+          [
+            -3.0,
+            -0.9999999999999997,
+            2.0
+          ],
+          [
+            -2.0,
+            -0.9999999999999998,
+            0.0
+          ],
+          [
+            -2.0,
+            -0.9999999999999998,
+            2.0
+          ],
+          [
+            2.0,
+            0.0,
+            0.0
+          ],
+          [
+            3.0,
+            0.0,
+            0.0
+          ],
+          [
+            2.0,
+            0.0,
+            2.0
+          ],
+          [
+            3.0,
+            0.0,
+            2.0
+          ],
+          [
+            3.0,
+            1.0,
+            0.0
+          ],
+          [
+            3.0,
+            1.0,
+            2.0
+          ],
+          [
+            2.0,
+            1.0,
+            0.0
+          ],
+          [
+            2.0,
+            1.0,
+            2.0
+          ],
+          [
+            2.220446049250313e-16,
+            2.0,
+            0.0
+          ],
+          [
+            3.3306690738754696e-16,
+            3.0,
+            0.0
+          ],
+          [
+            2.220446049250313e-16,
+            2.0,
+            2.0
+          ],
+          [
+            3.3306690738754696e-16,
+            3.0,
+            2.0
+          ],
+          [
+            -0.9999999999999997,
+            3.0,
+            0.0
+          ],
+          [
+            -0.9999999999999997,
+            3.0,
+            2.0
+          ],
+          [
+            -0.9999999999999998,
+            2.0,
+            0.0
+          ],
+          [
+            -0.9999999999999998,
+            2.0,
+            2.0
+          ]
+        ]
+      },
+      "object": "PolarPattern",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge1",
+          "id": "PolarPattern:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge1",
+          "subname": "PolarPattern.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge10",
+          "id": "PolarPattern:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge10",
+          "subname": "PolarPattern.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge11",
+          "id": "PolarPattern:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge11",
+          "subname": "PolarPattern.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge12",
+          "id": "PolarPattern:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge12",
+          "subname": "PolarPattern.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge13",
+          "id": "PolarPattern:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge1",
+          "subname": "PolarPattern.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge14",
+          "id": "PolarPattern:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge2",
+          "subname": "PolarPattern.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge15",
+          "id": "PolarPattern:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge3",
+          "subname": "PolarPattern.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge16",
+          "id": "PolarPattern:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge4",
+          "subname": "PolarPattern.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge17",
+          "id": "PolarPattern:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge5",
+          "subname": "PolarPattern.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge18",
+          "id": "PolarPattern:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge6",
+          "subname": "PolarPattern.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge19",
+          "id": "PolarPattern:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge7",
+          "subname": "PolarPattern.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge2",
+          "id": "PolarPattern:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge2",
+          "subname": "PolarPattern.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge20",
+          "id": "PolarPattern:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge8",
+          "subname": "PolarPattern.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge21",
+          "id": "PolarPattern:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge9",
+          "subname": "PolarPattern.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge22",
+          "id": "PolarPattern:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge10",
+          "subname": "PolarPattern.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge23",
+          "id": "PolarPattern:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge11",
+          "subname": "PolarPattern.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge24",
+          "id": "PolarPattern:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform2.Edge12",
+          "subname": "PolarPattern.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge25",
+          "identityStatus": "current_only",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge26",
+          "identityStatus": "current_only",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge27",
+          "identityStatus": "current_only",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge28",
+          "identityStatus": "current_only",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge29",
+          "identityStatus": "current_only",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge3",
+          "id": "PolarPattern:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge3",
+          "subname": "PolarPattern.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge30",
+          "identityStatus": "current_only",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge31",
+          "identityStatus": "current_only",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge32",
+          "identityStatus": "current_only",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge33",
+          "identityStatus": "current_only",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge34",
+          "identityStatus": "current_only",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge35",
+          "identityStatus": "current_only",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Edge36",
+          "identityStatus": "current_only",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge36"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge37",
+          "id": "PolarPattern:Edge37",
+          "identityStatus": "stable",
+          "indexed": "Edge37",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge1",
+          "subname": "PolarPattern.Edge37"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge38",
+          "id": "PolarPattern:Edge38",
+          "identityStatus": "stable",
+          "indexed": "Edge38",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge2",
+          "subname": "PolarPattern.Edge38"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge39",
+          "id": "PolarPattern:Edge39",
+          "identityStatus": "stable",
+          "indexed": "Edge39",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge3",
+          "subname": "PolarPattern.Edge39"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge4",
+          "id": "PolarPattern:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge4",
+          "subname": "PolarPattern.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge40",
+          "id": "PolarPattern:Edge40",
+          "identityStatus": "stable",
+          "indexed": "Edge40",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge4",
+          "subname": "PolarPattern.Edge40"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge41",
+          "id": "PolarPattern:Edge41",
+          "identityStatus": "stable",
+          "indexed": "Edge41",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge5",
+          "subname": "PolarPattern.Edge41"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge42",
+          "id": "PolarPattern:Edge42",
+          "identityStatus": "stable",
+          "indexed": "Edge42",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge6",
+          "subname": "PolarPattern.Edge42"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge43",
+          "id": "PolarPattern:Edge43",
+          "identityStatus": "stable",
+          "indexed": "Edge43",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge7",
+          "subname": "PolarPattern.Edge43"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge44",
+          "id": "PolarPattern:Edge44",
+          "identityStatus": "stable",
+          "indexed": "Edge44",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge8",
+          "subname": "PolarPattern.Edge44"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge45",
+          "id": "PolarPattern:Edge45",
+          "identityStatus": "stable",
+          "indexed": "Edge45",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge9",
+          "subname": "PolarPattern.Edge45"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge46",
+          "id": "PolarPattern:Edge46",
+          "identityStatus": "stable",
+          "indexed": "Edge46",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge10",
+          "subname": "PolarPattern.Edge46"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge47",
+          "id": "PolarPattern:Edge47",
+          "identityStatus": "stable",
+          "indexed": "Edge47",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge11",
+          "subname": "PolarPattern.Edge47"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge48",
+          "id": "PolarPattern:Edge48",
+          "identityStatus": "stable",
+          "indexed": "Edge48",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Transform1.Edge12",
+          "subname": "PolarPattern.Edge48"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge5",
+          "id": "PolarPattern:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge5",
+          "subname": "PolarPattern.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge6",
+          "id": "PolarPattern:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge6",
+          "subname": "PolarPattern.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge7",
+          "id": "PolarPattern:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge7",
+          "subname": "PolarPattern.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge8",
+          "id": "PolarPattern:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge8",
+          "subname": "PolarPattern.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Edge9",
+          "id": "PolarPattern:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "PolarPattern.Edge9",
+          "subname": "PolarPattern.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face1",
+          "id": "PolarPattern:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Face1",
+          "subname": "PolarPattern.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face10",
+          "id": "PolarPattern:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform2.Face4",
+          "subname": "PolarPattern.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face11",
+          "id": "PolarPattern:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform2.Face5",
+          "subname": "PolarPattern.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face12",
+          "id": "PolarPattern:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform2.Face6",
+          "subname": "PolarPattern.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Face13",
+          "identityStatus": "current_only",
+          "indexed": "Face13",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Face14",
+          "identityStatus": "current_only",
+          "indexed": "Face14",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Face15",
+          "identityStatus": "current_only",
+          "indexed": "Face15",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Face16",
+          "identityStatus": "current_only",
+          "indexed": "Face16",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Face17",
+          "identityStatus": "current_only",
+          "indexed": "Face17",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Face18",
+          "identityStatus": "current_only",
+          "indexed": "Face18",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face19",
+          "id": "PolarPattern:Face19",
+          "identityStatus": "stable",
+          "indexed": "Face19",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform1.Face1",
+          "subname": "PolarPattern.Face19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face2",
+          "id": "PolarPattern:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Face2",
+          "subname": "PolarPattern.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face20",
+          "id": "PolarPattern:Face20",
+          "identityStatus": "stable",
+          "indexed": "Face20",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform1.Face2",
+          "subname": "PolarPattern.Face20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face21",
+          "id": "PolarPattern:Face21",
+          "identityStatus": "stable",
+          "indexed": "Face21",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform1.Face3",
+          "subname": "PolarPattern.Face21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face22",
+          "id": "PolarPattern:Face22",
+          "identityStatus": "stable",
+          "indexed": "Face22",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform1.Face4",
+          "subname": "PolarPattern.Face22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face23",
+          "id": "PolarPattern:Face23",
+          "identityStatus": "stable",
+          "indexed": "Face23",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform1.Face5",
+          "subname": "PolarPattern.Face23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face24",
+          "id": "PolarPattern:Face24",
+          "identityStatus": "stable",
+          "indexed": "Face24",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform1.Face6",
+          "subname": "PolarPattern.Face24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face3",
+          "id": "PolarPattern:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Face3",
+          "subname": "PolarPattern.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face4",
+          "id": "PolarPattern:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Face4",
+          "subname": "PolarPattern.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face5",
+          "id": "PolarPattern:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Face5",
+          "subname": "PolarPattern.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face6",
+          "id": "PolarPattern:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Face6",
+          "subname": "PolarPattern.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face7",
+          "id": "PolarPattern:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform2.Face1",
+          "subname": "PolarPattern.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face8",
+          "id": "PolarPattern:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform2.Face2",
+          "subname": "PolarPattern.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Face9",
+          "id": "PolarPattern:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "PolarPattern.Transform2.Face3",
+          "subname": "PolarPattern.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex1",
+          "id": "PolarPattern:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex1",
+          "subname": "PolarPattern.Transform3.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex10",
+          "id": "PolarPattern:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex2",
+          "subname": "PolarPattern.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex11",
+          "id": "PolarPattern:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex3",
+          "subname": "PolarPattern.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex12",
+          "id": "PolarPattern:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex4",
+          "subname": "PolarPattern.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex13",
+          "id": "PolarPattern:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex5",
+          "subname": "PolarPattern.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex14",
+          "id": "PolarPattern:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex6",
+          "subname": "PolarPattern.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex15",
+          "id": "PolarPattern:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex7",
+          "subname": "PolarPattern.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex16",
+          "id": "PolarPattern:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex8",
+          "subname": "PolarPattern.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex17",
+          "identityStatus": "current_only",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex18",
+          "identityStatus": "current_only",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex19",
+          "identityStatus": "current_only",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex2",
+          "id": "PolarPattern:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex2",
+          "subname": "PolarPattern.Transform3.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex20",
+          "identityStatus": "current_only",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex21",
+          "identityStatus": "current_only",
+          "indexed": "Vertex21",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex22",
+          "identityStatus": "current_only",
+          "indexed": "Vertex22",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex23",
+          "identityStatus": "current_only",
+          "indexed": "Vertex23",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "PolarPattern:Vertex24",
+          "identityStatus": "current_only",
+          "indexed": "Vertex24",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex25",
+          "id": "PolarPattern:Vertex25",
+          "identityStatus": "stable",
+          "indexed": "Vertex25",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex1",
+          "subname": "PolarPattern.Vertex25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex26",
+          "id": "PolarPattern:Vertex26",
+          "identityStatus": "stable",
+          "indexed": "Vertex26",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex2",
+          "subname": "PolarPattern.Vertex26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex27",
+          "id": "PolarPattern:Vertex27",
+          "identityStatus": "stable",
+          "indexed": "Vertex27",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex3",
+          "subname": "PolarPattern.Vertex27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex28",
+          "id": "PolarPattern:Vertex28",
+          "identityStatus": "stable",
+          "indexed": "Vertex28",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex4",
+          "subname": "PolarPattern.Vertex28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex29",
+          "id": "PolarPattern:Vertex29",
+          "identityStatus": "stable",
+          "indexed": "Vertex29",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex5",
+          "subname": "PolarPattern.Vertex29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex3",
+          "id": "PolarPattern:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex3",
+          "subname": "PolarPattern.Transform3.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex30",
+          "id": "PolarPattern:Vertex30",
+          "identityStatus": "stable",
+          "indexed": "Vertex30",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex6",
+          "subname": "PolarPattern.Vertex30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex31",
+          "id": "PolarPattern:Vertex31",
+          "identityStatus": "stable",
+          "indexed": "Vertex31",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex7",
+          "subname": "PolarPattern.Vertex31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex32",
+          "id": "PolarPattern:Vertex32",
+          "identityStatus": "stable",
+          "indexed": "Vertex32",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform1.Vertex8",
+          "subname": "PolarPattern.Vertex32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex4",
+          "id": "PolarPattern:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex4",
+          "subname": "PolarPattern.Transform3.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex5",
+          "id": "PolarPattern:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex5",
+          "subname": "PolarPattern.Transform3.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex6",
+          "id": "PolarPattern:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex6",
+          "subname": "PolarPattern.Transform3.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex7",
+          "id": "PolarPattern:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex7",
+          "subname": "PolarPattern.Transform3.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Transform3.Vertex8",
+          "id": "PolarPattern:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform3.Vertex8",
+          "subname": "PolarPattern.Transform3.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "PolarPattern.Vertex9",
+          "id": "PolarPattern:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "PolarPattern.Transform2.Vertex1",
+          "subname": "PolarPattern.Vertex9"
+        }
+      ]
+    }
+  ]
+}

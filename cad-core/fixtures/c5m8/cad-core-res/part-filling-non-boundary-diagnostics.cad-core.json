@@ -1,0 +1,53 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object MissingConstraint",
+      "object": "MissingNonBoundaryTarget",
+      "property": "Boundary",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "Edge1",
+      "target": "MissingConstraint"
+    },
+    {
+      "code": "invalid_non_boundary_source",
+      "message": "Part.makeFilledFace non-boundary source must resolve to a wire, edge, face, or vertex",
+      "object": "InvalidNonBoundarySolid",
+      "property": "Boundary",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SolidConstraint"
+    },
+    {
+      "code": "invalid_subshape",
+      "message": "Boundary subshape Edge99 did not resolve",
+      "object": "InvalidNonBoundarySubshape",
+      "property": "Boundary",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge99",
+      "target": "ConstraintEdge"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "InvalidNonBoundarySolid",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "MissingNonBoundaryTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidNonBoundarySubshape",
+      "subshapes": []
+    }
+  ]
+}

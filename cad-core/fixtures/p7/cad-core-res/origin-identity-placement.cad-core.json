@@ -1,0 +1,26 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "origin",
+      "frame": {
+        "origin": [
+          10.0,
+          0.0,
+          0.0
+        ],
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "mesh": null,
+      "object": "Origin",
+      "subshapes": []
+    }
+  ]
+}

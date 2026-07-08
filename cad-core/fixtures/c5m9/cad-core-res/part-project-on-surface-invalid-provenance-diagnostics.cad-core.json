@@ -1,0 +1,54 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object MissingProjectionLine",
+      "object": "ProjectionMissingTarget",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "Edge1",
+      "target": "MissingProjectionLine"
+    },
+    {
+      "code": "unsupported_subshape_kind",
+      "message": "Part::ProjectOnSurface projects only edges, wires and faces",
+      "object": "ProjectionUnsupportedVertex",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Vertex1",
+      "target": "ProjectionVertex"
+    },
+    {
+      "code": "invalid_subshape",
+      "message": "Part::ProjectOnSurface Projection object/subname counts differ",
+      "object": "ProjectionCountMismatch",
+      "property": "Projection",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Edge1",
+      "target": "ProjectionLine"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ProjectionMissingTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "ProjectionUnsupportedVertex",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "ProjectionCountMismatch",
+      "subshapes": []
+    }
+  ]
+}

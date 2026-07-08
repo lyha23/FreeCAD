@@ -1,0 +1,38 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "attachment_support_invalid_shape",
+      "message": "DatumPoint ProximityPoint requires two support shapes",
+      "object": "DatumPointProximityMissingSecond",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SinglePoint"
+    },
+    {
+      "code": "subname_resolve_failed",
+      "message": "Datum AttachmentSupport subname MissingFace1 could not be resolved from request-local support shape evidence",
+      "object": "DatumPointProximityBadSubname",
+      "property": "AttachmentSupport",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "MissingFace1",
+      "target": "BadSubnamePlane"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "DatumPointProximityMissingSecond",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumPointProximityBadSubname",
+      "subshapes": []
+    }
+  ]
+}

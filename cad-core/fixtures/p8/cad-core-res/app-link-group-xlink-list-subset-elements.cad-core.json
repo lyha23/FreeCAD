@@ -1,0 +1,1350 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "LinkGroup:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                0.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge1"
+          },
+          {
+            "id": "LinkGroup:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.0,
+                10.0,
+                4.0
+              ],
+              [
+                0.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge2"
+          },
+          {
+            "id": "LinkGroup:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                13.0,
+                0.0
+              ],
+              [
+                0.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge3"
+          },
+          {
+            "id": "LinkGroup:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                0.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Edge4"
+          },
+          {
+            "id": "LinkGroup:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                2.0,
+                10.0,
+                0.0
+              ],
+              [
+                2.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge5"
+          },
+          {
+            "id": "LinkGroup:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                2.0,
+                10.0,
+                4.0
+              ],
+              [
+                2.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge6"
+          },
+          {
+            "id": "LinkGroup:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                2.0,
+                13.0,
+                0.0
+              ],
+              [
+                2.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge7"
+          },
+          {
+            "id": "LinkGroup:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                2.0,
+                10.0,
+                0.0
+              ],
+              [
+                2.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Edge8"
+          },
+          {
+            "id": "LinkGroup:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                0.0,
+                10.0,
+                0.0
+              ],
+              [
+                2.0,
+                10.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Edge9"
+          },
+          {
+            "id": "LinkGroup:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.0,
+                10.0,
+                4.0
+              ],
+              [
+                2.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge10"
+          },
+          {
+            "id": "LinkGroup:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                0.0,
+                13.0,
+                0.0
+              ],
+              [
+                2.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "0.Edge11"
+          },
+          {
+            "id": "LinkGroup:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.0,
+                13.0,
+                4.0
+              ],
+              [
+                2.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "0.Edge12"
+          },
+          {
+            "id": "LinkGroup:Edge13",
+            "identityStatus": "stable",
+            "indexed": "Edge13",
+            "points": [
+              [
+                5.0,
+                10.0,
+                0.0
+              ],
+              [
+                5.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge1"
+          },
+          {
+            "id": "LinkGroup:Edge14",
+            "identityStatus": "stable",
+            "indexed": "Edge14",
+            "points": [
+              [
+                5.0,
+                10.0,
+                4.0
+              ],
+              [
+                5.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge2"
+          },
+          {
+            "id": "LinkGroup:Edge15",
+            "identityStatus": "stable",
+            "indexed": "Edge15",
+            "points": [
+              [
+                5.0,
+                13.0,
+                0.0
+              ],
+              [
+                5.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge3"
+          },
+          {
+            "id": "LinkGroup:Edge16",
+            "identityStatus": "stable",
+            "indexed": "Edge16",
+            "points": [
+              [
+                5.0,
+                10.0,
+                0.0
+              ],
+              [
+                5.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "1.Edge4"
+          },
+          {
+            "id": "LinkGroup:Edge17",
+            "identityStatus": "stable",
+            "indexed": "Edge17",
+            "points": [
+              [
+                7.0,
+                10.0,
+                0.0
+              ],
+              [
+                7.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge5"
+          },
+          {
+            "id": "LinkGroup:Edge18",
+            "identityStatus": "stable",
+            "indexed": "Edge18",
+            "points": [
+              [
+                7.0,
+                10.0,
+                4.0
+              ],
+              [
+                7.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge6"
+          },
+          {
+            "id": "LinkGroup:Edge19",
+            "identityStatus": "stable",
+            "indexed": "Edge19",
+            "points": [
+              [
+                7.0,
+                13.0,
+                0.0
+              ],
+              [
+                7.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge7"
+          },
+          {
+            "id": "LinkGroup:Edge20",
+            "identityStatus": "stable",
+            "indexed": "Edge20",
+            "points": [
+              [
+                7.0,
+                10.0,
+                0.0
+              ],
+              [
+                7.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "1.Edge8"
+          },
+          {
+            "id": "LinkGroup:Edge21",
+            "identityStatus": "stable",
+            "indexed": "Edge21",
+            "points": [
+              [
+                5.0,
+                10.0,
+                0.0
+              ],
+              [
+                7.0,
+                10.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "1.Edge9"
+          },
+          {
+            "id": "LinkGroup:Edge22",
+            "identityStatus": "stable",
+            "indexed": "Edge22",
+            "points": [
+              [
+                5.0,
+                10.0,
+                4.0
+              ],
+              [
+                7.0,
+                10.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge10"
+          },
+          {
+            "id": "LinkGroup:Edge23",
+            "identityStatus": "stable",
+            "indexed": "Edge23",
+            "points": [
+              [
+                5.0,
+                13.0,
+                0.0
+              ],
+              [
+                7.0,
+                13.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "1.Edge11"
+          },
+          {
+            "id": "LinkGroup:Edge24",
+            "identityStatus": "stable",
+            "indexed": "Edge24",
+            "points": [
+              [
+                5.0,
+                13.0,
+                4.0
+              ],
+              [
+                7.0,
+                13.0,
+                4.0
+              ]
+            ],
+            "stableSubname": "1.Edge12"
+          }
+        ],
+        "faceIds": [
+          "LinkGroup:Face1",
+          "LinkGroup:Face1",
+          "LinkGroup:Face2",
+          "LinkGroup:Face2",
+          "LinkGroup:Face3",
+          "LinkGroup:Face3",
+          "LinkGroup:Face4",
+          "LinkGroup:Face4",
+          "LinkGroup:Face5",
+          "LinkGroup:Face5",
+          "LinkGroup:Face6",
+          "LinkGroup:Face6",
+          "LinkGroup:Face7",
+          "LinkGroup:Face7",
+          "LinkGroup:Face8",
+          "LinkGroup:Face8",
+          "LinkGroup:Face9",
+          "LinkGroup:Face9",
+          "LinkGroup:Face10",
+          "LinkGroup:Face10",
+          "LinkGroup:Face11",
+          "LinkGroup:Face11",
+          "LinkGroup:Face12",
+          "LinkGroup:Face12"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          1,
+          3,
+          4,
+          5,
+          6,
+          4,
+          6,
+          7,
+          5,
+          4,
+          0,
+          0,
+          4,
+          1,
+          7,
+          6,
+          2,
+          7,
+          2,
+          3,
+          2,
+          6,
+          0,
+          0,
+          6,
+          5,
+          7,
+          3,
+          1,
+          7,
+          1,
+          4,
+          8,
+          9,
+          10,
+          10,
+          9,
+          11,
+          12,
+          13,
+          14,
+          12,
+          14,
+          15,
+          13,
+          12,
+          8,
+          8,
+          12,
+          9,
+          15,
+          14,
+          10,
+          15,
+          10,
+          11,
+          10,
+          14,
+          8,
+          8,
+          14,
+          13,
+          15,
+          11,
+          9,
+          15,
+          9,
+          12
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "LinkGroup:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              10.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              13.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              13.0,
+              0.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              2.0,
+              10.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              2.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              2.0,
+              13.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              2.0,
+              13.0,
+              0.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex9",
+            "indexed": "Vertex9",
+            "point": [
+              5.0,
+              10.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex10",
+            "indexed": "Vertex10",
+            "point": [
+              5.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex11",
+            "indexed": "Vertex11",
+            "point": [
+              5.0,
+              13.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex12",
+            "indexed": "Vertex12",
+            "point": [
+              5.0,
+              13.0,
+              0.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex13",
+            "indexed": "Vertex13",
+            "point": [
+              7.0,
+              10.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex14",
+            "indexed": "Vertex14",
+            "point": [
+              7.0,
+              10.0,
+              0.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex15",
+            "indexed": "Vertex15",
+            "point": [
+              7.0,
+              13.0,
+              4.0
+            ]
+          },
+          {
+            "id": "LinkGroup:Vertex16",
+            "indexed": "Vertex16",
+            "point": [
+              7.0,
+              13.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            4.0
+          ],
+          [
+            0.0,
+            13.0,
+            0.0
+          ],
+          [
+            0.0,
+            13.0,
+            4.0
+          ],
+          [
+            2.0,
+            10.0,
+            4.0
+          ],
+          [
+            2.0,
+            10.0,
+            0.0
+          ],
+          [
+            2.0,
+            13.0,
+            0.0
+          ],
+          [
+            2.0,
+            13.0,
+            4.0
+          ],
+          [
+            5.0,
+            10.0,
+            0.0
+          ],
+          [
+            5.0,
+            10.0,
+            4.0
+          ],
+          [
+            5.0,
+            13.0,
+            0.0
+          ],
+          [
+            5.0,
+            13.0,
+            4.0
+          ],
+          [
+            7.0,
+            10.0,
+            4.0
+          ],
+          [
+            7.0,
+            10.0,
+            0.0
+          ],
+          [
+            7.0,
+            13.0,
+            0.0
+          ],
+          [
+            7.0,
+            13.0,
+            4.0
+          ]
+        ]
+      },
+      "object": "LinkGroup",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge1",
+          "id": "LinkGroup:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "0.Edge1",
+          "subname": "0.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge10",
+          "id": "LinkGroup:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "0.Edge10",
+          "subname": "0.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge11",
+          "id": "LinkGroup:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "0.Edge11",
+          "subname": "0.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge12",
+          "id": "LinkGroup:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "0.Edge12",
+          "subname": "0.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge13",
+          "id": "LinkGroup:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "stableSubname": "1.Edge1",
+          "subname": "1.Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge14",
+          "id": "LinkGroup:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "stableSubname": "1.Edge2",
+          "subname": "1.Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge15",
+          "id": "LinkGroup:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "stableSubname": "1.Edge3",
+          "subname": "1.Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge16",
+          "id": "LinkGroup:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "stableSubname": "1.Edge4",
+          "subname": "1.Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge17",
+          "id": "LinkGroup:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "stableSubname": "1.Edge5",
+          "subname": "1.Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge18",
+          "id": "LinkGroup:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "stableSubname": "1.Edge6",
+          "subname": "1.Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge19",
+          "id": "LinkGroup:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "stableSubname": "1.Edge7",
+          "subname": "1.Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge2",
+          "id": "LinkGroup:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "0.Edge2",
+          "subname": "0.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge20",
+          "id": "LinkGroup:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "stableSubname": "1.Edge8",
+          "subname": "1.Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge21",
+          "id": "LinkGroup:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "stableSubname": "1.Edge9",
+          "subname": "1.Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge22",
+          "id": "LinkGroup:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "stableSubname": "1.Edge10",
+          "subname": "1.Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge23",
+          "id": "LinkGroup:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "stableSubname": "1.Edge11",
+          "subname": "1.Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Edge24",
+          "id": "LinkGroup:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "stableSubname": "1.Edge12",
+          "subname": "1.Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge3",
+          "id": "LinkGroup:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "0.Edge3",
+          "subname": "0.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge4",
+          "id": "LinkGroup:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "0.Edge4",
+          "subname": "0.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge5",
+          "id": "LinkGroup:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "0.Edge5",
+          "subname": "0.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge6",
+          "id": "LinkGroup:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "0.Edge6",
+          "subname": "0.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge7",
+          "id": "LinkGroup:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "0.Edge7",
+          "subname": "0.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge8",
+          "id": "LinkGroup:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "0.Edge8",
+          "subname": "0.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Edge9",
+          "id": "LinkGroup:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "0.Edge9",
+          "subname": "0.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Face1",
+          "id": "LinkGroup:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "0.Face1",
+          "subname": "0.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Face10",
+          "id": "LinkGroup:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "stableSubname": "1.Face4",
+          "subname": "1.Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Face11",
+          "id": "LinkGroup:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "stableSubname": "1.Face5",
+          "subname": "1.Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Face12",
+          "id": "LinkGroup:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "stableSubname": "1.Face6",
+          "subname": "1.Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Face2",
+          "id": "LinkGroup:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "0.Face2",
+          "subname": "0.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Face3",
+          "id": "LinkGroup:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "0.Face3",
+          "subname": "0.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Face4",
+          "id": "LinkGroup:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "0.Face4",
+          "subname": "0.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Face5",
+          "id": "LinkGroup:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "0.Face5",
+          "subname": "0.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Face6",
+          "id": "LinkGroup:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "0.Face6",
+          "subname": "0.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Face7",
+          "id": "LinkGroup:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "stableSubname": "1.Face1",
+          "subname": "1.Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Face8",
+          "id": "LinkGroup:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "stableSubname": "1.Face2",
+          "subname": "1.Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Face9",
+          "id": "LinkGroup:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "stableSubname": "1.Face3",
+          "subname": "1.Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex1",
+          "id": "LinkGroup:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex1",
+          "subname": "0.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex10",
+          "id": "LinkGroup:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex2",
+          "subname": "1.Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex11",
+          "id": "LinkGroup:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex3",
+          "subname": "1.Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex12",
+          "id": "LinkGroup:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex4",
+          "subname": "1.Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex13",
+          "id": "LinkGroup:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex5",
+          "subname": "1.Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex14",
+          "id": "LinkGroup:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex6",
+          "subname": "1.Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex15",
+          "id": "LinkGroup:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex7",
+          "subname": "1.Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex16",
+          "id": "LinkGroup:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex8",
+          "subname": "1.Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex2",
+          "id": "LinkGroup:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex2",
+          "subname": "0.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex3",
+          "id": "LinkGroup:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex3",
+          "subname": "0.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex4",
+          "id": "LinkGroup:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex4",
+          "subname": "0.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex5",
+          "id": "LinkGroup:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex5",
+          "subname": "0.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex6",
+          "id": "LinkGroup:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex6",
+          "subname": "0.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex7",
+          "id": "LinkGroup:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex7",
+          "subname": "0.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.0.Vertex8",
+          "id": "LinkGroup:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "0.Vertex8",
+          "subname": "0.Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "LinkGroup.1.Vertex9",
+          "id": "LinkGroup:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "stableSubname": "1.Vertex1",
+          "subname": "1.Vertex9"
+        }
+      ]
+    }
+  ]
+}

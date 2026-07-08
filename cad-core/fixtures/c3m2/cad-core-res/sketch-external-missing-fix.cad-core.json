@@ -1,0 +1,34 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [
+    {
+      "action": "update",
+      "object": "Sketch",
+      "objectId": 2,
+      "properties": {
+        "ExternalGeometry": {
+          "PropertyType": "App::PropertyLinkSubList",
+          "SubSet": [
+            {
+              "SubList": [
+                "Face5"
+              ],
+              "value": "Box"
+            }
+          ]
+        }
+      },
+      "reason": "external_geometry_flags_sync",
+      "typeId": "Sketcher::SketchObject"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Sketch",
+      "subshapes": []
+    }
+  ]
+}

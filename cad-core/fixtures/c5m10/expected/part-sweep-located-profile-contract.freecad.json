@@ -19,5 +19,24 @@
     "status": "diagnostic_only"
   },
   "reference": "FreeCADCmd wrapper oracle from part-sweep-located-profile-contract.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Part::Vertex, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "schema_version": "cad-core.freecad-expected.v1",
+  "known_gap": {
+    "kind": "part_sweep_located_profile_freecadcmd_wrapper_build_blocker",
+    "freecadcmd_evidence": {
+      "error": "OCCError: NCollection_Array1::Value",
+      "failed_stage": "build",
+      "collector_policy": "do not fabricate shape_summary from cad-core output",
+      "failing_location_representatives": [
+        "located_free_vertex",
+        "located_profile_owned_vertex"
+      ],
+      "failing_call_order_variants": [
+        "located_add_before_transition"
+      ],
+      "successful_controls": [
+        "plain_control"
+      ]
+    },
+    "delete_condition": "Delete after FreeCADCmd wrapper expected can build located-profile add(Profile, Location, WithContact, WithCorrection)."
+  }
 }

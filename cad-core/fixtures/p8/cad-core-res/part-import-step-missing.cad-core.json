@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "execution_failed",
+      "message": "Cannot open file fixtures/p8/assets/missing.stp",
+      "object": "ImportedMissingStep",
+      "property": "FileName",
+      "severity": "error",
+      "stage": "runtime"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "ImportedMissingStep",
+      "subshapes": []
+    }
+  ]
+}

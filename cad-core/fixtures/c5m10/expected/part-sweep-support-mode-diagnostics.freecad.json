@@ -1,9 +1,9 @@
 {
   "diagnostic_codes": [
-    "unsupported_property",
+    "missing_link_target",
+    "missing_link_target",
     "invalid_parameter",
     "invalid_subshape",
-    "missing_link_target",
     "invalid_subshape",
     "invalid_parameter",
     "invalid_parameter",
@@ -63,5 +63,12 @@
     "status": "diagnostic_only"
   },
   "reference": "FreeCADCmd wrapper oracle from part-sweep-support-mode-diagnostics.json; Part::Sweep advanced DTO translated to request-local Part.BRepOffsetAPI_MakePipeShell helper; objects: Sketcher::SketchObject, Sketcher::SketchObject, Sketcher::SketchObject, Part::Plane, Part::Sweep, Part::Sweep, Part::Sweep, Part::Sweep, Part::Sweep, Part::Sweep, Part::Sweep, Part::Sweep",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "schema_version": "cad-core.freecad-expected.v1",
+  "known_gap": {
+    "kind": "part_sweep_support_mode_fixture_diagnostic_only",
+    "uncollected_fields": [
+      "shape_summary"
+    ],
+    "delete_condition": "Delete after every support/mode invalid representative has native wrapper expected beyond diagnostic-only evidence."
+  }
 }

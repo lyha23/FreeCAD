@@ -1,0 +1,21 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "message": "Unsupported Pocket Type UnsupportedType in P3b",
+      "object": "Pocket",
+      "property": "Type",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Body",
+      "subshapes": []
+    }
+  ]
+}

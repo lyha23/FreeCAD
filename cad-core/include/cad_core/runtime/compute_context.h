@@ -121,6 +121,7 @@ struct ComputeContext
     std::set<std::string> targetObjects;
     std::set<std::string> transformationTemplateObjects;
     std::map<std::string, gp_Trsf> globalPlacements;
+    nlohmann::json topoNamingState = nlohmann::json::object();
     double displayMeshDeflection = 0.1;
     std::vector<std::string> executionOrder;
 };

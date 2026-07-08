@@ -1,0 +1,16 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_object",
+      "message": "Recompute target Missing does not exist",
+      "object": "Missing",
+      "severity": "error",
+      "stage": "graph",
+      "target": "Missing"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": []
+}

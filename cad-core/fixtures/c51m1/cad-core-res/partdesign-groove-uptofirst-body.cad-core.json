@@ -1,0 +1,29 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "execution_failed",
+      "message": "BRepFeat_MakeRevol could not revolve profile up to face",
+      "object": "Groove",
+      "property": "Type",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "UpToFirst"
+    },
+    {
+      "code": "execution_failed",
+      "message": "Could not revolve the sketch",
+      "object": "Groove",
+      "severity": "error"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Body",
+      "subshapes": []
+    }
+  ]
+}

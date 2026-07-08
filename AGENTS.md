@@ -162,6 +162,10 @@
     --out cad-core/out/<case>.freecad.json \
     --pretty
   ```
+- `cad-core` fixture 的 FreeCADCmd 结果和 `cad-core` 自身 recompute 结果必须分目录保存，不得混放：
+  - FreeCADCmd / native oracle / expected 只放 `cad-core/fixtures/<phase>/expected/`，文件名使用 `<case>.freecad.json`；这里的内容必须来自 `cad-core/tools/collect_freecad_expected.py`、native probe，或明确记录 native unsupported / known gap 的 FreeCAD oracle 边界。
+  - `cad-core` 当前实现输出只放 `cad-core/fixtures/<phase>/cad-core-res/`，文件名使用 `<case>.cad-core.json`；生成方式示例：`cd cad-core && build/cad-core recompute fixtures/<phase>/<case>.json --output fixtures/<phase>/cad-core-res/<case>.cad-core.json`。
+  - 不要把 `cad-core` recompute response、`cad-core.expected.v1` 合同证据、或拼写错误的 `*.expeted.json` 放进 `expected/`；若需要保留 `cad-core` 侧对照结果，统一放到对应 phase 的 `cad-core-res/`。
 - 对已纳入 fixture phase 的 native expected 回归，使用：
   ```bash
   cd ~/Chili3DProject/FreeCAD

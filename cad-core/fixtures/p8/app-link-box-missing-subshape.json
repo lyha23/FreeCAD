@@ -20,6 +20,9 @@
           "value": "Box",
           "SubList": [
             "Face99"
+          ],
+          "StableSubList": [
+            "Box.Face99"
           ]
         }
       }

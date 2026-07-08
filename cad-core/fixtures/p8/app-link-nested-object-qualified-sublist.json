@@ -46,6 +46,9 @@
           "value": "BoxLink",
           "SubList": [
             "BoxLink.Box.Face1"
+          ],
+          "StableSubList": [
+            "Box.Face1"
           ]
         },
         "LinkTransform": false,

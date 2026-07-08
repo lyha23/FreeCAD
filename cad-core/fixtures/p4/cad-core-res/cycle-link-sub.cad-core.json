@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "cycle_dependency",
+      "message": "Cycle dependency: PadA PadB PadA",
+      "object": "PadA",
+      "severity": "error",
+      "stage": "graph",
+      "target": "PadA"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "PadA",
+      "subshapes": []
+    }
+  ]
+}

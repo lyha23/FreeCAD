@@ -1,0 +1,494 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ReversedRuledSurface:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                -1.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.0,
+                0.5,
+                0.0
+              ]
+            ],
+            "stableSubname": "SkewLine1.Edge1"
+          },
+          {
+            "id": "ReversedRuledSurface:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                3.0,
+                0.5,
+                0.0
+              ],
+              [
+                2.875,
+                0.6041666666666666,
+                0.08333333333333333
+              ],
+              [
+                2.75,
+                0.7083333333333334,
+                0.16666666666666666
+              ],
+              [
+                2.625,
+                0.8125,
+                0.25
+              ],
+              [
+                2.5,
+                0.9166666666666666,
+                0.3333333333333333
+              ],
+              [
+                2.375,
+                1.0208333333333333,
+                0.4166666666666667
+              ],
+              [
+                2.25,
+                1.125,
+                0.5
+              ],
+              [
+                2.125,
+                1.2291666666666667,
+                0.5833333333333334
+              ],
+              [
+                2.0,
+                1.3333333333333333,
+                0.6666666666666666
+              ],
+              [
+                1.875,
+                1.4375,
+                0.75
+              ],
+              [
+                1.75,
+                1.5416666666666667,
+                0.8333333333333334
+              ],
+              [
+                1.625,
+                1.6458333333333333,
+                0.9166666666666666
+              ],
+              [
+                1.5,
+                1.75,
+                1.0
+              ],
+              [
+                1.375,
+                1.8541666666666665,
+                1.0833333333333333
+              ],
+              [
+                1.25,
+                1.9583333333333335,
+                1.1666666666666667
+              ],
+              [
+                1.125,
+                2.0625,
+                1.25
+              ],
+              [
+                1.0,
+                2.1666666666666665,
+                1.3333333333333333
+              ],
+              [
+                0.8749999999999999,
+                2.2708333333333335,
+                1.4166666666666667
+              ],
+              [
+                0.75,
+                2.375,
+                1.5
+              ],
+              [
+                0.6250000000000001,
+                2.4791666666666665,
+                1.5833333333333333
+              ],
+              [
+                0.4999999999999999,
+                2.5833333333333335,
+                1.6666666666666667
+              ],
+              [
+                0.375,
+                2.6875,
+                1.75
+              ],
+              [
+                0.2500000000000001,
+                2.7916666666666665,
+                1.8333333333333333
+              ],
+              [
+                0.12499999999999989,
+                2.8958333333333335,
+                1.9166666666666667
+              ],
+              [
+                0.0,
+                3.0,
+                2.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "ReversedRuledSurface:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                0.0,
+                3.0,
+                2.0
+              ],
+              [
+                4.0,
+                2.0,
+                1.0
+              ]
+            ],
+            "stableSubname": "SkewLine2.Edge1"
+          },
+          {
+            "id": "ReversedRuledSurface:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                -1.0,
+                0.0,
+                0.0
+              ],
+              [
+                -0.7916666666666666,
+                0.08333333333333333,
+                0.041666666666666664
+              ],
+              [
+                -0.5833333333333334,
+                0.16666666666666666,
+                0.08333333333333333
+              ],
+              [
+                -0.375,
+                0.25,
+                0.125
+              ],
+              [
+                -0.1666666666666667,
+                0.3333333333333333,
+                0.16666666666666666
+              ],
+              [
+                0.04166666666666671,
+                0.4166666666666667,
+                0.20833333333333334
+              ],
+              [
+                0.25,
+                0.5,
+                0.25
+              ],
+              [
+                0.4583333333333334,
+                0.5833333333333334,
+                0.2916666666666667
+              ],
+              [
+                0.6666666666666665,
+                0.6666666666666666,
+                0.3333333333333333
+              ],
+              [
+                0.875,
+                0.75,
+                0.375
+              ],
+              [
+                1.0833333333333335,
+                0.8333333333333334,
+                0.4166666666666667
+              ],
+              [
+                1.2916666666666665,
+                0.9166666666666666,
+                0.4583333333333333
+              ],
+              [
+                1.5,
+                1.0,
+                0.5
+              ],
+              [
+                1.708333333333333,
+                1.0833333333333333,
+                0.5416666666666666
+              ],
+              [
+                1.916666666666667,
+                1.1666666666666667,
+                0.5833333333333334
+              ],
+              [
+                2.125,
+                1.25,
+                0.625
+              ],
+              [
+                2.333333333333333,
+                1.3333333333333333,
+                0.6666666666666666
+              ],
+              [
+                2.541666666666667,
+                1.4166666666666667,
+                0.7083333333333334
+              ],
+              [
+                2.75,
+                1.5,
+                0.75
+              ],
+              [
+                2.958333333333333,
+                1.5833333333333333,
+                0.7916666666666666
+              ],
+              [
+                3.166666666666667,
+                1.6666666666666667,
+                0.8333333333333334
+              ],
+              [
+                3.375,
+                1.75,
+                0.875
+              ],
+              [
+                3.583333333333333,
+                1.8333333333333333,
+                0.9166666666666666
+              ],
+              [
+                3.791666666666667,
+                1.9166666666666667,
+                0.9583333333333334
+              ],
+              [
+                4.0,
+                2.0,
+                1.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "ReversedRuledSurface:Face1",
+          "ReversedRuledSurface:Face1"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ReversedRuledSurface:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              -1.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "ReversedRuledSurface:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              3.0,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "ReversedRuledSurface:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              0.0,
+              3.0,
+              2.0
+            ]
+          },
+          {
+            "id": "ReversedRuledSurface:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              4.0,
+              2.0,
+              1.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            3.0,
+            2.0
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          [
+            3.0,
+            0.5,
+            0.0
+          ],
+          [
+            0.0,
+            3.0,
+            2.0
+          ],
+          [
+            4.0,
+            2.0,
+            1.0
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "object": "ReversedRuledSurface",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ReversedRuledSurface.SkewLine1.Edge1",
+          "id": "ReversedRuledSurface:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "SkewLine1.Edge1",
+          "subname": "SkewLine1.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ReversedRuledSurface:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ReversedRuledSurface.SkewLine2.Edge3",
+          "id": "ReversedRuledSurface:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "SkewLine2.Edge1",
+          "subname": "SkewLine2.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ReversedRuledSurface:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ReversedRuledSurface:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ReversedRuledSurface:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ReversedRuledSurface:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ReversedRuledSurface:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "ReversedRuledSurface:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        }
+      ]
+    }
+  ]
+}

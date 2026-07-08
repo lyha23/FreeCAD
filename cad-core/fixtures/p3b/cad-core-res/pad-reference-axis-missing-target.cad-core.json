@@ -1,0 +1,24 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object MissingAxis",
+      "object": "Pad",
+      "property": "ReferenceAxis",
+      "severity": "error",
+      "stage": "graph",
+      "subname": "Edge1",
+      "target": "MissingAxis"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Pad",
+      "subshapes": []
+    }
+  ]
+}

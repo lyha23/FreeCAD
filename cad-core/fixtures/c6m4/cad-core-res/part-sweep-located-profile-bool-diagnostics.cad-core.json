@@ -1,0 +1,39 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "invalid_parameter",
+      "message": "Part::Sweep SectionOptions WithContact must be a boolean",
+      "object": "InvalidWithContact",
+      "property": "SectionOptions[0].WithContact",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "WithContact",
+      "target": "InvalidWithContact"
+    },
+    {
+      "code": "invalid_parameter",
+      "message": "Part::Sweep SectionOptions WithCorrection must be a boolean",
+      "object": "InvalidWithCorrection",
+      "property": "SectionOptions[0].WithCorrection",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "WithCorrection",
+      "target": "InvalidWithCorrection"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "InvalidWithContact",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "InvalidWithCorrection",
+      "subshapes": []
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "CompoundNested:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "CompoundAB.Edge1"
+          },
+          {
+            "id": "CompoundNested:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                10.0,
+                0.0,
+                0.0
+              ],
+              [
+                10.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "CompoundAB.Edge2"
+          },
+          {
+            "id": "CompoundNested:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                20.0,
+                0.0,
+                0.0
+              ],
+              [
+                30.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "SketchB.Edge1"
+          },
+          {
+            "id": "CompoundNested:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                30.0,
+                0.0,
+                0.0
+              ],
+              [
+                30.0,
+                5.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "SketchB.Edge2"
+          },
+          {
+            "id": "CompoundNested:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                40.0,
+                0.0,
+                0.0
+              ],
+              [
+                45.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "g1"
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "CompoundNested:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "CompoundNested:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              10.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "CompoundNested:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              10.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "CompoundNested:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              20.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "CompoundNested:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              30.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "CompoundNested:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              30.0,
+              5.0,
+              0.0
+            ]
+          },
+          {
+            "id": "CompoundNested:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              40.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "CompoundNested:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              45.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "CompoundNested",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Edge1",
+          "id": "CompoundNested:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "CompoundAB.Edge1",
+          "subname": "CompoundAB.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Edge2",
+          "id": "CompoundNested:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "CompoundAB.Edge2",
+          "subname": "CompoundAB.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Edge3",
+          "id": "CompoundNested:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "SketchB.Edge1",
+          "subname": "CompoundAB.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Edge4",
+          "id": "CompoundNested:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "SketchB.Edge2",
+          "subname": "CompoundAB.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "CompoundNested:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "g1",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Vertex1",
+          "id": "CompoundNested:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "CompoundAB.Vertex1",
+          "subname": "CompoundAB.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Vertex2",
+          "id": "CompoundNested:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "CompoundAB.Vertex2",
+          "subname": "CompoundAB.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Vertex3",
+          "id": "CompoundNested:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "CompoundAB.Vertex3",
+          "subname": "CompoundAB.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Vertex4",
+          "id": "CompoundNested:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "SketchB.Vertex1",
+          "subname": "CompoundAB.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Vertex5",
+          "id": "CompoundNested:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "SketchB.Vertex2",
+          "subname": "CompoundAB.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.CompoundAB.Vertex6",
+          "id": "CompoundNested:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "SketchB.Vertex3",
+          "subname": "CompoundAB.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.SketchC.Vertex7",
+          "id": "CompoundNested:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "SketchC.Vertex1",
+          "subname": "SketchC.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "CompoundNested.SketchC.Vertex8",
+          "id": "CompoundNested:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "SketchC.Vertex2",
+          "subname": "SketchC.Vertex8"
+        }
+      ]
+    }
+  ]
+}

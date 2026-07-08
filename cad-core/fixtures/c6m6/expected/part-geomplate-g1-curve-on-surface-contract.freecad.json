@@ -14,5 +14,17 @@
     "status": "error"
   },
   "reference": "FreeCADCmd oracle from part-geomplate-g1-curve-on-surface-contract.json; Part::GeomPlateSurface is a cad-core helper translated to Part.GeomPlate.BuildPlateSurface(...); objects: Part::Plane, Part::Line, Part::Line, Part::Line, Part::GeomPlateSurface",
-  "schema_version": "cad-core.freecad-expected.v1"
+  "schema_version": "cad-core.freecad-expected.v1",
+  "known_gap": {
+    "kind": "geomplate_g1_curve_on_surface_native_oracle_blocked",
+    "cad_core_contract": {
+      "status": "request_local_source_backed",
+      "expected_native_shape": false
+    },
+    "s5_publication": {
+      "status": "published_c6m6_product_contract_non_parity",
+      "active_remaining_gap": false
+    },
+    "delete_condition": "Delete after Adaptor3d_CurveOnSurface G1 native oracle is stable and replaces the request-local product contract."
+  }
 }

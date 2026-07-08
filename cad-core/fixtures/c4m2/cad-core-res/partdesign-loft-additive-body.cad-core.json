@@ -1,0 +1,1200 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Body:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Edge1"
+          },
+          {
+            "id": "Body:Edge2",
+            "identityStatus": "stable",
+            "indexed": "Edge2",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                4.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Shell1.Edge5"
+          },
+          {
+            "id": "Body:Edge3",
+            "identityStatus": "stable",
+            "indexed": "Edge3",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.0
+              ],
+              [
+                0.0,
+                3.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Shell1.Edge8"
+          },
+          {
+            "id": "Body:Edge4",
+            "identityStatus": "stable",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.0,
+                3.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Shell1.Edge11"
+          },
+          {
+            "id": "Body:Edge5",
+            "identityStatus": "stable",
+            "indexed": "Edge5",
+            "points": [
+              [
+                4.0,
+                0.0,
+                0.0
+              ],
+              [
+                3.9791666666666665,
+                0.020833333333333332,
+                0.16666666666666666
+              ],
+              [
+                3.9583333333333335,
+                0.041666666666666664,
+                0.3333333333333333
+              ],
+              [
+                3.9375,
+                0.0625,
+                0.5
+              ],
+              [
+                3.9166666666666665,
+                0.08333333333333333,
+                0.6666666666666666
+              ],
+              [
+                3.8958333333333335,
+                0.10416666666666667,
+                0.8333333333333334
+              ],
+              [
+                3.875,
+                0.125,
+                1.0
+              ],
+              [
+                3.8541666666666665,
+                0.14583333333333334,
+                1.1666666666666667
+              ],
+              [
+                3.8333333333333335,
+                0.16666666666666666,
+                1.3333333333333333
+              ],
+              [
+                3.8125,
+                0.1875,
+                1.5
+              ],
+              [
+                3.7916666666666665,
+                0.20833333333333334,
+                1.6666666666666667
+              ],
+              [
+                3.7708333333333335,
+                0.22916666666666666,
+                1.8333333333333333
+              ],
+              [
+                3.75,
+                0.25,
+                2.0
+              ],
+              [
+                3.7291666666666665,
+                0.2708333333333333,
+                2.1666666666666665
+              ],
+              [
+                3.7083333333333335,
+                0.2916666666666667,
+                2.3333333333333335
+              ],
+              [
+                3.6875,
+                0.3125,
+                2.5
+              ],
+              [
+                3.6666666666666665,
+                0.3333333333333333,
+                2.6666666666666665
+              ],
+              [
+                3.6458333333333335,
+                0.3541666666666667,
+                2.8333333333333335
+              ],
+              [
+                3.625,
+                0.375,
+                3.0
+              ],
+              [
+                3.6041666666666665,
+                0.3958333333333333,
+                3.1666666666666665
+              ],
+              [
+                3.5833333333333335,
+                0.4166666666666667,
+                3.3333333333333335
+              ],
+              [
+                3.5625,
+                0.4375,
+                3.5
+              ],
+              [
+                3.5416666666666665,
+                0.4583333333333333,
+                3.6666666666666665
+              ],
+              [
+                3.5208333333333335,
+                0.4791666666666667,
+                3.8333333333333335
+              ],
+              [
+                3.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Shell1.Edge2"
+          },
+          {
+            "id": "Body:Edge6",
+            "identityStatus": "stable",
+            "indexed": "Edge6",
+            "points": [
+              [
+                0.5,
+                0.5,
+                4.0
+              ],
+              [
+                3.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "g1"
+          },
+          {
+            "id": "Body:Edge7",
+            "identityStatus": "stable",
+            "indexed": "Edge7",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.020833333333333332,
+                0.020833333333333332,
+                0.16666666666666666
+              ],
+              [
+                0.041666666666666664,
+                0.041666666666666664,
+                0.3333333333333333
+              ],
+              [
+                0.0625,
+                0.0625,
+                0.5
+              ],
+              [
+                0.08333333333333333,
+                0.08333333333333333,
+                0.6666666666666666
+              ],
+              [
+                0.10416666666666667,
+                0.10416666666666667,
+                0.8333333333333334
+              ],
+              [
+                0.125,
+                0.125,
+                1.0
+              ],
+              [
+                0.14583333333333334,
+                0.14583333333333334,
+                1.1666666666666667
+              ],
+              [
+                0.16666666666666666,
+                0.16666666666666666,
+                1.3333333333333333
+              ],
+              [
+                0.1875,
+                0.1875,
+                1.5
+              ],
+              [
+                0.20833333333333334,
+                0.20833333333333334,
+                1.6666666666666667
+              ],
+              [
+                0.22916666666666666,
+                0.22916666666666666,
+                1.8333333333333333
+              ],
+              [
+                0.25,
+                0.25,
+                2.0
+              ],
+              [
+                0.2708333333333333,
+                0.2708333333333333,
+                2.1666666666666665
+              ],
+              [
+                0.2916666666666667,
+                0.2916666666666667,
+                2.3333333333333335
+              ],
+              [
+                0.3125,
+                0.3125,
+                2.5
+              ],
+              [
+                0.3333333333333333,
+                0.3333333333333333,
+                2.6666666666666665
+              ],
+              [
+                0.3541666666666667,
+                0.3541666666666667,
+                2.8333333333333335
+              ],
+              [
+                0.375,
+                0.375,
+                3.0
+              ],
+              [
+                0.3958333333333333,
+                0.3958333333333333,
+                3.1666666666666665
+              ],
+              [
+                0.4166666666666667,
+                0.4166666666666667,
+                3.3333333333333335
+              ],
+              [
+                0.4375,
+                0.4375,
+                3.5
+              ],
+              [
+                0.4583333333333333,
+                0.4583333333333333,
+                3.6666666666666665
+              ],
+              [
+                0.4791666666666667,
+                0.4791666666666667,
+                3.8333333333333335
+              ],
+              [
+                0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Shell1.Edge4"
+          },
+          {
+            "id": "Body:Edge8",
+            "identityStatus": "stable",
+            "indexed": "Edge8",
+            "points": [
+              [
+                3.5,
+                0.5,
+                4.0
+              ],
+              [
+                3.5,
+                2.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "g2"
+          },
+          {
+            "id": "Body:Edge9",
+            "identityStatus": "stable",
+            "indexed": "Edge9",
+            "points": [
+              [
+                3.5,
+                2.5,
+                4.0
+              ],
+              [
+                0.5,
+                2.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "g3"
+          },
+          {
+            "id": "Body:Edge10",
+            "identityStatus": "stable",
+            "indexed": "Edge10",
+            "points": [
+              [
+                0.5,
+                2.5,
+                4.0
+              ],
+              [
+                0.5,
+                0.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "g4"
+          },
+          {
+            "id": "Body:Edge11",
+            "identityStatus": "stable",
+            "indexed": "Edge11",
+            "points": [
+              [
+                4.0,
+                3.0,
+                0.0
+              ],
+              [
+                3.9791666666666665,
+                2.9791666666666665,
+                0.16666666666666666
+              ],
+              [
+                3.9583333333333335,
+                2.9583333333333335,
+                0.3333333333333333
+              ],
+              [
+                3.9375,
+                2.9375,
+                0.5
+              ],
+              [
+                3.9166666666666665,
+                2.9166666666666665,
+                0.6666666666666666
+              ],
+              [
+                3.8958333333333335,
+                2.8958333333333335,
+                0.8333333333333334
+              ],
+              [
+                3.875,
+                2.875,
+                1.0
+              ],
+              [
+                3.8541666666666665,
+                2.8541666666666665,
+                1.1666666666666667
+              ],
+              [
+                3.8333333333333335,
+                2.8333333333333335,
+                1.3333333333333333
+              ],
+              [
+                3.8125,
+                2.8125,
+                1.5
+              ],
+              [
+                3.7916666666666665,
+                2.7916666666666665,
+                1.6666666666666667
+              ],
+              [
+                3.7708333333333335,
+                2.7708333333333335,
+                1.8333333333333333
+              ],
+              [
+                3.75,
+                2.75,
+                2.0
+              ],
+              [
+                3.7291666666666665,
+                2.7291666666666665,
+                2.1666666666666665
+              ],
+              [
+                3.7083333333333335,
+                2.7083333333333335,
+                2.3333333333333335
+              ],
+              [
+                3.6875,
+                2.6875,
+                2.5
+              ],
+              [
+                3.6666666666666665,
+                2.6666666666666665,
+                2.6666666666666665
+              ],
+              [
+                3.6458333333333335,
+                2.6458333333333335,
+                2.8333333333333335
+              ],
+              [
+                3.625,
+                2.625,
+                3.0
+              ],
+              [
+                3.6041666666666665,
+                2.6041666666666665,
+                3.1666666666666665
+              ],
+              [
+                3.5833333333333335,
+                2.5833333333333335,
+                3.3333333333333335
+              ],
+              [
+                3.5625,
+                2.5625,
+                3.5
+              ],
+              [
+                3.5416666666666665,
+                2.5416666666666665,
+                3.6666666666666665
+              ],
+              [
+                3.5208333333333335,
+                2.5208333333333335,
+                3.8333333333333335
+              ],
+              [
+                3.5,
+                2.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Shell1.Edge6"
+          },
+          {
+            "id": "Body:Edge12",
+            "identityStatus": "stable",
+            "indexed": "Edge12",
+            "points": [
+              [
+                0.0,
+                3.0,
+                0.0
+              ],
+              [
+                0.020833333333333332,
+                2.9791666666666665,
+                0.16666666666666666
+              ],
+              [
+                0.041666666666666664,
+                2.9583333333333335,
+                0.3333333333333333
+              ],
+              [
+                0.0625,
+                2.9375,
+                0.5
+              ],
+              [
+                0.08333333333333333,
+                2.9166666666666665,
+                0.6666666666666666
+              ],
+              [
+                0.10416666666666667,
+                2.8958333333333335,
+                0.8333333333333334
+              ],
+              [
+                0.125,
+                2.875,
+                1.0
+              ],
+              [
+                0.14583333333333334,
+                2.8541666666666665,
+                1.1666666666666667
+              ],
+              [
+                0.16666666666666666,
+                2.8333333333333335,
+                1.3333333333333333
+              ],
+              [
+                0.1875,
+                2.8125,
+                1.5
+              ],
+              [
+                0.20833333333333334,
+                2.7916666666666665,
+                1.6666666666666667
+              ],
+              [
+                0.22916666666666666,
+                2.7708333333333335,
+                1.8333333333333333
+              ],
+              [
+                0.25,
+                2.75,
+                2.0
+              ],
+              [
+                0.2708333333333333,
+                2.7291666666666665,
+                2.1666666666666665
+              ],
+              [
+                0.2916666666666667,
+                2.7083333333333335,
+                2.3333333333333335
+              ],
+              [
+                0.3125,
+                2.6875,
+                2.5
+              ],
+              [
+                0.3333333333333333,
+                2.6666666666666665,
+                2.6666666666666665
+              ],
+              [
+                0.3541666666666667,
+                2.6458333333333335,
+                2.8333333333333335
+              ],
+              [
+                0.375,
+                2.625,
+                3.0
+              ],
+              [
+                0.3958333333333333,
+                2.6041666666666665,
+                3.1666666666666665
+              ],
+              [
+                0.4166666666666667,
+                2.5833333333333335,
+                3.3333333333333335
+              ],
+              [
+                0.4375,
+                2.5625,
+                3.5
+              ],
+              [
+                0.4583333333333333,
+                2.5416666666666665,
+                3.6666666666666665
+              ],
+              [
+                0.4791666666666667,
+                2.5208333333333335,
+                3.8333333333333335
+              ],
+              [
+                0.5,
+                2.5,
+                4.0
+              ]
+            ],
+            "stableSubname": "AdditiveLoft.Shell1.Edge9"
+          }
+        ],
+        "faceIds": [
+          "Body:Face1",
+          "Body:Face1",
+          "Body:Face2",
+          "Body:Face2",
+          "Body:Face2",
+          "Body:Face2",
+          "Body:Face3",
+          "Body:Face3",
+          "Body:Face4",
+          "Body:Face4",
+          "Body:Face4",
+          "Body:Face4",
+          "Body:Face5",
+          "Body:Face5",
+          "Body:Face5",
+          "Body:Face5",
+          "Body:Face6",
+          "Body:Face6",
+          "Body:Face6",
+          "Body:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          1,
+          0,
+          4,
+          0,
+          2,
+          4,
+          2,
+          5,
+          4,
+          5,
+          6,
+          4,
+          6,
+          0,
+          7,
+          6,
+          5,
+          7,
+          8,
+          6,
+          9,
+          2,
+          1,
+          9,
+          1,
+          7,
+          9,
+          7,
+          5,
+          9,
+          5,
+          2,
+          10,
+          1,
+          3,
+          10,
+          3,
+          8,
+          10,
+          8,
+          7,
+          10,
+          7,
+          1,
+          11,
+          3,
+          0,
+          11,
+          0,
+          6,
+          11,
+          6,
+          8,
+          11,
+          8,
+          3
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Body:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              4.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              4.0,
+              3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              0.0,
+              3.0,
+              0.0
+            ]
+          },
+          {
+            "id": "Body:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              3.5,
+              0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "Body:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              0.5,
+              0.5,
+              4.0
+            ]
+          },
+          {
+            "id": "Body:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              3.5,
+              2.5,
+              4.0
+            ]
+          },
+          {
+            "id": "Body:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              0.5,
+              2.5,
+              4.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            4.0,
+            3.0,
+            0.0
+          ],
+          [
+            4.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            3.0,
+            0.0
+          ],
+          [
+            2.0,
+            0.25,
+            2.0
+          ],
+          [
+            3.5,
+            0.5,
+            4.0
+          ],
+          [
+            0.5,
+            0.5,
+            4.0
+          ],
+          [
+            3.5,
+            2.5,
+            4.0
+          ],
+          [
+            0.5,
+            2.5,
+            4.0
+          ],
+          [
+            3.75,
+            1.5,
+            2.0
+          ],
+          [
+            2.0,
+            2.75,
+            2.0
+          ],
+          [
+            0.25,
+            1.5,
+            2.0
+          ]
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Edge1",
+          "subname": "AdditiveLoft.Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "g4",
+          "subname": "AdditiveLoft.Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Shell1.Edge6",
+          "subname": "AdditiveLoft.Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Shell1.Edge9",
+          "subname": "AdditiveLoft.Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Shell1.Edge5",
+          "subname": "AdditiveLoft.Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Shell1.Edge8",
+          "subname": "AdditiveLoft.Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Shell1.Edge11",
+          "subname": "AdditiveLoft.Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Shell1.Edge2",
+          "subname": "AdditiveLoft.Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "g1",
+          "subname": "AdditiveLoft.Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "AdditiveLoft.Shell1.Edge4",
+          "subname": "AdditiveLoft.Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "g2",
+          "subname": "AdditiveLoft.Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "g3",
+          "subname": "AdditiveLoft.Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "AdditiveLoft.Face1",
+          "subname": "AdditiveLoft.Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "AdditiveLoft.Shell1.Face1",
+          "subname": "AdditiveLoft.Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "AdditiveLoft.SectionFace.Face1",
+          "subname": "AdditiveLoft.Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "AdditiveLoft.Shell1.Face2",
+          "subname": "AdditiveLoft.Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "AdditiveLoft.Shell1.Face3",
+          "subname": "AdditiveLoft.Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "AdditiveLoft.Shell1.Face4",
+          "subname": "AdditiveLoft.Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.Shell1.Vertex1",
+          "subname": "AdditiveLoft.Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.Shell1.Vertex2",
+          "subname": "AdditiveLoft.Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.Shell1.Vertex5",
+          "subname": "AdditiveLoft.Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.Shell1.Vertex7",
+          "subname": "AdditiveLoft.Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.SectionFace.Vertex2",
+          "subname": "AdditiveLoft.Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.SectionFace.Vertex1",
+          "subname": "AdditiveLoft.Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.SectionFace.Vertex3",
+          "subname": "AdditiveLoft.Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Body.AdditiveLoft.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "AdditiveLoft.SectionFace.Vertex4",
+          "subname": "AdditiveLoft.Vertex8"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,662 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "Sweep:Edge1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.5,
+                0.0,
+                0.0
+              ],
+              [
+                0.5000000000000004,
+                4.440892098500625e-16,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "points": [
+              [
+                0.5,
+                0.0,
+                0.0
+              ],
+              [
+                8.865115929175827e-17,
+                0.5,
+                3.6101876519730634e-33
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "points": [
+              [
+                1.1102230246251565e-16,
+                0.5,
+                3.6101876519730634e-33
+              ],
+              [
+                5.551115123125783e-16,
+                0.5000000000000004,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "points": [
+              [
+                0.5000000000000004,
+                4.440892098500625e-16,
+                4.0
+              ],
+              [
+                5.327403691418209e-16,
+                0.5000000000000004,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "points": [
+              [
+                3.061616997868383e-17,
+                0.5,
+                0.0
+              ],
+              [
+                -0.49999999999999994,
+                8.865115929175827e-17,
+                3.610187651973061e-33
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "points": [
+              [
+                -0.49999999999999994,
+                1.1102230246251565e-16,
+                3.610187651973061e-33
+              ],
+              [
+                -0.5000000000000004,
+                5.551115123125784e-16,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "points": [
+              [
+                -4.134730398713788e-16,
+                0.5000000000000004,
+                4.0
+              ],
+              [
+                -0.5000000000000004,
+                5.327403691418209e-16,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "points": [
+              [
+                -0.5,
+                6.123233995736767e-17,
+                0.0
+              ],
+              [
+                -8.865115929175828e-17,
+                -0.5000000000000001,
+                1.4953886881591163e-33
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "points": [
+              [
+                -1.1102230246251565e-16,
+                -0.5,
+                1.4953886881591163e-33
+              ],
+              [
+                3.3306690738754696e-16,
+                -0.49999999999999956,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "points": [
+              [
+                -0.49999999999999956,
+                5.053215498074301e-16,
+                4.0
+              ],
+              [
+                3.5543805055830434e-16,
+                -0.49999999999999967,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "points": [
+              [
+                -9.184850993605148e-17,
+                -0.5,
+                0.0
+              ],
+              [
+                0.5,
+                -1.0146536357569526e-17,
+                1.4953886881591238e-33
+              ]
+            ],
+            "stableSubname": ""
+          },
+          {
+            "id": "Sweep:Edge12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "points": [
+              [
+                -5.359377197861141e-16,
+                -0.49999999999999956,
+                4.0
+              ],
+              [
+                0.4999999999999996,
+                4.339426734924931e-16,
+                4.0
+              ]
+            ],
+            "stableSubname": ""
+          }
+        ],
+        "faceIds": [
+          "Sweep:Face1",
+          "Sweep:Face1",
+          "Sweep:Face2",
+          "Sweep:Face2",
+          "Sweep:Face3",
+          "Sweep:Face3",
+          "Sweep:Face4",
+          "Sweep:Face4",
+          "Sweep:Face5",
+          "Sweep:Face5",
+          "Sweep:Face6",
+          "Sweep:Face6"
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          0,
+          2,
+          3,
+          4,
+          0,
+          3,
+          4,
+          3,
+          5,
+          6,
+          4,
+          5,
+          6,
+          5,
+          7,
+          1,
+          6,
+          7,
+          1,
+          7,
+          2,
+          5,
+          3,
+          7,
+          7,
+          3,
+          2,
+          1,
+          0,
+          4,
+          1,
+          4,
+          6
+        ],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "Sweep:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.5,
+              0.0,
+              1.4953886881591238e-33
+            ]
+          },
+          {
+            "id": "Sweep:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              0.4999999999999996,
+              4.440892098500626e-16,
+              4.0
+            ]
+          },
+          {
+            "id": "Sweep:Vertex3",
+            "indexed": "Vertex3",
+            "point": [
+              3.061616997868383e-17,
+              0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Sweep:Vertex4",
+            "indexed": "Vertex4",
+            "point": [
+              -4.134730398713788e-16,
+              0.5000000000000004,
+              4.0
+            ]
+          },
+          {
+            "id": "Sweep:Vertex5",
+            "indexed": "Vertex5",
+            "point": [
+              -0.5,
+              6.123233995736767e-17,
+              0.0
+            ]
+          },
+          {
+            "id": "Sweep:Vertex6",
+            "indexed": "Vertex6",
+            "point": [
+              -0.49999999999999956,
+              5.053215498074301e-16,
+              4.0
+            ]
+          },
+          {
+            "id": "Sweep:Vertex7",
+            "indexed": "Vertex7",
+            "point": [
+              -9.184850993605148e-17,
+              -0.5,
+              0.0
+            ]
+          },
+          {
+            "id": "Sweep:Vertex8",
+            "indexed": "Vertex8",
+            "point": [
+              -5.359377197861141e-16,
+              -0.49999999999999956,
+              4.0
+            ]
+          }
+        ],
+        "vertices": [
+          [
+            -4.134730398713788e-16,
+            0.5000000000000004,
+            4.0
+          ],
+          [
+            0.4999999999999996,
+            4.440892098500626e-16,
+            4.0
+          ],
+          [
+            0.5,
+            0.0,
+            1.4953886881591238e-33
+          ],
+          [
+            3.061616997868383e-17,
+            0.5,
+            0.0
+          ],
+          [
+            -0.49999999999999956,
+            5.053215498074301e-16,
+            4.0
+          ],
+          [
+            -0.5,
+            6.123233995736767e-17,
+            0.0
+          ],
+          [
+            -5.359377197861141e-16,
+            -0.49999999999999956,
+            4.0
+          ],
+          [
+            -9.184850993605148e-17,
+            -0.5,
+            0.0
+          ]
+        ]
+      },
+      "object": "Sweep",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "id": "Sweep:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        }
+      ]
+    }
+  ]
+}

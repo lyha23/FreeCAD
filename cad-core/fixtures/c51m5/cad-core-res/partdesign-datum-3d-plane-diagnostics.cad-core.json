@@ -1,0 +1,95 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "attachment_support_invalid_shape",
+      "message": "Translate requires one Vertex support",
+      "object": "DatumCSTranslateWrongShape",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face1",
+      "target": "PlaneXY"
+    },
+    {
+      "code": "attachment_support_invalid_shape",
+      "message": "ThreePointsPlane/ThreePointsNormal require at least three points from Vertex or Edge supports",
+      "object": "DatumCSThreePointsMissingThird",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SinglePoint"
+    },
+    {
+      "code": "attachment_parameter_invalid",
+      "message": "ThreePointsPlane/ThreePointsNormal cannot derive a plane from coincident points",
+      "object": "DatumCSThreePointsCoincident",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SinglePoint"
+    },
+    {
+      "code": "attachment_parameter_invalid",
+      "message": "ThreePointsNormal cannot derive a plane from collinear points",
+      "object": "DatumCSThreePointsCollinear",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SinglePoint"
+    },
+    {
+      "code": "attachment_support_invalid_shape",
+      "message": "TangentPlane requires one Face and one Vertex support",
+      "object": "DatumCSTangentMissingVertex",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "subname": "Face1",
+      "target": "PlaneXY"
+    },
+    {
+      "code": "attachment_support_invalid_shape",
+      "message": "TangentPlane requires one Face and one Vertex support",
+      "object": "DatumCSTangentWrongShapes",
+      "property": "MapMode",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SinglePoint"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "DatumCSTranslateWrongShape",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumCSThreePointsMissingThird",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumCSThreePointsCoincident",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumCSThreePointsCollinear",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumCSTangentMissingVertex",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "DatumCSTangentWrongShapes",
+      "subshapes": []
+    }
+  ]
+}

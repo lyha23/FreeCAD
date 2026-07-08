@@ -1,0 +1,37 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "execution_failed",
+      "message": "Pipe: Only the profile and last section can be vertices",
+      "object": "AdditivePipeTwoVertexSections",
+      "property": "Spine",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SketchPipeSpine"
+    },
+    {
+      "code": "execution_failed",
+      "message": "A fatal error occurred when making the pipe",
+      "object": "AdditivePipeUnequalInnerWires",
+      "property": "Spine",
+      "severity": "error",
+      "stage": "runtime",
+      "target": "SketchPipeSpine"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "AdditivePipeTwoVertexSections",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "AdditivePipeUnequalInnerWires",
+      "subshapes": []
+    }
+  ]
+}

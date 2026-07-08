@@ -1,0 +1,26 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointVertex",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointOnEdge",
+      "subshapes": []
+    },
+    {
+      "datum": "point",
+      "mesh": null,
+      "object": "DatumPointCenterOfMass",
+      "subshapes": []
+    }
+  ]
+}

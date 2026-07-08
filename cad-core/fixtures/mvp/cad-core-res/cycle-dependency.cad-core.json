@@ -1,0 +1,22 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "cycle_dependency",
+      "message": "Cycle dependency: Body Pad Body",
+      "object": "Body",
+      "severity": "error",
+      "stage": "graph",
+      "target": "Body"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "Body",
+      "subshapes": []
+    }
+  ]
+}

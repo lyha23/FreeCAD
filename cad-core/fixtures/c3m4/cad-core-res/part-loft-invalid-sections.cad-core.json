@@ -1,0 +1,88 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [
+    {
+      "code": "missing_link_target",
+      "message": "Object links to missing object NoSuchProfile",
+      "object": "MissingTarget",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "graph",
+      "target": "NoSuchProfile"
+    },
+    {
+      "code": "missing_property",
+      "message": "No sections linked.",
+      "object": "MissingSections",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "missing_property",
+      "message": "No sections linked.",
+      "object": "EmptySections",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "execution_failed",
+      "message": "Need at least two vertices, edges or wires to create loft face",
+      "object": "OneSection",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "execution_failed",
+      "message": "Segments of a loft do not have sufficient separation",
+      "object": "RepeatedSections",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "runtime"
+    },
+    {
+      "code": "execution_failed",
+      "message": "Profile shape is not a single vertex, edge, wire nor face.",
+      "object": "NonProfileSection",
+      "property": "Sections",
+      "severity": "error",
+      "stage": "runtime"
+    }
+  ],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "mesh": null,
+      "object": "MissingSections",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "EmptySections",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "OneSection",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "MissingTarget",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "RepeatedSections",
+      "subshapes": []
+    },
+    {
+      "mesh": null,
+      "object": "NonProfileSection",
+      "subshapes": []
+    }
+  ]
+}

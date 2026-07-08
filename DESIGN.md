@@ -427,3 +427,7 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 
   下一步应该先改接口方案文档，把当前“纯无状态、ElementMap 不长期保存”的规则改成“客户端携带 topoNamingState 的协议有状态模式”，再动
   collector / recompute DTO / response schema。
+
+---
+
+ '/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures' 检查一下这里面的测试用例, 是否满足'/Users/li/Chili3DProject/FreeCAD/docs/接口规定/7-8-11-08-topoNamingState客户端携带状态接口方案.md' , 我是让你检查测试用例 和 输出结果的, 不是用来测试 cad-core 的. 这个是用做权威基线的, 我之后要实现 cad-core 的
