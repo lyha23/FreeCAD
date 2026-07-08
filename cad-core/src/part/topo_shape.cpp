@@ -162,6 +162,23 @@ std::string diagnosticStatusForHistoryKind(ElementHistoryKind kind)
     }
 }
 
+std::string mappedNameProvenanceStatusName(MappedNameProvenanceStatus status)
+{
+    switch (status) {
+        case MappedNameProvenanceStatus::SourceBacked:
+            return "source_backed";
+        case MappedNameProvenanceStatus::IndexedOnly:
+            return "indexed_only";
+        case MappedNameProvenanceStatus::MissingTag:
+            return "missing_tag";
+        case MappedNameProvenanceStatus::MissingOperation:
+            return "missing_op";
+        case MappedNameProvenanceStatus::Blocked:
+            return "blocked";
+    }
+    return "unknown";
+}
+
 void addIndexedElements(
     NamedShape& namedShape,
     const TopTools_IndexedMapOfShape& shapes,
@@ -2420,6 +2437,31 @@ nlohmann::json childElementMapToJson(const NamedShapeChildMap& childMap)
     };
 }
 
+nlohmann::json mappedNameProvenanceTagToJson(const std::optional<long>& tag)
+{
+    if (!tag) {
+        return nullptr;
+    }
+    return *tag;
+}
+
+nlohmann::json mappedNameProvenanceToJson(const MappedNameProvenance& provenance)
+{
+    return {
+        {"entry_key", provenance.entryKey},
+        {"current_element", provenance.currentElement},
+        {"source_element", provenance.sourceElement},
+        {"element_type", provenance.elementType},
+        {"producer_tag", mappedNameProvenanceTagToJson(provenance.producerTag)},
+        {"master_tag", mappedNameProvenanceTagToJson(provenance.masterTag)},
+        {"source_tag", mappedNameProvenanceTagToJson(provenance.sourceTag)},
+        {"operation_postfix", provenance.operationPostfix},
+        {"raw_mapped_name", provenance.rawMappedName},
+        {"canonical_mapped_name", provenance.canonicalMappedName},
+        {"status", mappedNameProvenanceStatusName(provenance.status)},
+    };
+}
+
 void consumeSketchInternalGeneratedFacesFromElementMap(
     NamedShape& namedShape,
     const TopoDS_Shape& internalShape,
@@ -4520,6 +4562,10 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
     for (const NamedShapeChildMap& childMap : namedShape.childElementMaps) {
         childElementMaps.push_back(childElementMapToJson(childMap));
     }
+    nlohmann::json mappedNameProvenance = nlohmann::json::object();
+    for (const auto& [entryKey, provenance] : namedShape.mappedNameProvenance) {
+        mappedNameProvenance[entryKey] = mappedNameProvenanceToJson(provenance);
+    }
     const std::vector<MapperHistoryEvent> mapperHistory = mapperHistoryForNamedShape(namedShape);
 
     const bool hasMappedHistory = std::any_of(
@@ -4543,6 +4589,7 @@ nlohmann::json namedShapeToJson(const NamedShape& namedShape)
         {"element_map_status", hasMappedHistory ? "history_partial" : "indexed_only"},
         {"element_history_status", elementHistoryStatus},
         {"element_map", namedShape.elementMap},
+        {"mapped_name_provenance", mappedNameProvenance},
         {"child_element_maps", childElementMaps},
         {"elements", elements},
         {"history", history},

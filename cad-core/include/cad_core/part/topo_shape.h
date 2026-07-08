@@ -82,12 +82,48 @@ struct NamedShapeChildMap
     std::size_t sourceChildMapCount = 0;
 };
 
+enum class MappedNameProvenanceStatus
+{
+    SourceBacked,
+    IndexedOnly,
+    MissingTag,
+    MissingOperation,
+    Blocked,
+};
+
+struct MappedNameProvenance
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::mapSubElement(...), calls
+    // "ensureElementMap()->encodeElementName(..., Tag, op, other.Tag)" before
+    // ElementMap::setElementName(); /Users/li/Chili3DProject/FreeCAD/src/App/
+    // ElementMap.cpp::ElementMap::encodeElementName(... masterTag ... postfix ... tag ...)
+    // appends "POSTFIX_TAG" and the element type. This is request-local producer evidence only;
+    // S2/S3 fill it from maker history instead of copying expected raw mapped-name strings.
+    std::string entryKey;
+    std::string currentElement;
+    std::string sourceElement;
+    std::string elementType;
+    std::optional<long> producerTag;
+    std::optional<long> masterTag;
+    std::optional<long> sourceTag;
+    std::string operationPostfix;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/MappedName.cpp
+    // ::MappedName::findTagInElementName(), parses ";:H<tag>:<len>,<type>" from raw mapped
+    // names. canonicalMappedName is the S2 codec's dehashed/canonical form, not a fallback
+    // stable token.
+    std::string rawMappedName;
+    std::string canonicalMappedName;
+    MappedNameProvenanceStatus status = MappedNameProvenanceStatus::IndexedOnly;
+};
+
 struct NamedShape
 {
     std::string owner;
     TopoDS_Shape shape;
     std::map<std::string, NamedElement> elements;
     std::map<std::string, std::string> elementMap;
+    std::map<std::string, MappedNameProvenance> mappedNameProvenance;
     std::vector<NamedShapeChildMap> childElementMaps;
     std::vector<ElementHistory> history;
     std::vector<MapperHistoryEvent> mapperHistory;
