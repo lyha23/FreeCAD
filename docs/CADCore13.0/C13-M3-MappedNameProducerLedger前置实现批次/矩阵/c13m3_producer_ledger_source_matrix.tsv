@@ -1,0 +1,7 @@
+id	semantic	freecad_source	cad_core_landing	status	notes
+C13M3-SRC-001	MappedName raw byte model	src/App/MappedName.h::MappedName::fromRawData;src/App/MappedName.cpp::findTagInElementName	cad-core/src/topo/freecad_mapped_name_codec.cpp	planned	FreeCAD raw name is data+postfix and parses ;:H<tag>:<len>,<type>.
+C13M3-SRC-002	ElementMap encodeElementName	src/App/ElementMap.cpp::encodeElementName	cad-core/src/topo/freecad_mapped_name_codec.cpp	planned	Encodes operation postfix, hash/dehash and tag segment from producer/source tags.
+C13M3-SRC-003	Element naming constants	src/App/ElementNamingUtils.h	cad-core/include/cad_core/topo/freecad_mapped_name_codec.h	planned	;:R, ;:H, ;:G, ;:M, ;:MG, ;:U, ;:L, ;:C and ;:I constants define byte grammar.
+C13M3-SRC-004	Producer propagation	 src/Mod/Part/App/TopoShapeExpansion.cpp::mapSubElement;makeShapeWithElementMap;setElementComboName	cad-core/src/part/topo_shape.cpp;topo_shape_expansion.cpp	planned	Generated/modified/upper/lower/combo/child map paths must write provenance where they create ElementMap aliases.
+C13M3-SRC-005	Mapper relation source	src/Mod/Part/App/TopoShapeMapper.cpp	cad-core/src/part/topo_shape_mapper.cpp	planned	Generated/modified relation classification remains separate from raw-name byte encoding.
+C13M3-SRC-006	Expected comparator	cad-core/tools/collect_freecad_expected.py::canonical_freecad_mapped_name	cad-core/tests/test_topo_naming_state_response.py	planned	Comparator is test/oracle schema only, not runtime source.
