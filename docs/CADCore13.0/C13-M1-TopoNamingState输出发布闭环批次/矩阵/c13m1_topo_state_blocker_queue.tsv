@@ -2,7 +2,7 @@ id	blocker	owner_step	status	close_condition	next_action
 C13M1-BLOCKER-001	Package entry and matrix not validated	入口	closed	Package files, S0-S5 step files and TSV headers validate	Proceed to S0 live baseline and schema freeze.
 C13M1-BLOCKER-101	Live baseline and topo state schema not frozen	S0	closed	Current input path, missing output path, expected schema and non-goals recorded in S0	Proceed to S1 source/collector contract review.
 C13M1-BLOCKER-201	FreeCAD authority vs collector schema not separated	S1	closed	Source and contract matrices now distinguish FreeCAD runtime authority from collector expected schema	Proceed to S2 red tests.
-C13M1-BLOCKER-301	Response topo state red tests missing	S2	open	Focused tests require official response topoNamingState and round-trip consumption	Proceed to S3 implementation.
+C13M1-BLOCKER-301	Response topo state red tests missing	S2	closed	Guarded expectedFailure tests now require official response topoNamingState, adapter channel parity and round-trip consumption	Proceed to S3 implementation; S3 must remove expectedFailure decorators after publisher lands.
 C13M1-BLOCKER-401	Runtime topo state publisher not implemented	S3	open	Publisher module exists, official response includes state, focused tests pass	Proceed to S4 integration validation.
 C13M1-BLOCKER-501	Adapter/reference/fixture validation incomplete	S4	open	Adapters return state and focused round-trip reference recovery passes	Proceed to S5 release gate.
 C13M1-BLOCKER-601	Release gate and follow-up gap classification incomplete	S5	open	README/matrices updated and mapped-name follow-up split out	Close C13-M1 or open C13-M2 mapped-name parity.

@@ -4,6 +4,7 @@ import json
 import os
 import subprocess
 import tempfile
+import unittest
 from pathlib import Path
 
 try:
@@ -436,6 +437,34 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             normalized = dict(result)
             normalized.pop("adapter")
             self.assertEqual(normalized, cli_result)
+
+    # C13-M1 S2 guarded redline: S3 runtime publisher should turn this into an
+    # unexpected success; S3 must then remove expectedFailure and keep it green.
+    @unittest.expectedFailure
+    def test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel(self) -> None:
+        payload = (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_bytes()
+
+        cli_result = self.run_cli_core_recompute_payload(payload)
+        c_api_result = self.run_recompute_ffi_payload(payload)
+        worker_result = self.run_worker_recompute_ffi_payload(payload)
+        wasm_result = self.run_wasm_recompute_ffi_payload(payload)
+
+        topo_states = []
+        for adapter, result in [
+            ("cli", cli_result),
+            ("c_api", c_api_result),
+            ("worker", worker_result),
+            ("wasm", wasm_result),
+        ]:
+            with self.subTest(adapter=adapter):
+                self.assertIn("topoNamingState", result)
+                state = result["topoNamingState"]
+                self.assertEqual(state["schemaVersion"], "cad-core.topo-state.v1")
+                self.assertIsInstance(state["objects"], dict)
+                topo_states.append(state)
+
+        for state in topo_states[1:]:
+            self.assertEqual(state, topo_states[0])
 
     def test_c4s11_adapter_resource_limit_diagnostic_preserves_result_schema(self) -> None:
         payload = json.loads((ROOT / "fixtures" / "c3m7" / "rect-pad-worker-mesh-limit.json").read_text())
