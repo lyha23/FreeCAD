@@ -1,9 +1,9 @@
 id	field	required_in_c13m2	source	status	acceptance
-C13M2-CONTRACT-001	topoNamingState.objects[*].elementMap.entries[*].mappedName.raw	yes_focused	FreeCAD getElementMappedName / ElementMap encoded name	planned	Focused entries publish FreeCAD-compatible raw mappedName, not stable token fallback.
-C13M2-CONTRACT-002	topoNamingState.objects[*].elementMap.entries[*].mappedName.canonical	yes_focused	collector canonical_freecad_mapped_name	planned	Canonical form matches comparator expectation for focused raw names.
-C13M2-CONTRACT-003	elementMap entry key stability	yes_focused	ElementMap mappedNames ledger	planned	Entry keys remain stable tokens accepted by next request and do not break C13-M1 round-trip.
-C13M2-CONTRACT-004	evidence.childElementMapKey	yes_if_source_backed	ElementMap::hashChildMaps	followup_until_S5	S5 implements focused key or records source blocker.
-C13M2-CONTRACT-005	evidence.mapperHistoryIds	yes_if_source_backed	TopoShapeMapper / collector expected	followup_until_S5	S5 aligns ids or records mapper_history_id blocker.
+C13M2-CONTRACT-001	topoNamingState.objects[*].elementMap.entries[*].mappedName.raw	yes_focused	src/App/MappedName.h::fromRawData + ElementMap::encodeElementName	source_authority_frozen_s1	Focused entries must eventually publish FreeCAD-compatible raw mappedName; S1 only freezes source authority, not implementation.
+C13M2-CONTRACT-002	topoNamingState.objects[*].elementMap.entries[*].mappedName.canonical	yes_focused	ElementMap::hashElementName/dehashElementName + S2 collector comparator	source_authority_frozen_s1	Canonical source is FreeCAD hash/dehash behavior; comparator details remain S2, and no runtime support is claimed here.
+C13M2-CONTRACT-003	elementMap entry key stability	yes_focused	ElementMap mappedNames ledger via setElementName/addName/find	source_authority_frozen_s1	Entry keys must remain ledger-derived and C13-M1 round-trip safe; implementation remains S4/S5.
+C13M2-CONTRACT-004	evidence.childElementMapKey	yes_if_source_backed	ElementMap::hashChildMaps/addChildElements/getChildElements	source_authority_frozen_s1_followup_s5	S1 freezes ;:R child key authority; S5 implements focused key or records source blocker.
+C13M2-CONTRACT-005	evidence.mapperHistoryIds	yes_if_source_backed	TopoShapeMapper generated/modified relation + TopoShapeExpansion MapperMaker/MapperHistory	source_authority_frozen_s1_followup_s5	S1 freezes relation source; S5 aligns ids or records mapper_history_id blocker.
 C13M2-CONTRACT-006	documentHash/objectHash	no_change	C13-M1 publisher	closed_inherited	Do not reopen C13-M1 hash work unless tests show regression.
 C13M2-CONTRACT-007	response subname/fullSubname/stableSubname	no_change	Existing response contract	closed_inherited	C13-M2 must not change frontend-visible subshape response semantics.
 C13M2-CONTRACT-901	Full fixture topoNamingState parity	no_followup	future full parity batch	non_goal	C13-M2 focused parity does not require all expected files to match.

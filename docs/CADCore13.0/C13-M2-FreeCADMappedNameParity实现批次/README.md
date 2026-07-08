@@ -8,7 +8,9 @@ C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输�
 - 入口关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=e3b3379102`（`e3b3379102 文档：新增 C13-M2 mapped name parity 方案`），起点 worktree clean。
 - S0 已关闭：`工作步骤细分/7-8-20-17-【已实现】C13-M2-S0-live基线与C13-M1继承冻结.md` 已冻结 live baseline、C13-M1 继承能力、focused fixture 当前差异和继承非目标。
 - S0 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=907a9264d7`（`907a9264d7 docs: 关闭 C13-M2 工作步骤总入口`），起点 worktree clean，C13-M1 队列为空。
-- 后续队列从 S1 `FreeCAD MappedName 源码调用链复核` 继续；S0 未改 C++/Python runtime、expected、fixtures、frontend 或 supported/focused parity 状态。
+- S1 已关闭：`工作步骤细分/7-8-20-18-【已实现】C13-M2-S1-FreeCAD-MappedName源码调用链复核.md` 已冻结 FreeCAD `MappedName` / `ElementMap` / child map / mapper relation source authority。
+- S1 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=10dd70aba8`（`10dd70aba8 docs: 关闭 C13-M2 S0 基线冻结`），起点 worktree clean。
+- 后续队列从 S2 `collector comparator 与 expected 证据矩阵` 继续；S1 未改 C++/Python runtime、expected、fixtures、frontend、codec/helper 或 supported/focused parity 状态。
 
 ## 当前问题
 
@@ -40,6 +42,13 @@ C13-M2 只做这三个 evidence 的 focused parity；不做全量 expected fixtu
 | child maps | `ElementMap::hashChildMaps()`, `addChildElements()`, `getChildElements()` | 生成或对齐 `childElementMapKey` evidence，不从 fixture 字符串反推。 |
 | shape history propagation | `src/Mod/Part/App/TopoShapeExpansion.cpp`, `TopoShapeMapper.cpp` | mapper history id 和 mapped name 来源的调用链依据。 |
 | expected schema/comparator | `cad-core/tools/collect_freecad_expected.py` | 只作为 schema、canonicalization 和 diff comparator 依据。 |
+
+S1 已冻结的关键源码结论：
+
+- `MappedName` 的 raw evidence 是 `data + postfix` 双段合并视图；`fromRawData()` 共享原始字节，`findTagInElementName()` 解析 `;:H<tag>:<len>,<type>`。
+- `ElementNamingUtils.h` 中 `;:R`、`;:H`、`;:G`、`;:M`、`;:MG`、`;:U`、`;:L`、`;:C` 是 C13-M2 codec/child key 的字节常量 authority。
+- `ElementMap::encodeElementName()`、`hashElementName()`、`dehashElementName()`、`hashChildMaps()`、`addChildElements()`、`getElementHistory()` 是 raw/canonical/child-key/history 的 source authority；后续实现不能从 expected 字符串反填。
+- `TopoShapeExpansion.cpp` 通过 `ensureElementMap()->encodeElementName()` 传播同拓扑、generated/modified、upper/lower、combo 和 child map 名称；`TopoShapeMapper.cpp` 提供 generated/modified relation 的基础 source。
 
 ## cad-core 落点
 
