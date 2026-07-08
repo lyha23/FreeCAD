@@ -320,6 +320,7 @@ add_library(cad-core-lib STATIC
   src/runtime/reference_lifecycle.cpp
   src/runtime/reference_resolution.cpp
   src/runtime/recompute.cpp
+  src/runtime/topo_naming_state.cpp
   src/sketcher/sketch_edge_identity.cpp
   src/sketcher/sketch_object_constraints.cpp
   src/sketcher/sketch_object_external.cpp

@@ -66,9 +66,6 @@ class TopoNamingStateResponseTest(unittest.TestCase):
             self.assertIsInstance(mapped_name.get("raw"), str)
             self.assertIsInstance(mapped_name.get("canonical"), str)
 
-    # C13-M1 S2 guarded redline: S3 runtime publisher should turn this into an
-    # unexpected success; S3 must then remove expectedFailure and keep it green.
-    @unittest.expectedFailure
     def test_c13m1_official_cli_response_publishes_body_topo_state_schema_gap_only(self) -> None:
         payload = self.fixture_payload("p2", "rect-pad-pocket")
 
@@ -79,9 +76,6 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         self.assert_topo_state_schema_gap_only(state)
         self.assert_body_element_map_schema_gap_only(state)
 
-    # C13-M1 S2 guarded redline: S3 runtime publisher should turn this into an
-    # unexpected success; S3 must then remove expectedFailure and keep it green.
-    @unittest.expectedFailure
     def test_c13m1_response_topo_state_round_trips_without_body_tip_recovery_regression(self) -> None:
         payload = self.fixture_payload("c4m6", "topo-state-body-tip-stable-recovery")
 

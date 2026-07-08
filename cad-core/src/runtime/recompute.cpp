@@ -7,6 +7,7 @@
 #include "cad_core/runtime/feature_registry.h"
 #include "cad_core/runtime/reference_lifecycle.h"
 #include "cad_core/runtime/reference_resolution.h"
+#include "cad_core/runtime/topo_naming_state.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/topo/subshape_identity.h"
 
@@ -1391,6 +1392,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
                                    const ComputeContext& context)
 {
     nlohmann::json results = nlohmann::json::array();
+    std::map<std::string, nlohmann::json> responseSubshapesByObject;
     std::vector<Diagnostic> diagnostics = context.diagnostics;
     for (const std::string& target : document.targets) {
         if (document.indexByName.count(target) == 0U) {
@@ -1398,6 +1400,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
         }
         const auto meshIt = context.mesh.find(target);
         nlohmann::json subshapes = responseSubshapes(target, context);
+        responseSubshapesByObject[target] = subshapes;
         if (requiresStableSubnamePublicationDiagnostics(target, context)
             && appendStableSubnamePublicationDiagnostics(target, subshapes, diagnostics)) {
             continue;
@@ -1420,6 +1423,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
         {"documentObjectUpdates", context.documentObjectUpdates},
         {"diagnostics", diagnosticsToJson(diagnostics)},
         {"binaryPayloads", nlohmann::json::array()},
+        {"topoNamingState", topoNamingStateJson(document, context, responseSubshapesByObject)},
     };
 }
 

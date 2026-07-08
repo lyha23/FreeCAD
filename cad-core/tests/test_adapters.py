@@ -22,6 +22,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         "documentObjectUpdates",
         "diagnostics",
         "binaryPayloads",
+        "topoNamingState",
     }
 
     def run_cli_core_recompute_payload(self, payload: bytes | dict) -> dict:
@@ -50,6 +51,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIsInstance(payload["documentObjectUpdates"], list)
         self.assertIsInstance(payload["diagnostics"], list)
         self.assertIsInstance(payload["binaryPayloads"], list)
+        self.assertIsInstance(payload["topoNamingState"], dict)
 
     def assert_capability_publication_smoke(self, capabilities: dict) -> None:
         self.assertEqual(capabilities["status"], "ok")
@@ -438,9 +440,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             normalized.pop("adapter")
             self.assertEqual(normalized, cli_result)
 
-    # C13-M1 S2 guarded redline: S3 runtime publisher should turn this into an
-    # unexpected success; S3 must then remove expectedFailure and keep it green.
-    @unittest.expectedFailure
     def test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel(self) -> None:
         payload = (ROOT / "fixtures" / "c4m6" / "topo-state-body-tip-stable-recovery.json").read_bytes()
 
@@ -1609,7 +1608,14 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         self.assertEqual(
             capabilities["adapters"]["stateless_result_channels"],
-            ["results", "elementReferenceUpdates", "documentObjectUpdates", "diagnostics", "binaryPayloads"],
+            [
+                "results",
+                "elementReferenceUpdates",
+                "documentObjectUpdates",
+                "diagnostics",
+                "binaryPayloads",
+                "topoNamingState",
+            ],
         )
         self.assertEqual(
             capabilities["adapters"]["resource_diagnostics"],

@@ -6,6 +6,7 @@
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/io.h"
 #include "cad_core/runtime/recompute.h"
+#include "cad_core/runtime/topo_naming_state.h"
 #include "cad_core/part/topo_shape.h"
 
 #include <nlohmann/json.hpp>
@@ -156,6 +157,8 @@ int runRecompute(const RecomputeOptions& options)
     }
     catch (const nlohmann::json::parse_error& error) {
         const nlohmann::json diagnostics = runtime::diagnosticsToJson({{"error", "parse_error", error.what(), {}, {}}});
+        const nlohmann::json emptyTopoNamingState =
+            runtime::topoNamingStateJson(app::Document {}, runtime::ComputeContext {}, {});
         nlohmann::json payload = useLegacyTestOutput()
             ? nlohmann::json{
                   {"objects", nlohmann::json::object()},
@@ -171,6 +174,7 @@ int runRecompute(const RecomputeOptions& options)
                   {"documentObjectUpdates", nlohmann::json::array()},
                   {"diagnostics", diagnostics},
                   {"binaryPayloads", nlohmann::json::array()},
+                  {"topoNamingState", emptyTopoNamingState},
               };
         runtime::writeJsonFile(options.outputPath, payload);
         return 0;
