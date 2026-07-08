@@ -5,6 +5,7 @@
 #include "cad_core/part/refine_model.h"
 #include "cad_core/part/shape_fix.h"
 #include "cad_core/app/element_map.h"
+#include "cad_core/topo/freecad_mapped_name_codec.h"
 
 #include <BRepBndLib.hxx>
 #include <BRepAlgoAPI_BooleanOperation.hxx>
@@ -64,7 +65,9 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <functional>
 #include <iomanip>
+#include <limits>
 #include <list>
 #include <map>
 #include <memory>
@@ -377,6 +380,10 @@ struct SourceTargets
 {
     std::set<std::string> preserved;
     std::set<std::string> history;
+    std::map<std::string, ElementHistoryKind> historyKinds;
+    std::optional<long> sourceTag;
+    std::string preservedOperationPostfix;
+    std::string sourceElement;
 };
 
 struct FilledOffsetBuild
@@ -393,14 +400,170 @@ struct SolidRecoveryBuild
     std::string error;
 };
 
+std::string localElementName(const std::string& elementName)
+{
+    const std::size_t dot = elementName.rfind('.');
+    return dot == std::string::npos ? elementName : elementName.substr(dot + 1);
+}
+
+std::string mappedNameElementType(const std::string& elementName)
+{
+    const auto parsed = parseSubshapeName(localElementName(elementName));
+    if (!parsed) {
+        return {};
+    }
+    switch (parsed->kind) {
+        case TopAbs_FACE:
+            return "Face";
+        case TopAbs_EDGE:
+            return "Edge";
+        case TopAbs_VERTEX:
+            return "Vertex";
+        default:
+            return {};
+    }
+}
+
+std::optional<long> requestLocalProducerTagForShape(const TopoDS_Shape& shape)
+{
+    if (shape.IsNull()) {
+        return std::nullopt;
+    }
+#if OCC_VERSION_HEX >= 0x070800
+    const std::size_t shapeHash = std::hash<TopoDS_Shape> {}(shape);
+#else
+    const std::size_t shapeHash = static_cast<std::size_t>(
+        shape.HashCode(std::numeric_limits<int>::max())
+    );
+#endif
+    constexpr long maxPositiveTag = 0x7fffffffL;
+    long tag = static_cast<long>(shapeHash % static_cast<std::size_t>(maxPositiveTag));
+    if (tag == 0) {
+        tag = 1;
+    }
+    return tag;
+}
+
+std::string normalizedProducerOperation(const std::string& producerOperation)
+{
+    if (producerOperation.empty()) {
+        return {};
+    }
+    if (producerOperation.front() == ';') {
+        return producerOperation;
+    }
+    return ";" + producerOperation;
+}
+
+std::string operationPostfixForHistoryKind(
+    ElementHistoryKind kind,
+    const std::string& producerOperation
+)
+{
+    std::string relationPostfix;
+    switch (kind) {
+        case ElementHistoryKind::Generated:
+            relationPostfix = ";:G";
+            break;
+        case ElementHistoryKind::Modified:
+            relationPostfix = ";:M";
+            break;
+        case ElementHistoryKind::Merge:
+            relationPostfix = ";:MG";
+            break;
+        default:
+            return {};
+    }
+    return relationPostfix + normalizedProducerOperation(producerOperation);
+}
+
+void rememberSourceTargetEvidence(
+    SourceTargets& targets,
+    const TopoDS_Shape& sourceShape,
+    const std::string& sourceElement,
+    const std::string& preservedOperationPostfix = {}
+)
+{
+    if (targets.sourceElement.empty() && !sourceElement.empty()) {
+        targets.sourceElement = sourceElement;
+    }
+    if (!targets.sourceTag) {
+        targets.sourceTag = requestLocalProducerTagForShape(sourceShape);
+    }
+    if (targets.preservedOperationPostfix.empty() && !preservedOperationPostfix.empty()) {
+        targets.preservedOperationPostfix = preservedOperationPostfix;
+    }
+}
+
+void rememberSourceTargetEvidence(
+    SourceTargets& targets,
+    const NamedShapeSource& source,
+    const std::string& sourceElement,
+    const std::string& preservedOperationPostfix = {}
+)
+{
+    rememberSourceTargetEvidence(targets, source.shape, sourceElement, preservedOperationPostfix);
+    if (source.namedShape == nullptr) {
+        return;
+    }
+    const auto provenanceIt = source.namedShape->mappedNameProvenance.find(sourceElement);
+    if (provenanceIt == source.namedShape->mappedNameProvenance.end()) {
+        return;
+    }
+    const MappedNameProvenance& inherited = provenanceIt->second;
+    if (inherited.status != MappedNameProvenanceStatus::SourceBacked) {
+        return;
+    }
+    if (!inherited.sourceElement.empty()) {
+        targets.sourceElement = inherited.sourceElement;
+    }
+    if (inherited.sourceTag) {
+        targets.sourceTag = inherited.sourceTag;
+    }
+    if (targets.preservedOperationPostfix.empty() && !inherited.operationPostfix.empty()) {
+        targets.preservedOperationPostfix = inherited.operationPostfix;
+    }
+}
+
+void recordMappedNameProvenance(
+    NamedShape& namedShape,
+    const std::string& entryKey,
+    const std::string& currentElement,
+    const std::string& sourceElement,
+    const std::optional<long>& sourceTag,
+    const std::string& operationPostfix
+)
+{
+    if (entryKey.empty() || currentElement.empty() || sourceElement.empty()) {
+        return;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::mapSubElement(...), calls
+    // "ensureElementMap()->encodeElementName(..., Tag, op, other.Tag)" at the producer map
+    // site. /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::encodeElementName(... masterTag ... postfix ... tag ...) appends the
+    // operation postfix and tag segment. cad-core records only producer evidence available at
+    // the alias-writing point, then lets the S2 codec reject incomplete evidence without using
+    // stable/display names as fake raw mapped names.
+    MappedNameProvenance provenance;
+    provenance.entryKey = entryKey;
+    provenance.currentElement = currentElement;
+    provenance.sourceElement = sourceElement;
+    provenance.elementType = mappedNameElementType(currentElement);
+    provenance.producerTag = requestLocalProducerTagForShape(namedShape.shape);
+    provenance.masterTag = provenance.producerTag;
+    provenance.sourceTag = sourceTag;
+    provenance.operationPostfix = operationPostfix;
+    provenance.status = MappedNameProvenanceStatus::IndexedOnly;
+    namedShape.mappedNameProvenance[entryKey] =
+        cad_core::topo::encodedMappedNameProvenance(std::move(provenance));
+}
+
 void addTerminalHistory(NamedShape& namedShape, const ElementHistory& entry);
 
 std::optional<TopAbs_ShapeEnum> elementKindFromName(const std::string& elementName)
 {
-    const std::size_t dot = elementName.rfind('.');
-    const std::string localName = dot == std::string::npos ? elementName
-                                                           : elementName.substr(dot + 1);
-    const auto parsed = parseSubshapeName(localName);
+    const auto parsed = parseSubshapeName(localElementName(elementName));
     if (!parsed) {
         return std::nullopt;
     }
@@ -534,6 +697,7 @@ bool applyHistoryShape(
             namedShape.history.push_back(ElementHistory {historyKind, *elementName, {sourceName}});
         }
         sourceTargets[sourceName].history.insert(*elementName);
+        sourceTargets[sourceName].historyKinds[*elementName] = historyKind;
         applied = true;
     }
     return applied;
@@ -2041,9 +2205,45 @@ void applyRefineGenericGeneratedHistory(
 
 void applyHistoryElementMap(
     NamedShape& namedShape,
-    const std::map<std::string, SourceTargets>& sourceTargets
+    const std::map<std::string, SourceTargets>& sourceTargets,
+    const std::string& producerOperation = {}
 )
 {
+    const auto applyAlias = [&](const std::string& sourceName,
+                                const SourceTargets& targets,
+                                const std::string& target,
+                                const std::string& operationPostfix) {
+        namedShape.elementMap[sourceName] = target;
+        recordMappedNameProvenance(
+            namedShape,
+            sourceName,
+            target,
+            targets.sourceElement.empty() ? sourceName : targets.sourceElement,
+            targets.sourceTag,
+            operationPostfix
+        );
+    };
+    const auto historyOperationPostfix = [&](const SourceTargets& targets,
+                                             const std::string& target) {
+        const auto historyKindIt = targets.historyKinds.find(target);
+        if (historyKindIt == targets.historyKinds.end()) {
+            return std::string {};
+        }
+        return operationPostfixForHistoryKind(historyKindIt->second, producerOperation);
+    };
+    const auto preservedOperationPostfix = [&](const SourceTargets& targets,
+                                               const std::string& target) {
+        if (!targets.preservedOperationPostfix.empty()) {
+            return targets.preservedOperationPostfix;
+        }
+        if (targets.history.count(target) != 0U) {
+            return historyOperationPostfix(targets, target);
+        }
+        if (targets.history.size() == 1U) {
+            return historyOperationPostfix(targets, *targets.history.begin());
+        }
+        return std::string {};
+    };
     const auto applySplit = [&](const std::string& sourceName, const std::set<std::string>& targets) {
         for (const std::string& target : targets) {
             auto elementIt = namedShape.elements.find(target);
@@ -2067,7 +2267,12 @@ void applyHistoryElementMap(
         // subelements resolve first; one-to-one same-kind history fills the remaining keys;
         // one-to-many same-kind history is recorded as split and left unresolved.
         if (targets.preserved.size() == 1U) {
-            namedShape.elementMap[sourceName] = *targets.preserved.begin();
+            applyAlias(
+                sourceName,
+                targets,
+                *targets.preserved.begin(),
+                preservedOperationPostfix(targets, *targets.preserved.begin())
+            );
             continue;
         }
         if (targets.preserved.size() > 1U) {
@@ -2079,7 +2284,8 @@ void applyHistoryElementMap(
         if (sourceKind) {
             const std::set<std::string> sameKindHistory = targetsOfKind(targets.history, *sourceKind);
             if (sameKindHistory.size() == 1U) {
-                namedShape.elementMap[sourceName] = *sameKindHistory.begin();
+                const std::string target = *sameKindHistory.begin();
+                applyAlias(sourceName, targets, target, historyOperationPostfix(targets, target));
                 continue;
             }
             if (sameKindHistory.size() > 1U) {
@@ -2089,7 +2295,8 @@ void applyHistoryElementMap(
         }
 
         if (targets.history.size() == 1U) {
-            namedShape.elementMap[sourceName] = *targets.history.begin();
+            const std::string target = *targets.history.begin();
+            applyAlias(sourceName, targets, target, historyOperationPostfix(targets, target));
             continue;
         }
         if (targets.history.size() > 1U) {
@@ -2110,7 +2317,16 @@ void applyPreservedElementMap(
 {
     for (const auto& [sourceName, targets] : sourceTargets) {
         if (targets.preserved.size() == 1U) {
-            namedShape.elementMap[sourceName] = *targets.preserved.begin();
+            const std::string target = *targets.preserved.begin();
+            namedShape.elementMap[sourceName] = target;
+            recordMappedNameProvenance(
+                namedShape,
+                sourceName,
+                target,
+                targets.sourceElement.empty() ? sourceName : targets.sourceElement,
+                targets.sourceTag,
+                targets.preservedOperationPostfix
+            );
             continue;
         }
         if (targets.preserved.size() <= 1U) {
@@ -2174,7 +2390,8 @@ void collectPropagatedWireElement(
     const TopoDS_Shape& originalElement,
     const TopoDS_Shape& propagatedElement,
     TopAbs_ShapeEnum kind,
-    std::map<std::string, SourceTargets>& sourceTargets
+    std::map<std::string, SourceTargets>& sourceTargets,
+    const std::string& operationPostfix = {}
 )
 {
     const auto localName = sourceLocalElementName(source, kind, originalElement);
@@ -2182,7 +2399,7 @@ void collectPropagatedWireElement(
         return;
     }
     for (const std::string& sourceName : sourceElementNames(source, *localName)) {
-        sourceTargets[sourceName];
+        rememberSourceTargetEvidence(sourceTargets[sourceName], source, sourceName, operationPostfix);
         collectSourceElementMap(namedShape, sourceName, propagatedElement, kind, sourceTargets);
     }
 }
@@ -2229,13 +2446,27 @@ void addMergeHistory(NamedShape& namedShape)
     }
 }
 
-void addRetagAlias(NamedShape& namedShape, const std::string& stableName, const std::string& targetName)
+void addRetagAlias(
+    NamedShape& namedShape,
+    const std::string& stableName,
+    const std::string& targetName,
+    const std::optional<long>& sourceTag = std::nullopt,
+    const std::string& operationPostfix = {}
+)
 {
     if (stableName.empty() || targetName.empty() || stableName == targetName
         || namedShape.elements.count(targetName) == 0U) {
         return;
     }
     namedShape.elementMap[stableName] = targetName;
+    recordMappedNameProvenance(
+        namedShape,
+        stableName,
+        targetName,
+        stableName,
+        sourceTag,
+        operationPostfix
+    );
     auto& element = namedShape.elements[targetName];
     if (element.status == ElementHistoryKind::Indexed) {
         element.status = ElementHistoryKind::Modified;
@@ -2398,6 +2629,19 @@ std::string booleanOperationName(BooleanOperation operation)
             return "intersect";
     }
     return "boolean";
+}
+
+std::string booleanOperationCode(BooleanOperation operation)
+{
+    switch (operation) {
+        case BooleanOperation::Fuse:
+            return "FUS";
+        case BooleanOperation::Cut:
+            return "CUT";
+        case BooleanOperation::Common:
+            return "CMN";
+    }
+    return {};
 }
 
 nlohmann::json historyToJson(const ElementHistory& history)
@@ -2817,14 +3061,16 @@ NamedShape namedShapeForMakerHistory(
     const TopoDS_Shape& resultShape,
     const std::string& sourceOwner,
     const TopoDS_Shape& sourceShape,
-    BRepBuilderAPI_MakeShape& maker
+    BRepBuilderAPI_MakeShape& maker,
+    const std::string& producerOperation
 )
 {
     return namedShapeForMakerHistory(
         owner,
         resultShape,
         std::vector<NamedShapeSource> {{sourceOwner, sourceShape}},
-        maker
+        maker,
+        producerOperation
     );
 }
 
@@ -2832,7 +3078,8 @@ NamedShape namedShapeForMakerHistory(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const std::vector<NamedShapeSource>& sources,
-    BRepBuilderAPI_MakeShape& maker
+    BRepBuilderAPI_MakeShape& maker,
+    const std::string& producerOperation
 )
 {
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
@@ -2850,7 +3097,12 @@ NamedShape namedShapeForMakerHistory(
                 const TopoDS_Shape& sourceElement = sourceElements(index);
                 const std::string localElementName = prefix + std::to_string(index);
                 for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
-                    sourceTargets[sourceName];
+                    rememberSourceTargetEvidence(
+                        sourceTargets[sourceName],
+                        source,
+                        sourceName,
+                        producerOperation
+                    );
                     collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
                     try {
                         applyHistoryList(
@@ -2875,7 +3127,7 @@ NamedShape namedShapeForMakerHistory(
             }
         }
     }
-    applyHistoryElementMap(namedShape, sourceTargets);
+    applyHistoryElementMap(namedShape, sourceTargets, producerOperation);
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
 
@@ -2906,7 +3158,7 @@ NamedShape namedShapeForThruSectionsHistory(
                 const TopoDS_Shape& sourceElement = sourceElements(index);
                 const std::string localElementName = prefix + std::to_string(index);
                 for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
-                    sourceTargets[sourceName];
+                    rememberSourceTargetEvidence(sourceTargets[sourceName], source, sourceName);
                     collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
 
                     bool generated = false;
@@ -2980,7 +3232,7 @@ NamedShape namedShapeForSewingHistory(
                 const TopoDS_Shape& sourceElement = sourceElements(index);
                 const std::string localElementName = prefix + std::to_string(index);
                 for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
-                    sourceTargets[sourceName];
+                    rememberSourceTargetEvidence(sourceTargets[sourceName], source, sourceName);
                     collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
                     sawModified = applySewingModifiedHistory(
                                       namedShape,
@@ -3083,7 +3335,7 @@ NamedShape namedShapeForRefineHistory(
             const TopoDS_Shape& sourceElement = sourceElements(index);
             const std::string localElementName = prefix + std::to_string(index);
             for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
-                sourceTargets[sourceName];
+                rememberSourceTargetEvidence(sourceTargets[sourceName], source, sourceName);
                 collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
                 try {
                     applyHistoryList(
@@ -3148,7 +3400,7 @@ NamedShape namedShapeForShapeFixHistory(
             const TopoDS_Shape& sourceElement = sourceElements(index);
             const std::string localElementName = prefix + std::to_string(index);
             for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
-                sourceTargets[sourceName];
+                rememberSourceTargetEvidence(sourceTargets[sourceName], source, sourceName);
                 collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
                 try {
                     applyHistoryList(
@@ -3220,7 +3472,7 @@ NamedShape namedShapeForShapeFixRootHistory(
             const TopoDS_Shape& sourceElement = sourceElements(index);
             const std::string localElementName = prefix + std::to_string(index);
             for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
-                sourceTargets[sourceName];
+                rememberSourceTargetEvidence(sourceTargets[sourceName], source, sourceName);
                 collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
                 try {
                     if (!history.IsNull()) {
@@ -3276,7 +3528,8 @@ NamedShape namedShapeForShapeFixRootHistory(
 NamedShape namedShapeForPreservedSources(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
-    const std::vector<NamedShapeSource>& sources
+    const std::vector<NamedShapeSource>& sources,
+    const std::string& producerOperation
 )
 {
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
@@ -3294,7 +3547,14 @@ NamedShape namedShapeForPreservedSources(
                 const TopoDS_Shape& sourceElement = sourceElements(index);
                 const std::string localElementName = prefix + std::to_string(index);
                 for (const std::string& sourceName : sourceElementNames(source, localElementName)) {
-                    sourceTargets[sourceName];
+                    rememberSourceTargetEvidence(
+                        sourceTargets[sourceName],
+                        source,
+                        sourceName,
+                        source.childElementMapPostfix.empty()
+                            ? producerOperation
+                            : source.childElementMapPostfix
+                    );
                     collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
                 }
             }
@@ -3319,7 +3579,6 @@ NamedShapeBuild makeElementWiresWithPropagatedSources(
     // "MakeWire will replace vertex of connected edge ... update the shape in order to preserve
     // element mapping." cad-core keeps this in the Part-layer NamedShape ledger so adapters do
     // not infer Propagate aliases from result geometry.
-    (void)op;
     BRepBuilderAPI_MakeWire wireMaker;
     struct PropagatedEdge
     {
@@ -3389,7 +3648,8 @@ NamedShapeBuild makeElementWiresWithPropagatedSources(
             edge.originalEdge,
             edge.propagatedEdge,
             TopAbs_EDGE,
-            sourceTargets
+            sourceTargets,
+            op
         );
 
         TopoDS_Vertex originalFirst;
@@ -3402,7 +3662,8 @@ NamedShapeBuild makeElementWiresWithPropagatedSources(
                 originalFirst,
                 propagatedVertexClosestTo(originalFirst, edge.propagatedEdge),
                 TopAbs_VERTEX,
-                sourceTargets
+                sourceTargets,
+                op
             );
         }
         if (!originalLast.IsNull()) {
@@ -3412,7 +3673,8 @@ NamedShapeBuild makeElementWiresWithPropagatedSources(
                 originalLast,
                 propagatedVertexClosestTo(originalLast, edge.propagatedEdge),
                 TopAbs_VERTEX,
-                sourceTargets
+                sourceTargets,
+                op
             );
         }
     }
@@ -3435,7 +3697,6 @@ NamedShapeBuild makeElementShellWithPropagatedSource(
     // adds every "getSubShapes(TopAbs_FACE)" face; with ElementMapPolicy::Propagate it builds
     // "TopoShape tmp(..., shell)", calls "tmp.mapSubElement(*this, op)", and reuses that
     // ElementMap after possible ShapeUpgrade_ShellSewing repair.
-    (void)op;
     if (source.shape.IsNull()) {
         return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "makeElementShell: null source shape"};
     }
@@ -3478,7 +3739,9 @@ NamedShapeBuild makeElementShellWithPropagatedSource(
             };
         }
 
-        NamedShape namedShape = namedShapeForPreservedSources(owner, resultShape, {source});
+        NamedShapeSource propagatedSource = source;
+        propagatedSource.childElementMapPostfix = op;
+        NamedShape namedShape = namedShapeForPreservedSources(owner, resultShape, {propagatedSource});
         addDistinctString(
             namedShape.elementHistoryStatus,
             "element_map_policy_propagate:make_element_shell"
@@ -3772,7 +4035,7 @@ NamedShapeBuild makeElementBooleanFromSources(
     const TopoDS_Shape resultShape = maker->Shape();
     return NamedShapeBuild {
         resultShape,
-        namedShapeForMakerHistory(owner, resultShape, booleanSources, *maker),
+        namedShapeForMakerHistory(owner, resultShape, booleanSources, *maker, booleanOperationCode(operation)),
         {}
     };
 }

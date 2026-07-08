@@ -9,8 +9,9 @@ C13-M2 S4 在实现 `mappedName.raw/canonical` codec 时被真实 blocker 卡住
 - C13-M3 S0 已关闭：`pwd=/Users/li/Chili3DProject/FreeCAD`，起点 `HEAD=095777f8ab`（`095777f8ab 文档：关闭 C13-M3 工作步骤入口`），起点 worktree clean。
 - C13-M2 S0-S3 已关闭，S3 已把 focused red tests 锁住。
 - C13-M2 S4 当前不能安全关闭；缺少的是 `NamedShape` 生产阶段的 FreeCAD-equivalent tag / op / raw mapped-name provenance。
-- C13-M3 S1 已关闭：`NamedShape` 现在有 request-local `mapped_name_provenance` JSON 出口，按 entry/stable element name 承载 tag/sourceTag/op/raw/canonical/status 接口；producer 填充与 runtime 发布仍在 S3/S4。
-- C13-M3 S2 已关闭：`cad_core::topo` 提供 FreeCAD mapped-name codec/helper，可从完整 `MappedNameProvenance` source/tag/op/type evidence 编码 raw/canonical，并在缺 evidence 时返回 missing/blocker status；producer 填充和 runtime 发布仍在 S3/S4。
+- C13-M3 S1 已关闭：`NamedShape` 现在有 request-local `mapped_name_provenance` JSON 出口，按 entry/stable element name 承载 tag/sourceTag/op/raw/canonical/status 接口；runtime 发布仍在 S4。
+- C13-M3 S2 已关闭：`cad_core::topo` 提供 FreeCAD mapped-name codec/helper，可从完整 `MappedNameProvenance` source/tag/op/type evidence 编码 raw/canonical，并在缺 evidence 时返回 missing/blocker status；runtime 发布仍在 S4。
+- C13-M3 S3 已关闭：shared Part/PartDesign maker-history 和 preserved-source alias 写入 source-backed producer evidence；focused debug recompute 已覆盖 p2 `Body`、c4m6 `Body`、p6 Body-side UpToFace source path。p6 `ProbePad` 的 runtime publication 仍留给 S4。
 - runtime 仍可继续发布 C13-M1 `topoNamingState`，但不能把 stable token 当作 FreeCAD raw mapped name。
 - C13-M3 不替代 C13-M2；它是 C13-M2 S4 的前置补账本批次。
 
@@ -55,7 +56,7 @@ C13-M2 S4 在实现 `mappedName.raw/canonical` codec 时被真实 blocker 卡住
 - S0：冻结 C13-M2 S4 blocker 与当前 redline。
 - S1：已关闭，落地 producer ledger 接口、tag/op/provenance 数据模型。
 - S2：已关闭，落地 FreeCAD-equivalent encode helper 与 request-local tag/op evidence 编码边界。
-- S3：接入 PartDesign focused producer 链路，覆盖 p2/c4m6/p6。
+- S3：已关闭，接入 PartDesign focused producer 链路，覆盖 p2/c4m6/p6 producer evidence。
 - S4：runtime publisher 消费 ledger，p5/p8 no-fake-raw 边界保持。
 - S5：发布闸门，回流 C13-M2 S4 或更新 blocker。
 

@@ -1,6 +1,6 @@
 id	phase	fixture	focused_object	required_behavior	status	close_condition
-C13M3-FIX-001	p2	rect-pad-pocket	Body	Body entry keys and mappedName.raw/canonical match FreeCAD expected without expected-string copy	planned	S4 focused test passes without expectedFailure.
-C13M3-FIX-002	c4m6	topo-state-body-tip-stable-recovery	Body	Body/Tip round-trip recovery remains stable while raw mapped names become source-backed	planned	S4 focused test passes and C13-M1 round-trip test still passes.
-C13M3-FIX-003	p6	up-to-face-stable-body-history	ProbePad	UpToFace probe raw/canonical evidence comes from producer ledger	planned	S4 focused test passes without expectedFailure.
+C13M3-FIX-001	p2	rect-pad-pocket	Body	Body entry keys have source-backed producer mapped_name_provenance before runtime publication	producer_evidence_wired_s3	S3 legacy named_shapes test passes; S4 still owns topoNamingState mappedName.raw/canonical parity.
+C13M3-FIX-002	c4m6	topo-state-body-tip-stable-recovery	Body	Body/Tip round-trip recovery keeps producer evidence available while runtime publication remains pending	producer_evidence_wired_s3	S3 legacy named_shapes test and C13-M1 round-trip pass; S4 still owns mappedName publication.
+C13M3-FIX-003	p6	up-to-face-stable-body-history	ProbePad	UpToFace source-side producer evidence is available for the Body path feeding ProbePad; ProbePad runtime output remains S4/expectedFailure scope	producer_evidence_wired_s3	S3 legacy Body evidence test passes; S4 still owns ProbePad topoNamingState mappedName.raw/canonical parity.
 C13M3-FIX-004	p5	sketch-internal-face	Sketch	Sketch indexed-only expected remains entries=0; no fake raw names from internal/display tokens	planned	S4 boundary test passes without expectedFailure.
 C13M3-FIX-005	p8	app-link-box-face	BoxLink	Link display path remains non-durable; no fake raw name from child display path	planned	S4 boundary test passes without expectedFailure.

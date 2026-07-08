@@ -220,7 +220,8 @@ NamedShape namedShapeForMakerHistory(
     const TopoDS_Shape& resultShape,
     const std::string& sourceOwner,
     const TopoDS_Shape& sourceShape,
-    BRepBuilderAPI_MakeShape& maker
+    BRepBuilderAPI_MakeShape& maker,
+    const std::string& producerOperation = {}
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
@@ -230,7 +231,8 @@ NamedShape namedShapeForMakerHistory(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const std::vector<NamedShapeSource>& sources,
-    BRepBuilderAPI_MakeShape& maker
+    BRepBuilderAPI_MakeShape& maker,
+    const std::string& producerOperation = {}
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::MapperThruSections,
@@ -272,7 +274,8 @@ std::optional<NamedShape> namedShapeForTaperedExtrusionHistory(
 NamedShape namedShapeForPreservedSources(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
-    const std::vector<NamedShapeSource>& sources
+    const std::vector<NamedShapeSource>& sources,
+    const std::string& producerOperation = {}
 );
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementBoolean(), routes OpCodes::Compound to

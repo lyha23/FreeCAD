@@ -1518,14 +1518,16 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
             namedShape = part::namedShapeForMakerHistory(historyOwner,
                                                          prism.Shape(),
                                                          std::vector<part::NamedShapeSource>{profileSource},
-                                                         prism);
+                                                         prism,
+                                                         "XTR");
         }
         else {
             namedShape = part::namedShapeForMakerHistory(historyOwner,
                                                          prism.Shape(),
                                                          profileLink.object,
                                                          profile,
-                                                         prism);
+                                                         prism,
+                                                         "XTR");
         }
         return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
     }
@@ -1647,7 +1649,7 @@ std::optional<SideBuild> makePrismUntilSide(const TopoDS_Shape& profile,
             profileSource.namedShape = &profileNamedShapeIt->second;
         }
     }
-    auto namedShape = part::namedShapeForPreservedSources(historyOwner, *prismShape, {profileSource});
+    auto namedShape = part::namedShapeForPreservedSources(historyOwner, *prismShape, {profileSource}, "PSM");
     return SideBuild{method, reportLength, *prismShape, false, false, std::move(namedShape)};
 }
 
@@ -1706,7 +1708,7 @@ std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
         }
     }
     auto namedShape = part::namedShapeForTaperedExtrusionHistory(historyOwner, *tapered, profile, profileSource)
-        .value_or(part::namedShapeForPreservedSources(historyOwner, tapered->shape, {profileSource}));
+        .value_or(part::namedShapeForPreservedSources(historyOwner, tapered->shape, {profileSource}, "XTR"));
     return SideBuild{
         method,
         length,

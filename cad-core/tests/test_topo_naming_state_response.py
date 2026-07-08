@@ -25,6 +25,12 @@ C13M2_INDEXED_ONLY_BOUNDARY_CASES = (
     ("p8", "app-link-box-face", "BoxLink"),
 )
 
+C13M3_PRODUCER_EVIDENCE_CASES = (
+    ("p2", "rect-pad-pocket", "Body"),
+    ("c4m6", "topo-state-body-tip-stable-recovery", "Body"),
+    ("p6", "up-to-face-stable-body-history", "Body"),
+)
+
 
 class TopoNamingStateResponseTest(unittest.TestCase):
     def fixture_payload(self, group: str, fixture: str) -> dict:
@@ -55,6 +61,23 @@ class TopoNamingStateResponseTest(unittest.TestCase):
 
     def run_official_recompute_fixture(self, group: str, fixture: str) -> dict:
         return self.run_official_recompute_payload(self.fixture_payload(group, fixture))
+
+    def run_legacy_recompute_fixture(self, group: str, fixture: str) -> dict:
+        payload = json.dumps(self.fixture_payload(group, fixture)).encode("utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            input_path = tmp_path / "request.json"
+            output_path = tmp_path / "result.json"
+            input_path.write_bytes(payload)
+            env = os.environ.copy()
+            env["CAD_CORE_TEST_LEGACY_OUTPUT"] = "1"
+            subprocess.run(
+                [str(BIN), "recompute", str(input_path), "--output", str(output_path)],
+                cwd=ROOT,
+                check=True,
+                env=env,
+            )
+            return json.loads(output_path.read_text(encoding="utf-8"))
 
     def topo_state_object(self, response: dict, object_name: str) -> dict:
         return response["topoNamingState"]["objects"][object_name]
@@ -125,6 +148,32 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         self.assertEqual(actual_element_map["status"], "indexed_only")
         self.assertEqual(actual_element_map["entries"], {})
 
+    def assert_source_backed_producer_evidence(self, response: dict, object_name: str) -> None:
+        named_shape = response["named_shapes"][object_name]
+        provenance = named_shape["mapped_name_provenance"]
+        source_backed = {
+            entry_key: entry
+            for entry_key, entry in provenance.items()
+            if entry["status"] == "source_backed"
+        }
+
+        self.assertGreater(len(source_backed), 0)
+        for entry_key, entry in source_backed.items():
+            with self.subTest(object=object_name, entry=entry_key):
+                self.assertEqual(entry["entry_key"], entry_key)
+                self.assertIn(entry_key, named_shape["element_map"])
+                self.assertIn(entry["current_element"], named_shape["elements"])
+                self.assertNotEqual(entry["source_element"], "")
+                self.assertIn(entry["element_type"], {"Face", "Edge", "Vertex"})
+                self.assertIsInstance(entry["producer_tag"], int)
+                self.assertIsInstance(entry["master_tag"], int)
+                self.assertIsInstance(entry["source_tag"], int)
+                self.assertNotEqual(entry["operation_postfix"], "")
+                self.assertNotEqual(entry["raw_mapped_name"], "")
+                self.assertNotEqual(entry["canonical_mapped_name"], "")
+                self.assertIn(";:H", entry["raw_mapped_name"])
+                self.assertIn(":H*", entry["canonical_mapped_name"])
+
     def test_c13m1_official_cli_response_publishes_body_topo_state_schema_gap_only(self) -> None:
         payload = self.fixture_payload("p2", "rect-pad-pocket")
 
@@ -152,6 +201,12 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         for edge in edge_subshapes:
             self.assertEqual(edge["identityStatus"], "stable")
             self.assertNotEqual(edge["stableSubname"], "")
+
+    def test_c13m3_s3_partdesign_producer_evidence_exists_for_focused_paths(self) -> None:
+        for group, fixture, object_name in C13M3_PRODUCER_EVIDENCE_CASES:
+            with self.subTest(fixture=f"{group}/{fixture}", object=object_name):
+                response = self.run_legacy_recompute_fixture(group, fixture)
+                self.assert_source_backed_producer_evidence(response, object_name)
 
     # C13-M2 S3 redline: remove expectedFailure in S4 when runtime publishes
     # FreeCAD-compatible raw/canonical mapped names instead of stable tokens.
