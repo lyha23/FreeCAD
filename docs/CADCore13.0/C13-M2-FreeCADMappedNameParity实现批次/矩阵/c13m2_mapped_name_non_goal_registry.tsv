@@ -1,0 +1,7 @@
+id	non_goal	reason	reopen_condition	status
+C13M2-NONGOAL-001	Full topoNamingState expected parity	All phases include many unrelated geometry/history families; C13-M2 only closes focused mapped-name evidence	User opens future full parity batch	active
+C13M2-NONGOAL-002	Frontend my-chili3d consumer sync	This package owns FreeCAD/cad-core backend evidence	User switches repo/task to frontend	active
+C13M2-NONGOAL-003	Changing response subname/fullSubname/stableSubname semantics	C13-M2 improves topo state evidence around existing response contract	Focused regression proves current visible subshape contract wrong	active
+C13M2-NONGOAL-004	Copying expected mappedName strings into runtime	Would violate FreeCAD source authority and hide missing codec semantics	Never reopen as implementation route	blocked_route
+C13M2-NONGOAL-005	Persistent backend topology cache	CAD Core remains stateless and state travels through request/response	Architecture boundary is explicitly changed	active
+C13M2-NONGOAL-006	Resolving full CadCoreAdapterTest existing 6F/8E baseline	C13-M1 recorded this as unrelated current baseline	User asks for adapter baseline cleanup	active

@@ -1,0 +1,6 @@
+id	phase	fixture	current_gap	expected_evidence	c13m2_role	status	close_condition
+C13M2-FIX-001	p2	rect-pad-pocket	freecad_mapped_name_encoding_gap	Body/Pad/Pocket mappedName.raw/canonical	PartDesign Body history focused parity	planned	Raw/canonical evidence matches expected or gap is source-blocked.
+C13M2-FIX-002	c4m6	topo-state-body-tip-stable-recovery	freecad_mapped_name_encoding_gap	Body/Tip persisted stable reference evidence	Round-trip recovery must not regress while raw names improve	planned	Second request still resolves stable Body/Tip references.
+C13M2-FIX-003	p5	sketch-internal-face	indexed_only_boundary	Sketch InternalShape / indexed-only state	Prevent raw-name fabrication for internal/indexed-only state	planned	No fake FreeCAD raw name is generated.
+C13M2-FIX-004	p6	up-to-face-stable-body-history	freecad_mapped_name_encoding_gap	UpToFace StableSubList evidence	External face history evidence parity	planned	StableSubList path uses published state and focused evidence aligns.
+C13M2-FIX-005	p8	app-link-box-face	child_path_identity_boundary	App::Link subshape evidence	Link display path must not become durable identity	planned	Child path remains display evidence unless ElementMap proves identity.

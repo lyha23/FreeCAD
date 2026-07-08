@@ -1,0 +1,9 @@
+id	semantic	freecad_source	cad_core_landing	status	notes
+C13M2-SRC-001	MappedName raw byte/string structure	src/App/MappedName.cpp;src/App/MappedName.h	future mapped-name codec helper	planned	Source audit must identify raw data, postfix and canonical printable behavior.
+C13M2-SRC-002	Element naming constants	src/App/ElementNamingUtils.h	future mapped-name codec helper	planned	Constants such as MAPPED_CHILD_ELEMENTS_PREFIX define child key raw form.
+C13M2-SRC-003	ElementMap indexed-to-mapped ledger	src/App/ElementMap.cpp::setElementName;addName;find;findAll	cad-core/src/part/topo_shape.cpp;runtime/topo_naming_state.cpp	planned	Runtime entries must remain ledger-derived.
+C13M2-SRC-004	ElementMap encode/hash behavior	src/App/ElementMap.cpp::encodeElementName;hashElementName;dehashElementName	future codec helper	planned	Defines focused #...:H... and canonical hash/delete treatment.
+C13M2-SRC-005	Child element map hashing	src/App/ElementMap.cpp::hashChildMaps;addChildElements;getChildElements	future child key helper or blocker	planned	Defines childElementMapKey parity boundary.
+C13M2-SRC-006	TopoShape mapped-name propagation	src/Mod/Part/App/TopoShapeExpansion.cpp	cad-core/src/part/topo_shape.cpp	planned	Calls ensureElementMap()->encodeElementName during generated/modified/child propagation.
+C13M2-SRC-007	Mapper history source	src/Mod/Part/App/TopoShapeMapper.cpp	cad-core/src/part/topo_shape_mapper.cpp	planned	Defines source of generated/modified/split/merge relation evidence.
+C13M2-SRC-008	Collector expected schema	cad-core/tools/collect_freecad_expected.py	cad-core tests and fixture matrix	planned	Comparator/canonicalizer only; not runtime business source.

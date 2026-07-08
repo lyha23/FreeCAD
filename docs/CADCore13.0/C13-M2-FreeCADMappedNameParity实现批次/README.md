@@ -1,0 +1,82 @@
+# C13-M2 FreeCAD MappedName Parity 实现批次
+
+C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输出 state，下一次请求能消费该 state，CLI / C API / worker / wasm channel 也已验证一致。C13-M2 的目标不是再做输出字段存在性，而是把 C13-M1 留下的 FreeCAD 字节级 identity evidence 缺口收窄到 focused parity。
+
+## 当前问题
+
+S4 已确认 focused output 的剩余差异集中在三类：
+
+- `freecad_mapped_name_encoding_gap`：expected 使用 FreeCAD raw mapped name，例如 `#...:H...` / `#...:G;XTR...`，runtime 目前只发布 `NamedShape.elementMap` 的稳定 token。
+- `child_element_map_key_gap`：expected evidence 里有 `childElementMapKey`，runtime 目前只发布当前 child map 投影。
+- `mapper_history_id_gap`：expected 使用 `mapperHistoryIds`，runtime 目前发布 request-local `mapperHistory` 和 `mapperHistoryIndexes`。
+
+C13-M2 只做这三个 evidence 的 focused parity；不做全量 expected fixture parity，不改前端，不把 expected 字符串硬塞进 runtime。
+
+## FreeCAD source authority
+
+| 语义 | FreeCAD source | C13-M2 用法 |
+| --- | --- | --- |
+| raw MappedName byte structure | `src/App/MappedName.cpp`, `src/App/MappedName.h`, `src/App/ElementNamingUtils.h` | 作为 raw/canonical mappedName encoder 的字节语义依据。 |
+| IndexedName <-> MappedName ledger | `src/App/ElementMap.cpp`, `src/App/ElementMap.h` | `elementMap.entries` 的 key、`mappedName.raw/canonical`、child map key 必须来自 ledger 规则。 |
+| encodeElementName / hashElementName | `src/App/ElementMap.cpp::encodeElementName()`, `hashElementName()` | 复刻 `#...:H...`、delete/hash canonicalization 的 focused 行为。 |
+| child maps | `ElementMap::hashChildMaps()`, `addChildElements()`, `getChildElements()` | 生成或对齐 `childElementMapKey` evidence，不从 fixture 字符串反推。 |
+| shape history propagation | `src/Mod/Part/App/TopoShapeExpansion.cpp`, `TopoShapeMapper.cpp` | mapper history id 和 mapped name 来源的调用链依据。 |
+| expected schema/comparator | `cad-core/tools/collect_freecad_expected.py` | 只作为 schema、canonicalization 和 diff comparator 依据。 |
+
+## cad-core 落点
+
+| 落点 | 角色 |
+| --- | --- |
+| `cad-core/include/cad_core/topo/` 或 `cad-core/include/cad_core/part/` 下的 mapped-name codec helper | 承接 FreeCAD raw/canonical mapped-name 编码与 child key 规则。 |
+| `cad-core/src/topo/` 或 `cad-core/src/part/` 对应实现 | 复刻 FreeCAD focused encoder/canonicalizer，保留 FreeCAD source 注释。 |
+| `cad-core/src/runtime/topo_naming_state.cpp` | 消费 codec 输出，填充 `mappedName.raw/canonical`、`childElementMapKey`、`mapperHistoryIds`。 |
+| `cad-core/tests/test_topo_naming_state_response.py` 或新增 focused test | 锁定 focused fixtures 的 C13-M2 parity。 |
+| `cad-core/fixtures/<phase>/cad-core-res/*.cad-core.json` | 保存当前实现输出对照，仍不得写入 `expected/`。 |
+
+## 最小完整语义批次
+
+| fixture | 覆盖目的 |
+| --- | --- |
+| `p2/rect-pad-pocket` | PartDesign Body / Pad / Pocket 的 mappedName raw/canonical 对齐。 |
+| `c4m6/topo-state-body-tip-stable-recovery` | persisted state round-trip 下 Body/Tip alias 不回退。 |
+| `p5/sketch-internal-face` | Sketch InternalShape 与 indexed-only 状态不伪造 FreeCAD raw name。 |
+| `p6/up-to-face-stable-body-history` | StableSubList 通过 topo state 恢复，上游 face history evidence 对齐。 |
+| `p8/app-link-box-face` | Link / child path 不误当 durable identity，child map key gap 单独归类。 |
+
+## 非目标
+
+- 不创建前端 my-chili3d consumer 同步任务。
+- 不把 `fixtures/<phase>/expected/*.freecad.json` 的 raw mappedName 字符串复制进 runtime。
+- 不修改 `subname/fullSubname/stableSubname` 既有 response 语义。
+- 不扩大到全量 expected fixture parity；C13-M2 只关闭 focused mapped-name / child-key / mapper-id evidence。
+- 不改变 CAD Core 无状态边界，不保存 backend session topology cache。
+
+## 验收分层
+
+本轮短跑：
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD
+python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M2-FreeCADMappedNameParity实现批次/工作步骤细分 --format markdown
+awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M2-FreeCADMappedNameParity实现批次/矩阵/*.tsv
+git diff --check
+```
+
+实现 focused：
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+cmake --build build
+python3 -m unittest tests.test_topo_naming_state_response
+python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel
+```
+
+阶段收口候选：
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+for spec in p2:rect-pad-pocket c4m6:topo-state-body-tip-stable-recovery p5:sketch-internal-face p6:up-to-face-stable-body-history p8:app-link-box-face; do
+  phase=${spec%%:*}; case=${spec#*:}
+  build/cad-core recompute fixtures/$phase/$case.json --output fixtures/$phase/cad-core-res/$case.cad-core.json
+done
+```
