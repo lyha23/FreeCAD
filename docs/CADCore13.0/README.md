@@ -7,7 +7,9 @@ CADCore13.0 用来收口 `topoNamingState` 输出发布与 expected 对齐主线
 | 批次 | 状态 | 入口 |
 | --- | --- | --- |
 | C13-M1 TopoNamingState 输出发布闭环 | completed / 已完成 | [C13-M1-TopoNamingState输出发布闭环批次](C13-M1-TopoNamingState输出发布闭环批次/README.md) |
-| C13-M2 FreeCAD MappedName Parity | planned | [C13-M2-FreeCADMappedNameParity实现批次](C13-M2-FreeCADMappedNameParity实现批次/README.md) |
+| C13-M2 FreeCAD MappedName Parity | active / S0 pending | [C13-M2-FreeCADMappedNameParity实现批次](C13-M2-FreeCADMappedNameParity实现批次/README.md) |
+
+- C13-M2 工作步骤总入口已关闭：`C13-M2-FreeCADMappedNameParity实现批次/工作步骤细分/7-8-20-16-【已实现】C13-M2工作步骤总入口.md` 已确认包结构、S0-S6 初始队列和 8 个 TSV 字段数；入口关闭后队列从 S0 继续。
 
 ## 阶段边界
 

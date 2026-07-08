@@ -2,6 +2,12 @@
 
 C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输出 state，下一次请求能消费该 state，CLI / C API / worker / wasm channel 也已验证一致。C13-M2 的目标不是再做输出字段存在性，而是把 C13-M1 留下的 FreeCAD 字节级 identity evidence 缺口收窄到 focused parity。
 
+## 当前队列状态
+
+- 工作步骤总入口已关闭：`工作步骤细分/7-8-20-16-【已实现】C13-M2工作步骤总入口.md` 已确认包结构、入口 + S0-S6 队列顺序和 8 个 TSV 字段数。
+- 入口关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=e3b3379102`（`e3b3379102 文档：新增 C13-M2 mapped name parity 方案`），起点 worktree clean。
+- 后续队列从 S0 `live 基线与 C13-M1 继承冻结` 继续；本步未改 C++/Python runtime、expected、fixtures 或 supported/focused gap 状态。
+
 ## 当前问题
 
 S4 已确认 focused output 的剩余差异集中在三类：

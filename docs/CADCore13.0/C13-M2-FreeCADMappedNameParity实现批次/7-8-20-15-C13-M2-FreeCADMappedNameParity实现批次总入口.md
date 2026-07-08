@@ -8,7 +8,7 @@
 
 - README：`README.md`
 - 方案：`7-8-20-15-C13-M2-FreeCADMappedNameParity实现批次方案.md`
-- 工作步骤：`工作步骤细分/`
+- 工作步骤：`工作步骤细分/`（工作步骤总入口已关闭，后续队列从 S0 开始）
 - 矩阵：`矩阵/`
 
 ## 当前结论
@@ -17,6 +17,7 @@
 - C13-M2 不重新解决 response field 是否存在的问题。
 - C13-M2 只处理 FreeCAD mapped-name / child map key / mapper history id focused parity。
 - 不允许在 runtime 中复制 expected fixture 字符串。
+- 工作步骤总入口已关闭：`工作步骤细分/7-8-20-16-【已实现】C13-M2工作步骤总入口.md` 已确认包结构、S0-S6 队列和 TSV 字段数；`C13M2-BLOCKER-001` 已关闭，后续从 S0 继续。
 
 ## 使用方式
 
