@@ -78,7 +78,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "Pad.#d:4;:G;XTR;:H21:7,F": {
+            "Pad.#d:4;:G;XTR;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],

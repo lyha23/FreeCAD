@@ -26,7 +26,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "#74:4;:M#72;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "#74:4;:M#72;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "#74:4;:M#72;RFI;:H*:*,F;:H*,F",
           "subname": "Face1"
@@ -40,7 +40,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "#74:3;:M#75;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "#74:3;:M#75;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "#74:3;:M#75;RFI;:H*:*,F;:H*,F",
           "subname": "Face2"
@@ -54,7 +54,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "#77:3;:M#76;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "#77:3;:M#76;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "#77:3;:M#76;RFI;:H*:*,F;:H*,F",
           "subname": "Face3"
@@ -68,7 +68,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "#74:2;:M#78;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "#74:2;:M#78;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "#74:2;:M#78;RFI;:H*:*,F;:H*,F",
           "subname": "Face4"
@@ -82,7 +82,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "#7a:3;:M#79;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "#7a:3;:M#79;RFI;:H*:*,F;:H*,F",
           "subname": "Face5"
@@ -96,7 +96,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "#7c:3;:M#7b;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "#7c:3;:M#7b;RFI;:H*:*,F;:H*,F",
           "subname": "Face6"
@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "#65:2;:M#63;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#65:2;:M#63;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "#65:2;:M#63;RFI;:H*:*,E;:H*,E",
           "subname": "Edge1"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "#67:2;:M#66;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#67:2;:M#66;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "#67:2;:M#66;RFI;:H*:*,E;:H*,E",
           "subname": "Edge2"
@@ -138,7 +138,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "#69:4;:M#68;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#69:4;:M#68;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "#69:4;:M#68;RFI;:H*:*,E;:H*,E",
           "subname": "Edge3"
@@ -152,7 +152,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#6b:4;:M#6a;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "#6b:4;:M#6a;RFI;:H*:*,E;:H*,E",
           "subname": "Edge4"
@@ -166,7 +166,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#6d:2;:M#6c;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "#6d:2;:M#6c;RFI;:H*:*,E;:H*,E",
           "subname": "Edge5"
@@ -180,7 +180,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E",
+          "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;_3;:H:3,E;:H746,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E",
           "subname": "Edge6"
@@ -194,7 +194,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;:H52b,E",
+          "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;:H746,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "#16:3;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge7"
@@ -208,7 +208,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E",
+          "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;:H,E;:H746,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge8"
@@ -222,7 +222,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#6b:2;:M#6e;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "#6b:2;:M#6e;RFI;:H*:*,E;:H*,E",
           "subname": "Edge9"
@@ -236,7 +236,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#69:2;:M#6f;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "#69:2;:M#6f;RFI;:H*:*,E;:H*,E",
           "subname": "Edge10"
@@ -250,7 +250,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "#71:2;:M#70;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "#71:2;:M#70;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "#71:2;:M#70;RFI;:H*:*,E;:H*,E",
           "subname": "Edge11"
@@ -264,7 +264,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E",
+          "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;_2;:H:3,E;:H746,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E",
           "subname": "Edge12"
@@ -278,7 +278,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
           "subname": "Vertex1"
@@ -292,7 +292,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;:H52b,V",
+          "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;:H746,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "#18:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex2"
@@ -306,7 +306,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
           "subname": "Vertex3"
@@ -320,7 +320,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+          "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex4"
@@ -334,7 +334,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
           "subname": "Vertex5"
@@ -348,7 +348,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;:H52b,V",
+          "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;:H746,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "#1a:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex6"
@@ -362,7 +362,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+          "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex7"
@@ -376,7 +376,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
           "subname": "Vertex8"
@@ -413,7 +413,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "PolarPattern.#74:4;:M#72;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "PolarPattern.#74:4;:M#72;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "PolarPattern.#74:4;:M#72;RFI;:H*:*,F;:H*,F",
           "subname": "Face1"
@@ -427,7 +427,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "PolarPattern.#74:3;:M#75;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "PolarPattern.#74:3;:M#75;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "PolarPattern.#74:3;:M#75;RFI;:H*:*,F;:H*,F",
           "subname": "Face2"
@@ -441,7 +441,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "PolarPattern.#77:3;:M#76;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "PolarPattern.#77:3;:M#76;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "PolarPattern.#77:3;:M#76;RFI;:H*:*,F;:H*,F",
           "subname": "Face3"
@@ -455,7 +455,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "PolarPattern.#74:2;:M#78;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "PolarPattern.#74:2;:M#78;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "PolarPattern.#74:2;:M#78;RFI;:H*:*,F;:H*,F",
           "subname": "Face4"
@@ -469,7 +469,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "PolarPattern.#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "PolarPattern.#7a:3;:M#79;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "PolarPattern.#7a:3;:M#79;RFI;:H*:*,F;:H*,F",
           "subname": "Face5"
@@ -483,7 +483,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "PolarPattern.#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F",
+          "rawFreecadMappedName": "PolarPattern.#7c:3;:M#7b;RFI;:H745:a,F;:H746,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "PolarPattern.#7c:3;:M#7b;RFI;:H*:*,F;:H*,F",
           "subname": "Face6"
@@ -497,7 +497,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#65:2;:M#63;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#65:2;:M#63;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "PolarPattern.#65:2;:M#63;RFI;:H*:*,E;:H*,E",
           "subname": "Edge1"
@@ -511,7 +511,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#67:2;:M#66;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#67:2;:M#66;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "PolarPattern.#67:2;:M#66;RFI;:H*:*,E;:H*,E",
           "subname": "Edge2"
@@ -525,7 +525,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#69:4;:M#68;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#69:4;:M#68;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "PolarPattern.#69:4;:M#68;RFI;:H*:*,E;:H*,E",
           "subname": "Edge3"
@@ -539,7 +539,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#6b:4;:M#6a;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "PolarPattern.#6b:4;:M#6a;RFI;:H*:*,E;:H*,E",
           "subname": "Edge4"
@@ -553,7 +553,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#6d:2;:M#6c;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "PolarPattern.#6d:2;:M#6c;RFI;:H*:*,E;:H*,E",
           "subname": "Edge5"
@@ -567,7 +567,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_3;:H:3,E;:H746,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E",
           "subname": "Edge6"
@@ -581,7 +581,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H746,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge7"
@@ -595,7 +595,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H,E;:H746,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
           "subname": "Edge8"
@@ -609,7 +609,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#6b:2;:M#6e;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "PolarPattern.#6b:2;:M#6e;RFI;:H*:*,E;:H*,E",
           "subname": "Edge9"
@@ -623,7 +623,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#69:2;:M#6f;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "PolarPattern.#69:2;:M#6f;RFI;:H*:*,E;:H*,E",
           "subname": "Edge10"
@@ -637,7 +637,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#71:2;:M#70;RFI;:H52a:a,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#71:2;:M#70;RFI;:H745:a,E;:H746,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "PolarPattern.#71:2;:M#70;RFI;:H*:*,E;:H*,E",
           "subname": "Edge11"
@@ -651,7 +651,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E",
+          "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_2;:H:3,E;:H746,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E",
           "subname": "Edge12"
@@ -665,7 +665,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
           "subname": "Vertex1"
@@ -679,7 +679,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H746,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex2"
@@ -693,7 +693,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
           "subname": "Vertex3"
@@ -707,7 +707,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex4"
@@ -721,7 +721,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
           "subname": "Vertex5"
@@ -735,7 +735,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H746,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex6"
@@ -749,7 +749,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
           "subname": "Vertex7"
@@ -763,7 +763,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+          "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
           "subname": "Vertex8"
@@ -788,28 +788,7 @@
             "elementMap": {
               "encoding": "cad-core.element-map.v1",
               "entries": {
-                "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E": {
-                  "evidence": {
-                    "childElementMapKey": "Body:PolarPattern:PolarPattern",
-                    "mapperHistoryIds": [],
-                    "source": "freecad_partdesign_body_tip"
-                  },
-                  "mappedName": {
-                    "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
-                    "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E"
-                  },
-                  "recoverability": "resolved",
-                  "shapeKind": "edge",
-                  "source": {
-                    "object": "PolarPattern",
-                    "subname": "Edge8"
-                  },
-                  "target": {
-                    "object": "Body",
-                    "subname": "Edge8"
-                  }
-                },
-                "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H52b,E": {
+                "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -817,7 +796,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H52b,E"
+                    "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -830,7 +809,28 @@
                     "subname": "Edge7"
                   }
                 },
-                "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E": {
+                "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:PolarPattern:PolarPattern",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
+                    "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H,E;:H746,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "PolarPattern",
+                    "subname": "Edge8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge8"
+                  }
+                },
+                "PolarPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -838,7 +838,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E",
-                    "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E"
+                    "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_2;:H:3,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -851,7 +851,7 @@
                     "subname": "Edge12"
                   }
                 },
-                "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E": {
+                "PolarPattern.#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -859,7 +859,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E",
-                    "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E"
+                    "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_3;:H:3,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -872,28 +872,7 @@
                     "subname": "Edge6"
                   }
                 },
-                "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V": {
-                  "evidence": {
-                    "childElementMapKey": "Body:PolarPattern:PolarPattern",
-                    "mapperHistoryIds": [],
-                    "source": "freecad_partdesign_body_tip"
-                  },
-                  "mappedName": {
-                    "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                    "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V"
-                  },
-                  "recoverability": "resolved",
-                  "shapeKind": "vertex",
-                  "source": {
-                    "object": "PolarPattern",
-                    "subname": "Vertex4"
-                  },
-                  "target": {
-                    "object": "Body",
-                    "subname": "Vertex4"
-                  }
-                },
-                "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H52b,V": {
+                "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -901,7 +880,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H52b,V"
+                    "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H746,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -914,7 +893,28 @@
                     "subname": "Vertex2"
                   }
                 },
-                "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V": {
+                "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:PolarPattern:PolarPattern",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                    "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H,V;:H746,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PolarPattern",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex4"
+                  }
+                },
+                "PolarPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -922,7 +922,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
-                    "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V"
+                    "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -935,7 +935,7 @@
                     "subname": "Vertex3"
                   }
                 },
-                "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V": {
+                "PolarPattern.#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -943,7 +943,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
-                    "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V"
+                    "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -956,28 +956,7 @@
                     "subname": "Vertex1"
                   }
                 },
-                "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V": {
-                  "evidence": {
-                    "childElementMapKey": "Body:PolarPattern:PolarPattern",
-                    "mapperHistoryIds": [],
-                    "source": "freecad_partdesign_body_tip"
-                  },
-                  "mappedName": {
-                    "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                    "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V"
-                  },
-                  "recoverability": "resolved",
-                  "shapeKind": "vertex",
-                  "source": {
-                    "object": "PolarPattern",
-                    "subname": "Vertex7"
-                  },
-                  "target": {
-                    "object": "Body",
-                    "subname": "Vertex7"
-                  }
-                },
-                "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H52b,V": {
+                "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -985,7 +964,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H52b,V"
+                    "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H746,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -998,7 +977,28 @@
                     "subname": "Vertex6"
                   }
                 },
-                "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V": {
+                "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:PolarPattern:PolarPattern",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
+                    "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H,V;:H746,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PolarPattern",
+                    "subname": "Vertex7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex7"
+                  }
+                },
+                "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1006,7 +1006,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
-                    "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V"
+                    "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1019,7 +1019,7 @@
                     "subname": "Vertex8"
                   }
                 },
-                "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V": {
+                "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1027,7 +1027,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
-                    "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V"
+                    "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1040,7 +1040,7 @@
                     "subname": "Vertex5"
                   }
                 },
-                "PolarPattern.#65:2;:M#63;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#65:2;:M#63;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1048,7 +1048,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#65:2;:M#63;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#65:2;:M#63;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#65:2;:M#63;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1061,7 +1061,7 @@
                     "subname": "Edge1"
                   }
                 },
-                "PolarPattern.#67:2;:M#66;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#67:2;:M#66;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1069,7 +1069,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#67:2;:M#66;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#67:2;:M#66;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#67:2;:M#66;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1082,7 +1082,7 @@
                     "subname": "Edge2"
                   }
                 },
-                "PolarPattern.#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#69:2;:M#6f;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1090,7 +1090,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#69:2;:M#6f;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#69:2;:M#6f;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1103,7 +1103,7 @@
                     "subname": "Edge10"
                   }
                 },
-                "PolarPattern.#69:4;:M#68;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#69:4;:M#68;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1111,7 +1111,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#69:4;:M#68;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#69:4;:M#68;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#69:4;:M#68;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1124,7 +1124,7 @@
                     "subname": "Edge3"
                   }
                 },
-                "PolarPattern.#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#6b:2;:M#6e;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1132,7 +1132,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#6b:2;:M#6e;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#6b:2;:M#6e;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1145,7 +1145,7 @@
                     "subname": "Edge9"
                   }
                 },
-                "PolarPattern.#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#6b:4;:M#6a;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1153,7 +1153,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#6b:4;:M#6a;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#6b:4;:M#6a;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1166,7 +1166,7 @@
                     "subname": "Edge4"
                   }
                 },
-                "PolarPattern.#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#6d:2;:M#6c;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1174,7 +1174,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#6d:2;:M#6c;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#6d:2;:M#6c;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1187,7 +1187,7 @@
                     "subname": "Edge5"
                   }
                 },
-                "PolarPattern.#71:2;:M#70;RFI;:H52a:a,E;:H52b,E": {
+                "PolarPattern.#71:2;:M#70;RFI;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1195,7 +1195,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#71:2;:M#70;RFI;:H*:*,E;:H*,E",
-                    "raw": "PolarPattern.#71:2;:M#70;RFI;:H52a:a,E;:H52b,E"
+                    "raw": "PolarPattern.#71:2;:M#70;RFI;:H745:a,E;:H746,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1208,7 +1208,7 @@
                     "subname": "Edge11"
                   }
                 },
-                "PolarPattern.#74:2;:M#78;RFI;:H52a:a,F;:H52b,F": {
+                "PolarPattern.#74:2;:M#78;RFI;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1216,7 +1216,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#74:2;:M#78;RFI;:H*:*,F;:H*,F",
-                    "raw": "PolarPattern.#74:2;:M#78;RFI;:H52a:a,F;:H52b,F"
+                    "raw": "PolarPattern.#74:2;:M#78;RFI;:H745:a,F;:H746,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1229,7 +1229,7 @@
                     "subname": "Face4"
                   }
                 },
-                "PolarPattern.#74:3;:M#75;RFI;:H52a:a,F;:H52b,F": {
+                "PolarPattern.#74:3;:M#75;RFI;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1237,7 +1237,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#74:3;:M#75;RFI;:H*:*,F;:H*,F",
-                    "raw": "PolarPattern.#74:3;:M#75;RFI;:H52a:a,F;:H52b,F"
+                    "raw": "PolarPattern.#74:3;:M#75;RFI;:H745:a,F;:H746,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1250,7 +1250,7 @@
                     "subname": "Face2"
                   }
                 },
-                "PolarPattern.#74:4;:M#72;RFI;:H52a:a,F;:H52b,F": {
+                "PolarPattern.#74:4;:M#72;RFI;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1258,7 +1258,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#74:4;:M#72;RFI;:H*:*,F;:H*,F",
-                    "raw": "PolarPattern.#74:4;:M#72;RFI;:H52a:a,F;:H52b,F"
+                    "raw": "PolarPattern.#74:4;:M#72;RFI;:H745:a,F;:H746,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1271,7 +1271,7 @@
                     "subname": "Face1"
                   }
                 },
-                "PolarPattern.#77:3;:M#76;RFI;:H52a:a,F;:H52b,F": {
+                "PolarPattern.#77:3;:M#76;RFI;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1279,7 +1279,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#77:3;:M#76;RFI;:H*:*,F;:H*,F",
-                    "raw": "PolarPattern.#77:3;:M#76;RFI;:H52a:a,F;:H52b,F"
+                    "raw": "PolarPattern.#77:3;:M#76;RFI;:H745:a,F;:H746,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1292,7 +1292,7 @@
                     "subname": "Face3"
                   }
                 },
-                "PolarPattern.#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F": {
+                "PolarPattern.#7a:3;:M#79;RFI;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1300,7 +1300,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#7a:3;:M#79;RFI;:H*:*,F;:H*,F",
-                    "raw": "PolarPattern.#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F"
+                    "raw": "PolarPattern.#7a:3;:M#79;RFI;:H745:a,F;:H746,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1313,7 +1313,7 @@
                     "subname": "Face5"
                   }
                 },
-                "PolarPattern.#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F": {
+                "PolarPattern.#7c:3;:M#7b;RFI;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:PolarPattern:PolarPattern",
                     "mapperHistoryIds": [],
@@ -1321,7 +1321,7 @@
                   },
                   "mappedName": {
                     "canonical": "PolarPattern.#7c:3;:M#7b;RFI;:H*:*,F;:H*,F",
-                    "raw": "PolarPattern.#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F"
+                    "raw": "PolarPattern.#7c:3;:M#7b;RFI;:H745:a,F;:H746,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1347,18 +1347,18 @@
           "entries": {
             "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H52b,E"
+                "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge7"
               },
               "target": {
@@ -1368,18 +1368,18 @@
             },
             "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E"
+                "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge8"
               },
               "target": {
@@ -1389,18 +1389,18 @@
             },
             "PolarPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E",
-                "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E"
+                "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_2;:H:3,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge12"
               },
               "target": {
@@ -1410,18 +1410,18 @@
             },
             "PolarPattern.#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E",
-                "raw": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E"
+                "raw": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_3;:H:3,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge6"
               },
               "target": {
@@ -1431,18 +1431,18 @@
             },
             "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H52b,V"
+                "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex2"
               },
               "target": {
@@ -1452,18 +1452,18 @@
             },
             "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V"
+                "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex4"
               },
               "target": {
@@ -1473,18 +1473,18 @@
             },
             "PolarPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
-                "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V"
+                "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex3"
               },
               "target": {
@@ -1494,18 +1494,18 @@
             },
             "PolarPattern.#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
-                "raw": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V"
+                "raw": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex1"
               },
               "target": {
@@ -1515,18 +1515,18 @@
             },
             "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H52b,V"
+                "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex6"
               },
               "target": {
@@ -1536,18 +1536,18 @@
             },
             "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V"
+                "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex7"
               },
               "target": {
@@ -1557,18 +1557,18 @@
             },
             "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
-                "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V"
+                "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex8"
               },
               "target": {
@@ -1578,18 +1578,18 @@
             },
             "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
-                "raw": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V"
+                "raw": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Vertex5"
               },
               "target": {
@@ -1599,18 +1599,18 @@
             },
             "PolarPattern.#65:2;:M#63;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#65:2;:M#63;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#65:2;:M#63;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#65:2;:M#63;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge1"
               },
               "target": {
@@ -1620,18 +1620,18 @@
             },
             "PolarPattern.#67:2;:M#66;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#67:2;:M#66;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#67:2;:M#66;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#67:2;:M#66;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge2"
               },
               "target": {
@@ -1641,18 +1641,18 @@
             },
             "PolarPattern.#69:2;:M#6f;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#69:2;:M#6f;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#69:2;:M#6f;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge10"
               },
               "target": {
@@ -1662,18 +1662,18 @@
             },
             "PolarPattern.#69:4;:M#68;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#69:4;:M#68;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#69:4;:M#68;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#69:4;:M#68;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge3"
               },
               "target": {
@@ -1683,18 +1683,18 @@
             },
             "PolarPattern.#6b:2;:M#6e;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#6b:2;:M#6e;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#6b:2;:M#6e;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge9"
               },
               "target": {
@@ -1704,18 +1704,18 @@
             },
             "PolarPattern.#6b:4;:M#6a;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#6b:4;:M#6a;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#6b:4;:M#6a;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge4"
               },
               "target": {
@@ -1725,18 +1725,18 @@
             },
             "PolarPattern.#6d:2;:M#6c;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#6d:2;:M#6c;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#6d:2;:M#6c;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge5"
               },
               "target": {
@@ -1746,18 +1746,18 @@
             },
             "PolarPattern.#71:2;:M#70;RFI;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#71:2;:M#70;RFI;:H*:*,E;:H*,E",
-                "raw": "PolarPattern.#71:2;:M#70;RFI;:H52a:a,E;:H52b,E"
+                "raw": "PolarPattern.#71:2;:M#70;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Edge11"
               },
               "target": {
@@ -1767,18 +1767,18 @@
             },
             "PolarPattern.#74:2;:M#78;RFI;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#74:2;:M#78;RFI;:H*:*,F;:H*,F",
-                "raw": "PolarPattern.#74:2;:M#78;RFI;:H52a:a,F;:H52b,F"
+                "raw": "PolarPattern.#74:2;:M#78;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Face4"
               },
               "target": {
@@ -1788,18 +1788,18 @@
             },
             "PolarPattern.#74:3;:M#75;RFI;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#74:3;:M#75;RFI;:H*:*,F;:H*,F",
-                "raw": "PolarPattern.#74:3;:M#75;RFI;:H52a:a,F;:H52b,F"
+                "raw": "PolarPattern.#74:3;:M#75;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Face2"
               },
               "target": {
@@ -1809,18 +1809,18 @@
             },
             "PolarPattern.#74:4;:M#72;RFI;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#74:4;:M#72;RFI;:H*:*,F;:H*,F",
-                "raw": "PolarPattern.#74:4;:M#72;RFI;:H52a:a,F;:H52b,F"
+                "raw": "PolarPattern.#74:4;:M#72;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Face1"
               },
               "target": {
@@ -1830,18 +1830,18 @@
             },
             "PolarPattern.#77:3;:M#76;RFI;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#77:3;:M#76;RFI;:H*:*,F;:H*,F",
-                "raw": "PolarPattern.#77:3;:M#76;RFI;:H52a:a,F;:H52b,F"
+                "raw": "PolarPattern.#77:3;:M#76;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Face3"
               },
               "target": {
@@ -1851,18 +1851,18 @@
             },
             "PolarPattern.#7a:3;:M#79;RFI;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#7a:3;:M#79;RFI;:H*:*,F;:H*,F",
-                "raw": "PolarPattern.#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F"
+                "raw": "PolarPattern.#7a:3;:M#79;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Face5"
               },
               "target": {
@@ -1872,18 +1872,18 @@
             },
             "PolarPattern.#7c:3;:M#7b;RFI;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:PolarPattern:PolarPattern",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "PolarPattern.#7c:3;:M#7b;RFI;:H*:*,F;:H*,F",
-                "raw": "PolarPattern.#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F"
+                "raw": "PolarPattern.#7c:3;:M#7b;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "PolarPattern",
                 "subname": "Face6"
               },
               "target": {
@@ -1901,182 +1901,182 @@
           "Edge1": {
             "canonicalFreecadMappedName": "PolarPattern.#65:2;:M#63;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#65:2;:M#63;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#65:2;:M#63;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "PolarPattern.#69:2;:M#6f;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#69:2;:M#6f;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "PolarPattern.#71:2;:M#70;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#71:2;:M#70;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#71:2;:M#70;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_2;:H:3,E;:H746,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "PolarPattern.#67:2;:M#66;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#67:2;:M#66;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#67:2;:M#66;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "PolarPattern.#69:4;:M#68;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#69:4;:M#68;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#69:4;:M#68;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "PolarPattern.#6b:4;:M#6a;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#6b:4;:M#6a;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "PolarPattern.#6d:2;:M#6c;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#6d:2;:M#6c;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;_3;:H:3,E;:H746,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H746,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#16:3;:U;XTR;:H745:7,E;:H,E;:H746,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "PolarPattern.#6b:2;:M#6e;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "PolarPattern.#6b:2;:M#6e;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "PolarPattern.#74:4;:M#72;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#74:4;:M#72;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "PolarPattern.#74:4;:M#72;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "PolarPattern.#74:3;:M#75;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#74:3;:M#75;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "PolarPattern.#74:3;:M#75;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "PolarPattern.#77:3;:M#76;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#77:3;:M#76;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "PolarPattern.#77:3;:M#76;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "PolarPattern.#74:2;:M#78;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#74:2;:M#78;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "PolarPattern.#74:2;:M#78;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "PolarPattern.#7a:3;:M#79;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "PolarPattern.#7a:3;:M#79;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "PolarPattern.#7c:3;:M#7b;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "PolarPattern.#7c:3;:M#7b;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H746,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#18:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H746,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "PolarPattern.#1a:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           }
@@ -2095,7 +2095,7 @@
               },
               "mappedName": {
                 "canonical": "#16:3;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "#16:3;:U;XTR;:H52a:7,E;:H52b,E"
+                "raw": "#16:3;:U;XTR;:H745:7,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2116,7 +2116,7 @@
               },
               "mappedName": {
                 "canonical": "#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
-                "raw": "#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E"
+                "raw": "#16:3;:U;XTR;:H745:7,E;:H,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2137,7 +2137,7 @@
               },
               "mappedName": {
                 "canonical": "#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E",
-                "raw": "#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E"
+                "raw": "#16:3;:U;XTR;:H745:7,E;_2;:H:3,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2158,7 +2158,7 @@
               },
               "mappedName": {
                 "canonical": "#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E",
-                "raw": "#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E"
+                "raw": "#16:3;:U;XTR;:H745:7,E;_3;:H:3,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2179,7 +2179,7 @@
               },
               "mappedName": {
                 "canonical": "#18:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "#18:2;:U;XTR;:H52a:7,V;:H52b,V"
+                "raw": "#18:2;:U;XTR;:H745:7,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2200,7 +2200,7 @@
               },
               "mappedName": {
                 "canonical": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V"
+                "raw": "#18:2;:U;XTR;:H745:7,V;:H,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2221,7 +2221,7 @@
               },
               "mappedName": {
                 "canonical": "#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
-                "raw": "#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V"
+                "raw": "#18:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2242,7 +2242,7 @@
               },
               "mappedName": {
                 "canonical": "#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
-                "raw": "#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V"
+                "raw": "#18:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2263,7 +2263,7 @@
               },
               "mappedName": {
                 "canonical": "#1a:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "#1a:2;:U;XTR;:H52a:7,V;:H52b,V"
+                "raw": "#1a:2;:U;XTR;:H745:7,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2284,7 +2284,7 @@
               },
               "mappedName": {
                 "canonical": "#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
-                "raw": "#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V"
+                "raw": "#1a:2;:U;XTR;:H745:7,V;:H,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2305,7 +2305,7 @@
               },
               "mappedName": {
                 "canonical": "#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
-                "raw": "#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V"
+                "raw": "#1a:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2326,7 +2326,7 @@
               },
               "mappedName": {
                 "canonical": "#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
-                "raw": "#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V"
+                "raw": "#1a:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2347,7 +2347,7 @@
               },
               "mappedName": {
                 "canonical": "#65:2;:M#63;RFI;:H*:*,E;:H*,E",
-                "raw": "#65:2;:M#63;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#65:2;:M#63;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2368,7 +2368,7 @@
               },
               "mappedName": {
                 "canonical": "#67:2;:M#66;RFI;:H*:*,E;:H*,E",
-                "raw": "#67:2;:M#66;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#67:2;:M#66;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2389,7 +2389,7 @@
               },
               "mappedName": {
                 "canonical": "#69:2;:M#6f;RFI;:H*:*,E;:H*,E",
-                "raw": "#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#69:2;:M#6f;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2410,7 +2410,7 @@
               },
               "mappedName": {
                 "canonical": "#69:4;:M#68;RFI;:H*:*,E;:H*,E",
-                "raw": "#69:4;:M#68;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#69:4;:M#68;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2431,7 +2431,7 @@
               },
               "mappedName": {
                 "canonical": "#6b:2;:M#6e;RFI;:H*:*,E;:H*,E",
-                "raw": "#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#6b:2;:M#6e;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2452,7 +2452,7 @@
               },
               "mappedName": {
                 "canonical": "#6b:4;:M#6a;RFI;:H*:*,E;:H*,E",
-                "raw": "#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#6b:4;:M#6a;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2473,7 +2473,7 @@
               },
               "mappedName": {
                 "canonical": "#6d:2;:M#6c;RFI;:H*:*,E;:H*,E",
-                "raw": "#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#6d:2;:M#6c;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2494,7 +2494,7 @@
               },
               "mappedName": {
                 "canonical": "#71:2;:M#70;RFI;:H*:*,E;:H*,E",
-                "raw": "#71:2;:M#70;RFI;:H52a:a,E;:H52b,E"
+                "raw": "#71:2;:M#70;RFI;:H745:a,E;:H746,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2515,7 +2515,7 @@
               },
               "mappedName": {
                 "canonical": "#74:2;:M#78;RFI;:H*:*,F;:H*,F",
-                "raw": "#74:2;:M#78;RFI;:H52a:a,F;:H52b,F"
+                "raw": "#74:2;:M#78;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2536,7 +2536,7 @@
               },
               "mappedName": {
                 "canonical": "#74:3;:M#75;RFI;:H*:*,F;:H*,F",
-                "raw": "#74:3;:M#75;RFI;:H52a:a,F;:H52b,F"
+                "raw": "#74:3;:M#75;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2557,7 +2557,7 @@
               },
               "mappedName": {
                 "canonical": "#74:4;:M#72;RFI;:H*:*,F;:H*,F",
-                "raw": "#74:4;:M#72;RFI;:H52a:a,F;:H52b,F"
+                "raw": "#74:4;:M#72;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2578,7 +2578,7 @@
               },
               "mappedName": {
                 "canonical": "#77:3;:M#76;RFI;:H*:*,F;:H*,F",
-                "raw": "#77:3;:M#76;RFI;:H52a:a,F;:H52b,F"
+                "raw": "#77:3;:M#76;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2599,7 +2599,7 @@
               },
               "mappedName": {
                 "canonical": "#7a:3;:M#79;RFI;:H*:*,F;:H*,F",
-                "raw": "#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F"
+                "raw": "#7a:3;:M#79;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2620,7 +2620,7 @@
               },
               "mappedName": {
                 "canonical": "#7c:3;:M#7b;RFI;:H*:*,F;:H*,F",
-                "raw": "#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F"
+                "raw": "#7c:3;:M#7b;RFI;:H745:a,F;:H746,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2643,182 +2643,182 @@
           "Edge1": {
             "canonicalFreecadMappedName": "#65:2;:M#63;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#65:2;:M#63;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#65:2;:M#63;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "#69:2;:M#6f;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#69:2;:M#6f;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#69:2;:M#6f;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "#71:2;:M#70;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#71:2;:M#70;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#71:2;:M#70;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;_2;:H:3,E;:H52b,E",
+            "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;_2;:H:3,E;:H746,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "#67:2;:M#66;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#67:2;:M#66;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#67:2;:M#66;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "#69:4;:M#68;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#69:4;:M#68;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#69:4;:M#68;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "#6b:4;:M#6a;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#6b:4;:M#6a;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#6b:4;:M#6a;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "#6d:2;:M#6c;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#6d:2;:M#6c;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#6d:2;:M#6c;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "#16:3;:U;XTR;:H*:*,E;_3;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;_3;:H:3,E;:H52b,E",
+            "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;_3;:H:3,E;:H746,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "#16:3;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;:H52b,E",
+            "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;:H746,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "#16:3;:U;XTR;:H*:*,E;:H,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#16:3;:U;XTR;:H52a:7,E;:H,E;:H52b,E",
+            "rawFreecadMappedName": "#16:3;:U;XTR;:H745:7,E;:H,E;:H746,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "#6b:2;:M#6e;RFI;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#6b:2;:M#6e;RFI;:H52a:a,E;:H52b,E",
+            "rawFreecadMappedName": "#6b:2;:M#6e;RFI;:H745:a,E;:H746,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "#74:4;:M#72;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#74:4;:M#72;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "#74:4;:M#72;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "#74:3;:M#75;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#74:3;:M#75;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "#74:3;:M#75;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "#77:3;:M#76;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#77:3;:M#76;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "#77:3;:M#76;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "#74:2;:M#78;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#74:2;:M#78;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "#74:2;:M#78;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "#7a:3;:M#79;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#7a:3;:M#79;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "#7a:3;:M#79;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "#7c:3;:M#7b;RFI;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#7c:3;:M#7b;RFI;:H52a:a,F;:H52b,F",
+            "rawFreecadMappedName": "#7c:3;:M#7b;RFI;:H745:a,F;:H746,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "#18:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "#18:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;:H52b,V",
+            "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;:H746,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#18:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+            "rawFreecadMappedName": "#18:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "#1a:2;:U;XTR;:H*:*,V;_3;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;_3;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;_3;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "#1a:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;:H52b,V",
+            "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;:H746,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "#1a:2;:U;XTR;:H*:*,V;:H,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;:H,V;:H52b,V",
+            "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;:H,V;:H746,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#1a:2;:U;XTR;:H52a:7,V;_2;:H:3,V;:H52b,V",
+            "rawFreecadMappedName": "#1a:2;:U;XTR;:H745:7,V;_2;:H:3,V;:H746,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           }

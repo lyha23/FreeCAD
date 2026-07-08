@@ -40,7 +40,7 @@
             "elementMap": {
               "encoding": "cad-core.element-map.v1",
               "entries": {
-                "Edge10;:H37a,E;:H37c:8,E": {
+                "Edge10;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -48,7 +48,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge10;:H*,E;:H*:*,E",
-                    "raw": "Edge10;:H37a,E;:H37c:8,E"
+                    "raw": "Edge10;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -61,7 +61,7 @@
                     "subname": "Edge10"
                   }
                 },
-                "Edge11;:H37a,E;:H37c:8,E": {
+                "Edge11;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -69,7 +69,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge11;:H*,E;:H*:*,E",
-                    "raw": "Edge11;:H37a,E;:H37c:8,E"
+                    "raw": "Edge11;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -82,7 +82,7 @@
                     "subname": "Edge11"
                   }
                 },
-                "Edge12;:H37a,E;:H37c:8,E": {
+                "Edge12;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -90,7 +90,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge12;:H*,E;:H*:*,E",
-                    "raw": "Edge12;:H37a,E;:H37c:8,E"
+                    "raw": "Edge12;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -103,7 +103,7 @@
                     "subname": "Edge12"
                   }
                 },
-                "Edge1;:H37a,E;:H37c:8,E": {
+                "Edge1;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -111,7 +111,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge1;:H*,E;:H*:*,E",
-                    "raw": "Edge1;:H37a,E;:H37c:8,E"
+                    "raw": "Edge1;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -124,7 +124,7 @@
                     "subname": "Edge1"
                   }
                 },
-                "Edge2;:H37a,E;:H37c:8,E": {
+                "Edge2;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -132,7 +132,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge2;:H*,E;:H*:*,E",
-                    "raw": "Edge2;:H37a,E;:H37c:8,E"
+                    "raw": "Edge2;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -145,7 +145,7 @@
                     "subname": "Edge2"
                   }
                 },
-                "Edge3;:H37a,E;:H37c:8,E": {
+                "Edge3;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -153,7 +153,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge3;:H*,E;:H*:*,E",
-                    "raw": "Edge3;:H37a,E;:H37c:8,E"
+                    "raw": "Edge3;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -166,7 +166,7 @@
                     "subname": "Edge3"
                   }
                 },
-                "Edge4;:H37a,E;:H37c:8,E": {
+                "Edge4;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -174,7 +174,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge4;:H*,E;:H*:*,E",
-                    "raw": "Edge4;:H37a,E;:H37c:8,E"
+                    "raw": "Edge4;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -187,7 +187,7 @@
                     "subname": "Edge4"
                   }
                 },
-                "Edge5;:H37a,E;:H37c:8,E": {
+                "Edge5;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -195,7 +195,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge5;:H*,E;:H*:*,E",
-                    "raw": "Edge5;:H37a,E;:H37c:8,E"
+                    "raw": "Edge5;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -208,7 +208,7 @@
                     "subname": "Edge5"
                   }
                 },
-                "Edge6;:H37a,E;:H37c:8,E": {
+                "Edge6;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -216,7 +216,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge6;:H*,E;:H*:*,E",
-                    "raw": "Edge6;:H37a,E;:H37c:8,E"
+                    "raw": "Edge6;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -229,7 +229,7 @@
                     "subname": "Edge6"
                   }
                 },
-                "Edge7;:H37a,E;:H37c:8,E": {
+                "Edge7;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -237,7 +237,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge7;:H*,E;:H*:*,E",
-                    "raw": "Edge7;:H37a,E;:H37c:8,E"
+                    "raw": "Edge7;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -250,7 +250,7 @@
                     "subname": "Edge7"
                   }
                 },
-                "Edge8;:H37a,E;:H37c:8,E": {
+                "Edge8;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -258,7 +258,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge8;:H*,E;:H*:*,E",
-                    "raw": "Edge8;:H37a,E;:H37c:8,E"
+                    "raw": "Edge8;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -271,7 +271,7 @@
                     "subname": "Edge8"
                   }
                 },
-                "Edge9;:H37a,E;:H37c:8,E": {
+                "Edge9;:H*,E;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -279,7 +279,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge9;:H*,E;:H*:*,E",
-                    "raw": "Edge9;:H37a,E;:H37c:8,E"
+                    "raw": "Edge9;:H9ac,E;:H9ae:8,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -292,7 +292,7 @@
                     "subname": "Edge9"
                   }
                 },
-                "Face1;:H37a,F;:H37c:8,F": {
+                "Face1;:H*,F;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -300,7 +300,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face1;:H*,F;:H*:*,F",
-                    "raw": "Face1;:H37a,F;:H37c:8,F"
+                    "raw": "Face1;:H9ac,F;:H9ae:8,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -313,7 +313,7 @@
                     "subname": "Face1"
                   }
                 },
-                "Face2;:H37a,F;:H37c:8,F": {
+                "Face2;:H*,F;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -321,7 +321,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face2;:H*,F;:H*:*,F",
-                    "raw": "Face2;:H37a,F;:H37c:8,F"
+                    "raw": "Face2;:H9ac,F;:H9ae:8,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -334,7 +334,7 @@
                     "subname": "Face2"
                   }
                 },
-                "Face3;:H37a,F;:H37c:8,F": {
+                "Face3;:H*,F;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -342,7 +342,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face3;:H*,F;:H*:*,F",
-                    "raw": "Face3;:H37a,F;:H37c:8,F"
+                    "raw": "Face3;:H9ac,F;:H9ae:8,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -355,7 +355,7 @@
                     "subname": "Face3"
                   }
                 },
-                "Face4;:H37a,F;:H37c:8,F": {
+                "Face4;:H*,F;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -363,7 +363,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face4;:H*,F;:H*:*,F",
-                    "raw": "Face4;:H37a,F;:H37c:8,F"
+                    "raw": "Face4;:H9ac,F;:H9ae:8,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -376,7 +376,7 @@
                     "subname": "Face4"
                   }
                 },
-                "Face5;:H37a,F;:H37c:8,F": {
+                "Face5;:H*,F;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -384,7 +384,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face5;:H*,F;:H*:*,F",
-                    "raw": "Face5;:H37a,F;:H37c:8,F"
+                    "raw": "Face5;:H9ac,F;:H9ae:8,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -397,7 +397,7 @@
                     "subname": "Face5"
                   }
                 },
-                "Face6;:H37a,F;:H37c:8,F": {
+                "Face6;:H*,F;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -405,7 +405,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face6;:H*,F;:H*:*,F",
-                    "raw": "Face6;:H37a,F;:H37c:8,F"
+                    "raw": "Face6;:H9ac,F;:H9ae:8,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -418,7 +418,7 @@
                     "subname": "Face6"
                   }
                 },
-                "Vertex1;:H37a,V;:H37c:8,V": {
+                "Vertex1;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -426,7 +426,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex1;:H*,V;:H*:*,V",
-                    "raw": "Vertex1;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex1;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -439,7 +439,7 @@
                     "subname": "Vertex1"
                   }
                 },
-                "Vertex2;:H37a,V;:H37c:8,V": {
+                "Vertex2;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -447,7 +447,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex2;:H*,V;:H*:*,V",
-                    "raw": "Vertex2;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex2;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -460,7 +460,7 @@
                     "subname": "Vertex2"
                   }
                 },
-                "Vertex3;:H37a,V;:H37c:8,V": {
+                "Vertex3;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -468,7 +468,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex3;:H*,V;:H*:*,V",
-                    "raw": "Vertex3;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex3;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -481,7 +481,7 @@
                     "subname": "Vertex3"
                   }
                 },
-                "Vertex4;:H37a,V;:H37c:8,V": {
+                "Vertex4;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -489,7 +489,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex4;:H*,V;:H*:*,V",
-                    "raw": "Vertex4;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex4;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -502,7 +502,7 @@
                     "subname": "Vertex4"
                   }
                 },
-                "Vertex5;:H37a,V;:H37c:8,V": {
+                "Vertex5;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -510,7 +510,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex5;:H*,V;:H*:*,V",
-                    "raw": "Vertex5;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex5;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -523,7 +523,7 @@
                     "subname": "Vertex5"
                   }
                 },
-                "Vertex6;:H37a,V;:H37c:8,V": {
+                "Vertex6;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -531,7 +531,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex6;:H*,V;:H*:*,V",
-                    "raw": "Vertex6;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex6;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -544,7 +544,7 @@
                     "subname": "Vertex6"
                   }
                 },
-                "Vertex7;:H37a,V;:H37c:8,V": {
+                "Vertex7;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -552,7 +552,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex7;:H*,V;:H*:*,V",
-                    "raw": "Vertex7;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex7;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -565,7 +565,7 @@
                     "subname": "Vertex7"
                   }
                 },
-                "Vertex8;:H37a,V;:H37c:8,V": {
+                "Vertex8;:H*,V;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "ArrayLink:Box:Box",
                     "mapperHistoryIds": [],
@@ -573,7 +573,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex8;:H*,V;:H*:*,V",
-                    "raw": "Vertex8;:H37a,V;:H37c:8,V"
+                    "raw": "Vertex8;:H9ac,V;:H9ae:8,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",

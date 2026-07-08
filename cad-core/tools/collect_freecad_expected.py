@@ -2022,19 +2022,150 @@ def normalized_topo_state_element_entry(entry: Any) -> dict[str, Any]:
     return normalized
 
 
+def element_entry_canonical_key(token: Any, entry: dict[str, Any]) -> str:
+    mapped_name = entry.get("mappedName")
+    if isinstance(mapped_name, dict):
+        canonical = mapped_name.get("canonical")
+        if isinstance(canonical, str) and canonical:
+            return canonical
+        raw = mapped_name.get("raw")
+        if isinstance(raw, str) and raw:
+            return canonical_freecad_mapped_name(raw)
+    return canonical_freecad_mapped_name(str(token))
+
+
+def element_entry_merge_signature(entry: dict[str, Any]) -> str:
+    mapped_name = entry.get("mappedName")
+    canonical = mapped_name.get("canonical") if isinstance(mapped_name, dict) else None
+    return json.dumps(
+        {
+            "target": entry.get("target"),
+            "shapeKind": entry.get("shapeKind"),
+            "source": entry.get("source"),
+            "mappedNameCanonical": canonical,
+            "recoverability": entry.get("recoverability"),
+            "evidence": entry.get("evidence"),
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def canonical_collision_mapper_history_event(
+    canonical: str,
+    group: list[dict[str, Any]],
+    context: str,
+) -> dict[str, Any]:
+    candidates = [
+        {
+            "target": copy.deepcopy(entry.get("target")),
+            "shapeKind": entry.get("shapeKind"),
+            "source": copy.deepcopy(entry.get("source")),
+            "mappedName": copy.deepcopy(entry.get("mappedName")),
+            "recoverability": entry.get("recoverability"),
+        }
+        for entry in group
+    ]
+    seed = {
+        "context": context,
+        "canonical": canonical,
+        "candidates": [
+            {
+                "target": candidate.get("target"),
+                "shapeKind": candidate.get("shapeKind"),
+                "source": candidate.get("source"),
+                "mappedNameCanonical": canonical,
+                "recoverability": candidate.get("recoverability"),
+            }
+            for candidate in candidates
+        ],
+    }
+    event_hash = hashlib.sha256(
+        json.dumps(seed, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()[:16]
+    raw = ""
+    mapped_name = group[0].get("mappedName") if group else None
+    if isinstance(mapped_name, dict) and isinstance(mapped_name.get("raw"), str):
+        raw = mapped_name["raw"]
+    return {
+        "id": f"canonical-collision-{event_hash}",
+        "relation": "ambiguous",
+        "recoverability": "ambiguous",
+        "source": "freecad_expected_collector",
+        "mappedName": {
+            "raw": raw,
+            "canonical": canonical,
+        },
+        "candidates": candidates,
+        "message": (
+            f"Canonical elementMap key {canonical} maps to multiple current targets; "
+            "the collector keeps it out of elementMap"
+        ),
+    }
+
+
+def insert_element_map_entry(
+    entries: dict[str, Any],
+    token: str,
+    entry: dict[str, Any],
+    context: str,
+) -> None:
+    existing = entries.get(token)
+    if existing is None:
+        entries[token] = entry
+        return
+    if isinstance(existing, dict) and element_entry_merge_signature(existing) == element_entry_merge_signature(entry):
+        return
+    raise UnsupportedFixture(f"{context} canonical elementMap key collision for {token}")
+
+
+def canonicalized_element_map_entries(
+    candidates: Sequence[tuple[str, dict[str, Any]]],
+    context: str,
+    *,
+    omit_ambiguous: bool,
+    collision_events: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for token, entry in candidates:
+        canonical = element_entry_canonical_key(token, entry)
+        mapped_name = entry.get("mappedName")
+        if isinstance(mapped_name, dict):
+            mapped_name["canonical"] = canonical
+        grouped.setdefault(canonical, []).append(entry)
+
+    entries: dict[str, Any] = {}
+    for canonical, group in grouped.items():
+        signatures = {element_entry_merge_signature(entry) for entry in group}
+        if len(signatures) > 1:
+            if omit_ambiguous:
+                if collision_events is not None:
+                    collision_events.append(canonical_collision_mapper_history_event(canonical, group, context))
+                continue
+            raise UnsupportedFixture(f"{context} canonical elementMap key collision for {canonical}")
+        insert_element_map_entry(entries, canonical, group[0], context)
+    return entries
+
+
 def normalized_topo_state_element_map(element_map: Any) -> dict[str, Any]:
     if not isinstance(element_map, dict):
         element_map = {}
     entries = element_map.get("entries")
     if not isinstance(entries, dict):
         entries = {}
+    canonical_entries = canonicalized_element_map_entries(
+        [
+            (str(token), normalized_topo_state_element_entry(entry))
+            for token, entry in entries.items()
+        ],
+        "topoNamingState.elementMap.entries",
+        omit_ambiguous=False,
+    )
     return {
         "encoding": str(element_map.get("encoding") or "cad-core.element-map.v1"),
-        "status": str(element_map.get("status") or ("history_partial" if entries else "indexed_only")),
-        "entries": {
-            str(token): normalized_topo_state_element_entry(entry)
-            for token, entry in entries.items()
-        },
+        "status": str(element_map.get("status") or ("history_partial" if canonical_entries else "indexed_only")),
+        "entries": canonical_entries,
     }
 
 
@@ -2530,7 +2661,7 @@ def topo_state_element_map_entry(object_name: str, subshape: dict[str, Any]) -> 
         return None
     reject_display_path_stable_token(raw_mapped_name, "rawFreecadMappedName")
     canonical_mapped_name = canonical_freecad_mapped_name(raw_mapped_name)
-    return stable_token, {
+    return canonical_mapped_name, {
         "target": {
             "object": object_name,
             "subname": target_subname,
@@ -2572,7 +2703,8 @@ def child_element_entry(
     if not raw_mapped_name:
         return None
     reject_display_path_stable_token(raw_mapped_name, "childElementMaps.elementMap.entries key")
-    return raw_mapped_name, {
+    canonical_mapped_name = canonical_freecad_mapped_name(raw_mapped_name)
+    return canonical_mapped_name, {
         "target": {
             "object": owner_name,
             "subname": target_subname,
@@ -2584,7 +2716,7 @@ def child_element_entry(
         },
         "mappedName": {
             "raw": raw_mapped_name,
-            "canonical": canonical_freecad_mapped_name(raw_mapped_name),
+            "canonical": canonical_mapped_name,
         },
         "recoverability": "resolved",
         "evidence": {
@@ -2624,11 +2756,12 @@ def child_map_for_shape_relation(
     offsets: dict[str, int],
     evidence_source: str,
     raw_token_prefix: str = "",
+    collision_events: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any] | None:
     child_key = f"{owner_name}:{child_name}"
     if path_prefix:
         child_key = f"{child_key}:{path_prefix}"
-    entries: dict[str, Any] = {}
+    candidates: list[tuple[str, dict[str, Any]]] = []
     for prefix in ("Face", "Edge", "Vertex"):
         for local_index, local_subname in enumerate(shape_indexed_names(child_shape, prefix), start=1):
             target_subname = f"{prefix}{offsets[prefix] + local_index}"
@@ -2648,8 +2781,13 @@ def child_map_for_shape_relation(
                 evidence_source,
             )
             if stable_entry is not None:
-                token, entry = stable_entry
-                entries[token] = entry
+                candidates.append(stable_entry)
+    entries = canonicalized_element_map_entries(
+        candidates,
+        f"topoNamingState.childElementMaps.{child_key}.elementMap.entries",
+        omit_ambiguous=True,
+        collision_events=collision_events,
+    )
     if not entries:
         return None
     return {
@@ -2685,6 +2823,7 @@ def generated_child_element_maps(
     object_name: str,
     object_spec: dict | None,
     created: dict[str, Any] | None,
+    collision_events: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     if created is None or object_name not in created:
         return []
@@ -2715,6 +2854,7 @@ def generated_child_element_maps(
                 f"Child{child_index}",
                 offsets,
                 "freecad_part_compound_links",
+                collision_events=collision_events,
             )
             if child_map is not None:
                 child_maps.append(child_map)
@@ -2738,6 +2878,7 @@ def generated_child_element_maps(
                 offsets,
                 "freecad_partdesign_body_tip",
                 raw_token_prefix=tip_name,
+                collision_events=collision_events,
             )
             if child_map is not None:
                 child_maps.append(child_map)
@@ -2760,6 +2901,7 @@ def generated_child_element_maps(
                 linked_name,
                 offsets,
                 "freecad_app_link_linked_object",
+                collision_events=collision_events,
             )
             if child_map is not None:
                 child_maps.append(child_map)
@@ -2794,7 +2936,8 @@ def topo_state_object_payload(
         subshapes = []
 
     state_subshapes: dict[str, Any] = {}
-    entries: dict[str, Any] = {}
+    entry_candidates: list[tuple[str, dict[str, Any]]] = []
+    mapper_history: list[dict[str, Any]] = []
     for subshape in subshapes:
         if not isinstance(subshape, dict):
             continue
@@ -2803,10 +2946,15 @@ def topo_state_object_payload(
             state_subshapes[indexed] = topo_state_subshape_entry(subshape)
         element_map_entry = topo_state_element_map_entry(object_name, subshape)
         if element_map_entry is not None:
-            token, entry = element_map_entry
-            entries[token] = entry
+            entry_candidates.append(element_map_entry)
+    entries = canonicalized_element_map_entries(
+        entry_candidates,
+        f"topoNamingState.objects.{object_name}.elementMap.entries",
+        omit_ambiguous=True,
+        collision_events=mapper_history,
+    )
 
-    child_maps = generated_child_element_maps(object_name, object_spec, created)
+    child_maps = generated_child_element_maps(object_name, object_spec, created, mapper_history)
     merge_child_map_entries_into_element_entries(entries, child_maps)
 
     return {
@@ -2819,7 +2967,7 @@ def topo_state_object_payload(
             "entries": entries,
         },
         "childElementMaps": child_maps,
-        "mapperHistory": [],
+        "mapperHistory": mapper_history,
     }
 
 
@@ -7450,6 +7598,35 @@ def reference_update_state_contract_errors(
     return errors
 
 
+def element_map_key_contract_errors(entries: Any, label: str, context: str) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(entries, dict):
+        return errors
+    seen_canonical: dict[str, str] = {}
+    for token, element_entry in entries.items():
+        if not isinstance(element_entry, dict):
+            continue
+        mapped_name = element_entry.get("mappedName")
+        if not isinstance(mapped_name, dict):
+            continue
+        raw = mapped_name.get("raw")
+        canonical = mapped_name.get("canonical")
+        if isinstance(raw, str) and raw:
+            raw_canonical = canonical_freecad_mapped_name(raw)
+            if isinstance(canonical, str) and canonical and canonical != raw_canonical:
+                errors.append(f"{label}:{context}.{token}.mappedName.canonical")
+        if not isinstance(canonical, str) or not canonical:
+            continue
+        if str(token) != canonical:
+            errors.append(f"{label}:{context}.{token}.key_canonical")
+        previous = seen_canonical.get(canonical)
+        if previous is not None and previous != str(token):
+            errors.append(f"{label}:{context}.{token}.canonical_collision")
+        else:
+            seen_canonical[canonical] = str(token)
+    return errors
+
+
 def topo_naming_state_contract_errors(payload: dict, label: str) -> list[str]:
     errors: list[str] = []
     state = payload.get("topoNamingState")
@@ -7482,6 +7659,13 @@ def topo_naming_state_contract_errors(payload: dict, label: str) -> list[str]:
 
         element_map = object_state.get("elementMap")
         entries = element_map.get("entries") if isinstance(element_map, dict) else {}
+        errors.extend(
+            element_map_key_contract_errors(
+                entries,
+                label,
+                f"topoNamingState.{object_name}.elementMap",
+            )
+        )
         if not isinstance(entries, dict):
             continue
         for token, element_entry in entries.items():
@@ -7504,6 +7688,19 @@ def topo_naming_state_contract_errors(payload: dict, label: str) -> list[str]:
                 errors.append(
                     f"{label}:topoNamingState.{object_name}.elementMap.{token}.target.subname.missing"
                 )
+        child_maps = object_state.get("childElementMaps")
+        if isinstance(child_maps, list):
+            for child_index, child_map in enumerate(child_maps):
+                if not isinstance(child_map, dict):
+                    continue
+                child_entries = child_map.get("elementMap", {}).get("entries")
+                child_key = child_map.get("key")
+                child_context = (
+                    f"topoNamingState.{object_name}.childElementMaps.{child_key}.elementMap"
+                    if isinstance(child_key, str) and child_key
+                    else f"topoNamingState.{object_name}.childElementMaps.{child_index}.elementMap"
+                )
+                errors.extend(element_map_key_contract_errors(child_entries, label, child_context))
     errors.extend(reference_update_state_contract_errors(payload, label, objects))
     return errors
 

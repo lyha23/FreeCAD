@@ -57,7 +57,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#d:4;:G;XTR;:H94e:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#d:4;:G;XTR;:H1378:7,F;:H1379,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "BooleanCut.#d:4;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face1"
@@ -71,7 +71,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#d:3;:G;XTR;:H94e:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#d:3;:G;XTR;:H1378:7,F;:H1379,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "BooleanCut.#d:3;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face2"
@@ -85,7 +85,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#d:1;:G;XTR;:H94e:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#d:1;:G;XTR;:H1378:7,F;:H1379,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "BooleanCut.#d:1;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face3"
@@ -99,7 +99,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#14:1;:M;CUT;:H94e:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#14:1;:M;CUT;:H1378:7,F;:H1379,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "BooleanCut.#14:1;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face4"
@@ -113,7 +113,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#3a:1;:M;CUT;:H94e:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#3a:1;:M;CUT;:H1378:7,F;:H1379,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "BooleanCut.#3a:1;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face5"
@@ -127,7 +127,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#16:2;:M2;CUT;:H94e:8,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#16:2;:M2;CUT;:H1378:8,F;:H1379,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "BooleanCut.#16:2;:M2;CUT;:H*:*,F;:H*,F",
           "subname": "Face6"
@@ -141,7 +141,7 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#16:2;:M;CUT;:H94e:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#16:2;:M;CUT;:H1378:7,F;:H1379,F",
           "resolvedIndexed": "Face7",
           "stableSubname": "BooleanCut.#16:2;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face7"
@@ -155,7 +155,7 @@
           "identityStatus": "stable",
           "indexed": "Face8",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#33:3;:M;CUT;:H952:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#33:3;:M;CUT;:H137c:7,F;:H1379,F",
           "resolvedIndexed": "Face8",
           "stableSubname": "BooleanCut.#33:3;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face8"
@@ -169,7 +169,7 @@
           "identityStatus": "stable",
           "indexed": "Face9",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#33:4;:M;CUT;:H952:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#33:4;:M;CUT;:H137c:7,F;:H1379,F",
           "resolvedIndexed": "Face9",
           "stableSubname": "BooleanCut.#33:4;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face9"
@@ -183,7 +183,7 @@
           "identityStatus": "stable",
           "indexed": "Face10",
           "kind": "Face",
-          "rawFreecadMappedName": "BooleanCut.#33:1;:M;CUT;:H952:7,F;:H94f,F",
+          "rawFreecadMappedName": "BooleanCut.#33:1;:M;CUT;:H137c:7,F;:H1379,F",
           "resolvedIndexed": "Face10",
           "stableSubname": "BooleanCut.#33:1;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face10"
@@ -197,7 +197,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#f:2;:G;XTR;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#f:2;:G;XTR;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "BooleanCut.#f:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge1"
@@ -211,7 +211,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#10:1;:G;XTR;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#10:1;:G;XTR;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "BooleanCut.#10:1;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge2"
@@ -225,7 +225,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#b:4;:H94e,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#b:4;:H1378,E;:H1379,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "BooleanCut.#b:4;:H*,E;:H*,E",
           "subname": "Edge3"
@@ -239,7 +239,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#16:4;:U;XTR;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#16:4;:U;XTR;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "BooleanCut.#16:4;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge4"
@@ -253,7 +253,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#11:2;:G;XTR;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#11:2;:G;XTR;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "BooleanCut.#11:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge5"
@@ -267,7 +267,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#b:3;:H94e,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#b:3;:H1378,E;:H1379,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "BooleanCut.#b:3;:H*,E;:H*,E",
           "subname": "Edge6"
@@ -281,7 +281,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#16:3;:U;XTR;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#16:3;:U;XTR;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "BooleanCut.#16:3;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge7"
@@ -295,7 +295,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#12:2;:G;XTR;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#12:2;:G;XTR;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "BooleanCut.#12:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge8"
@@ -309,7 +309,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#b:1;:H94e,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#b:1;:H1378,E;:H1379,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "BooleanCut.#b:1;:H*,E;:H*,E",
           "subname": "Edge9"
@@ -323,7 +323,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#16:1;:U;XTR;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#16:1;:U;XTR;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "BooleanCut.#16:1;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge10"
@@ -337,7 +337,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#d:2;:M2;CUT;:H94e:8,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#d:2;:M2;CUT;:H1378:8,E;:H1379,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "BooleanCut.#d:2;:M2;CUT;:H*:*,E;:H*,E",
           "subname": "Edge11"
@@ -351,7 +351,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#2d:3;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#2d:3;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "BooleanCut.#2d:3;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge12"
@@ -365,7 +365,7 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#2d:4;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#2d:4;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge13",
           "stableSubname": "BooleanCut.#2d:4;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge13"
@@ -379,7 +379,7 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#2d:1;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#2d:1;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge14",
           "stableSubname": "BooleanCut.#2d:1;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge14"
@@ -393,7 +393,7 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#d:2;:M;CUT;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#d:2;:M;CUT;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge15",
           "stableSubname": "BooleanCut.#d:2;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge15"
@@ -407,7 +407,7 @@
           "identityStatus": "stable",
           "indexed": "Edge16",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#2f:2;:M2;CUT;:H94e:8,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#2f:2;:M2;CUT;:H1378:8,E;:H1379,E",
           "resolvedIndexed": "Edge16",
           "stableSubname": "BooleanCut.#2f:2;:M2;CUT;:H*:*,E;:H*,E",
           "subname": "Edge16"
@@ -421,7 +421,7 @@
           "identityStatus": "stable",
           "indexed": "Edge17",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#31:3;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#31:3;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge17",
           "stableSubname": "BooleanCut.#31:3;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge17"
@@ -435,7 +435,7 @@
           "identityStatus": "stable",
           "indexed": "Edge18",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#31:4;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#31:4;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge18",
           "stableSubname": "BooleanCut.#31:4;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge18"
@@ -449,7 +449,7 @@
           "identityStatus": "stable",
           "indexed": "Edge19",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#31:1;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#31:1;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge19",
           "stableSubname": "BooleanCut.#31:1;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge19"
@@ -463,7 +463,7 @@
           "identityStatus": "stable",
           "indexed": "Edge20",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#2f:2;:M;CUT;:H94e:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#2f:2;:M;CUT;:H1378:7,E;:H1379,E",
           "resolvedIndexed": "Edge20",
           "stableSubname": "BooleanCut.#2f:2;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge20"
@@ -477,7 +477,7 @@
           "identityStatus": "stable",
           "indexed": "Edge21",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#16:2;:G#34;CUT;:H94e:a,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#16:2;:G#34;CUT;:H1378:a,E;:H1379,E",
           "resolvedIndexed": "Edge21",
           "stableSubname": "BooleanCut.#16:2;:G#34;CUT;:H*:*,E;:H*,E",
           "subname": "Edge21"
@@ -491,7 +491,7 @@
           "identityStatus": "stable",
           "indexed": "Edge22",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#16:2;:G2#35;CUT;:H94e:b,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#16:2;:G2#35;CUT;:H1378:b,E;:H1379,E",
           "resolvedIndexed": "Edge22",
           "stableSubname": "BooleanCut.#16:2;:G2#35;CUT;:H*:*,E;:H*,E",
           "subname": "Edge22"
@@ -505,7 +505,7 @@
           "identityStatus": "stable",
           "indexed": "Edge23",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#37:8;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#37:8;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge23",
           "stableSubname": "BooleanCut.#37:8;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge23"
@@ -519,7 +519,7 @@
           "identityStatus": "stable",
           "indexed": "Edge24",
           "kind": "Edge",
-          "rawFreecadMappedName": "BooleanCut.#38:2;:M;CUT;:H952:7,E;:H94f,E",
+          "rawFreecadMappedName": "BooleanCut.#38:2;:M;CUT;:H137c:7,E;:H1379,E",
           "resolvedIndexed": "Edge24",
           "stableSubname": "BooleanCut.#38:2;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge24"
@@ -533,7 +533,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#8:2;:H94e,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#8:2;:H1378,V;:H1379,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "BooleanCut.#8:2;:H*,V;:H*,V",
           "subname": "Vertex1"
@@ -547,7 +547,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#18:2;:U;XTR;:H94e:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#18:2;:U;XTR;:H1378:7,V;:H1379,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "BooleanCut.#18:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex2"
@@ -561,7 +561,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#2:1;:H94e,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#2:1;:H1378,V;:H1379,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "BooleanCut.#2:1;:H*,V;:H*,V",
           "subname": "Vertex3"
@@ -575,7 +575,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#19:1;:U;XTR;:H94e:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#19:1;:U;XTR;:H1378:7,V;:H1379,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "BooleanCut.#19:1;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex4"
@@ -589,7 +589,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#6:2;:H94e,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#6:2;:H1378,V;:H1379,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "BooleanCut.#6:2;:H*,V;:H*,V",
           "subname": "Vertex5"
@@ -603,7 +603,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#1a:2;:U;XTR;:H94e:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#1a:2;:U;XTR;:H1378:7,V;:H1379,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "BooleanCut.#1a:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex6"
@@ -617,7 +617,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#4:2;:H94e,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#4:2;:H1378,V;:H1379,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "BooleanCut.#4:2;:H*,V;:H*,V",
           "subname": "Vertex7"
@@ -631,7 +631,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#1b:2;:U;XTR;:H94e:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#1b:2;:U;XTR;:H1378:7,V;:H1379,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "BooleanCut.#1b:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex8"
@@ -645,7 +645,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#d:2;:G#3b;CUT;:H94e:a,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#d:2;:G#3b;CUT;:H1378:a,V;:H1379,V",
           "resolvedIndexed": "Vertex9",
           "stableSubname": "BooleanCut.#d:2;:G#3b;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex9"
@@ -659,7 +659,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#3d:8;:M;CUT;:H952:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#3d:8;:M;CUT;:H137c:7,V;:H1379,V",
           "resolvedIndexed": "Vertex10",
           "stableSubname": "BooleanCut.#3d:8;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex10"
@@ -673,7 +673,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex11",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#3e:2;:M;CUT;:H952:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#3e:2;:M;CUT;:H137c:7,V;:H1379,V",
           "resolvedIndexed": "Vertex11",
           "stableSubname": "BooleanCut.#3e:2;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex11"
@@ -687,7 +687,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex12",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#d:2;:G2#3f;CUT;:H94e:b,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#d:2;:G2#3f;CUT;:H1378:b,V;:H1379,V",
           "resolvedIndexed": "Vertex12",
           "stableSubname": "BooleanCut.#d:2;:G2#3f;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex12"
@@ -701,7 +701,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex13",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#2f:2;:G#40;CUT;:H94e:a,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#2f:2;:G#40;CUT;:H1378:a,V;:H1379,V",
           "resolvedIndexed": "Vertex13",
           "stableSubname": "BooleanCut.#2f:2;:G#40;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex13"
@@ -715,7 +715,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex14",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#42:8;:M;CUT;:H952:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#42:8;:M;CUT;:H137c:7,V;:H1379,V",
           "resolvedIndexed": "Vertex14",
           "stableSubname": "BooleanCut.#42:8;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex14"
@@ -729,7 +729,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex15",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#43:2;:M;CUT;:H952:7,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#43:2;:M;CUT;:H137c:7,V;:H1379,V",
           "resolvedIndexed": "Vertex15",
           "stableSubname": "BooleanCut.#43:2;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex15"
@@ -743,7 +743,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex16",
           "kind": "Vertex",
-          "rawFreecadMappedName": "BooleanCut.#2f:2;:G2#44;CUT;:H94e:b,V;:H94f,V",
+          "rawFreecadMappedName": "BooleanCut.#2f:2;:G2#44;CUT;:H1378:b,V;:H1379,V",
           "resolvedIndexed": "Vertex16",
           "stableSubname": "BooleanCut.#2f:2;:G2#44;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex16"
@@ -780,7 +780,7 @@
             "elementMap": {
               "encoding": "cad-core.element-map.v1",
               "entries": {
-                "BooleanCut.#10:1;:G;XTR;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#10:1;:G;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -788,7 +788,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#10:1;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#10:1;:G;XTR;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#10:1;:G;XTR;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -801,7 +801,7 @@
                     "subname": "Edge2"
                   }
                 },
-                "BooleanCut.#11:2;:G;XTR;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#11:2;:G;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -809,7 +809,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#11:2;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#11:2;:G;XTR;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#11:2;:G;XTR;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -822,7 +822,7 @@
                     "subname": "Edge5"
                   }
                 },
-                "BooleanCut.#12:2;:G;XTR;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#12:2;:G;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -830,7 +830,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#12:2;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#12:2;:G;XTR;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#12:2;:G;XTR;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -843,7 +843,7 @@
                     "subname": "Edge8"
                   }
                 },
-                "BooleanCut.#14:1;:M;CUT;:H94e:7,F;:H94f,F": {
+                "BooleanCut.#14:1;:M;CUT;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -851,7 +851,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#14:1;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#14:1;:M;CUT;:H94e:7,F;:H94f,F"
+                    "raw": "BooleanCut.#14:1;:M;CUT;:H1378:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -864,7 +864,7 @@
                     "subname": "Face4"
                   }
                 },
-                "BooleanCut.#16:1;:U;XTR;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#16:1;:U;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -872,7 +872,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#16:1;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#16:1;:U;XTR;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#16:1;:U;XTR;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -885,7 +885,7 @@
                     "subname": "Edge10"
                   }
                 },
-                "BooleanCut.#16:2;:G#34;CUT;:H94e:a,E;:H94f,E": {
+                "BooleanCut.#16:2;:G#34;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -893,7 +893,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#16:2;:G#34;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#16:2;:G#34;CUT;:H94e:a,E;:H94f,E"
+                    "raw": "BooleanCut.#16:2;:G#34;CUT;:H1378:a,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -906,7 +906,7 @@
                     "subname": "Edge21"
                   }
                 },
-                "BooleanCut.#16:2;:G2#35;CUT;:H94e:b,E;:H94f,E": {
+                "BooleanCut.#16:2;:G2#35;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -914,7 +914,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#16:2;:G2#35;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#16:2;:G2#35;CUT;:H94e:b,E;:H94f,E"
+                    "raw": "BooleanCut.#16:2;:G2#35;CUT;:H1378:b,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -927,7 +927,7 @@
                     "subname": "Edge22"
                   }
                 },
-                "BooleanCut.#16:2;:M2;CUT;:H94e:8,F;:H94f,F": {
+                "BooleanCut.#16:2;:M2;CUT;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -935,7 +935,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#16:2;:M2;CUT;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#16:2;:M2;CUT;:H94e:8,F;:H94f,F"
+                    "raw": "BooleanCut.#16:2;:M2;CUT;:H1378:8,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -948,7 +948,7 @@
                     "subname": "Face6"
                   }
                 },
-                "BooleanCut.#16:2;:M;CUT;:H94e:7,F;:H94f,F": {
+                "BooleanCut.#16:2;:M;CUT;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -956,7 +956,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#16:2;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#16:2;:M;CUT;:H94e:7,F;:H94f,F"
+                    "raw": "BooleanCut.#16:2;:M;CUT;:H1378:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -969,7 +969,7 @@
                     "subname": "Face7"
                   }
                 },
-                "BooleanCut.#16:3;:U;XTR;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#16:3;:U;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -977,7 +977,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#16:3;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#16:3;:U;XTR;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#16:3;:U;XTR;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -990,7 +990,7 @@
                     "subname": "Edge7"
                   }
                 },
-                "BooleanCut.#16:4;:U;XTR;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#16:4;:U;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -998,7 +998,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#16:4;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#16:4;:U;XTR;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#16:4;:U;XTR;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1011,7 +1011,7 @@
                     "subname": "Edge4"
                   }
                 },
-                "BooleanCut.#18:2;:U;XTR;:H94e:7,V;:H94f,V": {
+                "BooleanCut.#18:2;:U;XTR;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1019,7 +1019,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#18:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#18:2;:U;XTR;:H94e:7,V;:H94f,V"
+                    "raw": "BooleanCut.#18:2;:U;XTR;:H1378:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1032,7 +1032,7 @@
                     "subname": "Vertex2"
                   }
                 },
-                "BooleanCut.#19:1;:U;XTR;:H94e:7,V;:H94f,V": {
+                "BooleanCut.#19:1;:U;XTR;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1040,7 +1040,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#19:1;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#19:1;:U;XTR;:H94e:7,V;:H94f,V"
+                    "raw": "BooleanCut.#19:1;:U;XTR;:H1378:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1053,7 +1053,7 @@
                     "subname": "Vertex4"
                   }
                 },
-                "BooleanCut.#1a:2;:U;XTR;:H94e:7,V;:H94f,V": {
+                "BooleanCut.#1a:2;:U;XTR;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1061,7 +1061,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#1a:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#1a:2;:U;XTR;:H94e:7,V;:H94f,V"
+                    "raw": "BooleanCut.#1a:2;:U;XTR;:H1378:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1074,7 +1074,7 @@
                     "subname": "Vertex6"
                   }
                 },
-                "BooleanCut.#1b:2;:U;XTR;:H94e:7,V;:H94f,V": {
+                "BooleanCut.#1b:2;:U;XTR;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1082,7 +1082,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#1b:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#1b:2;:U;XTR;:H94e:7,V;:H94f,V"
+                    "raw": "BooleanCut.#1b:2;:U;XTR;:H1378:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1095,7 +1095,7 @@
                     "subname": "Vertex8"
                   }
                 },
-                "BooleanCut.#2:1;:H94e,V;:H94f,V": {
+                "BooleanCut.#2:1;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1103,7 +1103,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2:1;:H*,V;:H*,V",
-                    "raw": "BooleanCut.#2:1;:H94e,V;:H94f,V"
+                    "raw": "BooleanCut.#2:1;:H1378,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1116,7 +1116,7 @@
                     "subname": "Vertex3"
                   }
                 },
-                "BooleanCut.#2d:1;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#2d:1;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1124,7 +1124,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2d:1;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#2d:1;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#2d:1;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1137,7 +1137,7 @@
                     "subname": "Edge14"
                   }
                 },
-                "BooleanCut.#2d:3;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#2d:3;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1145,7 +1145,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2d:3;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#2d:3;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#2d:3;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1158,7 +1158,7 @@
                     "subname": "Edge12"
                   }
                 },
-                "BooleanCut.#2d:4;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#2d:4;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1166,7 +1166,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2d:4;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#2d:4;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#2d:4;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1179,7 +1179,7 @@
                     "subname": "Edge13"
                   }
                 },
-                "BooleanCut.#2f:2;:G#40;CUT;:H94e:a,V;:H94f,V": {
+                "BooleanCut.#2f:2;:G#40;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1187,7 +1187,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2f:2;:G#40;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#2f:2;:G#40;CUT;:H94e:a,V;:H94f,V"
+                    "raw": "BooleanCut.#2f:2;:G#40;CUT;:H1378:a,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1200,7 +1200,7 @@
                     "subname": "Vertex13"
                   }
                 },
-                "BooleanCut.#2f:2;:G2#44;CUT;:H94e:b,V;:H94f,V": {
+                "BooleanCut.#2f:2;:G2#44;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1208,7 +1208,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2f:2;:G2#44;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#2f:2;:G2#44;CUT;:H94e:b,V;:H94f,V"
+                    "raw": "BooleanCut.#2f:2;:G2#44;CUT;:H1378:b,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1221,7 +1221,7 @@
                     "subname": "Vertex16"
                   }
                 },
-                "BooleanCut.#2f:2;:M2;CUT;:H94e:8,E;:H94f,E": {
+                "BooleanCut.#2f:2;:M2;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1229,7 +1229,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2f:2;:M2;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#2f:2;:M2;CUT;:H94e:8,E;:H94f,E"
+                    "raw": "BooleanCut.#2f:2;:M2;CUT;:H1378:8,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1242,7 +1242,7 @@
                     "subname": "Edge16"
                   }
                 },
-                "BooleanCut.#2f:2;:M;CUT;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#2f:2;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1250,7 +1250,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#2f:2;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#2f:2;:M;CUT;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#2f:2;:M;CUT;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1263,7 +1263,7 @@
                     "subname": "Edge20"
                   }
                 },
-                "BooleanCut.#31:1;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#31:1;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1271,7 +1271,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#31:1;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#31:1;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#31:1;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1284,7 +1284,7 @@
                     "subname": "Edge19"
                   }
                 },
-                "BooleanCut.#31:3;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#31:3;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1292,7 +1292,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#31:3;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#31:3;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#31:3;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1305,7 +1305,7 @@
                     "subname": "Edge17"
                   }
                 },
-                "BooleanCut.#31:4;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#31:4;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1313,7 +1313,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#31:4;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#31:4;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#31:4;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1326,7 +1326,7 @@
                     "subname": "Edge18"
                   }
                 },
-                "BooleanCut.#33:1;:M;CUT;:H952:7,F;:H94f,F": {
+                "BooleanCut.#33:1;:M;CUT;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1334,7 +1334,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#33:1;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#33:1;:M;CUT;:H952:7,F;:H94f,F"
+                    "raw": "BooleanCut.#33:1;:M;CUT;:H137c:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1347,7 +1347,7 @@
                     "subname": "Face10"
                   }
                 },
-                "BooleanCut.#33:3;:M;CUT;:H952:7,F;:H94f,F": {
+                "BooleanCut.#33:3;:M;CUT;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1355,7 +1355,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#33:3;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#33:3;:M;CUT;:H952:7,F;:H94f,F"
+                    "raw": "BooleanCut.#33:3;:M;CUT;:H137c:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1368,7 +1368,7 @@
                     "subname": "Face8"
                   }
                 },
-                "BooleanCut.#33:4;:M;CUT;:H952:7,F;:H94f,F": {
+                "BooleanCut.#33:4;:M;CUT;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1376,7 +1376,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#33:4;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#33:4;:M;CUT;:H952:7,F;:H94f,F"
+                    "raw": "BooleanCut.#33:4;:M;CUT;:H137c:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1389,7 +1389,7 @@
                     "subname": "Face9"
                   }
                 },
-                "BooleanCut.#37:8;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#37:8;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1397,7 +1397,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#37:8;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#37:8;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#37:8;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1410,7 +1410,7 @@
                     "subname": "Edge23"
                   }
                 },
-                "BooleanCut.#38:2;:M;CUT;:H952:7,E;:H94f,E": {
+                "BooleanCut.#38:2;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1418,7 +1418,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#38:2;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#38:2;:M;CUT;:H952:7,E;:H94f,E"
+                    "raw": "BooleanCut.#38:2;:M;CUT;:H137c:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1431,7 +1431,7 @@
                     "subname": "Edge24"
                   }
                 },
-                "BooleanCut.#3a:1;:M;CUT;:H94e:7,F;:H94f,F": {
+                "BooleanCut.#3a:1;:M;CUT;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1439,7 +1439,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#3a:1;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#3a:1;:M;CUT;:H94e:7,F;:H94f,F"
+                    "raw": "BooleanCut.#3a:1;:M;CUT;:H1378:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1452,7 +1452,7 @@
                     "subname": "Face5"
                   }
                 },
-                "BooleanCut.#3d:8;:M;CUT;:H952:7,V;:H94f,V": {
+                "BooleanCut.#3d:8;:M;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1460,7 +1460,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#3d:8;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#3d:8;:M;CUT;:H952:7,V;:H94f,V"
+                    "raw": "BooleanCut.#3d:8;:M;CUT;:H137c:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1473,7 +1473,7 @@
                     "subname": "Vertex10"
                   }
                 },
-                "BooleanCut.#3e:2;:M;CUT;:H952:7,V;:H94f,V": {
+                "BooleanCut.#3e:2;:M;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1481,7 +1481,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#3e:2;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#3e:2;:M;CUT;:H952:7,V;:H94f,V"
+                    "raw": "BooleanCut.#3e:2;:M;CUT;:H137c:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1494,7 +1494,7 @@
                     "subname": "Vertex11"
                   }
                 },
-                "BooleanCut.#42:8;:M;CUT;:H952:7,V;:H94f,V": {
+                "BooleanCut.#42:8;:M;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1502,7 +1502,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#42:8;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#42:8;:M;CUT;:H952:7,V;:H94f,V"
+                    "raw": "BooleanCut.#42:8;:M;CUT;:H137c:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1515,7 +1515,7 @@
                     "subname": "Vertex14"
                   }
                 },
-                "BooleanCut.#43:2;:M;CUT;:H952:7,V;:H94f,V": {
+                "BooleanCut.#43:2;:M;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1523,7 +1523,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#43:2;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#43:2;:M;CUT;:H952:7,V;:H94f,V"
+                    "raw": "BooleanCut.#43:2;:M;CUT;:H137c:7,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1536,7 +1536,7 @@
                     "subname": "Vertex15"
                   }
                 },
-                "BooleanCut.#4:2;:H94e,V;:H94f,V": {
+                "BooleanCut.#4:2;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1544,7 +1544,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#4:2;:H*,V;:H*,V",
-                    "raw": "BooleanCut.#4:2;:H94e,V;:H94f,V"
+                    "raw": "BooleanCut.#4:2;:H1378,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1557,7 +1557,7 @@
                     "subname": "Vertex7"
                   }
                 },
-                "BooleanCut.#6:2;:H94e,V;:H94f,V": {
+                "BooleanCut.#6:2;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1565,7 +1565,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#6:2;:H*,V;:H*,V",
-                    "raw": "BooleanCut.#6:2;:H94e,V;:H94f,V"
+                    "raw": "BooleanCut.#6:2;:H1378,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1578,7 +1578,7 @@
                     "subname": "Vertex5"
                   }
                 },
-                "BooleanCut.#8:2;:H94e,V;:H94f,V": {
+                "BooleanCut.#8:2;:H*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1586,7 +1586,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#8:2;:H*,V;:H*,V",
-                    "raw": "BooleanCut.#8:2;:H94e,V;:H94f,V"
+                    "raw": "BooleanCut.#8:2;:H1378,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1599,7 +1599,7 @@
                     "subname": "Vertex1"
                   }
                 },
-                "BooleanCut.#b:1;:H94e,E;:H94f,E": {
+                "BooleanCut.#b:1;:H*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1607,7 +1607,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#b:1;:H*,E;:H*,E",
-                    "raw": "BooleanCut.#b:1;:H94e,E;:H94f,E"
+                    "raw": "BooleanCut.#b:1;:H1378,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1620,7 +1620,7 @@
                     "subname": "Edge9"
                   }
                 },
-                "BooleanCut.#b:3;:H94e,E;:H94f,E": {
+                "BooleanCut.#b:3;:H*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1628,7 +1628,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#b:3;:H*,E;:H*,E",
-                    "raw": "BooleanCut.#b:3;:H94e,E;:H94f,E"
+                    "raw": "BooleanCut.#b:3;:H1378,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1641,7 +1641,7 @@
                     "subname": "Edge6"
                   }
                 },
-                "BooleanCut.#b:4;:H94e,E;:H94f,E": {
+                "BooleanCut.#b:4;:H*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1649,7 +1649,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#b:4;:H*,E;:H*,E",
-                    "raw": "BooleanCut.#b:4;:H94e,E;:H94f,E"
+                    "raw": "BooleanCut.#b:4;:H1378,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1662,7 +1662,7 @@
                     "subname": "Edge3"
                   }
                 },
-                "BooleanCut.#d:1;:G;XTR;:H94e:7,F;:H94f,F": {
+                "BooleanCut.#d:1;:G;XTR;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1670,7 +1670,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#d:1;:G;XTR;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#d:1;:G;XTR;:H94e:7,F;:H94f,F"
+                    "raw": "BooleanCut.#d:1;:G;XTR;:H1378:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1683,7 +1683,7 @@
                     "subname": "Face3"
                   }
                 },
-                "BooleanCut.#d:2;:G#3b;CUT;:H94e:a,V;:H94f,V": {
+                "BooleanCut.#d:2;:G#3b;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1691,7 +1691,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#d:2;:G#3b;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#d:2;:G#3b;CUT;:H94e:a,V;:H94f,V"
+                    "raw": "BooleanCut.#d:2;:G#3b;CUT;:H1378:a,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1704,7 +1704,7 @@
                     "subname": "Vertex9"
                   }
                 },
-                "BooleanCut.#d:2;:G2#3f;CUT;:H94e:b,V;:H94f,V": {
+                "BooleanCut.#d:2;:G2#3f;CUT;:H*:*,V;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1712,7 +1712,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#d:2;:G2#3f;CUT;:H*:*,V;:H*,V",
-                    "raw": "BooleanCut.#d:2;:G2#3f;CUT;:H94e:b,V;:H94f,V"
+                    "raw": "BooleanCut.#d:2;:G2#3f;CUT;:H1378:b,V;:H1379,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1725,7 +1725,7 @@
                     "subname": "Vertex12"
                   }
                 },
-                "BooleanCut.#d:2;:M2;CUT;:H94e:8,E;:H94f,E": {
+                "BooleanCut.#d:2;:M2;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1733,7 +1733,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#d:2;:M2;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#d:2;:M2;CUT;:H94e:8,E;:H94f,E"
+                    "raw": "BooleanCut.#d:2;:M2;CUT;:H1378:8,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1746,7 +1746,7 @@
                     "subname": "Edge11"
                   }
                 },
-                "BooleanCut.#d:2;:M;CUT;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#d:2;:M;CUT;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1754,7 +1754,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#d:2;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#d:2;:M;CUT;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#d:2;:M;CUT;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1767,7 +1767,7 @@
                     "subname": "Edge15"
                   }
                 },
-                "BooleanCut.#d:3;:G;XTR;:H94e:7,F;:H94f,F": {
+                "BooleanCut.#d:3;:G;XTR;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1775,7 +1775,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#d:3;:G;XTR;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#d:3;:G;XTR;:H94e:7,F;:H94f,F"
+                    "raw": "BooleanCut.#d:3;:G;XTR;:H1378:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1788,7 +1788,7 @@
                     "subname": "Face2"
                   }
                 },
-                "BooleanCut.#d:4;:G;XTR;:H94e:7,F;:H94f,F": {
+                "BooleanCut.#d:4;:G;XTR;:H*:*,F;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1796,7 +1796,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#d:4;:G;XTR;:H*:*,F;:H*,F",
-                    "raw": "BooleanCut.#d:4;:G;XTR;:H94e:7,F;:H94f,F"
+                    "raw": "BooleanCut.#d:4;:G;XTR;:H1378:7,F;:H1379,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1809,7 +1809,7 @@
                     "subname": "Face1"
                   }
                 },
-                "BooleanCut.#f:2;:G;XTR;:H94e:7,E;:H94f,E": {
+                "BooleanCut.#f:2;:G;XTR;:H*:*,E;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                     "mapperHistoryIds": [],
@@ -1817,7 +1817,7 @@
                   },
                   "mappedName": {
                     "canonical": "BooleanCut.#f:2;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "BooleanCut.#f:2;:G;XTR;:H94e:7,E;:H94f,E"
+                    "raw": "BooleanCut.#f:2;:G;XTR;:H1378:7,E;:H1379,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1843,18 +1843,18 @@
           "entries": {
             "BooleanCut.#10:1;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#10:1;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#10:1;:G;XTR;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#10:1;:G;XTR;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge2"
               },
               "target": {
@@ -1864,18 +1864,18 @@
             },
             "BooleanCut.#11:2;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#11:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#11:2;:G;XTR;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#11:2;:G;XTR;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge5"
               },
               "target": {
@@ -1885,18 +1885,18 @@
             },
             "BooleanCut.#12:2;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#12:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#12:2;:G;XTR;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#12:2;:G;XTR;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge8"
               },
               "target": {
@@ -1906,18 +1906,18 @@
             },
             "BooleanCut.#14:1;:M;CUT;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#14:1;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#14:1;:M;CUT;:H94e:7,F;:H94f,F"
+                "raw": "BooleanCut.#14:1;:M;CUT;:H1378:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face4"
               },
               "target": {
@@ -1927,18 +1927,18 @@
             },
             "BooleanCut.#16:1;:U;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#16:1;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#16:1;:U;XTR;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#16:1;:U;XTR;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge10"
               },
               "target": {
@@ -1948,18 +1948,18 @@
             },
             "BooleanCut.#16:2;:G#34;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#16:2;:G#34;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#16:2;:G#34;CUT;:H94e:a,E;:H94f,E"
+                "raw": "BooleanCut.#16:2;:G#34;CUT;:H1378:a,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge21"
               },
               "target": {
@@ -1969,18 +1969,18 @@
             },
             "BooleanCut.#16:2;:G2#35;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#16:2;:G2#35;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#16:2;:G2#35;CUT;:H94e:b,E;:H94f,E"
+                "raw": "BooleanCut.#16:2;:G2#35;CUT;:H1378:b,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge22"
               },
               "target": {
@@ -1990,18 +1990,18 @@
             },
             "BooleanCut.#16:2;:M2;CUT;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#16:2;:M2;CUT;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#16:2;:M2;CUT;:H94e:8,F;:H94f,F"
+                "raw": "BooleanCut.#16:2;:M2;CUT;:H1378:8,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face6"
               },
               "target": {
@@ -2011,18 +2011,18 @@
             },
             "BooleanCut.#16:2;:M;CUT;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#16:2;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#16:2;:M;CUT;:H94e:7,F;:H94f,F"
+                "raw": "BooleanCut.#16:2;:M;CUT;:H1378:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face7"
               },
               "target": {
@@ -2032,18 +2032,18 @@
             },
             "BooleanCut.#16:3;:U;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#16:3;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#16:3;:U;XTR;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#16:3;:U;XTR;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge7"
               },
               "target": {
@@ -2053,18 +2053,18 @@
             },
             "BooleanCut.#16:4;:U;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#16:4;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#16:4;:U;XTR;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#16:4;:U;XTR;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge4"
               },
               "target": {
@@ -2074,18 +2074,18 @@
             },
             "BooleanCut.#18:2;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#18:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#18:2;:U;XTR;:H94e:7,V;:H94f,V"
+                "raw": "BooleanCut.#18:2;:U;XTR;:H1378:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex2"
               },
               "target": {
@@ -2095,18 +2095,18 @@
             },
             "BooleanCut.#19:1;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#19:1;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#19:1;:U;XTR;:H94e:7,V;:H94f,V"
+                "raw": "BooleanCut.#19:1;:U;XTR;:H1378:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex4"
               },
               "target": {
@@ -2116,18 +2116,18 @@
             },
             "BooleanCut.#1a:2;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#1a:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#1a:2;:U;XTR;:H94e:7,V;:H94f,V"
+                "raw": "BooleanCut.#1a:2;:U;XTR;:H1378:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex6"
               },
               "target": {
@@ -2137,18 +2137,18 @@
             },
             "BooleanCut.#1b:2;:U;XTR;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#1b:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#1b:2;:U;XTR;:H94e:7,V;:H94f,V"
+                "raw": "BooleanCut.#1b:2;:U;XTR;:H1378:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex8"
               },
               "target": {
@@ -2158,18 +2158,18 @@
             },
             "BooleanCut.#2:1;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2:1;:H*,V;:H*,V",
-                "raw": "BooleanCut.#2:1;:H94e,V;:H94f,V"
+                "raw": "BooleanCut.#2:1;:H1378,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex3"
               },
               "target": {
@@ -2179,18 +2179,18 @@
             },
             "BooleanCut.#2d:1;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2d:1;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#2d:1;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#2d:1;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge14"
               },
               "target": {
@@ -2200,18 +2200,18 @@
             },
             "BooleanCut.#2d:3;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2d:3;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#2d:3;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#2d:3;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge12"
               },
               "target": {
@@ -2221,18 +2221,18 @@
             },
             "BooleanCut.#2d:4;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2d:4;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#2d:4;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#2d:4;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge13"
               },
               "target": {
@@ -2242,18 +2242,18 @@
             },
             "BooleanCut.#2f:2;:G#40;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2f:2;:G#40;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#2f:2;:G#40;CUT;:H94e:a,V;:H94f,V"
+                "raw": "BooleanCut.#2f:2;:G#40;CUT;:H1378:a,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex13"
               },
               "target": {
@@ -2263,18 +2263,18 @@
             },
             "BooleanCut.#2f:2;:G2#44;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2f:2;:G2#44;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#2f:2;:G2#44;CUT;:H94e:b,V;:H94f,V"
+                "raw": "BooleanCut.#2f:2;:G2#44;CUT;:H1378:b,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex16"
               },
               "target": {
@@ -2284,18 +2284,18 @@
             },
             "BooleanCut.#2f:2;:M2;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2f:2;:M2;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#2f:2;:M2;CUT;:H94e:8,E;:H94f,E"
+                "raw": "BooleanCut.#2f:2;:M2;CUT;:H1378:8,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge16"
               },
               "target": {
@@ -2305,18 +2305,18 @@
             },
             "BooleanCut.#2f:2;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#2f:2;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#2f:2;:M;CUT;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#2f:2;:M;CUT;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge20"
               },
               "target": {
@@ -2326,18 +2326,18 @@
             },
             "BooleanCut.#31:1;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#31:1;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#31:1;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#31:1;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge19"
               },
               "target": {
@@ -2347,18 +2347,18 @@
             },
             "BooleanCut.#31:3;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#31:3;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#31:3;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#31:3;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge17"
               },
               "target": {
@@ -2368,18 +2368,18 @@
             },
             "BooleanCut.#31:4;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#31:4;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#31:4;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#31:4;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge18"
               },
               "target": {
@@ -2389,18 +2389,18 @@
             },
             "BooleanCut.#33:1;:M;CUT;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#33:1;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#33:1;:M;CUT;:H952:7,F;:H94f,F"
+                "raw": "BooleanCut.#33:1;:M;CUT;:H137c:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face10"
               },
               "target": {
@@ -2410,18 +2410,18 @@
             },
             "BooleanCut.#33:3;:M;CUT;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#33:3;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#33:3;:M;CUT;:H952:7,F;:H94f,F"
+                "raw": "BooleanCut.#33:3;:M;CUT;:H137c:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face8"
               },
               "target": {
@@ -2431,18 +2431,18 @@
             },
             "BooleanCut.#33:4;:M;CUT;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#33:4;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#33:4;:M;CUT;:H952:7,F;:H94f,F"
+                "raw": "BooleanCut.#33:4;:M;CUT;:H137c:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face9"
               },
               "target": {
@@ -2452,18 +2452,18 @@
             },
             "BooleanCut.#37:8;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#37:8;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#37:8;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#37:8;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge23"
               },
               "target": {
@@ -2473,18 +2473,18 @@
             },
             "BooleanCut.#38:2;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#38:2;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#38:2;:M;CUT;:H952:7,E;:H94f,E"
+                "raw": "BooleanCut.#38:2;:M;CUT;:H137c:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge24"
               },
               "target": {
@@ -2494,18 +2494,18 @@
             },
             "BooleanCut.#3a:1;:M;CUT;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#3a:1;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#3a:1;:M;CUT;:H94e:7,F;:H94f,F"
+                "raw": "BooleanCut.#3a:1;:M;CUT;:H1378:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face5"
               },
               "target": {
@@ -2515,18 +2515,18 @@
             },
             "BooleanCut.#3d:8;:M;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#3d:8;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#3d:8;:M;CUT;:H952:7,V;:H94f,V"
+                "raw": "BooleanCut.#3d:8;:M;CUT;:H137c:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex10"
               },
               "target": {
@@ -2536,18 +2536,18 @@
             },
             "BooleanCut.#3e:2;:M;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#3e:2;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#3e:2;:M;CUT;:H952:7,V;:H94f,V"
+                "raw": "BooleanCut.#3e:2;:M;CUT;:H137c:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex11"
               },
               "target": {
@@ -2557,18 +2557,18 @@
             },
             "BooleanCut.#42:8;:M;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#42:8;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#42:8;:M;CUT;:H952:7,V;:H94f,V"
+                "raw": "BooleanCut.#42:8;:M;CUT;:H137c:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex14"
               },
               "target": {
@@ -2578,18 +2578,18 @@
             },
             "BooleanCut.#43:2;:M;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#43:2;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#43:2;:M;CUT;:H952:7,V;:H94f,V"
+                "raw": "BooleanCut.#43:2;:M;CUT;:H137c:7,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex15"
               },
               "target": {
@@ -2599,18 +2599,18 @@
             },
             "BooleanCut.#4:2;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#4:2;:H*,V;:H*,V",
-                "raw": "BooleanCut.#4:2;:H94e,V;:H94f,V"
+                "raw": "BooleanCut.#4:2;:H1378,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex7"
               },
               "target": {
@@ -2620,18 +2620,18 @@
             },
             "BooleanCut.#6:2;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#6:2;:H*,V;:H*,V",
-                "raw": "BooleanCut.#6:2;:H94e,V;:H94f,V"
+                "raw": "BooleanCut.#6:2;:H1378,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex5"
               },
               "target": {
@@ -2641,18 +2641,18 @@
             },
             "BooleanCut.#8:2;:H*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#8:2;:H*,V;:H*,V",
-                "raw": "BooleanCut.#8:2;:H94e,V;:H94f,V"
+                "raw": "BooleanCut.#8:2;:H1378,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex1"
               },
               "target": {
@@ -2662,18 +2662,18 @@
             },
             "BooleanCut.#b:1;:H*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#b:1;:H*,E;:H*,E",
-                "raw": "BooleanCut.#b:1;:H94e,E;:H94f,E"
+                "raw": "BooleanCut.#b:1;:H1378,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge9"
               },
               "target": {
@@ -2683,18 +2683,18 @@
             },
             "BooleanCut.#b:3;:H*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#b:3;:H*,E;:H*,E",
-                "raw": "BooleanCut.#b:3;:H94e,E;:H94f,E"
+                "raw": "BooleanCut.#b:3;:H1378,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge6"
               },
               "target": {
@@ -2704,18 +2704,18 @@
             },
             "BooleanCut.#b:4;:H*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#b:4;:H*,E;:H*,E",
-                "raw": "BooleanCut.#b:4;:H94e,E;:H94f,E"
+                "raw": "BooleanCut.#b:4;:H1378,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge3"
               },
               "target": {
@@ -2725,18 +2725,18 @@
             },
             "BooleanCut.#d:1;:G;XTR;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#d:1;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#d:1;:G;XTR;:H94e:7,F;:H94f,F"
+                "raw": "BooleanCut.#d:1;:G;XTR;:H1378:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face3"
               },
               "target": {
@@ -2746,18 +2746,18 @@
             },
             "BooleanCut.#d:2;:G#3b;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#d:2;:G#3b;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#d:2;:G#3b;CUT;:H94e:a,V;:H94f,V"
+                "raw": "BooleanCut.#d:2;:G#3b;CUT;:H1378:a,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex9"
               },
               "target": {
@@ -2767,18 +2767,18 @@
             },
             "BooleanCut.#d:2;:G2#3f;CUT;:H*:*,V;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#d:2;:G2#3f;CUT;:H*:*,V;:H*,V",
-                "raw": "BooleanCut.#d:2;:G2#3f;CUT;:H94e:b,V;:H94f,V"
+                "raw": "BooleanCut.#d:2;:G2#3f;CUT;:H1378:b,V;:H1379,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Vertex12"
               },
               "target": {
@@ -2788,18 +2788,18 @@
             },
             "BooleanCut.#d:2;:M2;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#d:2;:M2;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#d:2;:M2;CUT;:H94e:8,E;:H94f,E"
+                "raw": "BooleanCut.#d:2;:M2;CUT;:H1378:8,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge11"
               },
               "target": {
@@ -2809,18 +2809,18 @@
             },
             "BooleanCut.#d:2;:M;CUT;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#d:2;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#d:2;:M;CUT;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#d:2;:M;CUT;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge15"
               },
               "target": {
@@ -2830,18 +2830,18 @@
             },
             "BooleanCut.#d:3;:G;XTR;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#d:3;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#d:3;:G;XTR;:H94e:7,F;:H94f,F"
+                "raw": "BooleanCut.#d:3;:G;XTR;:H1378:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face2"
               },
               "target": {
@@ -2851,18 +2851,18 @@
             },
             "BooleanCut.#d:4;:G;XTR;:H*:*,F;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#d:4;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "BooleanCut.#d:4;:G;XTR;:H94e:7,F;:H94f,F"
+                "raw": "BooleanCut.#d:4;:G;XTR;:H1378:7,F;:H1379,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Face1"
               },
               "target": {
@@ -2872,18 +2872,18 @@
             },
             "BooleanCut.#f:2;:G;XTR;:H*:*,E;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "MainBody:BooleanCut:BooleanCut",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "BooleanCut.#f:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "BooleanCut.#f:2;:G;XTR;:H94e:7,E;:H94f,E"
+                "raw": "BooleanCut.#f:2;:G;XTR;:H1378:7,E;:H1379,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "MainBody",
+                "object": "BooleanCut",
                 "subname": "Edge1"
               },
               "target": {
@@ -2901,350 +2901,350 @@
           "Edge1": {
             "canonicalFreecadMappedName": "BooleanCut.#f:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#f:2;:G;XTR;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#f:2;:G;XTR;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "BooleanCut.#16:1;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#16:1;:U;XTR;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#16:1;:U;XTR;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "BooleanCut.#d:2;:M2;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#d:2;:M2;CUT;:H94e:8,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#d:2;:M2;CUT;:H1378:8,E;:H1379,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "BooleanCut.#2d:3;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2d:3;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#2d:3;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "BooleanCut.#2d:4;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2d:4;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#2d:4;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge13",
             "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "BooleanCut.#2d:1;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2d:1;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#2d:1;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge14",
             "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "BooleanCut.#d:2;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#d:2;:M;CUT;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#d:2;:M;CUT;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge15",
             "subname": "Edge15"
           },
           "Edge16": {
             "canonicalFreecadMappedName": "BooleanCut.#2f:2;:M2;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2f:2;:M2;CUT;:H94e:8,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#2f:2;:M2;CUT;:H1378:8,E;:H1379,E",
             "resolvedIndexed": "Edge16",
             "subname": "Edge16"
           },
           "Edge17": {
             "canonicalFreecadMappedName": "BooleanCut.#31:3;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#31:3;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#31:3;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge17",
             "subname": "Edge17"
           },
           "Edge18": {
             "canonicalFreecadMappedName": "BooleanCut.#31:4;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#31:4;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#31:4;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge18",
             "subname": "Edge18"
           },
           "Edge19": {
             "canonicalFreecadMappedName": "BooleanCut.#31:1;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#31:1;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#31:1;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge19",
             "subname": "Edge19"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "BooleanCut.#10:1;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#10:1;:G;XTR;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#10:1;:G;XTR;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge20": {
             "canonicalFreecadMappedName": "BooleanCut.#2f:2;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2f:2;:M;CUT;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#2f:2;:M;CUT;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge20",
             "subname": "Edge20"
           },
           "Edge21": {
             "canonicalFreecadMappedName": "BooleanCut.#16:2;:G#34;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#16:2;:G#34;CUT;:H94e:a,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#16:2;:G#34;CUT;:H1378:a,E;:H1379,E",
             "resolvedIndexed": "Edge21",
             "subname": "Edge21"
           },
           "Edge22": {
             "canonicalFreecadMappedName": "BooleanCut.#16:2;:G2#35;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#16:2;:G2#35;CUT;:H94e:b,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#16:2;:G2#35;CUT;:H1378:b,E;:H1379,E",
             "resolvedIndexed": "Edge22",
             "subname": "Edge22"
           },
           "Edge23": {
             "canonicalFreecadMappedName": "BooleanCut.#37:8;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#37:8;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#37:8;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge23",
             "subname": "Edge23"
           },
           "Edge24": {
             "canonicalFreecadMappedName": "BooleanCut.#38:2;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#38:2;:M;CUT;:H952:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#38:2;:M;CUT;:H137c:7,E;:H1379,E",
             "resolvedIndexed": "Edge24",
             "subname": "Edge24"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "BooleanCut.#b:4;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#b:4;:H94e,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#b:4;:H1378,E;:H1379,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "BooleanCut.#16:4;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#16:4;:U;XTR;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#16:4;:U;XTR;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "BooleanCut.#11:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#11:2;:G;XTR;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#11:2;:G;XTR;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "BooleanCut.#b:3;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#b:3;:H94e,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#b:3;:H1378,E;:H1379,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "BooleanCut.#16:3;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#16:3;:U;XTR;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#16:3;:U;XTR;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "BooleanCut.#12:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#12:2;:G;XTR;:H94e:7,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#12:2;:G;XTR;:H1378:7,E;:H1379,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "BooleanCut.#b:1;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#b:1;:H94e,E;:H94f,E",
+            "rawFreecadMappedName": "BooleanCut.#b:1;:H1378,E;:H1379,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "BooleanCut.#d:4;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#d:4;:G;XTR;:H94e:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#d:4;:G;XTR;:H1378:7,F;:H1379,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face10": {
             "canonicalFreecadMappedName": "BooleanCut.#33:1;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#33:1;:M;CUT;:H952:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#33:1;:M;CUT;:H137c:7,F;:H1379,F",
             "resolvedIndexed": "Face10",
             "subname": "Face10"
           },
           "Face2": {
             "canonicalFreecadMappedName": "BooleanCut.#d:3;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#d:3;:G;XTR;:H94e:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#d:3;:G;XTR;:H1378:7,F;:H1379,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "BooleanCut.#d:1;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#d:1;:G;XTR;:H94e:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#d:1;:G;XTR;:H1378:7,F;:H1379,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "BooleanCut.#14:1;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#14:1;:M;CUT;:H94e:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#14:1;:M;CUT;:H1378:7,F;:H1379,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "BooleanCut.#3a:1;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#3a:1;:M;CUT;:H94e:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#3a:1;:M;CUT;:H1378:7,F;:H1379,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "BooleanCut.#16:2;:M2;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#16:2;:M2;CUT;:H94e:8,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#16:2;:M2;CUT;:H1378:8,F;:H1379,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "BooleanCut.#16:2;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#16:2;:M;CUT;:H94e:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#16:2;:M;CUT;:H1378:7,F;:H1379,F",
             "resolvedIndexed": "Face7",
             "subname": "Face7"
           },
           "Face8": {
             "canonicalFreecadMappedName": "BooleanCut.#33:3;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#33:3;:M;CUT;:H952:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#33:3;:M;CUT;:H137c:7,F;:H1379,F",
             "resolvedIndexed": "Face8",
             "subname": "Face8"
           },
           "Face9": {
             "canonicalFreecadMappedName": "BooleanCut.#33:4;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#33:4;:M;CUT;:H952:7,F;:H94f,F",
+            "rawFreecadMappedName": "BooleanCut.#33:4;:M;CUT;:H137c:7,F;:H1379,F",
             "resolvedIndexed": "Face9",
             "subname": "Face9"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "BooleanCut.#8:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#8:2;:H94e,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#8:2;:H1378,V;:H1379,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "BooleanCut.#3d:8;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#3d:8;:M;CUT;:H952:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#3d:8;:M;CUT;:H137c:7,V;:H1379,V",
             "resolvedIndexed": "Vertex10",
             "subname": "Vertex10"
           },
           "Vertex11": {
             "canonicalFreecadMappedName": "BooleanCut.#3e:2;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#3e:2;:M;CUT;:H952:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#3e:2;:M;CUT;:H137c:7,V;:H1379,V",
             "resolvedIndexed": "Vertex11",
             "subname": "Vertex11"
           },
           "Vertex12": {
             "canonicalFreecadMappedName": "BooleanCut.#d:2;:G2#3f;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#d:2;:G2#3f;CUT;:H94e:b,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#d:2;:G2#3f;CUT;:H1378:b,V;:H1379,V",
             "resolvedIndexed": "Vertex12",
             "subname": "Vertex12"
           },
           "Vertex13": {
             "canonicalFreecadMappedName": "BooleanCut.#2f:2;:G#40;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2f:2;:G#40;CUT;:H94e:a,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#2f:2;:G#40;CUT;:H1378:a,V;:H1379,V",
             "resolvedIndexed": "Vertex13",
             "subname": "Vertex13"
           },
           "Vertex14": {
             "canonicalFreecadMappedName": "BooleanCut.#42:8;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#42:8;:M;CUT;:H952:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#42:8;:M;CUT;:H137c:7,V;:H1379,V",
             "resolvedIndexed": "Vertex14",
             "subname": "Vertex14"
           },
           "Vertex15": {
             "canonicalFreecadMappedName": "BooleanCut.#43:2;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#43:2;:M;CUT;:H952:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#43:2;:M;CUT;:H137c:7,V;:H1379,V",
             "resolvedIndexed": "Vertex15",
             "subname": "Vertex15"
           },
           "Vertex16": {
             "canonicalFreecadMappedName": "BooleanCut.#2f:2;:G2#44;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2f:2;:G2#44;CUT;:H94e:b,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#2f:2;:G2#44;CUT;:H1378:b,V;:H1379,V",
             "resolvedIndexed": "Vertex16",
             "subname": "Vertex16"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "BooleanCut.#18:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#18:2;:U;XTR;:H94e:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#18:2;:U;XTR;:H1378:7,V;:H1379,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "BooleanCut.#2:1;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#2:1;:H94e,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#2:1;:H1378,V;:H1379,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "BooleanCut.#19:1;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#19:1;:U;XTR;:H94e:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#19:1;:U;XTR;:H1378:7,V;:H1379,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "BooleanCut.#6:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#6:2;:H94e,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#6:2;:H1378,V;:H1379,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "BooleanCut.#1a:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#1a:2;:U;XTR;:H94e:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#1a:2;:U;XTR;:H1378:7,V;:H1379,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "BooleanCut.#4:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#4:2;:H94e,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#4:2;:H1378,V;:H1379,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "BooleanCut.#1b:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#1b:2;:U;XTR;:H94e:7,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#1b:2;:U;XTR;:H1378:7,V;:H1379,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "BooleanCut.#d:2;:G#3b;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "BooleanCut.#d:2;:G#3b;CUT;:H94e:a,V;:H94f,V",
+            "rawFreecadMappedName": "BooleanCut.#d:2;:G#3b;CUT;:H1378:a,V;:H1379,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
           }

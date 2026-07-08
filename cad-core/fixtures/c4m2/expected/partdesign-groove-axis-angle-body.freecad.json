@@ -26,7 +26,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#16:4;:M;CUT;:H12cf:7,F",
+          "rawFreecadMappedName": "Groove.#16:4;:M;CUT;:H12e7:7,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "Groove.#16:4;:M;CUT;:H*:*,F",
           "subname": "Face1"
@@ -40,7 +40,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#16:3;:H12cf,F",
+          "rawFreecadMappedName": "Groove.#16:3;:H12e7,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "Groove.#16:3;:H*,F",
           "subname": "Face2"
@@ -54,7 +54,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#14:1;:M;CUT;:H12cf:7,F",
+          "rawFreecadMappedName": "Groove.#14:1;:M;CUT;:H12e7:7,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "Groove.#14:1;:M;CUT;:H*:*,F",
           "subname": "Face3"
@@ -68,7 +68,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#34:1;:H12cf,F",
+          "rawFreecadMappedName": "Groove.#34:1;:H12e7,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "Groove.#34:1;:H*,F",
           "subname": "Face4"
@@ -82,7 +82,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#16:1;:H12cf,F",
+          "rawFreecadMappedName": "Groove.#16:1;:H12e7,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "Groove.#16:1;:H*,F",
           "subname": "Face5"
@@ -96,7 +96,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#27:4;:M;CUT;:H-12d1:7,F",
+          "rawFreecadMappedName": "Groove.#27:4;:M;CUT;:H-12e9:7,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "Groove.#27:4;:M;CUT;:H*:*,F",
           "subname": "Face6"
@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#29:4;:M;CUT;:H-12d1:7,F",
+          "rawFreecadMappedName": "Groove.#29:4;:M;CUT;:H-12e9:7,F",
           "resolvedIndexed": "Face7",
           "stableSubname": "Groove.#29:4;:M;CUT;:H*:*,F",
           "subname": "Face7"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Face8",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#2b:6;:M;CUT;:H-12d1:7,F",
+          "rawFreecadMappedName": "Groove.#2b:6;:M;CUT;:H-12e9:7,F",
           "resolvedIndexed": "Face8",
           "stableSubname": "Groove.#2b:6;:M;CUT;:H*:*,F",
           "subname": "Face8"
@@ -138,7 +138,7 @@
           "identityStatus": "stable",
           "indexed": "Face9",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#29:2;:M;CUT;:H-12d1:7,F",
+          "rawFreecadMappedName": "Groove.#29:2;:M;CUT;:H-12e9:7,F",
           "resolvedIndexed": "Face9",
           "stableSubname": "Groove.#29:2;:M;CUT;:H*:*,F",
           "subname": "Face9"
@@ -152,7 +152,7 @@
           "identityStatus": "stable",
           "indexed": "Face10",
           "kind": "Face",
-          "rawFreecadMappedName": "Groove.#16:2;:H12cf,F",
+          "rawFreecadMappedName": "Groove.#16:2;:H12e7,F",
           "resolvedIndexed": "Face10",
           "stableSubname": "Groove.#16:2;:H*,F",
           "subname": "Face10"
@@ -166,7 +166,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#18:2;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#18:2;:H12e7,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "Groove.#18:2;:H*,E",
           "subname": "Edge1"
@@ -180,7 +180,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#d:4;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#d:4;:H12e7,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "Groove.#d:4;:H*,E",
           "subname": "Edge2"
@@ -194,7 +194,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#32:4;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#32:4;:H12e7,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "Groove.#32:4;:H*,E",
           "subname": "Edge3"
@@ -208,7 +208,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#19:1;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#19:1;:H12e7,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "Groove.#19:1;:H*,E",
           "subname": "Edge4"
@@ -222,7 +222,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#27:4;:G#35;CUT;:H-12d1:a,E",
+          "rawFreecadMappedName": "Groove.#27:4;:G#35;CUT;:H-12e9:a,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "Groove.#27:4;:G#35;CUT;:H*:*,E",
           "subname": "Edge5"
@@ -236,7 +236,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#29:4;:G#36;CUT;:H-12d1:a,E",
+          "rawFreecadMappedName": "Groove.#29:4;:G#36;CUT;:H-12e9:a,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "Groove.#29:4;:G#36;CUT;:H*:*,E",
           "subname": "Edge6"
@@ -250,7 +250,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#2b:6;:G#37;CUT;:H-12d1:a,E",
+          "rawFreecadMappedName": "Groove.#2b:6;:G#37;CUT;:H-12e9:a,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "Groove.#2b:6;:G#37;CUT;:H*:*,E",
           "subname": "Edge7"
@@ -264,7 +264,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#29:2;:G#38;CUT;:H-12d1:a,E",
+          "rawFreecadMappedName": "Groove.#29:2;:G#38;CUT;:H-12e9:a,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "Groove.#29:2;:G#38;CUT;:H*:*,E",
           "subname": "Edge8"
@@ -278,7 +278,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#1a:2;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#1a:2;:H12e7,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "Groove.#1a:2;:H*,E",
           "subname": "Edge9"
@@ -292,7 +292,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#d:3;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#d:3;:H12e7,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "Groove.#d:3;:H*,E",
           "subname": "Edge10"
@@ -306,7 +306,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#32:3;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#32:3;:H12e7,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "Groove.#32:3;:H*,E",
           "subname": "Edge11"
@@ -320,7 +320,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#d:1;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#d:1;:H12e7,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "Groove.#d:1;:H*,E",
           "subname": "Edge12"
@@ -334,7 +334,7 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#d:2;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#d:2;:H12e7,E",
           "resolvedIndexed": "Edge13",
           "stableSubname": "Groove.#d:2;:H*,E",
           "subname": "Edge13"
@@ -348,7 +348,7 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#1d:2;:M;CUT;:H-12d1:7,E",
+          "rawFreecadMappedName": "Groove.#1d:2;:M;CUT;:H-12e9:7,E",
           "resolvedIndexed": "Edge14",
           "stableSubname": "Groove.#1d:2;:M;CUT;:H*:*,E",
           "subname": "Edge14"
@@ -362,7 +362,7 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#2b:6;:G2#39;CUT;:H-12d1:b,E",
+          "rawFreecadMappedName": "Groove.#2b:6;:G2#39;CUT;:H-12e9:b,E",
           "resolvedIndexed": "Edge15",
           "stableSubname": "Groove.#2b:6;:G2#39;CUT;:H*:*,E",
           "subname": "Edge15"
@@ -376,7 +376,7 @@
           "identityStatus": "stable",
           "indexed": "Edge16",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#1d:4;:M;CUT;:H-12d1:7,E",
+          "rawFreecadMappedName": "Groove.#1d:4;:M;CUT;:H-12e9:7,E",
           "resolvedIndexed": "Edge16",
           "stableSubname": "Groove.#1d:4;:M;CUT;:H*:*,E",
           "subname": "Edge16"
@@ -390,7 +390,7 @@
           "identityStatus": "stable",
           "indexed": "Edge17",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#27:4;:G2#3a;CUT;:H-12d1:b,E",
+          "rawFreecadMappedName": "Groove.#27:4;:G2#3a;CUT;:H-12e9:b,E",
           "resolvedIndexed": "Edge17",
           "stableSubname": "Groove.#27:4;:G2#3a;CUT;:H*:*,E",
           "subname": "Edge17"
@@ -404,7 +404,7 @@
           "identityStatus": "stable",
           "indexed": "Edge18",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#32:2;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#32:2;:H12e7,E",
           "resolvedIndexed": "Edge18",
           "stableSubname": "Groove.#32:2;:H*,E",
           "subname": "Edge18"
@@ -418,7 +418,7 @@
           "identityStatus": "stable",
           "indexed": "Edge19",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#32:1;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#32:1;:H12e7,E",
           "resolvedIndexed": "Edge19",
           "stableSubname": "Groove.#32:1;:H*,E",
           "subname": "Edge19"
@@ -432,7 +432,7 @@
           "identityStatus": "stable",
           "indexed": "Edge20",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#1b:2;:H12cf,E",
+          "rawFreecadMappedName": "Groove.#1b:2;:H12e7,E",
           "resolvedIndexed": "Edge20",
           "stableSubname": "Groove.#1b:2;:H*,E",
           "subname": "Edge20"
@@ -446,7 +446,7 @@
           "identityStatus": "stable",
           "indexed": "Edge21",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#3b:2;:M;CUT;:H-12d1:7,E",
+          "rawFreecadMappedName": "Groove.#3b:2;:M;CUT;:H-12e9:7,E",
           "resolvedIndexed": "Edge21",
           "stableSubname": "Groove.#3b:2;:M;CUT;:H*:*,E",
           "subname": "Edge21"
@@ -460,7 +460,7 @@
           "identityStatus": "stable",
           "indexed": "Edge22",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#24:4;:M;CUT;:H-12d1:7,E",
+          "rawFreecadMappedName": "Groove.#24:4;:M;CUT;:H-12e9:7,E",
           "resolvedIndexed": "Edge22",
           "stableSubname": "Groove.#24:4;:M;CUT;:H*:*,E",
           "subname": "Edge22"
@@ -474,7 +474,7 @@
           "identityStatus": "stable",
           "indexed": "Edge23",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#3c:8;:M;CUT;:H-12d1:7,E",
+          "rawFreecadMappedName": "Groove.#3c:8;:M;CUT;:H-12e9:7,E",
           "resolvedIndexed": "Edge23",
           "stableSubname": "Groove.#3c:8;:M;CUT;:H*:*,E",
           "subname": "Edge23"
@@ -488,7 +488,7 @@
           "identityStatus": "stable",
           "indexed": "Edge24",
           "kind": "Edge",
-          "rawFreecadMappedName": "Groove.#25:6;:M;CUT;:H-12d1:7,E",
+          "rawFreecadMappedName": "Groove.#25:6;:M;CUT;:H-12e9:7,E",
           "resolvedIndexed": "Edge24",
           "stableSubname": "Groove.#25:6;:M;CUT;:H*:*,E",
           "subname": "Edge24"
@@ -502,7 +502,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#f:2;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#f:2;:H12e7,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "Groove.#f:2;:H*,V",
           "subname": "Vertex1"
@@ -516,7 +516,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#2d:2;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#2d:2;:H12e7,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "Groove.#2d:2;:H*,V",
           "subname": "Vertex2"
@@ -530,7 +530,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#10:1;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#10:1;:H12e7,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "Groove.#10:1;:H*,V",
           "subname": "Vertex3"
@@ -544,7 +544,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#2e:1;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#2e:1;:H12e7,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "Groove.#2e:1;:H*,V",
           "subname": "Vertex4"
@@ -558,7 +558,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#24:4;:G#3d;CUT;:H-12d1:a,V",
+          "rawFreecadMappedName": "Groove.#24:4;:G#3d;CUT;:H-12e9:a,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "Groove.#24:4;:G#3d;CUT;:H*:*,V",
           "subname": "Vertex5"
@@ -572,7 +572,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#3b:2;:G#3e;CUT;:H-12d1:a,V",
+          "rawFreecadMappedName": "Groove.#3b:2;:G#3e;CUT;:H-12e9:a,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "Groove.#3b:2;:G#3e;CUT;:H*:*,V",
           "subname": "Vertex6"
@@ -586,7 +586,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#3c:8;:G#3f;CUT;:H-12d1:a,V",
+          "rawFreecadMappedName": "Groove.#3c:8;:G#3f;CUT;:H-12e9:a,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "Groove.#3c:8;:G#3f;CUT;:H*:*,V",
           "subname": "Vertex7"
@@ -600,7 +600,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#25:6;:G#40;CUT;:H-12d1:a,V",
+          "rawFreecadMappedName": "Groove.#25:6;:G#40;CUT;:H-12e9:a,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "Groove.#25:6;:G#40;CUT;:H*:*,V",
           "subname": "Vertex8"
@@ -614,7 +614,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#11:2;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#11:2;:H12e7,V",
           "resolvedIndexed": "Vertex9",
           "stableSubname": "Groove.#11:2;:H*,V",
           "subname": "Vertex9"
@@ -628,7 +628,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#2f:2;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#2f:2;:H12e7,V",
           "resolvedIndexed": "Vertex10",
           "stableSubname": "Groove.#2f:2;:H*,V",
           "subname": "Vertex10"
@@ -642,7 +642,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex11",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#12:2;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#12:2;:H12e7,V",
           "resolvedIndexed": "Vertex11",
           "stableSubname": "Groove.#12:2;:H*,V",
           "subname": "Vertex11"
@@ -656,7 +656,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex12",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#20;:M;CUT;:H-12d1:7,V",
+          "rawFreecadMappedName": "Groove.#20;:M;CUT;:H-12e9:7,V",
           "resolvedIndexed": "Vertex12",
           "stableSubname": "Groove.#20;:M;CUT;:H*:*,V",
           "subname": "Vertex12"
@@ -670,7 +670,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex13",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#21;:M;CUT;:H-12d1:7,V",
+          "rawFreecadMappedName": "Groove.#21;:M;CUT;:H-12e9:7,V",
           "resolvedIndexed": "Vertex13",
           "stableSubname": "Groove.#21;:M;CUT;:H*:*,V",
           "subname": "Vertex13"
@@ -684,7 +684,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex14",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#22;:M;CUT;:H-12d1:7,V",
+          "rawFreecadMappedName": "Groove.#22;:M;CUT;:H-12e9:7,V",
           "resolvedIndexed": "Vertex14",
           "stableSubname": "Groove.#22;:M;CUT;:H*:*,V",
           "subname": "Vertex14"
@@ -698,7 +698,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex15",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#1f;:M;CUT;:H-12d1:7,V",
+          "rawFreecadMappedName": "Groove.#1f;:M;CUT;:H-12e9:7,V",
           "resolvedIndexed": "Vertex15",
           "stableSubname": "Groove.#1f;:M;CUT;:H*:*,V",
           "subname": "Vertex15"
@@ -712,7 +712,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex16",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Groove.#30:2;:H12cf,V",
+          "rawFreecadMappedName": "Groove.#30:2;:H12e7,V",
           "resolvedIndexed": "Vertex16",
           "stableSubname": "Groove.#30:2;:H*,V",
           "subname": "Vertex16"
@@ -737,7 +737,7 @@
             "elementMap": {
               "encoding": "cad-core.element-map.v1",
               "entries": {
-                "Groove.#10:1;:H12cf,V": {
+                "Groove.#10:1;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -745,7 +745,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#10:1;:H*,V",
-                    "raw": "Groove.#10:1;:H12cf,V"
+                    "raw": "Groove.#10:1;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -758,7 +758,7 @@
                     "subname": "Vertex3"
                   }
                 },
-                "Groove.#11:2;:H12cf,V": {
+                "Groove.#11:2;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -766,7 +766,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#11:2;:H*,V",
-                    "raw": "Groove.#11:2;:H12cf,V"
+                    "raw": "Groove.#11:2;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -779,7 +779,7 @@
                     "subname": "Vertex9"
                   }
                 },
-                "Groove.#12:2;:H12cf,V": {
+                "Groove.#12:2;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -787,7 +787,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#12:2;:H*,V",
-                    "raw": "Groove.#12:2;:H12cf,V"
+                    "raw": "Groove.#12:2;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -800,7 +800,7 @@
                     "subname": "Vertex11"
                   }
                 },
-                "Groove.#14:1;:M;CUT;:H12cf:7,F": {
+                "Groove.#14:1;:M;CUT;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -808,7 +808,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#14:1;:M;CUT;:H*:*,F",
-                    "raw": "Groove.#14:1;:M;CUT;:H12cf:7,F"
+                    "raw": "Groove.#14:1;:M;CUT;:H12e7:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -821,7 +821,7 @@
                     "subname": "Face3"
                   }
                 },
-                "Groove.#16:1;:H12cf,F": {
+                "Groove.#16:1;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -829,7 +829,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#16:1;:H*,F",
-                    "raw": "Groove.#16:1;:H12cf,F"
+                    "raw": "Groove.#16:1;:H12e7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -842,7 +842,7 @@
                     "subname": "Face5"
                   }
                 },
-                "Groove.#16:2;:H12cf,F": {
+                "Groove.#16:2;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -850,7 +850,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#16:2;:H*,F",
-                    "raw": "Groove.#16:2;:H12cf,F"
+                    "raw": "Groove.#16:2;:H12e7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -863,7 +863,7 @@
                     "subname": "Face10"
                   }
                 },
-                "Groove.#16:3;:H12cf,F": {
+                "Groove.#16:3;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -871,7 +871,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#16:3;:H*,F",
-                    "raw": "Groove.#16:3;:H12cf,F"
+                    "raw": "Groove.#16:3;:H12e7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -884,7 +884,7 @@
                     "subname": "Face2"
                   }
                 },
-                "Groove.#16:4;:M;CUT;:H12cf:7,F": {
+                "Groove.#16:4;:M;CUT;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -892,7 +892,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#16:4;:M;CUT;:H*:*,F",
-                    "raw": "Groove.#16:4;:M;CUT;:H12cf:7,F"
+                    "raw": "Groove.#16:4;:M;CUT;:H12e7:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -905,7 +905,7 @@
                     "subname": "Face1"
                   }
                 },
-                "Groove.#18:2;:H12cf,E": {
+                "Groove.#18:2;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -913,7 +913,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#18:2;:H*,E",
-                    "raw": "Groove.#18:2;:H12cf,E"
+                    "raw": "Groove.#18:2;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -926,7 +926,7 @@
                     "subname": "Edge1"
                   }
                 },
-                "Groove.#19:1;:H12cf,E": {
+                "Groove.#19:1;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -934,7 +934,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#19:1;:H*,E",
-                    "raw": "Groove.#19:1;:H12cf,E"
+                    "raw": "Groove.#19:1;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -947,7 +947,7 @@
                     "subname": "Edge4"
                   }
                 },
-                "Groove.#1a:2;:H12cf,E": {
+                "Groove.#1a:2;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -955,7 +955,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#1a:2;:H*,E",
-                    "raw": "Groove.#1a:2;:H12cf,E"
+                    "raw": "Groove.#1a:2;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -968,7 +968,7 @@
                     "subname": "Edge9"
                   }
                 },
-                "Groove.#1b:2;:H12cf,E": {
+                "Groove.#1b:2;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -976,7 +976,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#1b:2;:H*,E",
-                    "raw": "Groove.#1b:2;:H12cf,E"
+                    "raw": "Groove.#1b:2;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -989,7 +989,7 @@
                     "subname": "Edge20"
                   }
                 },
-                "Groove.#1d:2;:M;CUT;:H-12d1:7,E": {
+                "Groove.#1d:2;:M;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -997,7 +997,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#1d:2;:M;CUT;:H*:*,E",
-                    "raw": "Groove.#1d:2;:M;CUT;:H-12d1:7,E"
+                    "raw": "Groove.#1d:2;:M;CUT;:H-12e9:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1010,7 +1010,7 @@
                     "subname": "Edge14"
                   }
                 },
-                "Groove.#1d:4;:M;CUT;:H-12d1:7,E": {
+                "Groove.#1d:4;:M;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1018,7 +1018,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#1d:4;:M;CUT;:H*:*,E",
-                    "raw": "Groove.#1d:4;:M;CUT;:H-12d1:7,E"
+                    "raw": "Groove.#1d:4;:M;CUT;:H-12e9:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1031,7 +1031,7 @@
                     "subname": "Edge16"
                   }
                 },
-                "Groove.#1f;:M;CUT;:H-12d1:7,V": {
+                "Groove.#1f;:M;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1039,7 +1039,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#1f;:M;CUT;:H*:*,V",
-                    "raw": "Groove.#1f;:M;CUT;:H-12d1:7,V"
+                    "raw": "Groove.#1f;:M;CUT;:H-12e9:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1052,7 +1052,7 @@
                     "subname": "Vertex15"
                   }
                 },
-                "Groove.#20;:M;CUT;:H-12d1:7,V": {
+                "Groove.#20;:M;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1060,7 +1060,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#20;:M;CUT;:H*:*,V",
-                    "raw": "Groove.#20;:M;CUT;:H-12d1:7,V"
+                    "raw": "Groove.#20;:M;CUT;:H-12e9:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1073,7 +1073,7 @@
                     "subname": "Vertex12"
                   }
                 },
-                "Groove.#21;:M;CUT;:H-12d1:7,V": {
+                "Groove.#21;:M;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1081,7 +1081,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#21;:M;CUT;:H*:*,V",
-                    "raw": "Groove.#21;:M;CUT;:H-12d1:7,V"
+                    "raw": "Groove.#21;:M;CUT;:H-12e9:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1094,7 +1094,7 @@
                     "subname": "Vertex13"
                   }
                 },
-                "Groove.#22;:M;CUT;:H-12d1:7,V": {
+                "Groove.#22;:M;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1102,7 +1102,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#22;:M;CUT;:H*:*,V",
-                    "raw": "Groove.#22;:M;CUT;:H-12d1:7,V"
+                    "raw": "Groove.#22;:M;CUT;:H-12e9:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1115,7 +1115,7 @@
                     "subname": "Vertex14"
                   }
                 },
-                "Groove.#24:4;:G#3d;CUT;:H-12d1:a,V": {
+                "Groove.#24:4;:G#3d;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1123,7 +1123,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#24:4;:G#3d;CUT;:H*:*,V",
-                    "raw": "Groove.#24:4;:G#3d;CUT;:H-12d1:a,V"
+                    "raw": "Groove.#24:4;:G#3d;CUT;:H-12e9:a,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1136,7 +1136,7 @@
                     "subname": "Vertex5"
                   }
                 },
-                "Groove.#24:4;:M;CUT;:H-12d1:7,E": {
+                "Groove.#24:4;:M;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1144,7 +1144,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#24:4;:M;CUT;:H*:*,E",
-                    "raw": "Groove.#24:4;:M;CUT;:H-12d1:7,E"
+                    "raw": "Groove.#24:4;:M;CUT;:H-12e9:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1157,7 +1157,7 @@
                     "subname": "Edge22"
                   }
                 },
-                "Groove.#25:6;:G#40;CUT;:H-12d1:a,V": {
+                "Groove.#25:6;:G#40;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1165,7 +1165,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#25:6;:G#40;CUT;:H*:*,V",
-                    "raw": "Groove.#25:6;:G#40;CUT;:H-12d1:a,V"
+                    "raw": "Groove.#25:6;:G#40;CUT;:H-12e9:a,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1178,7 +1178,7 @@
                     "subname": "Vertex8"
                   }
                 },
-                "Groove.#25:6;:M;CUT;:H-12d1:7,E": {
+                "Groove.#25:6;:M;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1186,7 +1186,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#25:6;:M;CUT;:H*:*,E",
-                    "raw": "Groove.#25:6;:M;CUT;:H-12d1:7,E"
+                    "raw": "Groove.#25:6;:M;CUT;:H-12e9:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1199,7 +1199,7 @@
                     "subname": "Edge24"
                   }
                 },
-                "Groove.#27:4;:G#35;CUT;:H-12d1:a,E": {
+                "Groove.#27:4;:G#35;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1207,7 +1207,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#27:4;:G#35;CUT;:H*:*,E",
-                    "raw": "Groove.#27:4;:G#35;CUT;:H-12d1:a,E"
+                    "raw": "Groove.#27:4;:G#35;CUT;:H-12e9:a,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1220,7 +1220,7 @@
                     "subname": "Edge5"
                   }
                 },
-                "Groove.#27:4;:G2#3a;CUT;:H-12d1:b,E": {
+                "Groove.#27:4;:G2#3a;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1228,7 +1228,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#27:4;:G2#3a;CUT;:H*:*,E",
-                    "raw": "Groove.#27:4;:G2#3a;CUT;:H-12d1:b,E"
+                    "raw": "Groove.#27:4;:G2#3a;CUT;:H-12e9:b,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1241,7 +1241,7 @@
                     "subname": "Edge17"
                   }
                 },
-                "Groove.#27:4;:M;CUT;:H-12d1:7,F": {
+                "Groove.#27:4;:M;CUT;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1249,7 +1249,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#27:4;:M;CUT;:H*:*,F",
-                    "raw": "Groove.#27:4;:M;CUT;:H-12d1:7,F"
+                    "raw": "Groove.#27:4;:M;CUT;:H-12e9:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1262,7 +1262,7 @@
                     "subname": "Face6"
                   }
                 },
-                "Groove.#29:2;:G#38;CUT;:H-12d1:a,E": {
+                "Groove.#29:2;:G#38;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1270,7 +1270,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#29:2;:G#38;CUT;:H*:*,E",
-                    "raw": "Groove.#29:2;:G#38;CUT;:H-12d1:a,E"
+                    "raw": "Groove.#29:2;:G#38;CUT;:H-12e9:a,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1283,7 +1283,7 @@
                     "subname": "Edge8"
                   }
                 },
-                "Groove.#29:2;:M;CUT;:H-12d1:7,F": {
+                "Groove.#29:2;:M;CUT;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1291,7 +1291,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#29:2;:M;CUT;:H*:*,F",
-                    "raw": "Groove.#29:2;:M;CUT;:H-12d1:7,F"
+                    "raw": "Groove.#29:2;:M;CUT;:H-12e9:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1304,7 +1304,7 @@
                     "subname": "Face9"
                   }
                 },
-                "Groove.#29:4;:G#36;CUT;:H-12d1:a,E": {
+                "Groove.#29:4;:G#36;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1312,7 +1312,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#29:4;:G#36;CUT;:H*:*,E",
-                    "raw": "Groove.#29:4;:G#36;CUT;:H-12d1:a,E"
+                    "raw": "Groove.#29:4;:G#36;CUT;:H-12e9:a,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1325,7 +1325,7 @@
                     "subname": "Edge6"
                   }
                 },
-                "Groove.#29:4;:M;CUT;:H-12d1:7,F": {
+                "Groove.#29:4;:M;CUT;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1333,7 +1333,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#29:4;:M;CUT;:H*:*,F",
-                    "raw": "Groove.#29:4;:M;CUT;:H-12d1:7,F"
+                    "raw": "Groove.#29:4;:M;CUT;:H-12e9:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1346,7 +1346,7 @@
                     "subname": "Face7"
                   }
                 },
-                "Groove.#2b:6;:G#37;CUT;:H-12d1:a,E": {
+                "Groove.#2b:6;:G#37;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1354,7 +1354,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#2b:6;:G#37;CUT;:H*:*,E",
-                    "raw": "Groove.#2b:6;:G#37;CUT;:H-12d1:a,E"
+                    "raw": "Groove.#2b:6;:G#37;CUT;:H-12e9:a,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1367,7 +1367,7 @@
                     "subname": "Edge7"
                   }
                 },
-                "Groove.#2b:6;:G2#39;CUT;:H-12d1:b,E": {
+                "Groove.#2b:6;:G2#39;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1375,7 +1375,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#2b:6;:G2#39;CUT;:H*:*,E",
-                    "raw": "Groove.#2b:6;:G2#39;CUT;:H-12d1:b,E"
+                    "raw": "Groove.#2b:6;:G2#39;CUT;:H-12e9:b,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1388,7 +1388,7 @@
                     "subname": "Edge15"
                   }
                 },
-                "Groove.#2b:6;:M;CUT;:H-12d1:7,F": {
+                "Groove.#2b:6;:M;CUT;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1396,7 +1396,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#2b:6;:M;CUT;:H*:*,F",
-                    "raw": "Groove.#2b:6;:M;CUT;:H-12d1:7,F"
+                    "raw": "Groove.#2b:6;:M;CUT;:H-12e9:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1409,7 +1409,7 @@
                     "subname": "Face8"
                   }
                 },
-                "Groove.#2d:2;:H12cf,V": {
+                "Groove.#2d:2;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1417,7 +1417,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#2d:2;:H*,V",
-                    "raw": "Groove.#2d:2;:H12cf,V"
+                    "raw": "Groove.#2d:2;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1430,7 +1430,7 @@
                     "subname": "Vertex2"
                   }
                 },
-                "Groove.#2e:1;:H12cf,V": {
+                "Groove.#2e:1;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1438,7 +1438,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#2e:1;:H*,V",
-                    "raw": "Groove.#2e:1;:H12cf,V"
+                    "raw": "Groove.#2e:1;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1451,7 +1451,7 @@
                     "subname": "Vertex4"
                   }
                 },
-                "Groove.#2f:2;:H12cf,V": {
+                "Groove.#2f:2;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1459,7 +1459,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#2f:2;:H*,V",
-                    "raw": "Groove.#2f:2;:H12cf,V"
+                    "raw": "Groove.#2f:2;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1472,7 +1472,7 @@
                     "subname": "Vertex10"
                   }
                 },
-                "Groove.#30:2;:H12cf,V": {
+                "Groove.#30:2;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1480,7 +1480,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#30:2;:H*,V",
-                    "raw": "Groove.#30:2;:H12cf,V"
+                    "raw": "Groove.#30:2;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1493,7 +1493,7 @@
                     "subname": "Vertex16"
                   }
                 },
-                "Groove.#32:1;:H12cf,E": {
+                "Groove.#32:1;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1501,7 +1501,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#32:1;:H*,E",
-                    "raw": "Groove.#32:1;:H12cf,E"
+                    "raw": "Groove.#32:1;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1514,7 +1514,7 @@
                     "subname": "Edge19"
                   }
                 },
-                "Groove.#32:2;:H12cf,E": {
+                "Groove.#32:2;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1522,7 +1522,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#32:2;:H*,E",
-                    "raw": "Groove.#32:2;:H12cf,E"
+                    "raw": "Groove.#32:2;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1535,7 +1535,7 @@
                     "subname": "Edge18"
                   }
                 },
-                "Groove.#32:3;:H12cf,E": {
+                "Groove.#32:3;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1543,7 +1543,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#32:3;:H*,E",
-                    "raw": "Groove.#32:3;:H12cf,E"
+                    "raw": "Groove.#32:3;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1556,7 +1556,7 @@
                     "subname": "Edge11"
                   }
                 },
-                "Groove.#32:4;:H12cf,E": {
+                "Groove.#32:4;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1564,7 +1564,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#32:4;:H*,E",
-                    "raw": "Groove.#32:4;:H12cf,E"
+                    "raw": "Groove.#32:4;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1577,7 +1577,7 @@
                     "subname": "Edge3"
                   }
                 },
-                "Groove.#34:1;:H12cf,F": {
+                "Groove.#34:1;:H*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1585,7 +1585,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#34:1;:H*,F",
-                    "raw": "Groove.#34:1;:H12cf,F"
+                    "raw": "Groove.#34:1;:H12e7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1598,7 +1598,7 @@
                     "subname": "Face4"
                   }
                 },
-                "Groove.#3b:2;:G#3e;CUT;:H-12d1:a,V": {
+                "Groove.#3b:2;:G#3e;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1606,7 +1606,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#3b:2;:G#3e;CUT;:H*:*,V",
-                    "raw": "Groove.#3b:2;:G#3e;CUT;:H-12d1:a,V"
+                    "raw": "Groove.#3b:2;:G#3e;CUT;:H-12e9:a,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1619,7 +1619,7 @@
                     "subname": "Vertex6"
                   }
                 },
-                "Groove.#3b:2;:M;CUT;:H-12d1:7,E": {
+                "Groove.#3b:2;:M;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1627,7 +1627,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#3b:2;:M;CUT;:H*:*,E",
-                    "raw": "Groove.#3b:2;:M;CUT;:H-12d1:7,E"
+                    "raw": "Groove.#3b:2;:M;CUT;:H-12e9:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1640,7 +1640,7 @@
                     "subname": "Edge21"
                   }
                 },
-                "Groove.#3c:8;:G#3f;CUT;:H-12d1:a,V": {
+                "Groove.#3c:8;:G#3f;CUT;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1648,7 +1648,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#3c:8;:G#3f;CUT;:H*:*,V",
-                    "raw": "Groove.#3c:8;:G#3f;CUT;:H-12d1:a,V"
+                    "raw": "Groove.#3c:8;:G#3f;CUT;:H-12e9:a,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1661,7 +1661,7 @@
                     "subname": "Vertex7"
                   }
                 },
-                "Groove.#3c:8;:M;CUT;:H-12d1:7,E": {
+                "Groove.#3c:8;:M;CUT;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1669,7 +1669,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#3c:8;:M;CUT;:H*:*,E",
-                    "raw": "Groove.#3c:8;:M;CUT;:H-12d1:7,E"
+                    "raw": "Groove.#3c:8;:M;CUT;:H-12e9:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1682,7 +1682,7 @@
                     "subname": "Edge23"
                   }
                 },
-                "Groove.#d:1;:H12cf,E": {
+                "Groove.#d:1;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1690,7 +1690,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#d:1;:H*,E",
-                    "raw": "Groove.#d:1;:H12cf,E"
+                    "raw": "Groove.#d:1;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1703,7 +1703,7 @@
                     "subname": "Edge12"
                   }
                 },
-                "Groove.#d:2;:H12cf,E": {
+                "Groove.#d:2;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1711,7 +1711,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#d:2;:H*,E",
-                    "raw": "Groove.#d:2;:H12cf,E"
+                    "raw": "Groove.#d:2;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1724,7 +1724,7 @@
                     "subname": "Edge13"
                   }
                 },
-                "Groove.#d:3;:H12cf,E": {
+                "Groove.#d:3;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1732,7 +1732,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#d:3;:H*,E",
-                    "raw": "Groove.#d:3;:H12cf,E"
+                    "raw": "Groove.#d:3;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1745,7 +1745,7 @@
                     "subname": "Edge10"
                   }
                 },
-                "Groove.#d:4;:H12cf,E": {
+                "Groove.#d:4;:H*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1753,7 +1753,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#d:4;:H*,E",
-                    "raw": "Groove.#d:4;:H12cf,E"
+                    "raw": "Groove.#d:4;:H12e7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1766,7 +1766,7 @@
                     "subname": "Edge2"
                   }
                 },
-                "Groove.#f:2;:H12cf,V": {
+                "Groove.#f:2;:H*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:Groove:Groove",
                     "mapperHistoryIds": [],
@@ -1774,7 +1774,7 @@
                   },
                   "mappedName": {
                     "canonical": "Groove.#f:2;:H*,V",
-                    "raw": "Groove.#f:2;:H12cf,V"
+                    "raw": "Groove.#f:2;:H12e7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1800,18 +1800,18 @@
           "entries": {
             "Groove.#10:1;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#10:1;:H*,V",
-                "raw": "Groove.#10:1;:H12cf,V"
+                "raw": "Groove.#10:1;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex3"
               },
               "target": {
@@ -1821,18 +1821,18 @@
             },
             "Groove.#11:2;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#11:2;:H*,V",
-                "raw": "Groove.#11:2;:H12cf,V"
+                "raw": "Groove.#11:2;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex9"
               },
               "target": {
@@ -1842,18 +1842,18 @@
             },
             "Groove.#12:2;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#12:2;:H*,V",
-                "raw": "Groove.#12:2;:H12cf,V"
+                "raw": "Groove.#12:2;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex11"
               },
               "target": {
@@ -1863,18 +1863,18 @@
             },
             "Groove.#14:1;:M;CUT;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#14:1;:M;CUT;:H*:*,F",
-                "raw": "Groove.#14:1;:M;CUT;:H12cf:7,F"
+                "raw": "Groove.#14:1;:M;CUT;:H12e7:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face3"
               },
               "target": {
@@ -1884,18 +1884,18 @@
             },
             "Groove.#16:1;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#16:1;:H*,F",
-                "raw": "Groove.#16:1;:H12cf,F"
+                "raw": "Groove.#16:1;:H12e7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face5"
               },
               "target": {
@@ -1905,18 +1905,18 @@
             },
             "Groove.#16:2;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#16:2;:H*,F",
-                "raw": "Groove.#16:2;:H12cf,F"
+                "raw": "Groove.#16:2;:H12e7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face10"
               },
               "target": {
@@ -1926,18 +1926,18 @@
             },
             "Groove.#16:3;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#16:3;:H*,F",
-                "raw": "Groove.#16:3;:H12cf,F"
+                "raw": "Groove.#16:3;:H12e7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face2"
               },
               "target": {
@@ -1947,18 +1947,18 @@
             },
             "Groove.#16:4;:M;CUT;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#16:4;:M;CUT;:H*:*,F",
-                "raw": "Groove.#16:4;:M;CUT;:H12cf:7,F"
+                "raw": "Groove.#16:4;:M;CUT;:H12e7:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face1"
               },
               "target": {
@@ -1968,18 +1968,18 @@
             },
             "Groove.#18:2;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#18:2;:H*,E",
-                "raw": "Groove.#18:2;:H12cf,E"
+                "raw": "Groove.#18:2;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge1"
               },
               "target": {
@@ -1989,18 +1989,18 @@
             },
             "Groove.#19:1;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#19:1;:H*,E",
-                "raw": "Groove.#19:1;:H12cf,E"
+                "raw": "Groove.#19:1;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge4"
               },
               "target": {
@@ -2010,18 +2010,18 @@
             },
             "Groove.#1a:2;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#1a:2;:H*,E",
-                "raw": "Groove.#1a:2;:H12cf,E"
+                "raw": "Groove.#1a:2;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge9"
               },
               "target": {
@@ -2031,18 +2031,18 @@
             },
             "Groove.#1b:2;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#1b:2;:H*,E",
-                "raw": "Groove.#1b:2;:H12cf,E"
+                "raw": "Groove.#1b:2;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge20"
               },
               "target": {
@@ -2052,18 +2052,18 @@
             },
             "Groove.#1d:2;:M;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#1d:2;:M;CUT;:H*:*,E",
-                "raw": "Groove.#1d:2;:M;CUT;:H-12d1:7,E"
+                "raw": "Groove.#1d:2;:M;CUT;:H-12e9:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge14"
               },
               "target": {
@@ -2073,18 +2073,18 @@
             },
             "Groove.#1d:4;:M;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#1d:4;:M;CUT;:H*:*,E",
-                "raw": "Groove.#1d:4;:M;CUT;:H-12d1:7,E"
+                "raw": "Groove.#1d:4;:M;CUT;:H-12e9:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge16"
               },
               "target": {
@@ -2094,18 +2094,18 @@
             },
             "Groove.#1f;:M;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#1f;:M;CUT;:H*:*,V",
-                "raw": "Groove.#1f;:M;CUT;:H-12d1:7,V"
+                "raw": "Groove.#1f;:M;CUT;:H-12e9:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex15"
               },
               "target": {
@@ -2115,18 +2115,18 @@
             },
             "Groove.#20;:M;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#20;:M;CUT;:H*:*,V",
-                "raw": "Groove.#20;:M;CUT;:H-12d1:7,V"
+                "raw": "Groove.#20;:M;CUT;:H-12e9:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex12"
               },
               "target": {
@@ -2136,18 +2136,18 @@
             },
             "Groove.#21;:M;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#21;:M;CUT;:H*:*,V",
-                "raw": "Groove.#21;:M;CUT;:H-12d1:7,V"
+                "raw": "Groove.#21;:M;CUT;:H-12e9:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex13"
               },
               "target": {
@@ -2157,18 +2157,18 @@
             },
             "Groove.#22;:M;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#22;:M;CUT;:H*:*,V",
-                "raw": "Groove.#22;:M;CUT;:H-12d1:7,V"
+                "raw": "Groove.#22;:M;CUT;:H-12e9:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex14"
               },
               "target": {
@@ -2178,18 +2178,18 @@
             },
             "Groove.#24:4;:G#3d;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#24:4;:G#3d;CUT;:H*:*,V",
-                "raw": "Groove.#24:4;:G#3d;CUT;:H-12d1:a,V"
+                "raw": "Groove.#24:4;:G#3d;CUT;:H-12e9:a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex5"
               },
               "target": {
@@ -2199,18 +2199,18 @@
             },
             "Groove.#24:4;:M;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#24:4;:M;CUT;:H*:*,E",
-                "raw": "Groove.#24:4;:M;CUT;:H-12d1:7,E"
+                "raw": "Groove.#24:4;:M;CUT;:H-12e9:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge22"
               },
               "target": {
@@ -2220,18 +2220,18 @@
             },
             "Groove.#25:6;:G#40;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#25:6;:G#40;CUT;:H*:*,V",
-                "raw": "Groove.#25:6;:G#40;CUT;:H-12d1:a,V"
+                "raw": "Groove.#25:6;:G#40;CUT;:H-12e9:a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex8"
               },
               "target": {
@@ -2241,18 +2241,18 @@
             },
             "Groove.#25:6;:M;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#25:6;:M;CUT;:H*:*,E",
-                "raw": "Groove.#25:6;:M;CUT;:H-12d1:7,E"
+                "raw": "Groove.#25:6;:M;CUT;:H-12e9:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge24"
               },
               "target": {
@@ -2262,18 +2262,18 @@
             },
             "Groove.#27:4;:G#35;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#27:4;:G#35;CUT;:H*:*,E",
-                "raw": "Groove.#27:4;:G#35;CUT;:H-12d1:a,E"
+                "raw": "Groove.#27:4;:G#35;CUT;:H-12e9:a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge5"
               },
               "target": {
@@ -2283,18 +2283,18 @@
             },
             "Groove.#27:4;:G2#3a;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#27:4;:G2#3a;CUT;:H*:*,E",
-                "raw": "Groove.#27:4;:G2#3a;CUT;:H-12d1:b,E"
+                "raw": "Groove.#27:4;:G2#3a;CUT;:H-12e9:b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge17"
               },
               "target": {
@@ -2304,18 +2304,18 @@
             },
             "Groove.#27:4;:M;CUT;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#27:4;:M;CUT;:H*:*,F",
-                "raw": "Groove.#27:4;:M;CUT;:H-12d1:7,F"
+                "raw": "Groove.#27:4;:M;CUT;:H-12e9:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face6"
               },
               "target": {
@@ -2325,18 +2325,18 @@
             },
             "Groove.#29:2;:G#38;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#29:2;:G#38;CUT;:H*:*,E",
-                "raw": "Groove.#29:2;:G#38;CUT;:H-12d1:a,E"
+                "raw": "Groove.#29:2;:G#38;CUT;:H-12e9:a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge8"
               },
               "target": {
@@ -2346,18 +2346,18 @@
             },
             "Groove.#29:2;:M;CUT;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#29:2;:M;CUT;:H*:*,F",
-                "raw": "Groove.#29:2;:M;CUT;:H-12d1:7,F"
+                "raw": "Groove.#29:2;:M;CUT;:H-12e9:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face9"
               },
               "target": {
@@ -2367,18 +2367,18 @@
             },
             "Groove.#29:4;:G#36;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#29:4;:G#36;CUT;:H*:*,E",
-                "raw": "Groove.#29:4;:G#36;CUT;:H-12d1:a,E"
+                "raw": "Groove.#29:4;:G#36;CUT;:H-12e9:a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge6"
               },
               "target": {
@@ -2388,18 +2388,18 @@
             },
             "Groove.#29:4;:M;CUT;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#29:4;:M;CUT;:H*:*,F",
-                "raw": "Groove.#29:4;:M;CUT;:H-12d1:7,F"
+                "raw": "Groove.#29:4;:M;CUT;:H-12e9:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face7"
               },
               "target": {
@@ -2409,18 +2409,18 @@
             },
             "Groove.#2b:6;:G#37;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#2b:6;:G#37;CUT;:H*:*,E",
-                "raw": "Groove.#2b:6;:G#37;CUT;:H-12d1:a,E"
+                "raw": "Groove.#2b:6;:G#37;CUT;:H-12e9:a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge7"
               },
               "target": {
@@ -2430,18 +2430,18 @@
             },
             "Groove.#2b:6;:G2#39;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#2b:6;:G2#39;CUT;:H*:*,E",
-                "raw": "Groove.#2b:6;:G2#39;CUT;:H-12d1:b,E"
+                "raw": "Groove.#2b:6;:G2#39;CUT;:H-12e9:b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge15"
               },
               "target": {
@@ -2451,18 +2451,18 @@
             },
             "Groove.#2b:6;:M;CUT;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#2b:6;:M;CUT;:H*:*,F",
-                "raw": "Groove.#2b:6;:M;CUT;:H-12d1:7,F"
+                "raw": "Groove.#2b:6;:M;CUT;:H-12e9:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face8"
               },
               "target": {
@@ -2472,18 +2472,18 @@
             },
             "Groove.#2d:2;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#2d:2;:H*,V",
-                "raw": "Groove.#2d:2;:H12cf,V"
+                "raw": "Groove.#2d:2;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex2"
               },
               "target": {
@@ -2493,18 +2493,18 @@
             },
             "Groove.#2e:1;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#2e:1;:H*,V",
-                "raw": "Groove.#2e:1;:H12cf,V"
+                "raw": "Groove.#2e:1;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex4"
               },
               "target": {
@@ -2514,18 +2514,18 @@
             },
             "Groove.#2f:2;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#2f:2;:H*,V",
-                "raw": "Groove.#2f:2;:H12cf,V"
+                "raw": "Groove.#2f:2;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex10"
               },
               "target": {
@@ -2535,18 +2535,18 @@
             },
             "Groove.#30:2;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#30:2;:H*,V",
-                "raw": "Groove.#30:2;:H12cf,V"
+                "raw": "Groove.#30:2;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex16"
               },
               "target": {
@@ -2556,18 +2556,18 @@
             },
             "Groove.#32:1;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#32:1;:H*,E",
-                "raw": "Groove.#32:1;:H12cf,E"
+                "raw": "Groove.#32:1;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge19"
               },
               "target": {
@@ -2577,18 +2577,18 @@
             },
             "Groove.#32:2;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#32:2;:H*,E",
-                "raw": "Groove.#32:2;:H12cf,E"
+                "raw": "Groove.#32:2;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge18"
               },
               "target": {
@@ -2598,18 +2598,18 @@
             },
             "Groove.#32:3;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#32:3;:H*,E",
-                "raw": "Groove.#32:3;:H12cf,E"
+                "raw": "Groove.#32:3;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge11"
               },
               "target": {
@@ -2619,18 +2619,18 @@
             },
             "Groove.#32:4;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#32:4;:H*,E",
-                "raw": "Groove.#32:4;:H12cf,E"
+                "raw": "Groove.#32:4;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge3"
               },
               "target": {
@@ -2640,18 +2640,18 @@
             },
             "Groove.#34:1;:H*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#34:1;:H*,F",
-                "raw": "Groove.#34:1;:H12cf,F"
+                "raw": "Groove.#34:1;:H12e7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Face4"
               },
               "target": {
@@ -2661,18 +2661,18 @@
             },
             "Groove.#3b:2;:G#3e;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#3b:2;:G#3e;CUT;:H*:*,V",
-                "raw": "Groove.#3b:2;:G#3e;CUT;:H-12d1:a,V"
+                "raw": "Groove.#3b:2;:G#3e;CUT;:H-12e9:a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex6"
               },
               "target": {
@@ -2682,18 +2682,18 @@
             },
             "Groove.#3b:2;:M;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#3b:2;:M;CUT;:H*:*,E",
-                "raw": "Groove.#3b:2;:M;CUT;:H-12d1:7,E"
+                "raw": "Groove.#3b:2;:M;CUT;:H-12e9:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge21"
               },
               "target": {
@@ -2703,18 +2703,18 @@
             },
             "Groove.#3c:8;:G#3f;CUT;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#3c:8;:G#3f;CUT;:H*:*,V",
-                "raw": "Groove.#3c:8;:G#3f;CUT;:H-12d1:a,V"
+                "raw": "Groove.#3c:8;:G#3f;CUT;:H-12e9:a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex7"
               },
               "target": {
@@ -2724,18 +2724,18 @@
             },
             "Groove.#3c:8;:M;CUT;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#3c:8;:M;CUT;:H*:*,E",
-                "raw": "Groove.#3c:8;:M;CUT;:H-12d1:7,E"
+                "raw": "Groove.#3c:8;:M;CUT;:H-12e9:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge23"
               },
               "target": {
@@ -2745,18 +2745,18 @@
             },
             "Groove.#d:1;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#d:1;:H*,E",
-                "raw": "Groove.#d:1;:H12cf,E"
+                "raw": "Groove.#d:1;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge12"
               },
               "target": {
@@ -2766,18 +2766,18 @@
             },
             "Groove.#d:2;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#d:2;:H*,E",
-                "raw": "Groove.#d:2;:H12cf,E"
+                "raw": "Groove.#d:2;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge13"
               },
               "target": {
@@ -2787,18 +2787,18 @@
             },
             "Groove.#d:3;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#d:3;:H*,E",
-                "raw": "Groove.#d:3;:H12cf,E"
+                "raw": "Groove.#d:3;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge10"
               },
               "target": {
@@ -2808,18 +2808,18 @@
             },
             "Groove.#d:4;:H*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#d:4;:H*,E",
-                "raw": "Groove.#d:4;:H12cf,E"
+                "raw": "Groove.#d:4;:H12e7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Edge2"
               },
               "target": {
@@ -2829,18 +2829,18 @@
             },
             "Groove.#f:2;:H*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:Groove:Groove",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "Groove.#f:2;:H*,V",
-                "raw": "Groove.#f:2;:H12cf,V"
+                "raw": "Groove.#f:2;:H12e7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "Groove",
                 "subname": "Vertex1"
               },
               "target": {
@@ -2858,350 +2858,350 @@
           "Edge1": {
             "canonicalFreecadMappedName": "Groove.#18:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#18:2;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#18:2;:H12e7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "Groove.#d:3;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#d:3;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#d:3;:H12e7,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "Groove.#32:3;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#32:3;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#32:3;:H12e7,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "Groove.#d:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#d:1;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#d:1;:H12e7,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "Groove.#d:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#d:2;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#d:2;:H12e7,E",
             "resolvedIndexed": "Edge13",
             "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "Groove.#1d:2;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#1d:2;:M;CUT;:H-12d1:7,E",
+            "rawFreecadMappedName": "Groove.#1d:2;:M;CUT;:H-12e9:7,E",
             "resolvedIndexed": "Edge14",
             "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "Groove.#2b:6;:G2#39;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#2b:6;:G2#39;CUT;:H-12d1:b,E",
+            "rawFreecadMappedName": "Groove.#2b:6;:G2#39;CUT;:H-12e9:b,E",
             "resolvedIndexed": "Edge15",
             "subname": "Edge15"
           },
           "Edge16": {
             "canonicalFreecadMappedName": "Groove.#1d:4;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#1d:4;:M;CUT;:H-12d1:7,E",
+            "rawFreecadMappedName": "Groove.#1d:4;:M;CUT;:H-12e9:7,E",
             "resolvedIndexed": "Edge16",
             "subname": "Edge16"
           },
           "Edge17": {
             "canonicalFreecadMappedName": "Groove.#27:4;:G2#3a;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#27:4;:G2#3a;CUT;:H-12d1:b,E",
+            "rawFreecadMappedName": "Groove.#27:4;:G2#3a;CUT;:H-12e9:b,E",
             "resolvedIndexed": "Edge17",
             "subname": "Edge17"
           },
           "Edge18": {
             "canonicalFreecadMappedName": "Groove.#32:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#32:2;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#32:2;:H12e7,E",
             "resolvedIndexed": "Edge18",
             "subname": "Edge18"
           },
           "Edge19": {
             "canonicalFreecadMappedName": "Groove.#32:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#32:1;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#32:1;:H12e7,E",
             "resolvedIndexed": "Edge19",
             "subname": "Edge19"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "Groove.#d:4;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#d:4;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#d:4;:H12e7,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge20": {
             "canonicalFreecadMappedName": "Groove.#1b:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#1b:2;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#1b:2;:H12e7,E",
             "resolvedIndexed": "Edge20",
             "subname": "Edge20"
           },
           "Edge21": {
             "canonicalFreecadMappedName": "Groove.#3b:2;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#3b:2;:M;CUT;:H-12d1:7,E",
+            "rawFreecadMappedName": "Groove.#3b:2;:M;CUT;:H-12e9:7,E",
             "resolvedIndexed": "Edge21",
             "subname": "Edge21"
           },
           "Edge22": {
             "canonicalFreecadMappedName": "Groove.#24:4;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#24:4;:M;CUT;:H-12d1:7,E",
+            "rawFreecadMappedName": "Groove.#24:4;:M;CUT;:H-12e9:7,E",
             "resolvedIndexed": "Edge22",
             "subname": "Edge22"
           },
           "Edge23": {
             "canonicalFreecadMappedName": "Groove.#3c:8;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#3c:8;:M;CUT;:H-12d1:7,E",
+            "rawFreecadMappedName": "Groove.#3c:8;:M;CUT;:H-12e9:7,E",
             "resolvedIndexed": "Edge23",
             "subname": "Edge23"
           },
           "Edge24": {
             "canonicalFreecadMappedName": "Groove.#25:6;:M;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#25:6;:M;CUT;:H-12d1:7,E",
+            "rawFreecadMappedName": "Groove.#25:6;:M;CUT;:H-12e9:7,E",
             "resolvedIndexed": "Edge24",
             "subname": "Edge24"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "Groove.#32:4;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#32:4;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#32:4;:H12e7,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "Groove.#19:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#19:1;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#19:1;:H12e7,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "Groove.#27:4;:G#35;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#27:4;:G#35;CUT;:H-12d1:a,E",
+            "rawFreecadMappedName": "Groove.#27:4;:G#35;CUT;:H-12e9:a,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "Groove.#29:4;:G#36;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#29:4;:G#36;CUT;:H-12d1:a,E",
+            "rawFreecadMappedName": "Groove.#29:4;:G#36;CUT;:H-12e9:a,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "Groove.#2b:6;:G#37;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#2b:6;:G#37;CUT;:H-12d1:a,E",
+            "rawFreecadMappedName": "Groove.#2b:6;:G#37;CUT;:H-12e9:a,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "Groove.#29:2;:G#38;CUT;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#29:2;:G#38;CUT;:H-12d1:a,E",
+            "rawFreecadMappedName": "Groove.#29:2;:G#38;CUT;:H-12e9:a,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "Groove.#1a:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#1a:2;:H12cf,E",
+            "rawFreecadMappedName": "Groove.#1a:2;:H12e7,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "Groove.#16:4;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#16:4;:M;CUT;:H12cf:7,F",
+            "rawFreecadMappedName": "Groove.#16:4;:M;CUT;:H12e7:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face10": {
             "canonicalFreecadMappedName": "Groove.#16:2;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#16:2;:H12cf,F",
+            "rawFreecadMappedName": "Groove.#16:2;:H12e7,F",
             "resolvedIndexed": "Face10",
             "subname": "Face10"
           },
           "Face2": {
             "canonicalFreecadMappedName": "Groove.#16:3;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#16:3;:H12cf,F",
+            "rawFreecadMappedName": "Groove.#16:3;:H12e7,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "Groove.#14:1;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#14:1;:M;CUT;:H12cf:7,F",
+            "rawFreecadMappedName": "Groove.#14:1;:M;CUT;:H12e7:7,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "Groove.#34:1;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#34:1;:H12cf,F",
+            "rawFreecadMappedName": "Groove.#34:1;:H12e7,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "Groove.#16:1;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#16:1;:H12cf,F",
+            "rawFreecadMappedName": "Groove.#16:1;:H12e7,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "Groove.#27:4;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#27:4;:M;CUT;:H-12d1:7,F",
+            "rawFreecadMappedName": "Groove.#27:4;:M;CUT;:H-12e9:7,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "Groove.#29:4;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#29:4;:M;CUT;:H-12d1:7,F",
+            "rawFreecadMappedName": "Groove.#29:4;:M;CUT;:H-12e9:7,F",
             "resolvedIndexed": "Face7",
             "subname": "Face7"
           },
           "Face8": {
             "canonicalFreecadMappedName": "Groove.#2b:6;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#2b:6;:M;CUT;:H-12d1:7,F",
+            "rawFreecadMappedName": "Groove.#2b:6;:M;CUT;:H-12e9:7,F",
             "resolvedIndexed": "Face8",
             "subname": "Face8"
           },
           "Face9": {
             "canonicalFreecadMappedName": "Groove.#29:2;:M;CUT;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#29:2;:M;CUT;:H-12d1:7,F",
+            "rawFreecadMappedName": "Groove.#29:2;:M;CUT;:H-12e9:7,F",
             "resolvedIndexed": "Face9",
             "subname": "Face9"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "Groove.#f:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#f:2;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#f:2;:H12e7,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "Groove.#2f:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#2f:2;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#2f:2;:H12e7,V",
             "resolvedIndexed": "Vertex10",
             "subname": "Vertex10"
           },
           "Vertex11": {
             "canonicalFreecadMappedName": "Groove.#12:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#12:2;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#12:2;:H12e7,V",
             "resolvedIndexed": "Vertex11",
             "subname": "Vertex11"
           },
           "Vertex12": {
             "canonicalFreecadMappedName": "Groove.#20;:M;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#20;:M;CUT;:H-12d1:7,V",
+            "rawFreecadMappedName": "Groove.#20;:M;CUT;:H-12e9:7,V",
             "resolvedIndexed": "Vertex12",
             "subname": "Vertex12"
           },
           "Vertex13": {
             "canonicalFreecadMappedName": "Groove.#21;:M;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#21;:M;CUT;:H-12d1:7,V",
+            "rawFreecadMappedName": "Groove.#21;:M;CUT;:H-12e9:7,V",
             "resolvedIndexed": "Vertex13",
             "subname": "Vertex13"
           },
           "Vertex14": {
             "canonicalFreecadMappedName": "Groove.#22;:M;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#22;:M;CUT;:H-12d1:7,V",
+            "rawFreecadMappedName": "Groove.#22;:M;CUT;:H-12e9:7,V",
             "resolvedIndexed": "Vertex14",
             "subname": "Vertex14"
           },
           "Vertex15": {
             "canonicalFreecadMappedName": "Groove.#1f;:M;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#1f;:M;CUT;:H-12d1:7,V",
+            "rawFreecadMappedName": "Groove.#1f;:M;CUT;:H-12e9:7,V",
             "resolvedIndexed": "Vertex15",
             "subname": "Vertex15"
           },
           "Vertex16": {
             "canonicalFreecadMappedName": "Groove.#30:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#30:2;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#30:2;:H12e7,V",
             "resolvedIndexed": "Vertex16",
             "subname": "Vertex16"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "Groove.#2d:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#2d:2;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#2d:2;:H12e7,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "Groove.#10:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#10:1;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#10:1;:H12e7,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "Groove.#2e:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#2e:1;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#2e:1;:H12e7,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "Groove.#24:4;:G#3d;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#24:4;:G#3d;CUT;:H-12d1:a,V",
+            "rawFreecadMappedName": "Groove.#24:4;:G#3d;CUT;:H-12e9:a,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "Groove.#3b:2;:G#3e;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#3b:2;:G#3e;CUT;:H-12d1:a,V",
+            "rawFreecadMappedName": "Groove.#3b:2;:G#3e;CUT;:H-12e9:a,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "Groove.#3c:8;:G#3f;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#3c:8;:G#3f;CUT;:H-12d1:a,V",
+            "rawFreecadMappedName": "Groove.#3c:8;:G#3f;CUT;:H-12e9:a,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "Groove.#25:6;:G#40;CUT;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#25:6;:G#40;CUT;:H-12d1:a,V",
+            "rawFreecadMappedName": "Groove.#25:6;:G#40;CUT;:H-12e9:a,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "Groove.#11:2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Groove.#11:2;:H12cf,V",
+            "rawFreecadMappedName": "Groove.#11:2;:H12e7,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
           }

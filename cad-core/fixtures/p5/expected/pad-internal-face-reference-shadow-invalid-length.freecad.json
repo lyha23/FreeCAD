@@ -398,7 +398,7 @@
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {
-            "#10:1;:G;XTR;:H9e0:7,E": {
+            "#10:1;:G;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -419,7 +419,7 @@
                 "subname": "Edge2"
               }
             },
-            "#12:2;:G;XTR;:H9e0:7,E": {
+            "#12:2;:G;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -440,7 +440,7 @@
                 "subname": "Edge5"
               }
             },
-            "#13:1;:G;XTR;:H9e0:7,E": {
+            "#13:1;:G;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -461,7 +461,7 @@
                 "subname": "Edge8"
               }
             },
-            "#15:4;:G;XTR;:H9e0:7,F": {
+            "#15:4;:G;XTR;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -482,7 +482,7 @@
                 "subname": "Face1"
               }
             },
-            "#17:1;:G0;XTR;:H9e0:8,F": {
+            "#17:1;:G0;XTR;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -503,7 +503,7 @@
                 "subname": "Face6"
               }
             },
-            "#19:4;:U;XTR;:H9e0:7,E": {
+            "#19:4;:U;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -524,7 +524,7 @@
                 "subname": "Edge4"
               }
             },
-            "#1a:3;:U;XTR;:H9e0:7,E": {
+            "#1a:3;:U;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -545,7 +545,7 @@
                 "subname": "Edge7"
               }
             },
-            "#1b:1;:U;XTR;:H9e0:7,E": {
+            "#1b:1;:U;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -566,7 +566,7 @@
                 "subname": "Edge12"
               }
             },
-            "#1b:5;:U;XTR;:H9e0:7,E": {
+            "#1b:5;:U;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -587,7 +587,7 @@
                 "subname": "Edge10"
               }
             },
-            "#1d:2;:U;XTR;:H9e0:7,V": {
+            "#1d:2;:U;XTR;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -608,7 +608,7 @@
                 "subname": "Vertex2"
               }
             },
-            "#1e:1;:U;XTR;:H9e0:7,V": {
+            "#1e:1;:U;XTR;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -629,7 +629,7 @@
                 "subname": "Vertex4"
               }
             },
-            "#1f:2;:U;XTR;:H9e0:7,V": {
+            "#1f:2;:U;XTR;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -650,7 +650,7 @@
                 "subname": "Vertex6"
               }
             },
-            "#20:1;:U;XTR;:H9e0:7,V": {
+            "#20:1;:U;XTR;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -671,7 +671,7 @@
                 "subname": "Vertex8"
               }
             },
-            "#2:1;:H9e0,V": {
+            "#2:1;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -692,7 +692,7 @@
                 "subname": "Vertex3"
               }
             },
-            "#5:2;:H9e0,V": {
+            "#5:2;:H*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -713,7 +713,7 @@
                 "subname": "Vertex1"
               }
             },
-            "#7:1;:M;MAK;:H9e0:7,E": {
+            "#7:1;:M;MAK;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -734,7 +734,7 @@
                 "subname": "Edge11"
               }
             },
-            "#7:3;:M2;MAK;:H9e0:8,E": {
+            "#7:3;:M2;MAK;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -755,7 +755,7 @@
                 "subname": "Edge6"
               }
             },
-            "#7:4;:H9e0,E": {
+            "#7:4;:H*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -776,7 +776,7 @@
                 "subname": "Edge3"
               }
             },
-            "#7:5;:M;MAK;:H9e0:7,E": {
+            "#7:5;:M;MAK;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -797,7 +797,7 @@
                 "subname": "Edge9"
               }
             },
-            "#8:1;:M;MAK;:H9e0:7,V": {
+            "#8:1;:M;MAK;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -818,7 +818,7 @@
                 "subname": "Vertex7"
               }
             },
-            "#9:2;:M;MAK;:H9e0:7,V": {
+            "#9:2;:M;MAK;:H*:*,V": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -839,7 +839,7 @@
                 "subname": "Vertex5"
               }
             },
-            "#b:1;:G;XTR;:H9e0:7,F": {
+            "#b:1;:G;XTR;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -860,7 +860,7 @@
                 "subname": "Face4"
               }
             },
-            "#b:1;;:H9e0:1,F": {
+            "#b:1;;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -881,7 +881,7 @@
                 "subname": "Face5"
               }
             },
-            "#b:5;:G;XTR;:H9e0:7,F": {
+            "#b:5;:G;XTR;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -902,7 +902,7 @@
                 "subname": "Face3"
               }
             },
-            "#d:3;:G;XTR;:H9e0:7,F": {
+            "#d:3;:G;XTR;:H*:*,F": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],
@@ -923,7 +923,7 @@
                 "subname": "Face2"
               }
             },
-            "#f:2;:G;XTR;:H9e0:7,E": {
+            "#f:2;:G;XTR;:H*:*,E": {
               "evidence": {
                 "childElementMapKey": null,
                 "mapperHistoryIds": [],

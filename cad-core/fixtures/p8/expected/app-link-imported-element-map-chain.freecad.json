@@ -313,432 +313,449 @@
         "childElementMaps": [],
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
-          "entries": {
-            "Edge1;:H109f,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H109f,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge1"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge1"
-              }
-            },
-            "Edge1;:H10a0,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H10a0,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge2"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge2"
-              }
-            },
-            "Edge1;:H10a1,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H10a1,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge6"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge6"
-              }
-            },
-            "Edge2;:H10a0,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge2;:H*,E",
-                "raw": "Edge2;:H10a0,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge3"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge3"
-              }
-            },
-            "Edge2;:H10a1,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge2;:H*,E",
-                "raw": "Edge2;:H10a1,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge7"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge7"
-              }
-            },
-            "Edge3;:H10a0,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge3;:H*,E",
-                "raw": "Edge3;:H10a0,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge4"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge4"
-              }
-            },
-            "Edge3;:H10a1,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge3;:H*,E",
-                "raw": "Edge3;:H10a1,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge8"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge8"
-              }
-            },
-            "Edge4;:H10a0,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge4;:H*,E",
-                "raw": "Edge4;:H10a0,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge5"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge5"
-              }
-            },
-            "Edge4;:H10a1,E": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Edge4;:H*,E",
-                "raw": "Edge4;:H10a1,E"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "edge",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge9"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Edge9"
-              }
-            },
-            "Face1;:H10a0,F": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Face1;:H*,F",
-                "raw": "Face1;:H10a0,F"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "face",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Face1"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Face1"
-              }
-            },
-            "Face1;:H10a1,F": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Face1;:H*,F",
-                "raw": "Face1;:H10a1,F"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "face",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Face2"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Face2"
-              }
-            },
-            "Vertex1;:H109f,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H109f,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex1"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex1"
-              }
-            },
-            "Vertex1;:H10a0,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H10a0,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex2"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex2"
-              }
-            },
-            "Vertex1;:H10a1,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H10a1,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex6"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex6"
-              }
-            },
-            "Vertex2;:H10a0,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex2;:H*,V",
-                "raw": "Vertex2;:H10a0,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex3"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex3"
-              }
-            },
-            "Vertex2;:H10a1,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex2;:H*,V",
-                "raw": "Vertex2;:H10a1,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex7"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex7"
-              }
-            },
-            "Vertex3;:H10a0,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex3;:H*,V",
-                "raw": "Vertex3;:H10a0,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex4"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex4"
-              }
-            },
-            "Vertex3;:H10a1,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex3;:H*,V",
-                "raw": "Vertex3;:H10a1,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex8"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex8"
-              }
-            },
-            "Vertex4;:H10a0,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex4;:H*,V",
-                "raw": "Vertex4;:H10a0,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex5"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex5"
-              }
-            },
-            "Vertex4;:H10a1,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex4;:H*,V",
-                "raw": "Vertex4;:H10a1,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex9"
-              },
-              "target": {
-                "object": "ImportedLinkGroup",
-                "subname": "Vertex9"
-              }
-            }
-          },
-          "status": "history_partial"
+          "entries": {},
+          "status": "indexed_only"
         },
         "elementMapVersion": "cad-core.element-map.v1",
-        "mapperHistory": [],
+        "mapperHistory": [
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H109f,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H10a0,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H10a1,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge6"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge6"
+                }
+              }
+            ],
+            "id": "canonical-collision-38acdc90e6a9b9cf",
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:H109f,E"
+            },
+            "message": "Canonical elementMap key Edge1;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge2;:H*,E",
+                  "raw": "Edge2;:H10a0,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge2;:H*,E",
+                  "raw": "Edge2;:H10a1,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge7"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge7"
+                }
+              }
+            ],
+            "id": "canonical-collision-5f87557bce6ddac5",
+            "mappedName": {
+              "canonical": "Edge2;:H*,E",
+              "raw": "Edge2;:H10a0,E"
+            },
+            "message": "Canonical elementMap key Edge2;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge3;:H*,E",
+                  "raw": "Edge3;:H10a0,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge4"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge3;:H*,E",
+                  "raw": "Edge3;:H10a1,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge8"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge8"
+                }
+              }
+            ],
+            "id": "canonical-collision-afbef8591b41254e",
+            "mappedName": {
+              "canonical": "Edge3;:H*,E",
+              "raw": "Edge3;:H10a0,E"
+            },
+            "message": "Canonical elementMap key Edge3;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge4;:H*,E",
+                  "raw": "Edge4;:H10a0,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge5"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge5"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge4;:H*,E",
+                  "raw": "Edge4;:H10a1,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge9"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Edge9"
+                }
+              }
+            ],
+            "id": "canonical-collision-3f785b4888d9b634",
+            "mappedName": {
+              "canonical": "Edge4;:H*,E",
+              "raw": "Edge4;:H10a0,E"
+            },
+            "message": "Canonical elementMap key Edge4;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Face1;:H*,F",
+                  "raw": "Face1;:H10a0,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Face1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Face1;:H*,F",
+                  "raw": "Face1;:H10a1,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Face2"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Face2"
+                }
+              }
+            ],
+            "id": "canonical-collision-2a922885aa726a95",
+            "mappedName": {
+              "canonical": "Face1;:H*,F",
+              "raw": "Face1;:H10a0,F"
+            },
+            "message": "Canonical elementMap key Face1;:H*,F maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H109f,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H10a0,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H10a1,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex6"
+                }
+              }
+            ],
+            "id": "canonical-collision-530580e766437f82",
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:H109f,V"
+            },
+            "message": "Canonical elementMap key Vertex1;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V",
+                  "raw": "Vertex2;:H10a0,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V",
+                  "raw": "Vertex2;:H10a1,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex7"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex7"
+                }
+              }
+            ],
+            "id": "canonical-collision-2b0fe6eff09b5cef",
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:H10a0,V"
+            },
+            "message": "Canonical elementMap key Vertex2;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex3;:H*,V",
+                  "raw": "Vertex3;:H10a0,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex4"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex3;:H*,V",
+                  "raw": "Vertex3;:H10a1,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex8"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex8"
+                }
+              }
+            ],
+            "id": "canonical-collision-7dbaacb32f607860",
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V",
+              "raw": "Vertex3;:H10a0,V"
+            },
+            "message": "Canonical elementMap key Vertex3;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex4;:H*,V",
+                  "raw": "Vertex4;:H10a0,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex5"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex4;:H*,V",
+                  "raw": "Vertex4;:H10a1,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex9"
+                },
+                "target": {
+                  "object": "ImportedLinkGroup",
+                  "subname": "Vertex9"
+                }
+              }
+            ],
+            "id": "canonical-collision-a4ff606ace7ef352",
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V",
+              "raw": "Vertex4;:H10a0,V"
+            },
+            "message": "Canonical elementMap key Vertex4;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          }
+        ],
         "objectHash": "sha256:1eb6000a21ea55818b5c1b3277db1b37b6b799a10676e9305a4363e86ac82642",
         "subshapes": {
           "Edge1": {

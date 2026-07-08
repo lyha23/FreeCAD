@@ -26,7 +26,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:1;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:1;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "AdditivePipeFixedRound.#f:1;:G;SEW;:H*:*,F",
           "subname": "Face1"
@@ -40,7 +40,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:2;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:2;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "AdditivePipeFixedRound.#f:2;:G;SEW;:H*:*,F",
           "subname": "Face2"
@@ -54,7 +54,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:3;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:3;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "AdditivePipeFixedRound.#f:3;:G;SEW;:H*:*,F",
           "subname": "Face3"
@@ -68,7 +68,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:4;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#f:4;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "AdditivePipeFixedRound.#f:4;:G;SEW;:H*:*,F",
           "subname": "Face4"
@@ -82,7 +82,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "AdditivePipeFixedRound.#11:1;:G;SEW;:H*:*,F",
           "subname": "Face5"
@@ -96,7 +96,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "AdditivePipeFixedRound.#11:2;:G;SEW;:H*:*,F",
           "subname": "Face6"
@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face7",
           "stableSubname": "AdditivePipeFixedRound.#11:3;:G;SEW;:H*:*,F",
           "subname": "Face7"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Face8",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:G;SEW;:H2f4:7,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:G;SEW;:H516:7,F",
           "resolvedIndexed": "Face8",
           "stableSubname": "AdditivePipeFixedRound.#11:4;:G;SEW;:H*:*,F",
           "subname": "Face8"
@@ -138,7 +138,7 @@
           "identityStatus": "stable",
           "indexed": "Face9",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H2f4:a,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H516:a,F",
           "resolvedIndexed": "Face9",
           "stableSubname": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H*:*,F",
           "subname": "Face9"
@@ -152,7 +152,7 @@
           "identityStatus": "stable",
           "indexed": "Face10",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H2f4:a,F",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H516:a,F",
           "resolvedIndexed": "Face10",
           "stableSubname": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H*:*,F",
           "subname": "Face10"
@@ -166,7 +166,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#13;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#13;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "AdditivePipeFixedRound.#13;:G;SEW;:H*:*,E",
           "subname": "Edge1"
@@ -180,7 +180,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H*:*,E",
           "subname": "Edge2"
@@ -194,7 +194,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#16;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#16;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "AdditivePipeFixedRound.#16;:G;SEW;:H*:*,E",
           "subname": "Edge3"
@@ -208,7 +208,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:U;PSH;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:U;PSH;:H516:7,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "AdditivePipeFixedRound.#11:1;:U;PSH;:H*:*,E",
           "subname": "Edge4"
@@ -222,7 +222,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H*:*,E",
           "subname": "Edge5"
@@ -236,7 +236,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#18;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#18;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "AdditivePipeFixedRound.#18;:G;SEW;:H*:*,E",
           "subname": "Edge6"
@@ -250,7 +250,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:U;PSH;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:U;PSH;:H516:7,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "AdditivePipeFixedRound.#11:2;:U;PSH;:H*:*,E",
           "subname": "Edge7"
@@ -264,7 +264,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H*:*,E",
           "subname": "Edge8"
@@ -278,7 +278,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1a;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1a;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "AdditivePipeFixedRound.#1a;:G;SEW;:H*:*,E",
           "subname": "Edge9"
@@ -292,7 +292,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:U;PSH;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:U;PSH;:H516:7,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "AdditivePipeFixedRound.#11:3;:U;PSH;:H*:*,E",
           "subname": "Edge10"
@@ -306,7 +306,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H*:*,E",
           "subname": "Edge11"
@@ -320,7 +320,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:U;PSH;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:U;PSH;:H516:7,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "AdditivePipeFixedRound.#11:4;:U;PSH;:H*:*,E",
           "subname": "Edge12"
@@ -334,7 +334,7 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#15;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#15;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge13",
           "stableSubname": "AdditivePipeFixedRound.#15;:G;SEW;:H*:*,E",
           "subname": "Edge13"
@@ -348,7 +348,7 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#17;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#17;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge14",
           "stableSubname": "AdditivePipeFixedRound.#17;:G;SEW;:H*:*,E",
           "subname": "Edge14"
@@ -362,7 +362,7 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge15",
           "stableSubname": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H*:*,E",
           "subname": "Edge15"
@@ -376,7 +376,7 @@
           "identityStatus": "stable",
           "indexed": "Edge16",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#19;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#19;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge16",
           "stableSubname": "AdditivePipeFixedRound.#19;:G;SEW;:H*:*,E",
           "subname": "Edge16"
@@ -390,7 +390,7 @@
           "identityStatus": "stable",
           "indexed": "Edge17",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge17",
           "stableSubname": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H*:*,E",
           "subname": "Edge17"
@@ -404,7 +404,7 @@
           "identityStatus": "stable",
           "indexed": "Edge18",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1b;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1b;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge18",
           "stableSubname": "AdditivePipeFixedRound.#1b;:G;SEW;:H*:*,E",
           "subname": "Edge18"
@@ -418,7 +418,7 @@
           "identityStatus": "stable",
           "indexed": "Edge19",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge19",
           "stableSubname": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H*:*,E",
           "subname": "Edge19"
@@ -432,7 +432,7 @@
           "identityStatus": "stable",
           "indexed": "Edge20",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H2f4:7,E",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H516:7,E",
           "resolvedIndexed": "Edge20",
           "stableSubname": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H*:*,E",
           "subname": "Edge20"
@@ -446,7 +446,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#21:2;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#21:2;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "AdditivePipeFixedRound.#21:2;:G;SEW;:H*:*,V",
           "subname": "Vertex1"
@@ -460,7 +460,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#15:2;:U;PSH;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#15:2;:U;PSH;:H516:7,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "AdditivePipeFixedRound.#15:2;:U;PSH;:H*:*,V",
           "subname": "Vertex2"
@@ -474,7 +474,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#22:4;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#22:4;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "AdditivePipeFixedRound.#22:4;:G;SEW;:H*:*,V",
           "subname": "Vertex3"
@@ -488,7 +488,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#17:4;:U;PSH;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#17:4;:U;PSH;:H516:7,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "AdditivePipeFixedRound.#17:4;:U;PSH;:H*:*,V",
           "subname": "Vertex4"
@@ -502,7 +502,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#23:6;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#23:6;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "AdditivePipeFixedRound.#23:6;:G;SEW;:H*:*,V",
           "subname": "Vertex5"
@@ -516,7 +516,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#19:6;:U;PSH;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#19:6;:U;PSH;:H516:7,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "AdditivePipeFixedRound.#19:6;:U;PSH;:H*:*,V",
           "subname": "Vertex6"
@@ -530,7 +530,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#24:8;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#24:8;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "AdditivePipeFixedRound.#24:8;:G;SEW;:H*:*,V",
           "subname": "Vertex7"
@@ -544,7 +544,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H516:7,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H*:*,V",
           "subname": "Vertex8"
@@ -558,7 +558,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#26:f;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#26:f;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex9",
           "stableSubname": "AdditivePipeFixedRound.#26:f;:G;SEW;:H*:*,V",
           "subname": "Vertex9"
@@ -572,7 +572,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#27:11;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#27:11;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex10",
           "stableSubname": "AdditivePipeFixedRound.#27:11;:G;SEW;:H*:*,V",
           "subname": "Vertex10"
@@ -586,7 +586,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex11",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#28:13;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#28:13;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex11",
           "stableSubname": "AdditivePipeFixedRound.#28:13;:G;SEW;:H*:*,V",
           "subname": "Vertex11"
@@ -600,7 +600,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex12",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeFixedRound.#29;:G;SEW;:H2f4:7,V",
+          "rawFreecadMappedName": "AdditivePipeFixedRound.#29;:G;SEW;:H516:7,V",
           "resolvedIndexed": "Vertex12",
           "stableSubname": "AdditivePipeFixedRound.#29;:G;SEW;:H*:*,V",
           "subname": "Vertex12"
@@ -625,7 +625,7 @@
             "elementMap": {
               "encoding": "cad-core.element-map.v1",
               "entries": {
-                "AdditivePipeFixedRound.#11:1;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#11:1;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -633,7 +633,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:1;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#11:1;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#11:1;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -646,7 +646,7 @@
                     "subname": "Face5"
                   }
                 },
-                "AdditivePipeFixedRound.#11:1;:U;PSH;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#11:1;:U;PSH;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -654,7 +654,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:1;:U;PSH;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#11:1;:U;PSH;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#11:1;:U;PSH;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -667,7 +667,7 @@
                     "subname": "Edge4"
                   }
                 },
-                "AdditivePipeFixedRound.#11:2;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#11:2;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -675,7 +675,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:2;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#11:2;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#11:2;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -688,7 +688,7 @@
                     "subname": "Face6"
                   }
                 },
-                "AdditivePipeFixedRound.#11:2;:U;PSH;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#11:2;:U;PSH;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -696,7 +696,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:2;:U;PSH;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#11:2;:U;PSH;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#11:2;:U;PSH;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -709,7 +709,7 @@
                     "subname": "Edge7"
                   }
                 },
-                "AdditivePipeFixedRound.#11:3;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#11:3;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -717,7 +717,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:3;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#11:3;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#11:3;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -730,7 +730,7 @@
                     "subname": "Face7"
                   }
                 },
-                "AdditivePipeFixedRound.#11:3;:U;PSH;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#11:3;:U;PSH;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -738,7 +738,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:3;:U;PSH;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#11:3;:U;PSH;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#11:3;:U;PSH;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -751,7 +751,7 @@
                     "subname": "Edge10"
                   }
                 },
-                "AdditivePipeFixedRound.#11:4;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#11:4;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -759,7 +759,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:4;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#11:4;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#11:4;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -772,7 +772,7 @@
                     "subname": "Face8"
                   }
                 },
-                "AdditivePipeFixedRound.#11:4;:U;PSH;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#11:4;:U;PSH;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -780,7 +780,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#11:4;:U;PSH;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#11:4;:U;PSH;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#11:4;:U;PSH;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -793,7 +793,7 @@
                     "subname": "Edge12"
                   }
                 },
-                "AdditivePipeFixedRound.#13;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#13;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -801,7 +801,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#13;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#13;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#13;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -814,7 +814,7 @@
                     "subname": "Edge1"
                   }
                 },
-                "AdditivePipeFixedRound.#15:2;:U;PSH;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#15:2;:U;PSH;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -822,7 +822,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#15:2;:U;PSH;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#15:2;:U;PSH;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#15:2;:U;PSH;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -835,7 +835,7 @@
                     "subname": "Vertex2"
                   }
                 },
-                "AdditivePipeFixedRound.#15;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#15;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -843,7 +843,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#15;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#15;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#15;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -856,7 +856,7 @@
                     "subname": "Edge13"
                   }
                 },
-                "AdditivePipeFixedRound.#16;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#16;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -864,7 +864,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#16;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#16;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#16;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -877,7 +877,7 @@
                     "subname": "Edge3"
                   }
                 },
-                "AdditivePipeFixedRound.#17:4;:U;PSH;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#17:4;:U;PSH;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -885,7 +885,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#17:4;:U;PSH;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#17:4;:U;PSH;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#17:4;:U;PSH;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -898,7 +898,7 @@
                     "subname": "Vertex4"
                   }
                 },
-                "AdditivePipeFixedRound.#17;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#17;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -906,7 +906,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#17;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#17;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#17;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -919,7 +919,7 @@
                     "subname": "Edge14"
                   }
                 },
-                "AdditivePipeFixedRound.#18;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#18;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -927,7 +927,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#18;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#18;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#18;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -940,7 +940,7 @@
                     "subname": "Edge6"
                   }
                 },
-                "AdditivePipeFixedRound.#19:6;:U;PSH;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#19:6;:U;PSH;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -948,7 +948,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#19:6;:U;PSH;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#19:6;:U;PSH;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#19:6;:U;PSH;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -961,7 +961,7 @@
                     "subname": "Vertex6"
                   }
                 },
-                "AdditivePipeFixedRound.#19;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#19;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -969,7 +969,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#19;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#19;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#19;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -982,7 +982,7 @@
                     "subname": "Edge16"
                   }
                 },
-                "AdditivePipeFixedRound.#1a;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1a;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -990,7 +990,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1a;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1a;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1a;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1003,7 +1003,7 @@
                     "subname": "Edge9"
                   }
                 },
-                "AdditivePipeFixedRound.#1b:8;:U;PSH;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#1b:8;:U;PSH;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1011,7 +1011,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1024,7 +1024,7 @@
                     "subname": "Vertex8"
                   }
                 },
-                "AdditivePipeFixedRound.#1b;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1b;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1032,7 +1032,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1b;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1b;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1b;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1045,7 +1045,7 @@
                     "subname": "Edge18"
                   }
                 },
-                "AdditivePipeFixedRound.#1d:1;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1d:1;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1053,7 +1053,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1066,7 +1066,7 @@
                     "subname": "Edge2"
                   }
                 },
-                "AdditivePipeFixedRound.#1d:2;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1d:2;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1074,7 +1074,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1087,7 +1087,7 @@
                     "subname": "Edge5"
                   }
                 },
-                "AdditivePipeFixedRound.#1d:3;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1d:3;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1095,7 +1095,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1108,7 +1108,7 @@
                     "subname": "Edge8"
                   }
                 },
-                "AdditivePipeFixedRound.#1d:4;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1d:4;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1116,7 +1116,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1129,7 +1129,7 @@
                     "subname": "Edge11"
                   }
                 },
-                "AdditivePipeFixedRound.#1f:1;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1f:1;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1137,7 +1137,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1150,7 +1150,7 @@
                     "subname": "Edge15"
                   }
                 },
-                "AdditivePipeFixedRound.#1f:2;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1f:2;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1158,7 +1158,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1171,7 +1171,7 @@
                     "subname": "Edge17"
                   }
                 },
-                "AdditivePipeFixedRound.#1f:3;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1f:3;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1179,7 +1179,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1192,7 +1192,7 @@
                     "subname": "Edge19"
                   }
                 },
-                "AdditivePipeFixedRound.#1f:4;:G;SEW;:H2f4:7,E": {
+                "AdditivePipeFixedRound.#1f:4;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1200,7 +1200,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H2f4:7,E"
+                    "raw": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H516:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1213,7 +1213,7 @@
                     "subname": "Edge20"
                   }
                 },
-                "AdditivePipeFixedRound.#21:2;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#21:2;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1221,7 +1221,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#21:2;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#21:2;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#21:2;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1234,7 +1234,7 @@
                     "subname": "Vertex1"
                   }
                 },
-                "AdditivePipeFixedRound.#22:4;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#22:4;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1242,7 +1242,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#22:4;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#22:4;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#22:4;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1255,7 +1255,7 @@
                     "subname": "Vertex3"
                   }
                 },
-                "AdditivePipeFixedRound.#23:6;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#23:6;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1263,7 +1263,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#23:6;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#23:6;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#23:6;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1276,7 +1276,7 @@
                     "subname": "Vertex5"
                   }
                 },
-                "AdditivePipeFixedRound.#24:8;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#24:8;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1284,7 +1284,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#24:8;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#24:8;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#24:8;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1297,7 +1297,7 @@
                     "subname": "Vertex7"
                   }
                 },
-                "AdditivePipeFixedRound.#26:f;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#26:f;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1305,7 +1305,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#26:f;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#26:f;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#26:f;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1318,7 +1318,7 @@
                     "subname": "Vertex9"
                   }
                 },
-                "AdditivePipeFixedRound.#27:11;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#27:11;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1326,7 +1326,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#27:11;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#27:11;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#27:11;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1339,7 +1339,7 @@
                     "subname": "Vertex10"
                   }
                 },
-                "AdditivePipeFixedRound.#28:13;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#28:13;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1347,7 +1347,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#28:13;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#28:13;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#28:13;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1360,7 +1360,7 @@
                     "subname": "Vertex11"
                   }
                 },
-                "AdditivePipeFixedRound.#29;:G;SEW;:H2f4:7,V": {
+                "AdditivePipeFixedRound.#29;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1368,7 +1368,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#29;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeFixedRound.#29;:G;SEW;:H2f4:7,V"
+                    "raw": "AdditivePipeFixedRound.#29;:G;SEW;:H516:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1381,7 +1381,7 @@
                     "subname": "Vertex12"
                   }
                 },
-                "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H2f4:a,F": {
+                "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1389,7 +1389,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H2f4:a,F"
+                    "raw": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H516:a,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1402,7 +1402,7 @@
                     "subname": "Face9"
                   }
                 },
-                "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H2f4:a,F": {
+                "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1410,7 +1410,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H2f4:a,F"
+                    "raw": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H516:a,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1423,7 +1423,7 @@
                     "subname": "Face10"
                   }
                 },
-                "AdditivePipeFixedRound.#f:1;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#f:1;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1431,7 +1431,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#f:1;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#f:1;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#f:1;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1444,7 +1444,7 @@
                     "subname": "Face1"
                   }
                 },
-                "AdditivePipeFixedRound.#f:2;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#f:2;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1452,7 +1452,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#f:2;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#f:2;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#f:2;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1465,7 +1465,7 @@
                     "subname": "Face2"
                   }
                 },
-                "AdditivePipeFixedRound.#f:3;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#f:3;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1473,7 +1473,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#f:3;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#f:3;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#f:3;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1486,7 +1486,7 @@
                     "subname": "Face3"
                   }
                 },
-                "AdditivePipeFixedRound.#f:4;:G;SEW;:H2f4:7,F": {
+                "AdditivePipeFixedRound.#f:4;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                     "mapperHistoryIds": [],
@@ -1494,7 +1494,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeFixedRound.#f:4;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeFixedRound.#f:4;:G;SEW;:H2f4:7,F"
+                    "raw": "AdditivePipeFixedRound.#f:4;:G;SEW;:H516:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1520,18 +1520,18 @@
           "entries": {
             "AdditivePipeFixedRound.#11:1;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:1;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#11:1;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#11:1;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face5"
               },
               "target": {
@@ -1541,18 +1541,18 @@
             },
             "AdditivePipeFixedRound.#11:1;:U;PSH;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:1;:U;PSH;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#11:1;:U;PSH;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#11:1;:U;PSH;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge4"
               },
               "target": {
@@ -1562,18 +1562,18 @@
             },
             "AdditivePipeFixedRound.#11:2;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:2;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#11:2;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#11:2;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face6"
               },
               "target": {
@@ -1583,18 +1583,18 @@
             },
             "AdditivePipeFixedRound.#11:2;:U;PSH;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:2;:U;PSH;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#11:2;:U;PSH;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#11:2;:U;PSH;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge7"
               },
               "target": {
@@ -1604,18 +1604,18 @@
             },
             "AdditivePipeFixedRound.#11:3;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:3;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#11:3;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#11:3;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face7"
               },
               "target": {
@@ -1625,18 +1625,18 @@
             },
             "AdditivePipeFixedRound.#11:3;:U;PSH;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:3;:U;PSH;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#11:3;:U;PSH;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#11:3;:U;PSH;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge10"
               },
               "target": {
@@ -1646,18 +1646,18 @@
             },
             "AdditivePipeFixedRound.#11:4;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:4;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#11:4;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#11:4;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face8"
               },
               "target": {
@@ -1667,18 +1667,18 @@
             },
             "AdditivePipeFixedRound.#11:4;:U;PSH;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#11:4;:U;PSH;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#11:4;:U;PSH;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#11:4;:U;PSH;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge12"
               },
               "target": {
@@ -1688,18 +1688,18 @@
             },
             "AdditivePipeFixedRound.#13;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#13;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#13;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#13;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge1"
               },
               "target": {
@@ -1709,18 +1709,18 @@
             },
             "AdditivePipeFixedRound.#15:2;:U;PSH;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#15:2;:U;PSH;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#15:2;:U;PSH;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#15:2;:U;PSH;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex2"
               },
               "target": {
@@ -1730,18 +1730,18 @@
             },
             "AdditivePipeFixedRound.#15;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#15;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#15;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#15;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge13"
               },
               "target": {
@@ -1751,18 +1751,18 @@
             },
             "AdditivePipeFixedRound.#16;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#16;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#16;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#16;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge3"
               },
               "target": {
@@ -1772,18 +1772,18 @@
             },
             "AdditivePipeFixedRound.#17:4;:U;PSH;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#17:4;:U;PSH;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#17:4;:U;PSH;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#17:4;:U;PSH;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex4"
               },
               "target": {
@@ -1793,18 +1793,18 @@
             },
             "AdditivePipeFixedRound.#17;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#17;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#17;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#17;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge14"
               },
               "target": {
@@ -1814,18 +1814,18 @@
             },
             "AdditivePipeFixedRound.#18;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#18;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#18;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#18;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge6"
               },
               "target": {
@@ -1835,18 +1835,18 @@
             },
             "AdditivePipeFixedRound.#19:6;:U;PSH;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#19:6;:U;PSH;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#19:6;:U;PSH;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#19:6;:U;PSH;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex6"
               },
               "target": {
@@ -1856,18 +1856,18 @@
             },
             "AdditivePipeFixedRound.#19;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#19;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#19;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#19;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge16"
               },
               "target": {
@@ -1877,18 +1877,18 @@
             },
             "AdditivePipeFixedRound.#1a;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1a;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1a;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1a;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge9"
               },
               "target": {
@@ -1898,18 +1898,18 @@
             },
             "AdditivePipeFixedRound.#1b:8;:U;PSH;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex8"
               },
               "target": {
@@ -1919,18 +1919,18 @@
             },
             "AdditivePipeFixedRound.#1b;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1b;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1b;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1b;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge18"
               },
               "target": {
@@ -1940,18 +1940,18 @@
             },
             "AdditivePipeFixedRound.#1d:1;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge2"
               },
               "target": {
@@ -1961,18 +1961,18 @@
             },
             "AdditivePipeFixedRound.#1d:2;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge5"
               },
               "target": {
@@ -1982,18 +1982,18 @@
             },
             "AdditivePipeFixedRound.#1d:3;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge8"
               },
               "target": {
@@ -2003,18 +2003,18 @@
             },
             "AdditivePipeFixedRound.#1d:4;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge11"
               },
               "target": {
@@ -2024,18 +2024,18 @@
             },
             "AdditivePipeFixedRound.#1f:1;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge15"
               },
               "target": {
@@ -2045,18 +2045,18 @@
             },
             "AdditivePipeFixedRound.#1f:2;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge17"
               },
               "target": {
@@ -2066,18 +2066,18 @@
             },
             "AdditivePipeFixedRound.#1f:3;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge19"
               },
               "target": {
@@ -2087,18 +2087,18 @@
             },
             "AdditivePipeFixedRound.#1f:4;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H2f4:7,E"
+                "raw": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H516:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Edge20"
               },
               "target": {
@@ -2108,18 +2108,18 @@
             },
             "AdditivePipeFixedRound.#21:2;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#21:2;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#21:2;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#21:2;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex1"
               },
               "target": {
@@ -2129,18 +2129,18 @@
             },
             "AdditivePipeFixedRound.#22:4;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#22:4;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#22:4;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#22:4;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex3"
               },
               "target": {
@@ -2150,18 +2150,18 @@
             },
             "AdditivePipeFixedRound.#23:6;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#23:6;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#23:6;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#23:6;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex5"
               },
               "target": {
@@ -2171,18 +2171,18 @@
             },
             "AdditivePipeFixedRound.#24:8;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#24:8;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#24:8;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#24:8;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex7"
               },
               "target": {
@@ -2192,18 +2192,18 @@
             },
             "AdditivePipeFixedRound.#26:f;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#26:f;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#26:f;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#26:f;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex9"
               },
               "target": {
@@ -2213,18 +2213,18 @@
             },
             "AdditivePipeFixedRound.#27:11;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#27:11;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#27:11;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#27:11;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex10"
               },
               "target": {
@@ -2234,18 +2234,18 @@
             },
             "AdditivePipeFixedRound.#28:13;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#28:13;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#28:13;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#28:13;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex11"
               },
               "target": {
@@ -2255,18 +2255,18 @@
             },
             "AdditivePipeFixedRound.#29;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#29;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeFixedRound.#29;:G;SEW;:H2f4:7,V"
+                "raw": "AdditivePipeFixedRound.#29;:G;SEW;:H516:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Vertex12"
               },
               "target": {
@@ -2276,18 +2276,18 @@
             },
             "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H2f4:a,F"
+                "raw": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H516:a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face9"
               },
               "target": {
@@ -2297,18 +2297,18 @@
             },
             "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H2f4:a,F"
+                "raw": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H516:a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face10"
               },
               "target": {
@@ -2318,18 +2318,18 @@
             },
             "AdditivePipeFixedRound.#f:1;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#f:1;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#f:1;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#f:1;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face1"
               },
               "target": {
@@ -2339,18 +2339,18 @@
             },
             "AdditivePipeFixedRound.#f:2;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#f:2;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#f:2;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#f:2;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face2"
               },
               "target": {
@@ -2360,18 +2360,18 @@
             },
             "AdditivePipeFixedRound.#f:3;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#f:3;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#f:3;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#f:3;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face3"
               },
               "target": {
@@ -2381,18 +2381,18 @@
             },
             "AdditivePipeFixedRound.#f:4;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeFixedRound:AdditivePipeFixedRound",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeFixedRound.#f:4;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeFixedRound.#f:4;:G;SEW;:H2f4:7,F"
+                "raw": "AdditivePipeFixedRound.#f:4;:G;SEW;:H516:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeFixedRound",
                 "subname": "Face4"
               },
               "target": {
@@ -2410,294 +2410,294 @@
           "Edge1": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#13;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#13;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#13;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:3;:U;PSH;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:U;PSH;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:U;PSH;:H516:7,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:4;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:4;:U;PSH;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:U;PSH;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:U;PSH;:H516:7,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#15;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#15;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#15;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge13",
             "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#17;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#17;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#17;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge14",
             "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:1;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge15",
             "subname": "Edge15"
           },
           "Edge16": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#19;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#19;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#19;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge16",
             "subname": "Edge16"
           },
           "Edge17": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:2;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge17",
             "subname": "Edge17"
           },
           "Edge18": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1b;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1b;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1b;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge18",
             "subname": "Edge18"
           },
           "Edge19": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:3;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge19",
             "subname": "Edge19"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:1;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge20": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1f:4;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge20",
             "subname": "Edge20"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#16;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#16;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#16;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:1;:U;PSH;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:U;PSH;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:U;PSH;:H516:7,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:2;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#18;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#18;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#18;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:2;:U;PSH;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:U;PSH;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:U;PSH;:H516:7,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1d:3;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1a;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1a;:G;SEW;:H2f4:7,E",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1a;:G;SEW;:H516:7,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#f:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:1;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:1;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face10": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H2f4:a,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#2e:1;:L#2d;SEW;:H516:a,F",
             "resolvedIndexed": "Face10",
             "subname": "Face10"
           },
           "Face2": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#f:2;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:2;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:2;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#f:3;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:3;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:3;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#f:4;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:4;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#f:4;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:1;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:2;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:2;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:3;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:3;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face7",
             "subname": "Face7"
           },
           "Face8": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#11:4;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:G;SEW;:H2f4:7,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#11:4;:G;SEW;:H516:7,F",
             "resolvedIndexed": "Face8",
             "subname": "Face8"
           },
           "Face9": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H2f4:a,F",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#2c:1;:L#2a;SEW;:H516:a,F",
             "resolvedIndexed": "Face9",
             "subname": "Face9"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#21:2;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#21:2;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#21:2;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#27:11;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#27:11;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#27:11;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex10",
             "subname": "Vertex10"
           },
           "Vertex11": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#28:13;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#28:13;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#28:13;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex11",
             "subname": "Vertex11"
           },
           "Vertex12": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#29;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#29;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#29;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex12",
             "subname": "Vertex12"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#15:2;:U;PSH;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#15:2;:U;PSH;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#15:2;:U;PSH;:H516:7,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#22:4;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#22:4;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#22:4;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#17:4;:U;PSH;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#17:4;:U;PSH;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#17:4;:U;PSH;:H516:7,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#23:6;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#23:6;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#23:6;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#19:6;:U;PSH;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#19:6;:U;PSH;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#19:6;:U;PSH;:H516:7,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#24:8;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#24:8;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#24:8;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#1b:8;:U;PSH;:H516:7,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "AdditivePipeFixedRound.#26:f;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeFixedRound.#26:f;:G;SEW;:H2f4:7,V",
+            "rawFreecadMappedName": "AdditivePipeFixedRound.#26:f;:G;SEW;:H516:7,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
           }

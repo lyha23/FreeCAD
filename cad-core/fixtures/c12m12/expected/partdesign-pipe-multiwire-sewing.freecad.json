@@ -26,7 +26,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#18:1;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#18:1;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "AdditivePipeMultiWire.#18:1;:G;SEW;:H*:*,F",
           "subname": "Face1"
@@ -40,7 +40,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#19:2;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#19:2;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "AdditivePipeMultiWire.#19:2;:G;SEW;:H*:*,F",
           "subname": "Face2"
@@ -54,7 +54,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#1a:3;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H*:*,F",
           "subname": "Face3"
@@ -68,7 +68,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#1b:4;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H*:*,F",
           "subname": "Face4"
@@ -82,7 +82,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H69f:a,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:He1a:a,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H*:*,F",
           "subname": "Face5"
@@ -96,7 +96,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#28:5;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#28:5;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "AdditivePipeMultiWire.#28:5;:G;SEW;:H*:*,F",
           "subname": "Face6"
@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#29:6;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#29:6;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face7",
           "stableSubname": "AdditivePipeMultiWire.#29:6;:G;SEW;:H*:*,F",
           "subname": "Face7"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Face8",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#2a:7;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face8",
           "stableSubname": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H*:*,F",
           "subname": "Face8"
@@ -138,7 +138,7 @@
           "identityStatus": "stable",
           "indexed": "Face9",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H69f:7,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#2b:8;:G;SEW;:He1a:7,F",
           "resolvedIndexed": "Face9",
           "stableSubname": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H*:*,F",
           "subname": "Face9"
@@ -152,7 +152,7 @@
           "identityStatus": "stable",
           "indexed": "Face10",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H69f:a,F",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:He1a:a,F",
           "resolvedIndexed": "Face10",
           "stableSubname": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H*:*,F",
           "subname": "Face10"
@@ -166,7 +166,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#1c;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#1c;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "AdditivePipeMultiWire.#1c;:G;SEW;:H*:*,E",
           "subname": "Edge1"
@@ -180,7 +180,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#31:1;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#31:1;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "AdditivePipeMultiWire.#31:1;:G;SEW;:H*:*,E",
           "subname": "Edge2"
@@ -194,7 +194,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#1d;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#1d;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "AdditivePipeMultiWire.#1d;:G;SEW;:H*:*,E",
           "subname": "Edge3"
@@ -208,7 +208,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#33:1;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#33:1;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "AdditivePipeMultiWire.#33:1;:G;SEW;:H*:*,E",
           "subname": "Edge4"
@@ -222,7 +222,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#34:2;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#34:2;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "AdditivePipeMultiWire.#34:2;:G;SEW;:H*:*,E",
           "subname": "Edge5"
@@ -236,7 +236,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#1e;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#1e;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "AdditivePipeMultiWire.#1e;:G;SEW;:H*:*,E",
           "subname": "Edge6"
@@ -250,7 +250,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#35:2;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#35:2;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "AdditivePipeMultiWire.#35:2;:G;SEW;:H*:*,E",
           "subname": "Edge7"
@@ -264,7 +264,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#36:3;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#36:3;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "AdditivePipeMultiWire.#36:3;:G;SEW;:H*:*,E",
           "subname": "Edge8"
@@ -278,7 +278,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#1f;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#1f;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "AdditivePipeMultiWire.#1f;:G;SEW;:H*:*,E",
           "subname": "Edge9"
@@ -292,7 +292,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#37:3;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#37:3;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "AdditivePipeMultiWire.#37:3;:G;SEW;:H*:*,E",
           "subname": "Edge10"
@@ -306,7 +306,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#38:4;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#38:4;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "AdditivePipeMultiWire.#38:4;:G;SEW;:H*:*,E",
           "subname": "Edge11"
@@ -320,7 +320,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#39:4;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#39:4;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "AdditivePipeMultiWire.#39:4;:G;SEW;:H*:*,E",
           "subname": "Edge12"
@@ -334,7 +334,7 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#3a:5;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge13",
           "stableSubname": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H*:*,E",
           "subname": "Edge13"
@@ -348,7 +348,7 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#3b:6;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge14",
           "stableSubname": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H*:*,E",
           "subname": "Edge14"
@@ -362,7 +362,7 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#3c:7;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge15",
           "stableSubname": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H*:*,E",
           "subname": "Edge15"
@@ -376,7 +376,7 @@
           "identityStatus": "stable",
           "indexed": "Edge16",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#3d:8;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge16",
           "stableSubname": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H*:*,E",
           "subname": "Edge16"
@@ -390,7 +390,7 @@
           "identityStatus": "stable",
           "indexed": "Edge17",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#2c;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#2c;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge17",
           "stableSubname": "AdditivePipeMultiWire.#2c;:G;SEW;:H*:*,E",
           "subname": "Edge17"
@@ -404,7 +404,7 @@
           "identityStatus": "stable",
           "indexed": "Edge18",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#2d;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#2d;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge18",
           "stableSubname": "AdditivePipeMultiWire.#2d;:G;SEW;:H*:*,E",
           "subname": "Edge18"
@@ -418,7 +418,7 @@
           "identityStatus": "stable",
           "indexed": "Edge19",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#3e:5;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge19",
           "stableSubname": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H*:*,E",
           "subname": "Edge19"
@@ -432,7 +432,7 @@
           "identityStatus": "stable",
           "indexed": "Edge20",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#2e;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#2e;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge20",
           "stableSubname": "AdditivePipeMultiWire.#2e;:G;SEW;:H*:*,E",
           "subname": "Edge20"
@@ -446,7 +446,7 @@
           "identityStatus": "stable",
           "indexed": "Edge21",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#3f:6;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge21",
           "stableSubname": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H*:*,E",
           "subname": "Edge21"
@@ -460,7 +460,7 @@
           "identityStatus": "stable",
           "indexed": "Edge22",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#2f;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#2f;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge22",
           "stableSubname": "AdditivePipeMultiWire.#2f;:G;SEW;:H*:*,E",
           "subname": "Edge22"
@@ -474,7 +474,7 @@
           "identityStatus": "stable",
           "indexed": "Edge23",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#40:7;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#40:7;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge23",
           "stableSubname": "AdditivePipeMultiWire.#40:7;:G;SEW;:H*:*,E",
           "subname": "Edge23"
@@ -488,7 +488,7 @@
           "identityStatus": "stable",
           "indexed": "Edge24",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#41:8;:G;SEW;:H69f:7,E",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#41:8;:G;SEW;:He1a:7,E",
           "resolvedIndexed": "Edge24",
           "stableSubname": "AdditivePipeMultiWire.#41:8;:G;SEW;:H*:*,E",
           "subname": "Edge24"
@@ -502,7 +502,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#43:2;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#43:2;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "AdditivePipeMultiWire.#43:2;:G;SEW;:H*:*,V",
           "subname": "Vertex1"
@@ -516,7 +516,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#45;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#45;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "AdditivePipeMultiWire.#45;:G;SEW;:H*:*,V",
           "subname": "Vertex2"
@@ -530,7 +530,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#46:3;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#46:3;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "AdditivePipeMultiWire.#46:3;:G;SEW;:H*:*,V",
           "subname": "Vertex3"
@@ -544,7 +544,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#47;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#47;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "AdditivePipeMultiWire.#47;:G;SEW;:H*:*,V",
           "subname": "Vertex4"
@@ -558,7 +558,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#48:4;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#48:4;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "AdditivePipeMultiWire.#48:4;:G;SEW;:H*:*,V",
           "subname": "Vertex5"
@@ -572,7 +572,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#49;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#49;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "AdditivePipeMultiWire.#49;:G;SEW;:H*:*,V",
           "subname": "Vertex6"
@@ -586,7 +586,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#4a:5;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H*:*,V",
           "subname": "Vertex7"
@@ -600,7 +600,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#4b;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#4b;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "AdditivePipeMultiWire.#4b;:G;SEW;:H*:*,V",
           "subname": "Vertex8"
@@ -614,7 +614,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#4c:8;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex9",
           "stableSubname": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H*:*,V",
           "subname": "Vertex9"
@@ -628,7 +628,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#4d:9;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex10",
           "stableSubname": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H*:*,V",
           "subname": "Vertex10"
@@ -642,7 +642,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex11",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#4e;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#4e;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex11",
           "stableSubname": "AdditivePipeMultiWire.#4e;:G;SEW;:H*:*,V",
           "subname": "Vertex11"
@@ -656,7 +656,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex12",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#4f;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#4f;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex12",
           "stableSubname": "AdditivePipeMultiWire.#4f;:G;SEW;:H*:*,V",
           "subname": "Vertex12"
@@ -670,7 +670,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex13",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#50;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#50;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex13",
           "stableSubname": "AdditivePipeMultiWire.#50;:G;SEW;:H*:*,V",
           "subname": "Vertex13"
@@ -684,7 +684,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex14",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#51;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#51;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex14",
           "stableSubname": "AdditivePipeMultiWire.#51;:G;SEW;:H*:*,V",
           "subname": "Vertex14"
@@ -698,7 +698,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex15",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#52;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#52;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex15",
           "stableSubname": "AdditivePipeMultiWire.#52;:G;SEW;:H*:*,V",
           "subname": "Vertex15"
@@ -712,7 +712,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex16",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeMultiWire.#53;:G;SEW;:H69f:7,V",
+          "rawFreecadMappedName": "AdditivePipeMultiWire.#53;:G;SEW;:He1a:7,V",
           "resolvedIndexed": "Vertex16",
           "stableSubname": "AdditivePipeMultiWire.#53;:G;SEW;:H*:*,V",
           "subname": "Vertex16"
@@ -737,7 +737,7 @@
             "elementMap": {
               "encoding": "cad-core.element-map.v1",
               "entries": {
-                "AdditivePipeMultiWire.#18:1;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#18:1;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -745,7 +745,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#18:1;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#18:1;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#18:1;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -758,7 +758,7 @@
                     "subname": "Face1"
                   }
                 },
-                "AdditivePipeMultiWire.#19:2;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#19:2;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -766,7 +766,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#19:2;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#19:2;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#19:2;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -779,7 +779,7 @@
                     "subname": "Face2"
                   }
                 },
-                "AdditivePipeMultiWire.#1a:3;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#1a:3;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -787,7 +787,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#1a:3;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -800,7 +800,7 @@
                     "subname": "Face3"
                   }
                 },
-                "AdditivePipeMultiWire.#1b:4;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#1b:4;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -808,7 +808,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#1b:4;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -821,7 +821,7 @@
                     "subname": "Face4"
                   }
                 },
-                "AdditivePipeMultiWire.#1c;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#1c;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -829,7 +829,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#1c;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#1c;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#1c;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -842,7 +842,7 @@
                     "subname": "Edge1"
                   }
                 },
-                "AdditivePipeMultiWire.#1d;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#1d;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -850,7 +850,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#1d;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#1d;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#1d;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -863,7 +863,7 @@
                     "subname": "Edge3"
                   }
                 },
-                "AdditivePipeMultiWire.#1e;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#1e;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -871,7 +871,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#1e;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#1e;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#1e;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -884,7 +884,7 @@
                     "subname": "Edge6"
                   }
                 },
-                "AdditivePipeMultiWire.#1f;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#1f;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -892,7 +892,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#1f;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#1f;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#1f;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -905,7 +905,7 @@
                     "subname": "Edge9"
                   }
                 },
-                "AdditivePipeMultiWire.#28:5;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#28:5;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -913,7 +913,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#28:5;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#28:5;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#28:5;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -926,7 +926,7 @@
                     "subname": "Face6"
                   }
                 },
-                "AdditivePipeMultiWire.#29:6;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#29:6;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -934,7 +934,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#29:6;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#29:6;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#29:6;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -947,7 +947,7 @@
                     "subname": "Face7"
                   }
                 },
-                "AdditivePipeMultiWire.#2a:7;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#2a:7;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -955,7 +955,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#2a:7;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -968,7 +968,7 @@
                     "subname": "Face8"
                   }
                 },
-                "AdditivePipeMultiWire.#2b:8;:G;SEW;:H69f:7,F": {
+                "AdditivePipeMultiWire.#2b:8;:G;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -976,7 +976,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H69f:7,F"
+                    "raw": "AdditivePipeMultiWire.#2b:8;:G;SEW;:He1a:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -989,7 +989,7 @@
                     "subname": "Face9"
                   }
                 },
-                "AdditivePipeMultiWire.#2c;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#2c;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -997,7 +997,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#2c;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#2c;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#2c;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1010,7 +1010,7 @@
                     "subname": "Edge17"
                   }
                 },
-                "AdditivePipeMultiWire.#2d;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#2d;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1018,7 +1018,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#2d;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#2d;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#2d;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1031,7 +1031,7 @@
                     "subname": "Edge18"
                   }
                 },
-                "AdditivePipeMultiWire.#2e;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#2e;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1039,7 +1039,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#2e;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#2e;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#2e;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1052,7 +1052,7 @@
                     "subname": "Edge20"
                   }
                 },
-                "AdditivePipeMultiWire.#2f;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#2f;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1060,7 +1060,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#2f;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#2f;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#2f;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1073,7 +1073,7 @@
                     "subname": "Edge22"
                   }
                 },
-                "AdditivePipeMultiWire.#31:1;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#31:1;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1081,7 +1081,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#31:1;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#31:1;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#31:1;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1094,7 +1094,7 @@
                     "subname": "Edge2"
                   }
                 },
-                "AdditivePipeMultiWire.#33:1;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#33:1;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1102,7 +1102,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#33:1;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#33:1;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#33:1;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1115,7 +1115,7 @@
                     "subname": "Edge4"
                   }
                 },
-                "AdditivePipeMultiWire.#34:2;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#34:2;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1123,7 +1123,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#34:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#34:2;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#34:2;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1136,7 +1136,7 @@
                     "subname": "Edge5"
                   }
                 },
-                "AdditivePipeMultiWire.#35:2;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#35:2;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1144,7 +1144,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#35:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#35:2;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#35:2;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1157,7 +1157,7 @@
                     "subname": "Edge7"
                   }
                 },
-                "AdditivePipeMultiWire.#36:3;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#36:3;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1165,7 +1165,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#36:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#36:3;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#36:3;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1178,7 +1178,7 @@
                     "subname": "Edge8"
                   }
                 },
-                "AdditivePipeMultiWire.#37:3;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#37:3;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1186,7 +1186,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#37:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#37:3;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#37:3;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1199,7 +1199,7 @@
                     "subname": "Edge10"
                   }
                 },
-                "AdditivePipeMultiWire.#38:4;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#38:4;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1207,7 +1207,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#38:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#38:4;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#38:4;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1220,7 +1220,7 @@
                     "subname": "Edge11"
                   }
                 },
-                "AdditivePipeMultiWire.#39:4;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#39:4;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1228,7 +1228,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#39:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#39:4;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#39:4;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1241,7 +1241,7 @@
                     "subname": "Edge12"
                   }
                 },
-                "AdditivePipeMultiWire.#3a:5;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#3a:5;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1249,7 +1249,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#3a:5;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1262,7 +1262,7 @@
                     "subname": "Edge13"
                   }
                 },
-                "AdditivePipeMultiWire.#3b:6;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#3b:6;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1270,7 +1270,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#3b:6;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1283,7 +1283,7 @@
                     "subname": "Edge14"
                   }
                 },
-                "AdditivePipeMultiWire.#3c:7;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#3c:7;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1291,7 +1291,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#3c:7;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1304,7 +1304,7 @@
                     "subname": "Edge15"
                   }
                 },
-                "AdditivePipeMultiWire.#3d:8;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#3d:8;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1312,7 +1312,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#3d:8;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1325,7 +1325,7 @@
                     "subname": "Edge16"
                   }
                 },
-                "AdditivePipeMultiWire.#3e:5;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#3e:5;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1333,7 +1333,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#3e:5;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1346,7 +1346,7 @@
                     "subname": "Edge19"
                   }
                 },
-                "AdditivePipeMultiWire.#3f:6;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#3f:6;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1354,7 +1354,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#3f:6;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1367,7 +1367,7 @@
                     "subname": "Edge21"
                   }
                 },
-                "AdditivePipeMultiWire.#40:7;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#40:7;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1375,7 +1375,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#40:7;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#40:7;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#40:7;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1388,7 +1388,7 @@
                     "subname": "Edge23"
                   }
                 },
-                "AdditivePipeMultiWire.#41:8;:G;SEW;:H69f:7,E": {
+                "AdditivePipeMultiWire.#41:8;:G;SEW;:H*:*,E": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1396,7 +1396,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#41:8;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeMultiWire.#41:8;:G;SEW;:H69f:7,E"
+                    "raw": "AdditivePipeMultiWire.#41:8;:G;SEW;:He1a:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1409,7 +1409,7 @@
                     "subname": "Edge24"
                   }
                 },
-                "AdditivePipeMultiWire.#43:2;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#43:2;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1417,7 +1417,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#43:2;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#43:2;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#43:2;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1430,7 +1430,7 @@
                     "subname": "Vertex1"
                   }
                 },
-                "AdditivePipeMultiWire.#45;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#45;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1438,7 +1438,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#45;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#45;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#45;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1451,7 +1451,7 @@
                     "subname": "Vertex2"
                   }
                 },
-                "AdditivePipeMultiWire.#46:3;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#46:3;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1459,7 +1459,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#46:3;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#46:3;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#46:3;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1472,7 +1472,7 @@
                     "subname": "Vertex3"
                   }
                 },
-                "AdditivePipeMultiWire.#47;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#47;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1480,7 +1480,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#47;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#47;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#47;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1493,7 +1493,7 @@
                     "subname": "Vertex4"
                   }
                 },
-                "AdditivePipeMultiWire.#48:4;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#48:4;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1501,7 +1501,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#48:4;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#48:4;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#48:4;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1514,7 +1514,7 @@
                     "subname": "Vertex5"
                   }
                 },
-                "AdditivePipeMultiWire.#49;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#49;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1522,7 +1522,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#49;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#49;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#49;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1535,7 +1535,7 @@
                     "subname": "Vertex6"
                   }
                 },
-                "AdditivePipeMultiWire.#4a:5;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#4a:5;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1543,7 +1543,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#4a:5;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1556,7 +1556,7 @@
                     "subname": "Vertex7"
                   }
                 },
-                "AdditivePipeMultiWire.#4b;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#4b;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1564,7 +1564,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#4b;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#4b;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#4b;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1577,7 +1577,7 @@
                     "subname": "Vertex8"
                   }
                 },
-                "AdditivePipeMultiWire.#4c:8;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#4c:8;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1585,7 +1585,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#4c:8;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1598,7 +1598,7 @@
                     "subname": "Vertex9"
                   }
                 },
-                "AdditivePipeMultiWire.#4d:9;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#4d:9;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1606,7 +1606,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#4d:9;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1619,7 +1619,7 @@
                     "subname": "Vertex10"
                   }
                 },
-                "AdditivePipeMultiWire.#4e;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#4e;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1627,7 +1627,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#4e;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#4e;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#4e;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1640,7 +1640,7 @@
                     "subname": "Vertex11"
                   }
                 },
-                "AdditivePipeMultiWire.#4f;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#4f;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1648,7 +1648,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#4f;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#4f;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#4f;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1661,7 +1661,7 @@
                     "subname": "Vertex12"
                   }
                 },
-                "AdditivePipeMultiWire.#50;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#50;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1669,7 +1669,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#50;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#50;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#50;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1682,7 +1682,7 @@
                     "subname": "Vertex13"
                   }
                 },
-                "AdditivePipeMultiWire.#51;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#51;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1690,7 +1690,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#51;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#51;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#51;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1703,7 +1703,7 @@
                     "subname": "Vertex14"
                   }
                 },
-                "AdditivePipeMultiWire.#52;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#52;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1711,7 +1711,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#52;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#52;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#52;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1724,7 +1724,7 @@
                     "subname": "Vertex15"
                   }
                 },
-                "AdditivePipeMultiWire.#53;:G;SEW;:H69f:7,V": {
+                "AdditivePipeMultiWire.#53;:G;SEW;:H*:*,V": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1732,7 +1732,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#53;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeMultiWire.#53;:G;SEW;:H69f:7,V"
+                    "raw": "AdditivePipeMultiWire.#53;:G;SEW;:He1a:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1745,7 +1745,7 @@
                     "subname": "Vertex16"
                   }
                 },
-                "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H69f:a,F": {
+                "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1753,7 +1753,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H69f:a,F"
+                    "raw": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:He1a:a,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1766,7 +1766,7 @@
                     "subname": "Face5"
                   }
                 },
-                "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H69f:a,F": {
+                "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H*:*,F": {
                   "evidence": {
                     "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                     "mapperHistoryIds": [],
@@ -1774,7 +1774,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H*:*,F",
-                    "raw": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H69f:a,F"
+                    "raw": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:He1a:a,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1800,18 +1800,18 @@
           "entries": {
             "AdditivePipeMultiWire.#18:1;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#18:1;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#18:1;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#18:1;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face1"
               },
               "target": {
@@ -1821,18 +1821,18 @@
             },
             "AdditivePipeMultiWire.#19:2;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#19:2;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#19:2;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#19:2;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face2"
               },
               "target": {
@@ -1842,18 +1842,18 @@
             },
             "AdditivePipeMultiWire.#1a:3;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#1a:3;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face3"
               },
               "target": {
@@ -1863,18 +1863,18 @@
             },
             "AdditivePipeMultiWire.#1b:4;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#1b:4;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face4"
               },
               "target": {
@@ -1884,18 +1884,18 @@
             },
             "AdditivePipeMultiWire.#1c;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#1c;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#1c;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#1c;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge1"
               },
               "target": {
@@ -1905,18 +1905,18 @@
             },
             "AdditivePipeMultiWire.#1d;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#1d;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#1d;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#1d;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge3"
               },
               "target": {
@@ -1926,18 +1926,18 @@
             },
             "AdditivePipeMultiWire.#1e;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#1e;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#1e;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#1e;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge6"
               },
               "target": {
@@ -1947,18 +1947,18 @@
             },
             "AdditivePipeMultiWire.#1f;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#1f;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#1f;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#1f;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge9"
               },
               "target": {
@@ -1968,18 +1968,18 @@
             },
             "AdditivePipeMultiWire.#28:5;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#28:5;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#28:5;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#28:5;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face6"
               },
               "target": {
@@ -1989,18 +1989,18 @@
             },
             "AdditivePipeMultiWire.#29:6;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#29:6;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#29:6;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#29:6;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face7"
               },
               "target": {
@@ -2010,18 +2010,18 @@
             },
             "AdditivePipeMultiWire.#2a:7;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#2a:7;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face8"
               },
               "target": {
@@ -2031,18 +2031,18 @@
             },
             "AdditivePipeMultiWire.#2b:8;:G;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H69f:7,F"
+                "raw": "AdditivePipeMultiWire.#2b:8;:G;SEW;:He1a:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face9"
               },
               "target": {
@@ -2052,18 +2052,18 @@
             },
             "AdditivePipeMultiWire.#2c;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#2c;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#2c;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#2c;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge17"
               },
               "target": {
@@ -2073,18 +2073,18 @@
             },
             "AdditivePipeMultiWire.#2d;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#2d;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#2d;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#2d;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge18"
               },
               "target": {
@@ -2094,18 +2094,18 @@
             },
             "AdditivePipeMultiWire.#2e;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#2e;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#2e;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#2e;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge20"
               },
               "target": {
@@ -2115,18 +2115,18 @@
             },
             "AdditivePipeMultiWire.#2f;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#2f;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#2f;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#2f;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge22"
               },
               "target": {
@@ -2136,18 +2136,18 @@
             },
             "AdditivePipeMultiWire.#31:1;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#31:1;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#31:1;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#31:1;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge2"
               },
               "target": {
@@ -2157,18 +2157,18 @@
             },
             "AdditivePipeMultiWire.#33:1;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#33:1;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#33:1;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#33:1;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge4"
               },
               "target": {
@@ -2178,18 +2178,18 @@
             },
             "AdditivePipeMultiWire.#34:2;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#34:2;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#34:2;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#34:2;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge5"
               },
               "target": {
@@ -2199,18 +2199,18 @@
             },
             "AdditivePipeMultiWire.#35:2;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#35:2;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#35:2;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#35:2;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge7"
               },
               "target": {
@@ -2220,18 +2220,18 @@
             },
             "AdditivePipeMultiWire.#36:3;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#36:3;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#36:3;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#36:3;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge8"
               },
               "target": {
@@ -2241,18 +2241,18 @@
             },
             "AdditivePipeMultiWire.#37:3;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#37:3;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#37:3;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#37:3;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge10"
               },
               "target": {
@@ -2262,18 +2262,18 @@
             },
             "AdditivePipeMultiWire.#38:4;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#38:4;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#38:4;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#38:4;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge11"
               },
               "target": {
@@ -2283,18 +2283,18 @@
             },
             "AdditivePipeMultiWire.#39:4;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#39:4;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#39:4;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#39:4;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge12"
               },
               "target": {
@@ -2304,18 +2304,18 @@
             },
             "AdditivePipeMultiWire.#3a:5;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#3a:5;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge13"
               },
               "target": {
@@ -2325,18 +2325,18 @@
             },
             "AdditivePipeMultiWire.#3b:6;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#3b:6;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge14"
               },
               "target": {
@@ -2346,18 +2346,18 @@
             },
             "AdditivePipeMultiWire.#3c:7;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#3c:7;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge15"
               },
               "target": {
@@ -2367,18 +2367,18 @@
             },
             "AdditivePipeMultiWire.#3d:8;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#3d:8;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge16"
               },
               "target": {
@@ -2388,18 +2388,18 @@
             },
             "AdditivePipeMultiWire.#3e:5;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#3e:5;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge19"
               },
               "target": {
@@ -2409,18 +2409,18 @@
             },
             "AdditivePipeMultiWire.#3f:6;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#3f:6;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge21"
               },
               "target": {
@@ -2430,18 +2430,18 @@
             },
             "AdditivePipeMultiWire.#40:7;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#40:7;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#40:7;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#40:7;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge23"
               },
               "target": {
@@ -2451,18 +2451,18 @@
             },
             "AdditivePipeMultiWire.#41:8;:G;SEW;:H*:*,E": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#41:8;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeMultiWire.#41:8;:G;SEW;:H69f:7,E"
+                "raw": "AdditivePipeMultiWire.#41:8;:G;SEW;:He1a:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Edge24"
               },
               "target": {
@@ -2472,18 +2472,18 @@
             },
             "AdditivePipeMultiWire.#43:2;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#43:2;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#43:2;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#43:2;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex1"
               },
               "target": {
@@ -2493,18 +2493,18 @@
             },
             "AdditivePipeMultiWire.#45;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#45;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#45;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#45;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex2"
               },
               "target": {
@@ -2514,18 +2514,18 @@
             },
             "AdditivePipeMultiWire.#46:3;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#46:3;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#46:3;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#46:3;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex3"
               },
               "target": {
@@ -2535,18 +2535,18 @@
             },
             "AdditivePipeMultiWire.#47;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#47;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#47;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#47;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex4"
               },
               "target": {
@@ -2556,18 +2556,18 @@
             },
             "AdditivePipeMultiWire.#48:4;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#48:4;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#48:4;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#48:4;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex5"
               },
               "target": {
@@ -2577,18 +2577,18 @@
             },
             "AdditivePipeMultiWire.#49;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#49;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#49;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#49;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex6"
               },
               "target": {
@@ -2598,18 +2598,18 @@
             },
             "AdditivePipeMultiWire.#4a:5;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#4a:5;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex7"
               },
               "target": {
@@ -2619,18 +2619,18 @@
             },
             "AdditivePipeMultiWire.#4b;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#4b;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#4b;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#4b;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex8"
               },
               "target": {
@@ -2640,18 +2640,18 @@
             },
             "AdditivePipeMultiWire.#4c:8;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#4c:8;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex9"
               },
               "target": {
@@ -2661,18 +2661,18 @@
             },
             "AdditivePipeMultiWire.#4d:9;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#4d:9;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex10"
               },
               "target": {
@@ -2682,18 +2682,18 @@
             },
             "AdditivePipeMultiWire.#4e;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#4e;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#4e;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#4e;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex11"
               },
               "target": {
@@ -2703,18 +2703,18 @@
             },
             "AdditivePipeMultiWire.#4f;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#4f;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#4f;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#4f;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex12"
               },
               "target": {
@@ -2724,18 +2724,18 @@
             },
             "AdditivePipeMultiWire.#50;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#50;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#50;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#50;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex13"
               },
               "target": {
@@ -2745,18 +2745,18 @@
             },
             "AdditivePipeMultiWire.#51;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#51;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#51;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#51;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex14"
               },
               "target": {
@@ -2766,18 +2766,18 @@
             },
             "AdditivePipeMultiWire.#52;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#52;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#52;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#52;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex15"
               },
               "target": {
@@ -2787,18 +2787,18 @@
             },
             "AdditivePipeMultiWire.#53;:G;SEW;:H*:*,V": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#53;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeMultiWire.#53;:G;SEW;:H69f:7,V"
+                "raw": "AdditivePipeMultiWire.#53;:G;SEW;:He1a:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Vertex16"
               },
               "target": {
@@ -2808,18 +2808,18 @@
             },
             "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H69f:a,F"
+                "raw": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:He1a:a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face5"
               },
               "target": {
@@ -2829,18 +2829,18 @@
             },
             "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H*:*,F": {
               "evidence": {
-                "childElementMapKey": null,
+                "childElementMapKey": "Body:AdditivePipeMultiWire:AdditivePipeMultiWire",
                 "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
+                "source": "freecad_partdesign_body_tip"
               },
               "mappedName": {
                 "canonical": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H*:*,F",
-                "raw": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H69f:a,F"
+                "raw": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:He1a:a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
               "source": {
-                "object": "Body",
+                "object": "AdditivePipeMultiWire",
                 "subname": "Face10"
               },
               "target": {
@@ -2858,350 +2858,350 @@
           "Edge1": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#1c;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#1c;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#1c;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#37:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#37:3;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#37:3;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#38:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#38:4;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#38:4;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#39:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#39:4;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#39:4;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#3a:5;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#3a:5;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge13",
             "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#3b:6;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#3b:6;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge14",
             "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#3c:7;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#3c:7;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge15",
             "subname": "Edge15"
           },
           "Edge16": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#3d:8;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#3d:8;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge16",
             "subname": "Edge16"
           },
           "Edge17": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#2c;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#2c;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#2c;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge17",
             "subname": "Edge17"
           },
           "Edge18": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#2d;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#2d;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#2d;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge18",
             "subname": "Edge18"
           },
           "Edge19": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#3e:5;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#3e:5;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge19",
             "subname": "Edge19"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#31:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#31:1;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#31:1;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge20": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#2e;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#2e;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#2e;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge20",
             "subname": "Edge20"
           },
           "Edge21": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#3f:6;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#3f:6;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge21",
             "subname": "Edge21"
           },
           "Edge22": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#2f;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#2f;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#2f;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge22",
             "subname": "Edge22"
           },
           "Edge23": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#40:7;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#40:7;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#40:7;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge23",
             "subname": "Edge23"
           },
           "Edge24": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#41:8;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#41:8;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#41:8;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge24",
             "subname": "Edge24"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#1d;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#1d;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#1d;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#33:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#33:1;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#33:1;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#34:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#34:2;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#34:2;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#1e;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#1e;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#1e;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#35:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#35:2;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#35:2;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#36:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#36:3;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#36:3;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#1f;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#1f;:G;SEW;:H69f:7,E",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#1f;:G;SEW;:He1a:7,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#18:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#18:1;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#18:1;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face10": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:H69f:a,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#58:1;:L#57;SEW;:He1a:a,F",
             "resolvedIndexed": "Face10",
             "subname": "Face10"
           },
           "Face2": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#19:2;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#19:2;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#19:2;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#1a:3;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#1a:3;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#1b:4;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#1b:4;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:H69f:a,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#56:1;:L#54;SEW;:He1a:a,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#28:5;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#28:5;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#28:5;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#29:6;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#29:6;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#29:6;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face7",
             "subname": "Face7"
           },
           "Face8": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#2a:7;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#2a:7;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face8",
             "subname": "Face8"
           },
           "Face9": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#2b:8;:G;SEW;:H69f:7,F",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#2b:8;:G;SEW;:He1a:7,F",
             "resolvedIndexed": "Face9",
             "subname": "Face9"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#43:2;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#43:2;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#43:2;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#4d:9;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#4d:9;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex10",
             "subname": "Vertex10"
           },
           "Vertex11": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#4e;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#4e;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#4e;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex11",
             "subname": "Vertex11"
           },
           "Vertex12": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#4f;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#4f;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#4f;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex12",
             "subname": "Vertex12"
           },
           "Vertex13": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#50;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#50;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#50;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex13",
             "subname": "Vertex13"
           },
           "Vertex14": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#51;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#51;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#51;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex14",
             "subname": "Vertex14"
           },
           "Vertex15": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#52;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#52;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#52;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex15",
             "subname": "Vertex15"
           },
           "Vertex16": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#53;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#53;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#53;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex16",
             "subname": "Vertex16"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#45;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#45;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#45;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#46:3;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#46:3;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#46:3;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#47;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#47;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#47;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#48:4;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#48:4;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#48:4;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#49;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#49;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#49;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#4a:5;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#4a:5;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#4b;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#4b;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#4b;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeMultiWire.#4c:8;:G;SEW;:H69f:7,V",
+            "rawFreecadMappedName": "AdditivePipeMultiWire.#4c:8;:G;SEW;:He1a:7,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
           }
