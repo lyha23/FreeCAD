@@ -1946,6 +1946,69 @@ def topo_state_reference_shadow_updates(fixture: dict) -> list[dict[str, Any]]:
     return updates
 
 
+def reference_update_requires_state(item: dict[str, Any]) -> bool:
+    stable_sub_list = item.get("StableSubList")
+    return isinstance(stable_sub_list, list) and bool(stable_sub_list)
+
+
+def validate_reference_update_shadow_targets(item: dict[str, Any], target_name: str, context: str) -> None:
+    reference_shadows = item.get("ReferenceShadow")
+    if not isinstance(reference_shadows, list):
+        return
+    for index, shadow in enumerate(reference_shadows):
+        if not isinstance(shadow, dict):
+            continue
+        shadow_target = shadow.get("target")
+        if isinstance(shadow_target, str) and shadow_target and shadow_target != target_name:
+            raise UnsupportedFixture(
+                f"{context}.ReferenceShadow[{index}].target {shadow_target} conflicts with value {target_name}"
+            )
+
+
+def add_reference_update_state_target(
+    targets: list[str],
+    seen: set[str],
+    item: dict[str, Any],
+    context: str,
+) -> None:
+    if not reference_update_requires_state(item):
+        return
+    target_name = item.get("value")
+    if not isinstance(target_name, str) or not target_name:
+        raise UnsupportedFixture(f"{context}.StableSubList requires a value target")
+    validate_reference_update_shadow_targets(item, target_name, context)
+    if target_name not in seen:
+        seen.add(target_name)
+        targets.append(target_name)
+
+
+def element_reference_update_state_targets(reference_updates: list[dict[str, Any]]) -> list[str]:
+    targets: list[str] = []
+    seen: set[str] = set()
+    for update_index, update in enumerate(reference_updates):
+        if not isinstance(update, dict):
+            continue
+        property_type = update.get("PropertyType")
+        context = f"elementReferenceUpdates[{update_index}]"
+        if property_type in LINK_SUB_PROPERTY_TYPES:
+            add_reference_update_state_target(targets, seen, update, context)
+            continue
+        if property_type in LINK_SUB_LIST_PROPERTY_TYPES:
+            sub_set = update.get("SubSet")
+            if not isinstance(sub_set, list):
+                raise UnsupportedFixture(f"{context}.SubSet must be a list")
+            for item_index, item in enumerate(sub_set):
+                if not isinstance(item, dict):
+                    raise UnsupportedFixture(f"{context}.SubSet[{item_index}] must be an object")
+                add_reference_update_state_target(
+                    targets,
+                    seen,
+                    item,
+                    f"{context}.SubSet[{item_index}]",
+                )
+    return targets
+
+
 def normalized_topo_state_element_entry(entry: Any) -> dict[str, Any]:
     if not isinstance(entry, dict):
         return {}
@@ -2031,6 +2094,133 @@ def normalized_input_topo_state(fixture: dict, FreeCAD: Any) -> dict[str, Any]:
     }
 
 
+def normalized_input_topo_state_object(fixture: dict, object_name: str) -> dict[str, Any] | None:
+    topo_state = fixture.get("topoNamingState")
+    objects = topo_state.get("objects") if isinstance(topo_state, dict) else None
+    if not isinstance(objects, dict):
+        return None
+    object_state = objects.get(object_name)
+    if not isinstance(object_state, dict):
+        return None
+    return normalized_topo_state_object(object_name, object_state, fixture_object_specs(fixture).get(object_name))
+
+
+def generated_topo_state_object(
+    fixture: dict,
+    object_name: str,
+    created: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    if created is None:
+        return None
+    obj = created.get(object_name)
+    if obj is None:
+        return None
+    summary = object_expected_payload(obj, fixture, created)
+    return topo_state_object_payload(object_name, summary, fixture_object_specs(fixture).get(object_name), created)
+
+
+def topo_state_object_has_stable_token(object_state: dict[str, Any], stable_subname: str) -> bool:
+    element_map = object_state.get("elementMap")
+    entries = element_map.get("entries") if isinstance(element_map, dict) else None
+    if matching_topo_state_entry(entries, stable_subname) is not None:
+        return True
+
+    child_maps = object_state.get("childElementMaps")
+    if isinstance(child_maps, list):
+        for child_map in child_maps:
+            if not isinstance(child_map, dict):
+                continue
+            child_entries = child_map.get("elementMap", {}).get("entries")
+            if matching_topo_state_entry(child_entries, stable_subname) is not None:
+                return True
+
+    mapper_history = object_state.get("mapperHistory")
+    if isinstance(mapper_history, list):
+        return any(
+            isinstance(event, dict) and mapper_history_event_matches(event, stable_subname)
+            for event in mapper_history
+        )
+    return False
+
+
+def assert_reference_updates_resolve_in_state(
+    reference_updates: list[dict[str, Any]],
+    objects: dict[str, Any],
+) -> None:
+    for update_index, update in enumerate(reference_updates):
+        if not isinstance(update, dict):
+            continue
+        property_type = update.get("PropertyType")
+        items: list[tuple[str, dict[str, Any]]] = []
+        if property_type in LINK_SUB_PROPERTY_TYPES:
+            items.append((f"elementReferenceUpdates[{update_index}]", update))
+        elif property_type in LINK_SUB_LIST_PROPERTY_TYPES:
+            sub_set = update.get("SubSet")
+            if not isinstance(sub_set, list):
+                raise UnsupportedFixture(f"elementReferenceUpdates[{update_index}].SubSet must be a list")
+            for item_index, item in enumerate(sub_set):
+                if not isinstance(item, dict):
+                    raise UnsupportedFixture(
+                        f"elementReferenceUpdates[{update_index}].SubSet[{item_index}] must be an object"
+                    )
+                items.append((f"elementReferenceUpdates[{update_index}].SubSet[{item_index}]", item))
+        for context, item in items:
+            if not reference_update_requires_state(item):
+                continue
+            target_name = item.get("value")
+            if not isinstance(target_name, str) or not target_name:
+                raise UnsupportedFixture(f"{context}.StableSubList requires a value target")
+            validate_reference_update_shadow_targets(item, target_name, context)
+            object_state = objects.get(target_name)
+            if not isinstance(object_state, dict):
+                raise UnsupportedFixture(
+                    f"{context}.StableSubList target {target_name} missing from topoNamingState.objects"
+                )
+            stable_sub_list = item.get("StableSubList")
+            for token in stable_sub_list if isinstance(stable_sub_list, list) else []:
+                if not isinstance(token, str) or not token:
+                    raise UnsupportedFixture(f"{context}.StableSubList requires string tokens")
+                stable_token = token
+                reject_display_path_stable_token(stable_token, f"{context}.StableSubList")
+                if not topo_state_object_has_stable_token(object_state, stable_token):
+                    raise UnsupportedFixture(
+                        f"{context}.StableSubList {stable_token} cannot resolve in topoNamingState.objects.{target_name}"
+                    )
+
+
+def expand_topo_state_for_reference_updates(
+    fixture: dict,
+    topo_state: dict[str, Any],
+    reference_updates: list[dict[str, Any]],
+    created: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    if not reference_updates:
+        return topo_state
+
+    expanded = copy.deepcopy(topo_state)
+    objects = expanded.get("objects")
+    if not isinstance(objects, dict):
+        raise UnsupportedFixture("topoNamingState.objects must be an object")
+
+    for target_name in element_reference_update_state_targets(reference_updates):
+        if target_name in objects:
+            continue
+        input_object = normalized_input_topo_state_object(fixture, target_name)
+        if input_object is not None:
+            objects[target_name] = input_object
+            continue
+        generated_object = generated_topo_state_object(fixture, target_name, created)
+        if generated_object is not None:
+            objects[target_name] = generated_object
+            continue
+        raise UnsupportedFixture(
+            f"elementReferenceUpdates target {target_name} missing from input topoNamingState and native objects"
+        )
+
+    assert_reference_updates_resolve_in_state(reference_updates, objects)
+    return expanded
+
+
 def topo_state_protocol_response(
     fixture: dict,
     FreeCAD: Any,
@@ -2038,6 +2228,7 @@ def topo_state_protocol_response(
     diagnostics: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
+    topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates)
     return {
         "results": [],
         "topoNamingState": topo_state,
@@ -2640,6 +2831,19 @@ def topo_naming_state_response(
 ) -> dict[str, Any]:
     specs = fixture_object_specs(fixture)
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
+    topo_state = {
+        "schemaVersion": "cad-core.topo-state.v1",
+        "producer": topo_state_producer(fixture, FreeCAD),
+        "documentHash": semantic_hash({
+            "Objects": fixture.get("Objects", []),
+            "recompute": fixture.get("recompute", {}),
+        }),
+        "objects": {
+            object_name: topo_state_object_payload(object_name, summary, specs.get(object_name), created)
+            for object_name, summary in object_payloads.items()
+        },
+    }
+    topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
     return {
         "results": [
             {
@@ -2648,18 +2852,7 @@ def topo_naming_state_response(
             }
             for object_name, summary in object_payloads.items()
         ],
-        "topoNamingState": {
-            "schemaVersion": "cad-core.topo-state.v1",
-            "producer": topo_state_producer(fixture, FreeCAD),
-            "documentHash": semantic_hash({
-                "Objects": fixture.get("Objects", []),
-                "recompute": fixture.get("recompute", {}),
-            }),
-            "objects": {
-                object_name: topo_state_object_payload(object_name, summary, specs.get(object_name), created)
-                for object_name, summary in object_payloads.items()
-            },
-        },
+        "topoNamingState": topo_state,
         "elementReferenceUpdates": reference_updates,
         "diagnostics": reference_diagnostics,
     }
@@ -7194,14 +7387,78 @@ def compare_topo_naming_state_expected(existing: dict, generated: dict) -> list[
     return []
 
 
+def reference_update_state_contract_errors(
+    payload: dict,
+    label: str,
+    objects: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    reference_updates = payload.get("elementReferenceUpdates")
+    if not isinstance(reference_updates, list):
+        return errors
+
+    for update_index, update in enumerate(reference_updates):
+        if not isinstance(update, dict):
+            errors.append(f"{label}:elementReferenceUpdates.{update_index}")
+            continue
+        property_type = update.get("PropertyType")
+        items: list[tuple[str, dict[str, Any]]] = []
+        if property_type in LINK_SUB_PROPERTY_TYPES:
+            items.append((f"{label}:elementReferenceUpdates.{update_index}", update))
+        elif property_type in LINK_SUB_LIST_PROPERTY_TYPES:
+            sub_set = update.get("SubSet")
+            if not isinstance(sub_set, list):
+                errors.append(f"{label}:elementReferenceUpdates.{update_index}.SubSet")
+                continue
+            for item_index, item in enumerate(sub_set):
+                if not isinstance(item, dict):
+                    errors.append(f"{label}:elementReferenceUpdates.{update_index}.SubSet.{item_index}")
+                    continue
+                items.append((f"{label}:elementReferenceUpdates.{update_index}.SubSet.{item_index}", item))
+
+        for context, item in items:
+            stable_sub_list = item.get("StableSubList")
+            if not isinstance(stable_sub_list, list) or not stable_sub_list:
+                continue
+            target_name = item.get("value")
+            if not isinstance(target_name, str) or not target_name:
+                errors.append(f"{context}.value")
+                continue
+
+            reference_shadows = item.get("ReferenceShadow")
+            if isinstance(reference_shadows, list):
+                for shadow_index, shadow in enumerate(reference_shadows):
+                    if not isinstance(shadow, dict):
+                        continue
+                    shadow_target = shadow.get("target")
+                    if isinstance(shadow_target, str) and shadow_target and shadow_target != target_name:
+                        errors.append(f"{context}.ReferenceShadow.{shadow_index}.target")
+
+            object_state = objects.get(target_name)
+            if not isinstance(object_state, dict):
+                errors.append(f"{context}.topoNamingState.objects.{target_name}.missing")
+                continue
+            for token_index, token in enumerate(stable_sub_list):
+                if not isinstance(token, str) or not token:
+                    errors.append(f"{context}.StableSubList.{token_index}")
+                    continue
+                if display_path_stable_token(token):
+                    errors.append(f"{context}.StableSubList.{token_index}.display_path")
+                    continue
+                if not topo_state_object_has_stable_token(object_state, token):
+                    errors.append(f"{context}.StableSubList.{token_index}.unresolved")
+    return errors
+
+
 def topo_naming_state_contract_errors(payload: dict, label: str) -> list[str]:
     errors: list[str] = []
     state = payload.get("topoNamingState")
     if not isinstance(state, dict):
-        return errors
+        return reference_update_state_contract_errors(payload, label, {})
     errors.extend(stable_identity_contract_errors(payload, label))
     objects = state.get("objects")
     if not isinstance(objects, dict):
+        errors.extend(reference_update_state_contract_errors(payload, label, {}))
         return errors
 
     for object_name, object_state in objects.items():
@@ -7247,6 +7504,7 @@ def topo_naming_state_contract_errors(payload: dict, label: str) -> list[str]:
                 errors.append(
                     f"{label}:topoNamingState.{object_name}.elementMap.{token}.target.subname.missing"
                 )
+    errors.extend(reference_update_state_contract_errors(payload, label, objects))
     return errors
 
 

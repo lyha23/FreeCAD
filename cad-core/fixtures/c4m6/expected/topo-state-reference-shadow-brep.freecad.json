@@ -73,6 +73,48 @@
   "topoNamingState": {
     "documentHash": "sha256:d2331a296b236e14814da04856d3166dfce5668497174769e235ba666c567fb9",
     "objects": {
+      "Body": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Pad.#d:4;:G;XTR;:H21:7,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "element_map"
+              },
+              "mappedName": {
+                "canonical": "Pad.#d:4;:G;XTR;:H*:*,F",
+                "raw": "Pad.#d:4;:G;XTR;:H21:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:37cd9437f117b4d1c98b658a6b0d1584049e4549c9df2c9cebcefd3c45b06de1",
+        "subshapes": {
+          "Face1": {
+            "canonicalFreecadMappedName": "Pad.#d:4;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Pad.#d:4;:G;XTR;:H21:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          }
+        }
+      },
       "ProbeSketch": {
         "childElementMaps": [],
         "elementMap": {
