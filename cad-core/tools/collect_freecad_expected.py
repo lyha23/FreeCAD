@@ -673,10 +673,10 @@ def set_sketch_external_geometry(created: dict[str, Any], obj: Any, value: Any) 
         # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App
         # /SketchObjectExternal.cpp::SketchObject::addExternal(), the Python wrapper takes
         # "ObjectName" and "SubName", then stores ExternalGeometry.setValues(Objects,
-        # SubElements). In oracle mode, feed StableSubList first to collect post-resolution
-        # geometry for CAD Core stable-subname fixtures.
+        # SubElements). In oracle mode, resolve state-backed StableSubList through the
+        # fixture topoNamingState before feeding native FreeCAD's current subname.
         flags = external_geometry_flags_from_item(item)
-        for subname in list_field(item, "StableSubList", "SubList"):
+        for subname in native_sub_list(item):
             external_target_name, external_subname = resolve_external_subname(created, target_name, subname)
             try:
                 # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectPyImp.cpp
