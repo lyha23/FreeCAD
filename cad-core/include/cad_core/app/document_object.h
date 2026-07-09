@@ -33,6 +33,7 @@ struct Document {
     // stores topological element identity in the shape's "ElementMap". cad-core fixtures carry
     // request-side snapshots under "topoNamingState.objects[*].elementMap.entries".
     nlohmann::json topoNamingState = nlohmann::json::object();
+    bool hasTopoNamingState = false;
 };
 
 }  // namespace cad_core::app

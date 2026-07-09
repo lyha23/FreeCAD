@@ -154,6 +154,7 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
     const auto topoStateIt = raw.find("topoNamingState");
     if (topoStateIt != raw.end() && topoStateIt->is_object()) {
         document.topoNamingState = *topoStateIt;
+        document.hasTopoNamingState = true;
     }
 
     std::set<std::string> seenNames;

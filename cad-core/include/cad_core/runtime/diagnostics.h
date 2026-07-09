@@ -16,6 +16,7 @@ struct Diagnostic {
     std::string stage;
     std::string target;
     std::string subname;
+    nlohmann::json details = nlohmann::json::object();
 };
 
 void addDiagnostic(std::vector<Diagnostic>& diagnostics,

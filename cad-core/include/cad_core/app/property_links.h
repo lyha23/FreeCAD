@@ -43,6 +43,7 @@ struct ReferenceShadow {
     std::string sourceStableSubname;
     nlohmann::json fingerprint = nlohmann::json::object();
     std::optional<BrepSnapshot> brep;
+    std::string rawBrep;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.cpp

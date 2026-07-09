@@ -181,6 +181,10 @@ int runRecompute(const RecomputeOptions& options)
     }
 
     auto [document, diagnostics] = app::parseDocument(raw);
+    if (auto failure = runtime::topoNamingStateRequestFailureJson(document, diagnostics)) {
+        runtime::writeJsonFile(options.outputPath, *failure);
+        return 0;
+    }
     const runtime::ComputeContext context = runtime::recomputeContext(document, std::move(diagnostics));
     nlohmann::json result = useLegacyTestOutput()
         ? legacyTestResultJson(document, context)

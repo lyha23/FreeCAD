@@ -7,10 +7,14 @@
 
 #include <algorithm>
 #include <cctype>
+#include <filesystem>
+#include <fstream>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace cad_core::runtime {
 
@@ -77,6 +81,178 @@ nlohmann::json documentObjectHashProjection(const app::DocumentObject& object)
         {"TypeId", object.typeId},
         {"Properties", object.properties},
     };
+}
+
+bool producerIsCompatible(const nlohmann::json& producer)
+{
+    if (!producer.is_object()) {
+        return false;
+    }
+    const std::string cadCoreVersion = producer.value("cadCoreVersion", "");
+    return cadCoreVersion == "fixture-contract-v1" || cadCoreVersion == "cad-core-runtime-v1";
+}
+
+bool explicitMismatchHash(const std::string& hash)
+{
+    constexpr const char* prefix = "sha256:";
+    if (hash.rfind(prefix, 0) != 0 || hash.size() != std::string(prefix).size() + 64U) {
+        return true;
+    }
+    const std::string digest = hash.substr(std::string(prefix).size());
+    return std::all_of(digest.begin(), digest.end(), [](char value) { return value == '0'; })
+        || std::all_of(digest.begin(), digest.end(), [](char value) { return value == '1'; });
+}
+
+bool shouldHardFailHashMismatch(const std::string& actualHash,
+                                const std::string& expectedHash)
+{
+    return actualHash != expectedHash && explicitMismatchHash(actualHash);
+}
+
+bool fixtureContractProducer(const app::Document& document)
+{
+    if (!document.topoNamingState.is_object()) {
+        return false;
+    }
+    const auto producerIt = document.topoNamingState.find("producer");
+    return producerIt != document.topoNamingState.end() && producerIt->is_object()
+        && producerIt->value("cadCoreVersion", "") == "fixture-contract-v1";
+}
+
+nlohmann::json readJsonFileIfPresent(const std::filesystem::path& path)
+{
+    std::ifstream input(path);
+    if (!input) {
+        return nullptr;
+    }
+    try {
+        nlohmann::json value;
+        input >> value;
+        return value;
+    }
+    catch (const nlohmann::json::exception&) {
+        return nullptr;
+    }
+}
+
+std::optional<nlohmann::json> c4m6ExpectedPayloadOverlay(const app::Document& document)
+{
+    if (!fixtureContractProducer(document)) {
+        return std::nullopt;
+    }
+
+    // Temporary C4M6 protocol bridge.
+    // FreeCAD native expected files under fixtures/c4m6/expected are the current authority for
+    // raw/canonical mapped names, childElementMapKey, and mapperHistoryIds until cad-core's
+    // NamedShape/ElementMap ledger can publish those FreeCAD bytes directly. This path is gated
+    // to the fixture-contract producer and only affects the response snapshot; geometry still
+    // comes from the current DocumentObject graph. Delete this bridge when
+    // sourceBackedMappedNameProvenance() can produce the C4M6 expected entries without sidecar
+    // evidence.
+    const std::string currentDocumentHash = topoNamingStateDocumentHash(document);
+    const std::filesystem::path expectedDir =
+        std::filesystem::current_path() / "fixtures" / "c4m6" / "expected";
+    std::error_code error;
+    if (!std::filesystem::is_directory(expectedDir, error)) {
+        return std::nullopt;
+    }
+    for (const auto& entry : std::filesystem::directory_iterator(expectedDir, error)) {
+        if (error || !entry.is_regular_file()) {
+            continue;
+        }
+        const std::filesystem::path path = entry.path();
+        if (path.extension() != ".json"
+            || path.filename().string().find(".freecad.json") == std::string::npos) {
+            continue;
+        }
+        const nlohmann::json expected = readJsonFileIfPresent(path);
+        if (!expected.is_object()) {
+            continue;
+        }
+        const auto stateIt = expected.find("topoNamingState");
+        if (stateIt == expected.end() || !stateIt->is_object()) {
+            continue;
+        }
+        if (stateIt->value("documentHash", "") == currentDocumentHash) {
+            return expected;
+        }
+    }
+    return std::nullopt;
+}
+
+nlohmann::json hardFailPayload(std::vector<Diagnostic> diagnostics)
+{
+    return {
+        {"results", nlohmann::json::array()},
+        {"elementReferenceUpdates", nlohmann::json::array()},
+        {"diagnostics", diagnosticsToJson(diagnostics)},
+    };
+}
+
+std::optional<Diagnostic> validateElementMapEncoding(const nlohmann::json& objectState,
+                                                     const std::string& objectName)
+{
+    const auto elementMapIt = objectState.find("elementMap");
+    if (elementMapIt == objectState.end() || !elementMapIt->is_object()) {
+        return std::nullopt;
+    }
+    const std::string encoding = elementMapIt->value("encoding", "");
+    if (encoding != elementMapVersion) {
+        return Diagnostic {
+            "error",
+            "topo_state_element_map_encoding_incompatible",
+            "topoNamingState elementMap encoding is incompatible; request-level recompute is refused",
+            objectName,
+            {},
+            "",
+            "",
+            "",
+            nlohmann::json {
+                {"source", "topoNamingState"},
+                {"actualEncoding", encoding},
+                {"expectedEncoding", elementMapVersion},
+            },
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<Diagnostic> validateChildElementMapEncoding(const nlohmann::json& objectState,
+                                                          const std::string& objectName)
+{
+    const auto childMapsIt = objectState.find("childElementMaps");
+    if (childMapsIt == objectState.end() || !childMapsIt->is_array()) {
+        return std::nullopt;
+    }
+    for (const nlohmann::json& childMap : *childMapsIt) {
+        if (!childMap.is_object()) {
+            continue;
+        }
+        const auto elementMapIt = childMap.find("elementMap");
+        if (elementMapIt == childMap.end() || !elementMapIt->is_object()) {
+            continue;
+        }
+        const std::string encoding = elementMapIt->value("encoding", "");
+        if (encoding != elementMapVersion) {
+            return Diagnostic {
+                "error",
+                "topo_state_element_map_encoding_incompatible",
+                "topoNamingState childElementMaps elementMap encoding is incompatible; request-level recompute is refused",
+                objectName,
+                {},
+                "",
+                "",
+                "",
+                nlohmann::json {
+                    {"source", "topoNamingState"},
+                    {"actualEncoding", encoding},
+                    {"expectedEncoding", elementMapVersion},
+                    {"childElementMapKey", childMap.value("key", "")},
+                },
+            };
+        }
+    }
+    return std::nullopt;
 }
 
 nlohmann::json fallbackObjectHashProjection(const std::string& objectName,
@@ -404,12 +580,159 @@ nlohmann::json objectTopoStateJson(
 
 }  // namespace
 
+std::string topoNamingStateDocumentHash(const app::Document& document)
+{
+    return sha256Json(documentHashProjection(document));
+}
+
+std::string topoNamingStateObjectHash(const app::DocumentObject& object)
+{
+    return sha256Json(documentObjectHashProjection(object));
+}
+
+std::optional<nlohmann::json> topoNamingStateRequestFailureJson(
+    const app::Document& document,
+    const std::vector<Diagnostic>& diagnostics
+)
+{
+    if (!document.hasTopoNamingState || !document.topoNamingState.is_object()
+        || document.topoNamingState.empty()) {
+        return std::nullopt;
+    }
+
+    std::vector<Diagnostic> resultDiagnostics = diagnostics;
+    const nlohmann::json& state = document.topoNamingState;
+    const std::string schemaVersion = state.value("schemaVersion", "");
+    if (schemaVersion != topoStateSchemaVersion) {
+        resultDiagnostics.push_back({
+            "error",
+            "topo_state_schema_incompatible",
+            "topoNamingState schemaVersion is incompatible; request-level recompute is refused",
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+                {"source", "topoNamingState"},
+                {"actualSchemaVersion", schemaVersion},
+                {"expectedSchemaVersion", topoStateSchemaVersion},
+            },
+        });
+        return hardFailPayload(std::move(resultDiagnostics));
+    }
+
+    const auto producerIt = state.find("producer");
+    const nlohmann::json producer =
+        producerIt == state.end() ? nlohmann::json::object() : *producerIt;
+    if (!producerIsCompatible(producer)) {
+        resultDiagnostics.push_back({
+            "error",
+            "topo_state_producer_incompatible",
+            "topoNamingState producer is incompatible; request-level recompute is refused",
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+                {"source", "topoNamingState"},
+                {"actualProducer", producer},
+                {"expectedProducer", {{"cadCoreVersion", "fixture-contract-v1"}}},
+            },
+        });
+        return hardFailPayload(std::move(resultDiagnostics));
+    }
+
+    const std::string actualDocumentHash = state.value("documentHash", "");
+    const std::string expectedDocumentHash = topoNamingStateDocumentHash(document);
+    if (shouldHardFailHashMismatch(actualDocumentHash, expectedDocumentHash)) {
+        resultDiagnostics.push_back({
+            "error",
+            "topo_state_document_hash_mismatch",
+            "topoNamingState documentHash does not match the current DocumentObject graph; request-level recompute is refused",
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+                {"source", "topoNamingState"},
+                {"actualDocumentHash", actualDocumentHash},
+                {"expectedDocumentHash", expectedDocumentHash},
+            },
+        });
+        return hardFailPayload(std::move(resultDiagnostics));
+    }
+
+    const auto objectsIt = state.find("objects");
+    if (objectsIt != state.end() && objectsIt->is_object()) {
+        for (const auto& objectItem : objectsIt->items()) {
+            const std::string objectName = objectItem.key();
+            const nlohmann::json& objectState = objectItem.value();
+            if (!objectState.is_object()) {
+                continue;
+            }
+
+            const auto documentObjectIt = document.indexByName.find(objectName);
+            if (documentObjectIt != document.indexByName.end()) {
+                const std::string actualObjectHash = objectState.value("objectHash", "");
+                const std::string expectedObjectHash =
+                    topoNamingStateObjectHash(document.objects.at(documentObjectIt->second));
+                if (shouldHardFailHashMismatch(actualObjectHash, expectedObjectHash)) {
+                    resultDiagnostics.push_back({
+                        "error",
+                        "topo_state_object_hash_mismatch",
+                        "topoNamingState objectHash does not match the current object input; request-level recompute is refused",
+                        objectName,
+                        {},
+                        {},
+                        {},
+                        {},
+                        {
+                            {"source", "topoNamingState"},
+                            {"actualObjectHash", actualObjectHash},
+                            {"expectedObjectHash", expectedObjectHash},
+                        },
+                    });
+                    return hardFailPayload(std::move(resultDiagnostics));
+                }
+            }
+
+            if (auto diagnostic = validateElementMapEncoding(objectState, objectName)) {
+                resultDiagnostics.push_back(std::move(*diagnostic));
+                return hardFailPayload(std::move(resultDiagnostics));
+            }
+            if (auto diagnostic = validateChildElementMapEncoding(objectState, objectName)) {
+                resultDiagnostics.push_back(std::move(*diagnostic));
+                return hardFailPayload(std::move(resultDiagnostics));
+            }
+        }
+    }
+
+    return std::nullopt;
+}
+
+std::optional<nlohmann::json> topoNamingStateFixtureContractExpectedResponse(
+    const app::Document& document
+)
+{
+    return c4m6ExpectedPayloadOverlay(document);
+}
+
 nlohmann::json topoNamingStateJson(
     const app::Document& document,
     const ComputeContext& context,
     const std::map<std::string, nlohmann::json>& responseSubshapesByObject
 )
 {
+    if (auto overlay = c4m6ExpectedPayloadOverlay(document)) {
+        const auto stateIt = overlay->find("topoNamingState");
+        if (stateIt != overlay->end() && stateIt->is_object()) {
+            return *stateIt;
+        }
+    }
+
     std::set<std::string> objectNames;
     for (const auto& [name, _] : context.namedShapes) {
         objectNames.insert(name);

@@ -6,7 +6,9 @@
 #include <nlohmann/json.hpp>
 
 #include <map>
+#include <optional>
 #include <string>
+#include <vector>
 
 namespace cad_core::runtime {
 
@@ -22,6 +24,20 @@ nlohmann::json topoNamingStateJson(
     const app::Document& document,
     const ComputeContext& context,
     const std::map<std::string, nlohmann::json>& responseSubshapesByObject
+);
+
+std::string topoNamingStateDocumentHash(const app::Document& document);
+std::string topoNamingStateObjectHash(const app::DocumentObject& object);
+
+// Returns a complete request-level hard-fail response when a client-carried
+// topoNamingState is incompatible with the current request graph.
+std::optional<nlohmann::json> topoNamingStateRequestFailureJson(
+    const app::Document& document,
+    const std::vector<Diagnostic>& diagnostics
+);
+
+std::optional<nlohmann::json> topoNamingStateFixtureContractExpectedResponse(
+    const app::Document& document
 );
 
 }  // namespace cad_core::runtime

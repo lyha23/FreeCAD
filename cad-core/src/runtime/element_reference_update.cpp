@@ -324,6 +324,9 @@ nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
             update["brep"] = brepSnapshotToJson(*shadow.brep);
         }
     }
+    else if (!shadow.rawBrep.empty()) {
+        update["brep"] = shadow.rawBrep;
+    }
     if (!recoveryMethod.empty()) {
         update["reference_recovery"] = recoveryMethod;
         update["reference_recovery_reason"] = recoveryReason;

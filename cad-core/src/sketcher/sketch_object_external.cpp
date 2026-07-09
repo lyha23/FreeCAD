@@ -168,6 +168,9 @@ nlohmann::json externalReferenceShadowsJson(const std::vector<app::ReferenceShad
                 {"data", shadow.brep->data},
             };
         }
+        else if (!shadow.rawBrep.empty()) {
+            item["brep"] = shadow.rawBrep;
+        }
         result.push_back(std::move(item));
     }
     return result;

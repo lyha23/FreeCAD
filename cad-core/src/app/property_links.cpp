@@ -196,11 +196,16 @@ std::optional<std::vector<ReferenceShadow>> readReferenceShadowList(const nlohma
 
         const auto brepIt = item.find("brep");
         if (brepIt != item.end()) {
-            auto brep = readBrepSnapshot(*brepIt);
-            if (!brep) {
-                return std::nullopt;
+            if (brepIt->is_string()) {
+                shadow.rawBrep = brepIt->get<std::string>();
             }
-            shadow.brep = std::move(*brep);
+            else {
+                auto brep = readBrepSnapshot(*brepIt);
+                if (!brep) {
+                    return std::nullopt;
+                }
+                shadow.brep = std::move(*brep);
+            }
         }
 
         items.push_back(std::move(shadow));

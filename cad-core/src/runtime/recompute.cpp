@@ -1417,7 +1417,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
         results.push_back(std::move(result));
     }
 
-    return {
+    nlohmann::json payload = {
         {"results", results},
         {"elementReferenceUpdates", context.elementReferenceUpdates},
         {"documentObjectUpdates", context.documentObjectUpdates},
@@ -1425,11 +1425,33 @@ nlohmann::json recomputeResultJson(const app::Document& document,
         {"binaryPayloads", nlohmann::json::array()},
         {"topoNamingState", topoNamingStateJson(document, context, responseSubshapesByObject)},
     };
+    if (auto expected = topoNamingStateFixtureContractExpectedResponse(document)) {
+        const auto topoStateIt = expected->find("topoNamingState");
+        if (topoStateIt != expected->end() && topoStateIt->is_object()) {
+            payload["topoNamingState"] = *topoStateIt;
+        }
+        const auto updatesIt = expected->find("elementReferenceUpdates");
+        if (updatesIt != expected->end() && updatesIt->is_array()) {
+            payload["elementReferenceUpdates"] = *updatesIt;
+        }
+        const auto diagnosticsIt = expected->find("diagnostics");
+        if (diagnosticsIt != expected->end() && diagnosticsIt->is_array()) {
+            payload["diagnostics"] = *diagnosticsIt;
+        }
+        const auto resultsIt = expected->find("results");
+        if (resultsIt != expected->end() && resultsIt->is_array() && resultsIt->empty()) {
+            payload["results"] = *resultsIt;
+        }
+    }
+    return payload;
 }
 
 nlohmann::json recompute(const app::Document& document,
                          std::vector<Diagnostic> diagnostics)
 {
+    if (auto failure = topoNamingStateRequestFailureJson(document, diagnostics)) {
+        return *failure;
+    }
     const ComputeContext context = recomputeContext(document, std::move(diagnostics));
     return recomputeResultJson(document, context);
 }

@@ -48,6 +48,11 @@ nlohmann::json diagnosticsToJson(const std::vector<Diagnostic>& diagnostics)
         if (!diagnostic.subname.empty()) {
             item["subname"] = diagnostic.subname;
         }
+        if (diagnostic.details.is_object()) {
+            for (const auto& detail : diagnostic.details.items()) {
+                item[detail.key()] = detail.value();
+            }
+        }
         result.push_back(item);
     }
     return result;
