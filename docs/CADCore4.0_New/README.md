@@ -8,16 +8,20 @@
 
 | 文件 | 用途 |
 | --- | --- |
-| `7-9-09-19-CADCore4.0_New-topoNamingState完整状态记录总览方案.md` | 新方案总览、边界、落点和验收分层 |
-| `矩阵/topo_state_scope.tsv` | 状态字段、代码落点、当前基线和目标 |
-| `矩阵/topo_state_fixture_matrix.tsv` | fixture / expected / protocol contract 覆盖矩阵 |
-| `矩阵/topo_state_blocker_queue.tsv` | 后续实现队列 |
-| `工作步骤细分/7-9-09-19-C4N-S1-topoNamingState完整状态记录基线与exact-parity方案.md` | 第一批可执行步骤 |
+| `C4N-S1/7-9-09-19-CADCore4.0_New-topoNamingState完整状态记录总览方案.md` | C4N-S1 总览、边界、落点和验收分层 |
+| `C4N-S1/矩阵/topo_state_scope.tsv` | C4N-S1 状态字段、代码落点、当前基线和目标 |
+| `C4N-S1/矩阵/topo_state_fixture_matrix.tsv` | C4N-S1 fixture / expected / protocol contract 覆盖矩阵 |
+| `C4N-S1/矩阵/topo_state_blocker_queue.tsv` | C4N-S1 实现队列和完成状态 |
+| `C4N-S1/工作步骤细分/7-9-09-19-【已实现】C4N-S1-topoNamingState完整状态记录基线与exact-parity方案.md` | 已完成的第一批 c4m6 exact parity 步骤 |
+| `C4N-S2/7-9-10-26-【已实现】C4N-S2-FreeCAD-ElementMap-MappedName-producer语义通用化方案.md` | 已完成的 p2/p6 producer mapped-name 通用化方案 |
+| `C4N-S2/矩阵/c4n_s2_fixture_matrix.tsv` | C4N-S2 p2/p6 红线和 c4m6 回归守卫矩阵 |
+| `C4N-S2/工作步骤细分/7-9-10-26-【已实现】C4N-S2-S1-p2p6-producer语义通用化实施步骤.md` | 已完成的 C4N-S2 可执行步骤 |
 
 ## 执行规则
 
 - `docs/接口规定/7-8-11-08-topoNamingState客户端携带状态接口方案.md` 是协议权威；本包负责实现拆分和验收组织。
 - `DocumentObject graph` 仍是唯一建模事实；`topoNamingState` 只能参与旧引用恢复、diagnostics 和 update 建议。
 - expected 以 `cad-core/fixtures/**/expected/*.freecad.json` 的 native FreeCADCmd 输出为权威；不得用当前 `cad-core` 输出反推 expected。
-- 当前第一批验收聚焦 `cad-core/fixtures/c4m6`，因为它同时覆盖首次状态、Body Tip child map、Compound child map、mapperHistory、hard-fail 和 ReferenceShadow 边界。
-- 完成步骤后，按仓库文档规则把步骤文件改名为 `【已实现】...`，再刷新队列。
+- C4N-S1 已聚焦并关闭 `cad-core/fixtures/c4m6`，覆盖首次状态、Body Tip child map、Compound child map、mapperHistory、hard-fail 和 ReferenceShadow 边界。
+- C4N-S2 已关闭 p2 / p6 producer mapped-name 通用化红线；`test_topo_naming_state_response.py` 中对应 expectedFailure 已移除，c4m6 回归守卫保持通过。
+- 完成步骤后，按仓库文档规则把方案或步骤文件改名为 `【已实现】...`，再刷新矩阵和 README。

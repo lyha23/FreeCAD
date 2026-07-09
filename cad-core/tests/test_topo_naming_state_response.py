@@ -378,9 +378,6 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                 response = self.run_legacy_recompute_fixture(group, fixture)
                 self.assert_source_backed_producer_evidence(response, object_name)
 
-    # C13-M2 S3 redline: remove expectedFailure in S4 when runtime publishes
-    # FreeCAD-compatible raw/canonical mapped names instead of stable tokens.
-    @unittest.expectedFailure
     def test_c13m2_p2_body_mapped_name_raw_canonical_matches_freecad_expected(self) -> None:
         self.assert_c13m2_focused_mapped_name_case("p2", "rect-pad-pocket", "Body")
 
@@ -405,9 +402,6 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         )
         self.assert_topo_state_object_runtime_contract(body)
 
-    # C13-M2 S3 redline: remove expectedFailure in S4 when runtime publishes
-    # FreeCAD-compatible raw/canonical mapped names instead of stable tokens.
-    @unittest.expectedFailure
     def test_c13m2_p6_probe_pad_mapped_name_raw_canonical_matches_freecad_expected(self) -> None:
         self.assert_c13m2_focused_mapped_name_case(
             "p6",

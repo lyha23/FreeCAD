@@ -1,0 +1,6 @@
+id	phase	fixture	oracle	object	scope	status	exit_condition
+C4N-S2-FIX-001	p2	rect-pad-pocket	fixtures/p2/expected/rect-pad-pocket.freecad.json	Body	Pad/Pocket Body mapped-name raw/canonical exact parity	closed	Removed expectedFailure; tests.test_topo_naming_state_response passes with p2 exact raw/canonical parity
+C4N-S2-FIX-002	p6	up-to-face-stable-body-history	fixtures/p6/expected/up-to-face-stable-body-history.freecad.json	ProbePad	UpToFace ProbePad producer evidence and mapped-name parity	closed	Removed expectedFailure; tests.test_topo_naming_state_response passes with p6 ProbePad exact raw/canonical parity
+C4N-S2-FIX-003	p6	up-to-face-stable-body-history	fixtures/p6/expected/up-to-face-stable-body-history.freecad.json	Body	Body stable history and child topoNamingState publication	closed	Focused producer-evidence test keeps Body source-backed without fake stable raw names
+C4N-S2-FIX-004	c4m6	topo-state-body-tip-stable-recovery	fixtures/c4m6/expected/topo-state-body-tip-stable-recovery.freecad.json	Body	C4N-S1 Body Tip child map regression guard	closed	Focused c4m6 runtime contract remains passing
+C4N-S2-FIX-005	c4m6	topo-state-link-compound-child-maps	fixtures/c4m6/expected/topo-state-link-compound-child-maps.freecad.json	LinkCompound	Compound child map local token regression guard	closed	Focused c4m6 runtime contract remains passing

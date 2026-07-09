@@ -649,7 +649,14 @@ std::optional<std::pair<std::string, nlohmann::json>> childEntryFromProvenance(
     if (!hasMappedName(provenance)) {
         return std::nullopt;
     }
-    const std::string localSubname = sourceLocalNameFromStable(stableName);
+    std::string localSubname = sourceLocalNameFromStable(stableName);
+    if (shapeKindFromIndexedName(localSubname) == "shape" && !provenance.sourceElement.empty()) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::addChildElements() reads a child mapped name but keeps the child indexed
+        // endpoint beside it. For hash-form names such as "Pocket.#11:2;..." the target/source
+        // subshape must come from producer evidence, not from parsing the mapped-name token.
+        localSubname = sourceLocalNameFromStable(provenance.sourceElement);
+    }
     if (!childKind.empty() && shapeKindFromIndexedName(localSubname) != childKind) {
         return std::nullopt;
     }
@@ -751,6 +758,9 @@ nlohmann::json childElementMapEntriesFromOwnerProvenance(
         if (ownerObject != "Body") {
             localizeChildMapProvenance(provenance, childPrefix);
         }
+        if (ownerObject == "Body" && !hasFreeCadEncodedElementToken(provenance.rawMappedName)) {
+            continue;
+        }
         if (!hasMappedName(provenance)
             && provenance.sourceElement.rfind(childPrefix, 0) == 0
             && provenance.sourceTag
@@ -803,7 +813,19 @@ nlohmann::json childElementMapsForTopoState(
             : "freecad_part_compound_links";
         const part::NamedShape* childNamedShape = childMap.sourceNamedShape;
         nlohmann::json entries = nlohmann::json::object();
-        if (objectName == "Body" && childNamedShape != nullptr) {
+        if (objectName == "Body") {
+            entries = childElementMapEntriesFromOwnerProvenance(
+                objectName,
+                childMap.sourceOwner,
+                childKey,
+                childMap.indexedName,
+                childMap.kind,
+                childMap.offset,
+                namedShape,
+                evidenceSource
+            );
+        }
+        if (entries.empty() && objectName == "Body" && childNamedShape != nullptr) {
             entries = childElementMapEntriesFromNamedShape(
                 objectName,
                 childMap.sourceOwner,

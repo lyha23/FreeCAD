@@ -46,6 +46,8 @@ namespace {
 struct PlanarLimit {
     gp_Dir direction;
     double length = 0.0;
+    TopoDS_Shape untilShape;
+    bool prismUntil = false;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.cpp
@@ -875,7 +877,19 @@ std::optional<PlanarLimit> resolveUpToFaceLimit(const app::DocumentObject& objec
         return std::nullopt;
     }
 
-    return measureFaceLimit(profile, *face, direction, object, context, property);
+    auto limit = measureFaceLimit(profile, *face, direction, object, context, property);
+    if (!limit) {
+        return std::nullopt;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+    // FeatureExtrude.cpp::FeatureExtrude::generateSingleExtrusionSide(), for "UpToFace" calls
+    // "getUpToFaceFromLinkSub(upToShape, upToFacePropHandle)" and then
+    // "prism.makeElementPrismUntil(..., upToShape, dir, TopoShape::PrismMode::None, true)".
+    // Keep the face shape in the limit so the side builder can use the BRepFeat/PSM producer
+    // path instead of degrading UpToFace to a plain length/XTR prism.
+    limit->untilShape = *face;
+    limit->prismUntil = true;
+    return limit;
 }
 
 std::optional<UpToShapeLimit> resolveUpToShapeLimit(const app::DocumentObject& object,
@@ -2063,6 +2077,29 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
         length = limit->length;
         if (std::abs(offset) > Precision::Confusion()) {
             return rejectOffset(side.offsetProperty + " requires the full FreeCAD UpTo offset path");
+        }
+        if (limit->prismUntil) {
+            if (std::abs(taper) > Precision::Angular()) {
+                runtime::addDiagnostic(context.diagnostics,
+                                       "error",
+                                       "unsupported_property",
+                                       side.taperProperty + " is not supported for UpToFace prism-until",
+                                       object.name,
+                                       side.taperProperty);
+                return std::nullopt;
+            }
+            return makePrismUntilSide(profile,
+                                      direction,
+                                      limit->untilShape,
+                                      length,
+                                      object,
+                                      context,
+                                      profileLink,
+                                      method,
+                                      side.upToFaceProperty,
+                                      featureName,
+                                      historyOwner,
+                                      profileNamedShape);
         }
     }
     else if (method == "UpToShape") {

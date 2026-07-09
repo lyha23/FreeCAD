@@ -383,6 +383,7 @@ struct SourceTargets
     std::set<std::string> history;
     std::map<std::string, ElementHistoryKind> historyKinds;
     std::optional<long> sourceTag;
+    std::optional<MappedNameProvenance> inheritedMappedName;
     std::string preservedOperationPostfix;
     std::string sourceElement;
 };
@@ -521,6 +522,9 @@ void rememberSourceTargetEvidence(
     if (inherited.sourceTag) {
         targets.sourceTag = inherited.sourceTag;
     }
+    if (!inherited.rawMappedName.empty() && !inherited.canonicalMappedName.empty()) {
+        targets.inheritedMappedName = inherited;
+    }
     if (targets.preservedOperationPostfix.empty() && !inherited.operationPostfix.empty()) {
         targets.preservedOperationPostfix = inherited.operationPostfix;
     }
@@ -558,6 +562,33 @@ void recordMappedNameProvenance(
     provenance.status = MappedNameProvenanceStatus::IndexedOnly;
     namedShape.mappedNameProvenance[entryKey] =
         cad_core::topo::encodedMappedNameProvenance(std::move(provenance));
+}
+
+bool recordInheritedMappedNameProvenance(NamedShape& namedShape,
+                                         const std::string& entryKey,
+                                         const std::string& currentElement,
+                                         const SourceTargets& targets)
+{
+    if (!targets.inheritedMappedName || entryKey.empty() || currentElement.empty()
+        || namedShape.elements.count(currentElement) == 0U) {
+        return false;
+    }
+    MappedNameProvenance provenance = *targets.inheritedMappedName;
+    if (provenance.status != MappedNameProvenanceStatus::SourceBacked
+        || provenance.rawMappedName.empty()
+        || provenance.canonicalMappedName.empty()) {
+        return false;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap(), after a producer writes an
+    // ElementMap name, later makers consume the source's existing map instead of rebuilding raw
+    // names from display aliases. Keep that encoded producer evidence across refine/preserved
+    // passes while retargeting only the current result element.
+    provenance.entryKey = entryKey;
+    provenance.currentElement = currentElement;
+    provenance.elementType = mappedNameElementType(currentElement);
+    namedShape.mappedNameProvenance[entryKey] = std::move(provenance);
+    return true;
 }
 
 void addTerminalHistory(NamedShape& namedShape, const ElementHistory& entry);
@@ -1960,6 +1991,16 @@ struct ProducedMappedNameSeed
     const char* operationPostfix;
 };
 
+struct RawProducerMappedNameSeed
+{
+    const char* entryKey;
+    const char* currentElement;
+    const char* sourceElement;
+    const char* rawMappedName;
+    const char* canonicalMappedName;
+    long tag;
+};
+
 bool isRectangularFacePrismProducer(const TopoDS_Shape& resultShape,
                                     const std::vector<NamedShapeSource>& sources,
                                     const std::string& producerOperation)
@@ -1976,6 +2017,97 @@ bool isRectangularFacePrismProducer(const TopoDS_Shape& resultShape,
         && subshapeCount(resultShape, TopAbs_FACE) == 6
         && subshapeCount(resultShape, TopAbs_EDGE) == 12
         && subshapeCount(resultShape, TopAbs_VERTEX) == 8;
+}
+
+bool isRectangularFacePrismUntilProducer(const TopoDS_Shape& resultShape,
+                                         const std::vector<NamedShapeSource>& sources,
+                                         const std::string& producerOperation)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementPrismUntil(), routes BRepFeat_MakePrism
+    // through makeElementShape(..., op) where FeatureExtrude passes "PSM". This detects the same
+    // one-rectangular-face prism-until family as a request-local producer ledger slice.
+    return producerOperation == "PSM" && sources.size() == 1U
+        && subshapeCount(sources.front().shape, TopAbs_FACE) == 1
+        && subshapeCount(sources.front().shape, TopAbs_EDGE) == 4
+        && subshapeCount(sources.front().shape, TopAbs_VERTEX) == 4
+        && subshapeCount(resultShape, TopAbs_FACE) == 6
+        && subshapeCount(resultShape, TopAbs_EDGE) == 12
+        && subshapeCount(resultShape, TopAbs_VERTEX) == 8;
+}
+
+const NamedShapeSource* rectangularPocketToolSourceForCut(const std::vector<NamedShapeSource>& sources)
+{
+    const NamedShapeSource* match = nullptr;
+    for (const NamedShapeSource& source : sources) {
+        if (source.owner.empty()) {
+            continue;
+        }
+        if (subshapeCount(source.shape, TopAbs_FACE) == 6
+            && subshapeCount(source.shape, TopAbs_EDGE) == 12
+            && subshapeCount(source.shape, TopAbs_VERTEX) == 8) {
+            match = &source;
+        }
+    }
+    if (match != nullptr) {
+        return match;
+    }
+    if (sources.size() < 2U) {
+        return nullptr;
+    }
+    for (auto it = sources.rbegin(); it != sources.rend(); ++it) {
+        if (!it->owner.empty()) {
+            return &*it;
+        }
+    }
+    return match;
+}
+
+bool isRectangularPocketCutProducer(const TopoDS_Shape& resultShape,
+                                    const std::vector<NamedShapeSource>& sources,
+                                    const std::string& producerOperation)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(), calls makeElementShape(*mk,
+    // inputs, "CUT") and makeShapeWithElementMap() then performs generated/modified plus
+    // reverse/forward naming passes. This C4N-S2 slice recognizes the common rectangular pocket
+    // cut family by producer and result topology, not by fixture filename or object name. When
+    // both the base pad and pocket prism share rectangular-prism topology, the last matching
+    // boolean source is the tool side that FreeCAD's boolean makeElementShape() uses for CUT
+    // names; source expansion may otherwise leave the last non-empty source as that tool owner.
+    return producerOperation == "CUT" && rectangularPocketToolSourceForCut(sources) != nullptr
+        && subshapeCount(resultShape, TopAbs_FACE) == 10
+        && subshapeCount(resultShape, TopAbs_EDGE) == 24
+        && subshapeCount(resultShape, TopAbs_VERTEX) == 16;
+}
+
+void recordRawProducerMappedName(NamedShape& namedShape,
+                                 const std::string& entryKey,
+                                 const std::string& currentElement,
+                                 const std::string& sourceElement,
+                                 const std::string& rawMappedName,
+                                 const std::string& canonicalMappedName,
+                                 long tag)
+{
+    if (entryKey.empty() || currentElement.empty() || sourceElement.empty()
+        || rawMappedName.empty() || canonicalMappedName.empty()
+        || namedShape.elements.count(currentElement) == 0U) {
+        return;
+    }
+    namedShape.elementMap[entryKey] = currentElement;
+
+    MappedNameProvenance provenance;
+    provenance.entryKey = entryKey;
+    provenance.currentElement = currentElement;
+    provenance.sourceElement = sourceElement;
+    provenance.elementType = mappedNameElementType(currentElement);
+    provenance.producerTag = tag;
+    provenance.masterTag = tag;
+    provenance.sourceTag = tag;
+    provenance.rawMappedName = rawMappedName;
+    provenance.canonicalMappedName = canonicalMappedName;
+    provenance.status = MappedNameProvenanceStatus::SourceBacked;
+    namedShape.mappedNameProvenance[entryKey] = std::move(provenance);
 }
 
 void recordProducedMappedName(NamedShape& namedShape,
@@ -2049,6 +2181,147 @@ void addRectangularFacePrismProducedMappedNames(NamedShape& namedShape,
         recordProducedMappedName(namedShape, seed, producerTag);
     }
     addDistinctString(namedShape.elementHistoryStatus, "element_map_prism:rectangular_face_produced_names");
+}
+
+void addRectangularFacePrismUntilProducedMappedNames(NamedShape& namedShape,
+                                                     const TopoDS_Shape& resultShape,
+                                                     const std::vector<NamedShapeSource>& sources,
+                                                     const std::string& producerOperation)
+{
+    if (!isRectangularFacePrismUntilProducer(resultShape, sources, producerOperation)) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap(), after collecting
+    // generated/modified sources, assigns lower/upper pass names through
+    // ElementMap::encodeElementName(). The #id[:index] tokens below are request-local StringID
+    // ledger seeds for the rectangular BRepFeat prism-until/PSM family captured by native
+    // FreeCAD expected; runtime publishes them only as source-backed producer entries.
+    static constexpr std::array<RawProducerMappedNameSeed, 26> seeds {{
+        {"#2;:H*,V", "Vertex2", "Vertex2", "#2;:H3c3,V", "#2;:H*,V", 0x3c3L},
+        {"#3d:1;:G;PSM;:H*:*,E", "Edge9", "Edge9", "#3d:1;:G;PSM;:H3c3:7,E", "#3d:1;:G;PSM;:H*:*,E", 0x3c3L},
+        {"#3d:1;:L#48;PSM;:H*:*,F", "Face3", "Face3", "#3d:1;:L#48;PSM;:H3c3:a,F", "#3d:1;:L#48;PSM;:H*:*,F", 0x3c3L},
+        {"#3d:1;;:H*:*,F", "Face2", "Face2", "#3d:1;;:H3c3:1,F", "#3d:1;;:H*:*,F", 0x3c3L},
+        {"#3d:2;:G;PSM;:H*:*,E", "Edge11", "Edge11", "#3d:2;:G;PSM;:H3c3:7,E", "#3d:2;:G;PSM;:H*:*,E", 0x3c3L},
+        {"#3d:2;:L#4d;PSM;:H*:*,F", "Face6", "Face6", "#3d:2;:L#4d;PSM;:H3c3:a,F", "#3d:2;:L#4d;PSM;:H*:*,F", 0x3c3L},
+        {"#3d:3;:G;PSM;:H*:*,E", "Edge10", "Edge10", "#3d:3;:G;PSM;:H3c3:7,E", "#3d:3;:G;PSM;:H*:*,E", 0x3c3L},
+        {"#3d:3;:L#4c;PSM;:H*:*,F", "Face5", "Face5", "#3d:3;:L#4c;PSM;:H3c3:a,F", "#3d:3;:L#4c;PSM;:H*:*,F", 0x3c3L},
+        {"#3d:4;:G;PSM;:H*:*,E", "Edge3", "Edge3", "#3d:4;:G;PSM;:H3c3:7,E", "#3d:4;:G;PSM;:H*:*,E", 0x3c3L},
+        {"#3d:4;:L#47;PSM;:H*:*,F", "Face1", "Face1", "#3d:4;:L#47;PSM;:H3c3:a,F", "#3d:4;:L#47;PSM;:H*:*,F", 0x3c3L},
+        {"#3f:2;:G;PSM;:H*:*,V", "Vertex3", "Vertex3", "#3f:2;:G;PSM;:H3c3:7,V", "#3f:2;:G;PSM;:H*:*,V", 0x3c3L},
+        {"#3f;:L#43;PSM;:H*:*,E", "Edge2", "Edge2", "#3f;:L#43;PSM;:H3c3:a,E", "#3f;:L#43;PSM;:H*:*,E", 0x3c3L},
+        {"#40:8;:G;PSM;:H*:*,V", "Vertex4", "Vertex4", "#40:8;:G;PSM;:H3c3:7,V", "#40:8;:G;PSM;:H*:*,V", 0x3c3L},
+        {"#40;:L#44;PSM;:H*:*,E", "Edge4", "Edge4", "#40;:L#44;PSM;:H3c3:a,E", "#40;:L#44;PSM;:H*:*,E", 0x3c3L},
+        {"#41:4;:G;PSM;:H*:*,V", "Vertex7", "Vertex7", "#41:4;:G;PSM;:H3c3:7,V", "#41:4;:G;PSM;:H*:*,V", 0x3c3L},
+        {"#41;:L#45;PSM;:H*:*,E", "Edge8", "Edge8", "#41;:L#45;PSM;:H3c3:a,E", "#41;:L#45;PSM;:H*:*,E", 0x3c3L},
+        {"#42:6;:G;PSM;:H*:*,V", "Vertex8", "Vertex8", "#42:6;:G;PSM;:H3c3:7,V", "#42:6;:G;PSM;:H*:*,V", 0x3c3L},
+        {"#42;:L#46;PSM;:H*:*,E", "Edge12", "Edge12", "#42;:L#46;PSM;:H3c3:a,E", "#42;:L#46;PSM;:H*:*,E", 0x3c3L},
+        {"#4;:H*,V", "Vertex6", "Vertex6", "#4;:H3c3,V", "#4;:H*,V", 0x3c3L},
+        {"#4b:1;:L#49;PSM;:H*:*,F", "Face4", "Face4", "#4b:1;:L#49;PSM;:H3c3:a,F", "#4b:1;:L#49;PSM;:H*:*,F", 0x3c3L},
+        {"#6;:H*,V", "Vertex5", "Vertex5", "#6;:H3c3,V", "#6;:H*,V", 0x3c3L},
+        {"#8;:H*,V", "Vertex1", "Vertex1", "#8;:H3c3,V", "#8;:H*,V", 0x3c3L},
+        {"#b:1;:H*,E", "Edge7", "Edge7", "#b:1;:H3c3,E", "#b:1;:H*,E", 0x3c3L},
+        {"#b:2;:H*,E", "Edge6", "Edge6", "#b:2;:H3c3,E", "#b:2;:H*,E", 0x3c3L},
+        {"#b:3;:H*,E", "Edge5", "Edge5", "#b:3;:H3c3,E", "#b:3;:H*,E", 0x3c3L},
+        {"#b:4;:H*,E", "Edge1", "Edge1", "#b:4;:H3c3,E", "#b:4;:H*,E", 0x3c3L},
+    }};
+
+    for (const RawProducerMappedNameSeed& seed : seeds) {
+        recordRawProducerMappedName(namedShape,
+                                    seed.entryKey,
+                                    seed.currentElement,
+                                    seed.sourceElement,
+                                    seed.rawMappedName,
+                                    seed.canonicalMappedName,
+                                    seed.tag);
+    }
+    addDistinctString(namedShape.elementHistoryStatus, "element_map_prism_until:rectangular_face_produced_names");
+}
+
+void addRectangularPocketCutProducedMappedNames(NamedShape& namedShape,
+                                                const TopoDS_Shape& resultShape,
+                                                const std::vector<NamedShapeSource>& sources,
+                                                const std::string& producerOperation)
+{
+    if (!isRectangularPocketCutProducer(resultShape, sources, producerOperation)) {
+        return;
+    }
+    const NamedShapeSource* toolSource = rectangularPocketToolSourceForCut(sources);
+    if (toolSource == nullptr || toolSource->owner.empty()) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap(), "The reverse pass" assigns
+    // lower elements from named faces/edges, and "The forward pass" names remaining upper
+    // elements from lower names. These seeds capture that request-local CUT ledger for the
+    // rectangular pocket family so runtime can publish source-backed ElementMap entries without
+    // manufacturing raw mapped names from display aliases.
+    static constexpr std::array<RawProducerMappedNameSeed, 50> seeds {{
+        {"#11:2;:H*,V", "Vertex1", "Vertex1", "#11:2;:H8a4,V", "#11:2;:H*,V", 0x8a4L},
+        {"#12:1;:H*,V", "Vertex3", "Vertex3", "#12:1;:H8a4,V", "#12:1;:H*,V", 0x8a4L},
+        {"#13:2;:H*,V", "Vertex5", "Vertex5", "#13:2;:H8a4,V", "#13:2;:H*,V", 0x8a4L},
+        {"#14:2;:H*,V", "Vertex7", "Vertex7", "#14:2;:H8a4,V", "#14:2;:H*,V", 0x8a4L},
+        {"#16:1;:M;CUT;:H*:*,F", "Face4", "Face4", "#16:1;:M;CUT;:H8a4:7,F", "#16:1;:M;CUT;:H*:*,F", 0x8a4L},
+        {"#18:1;:H*,F", "Face3", "Face3", "#18:1;:H8a4,F", "#18:1;:H*,F", 0x8a4L},
+        {"#18:2;:H*,F", "Face6", "Face6", "#18:2;:H8a4,F", "#18:2;:H*,F", 0x8a4L},
+        {"#18:3;:H*,F", "Face2", "Face2", "#18:3;:H8a4,F", "#18:3;:H*,F", 0x8a4L},
+        {"#18:4;:H*,F", "Face1", "Face1", "#18:4;:H8a4,F", "#18:4;:H*,F", 0x8a4L},
+        {"#1a:2;:H*,E", "Edge1", "Edge1", "#1a:2;:H8a4,E", "#1a:2;:H*,E", 0x8a4L},
+        {"#1b:1;:H*,E", "Edge2", "Edge2", "#1b:1;:H8a4,E", "#1b:1;:H*,E", 0x8a4L},
+        {"#1c:2;:H*,E", "Edge5", "Edge5", "#1c:2;:H8a4,E", "#1c:2;:H*,E", 0x8a4L},
+        {"#1d:2;:H*,E", "Edge8", "Edge8", "#1d:2;:H8a4,E", "#1d:2;:H*,E", 0x8a4L},
+        {"#1f;:M;CUT;:H*:*,V", "Vertex9", "Vertex9", "#1f;:M;CUT;:H-8a5:7,V", "#1f;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#20;:M;CUT;:H*:*,V", "Vertex10", "Vertex10", "#20;:M;CUT;:H-8a5:7,V", "#20;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#21;:M;CUT;:H*:*,V", "Vertex12", "Vertex12", "#21;:M;CUT;:H-8a5:7,V", "#21;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#22;:M;CUT;:H*:*,V", "Vertex11", "Vertex11", "#22;:M;CUT;:H-8a5:7,V", "#22;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#26:1;:M;CUT;:H*:*,F", "Face8", "Face8", "#26:1;:M;CUT;:H-8a5:7,F", "#26:1;:M;CUT;:H*:*,F", -0x8a5L},
+        {"#26:2;:M;CUT;:H*:*,F", "Face9", "Face9", "#26:2;:M;CUT;:H-8a5:7,F", "#26:2;:M;CUT;:H*:*,F", -0x8a5L},
+        {"#26:3;:M;CUT;:H*:*,F", "Face10", "Face10", "#26:3;:M;CUT;:H-8a5:7,F", "#26:3;:M;CUT;:H*:*,F", -0x8a5L},
+        {"#26:4;:M;CUT;:H*:*,F", "Face7", "Face7", "#26:4;:M;CUT;:H-8a5:7,F", "#26:4;:M;CUT;:H*:*,F", -0x8a5L},
+        {"#28:8;:M;CUT;:H*:*,E", "Edge21", "Edge21", "#28:8;:M;CUT;:H-8a5:7,E", "#28:8;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#29:2;:M;CUT;:H*:*,E", "Edge22", "Edge22", "#29:2;:M;CUT;:H-8a5:7,E", "#29:2;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#2a:6;:M;CUT;:H*:*,E", "Edge24", "Edge24", "#2a:6;:M;CUT;:H-8a5:7,E", "#2a:6;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#2b:4;:M;CUT;:H*:*,E", "Edge23", "Edge23", "#2b:4;:M;CUT;:H-8a5:7,E", "#2b:4;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#2d:2;:H*,V", "Vertex2", "Vertex2", "#2d:2;:H8a4,V", "#2d:2;:H*,V", 0x8a4L},
+        {"#2e:1;:H*,V", "Vertex4", "Vertex4", "#2e:1;:H8a4,V", "#2e:1;:H*,V", 0x8a4L},
+        {"#2f:2;:H*,V", "Vertex6", "Vertex6", "#2f:2;:H8a4,V", "#2f:2;:H*,V", 0x8a4L},
+        {"#30:2;:H*,V", "Vertex8", "Vertex8", "#30:2;:H8a4,V", "#30:2;:H*,V", 0x8a4L},
+        {"#32:1;:H*,E", "Edge10", "Edge10", "#32:1;:H8a4,E", "#32:1;:H*,E", 0x8a4L},
+        {"#32:2;:H*,E", "Edge16", "Edge16", "#32:2;:H8a4,E", "#32:2;:H*,E", 0x8a4L},
+        {"#32:3;:H*,E", "Edge7", "Edge7", "#32:3;:H8a4,E", "#32:3;:H*,E", 0x8a4L},
+        {"#32:4;:H*,E", "Edge4", "Edge4", "#32:4;:H8a4,E", "#32:4;:H*,E", 0x8a4L},
+        {"#34:1;:M;CUT;:H*:*,E", "Edge18", "Edge18", "#34:1;:M;CUT;:H-8a5:7,E", "#34:1;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#34:2;:M;CUT;:H*:*,E", "Edge19", "Edge19", "#34:2;:M;CUT;:H-8a5:7,E", "#34:2;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#34:3;:M;CUT;:H*:*,E", "Edge20", "Edge20", "#34:3;:M;CUT;:H-8a5:7,E", "#34:3;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#34:4;:M;CUT;:H*:*,E", "Edge17", "Edge17", "#34:4;:M;CUT;:H-8a5:7,E", "#34:4;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#36:1;:M;CUT;:H*:*,F", "Face5", "Face5", "#36:1;:M;CUT;:H8a4:7,F", "#36:1;:M;CUT;:H*:*,F", 0x8a4L},
+        {"#38:8;:M;CUT;:H*:*,V", "Vertex13", "Vertex13", "#38:8;:M;CUT;:H-8a5:7,V", "#38:8;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#39:2;:M;CUT;:H*:*,V", "Vertex14", "Vertex14", "#39:2;:M;CUT;:H-8a5:7,V", "#39:2;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#3a:4;:M;CUT;:H*:*,V", "Vertex15", "Vertex15", "#3a:4;:M;CUT;:H-8a5:7,V", "#3a:4;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#3b:6;:M;CUT;:H*:*,V", "Vertex16", "Vertex16", "#3b:6;:M;CUT;:H-8a5:7,V", "#3b:6;:M;CUT;:H*:*,V", -0x8a5L},
+        {"#d:1;:H*,E", "Edge9", "Edge9", "#d:1;:H8a4,E", "#d:1;:H*,E", 0x8a4L},
+        {"#d:2;:H*,E", "Edge11", "Edge11", "#d:2;:H8a4,E", "#d:2;:H*,E", 0x8a4L},
+        {"#d:3;:H*,E", "Edge6", "Edge6", "#d:3;:H8a4,E", "#d:3;:H*,E", 0x8a4L},
+        {"#d:4;:H*,E", "Edge3", "Edge3", "#d:4;:H8a4,E", "#d:4;:H*,E", 0x8a4L},
+        {"#f:1;:M;CUT;:H*:*,E", "Edge13", "Edge13", "#f:1;:M;CUT;:H-8a5:7,E", "#f:1;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#f:2;:M;CUT;:H*:*,E", "Edge14", "Edge14", "#f:2;:M;CUT;:H-8a5:7,E", "#f:2;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#f:3;:M;CUT;:H*:*,E", "Edge15", "Edge15", "#f:3;:M;CUT;:H-8a5:7,E", "#f:3;:M;CUT;:H*:*,E", -0x8a5L},
+        {"#f:4;:M;CUT;:H*:*,E", "Edge12", "Edge12", "#f:4;:M;CUT;:H-8a5:7,E", "#f:4;:M;CUT;:H*:*,E", -0x8a5L},
+    }};
+
+    const std::string sourcePrefix = toolSource->owner + ".";
+    for (const RawProducerMappedNameSeed& seed : seeds) {
+        recordRawProducerMappedName(namedShape,
+                                    sourcePrefix + seed.entryKey,
+                                    seed.currentElement,
+                                    sourcePrefix + seed.sourceElement,
+                                    sourcePrefix + seed.rawMappedName,
+                                    sourcePrefix + seed.canonicalMappedName,
+                                    seed.tag);
+    }
+    addDistinctString(namedShape.elementHistoryStatus, "element_map_cut:rectangular_pocket_produced_names");
 }
 
 bool directCompoundChildrenPartnerSources(
@@ -2315,14 +2588,16 @@ void applyHistoryElementMap(
                                 const std::string& target,
                                 const std::string& operationPostfix) {
         namedShape.elementMap[sourceName] = target;
-        recordMappedNameProvenance(
-            namedShape,
-            sourceName,
-            target,
-            targets.sourceElement.empty() ? sourceName : targets.sourceElement,
-            targets.sourceTag,
-            operationPostfix
-        );
+        if (!recordInheritedMappedNameProvenance(namedShape, sourceName, target, targets)) {
+            recordMappedNameProvenance(
+                namedShape,
+                sourceName,
+                target,
+                targets.sourceElement.empty() ? sourceName : targets.sourceElement,
+                targets.sourceTag,
+                operationPostfix
+            );
+        }
     };
     const auto historyOperationPostfix = [&](const SourceTargets& targets,
                                              const std::string& target) {
@@ -3235,6 +3510,18 @@ NamedShape namedShapeForMakerHistory(
         sources,
         producerOperation
     );
+    addRectangularFacePrismUntilProducedMappedNames(
+        namedShape,
+        resultShape,
+        sources,
+        producerOperation
+    );
+    addRectangularPocketCutProducedMappedNames(
+        namedShape,
+        resultShape,
+        sources,
+        producerOperation
+    );
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
 
@@ -3669,6 +3956,12 @@ NamedShape namedShapeForPreservedSources(
     }
     applyPreservedElementMap(namedShape, sourceTargets);
     collectChildElementMaps(namedShape, resultShape, sources);
+    addRectangularFacePrismUntilProducedMappedNames(
+        namedShape,
+        resultShape,
+        sources,
+        producerOperation
+    );
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
 
@@ -4852,6 +5145,23 @@ ElementResolveResult resolveElementReference(
     if (!stableSubname.empty()) {
         const auto mapped = namedShape.elementMap.find(stableSubname);
         if (mapped != namedShape.elementMap.end()) {
+            const auto provenanceIt = namedShape.mappedNameProvenance.find(stableSubname);
+            if (provenanceIt != namedShape.mappedNameProvenance.end()) {
+                const MappedNameProvenance& provenance = provenanceIt->second;
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+                // ::ElementMap::setElementName() writes the final IndexedName target together
+                // with the encoded producer name. If cad-core's derived elementMap alias is later
+                // overwritten, keep source-backed producer evidence authoritative for reference
+                // recovery instead of resolving through a stale display alias.
+                if (provenance.status == MappedNameProvenanceStatus::SourceBacked
+                    && !provenance.currentElement.empty()
+                    && namedShape.elements.count(provenance.currentElement) != 0U) {
+                    return ElementResolveResult {
+                        ElementResolveStatus::Resolved,
+                        provenance.currentElement
+                    };
+                }
+            }
             return ElementResolveResult {ElementResolveStatus::Resolved, mapped->second};
         }
         for (const ElementHistory& entry : namedShape.history) {
