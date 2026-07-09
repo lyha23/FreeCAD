@@ -1,4 +1,4 @@
-# C13-M4 S2 c4m6 focused parity 转绿
+# 【已实现】C13-M4 S2 c4m6 focused parity 转绿
 
 ## 目标
 
@@ -26,6 +26,15 @@
 - `C13M4-VAL-101` 与 `C13M4-VAL-102` 通过。
 - `python3 -m unittest tests.test_topo_naming_state_response` 普通通过。
 - `python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict` 仍通过。
+
+## S2 实现结果
+
+- C13M4-BLOCKER-201、C13M4-IMPL-201、C13M4-VAL-101、C13M4-VAL-102 已关闭；c4m6 focused runtime parity 正式转绿。
+- `python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict` 验证 9 个 `.freecad.json` 与同名 `.freecad.ledger.json`，结果 9/9 green。
+- `python3 -m unittest tests.test_topo_naming_state_response` 完整运行 14 个测试并通过，没有只跑单 case。
+- hard fail 覆盖点仍在 focused test 中：schema、producer、documentHash、objectHash、object element-map encoding、child-map encoding 失败都断言不发布 `topoNamingState`。
+- `topo-state-reference-shadow-brep` 的 ReferenceShadow 边界未变：StableSubList、ShadowSub、ReferenceShadow stableSubname 仍对齐 expected 合同；`ReferenceShadow.brep` 只作为旧 subshape recovery evidence，不作为建模输入。
+- 本步未修改 expected/ledger JSON，未重采 oracle，未推进 S3 索引或最终包收口；队列下一步从 S3 开始。
 
 ## 验收
 
