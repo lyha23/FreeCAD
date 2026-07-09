@@ -316,6 +316,9 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def test_c13m2_p5_topo_state_matches_freecad_expected(self) -> None:
         self.assert_topo_naming_state_matches_freecad_expected("p5", "sketch-internal-face")
 
+    def test_c13m2_p8_link_topo_state_keeps_indexed_only_expected_boundary(self) -> None:
+        self.assert_topo_naming_state_matches_freecad_expected("p8", "app-link-box")
+
     def test_c4m6_success_response_matches_freecad_expected_topo_state(self) -> None:
         for fixture in C4M6_TOPO_STATE_PARITY_FIXTURES:
             with self.subTest(fixture=fixture):

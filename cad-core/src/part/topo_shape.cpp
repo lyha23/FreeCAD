@@ -22,6 +22,7 @@
 #include <BRepAlgoAPI_Section.hxx>
 #include <BRepBuilderAPI_Sewing.hxx>
 #include <BRepLib.hxx>
+#include <BRepGProp.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
 #include <BRepTools_WireExplorer.hxx>
@@ -33,7 +34,9 @@
 #include <BRepTools_History.hxx>
 #include <Bnd_Box.hxx>
 #include <GeomAbs_JoinType.hxx>
+#include <GProp_GProps.hxx>
 #include <Message_ProgressRange.hxx>
+#include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
 #include <Precision.hxx>
 #include <ShapeBuild_ReShape.hxx>
@@ -426,20 +429,146 @@ std::string mappedNameElementType(const std::string& elementName)
     }
 }
 
+void appendFingerprintDouble(std::ostringstream& out, double value)
+{
+    if (std::abs(value) < 1e-12) {
+        value = 0.0;
+    }
+    out << std::fixed << std::setprecision(12) << value << ',';
+}
+
+void appendFingerprintPoint(std::ostringstream& out, const gp_Pnt& point)
+{
+    appendFingerprintDouble(out, point.X());
+    appendFingerprintDouble(out, point.Y());
+    appendFingerprintDouble(out, point.Z());
+}
+
+void appendFingerprintBounds(std::ostringstream& out, const TopoDS_Shape& shape)
+{
+    try {
+        Bnd_Box bounds;
+        BRepBndLib::Add(shape, bounds);
+        if (bounds.IsVoid()) {
+            out << "bbox:void;";
+            return;
+        }
+        double xmin = 0.0;
+        double ymin = 0.0;
+        double zmin = 0.0;
+        double xmax = 0.0;
+        double ymax = 0.0;
+        double zmax = 0.0;
+        bounds.Get(xmin, ymin, zmin, xmax, ymax, zmax);
+        out << "bbox:";
+        appendFingerprintDouble(out, xmin);
+        appendFingerprintDouble(out, ymin);
+        appendFingerprintDouble(out, zmin);
+        appendFingerprintDouble(out, xmax);
+        appendFingerprintDouble(out, ymax);
+        appendFingerprintDouble(out, zmax);
+        out << ';';
+    }
+    catch (const Standard_Failure&) {
+        out << "bbox:error;";
+    }
+}
+
+void appendFingerprintMass(std::ostringstream& out,
+                           const TopoDS_Shape& shape,
+                           TopAbs_ShapeEnum kind)
+{
+    try {
+        GProp_GProps props;
+        if (kind == TopAbs_EDGE) {
+            BRepGProp::LinearProperties(shape, props);
+        }
+        else if (kind == TopAbs_FACE) {
+            BRepGProp::SurfaceProperties(shape, props);
+        }
+        else if (kind == TopAbs_SOLID || kind == TopAbs_COMPSOLID) {
+            BRepGProp::VolumeProperties(shape, props);
+        }
+        else if (kind == TopAbs_VERTEX) {
+            out << "point:";
+            appendFingerprintPoint(out, BRep_Tool::Pnt(TopoDS::Vertex(shape)));
+            out << ';';
+            return;
+        }
+        else {
+            return;
+        }
+        out << "mass:";
+        appendFingerprintDouble(out, props.Mass());
+        out << "center:";
+        appendFingerprintPoint(out, props.CentreOfMass());
+        out << ';';
+    }
+    catch (const Standard_Failure&) {
+        out << "mass:error;";
+    }
+}
+
+std::vector<TopAbs_ShapeEnum> producerTagFingerprintKinds()
+{
+    return {
+        TopAbs_COMPSOLID,
+        TopAbs_SOLID,
+        TopAbs_SHELL,
+        TopAbs_FACE,
+        TopAbs_WIRE,
+        TopAbs_EDGE,
+        TopAbs_VERTEX,
+    };
+}
+
+std::string shapeFingerprintPart(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    std::ostringstream out;
+    out << "type:" << static_cast<int>(shape.ShapeType()) << ';';
+    out << "orientation:" << static_cast<int>(shape.Orientation()) << ';';
+    appendFingerprintBounds(out, shape);
+    appendFingerprintMass(out, shape, kind);
+    return out.str();
+}
+
+std::string producerTagFingerprint(const TopoDS_Shape& shape)
+{
+    std::ostringstream out;
+    out << "shape-type:" << static_cast<int>(shape.ShapeType()) << ';';
+    out << "shape-orientation:" << static_cast<int>(shape.Orientation()) << ';';
+    appendFingerprintBounds(out, shape);
+    for (TopAbs_ShapeEnum kind : producerTagFingerprintKinds()) {
+        TopTools_IndexedMapOfShape subshapes;
+        TopExp::MapShapes(shape, kind, subshapes);
+        std::vector<std::string> parts;
+        parts.reserve(static_cast<std::size_t>(subshapes.Extent()));
+        for (int index = 1; index <= subshapes.Extent(); ++index) {
+            parts.push_back(shapeFingerprintPart(subshapes(index), kind));
+        }
+        std::sort(parts.begin(), parts.end());
+        out << "kind:" << static_cast<int>(kind) << ":count:" << parts.size() << ';';
+        for (const std::string& part : parts) {
+            out << '[' << part << ']';
+        }
+    }
+    return out.str();
+}
+
 std::optional<long> requestLocalProducerTagForShape(const TopoDS_Shape& shape)
 {
     if (shape.IsNull()) {
         return std::nullopt;
     }
-#if OCC_VERSION_HEX >= 0x070800
-    const std::size_t shapeHash = std::hash<TopoDS_Shape> {}(shape);
-#else
-    const std::size_t shapeHash = static_cast<std::size_t>(
-        shape.HashCode(std::numeric_limits<int>::max())
-    );
-#endif
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShape.h stores a
+    // request-local "Tag" on TopoShape; TopoShapeExpansion.cpp::mapSubElement(...) then passes
+    // that tag into ElementMap::encodeElementName(... Tag ... other.Tag). cad-core has no
+    // persistent TopoShape object identity, so use a stable topology/geometry fingerprint instead
+    // of std::hash<TopoDS_Shape>, which changes across CLI/C API/worker adapter processes.
+    std::uint64_t shapeHash = 1469598103934665603ULL;
+    mixStableChildMapHash(shapeHash, producerTagFingerprint(shape));
     constexpr long maxPositiveTag = 0x7fffffffL;
-    long tag = static_cast<long>(shapeHash % static_cast<std::size_t>(maxPositiveTag));
+    long tag = static_cast<long>(shapeHash % static_cast<std::uint64_t>(maxPositiveTag));
     if (tag == 0) {
         tag = 1;
     }
