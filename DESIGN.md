@@ -449,3 +449,7 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 
  '/Users/li/Chili3DProject/opencascade-rs/docs/框架/7-8-11-08-topoNamingState客户端携带状态接口方案.md'要实现这个方案, 并对其'/Users/li/
   Chili3DProject/FreeCAD/cad-core/fixtures'中 FreeCAD 的expeted, 下一步该做什么
+
+---
+
+我觉得先不用考虑  cad-core 的 , FreeCADCmd 在生成 recomputed 的输入和输出的时候, 应该先考虑如何保证这个账本的完整性, 这样才能设置权威
