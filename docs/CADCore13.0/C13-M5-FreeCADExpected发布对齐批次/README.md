@@ -13,6 +13,7 @@ C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到所有 checked-i
 - 不能手改 expected 来追 cad-core；cad-core 输出应通过实现、发布策略或明确 known-gap 机制对齐 expected。
 - FreeCAD raw mapped-name 中的 `:H...` token 允许随机漂移，严格比较必须先 canonicalize；对象集合、subshape 数量、diagnostic code、stableSubname、elementMap key 不能因 hash 漂移被放宽。
 - 第一批 strict lane 仍选 `c4m6`，因为它覆盖 first recompute、Body/Tip recovery、compound child maps、mapperHistory、ReferenceShadow、schema/producer/hash mismatch。
+- S1 strict comparator 与生成入口已关闭：`compare_freecad_expected.py` 可按 expected discovery 生成 strict report，`regenerate_cad_core_res.py` 可只重生成同名 `cad-core-res`，当前 `c4m6` report 为 red（9 个 case，2 green / 7 red）。
 - 本轮 S0 不纳入无关 dirty 文件：`DESIGN.md`、`docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md`。
 
 ## S0 比较边界
@@ -56,7 +57,7 @@ find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
 | 步骤 | 主题 | 关闭条件 |
 | --- | --- | --- |
 | S0 | expected inventory 与比较边界冻结 | 已实现：phase inventory、字段策略、非目标和首批 lane 已冻结。 |
-| S1 | strict comparator 与 cad-core-res 生成入口 | 可以按 phase 生成 cad-core-res，并输出 canonical diff / gap report。 |
+| S1 | strict comparator 与 cad-core-res 生成入口 | 已实现：可按 phase 生成 cad-core-res，并输出 canonical strict diff report。 |
 | S2 | c4m6 strict public parity 红灯基线 | 当前 c4m6 strict diff 被机器化记录，区分发布缺口和协议决策。 |
 | S3 | topoNamingState 发布策略对齐 | object set、mapperHistory、hash mismatch、link diagnostic 等 public publication gap 有实现计划和 focused tests。 |
 | S4 | phase family 扩展 | 按 fixture 家族推进，不把全量 phase 混成一个不可关闭的任务。 |
@@ -67,6 +68,7 @@ find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次/工作步骤细分 --format markdown
+(cd cad-core && python3 tools/compare_freecad_expected.py --phase c4m6 --strict)
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次/矩阵/*.tsv
 git diff --check -- docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次 docs/CADCore13.0/README.md
 ```

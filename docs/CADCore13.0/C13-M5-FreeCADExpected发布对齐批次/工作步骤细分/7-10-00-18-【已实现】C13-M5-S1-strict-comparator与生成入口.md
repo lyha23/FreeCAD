@@ -1,4 +1,4 @@
-# C13-M5 S1 strict comparator 与生成入口
+# 【已实现】C13-M5 S1 strict comparator 与生成入口
 
 ## 目标
 
@@ -23,6 +23,15 @@
    - subshape / elementMap / childElementMaps / mapperHistory 差异。
    - geometry numeric diff 分类。
 5. normalization 只处理明确非语义漂移，例如 raw mapped-name hash。
+
+## 实现结果
+
+- 已新增 `cad-core/tools/compare_freecad_expected.py`：按 `fixtures/<phase>/expected/*.freecad.json` discovery，支持 `--phase`、`--case`、`--strict`、`--write-current`，strict report 写入 `cad-core/out/freecad-expected-parity/<phase>.json`。
+- 已新增 `cad-core/tools/regenerate_cad_core_res.py`：只按 expected discovery 查找同名 input，调用 `build/cad-core recompute`，写入 `fixtures/<phase>/cad-core-res/<case>.cad-core.json`，不写 `expected/`。
+- strict report schema 固定为 `cad-core.freecad-expected-parity.v1`，分类包含 diagnostics、results、results.subshapes、topoNamingState.objects、topoNamingState.subshapes、topoNamingState.elementMap、topoNamingState.childElementMaps、topoNamingState.mapperHistory、geometry.numeric。
+- raw mapped-name hash 只在 `rawFreecadMappedName`、`mappedName.raw` 等 raw 字段 canonicalize；stableSubname、canonical key、object set、diagnostic code 和 topology publication 仍严格比较。
+- 已新增 `cad-core/tests/test_freecad_expected_public_parity.py`，覆盖 discovery 边界、raw hash canonicalization、生成入口不写 expected、c4m6 strict report 生成。
+- 当前 `c4m6` strict report 可稳定生成且 status 为 `red`：9 个 case 中 2 个 green、7 个 red；红灯留给 S2/S3 做分类和实现。
 
 ## 非目标
 

@@ -78,9 +78,9 @@ S0 live inventory 已冻结：当前发现到的 `.freecad.json` phase 数量是
 
 关闭条件：
 
-- `c4m6` 能稳定产出 strict diff report。
-- comparator 的 normalization 有单测覆盖。
-- 同名 expected 缺失 input、cad-core 执行失败、diagnostic-only response 都能结构化记录。
+- 已实现：`c4m6` 能稳定产出 strict diff report，当前 status 为 `red`，9 个 case 中 2 个 green、7 个 red。
+- 已实现：comparator 的 raw mapped-name hash normalization、expected-only discovery、strict report 结构和生成入口已有单测覆盖。
+- 已实现：同名 expected 缺失 input、cad-core 执行失败、diagnostic-only response 可结构化记录；S2/S3 继续处理 c4m6 strict public parity 红灯。
 
 ### S2 c4m6 strict public parity 红灯基线
 
@@ -163,4 +163,4 @@ python3 tools/compare_freecad_expected.py --phase c4m6 --strict
 python3 -m unittest tests.test_topo_naming_state_response tests.test_freecad_expected_public_parity
 ```
 
-`compare_freecad_expected.py` 和 `tests.test_freecad_expected_public_parity` 是 S1/S2 计划产物；S0 文档阶段不要求存在。
+`compare_freecad_expected.py` 和 `tests.test_freecad_expected_public_parity` 已在 S1 落地；S2/S3 继续消费 strict report 中的 `c4m6` 红灯差异。
