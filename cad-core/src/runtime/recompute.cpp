@@ -155,6 +155,17 @@ void mergeTopoNamingStateElementMap(const std::string& name, ComputeContext& con
     if (objectIt == objectsIt->end() || !objectIt->is_object()) {
         return;
     }
+    const auto documentObjectIt = context.documentObjects.find(name);
+    if (documentObjectIt != context.documentObjects.end()
+        && documentObjectIt->second != nullptr
+        && objectIt->value("objectHash", "")
+               != topoNamingStateObjectHash(*documentObjectIt->second)) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/PropertyLinks.cpp
+        // ::PropertyLinkBase::_updateElementReference() can attempt recovery when persisted
+        // metadata is stale, but a mismatched object state must not seed current ElementMap
+        // aliases before the object has been recomputed.
+        return;
+    }
     const auto elementMapIt = objectIt->find("elementMap");
     if (elementMapIt == objectIt->end() || !elementMapIt->is_object()) {
         return;
@@ -1485,6 +1496,149 @@ void appendDatumFrameResultFields(nlohmann::json& result,
     }
 }
 
+nlohmann::json topologyCountsForResponseSubshapes(const nlohmann::json& subshapes)
+{
+    nlohmann::json counts = {
+        {"faces", 0},
+        {"edges", 0},
+        {"vertices", 0},
+    };
+    if (!subshapes.is_array()) {
+        return counts;
+    }
+    for (const auto& subshape : subshapes) {
+        if (!subshape.is_object()) {
+            continue;
+        }
+        const std::string kind = subshape.value("kind", "");
+        if (kind == "Face") {
+            counts["faces"] = counts["faces"].get<int>() + 1;
+        }
+        else if (kind == "Edge") {
+            counts["edges"] = counts["edges"].get<int>() + 1;
+        }
+        else if (kind == "Vertex") {
+            counts["vertices"] = counts["vertices"].get<int>() + 1;
+        }
+    }
+    return counts;
+}
+
+int objectResultInt(const nlohmann::json& objectResult, const std::string& field)
+{
+    const auto fieldIt = objectResult.find(field);
+    if (fieldIt != objectResult.end() && fieldIt->is_number_integer()) {
+        return fieldIt->get<int>();
+    }
+    if (fieldIt != objectResult.end() && fieldIt->is_number_unsigned()) {
+        return static_cast<int>(fieldIt->get<std::size_t>());
+    }
+    return 0;
+}
+
+nlohmann::json sketchExternalFlagCounts(const nlohmann::json& objectResult)
+{
+    static const std::vector<std::pair<std::string, std::string>> kFlagFields {
+        {"Defining", "defining"},
+        {"Detached", "detached"},
+        {"Frozen", "frozen"},
+        {"Missing", "missing"},
+        {"Sync", "sync"},
+    };
+
+    const auto stateCountsIt = objectResult.find("external_geometry_state_counts");
+    const nlohmann::json* stateCounts =
+        stateCountsIt != objectResult.end() && stateCountsIt->is_object() ? &*stateCountsIt
+                                                                          : nullptr;
+    nlohmann::json counts = nlohmann::json::object();
+    for (const auto& [publicName, internalName] : kFlagFields) {
+        int count = 0;
+        if (stateCounts != nullptr) {
+            const auto countIt = stateCounts->find(internalName);
+            if (countIt != stateCounts->end() && countIt->is_number_integer()) {
+                count = countIt->get<int>();
+            }
+            else if (countIt != stateCounts->end() && countIt->is_number_unsigned()) {
+                count = static_cast<int>(countIt->get<std::size_t>());
+            }
+        }
+        counts[publicName] = count;
+    }
+    return counts;
+}
+
+nlohmann::json emptySketchExternalFlags(const nlohmann::json& objectResult)
+{
+    const int externalGeometryCount = objectResultInt(objectResult, "external_geometry_count");
+    nlohmann::json flags = nlohmann::json::array();
+    for (int index = 0; index < externalGeometryCount; ++index) {
+        flags.push_back(nlohmann::json::array());
+    }
+    return flags;
+}
+
+void appendSketchSummaryResultFields(nlohmann::json& result, const nlohmann::json& objectResult)
+{
+    if (objectResult.value("shape", "") != "occt_sketch_shape") {
+        return;
+    }
+
+    const int rawEdgeCount = objectResultInt(objectResult, "raw_edge_count");
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::SketchObject::getExternalGeometryCount(), "::getExternalGeometry()" and
+    // "InternalShape" expose the public Sketch summary collected by native expected.
+    result["object_fields"] = {
+        {"external_curve_count", objectResultInt(objectResult, "external_curve_count")},
+        {"external_geometry_count", objectResultInt(objectResult, "external_geometry_count")},
+        {"external_point_count", objectResultInt(objectResult, "external_point_count")},
+        {"raw_edge_count", rawEdgeCount},
+        {"shape", "occt_sketch_shape"},
+        {"status", objectResult.value("status", "ok")},
+    };
+    result["sketch_external"] = {
+        {"construction_count", objectResultInt(objectResult, "external_construction_count")},
+        {"flag_counts", sketchExternalFlagCounts(objectResult)},
+        {"flags", emptySketchExternalFlags(objectResult)},
+    };
+    result["sketch_internal"] = {
+        {"profile_ready", objectResult.value("profile_ready", false)},
+        {"raw_edge_count", rawEdgeCount},
+        {"shape", objectResult.value("internal_shape", "none")},
+    };
+    const auto internalCountsIt = objectResult.find("internal_counts");
+    if (internalCountsIt != objectResult.end() && internalCountsIt->is_object()) {
+        result["sketch_internal"]["internal_counts"] = *internalCountsIt;
+    }
+}
+
+void appendObjectSummaryResultFields(nlohmann::json& result,
+                                     const std::string& objectName,
+                                     const ComputeContext& context,
+                                     const nlohmann::json& subshapes)
+{
+    const auto objectIt = context.objects.find(objectName);
+    if (objectIt == context.objects.end() || !objectIt->second.is_object()) {
+        return;
+    }
+
+    const nlohmann::json& objectResult = objectIt->second;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PropertyTopoShape.cpp
+    // ::PropertyPartShape::setValue() stores the current TopoShape on the object; the
+    // native expected collector publishes its bbox, Volume and subelement counts.
+    const auto bboxIt = objectResult.find("bbox");
+    if (bboxIt != objectResult.end()) {
+        result["bbox"] = *bboxIt;
+    }
+    const auto volumeIt = objectResult.find("volume");
+    if (volumeIt != objectResult.end()) {
+        result["volume"] = *volumeIt;
+    }
+    if (objectResult.value("shape", "") != "occt_sketch_shape" && !subshapes.empty()) {
+        result["topology_counts"] = topologyCountsForResponseSubshapes(subshapes);
+    }
+    appendSketchSummaryResultFields(result, objectResult);
+}
+
 }  // namespace
 
 ComputeContext recomputeContext(const app::Document& document,
@@ -1594,9 +1748,10 @@ nlohmann::json recomputeResultJson(const app::Document& document,
              meshIt == context.mesh.end()
                  ? nlohmann::json(nullptr)
                  : responseMesh(target, meshIt->second, subshapes)},
-            {"subshapes", std::move(subshapes)},
+            {"subshapes", subshapes},
         };
         appendDatumFrameResultFields(result, target, context);
+        appendObjectSummaryResultFields(result, target, context, subshapes);
         results.push_back(std::move(result));
     }
 

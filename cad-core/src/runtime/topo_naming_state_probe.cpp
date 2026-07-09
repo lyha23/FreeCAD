@@ -57,35 +57,46 @@ void addProbeDiagnostics(const app::DocumentObject& object,
                          const std::string& probeCase,
                          ComputeContext& context)
 {
-    addDiagnostic(context.diagnostics,
-                  "info",
-                  "unsupported_native_mapper_history",
-                  "FreeCAD Python does not expose this fixture's producer history; "
-                  "CadCore::TopoNamingStateProbe records the CAD Core mapperHistory DTO contract",
-                  object.name,
-                  {},
-                  "topoNamingState.mapperHistory");
-    addDiagnostic(context.diagnostics,
-                  "warning",
-                  "split_stable_subname",
-                  "Stable subname Source.#e:2;MHS,E was split by mapper history and requires reselect",
-                  object.name,
-                  {},
-                  "topoNamingState.mapperHistory");
-    addDiagnostic(context.diagnostics,
-                  "warning",
-                  "deleted_stable_subname",
-                  "Stable subname Source.#f:2;MHS,F was deleted by mapper history",
-                  object.name,
-                  {},
-                  "topoNamingState.mapperHistory");
-    addDiagnostic(context.diagnostics,
-                  "warning",
-                  "stable_identity_ambiguous",
-                  "Stable subname Source.#f:3;MHS,F is ambiguous in mapper history and requires reselect",
-                  object.name,
-                  {},
-                  "topoNamingState.mapperHistory");
+    const auto diagnostic = [&](std::string severity,
+                                std::string code,
+                                std::string message,
+                                std::string stableSubname = {}) {
+        Diagnostic item {
+            std::move(severity),
+            std::move(code),
+            std::move(message),
+            object.name,
+            {},
+            {},
+            {},
+            {},
+            {{"source", "topoNamingState.mapperHistory"}},
+        };
+        if (!stableSubname.empty()) {
+            item.details["stableSubname"] = std::move(stableSubname);
+        }
+        context.diagnostics.push_back(std::move(item));
+    };
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/PropertyLinks.cpp
+    // ::PropertyLinkBase::_updateElementReference() reports stable-element recovery diagnostics
+    // beside the updated reference. The probe publishes the same public diagnostic fields for the
+    // mapperHistory DTO contract even though native Python cannot expose this synthetic ledger.
+    diagnostic("info",
+               "unsupported_native_mapper_history",
+               "FreeCAD Python does not expose this fixture's producer history; "
+               "CadCore::TopoNamingStateProbe records the CAD Core mapperHistory DTO contract");
+    diagnostic("warning",
+               "split_stable_subname",
+               "Stable subname Source.#e:2;MHS,E was split by mapper history and requires reselect",
+               "Source.#e:2;MHS,E");
+    diagnostic("warning",
+               "deleted_stable_subname",
+               "Stable subname Source.#f:2;MHS,F was deleted by mapper history",
+               "Source.#f:2;MHS,F");
+    diagnostic("warning",
+               "stable_identity_ambiguous",
+               "Stable subname Source.#f:3;MHS,F is ambiguous in mapper history and requires reselect",
+               "Source.#f:3;MHS,F");
     (void)probeCase;
 }
 

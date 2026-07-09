@@ -500,6 +500,40 @@ std::vector<std::string> plainGroupOwnerNames(const PlainGroupChildEntry& entry)
     return names;
 }
 
+std::optional<std::string> localStableSubnameForPlainGroupOwner(
+    const std::string& ownerName,
+    const std::string& localSubname,
+    const std::string& stableSubname
+)
+{
+    const std::string ownerPrefix = ownerName + ".";
+    if (stableSubname.rfind(ownerPrefix, 0U) == 0U
+        && stableSubname.size() > ownerPrefix.size()) {
+        return stableSubname.substr(ownerPrefix.size());
+    }
+
+    const auto slash = stableSubname.find('/');
+    if (slash == std::string::npos || slash + 1U >= stableSubname.size()) {
+        return std::nullopt;
+    }
+    const std::string ownerQualified = stableSubname.substr(slash + 1U);
+    if (ownerQualified.rfind(ownerPrefix, 0U) != 0U
+        || ownerQualified.size() <= ownerPrefix.size()) {
+        return std::nullopt;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements() stores child mapped names under an owner/child projection.
+    // When App::Link consumes a child path such as "Child0.Face1", cad-core accepts the matching
+    // owner-qualified stable token as projection evidence and resolves the current child subshape.
+    const std::string childMappedName = ownerQualified.substr(ownerPrefix.size());
+    if (childMappedName.find('#') == std::string::npos
+        && childMappedName.find(';') == std::string::npos) {
+        return childMappedName;
+    }
+    return localSubname;
+}
+
 void appendPlainGroupChildren(const app::DocumentObject& groupObject,
                               const runtime::ComputeContext& context,
                               std::vector<PlainGroupChildEntry>& children,
@@ -515,6 +549,7 @@ void appendPlainGroupChildren(const app::DocumentObject& groupObject,
         const std::size_t index = children.size();
         std::vector<std::string> aliases;
         addPlainGroupOwnerAlias(aliases, std::to_string(index), link.object);
+        addPlainGroupOwnerAlias(aliases, "Child" + std::to_string(index), link.object);
         const std::string label = objectLabel(link.object, context);
         if (label != link.object) {
             addPlainGroupOwnerAlias(aliases, "$" + label, link.object);
@@ -535,6 +570,7 @@ void appendPlainGroupChildren(const app::DocumentObject& groupObject,
         std::vector<std::string> childGroupPathAliases;
         childGroupPathAliases.push_back(link.object);
         childGroupPathAliases.push_back(std::to_string(index));
+        childGroupPathAliases.push_back("Child" + std::to_string(index));
         if (label != link.object) {
             childGroupPathAliases.push_back("$" + label);
         }
@@ -579,6 +615,7 @@ std::vector<PlainGroupChildEntry> elementListWithPlainGroupChildren(const std::v
         const std::size_t index = children.size();
         std::vector<std::string> aliases;
         addPlainGroupOwnerAlias(aliases, std::to_string(index), link.object);
+        addPlainGroupOwnerAlias(aliases, "Child" + std::to_string(index), link.object);
         const std::string label = objectLabel(link.object, context);
         if (label != link.object) {
             addPlainGroupOwnerAlias(aliases, "$" + label, link.object);
@@ -590,6 +627,7 @@ std::vector<PlainGroupChildEntry> elementListWithPlainGroupChildren(const std::v
         }
 
         std::vector<std::string> childGroupPathAliases {link.object, std::to_string(index)};
+        childGroupPathAliases.push_back("Child" + std::to_string(index));
         if (label != link.object) {
             childGroupPathAliases.push_back("$" + label);
         }
@@ -621,10 +659,12 @@ std::optional<PlainGroupSubpathMatch> matchPlainGroupSubpath(const std::vector<P
             best.localSubname = subname.substr(prefix.size());
             best.localStableSubname = stableSubname == subname ? best.localSubname : stableSubname;
             for (const std::string& stableOwnerName : plainGroupOwnerNames(child)) {
-                const std::string stablePrefix = stableOwnerName + ".";
-                if (stableSubname.rfind(stablePrefix, 0U) == 0U
-                    && stableSubname.size() > stablePrefix.size()) {
-                    best.localStableSubname = stableSubname.substr(stablePrefix.size());
+                if (const auto localStable = localStableSubnameForPlainGroupOwner(
+                        stableOwnerName,
+                        best.localSubname,
+                        stableSubname
+                    )) {
+                    best.localStableSubname = *localStable;
                     break;
                 }
             }
@@ -1183,6 +1223,168 @@ std::optional<LinkShapeBuild> linkedGroupElementSubshape(const app::DocumentObje
                                     rawFullSubname);
 }
 
+std::optional<std::size_t> childPathIndex(const std::string& pathPrefix)
+{
+    constexpr const char* childPrefix = "Child";
+    constexpr std::size_t childPrefixSize = 5U;
+    if (pathPrefix.rfind(childPrefix, 0U) != 0U
+        || pathPrefix.size() == childPrefixSize) {
+        return std::nullopt;
+    }
+    std::size_t index = 0U;
+    return parseNonNegativeIndex(pathPrefix.substr(childPrefixSize), index)
+        ? std::make_optional(index)
+        : std::nullopt;
+}
+
+std::string childMapKindForSubname(const std::string& localSubname)
+{
+    const auto parsed = part::parseSubshapeName(localSubname);
+    if (!parsed) {
+        return {};
+    }
+    switch (parsed->kind) {
+        case TopAbs_FACE:
+            return "face";
+        case TopAbs_EDGE:
+            return "edge";
+        case TopAbs_VERTEX:
+            return "vertex";
+        default:
+            return {};
+    }
+}
+
+std::optional<std::pair<std::string, std::string>> childPathParts(const std::string& subname)
+{
+    const std::size_t dot = subname.find('.');
+    if (dot == std::string::npos || dot == 0U || dot + 1U >= subname.size()) {
+        return std::nullopt;
+    }
+    std::string pathPrefix = subname.substr(0U, dot);
+    if (!childPathIndex(pathPrefix)) {
+        return std::nullopt;
+    }
+    return std::make_pair(std::move(pathPrefix), subname.substr(dot + 1U));
+}
+
+std::string childMapTargetName(const std::string& localSubname, int offset)
+{
+    const auto parsed = part::parseSubshapeName(localSubname);
+    if (!parsed || parsed->index <= 0) {
+        return {};
+    }
+    const std::string prefix = parsed->kind == TopAbs_FACE ? "Face"
+        : parsed->kind == TopAbs_EDGE                      ? "Edge"
+        : parsed->kind == TopAbs_VERTEX                    ? "Vertex"
+                                                          : "";
+    if (prefix.empty()) {
+        return {};
+    }
+    return prefix + std::to_string(offset + parsed->index);
+}
+
+struct CompoundChildPathProjection {
+    std::string childObject;
+    std::string pathPrefix;
+    std::string localSubname;
+    std::string shapeKind;
+};
+
+std::optional<CompoundChildPathProjection> compoundChildPathProjectionFromStableReference(
+    const std::string& ownerObject,
+    const std::string& subname,
+    const std::string& stableSubname)
+{
+    const auto pathParts = childPathParts(subname);
+    if (!pathParts) {
+        return std::nullopt;
+    }
+    const std::string ownerPrefix = ownerObject + "/";
+    if (stableSubname.rfind(ownerPrefix, 0U) != 0U) {
+        return std::nullopt;
+    }
+    const std::string childMappedName = stableSubname.substr(ownerPrefix.size());
+    const std::size_t dot = childMappedName.find('.');
+    if (dot == std::string::npos || dot == 0U || dot + 1U >= childMappedName.size()) {
+        return std::nullopt;
+    }
+    const std::string mappedLocal = childMappedName.substr(dot + 1U);
+    if (mappedLocal.find('#') == std::string::npos
+        || mappedLocal.find(';') == std::string::npos) {
+        return std::nullopt;
+    }
+    const std::string shapeKind = childMapKindForSubname(pathParts->second);
+    if (shapeKind.empty()) {
+        return std::nullopt;
+    }
+    return CompoundChildPathProjection {
+        childMappedName.substr(0U, dot),
+        pathParts->first,
+        pathParts->second,
+        shapeKind,
+    };
+}
+
+std::optional<LinkShapeBuild> linkedCompoundChildPathSubshape(
+    const app::DocumentObject& object,
+    const app::Link& link,
+    const part::NamedShape& namedShape,
+    const std::string& subname,
+    const std::string& stableSubname,
+    const std::string& rawSubname,
+    const std::string& rawStableSubname,
+    const std::string& rawFullSubname)
+{
+    const auto projection =
+        compoundChildPathProjectionFromStableReference(link.object, subname, stableSubname);
+    if (!projection) {
+        return std::nullopt;
+    }
+    for (const part::NamedShapeChildMap& childMap : namedShape.childElementMaps) {
+        if (childMap.sourceOwner != projection->childObject
+            || childMap.indexedName != projection->pathPrefix
+            || childMap.kind != projection->shapeKind
+            || childMap.count <= 0) {
+            continue;
+        }
+        if (childMap.sourceNamedShape != nullptr
+            && childMap.sourceNamedShape->elements.count(projection->localSubname) == 0U) {
+            continue;
+        }
+        const std::string resolvedElement =
+            childMapTargetName(projection->localSubname, childMap.offset);
+        if (resolvedElement.empty()) {
+            continue;
+        }
+        auto selected = part::subshapeByName(namedShape, resolvedElement);
+        if (!selected) {
+            continue;
+        }
+        std::vector<std::string> exactAliases;
+        addRetagAliasCandidates(
+            exactAliases,
+            {rawSubname, rawStableSubname, rawFullSubname},
+            {subname, stableSubname, resolvedElement}
+        );
+        (void)object;
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::addChildElements() stores child ranges that make owner paths like
+        // "Child0.Face1" recoverable from owner/child mapped names. cad-core resolves the current
+        // compound subshape from NamedShapeChildMap instead of treating the stable child path as a
+        // missing top-level ElementMap key.
+        return LinkShapeBuild{
+            *selected,
+            resolvedElement,
+            targetElementNameForResolvedSource(resolvedElement),
+            {part::LinkedSubshapeRetag{resolvedElement,
+                                       targetElementNameForResolvedSource(resolvedElement),
+                                       exactAliases}},
+        };
+    }
+    return std::nullopt;
+}
+
 std::optional<LinkShapeBuild> linkedSubshapeAt(const app::DocumentObject& object,
                                                runtime::ComputeContext& context,
                                                const app::Link& link,
@@ -1211,6 +1413,18 @@ std::optional<LinkShapeBuild> linkedSubshapeAt(const app::DocumentObject& object
     const auto namedShapeIt = context.namedShapes.find(link.object);
     const part::NamedShape* namedShape =
         namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second;
+    if (namedShape != nullptr) {
+        if (const auto selected = linkedCompoundChildPathSubshape(object,
+                                                                  link,
+                                                                  *namedShape,
+                                                                  subname,
+                                                                  stableSubname,
+                                                                  rawSubname,
+                                                                  rawStableSubname,
+                                                                  rawFullSubname)) {
+            return selected;
+        }
+    }
     if (namedShape != nullptr
         && topo::hasStableElementMapEvidence(namedShape, subname, rawStableSubname)) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/PropertyLinks.cpp

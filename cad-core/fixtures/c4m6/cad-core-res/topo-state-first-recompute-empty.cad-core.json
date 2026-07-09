@@ -5,6 +5,18 @@
   "elementReferenceUpdates": [],
   "results": [
     {
+      "bbox": {
+        "max": [
+          2.0,
+          3.0,
+          4.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
       "mesh": {
         "edgeSegments": [
           {
@@ -682,7 +694,13 @@
           "stableSubname": "",
           "subname": "Vertex8"
         }
-      ]
+      ],
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 23.999999999999996
     }
   ],
   "topoNamingState": {
@@ -696,684 +714,111 @@
           "status": "indexed_only"
         },
         "elementMapVersion": "cad-core.element-map.v1",
-        "mapperHistory": [
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "Box",
-              "subname": "Face1"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Face1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "Box",
-              "subname": "Face2"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Face2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "Box",
-              "subname": "Face3"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Face3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "Box",
-              "subname": "Face4"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Face4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "Box",
-              "subname": "Face5"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Face5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "Box",
-              "subname": "Face6"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Face6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge1"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge2"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge3"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge4"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge5"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge6"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge7",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge7"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge7"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge8",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge8"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge8"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge9",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge9"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge9"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge10",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge10"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge10"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge11",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge11"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge11"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge12",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "Box",
-              "subname": "Edge12"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Edge12"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex1"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex2"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex3"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex4"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex5"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex6"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex7",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex7"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex7"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex8",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "Box",
-              "subname": "Vertex8"
-            },
-            "target": {
-              "object": "Box",
-              "subname": "Vertex8"
-            }
-          }
-        ],
+        "mapperHistory": [],
         "objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
         "subshapes": {
           "Edge1": {
-            "fullSubname": "Box.Edge1",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge1",
-            "stableSubname": "",
             "subname": "Edge1"
           },
           "Edge10": {
-            "fullSubname": "Box.Edge10",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge10",
-            "stableSubname": "",
             "subname": "Edge10"
           },
           "Edge11": {
-            "fullSubname": "Box.Edge11",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge11",
-            "stableSubname": "",
             "subname": "Edge11"
           },
           "Edge12": {
-            "fullSubname": "Box.Edge12",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge12",
-            "stableSubname": "",
             "subname": "Edge12"
           },
           "Edge2": {
-            "fullSubname": "Box.Edge2",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge2",
-            "stableSubname": "",
             "subname": "Edge2"
           },
           "Edge3": {
-            "fullSubname": "Box.Edge3",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge3",
-            "stableSubname": "",
             "subname": "Edge3"
           },
           "Edge4": {
-            "fullSubname": "Box.Edge4",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge4",
-            "stableSubname": "",
             "subname": "Edge4"
           },
           "Edge5": {
-            "fullSubname": "Box.Edge5",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge5",
-            "stableSubname": "",
             "subname": "Edge5"
           },
           "Edge6": {
-            "fullSubname": "Box.Edge6",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge6",
-            "stableSubname": "",
             "subname": "Edge6"
           },
           "Edge7": {
-            "fullSubname": "Box.Edge7",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge7",
-            "stableSubname": "",
             "subname": "Edge7"
           },
           "Edge8": {
-            "fullSubname": "Box.Edge8",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge8",
-            "stableSubname": "",
             "subname": "Edge8"
           },
           "Edge9": {
-            "fullSubname": "Box.Edge9",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Edge9",
-            "stableSubname": "",
             "subname": "Edge9"
           },
           "Face1": {
-            "fullSubname": "Box.Face1",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Face1",
-            "stableSubname": "",
             "subname": "Face1"
           },
           "Face2": {
-            "fullSubname": "Box.Face2",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Face2",
-            "stableSubname": "",
             "subname": "Face2"
           },
           "Face3": {
-            "fullSubname": "Box.Face3",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Face3",
-            "stableSubname": "",
             "subname": "Face3"
           },
           "Face4": {
-            "fullSubname": "Box.Face4",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Face4",
-            "stableSubname": "",
             "subname": "Face4"
           },
           "Face5": {
-            "fullSubname": "Box.Face5",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Face5",
-            "stableSubname": "",
             "subname": "Face5"
           },
           "Face6": {
-            "fullSubname": "Box.Face6",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Face6",
-            "stableSubname": "",
             "subname": "Face6"
           },
           "Vertex1": {
-            "fullSubname": "Box.Vertex1",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex1",
-            "stableSubname": "",
             "subname": "Vertex1"
           },
           "Vertex2": {
-            "fullSubname": "Box.Vertex2",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex2",
-            "stableSubname": "",
             "subname": "Vertex2"
           },
           "Vertex3": {
-            "fullSubname": "Box.Vertex3",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex3",
-            "stableSubname": "",
             "subname": "Vertex3"
           },
           "Vertex4": {
-            "fullSubname": "Box.Vertex4",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex4",
-            "stableSubname": "",
             "subname": "Vertex4"
           },
           "Vertex5": {
-            "fullSubname": "Box.Vertex5",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex5",
-            "stableSubname": "",
             "subname": "Vertex5"
           },
           "Vertex6": {
-            "fullSubname": "Box.Vertex6",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex6",
-            "stableSubname": "",
             "subname": "Vertex6"
           },
           "Vertex7": {
-            "fullSubname": "Box.Vertex7",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex7",
-            "stableSubname": "",
             "subname": "Vertex7"
           },
           "Vertex8": {
-            "fullSubname": "Box.Vertex8",
             "identityStatus": "current_only",
-            "resolvedIndexed": "Vertex8",
-            "stableSubname": "",
             "subname": "Vertex8"
           }
         }
@@ -1382,7 +827,7 @@
     "producer": {
       "cadCoreVersion": "fixture-contract-v1",
       "freecadVersion": "1.2.0 revision 20260519",
-      "occtVersion": "fixture-occt-unspecified"
+      "occtVersion": "7.8.1"
     },
     "schemaVersion": "cad-core.topo-state.v1"
   }

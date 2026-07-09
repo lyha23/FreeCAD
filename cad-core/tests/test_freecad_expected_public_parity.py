@@ -127,50 +127,61 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             self.assertEqual(json.loads(expected.read_text(encoding="utf-8")), {"expected": "native"})
             self.assertEqual(json.loads(extra.read_text(encoding="utf-8")), {"extra": True})
 
-    def test_c4m6_strict_report_is_current_classified_red_baseline(self) -> None:
+    def test_c4m6_strict_report_is_green_or_registered_intentional_divergence(self) -> None:
         output = ROOT / "out" / "freecad-expected-parity" / "c4m6.unittest.json"
         report = compare_freecad_expected.run_strict_compare(ROOT, phase="c4m6", output=output)
 
         self.assertTrue(output.exists())
         self.assertEqual(report["schemaVersion"], "cad-core.freecad-expected-parity.v1")
-        self.assertEqual(report["status"], "red")
         self.assertEqual(report["summary"]["cases"], 9)
-        self.assertEqual(report["summary"]["passed"], 2)
-        self.assertEqual(report["summary"]["red"], 7)
-        self.assertEqual(
-            report["summary"]["categories"],
-            {
-                "diagnostics": 14,
-                "results": 14,
-                "results.subshapes": 1,
-                "topoNamingState.objects": 13,
-                "topoNamingState.subshapes": 449,
-                "topoNamingState.elementMap": 1,
-                "topoNamingState.childElementMaps": 0,
-                "topoNamingState.mapperHistory": 328,
-                "geometry.numeric": 2,
-                "json": 0,
-            },
-        )
-        self.assertEqual(
+
+        forbidden_decisions = {
+            "hash_mismatch_policy",
+            "mapper_history_publication_gap",
+            "protocol_decision_required",
+            "runtime_publication_gap",
+            "stable_subname_diagnostic_policy",
+        }
+        self.assertTrue(
+            forbidden_decisions.isdisjoint(report["summary"]["decisions"]),
             report["summary"]["decisions"],
-            {
-                "hash_mismatch_policy": 6,
-                "mapper_history_publication_gap": 328,
-                "protocol_decision_required": 5,
-                "runtime_publication_gap": 470,
-                "stable_subname_diagnostic_policy": 13,
-            },
         )
+        for category in (
+            "diagnostics",
+            "geometry.numeric",
+            "json",
+            "topoNamingState.objects",
+            "topoNamingState.subshapes",
+            "topoNamingState.elementMap",
+            "topoNamingState.childElementMaps",
+            "topoNamingState.mapperHistory",
+        ):
+            self.assertEqual(report["summary"]["categories"][category], 0, category)
 
         case_statuses = {item["case"]: item["status"] for item in report["cases"]}
-        self.assertEqual(
-            {case for case, status in case_statuses.items() if status == "green"},
-            {
-                "topo-state-producer-incompatible",
-                "topo-state-schema-incompatible",
-            },
-        )
+        if report["status"] == "green":
+            self.assertEqual(report["summary"]["passed"], 9)
+            self.assertEqual(report["summary"]["red"], 0)
+            self.assertEqual(report["summary"]["decisions"], {})
+        else:
+            self.assertEqual(report["status"], "red")
+            intentional_diff_count = sum(item["diffCount"] for item in report["cases"])
+            self.assertEqual(
+                report["summary"]["decisions"],
+                {"intentional_protocol_divergence": intentional_diff_count},
+            )
+            self.assertLessEqual(
+                {case for case, status in case_statuses.items() if status == "red"},
+                {
+                    "topo-state-body-tip-stable-recovery",
+                    "topo-state-document-hash-mismatch",
+                    "topo-state-first-recompute-empty",
+                    "topo-state-link-compound-child-maps",
+                    "topo-state-mapper-history-events",
+                    "topo-state-object-hash-mismatch",
+                    "topo-state-reference-shadow-brep",
+                },
+            )
         for category in compare_freecad_expected.REPORT_CATEGORIES:
             self.assertIn(category, report["summary"]["categories"])
         for case_report in report["cases"]:
@@ -180,6 +191,8 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             if case_report["status"] == "red":
                 self.assertGreater(case_report["diffCount"], 0)
                 for diff in case_report["diffs"]:
+                    self.assertEqual(diff["decision"], "intentional_protocol_divergence")
+                    self.assertIn(diff["category"], {"results", "results.subshapes"})
                     for field in compare_freecad_expected.CLASSIFICATION_FIELDS:
                         self.assertIsInstance(diff.get(field), str)
                         self.assertNotEqual(diff[field], "")

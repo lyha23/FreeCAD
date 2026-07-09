@@ -4,6 +4,14 @@
 
 关闭 `c4m6` strict public expected 中属于 topoNamingState publication 的缺口，为后续 phase 提供可复用的发布策略。
 
+## 实现结果
+
+- public object set 已从 response target 扩展为 `ComputeContext` 中已执行且有 `NamedShape` 的对象，并保留 Link、ReferenceShadow、child owner projection。
+- mapperHistory 只发布 expected-facing recovery evidence；内部 indexed history 不再无差别进入 public state。
+- schema、producer、element-map encoding 继续 hard fail；document/object hash mismatch 按 c4m6 native expected 重算并发布 topoNamingState。
+- Link compound child path projection 可解析时，不再保留 `missing_stable_subname`；剩余 Link result 差异登记为 transport metadata intentional divergence。
+- `c4m6` strict report 仍为 red，但只剩 `intentional_protocol_divergence`=8；topoNamingState publication、mapperHistory、hash mismatch、stable diagnostic policy 缺口均已清零。
+
 ## 必做
 
 1. 完整 public object set：

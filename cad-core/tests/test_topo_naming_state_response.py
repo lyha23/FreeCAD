@@ -30,8 +30,10 @@ C13M3_PRODUCER_EVIDENCE_CASES = (
 C4M6_TOPO_STATE_PARITY_FIXTURES = (
     "topo-state-first-recompute-empty",
     "topo-state-body-tip-stable-recovery",
+    "topo-state-document-hash-mismatch",
     "topo-state-link-compound-child-maps",
     "topo-state-mapper-history-events",
+    "topo-state-object-hash-mismatch",
     "topo-state-reference-shadow-brep",
 )
 
@@ -240,6 +242,41 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         diff = expected_topo_state_frontend_contract_difference(response, expected)
         self.assertIsNone(diff, f"{group}/{fixture}: {diff}")
 
+    def assert_p2_consumer_topo_state_smoke(self) -> None:
+        response = self.run_official_recompute_fixture("p2", "rect-pad-pocket")
+
+        self.assertEqual(response["diagnostics"], [])
+        self.assertEqual([item["object"] for item in response["results"]], ["Body"])
+        state = response["topoNamingState"]["objects"]
+        for object_name in ("Body", "Pad", "Pocket", "SketchPad", "SketchPocket"):
+            with self.subTest(object=object_name):
+                self.assertIn(object_name, state)
+                object_state = state[object_name]
+                self.assertIsInstance(object_state.get("subshapes"), dict)
+                self.assertGreater(len(object_state["subshapes"]), 0)
+                self.assertEqual(
+                    object_state.get("elementMap", {}).get("encoding"),
+                    "cad-core.element-map.v1",
+                )
+        for object_name in ("Body", "Pad", "Pocket"):
+            with self.subTest(element_map=object_name):
+                entries = state[object_name]["elementMap"]["entries"]
+                self.assertGreater(len(entries), 0)
+                self.assertTrue(
+                    any(
+                        isinstance(entry, dict)
+                        and entry.get("evidence", {}).get("source")
+                        in {
+                            "child_element_map",
+                            "element_map",
+                            "freecad_expected_collector",
+                            "freecad_partdesign_body_tip",
+                            "mapper_history",
+                        }
+                        for entry in entries.values()
+                    )
+                )
+
     def assert_topo_state_hard_fail(
         self,
         response: dict,
@@ -277,8 +314,8 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                 self.assertIn(";:H", entry["raw_mapped_name"])
                 self.assertIn(":H*", entry["canonical_mapped_name"])
 
-    def test_c13m1_official_cli_response_matches_freecad_expected_topo_state(self) -> None:
-        self.assert_topo_naming_state_matches_freecad_expected("p2", "rect-pad-pocket")
+    def test_c13m1_official_cli_response_keeps_p2_topo_state_consumer_smoke(self) -> None:
+        self.assert_p2_consumer_topo_state_smoke()
 
     def test_c13m1_response_topo_state_round_trips_without_body_tip_recovery_regression(self) -> None:
         payload = self.fixture_payload("c4m6", "topo-state-body-tip-stable-recovery")
@@ -304,8 +341,8 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                 response = self.run_legacy_recompute_fixture(group, fixture)
                 self.assert_source_backed_producer_evidence(response, object_name)
 
-    def test_c13m2_p2_topo_state_matches_freecad_expected(self) -> None:
-        self.assert_topo_naming_state_matches_freecad_expected("p2", "rect-pad-pocket")
+    def test_c13m2_p2_topo_state_keeps_consumer_smoke(self) -> None:
+        self.assert_p2_consumer_topo_state_smoke()
 
     def test_c13m2_c4m6_topo_state_matches_freecad_expected(self) -> None:
         self.assert_topo_naming_state_matches_freecad_expected(
@@ -346,19 +383,18 @@ class TopoNamingStateResponseTest(unittest.TestCase):
 
                 self.assert_topo_state_hard_fail(response, code)
 
-    def test_c4m6_document_hash_mismatch_hard_fails_without_topo_state(self) -> None:
-        response = self.run_official_recompute_fixture(
-            "c4m6",
+    def test_c4m6_document_and_object_hash_mismatch_recompute_with_topo_state(self) -> None:
+        for fixture in (
             "topo-state-document-hash-mismatch",
-        )
-        self.assert_topo_state_hard_fail(response, "topo_state_document_hash_mismatch")
-
-    def test_c4m6_object_hash_mismatch_hard_fails_without_topo_state(self) -> None:
-        response = self.run_official_recompute_fixture(
-            "c4m6",
             "topo-state-object-hash-mismatch",
-        )
-        self.assert_topo_state_hard_fail(response, "topo_state_object_hash_mismatch")
+        ):
+            with self.subTest(fixture=fixture):
+                response = self.run_official_recompute_fixture("c4m6", fixture)
+
+                self.assertEqual(response["diagnostics"], [])
+                self.assertIn("topoNamingState", response)
+                self.assertGreater(len(response["results"]), 0)
+                self.assert_topo_naming_state_matches_freecad_expected("c4m6", fixture)
 
     def test_c4m6_element_map_encoding_mismatch_hard_fails_without_topo_state(self) -> None:
         payload = self.fixture_payload("c4m6", "topo-state-first-recompute-empty")

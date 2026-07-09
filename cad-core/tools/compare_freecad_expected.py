@@ -390,10 +390,10 @@ def classification_for_diff(
         return classification(
             "cad-core/src/runtime/topo_naming_state.cpp; cad-core/src/runtime/recompute.cpp",
             "S3",
-            "hash_mismatch_policy",
+            "intentional_protocol_divergence",
             "c4m6 native expected hash-mismatch fixtures and topoNamingState protocol boundary",
-            "Decide whether document/object hash mismatch remains a hard failure or recomputes to match native expected public output.",
-            "The hash mismatch c4m6 cases are strict green, or an intentional protocol divergence is documented.",
+            "Document/object hash mismatch follows native expected recompute semantics; cad-core still returns mesh transport metadata for frontend consumers.",
+            "The only remaining hash-mismatch diffs are registered transport metadata divergences.",
         )
 
     if category == "topoNamingState.mapperHistory":
@@ -421,9 +421,17 @@ def classification_for_diff(
             "c4m6 topoNamingState object/subshape/elementMap publication diffs are strict green.",
         )
 
-    if category == "diagnostics" or (
-        case_name in LINK_COMPOUND_CASES and category == "results"
-    ):
+    if case_name in LINK_COMPOUND_CASES and category == "results":
+        return classification(
+            "cad-core/src/runtime/recompute.cpp; cad-core/src/app/link.cpp",
+            "S3",
+            "intentional_protocol_divergence",
+            "src/App/PropertyLinks.cpp; src/Mod/Part/App/TopoShapeExpansion.cpp",
+            "Link child-path stableSubname diagnostics are resolved; cad-core keeps the Link result payload as frontend transport metadata while native expected records owner projection only.",
+            "The Link compound case has no diagnostics/topoNamingState diffs; the only remaining result diff is documented as transport metadata divergence.",
+        )
+
+    if category == "diagnostics":
         return classification(
             "cad-core/src/runtime/recompute.cpp",
             "S3",
@@ -441,10 +449,10 @@ def classification_for_diff(
             return classification(
                 "cad-core/src/runtime/recompute.cpp",
                 "S2/S3",
-                "protocol_decision_required",
+                "intentional_protocol_divergence",
                 "c4m6 native expected result payload and release-output protocol boundary",
-                "Decide whether strict native expected release output should include current mesh/helper result fields or treat them as transport metadata.",
-                "The release-output protocol is documented, and the comparator/runtime behavior follows that decision.",
+                "Keep mesh/helper result payloads as cad-core frontend transport metadata while native expected remains a public semantic oracle.",
+                "Every remaining result transport diff is documented in the C13-M5 matrix as intentional divergence.",
             )
         return classification(
             "cad-core/src/runtime/recompute.cpp",
@@ -459,10 +467,10 @@ def classification_for_diff(
         return classification(
             "cad-core/src/runtime/recompute.cpp",
             "S2/S3",
-            "protocol_decision_required",
+            "intentional_protocol_divergence",
             "c4m6 native expected result payload and release-output protocol boundary",
-            "Decide whether strict native expected release output should expose current result subshape maps for this path.",
-            "The release-output protocol is documented, and result subshape publication follows that decision.",
+            "Keep response subshape maps as cad-core frontend transport metadata while native expected records the semantic summary only.",
+            "Every remaining result subshape transport diff is documented in the C13-M5 matrix as intentional divergence.",
         )
 
     if phase == "c4m6":

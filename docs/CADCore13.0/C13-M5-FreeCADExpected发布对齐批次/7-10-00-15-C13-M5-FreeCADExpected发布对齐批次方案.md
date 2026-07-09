@@ -100,17 +100,19 @@ S0 live inventory 已冻结：当前发现到的 `.freecad.json` phase 数量是
 
 ### S3 topoNamingState 发布策略对齐
 
-优先修改 cad-core runtime publication：
+已实现：cad-core runtime publication 已按 c4m6 native expected 收口：
 
-- `cad-core/src/runtime/topo_naming_state.cpp`：发布完整 public object set，不只发布 result targets。
-- `cad-core/src/runtime/topo_naming_state.cpp`：为 `mapperHistory` 增加 expected-facing publication policy，避免把内部 indexed history 全量泄漏为 public state。
-- `cad-core/src/runtime/topo_naming_state.cpp` / `cad-core/src/runtime/recompute.cpp`：重新裁决 hash mismatch 与 stableSubname publication diagnostics。
-- `cad-core/tests/test_topo_naming_state_response.py` 或新 strict parity test：锁住 c4m6 strict expected。
+- `cad-core/src/runtime/topo_naming_state.cpp`：发布已执行且有 `NamedShape` 的 public object set，不只发布 result targets；保留 Link、ReferenceShadow、child owner projection。
+- `cad-core/src/runtime/topo_naming_state.cpp`：mapperHistory 只发布 expected-facing recovery evidence，不把内部 indexed history 全量泄漏为 public state。
+- `cad-core/src/runtime/topo_naming_state.cpp` / `cad-core/src/runtime/recompute.cpp`：schema、producer、element-map encoding 继续 hard fail；document/object hash mismatch 按 native expected 重算并发布 topoNamingState。
+- `cad-core/src/app/link.cpp`：Link compound child path 已能解析时，不再产生 `missing_stable_subname`。
+- `cad-core/tests/test_topo_naming_state_response.py` 与 `cad-core/tests/test_freecad_expected_public_parity.py`：锁住 consumer smoke、hard-fail 边界和 c4m6 strict decision surface。
 
 关闭条件：
 
-- `c4m6` strict expected green，或者剩余项被明确登记为协议 intentional divergence。
-- 若协议 intentional divergence 存在，需要单独文档说明为什么 release output 不对齐 native expected，不能静默保留红灯。
+- 已实现：`c4m6` strict report 仍为 red，但只剩 `intentional_protocol_divergence`=8。
+- 已实现：`topoNamingState.objects/subshapes/elementMap/childElementMaps/mapperHistory`、diagnostics、geometry numeric 均为 0；`runtime_publication_gap`、`mapper_history_publication_gap`、`stable_subname_diagnostic_policy`、`hash_mismatch_policy`、`protocol_decision_required` 均不再出现。
+- intentional divergence 范围：cad-core response 保留前端需要的 `mesh`、helper `result`、`subshapes` transport metadata；native expected 只作为 public semantic oracle，不要求删除 transport 字段。
 
 ### S4 phase family 扩展
 
