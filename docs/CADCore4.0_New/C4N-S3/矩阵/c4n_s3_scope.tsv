@@ -1,0 +1,6 @@
+id	area	current_baseline	target	code_landings	validation
+C4N-S3-SCOPE-001	producer_tag_source	部分 raw mapped-name tag 仍可能来自 OCCT shape hash / request-local地址相关路径	建立跨入口确定的 request-local producer tag ledger	cad-core/src/part/topo_shape.cpp; cad-core/src/topo/freecad_mapped_name_codec.cpp	test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel
+C4N-S3-SCOPE-002	raw_canonical_contract	C4N-S1/S2 focused raw/canonical parity 已关闭；跨入口 raw 仍需一致	raw 保持 FreeCAD 风格且跨 adapter 一致，canonical 只做稳定比较	cad-core/src/runtime/topo_naming_state.cpp; cad-core/tests/test_topo_naming_state_response.py	tests.test_topo_naming_state_response
+C4N-S3-SCOPE-003	adapter_channel	上一轮 broad adapter test 暴露 topoNamingState channel 差异	CLI / C API / worker / wasm 对同一请求返回同一 topoNamingState	cad-core/tests/test_adapters.py	test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel
+C4N-S3-SCOPE-004	fixture_intake	全 corpus expected 混有旧 schema、missing expected、product drift 和 topo state drift	建立准入矩阵，先筛出 topoNamingState producer tag 相关 case	docs/CADCore4.0_New/C4N-S3/矩阵/c4n_s3_fixture_intake.tsv	脚本化扫描 + 人工分组复核
+C4N-S3-SCOPE-005	non_goal_guard	全量 tests.test_expected_fixtures tests.test_adapters 当前不是单一 topoNamingState 问题	把非 topoNamingState drift 留在各自产品包，不作为 C4N-S3 通过条件	docs/CADCore4.0_New/C4N-S3/矩阵/c4n_s3_blocker_queue.tsv	git diff --check -- docs/CADCore4.0_New cad-core

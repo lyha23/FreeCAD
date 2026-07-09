@@ -1,0 +1,4683 @@
+{
+  "binaryPayloads": [],
+  "diagnostics": [],
+  "documentObjectUpdates": [],
+  "elementReferenceUpdates": [
+    {
+      "PropertyType": "App::PropertyLinkSubList",
+      "SubSet": [
+        {
+          "ReferenceShadow": [
+            {
+              "brep": "BREP:single-face-snapshot-only",
+              "fingerprint": {
+                "area": 15.0
+              },
+              "indexed": "Face1",
+              "property": "Shape",
+              "shapeType": "Face",
+              "stableSubname": "Pad.#d:4;:G;XTR;:H*:*,F",
+              "subname": "Face1",
+              "target": "Body",
+              "targetId": 3
+            }
+          ],
+          "ShadowSub": [
+            {
+              "newName": "Pad.#d:4;:G;XTR;:H*:*,F",
+              "oldName": "Face1"
+            }
+          ],
+          "StableSubList": [
+            "Pad.#d:4;:G;XTR;:H*:*,F"
+          ],
+          "SubList": [
+            "Face1"
+          ],
+          "value": "Body"
+        }
+      ],
+      "object": "ProbeSketch",
+      "property": "ExternalGeometry"
+    }
+  ],
+  "results": [
+    {
+      "mesh": {
+        "edgeSegments": [
+          {
+            "id": "ProbeSketch:Edge1",
+            "identityStatus": "stable",
+            "indexed": "Edge1",
+            "points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "sourceGeometryId": 1,
+            "sourceGeometryIndex": 0,
+            "sourceGeometryKind": "LineSegment",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1"
+          }
+        ],
+        "faceIds": [],
+        "indices": [],
+        "normals": [],
+        "vertexPoints": [
+          {
+            "id": "ProbeSketch:Vertex1",
+            "indexed": "Vertex1",
+            "point": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "id": "ProbeSketch:Vertex2",
+            "indexed": "Vertex2",
+            "point": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "vertices": []
+      },
+      "object": "ProbeSketch",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ProbeSketch.Edge1",
+          "id": "ProbeSketch:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "sourceGeometryId": 1,
+          "sourceGeometryIndex": 0,
+          "sourceGeometryKind": "LineSegment",
+          "sourceStableSubname": "g1",
+          "stableSubname": "g1",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ProbeSketch.Vertex1",
+          "id": "ProbeSketch:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "ProbeSketch.Vertex2",
+          "id": "ProbeSketch:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        }
+      ]
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:d2331a296b236e14814da04856d3166dfce5668497174769e235ba666c567fb9",
+    "objects": {
+      "Body": {
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "Pad",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Pad.#10:1;:G;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#10:1;:G;XTR;:H*:*,E",
+                    "raw": "Pad.#10:1;:G;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge2"
+                  }
+                },
+                "Pad.#11:2;:G;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#11:2;:G;XTR;:H*:*,E",
+                    "raw": "Pad.#11:2;:G;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge5"
+                  }
+                },
+                "Pad.#12:2;:G;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#12:2;:G;XTR;:H*:*,E",
+                    "raw": "Pad.#12:2;:G;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge8"
+                  }
+                },
+                "Pad.#14:1;:G0;XTR;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#14:1;:G0;XTR;:H*:*,F",
+                    "raw": "Pad.#14:1;:G0;XTR;:H1c451092:8,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Face6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face6"
+                  }
+                },
+                "Pad.#16:1;:U;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#16:1;:U;XTR;:H*:*,E",
+                    "raw": "Pad.#16:1;:U;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge12"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge12"
+                  }
+                },
+                "Pad.#16:2;:U;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#16:2;:U;XTR;:H*:*,E",
+                    "raw": "Pad.#16:2;:U;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge10"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge10"
+                  }
+                },
+                "Pad.#16:3;:U;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#16:3;:U;XTR;:H*:*,E",
+                    "raw": "Pad.#16:3;:U;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge7"
+                  }
+                },
+                "Pad.#16:4;:U;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#16:4;:U;XTR;:H*:*,E",
+                    "raw": "Pad.#16:4;:U;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge4"
+                  }
+                },
+                "Pad.#18:2;:U;XTR;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#18:2;:U;XTR;:H*:*,V",
+                    "raw": "Pad.#18:2;:U;XTR;:H1c451092:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex2"
+                  }
+                },
+                "Pad.#19:1;:U;XTR;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#19:1;:U;XTR;:H*:*,V",
+                    "raw": "Pad.#19:1;:U;XTR;:H1c451092:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex4"
+                  }
+                },
+                "Pad.#1a:2;:U;XTR;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#1a:2;:U;XTR;:H*:*,V",
+                    "raw": "Pad.#1a:2;:U;XTR;:H1c451092:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex6"
+                  }
+                },
+                "Pad.#1b:2;:U;XTR;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#1b:2;:U;XTR;:H*:*,V",
+                    "raw": "Pad.#1b:2;:U;XTR;:H1c451092:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex8"
+                  }
+                },
+                "Pad.#2:1;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#2:1;:H*,V",
+                    "raw": "Pad.#2:1;:H1c451092,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex3"
+                  }
+                },
+                "Pad.#4:2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#4:2;:H*,V",
+                    "raw": "Pad.#4:2;:H1c451092,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex7"
+                  }
+                },
+                "Pad.#6:2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#6:2;:H*,V",
+                    "raw": "Pad.#6:2;:H1c451092,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex5"
+                  }
+                },
+                "Pad.#8:2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#8:2;:H*,V",
+                    "raw": "Pad.#8:2;:H1c451092,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex1"
+                  }
+                },
+                "Pad.#b:1;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#b:1;:H*,E",
+                    "raw": "Pad.#b:1;:H1c451092,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge11"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge11"
+                  }
+                },
+                "Pad.#b:2;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#b:2;:H*,E",
+                    "raw": "Pad.#b:2;:H1c451092,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge9"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge9"
+                  }
+                },
+                "Pad.#b:3;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#b:3;:H*,E",
+                    "raw": "Pad.#b:3;:H1c451092,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge6"
+                  }
+                },
+                "Pad.#b:4;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#b:4;:H*,E",
+                    "raw": "Pad.#b:4;:H1c451092,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge3"
+                  }
+                },
+                "Pad.#d:1;:G;XTR;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#d:1;:G;XTR;:H*:*,F",
+                    "raw": "Pad.#d:1;:G;XTR;:H1c451092:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Face4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face4"
+                  }
+                },
+                "Pad.#d:1;;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#d:1;;:H*:*,F",
+                    "raw": "Pad.#d:1;;:H1c451092:1,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Face5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face5"
+                  }
+                },
+                "Pad.#d:2;:G;XTR;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#d:2;:G;XTR;:H*:*,F",
+                    "raw": "Pad.#d:2;:G;XTR;:H1c451092:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Face3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face3"
+                  }
+                },
+                "Pad.#d:3;:G;XTR;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#d:3;:G;XTR;:H*:*,F",
+                    "raw": "Pad.#d:3;:G;XTR;:H1c451092:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Face2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face2"
+                  }
+                },
+                "Pad.#d:4;:G;XTR;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#d:4;:G;XTR;:H*:*,F",
+                    "raw": "Pad.#d:4;:G;XTR;:H1c451092:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Face1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face1"
+                  }
+                },
+                "Pad.#f:2;:G;XTR;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:Pad:Pad",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "Pad.#f:2;:G;XTR;:H*:*,E",
+                    "raw": "Pad.#f:2;:G;XTR;:H1c451092:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "Pad",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge1"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "Body:Pad:Pad",
+            "ownerObject": "Body",
+            "pathPrefix": "Pad"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "Pad.#10:1;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#10:1;:G;XTR;:H*:*,E",
+                "raw": "Pad.#10:1;:G;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge2"
+              }
+            },
+            "Pad.#11:2;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#11:2;:G;XTR;:H*:*,E",
+                "raw": "Pad.#11:2;:G;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge5"
+              }
+            },
+            "Pad.#12:2;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#12:2;:G;XTR;:H*:*,E",
+                "raw": "Pad.#12:2;:G;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge8"
+              }
+            },
+            "Pad.#14:1;:G0;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#14:1;:G0;XTR;:H*:*,F",
+                "raw": "Pad.#14:1;:G0;XTR;:H1c451092:8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face6"
+              }
+            },
+            "Pad.#16:1;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#16:1;:U;XTR;:H*:*,E",
+                "raw": "Pad.#16:1;:U;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge12"
+              }
+            },
+            "Pad.#16:2;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#16:2;:U;XTR;:H*:*,E",
+                "raw": "Pad.#16:2;:U;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge10"
+              }
+            },
+            "Pad.#16:3;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#16:3;:U;XTR;:H*:*,E",
+                "raw": "Pad.#16:3;:U;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge7"
+              }
+            },
+            "Pad.#16:4;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#16:4;:U;XTR;:H*:*,E",
+                "raw": "Pad.#16:4;:U;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge4"
+              }
+            },
+            "Pad.#18:2;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#18:2;:U;XTR;:H*:*,V",
+                "raw": "Pad.#18:2;:U;XTR;:H1c451092:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex2"
+              }
+            },
+            "Pad.#19:1;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#19:1;:U;XTR;:H*:*,V",
+                "raw": "Pad.#19:1;:U;XTR;:H1c451092:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex4"
+              }
+            },
+            "Pad.#1a:2;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#1a:2;:U;XTR;:H*:*,V",
+                "raw": "Pad.#1a:2;:U;XTR;:H1c451092:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex6"
+              }
+            },
+            "Pad.#1b:2;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#1b:2;:U;XTR;:H*:*,V",
+                "raw": "Pad.#1b:2;:U;XTR;:H1c451092:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex8"
+              }
+            },
+            "Pad.#2:1;:H*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#2:1;:H*,V",
+                "raw": "Pad.#2:1;:H1c451092,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex3"
+              }
+            },
+            "Pad.#4:2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#4:2;:H*,V",
+                "raw": "Pad.#4:2;:H1c451092,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex7"
+              }
+            },
+            "Pad.#6:2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#6:2;:H*,V",
+                "raw": "Pad.#6:2;:H1c451092,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex5"
+              }
+            },
+            "Pad.#8:2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#8:2;:H*,V",
+                "raw": "Pad.#8:2;:H1c451092,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Pad",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex1"
+              }
+            },
+            "Pad.#b:1;:H*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#b:1;:H*,E",
+                "raw": "Pad.#b:1;:H1c451092,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge11"
+              }
+            },
+            "Pad.#b:2;:H*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#b:2;:H*,E",
+                "raw": "Pad.#b:2;:H1c451092,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge9"
+              }
+            },
+            "Pad.#b:3;:H*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#b:3;:H*,E",
+                "raw": "Pad.#b:3;:H1c451092,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge6"
+              }
+            },
+            "Pad.#b:4;:H*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#b:4;:H*,E",
+                "raw": "Pad.#b:4;:H1c451092,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge3"
+              }
+            },
+            "Pad.#d:1;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#d:1;:G;XTR;:H*:*,F",
+                "raw": "Pad.#d:1;:G;XTR;:H1c451092:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face4"
+              }
+            },
+            "Pad.#d:1;;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#d:1;;:H*:*,F",
+                "raw": "Pad.#d:1;;:H1c451092:1,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face5"
+              }
+            },
+            "Pad.#d:2;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#d:2;:G;XTR;:H*:*,F",
+                "raw": "Pad.#d:2;:G;XTR;:H1c451092:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face3"
+              }
+            },
+            "Pad.#d:3;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#d:3;:G;XTR;:H*:*,F",
+                "raw": "Pad.#d:3;:G;XTR;:H1c451092:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face2"
+              }
+            },
+            "Pad.#d:4;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#d:4;:G;XTR;:H*:*,F",
+                "raw": "Pad.#d:4;:G;XTR;:H1c451092:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Pad",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face1"
+              }
+            },
+            "Pad.#f:2;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:Pad:Pad",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "Pad.#f:2;:G;XTR;:H*:*,E",
+                "raw": "Pad.#f:2;:G;XTR;:H1c451092:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Pad",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Body",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Body",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Body",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Body",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face5",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Body",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face6",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Body",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge5",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge6",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge7",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge7"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge8",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge8"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge9",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge9"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge10",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge10"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge11",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge11"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge12",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Body",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge12"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex5",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex6",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex7",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex7"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex8",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Body",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex8"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face2",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face3",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face4",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge5",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge8",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge8"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge11",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge11"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge11",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge11"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge3",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge3",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge6",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge6",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge9",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge9"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge9",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge9"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face5",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face5",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex1",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex1",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex3",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex3",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex5",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex5",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex7",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex7"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex7",
+              "legacy_history_kind": "merge"
+            },
+            "maker_stage": "element_map_merge",
+            "recoverability": "resolved",
+            "relation": "merge",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex7"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Face1",
+              "element_map": true,
+              "stable_subname": "Pad.#d:4;:G;XTR;:H21:7,F"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "#d:4;:G;XTR;:H21:7,F"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge1",
+              "element_map": true,
+              "stable_subname": "Pad.Edge1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge10",
+              "element_map": true,
+              "stable_subname": "Pad.Edge10"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge10"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge12",
+              "element_map": true,
+              "stable_subname": "Pad.Edge12"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge12"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge2",
+              "element_map": true,
+              "stable_subname": "Pad.Edge2"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge4",
+              "element_map": true,
+              "stable_subname": "Pad.Edge4"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge5",
+              "element_map": true,
+              "stable_subname": "Pad.Edge5"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge7",
+              "element_map": true,
+              "stable_subname": "Pad.Edge7"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge7"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge8",
+              "element_map": true,
+              "stable_subname": "Pad.Edge8"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge8"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Face1",
+              "element_map": true,
+              "stable_subname": "Pad.Face1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Face2",
+              "element_map": true,
+              "stable_subname": "Pad.Face2"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Face3",
+              "element_map": true,
+              "stable_subname": "Pad.Face3"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Face4",
+              "element_map": true,
+              "stable_subname": "Pad.Face4"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Face6",
+              "element_map": true,
+              "stable_subname": "Pad.Face6"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex2",
+              "element_map": true,
+              "stable_subname": "Pad.Vertex2"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex4",
+              "element_map": true,
+              "stable_subname": "Pad.Vertex4"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex6",
+              "element_map": true,
+              "stable_subname": "Pad.Vertex6"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex8",
+              "element_map": true,
+              "stable_subname": "Pad.Vertex8"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex8"
+            }
+          }
+        ],
+        "objectHash": "sha256:37cd9437f117b4d1c98b658a6b0d1584049e4549c9df2c9cebcefd3c45b06de1",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "Pad": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face5",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face6",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "face",
+            "source": {
+              "object": "Pad",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge5",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge6",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge7",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge7"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge8",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge8"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge9",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge9"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge10",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge10"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge11",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge11"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge12",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Pad",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge12"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex5",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex6",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex7",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex7"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex8",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Pad",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex8"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face2",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face3",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Face4",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge5",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge8",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge8"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge3",
+              "element_map": true,
+              "stable_subname": "Sketch.Edge1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge6",
+              "element_map": true,
+              "stable_subname": "Sketch.Edge2"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge6"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge9",
+              "element_map": true,
+              "stable_subname": "Sketch.Edge3"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge9"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge11",
+              "element_map": true,
+              "stable_subname": "Sketch.Edge4"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Edge11"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Face5",
+              "element_map": true,
+              "stable_subname": "Sketch.Face1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Face5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex1",
+              "element_map": true,
+              "stable_subname": "Sketch.Vertex1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex3",
+              "element_map": true,
+              "stable_subname": "Sketch.Vertex2"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex5",
+              "element_map": true,
+              "stable_subname": "Sketch.Vertex3"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex5"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Vertex7",
+              "element_map": true,
+              "stable_subname": "Sketch.Vertex4"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Pad",
+              "subname": "Vertex7"
+            }
+          }
+        ],
+        "objectHash": "sha256:a70277d182e476f73bd5b7ad22968957ca25904a197d5c34a0e0193d78b09889",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "ProbeSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "ProbeSketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "ProbeSketch",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "ProbeSketch",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "ProbeSketch",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "ProbeSketch",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "ProbeSketch",
+              "subname": "Vertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge1",
+              "element_map": true,
+              "stable_subname": "g1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "ProbeSketch",
+              "subname": "g1"
+            },
+            "target": {
+              "object": "ProbeSketch",
+              "subname": "Edge1"
+            }
+          }
+        ],
+        "objectHash": "sha256:e82f3c1fc13426b09b46247c29fd7f7922ebf72548f461462237da197daaebe6",
+        "subshapes": {
+          "Edge1": {
+            "fullSubname": "ProbeSketch.Edge1",
+            "identityStatus": "stable",
+            "resolvedIndexed": "Edge1",
+            "sourceStableSubname": "g1",
+            "stableSubname": "g1",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "fullSubname": "ProbeSketch.Vertex1",
+            "identityStatus": "current_only",
+            "resolvedIndexed": "Vertex1",
+            "stableSubname": "",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "fullSubname": "ProbeSketch.Vertex2",
+            "identityStatus": "current_only",
+            "resolvedIndexed": "Vertex2",
+            "stableSubname": "",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Edge4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "Vertex4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Vertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge1",
+              "element_map": true,
+              "stable_subname": "g1"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g1"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge2",
+              "element_map": true,
+              "stable_subname": "g2"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g2"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge3",
+              "element_map": true,
+              "stable_subname": "g3"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g3"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "Edge4",
+              "element_map": true,
+              "stable_subname": "g4"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Sketch",
+              "subname": "g4"
+            },
+            "target": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            }
+          }
+        ],
+        "objectHash": "sha256:f9eb89a5470a6ce9d04496976c2527e2dd11cc358b25eb25f7cff747630d79b3",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "Sketch.InternalShape": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge4",
+              "source_edge_index": 4,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge3",
+              "source_edge_index": 3,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge2",
+              "source_edge_index": 2,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "bounded_face_index": 1,
+              "producer": "FaceMakerBuildFace",
+              "source_edge": "Edge1",
+              "source_edge_index": 1,
+              "target_internal_element": "InternalFace1"
+            },
+            "maker_stage": "facemaker:outer_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Sketch",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex1",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex2",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex3",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex4",
+              "legacy_history_kind": "indexed"
+            },
+            "maker_stage": "indexed",
+            "recoverability": "resolved",
+            "relation": "identity",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge1",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge2",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge3",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalEdge4",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalEdge4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex1",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex2",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex2"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex3",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex3"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalVertex4",
+              "legacy_history_kind": "modified"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "modified",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalVertex4"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "legacy_element": "InternalFace1",
+              "legacy_history_kind": "generated"
+            },
+            "maker_stage": "maker_history",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          },
+          {
+            "diagnostic_status": "",
+            "evidence": {
+              "current_subname": "InternalFace1",
+              "element_map": true,
+              "stable_subname": "g1;SKT;FAC"
+            },
+            "maker_stage": "element_map_preserved",
+            "recoverability": "resolved",
+            "relation": "preserved",
+            "shape_kind": "shape",
+            "source": {
+              "object": "Sketch.InternalShape",
+              "subname": "g1;SKT;FAC"
+            },
+            "target": {
+              "object": "Sketch.InternalShape",
+              "subname": "InternalFace1"
+            }
+          }
+        ],
+        "objectHash": "sha256:932804ce571e878d520068ae7274d2ec8b1ce22bb2e761339252c04469026a67",
+        "subshapes": {
+          "InternalEdge1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge1",
+            "subname": "InternalEdge1"
+          },
+          "InternalEdge2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge2",
+            "subname": "InternalEdge2"
+          },
+          "InternalEdge3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge3",
+            "subname": "InternalEdge3"
+          },
+          "InternalEdge4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalEdge4",
+            "subname": "InternalEdge4"
+          },
+          "InternalFace1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalFace1",
+            "subname": "InternalFace1"
+          },
+          "InternalVertex1": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex1",
+            "subname": "InternalVertex1"
+          },
+          "InternalVertex2": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex2",
+            "subname": "InternalVertex2"
+          },
+          "InternalVertex3": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex3",
+            "subname": "InternalVertex3"
+          },
+          "InternalVertex4": {
+            "identityStatus": "indexed_only",
+            "resolvedIndexed": "InternalVertex4",
+            "subname": "InternalVertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

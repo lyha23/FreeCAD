@@ -1,0 +1,5 @@
+id	status	title	scope	files	validation
+C4N-S3-BLK-001	open	Producer tag deterministic ledger	替换入口/进程相关 producer tag 来源，保证 raw mapped-name 跨 adapter 一致	cad-core/src/part/topo_shape.cpp; cad-core/src/topo/freecad_mapped_name_codec.cpp	test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel
+C4N-S3-BLK-002	open	Adapter topoNamingState channel parity	固化 CLI / C API / worker / wasm 同一 topoNamingState payload	cad-core/tests/test_adapters.py	test_c4s11_cli_c_api_worker_wasm_share_core_result_contract
+C4N-S3-BLK-003	open	Fixture corpus intake matrix	扫描 expected corpus，将 topoNamingState producer tag case 与旧 schema/missing expected/product drift 分开	docs/CADCore4.0_New/C4N-S3/矩阵/c4n_s3_fixture_intake.tsv	脚本化统计 + 矩阵更新
+C4N-S3-BLK-004	pending	Expand producer family parity	等 deterministic ledger 和准入矩阵完成后，再按 producer family 扩 focused parity	cad-core/fixtures; cad-core/tests	只纳入准入矩阵标记为 topoNamingState-relevant 的 case

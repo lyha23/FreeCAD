@@ -1,0 +1,15 @@
+{
+  "diagnostics": [
+    {
+      "actualObjectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "code": "topo_state_object_hash_mismatch",
+      "expectedObjectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+      "message": "topoNamingState objectHash does not match the current object input; request-level recompute is refused",
+      "object": "Box",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": []
+}

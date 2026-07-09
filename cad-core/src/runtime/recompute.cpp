@@ -540,6 +540,12 @@ struct BodyDisplayCompoundResponseContext {
     std::map<std::string, bool> childHasNamedShape;
 };
 
+struct ResponseMappedNamePublication {
+    std::string rawMappedName;
+    std::string canonicalMappedName;
+    std::string resolvedIndexed;
+};
+
 std::optional<std::string> qualifiedStableSubnameOwner(const std::string& stableSubname)
 {
     const std::size_t dot = stableSubname.find('.');
@@ -781,6 +787,162 @@ bool bodyDisplayCompoundStableSubnameHasChildEvidence(
     return childIt == displayContext->childHasNamedShape.end() || childIt->second;
 }
 
+bool hasSourceBackedMappedName(const part::MappedNameProvenance& provenance)
+{
+    return provenance.status == part::MappedNameProvenanceStatus::SourceBacked
+        && !provenance.rawMappedName.empty()
+        && !provenance.canonicalMappedName.empty();
+}
+
+bool hasFreeCadEncodedElementToken(const std::string& rawMappedName)
+{
+    const std::size_t postfix = rawMappedName.find(';');
+    const std::string data = rawMappedName.substr(0, postfix);
+    return data.find('#') != std::string::npos;
+}
+
+std::string prefixedMappedName(const std::string& prefix,
+                               const std::string& mappedName)
+{
+    if (prefix.empty() || mappedName.rfind(prefix, 0) == 0) {
+        return mappedName;
+    }
+    return prefix + mappedName;
+}
+
+std::optional<ResponseMappedNamePublication> publicationFromProvenance(
+    const std::string& prefix,
+    const std::string& indexed,
+    const part::MappedNameProvenance& provenance)
+{
+    if (!hasSourceBackedMappedName(provenance)
+        || !hasFreeCadEncodedElementToken(provenance.rawMappedName)) {
+        return std::nullopt;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::execute(),
+    // "Shape.setValue(tipShape)" publishes the Tip shape as Body display geometry, while
+    // /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp::addChildElements() keeps the Tip
+    // mapped-name ledger as child-local evidence. Body response subshapes therefore expose the
+    // current Body indexed name but carry the Tip-prefixed FreeCAD MappedName identity.
+    return ResponseMappedNamePublication {
+        prefixedMappedName(prefix, provenance.rawMappedName),
+        prefixedMappedName(prefix, provenance.canonicalMappedName),
+        indexed,
+    };
+}
+
+std::optional<ResponseMappedNamePublication> bodyTipMappedNamePublicationFromOwner(
+    const std::string& indexed,
+    const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+    const part::NamedShape* namedShape)
+{
+    if (!tipContext || namedShape == nullptr || tipContext->owner.empty()) {
+        return std::nullopt;
+    }
+    const std::string ownerPrefix = tipContext->owner + ".";
+    for (const auto& [stableName, currentName] : namedShape->elementMap) {
+        if (currentName != indexed || stableName.rfind(ownerPrefix, 0) != 0) {
+            continue;
+        }
+        const auto provenanceIt = namedShape->mappedNameProvenance.find(stableName);
+        if (provenanceIt == namedShape->mappedNameProvenance.end()) {
+            continue;
+        }
+        if (const auto publication =
+                publicationFromProvenance({}, indexed, provenanceIt->second)) {
+            return publication;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<ResponseMappedNamePublication> mappedNamePublicationFromNamedShape(
+    const std::string& indexed,
+    const part::NamedShape* namedShape)
+{
+    if (namedShape == nullptr) {
+        return std::nullopt;
+    }
+    for (const auto& [stableName, currentName] : namedShape->elementMap) {
+        if (currentName != indexed) {
+            continue;
+        }
+        const auto provenanceIt = namedShape->mappedNameProvenance.find(stableName);
+        if (provenanceIt == namedShape->mappedNameProvenance.end()) {
+            continue;
+        }
+        if (const auto publication =
+                publicationFromProvenance({}, indexed, provenanceIt->second)) {
+            return publication;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<ResponseMappedNamePublication> bodyTipMappedNamePublicationFromChildMap(
+    const std::string& indexed,
+    const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+    const part::NamedShape* namedShape)
+{
+    if (!tipContext || namedShape == nullptr || tipContext->owner.empty()) {
+        return std::nullopt;
+    }
+    const auto token = parseTopologicalElementToken(indexed);
+    if (!token) {
+        return std::nullopt;
+    }
+    for (const part::NamedShapeChildMap& childMap : namedShape->childElementMaps) {
+        if (childMap.sourceOwner != tipContext->owner
+            || childMap.kind != token->kind
+            || childMap.count <= 0
+            || childMap.sourceNamedShape == nullptr) {
+            continue;
+        }
+        if (token->index <= childMap.offset || token->index > childMap.offset + childMap.count) {
+            continue;
+        }
+        const std::string childIndexed =
+            token->prefix + std::to_string(token->index - childMap.offset);
+        for (const auto& [stableName, currentName] : childMap.sourceNamedShape->elementMap) {
+            if (currentName != childIndexed) {
+                continue;
+            }
+            const auto provenanceIt = childMap.sourceNamedShape->mappedNameProvenance.find(stableName);
+            if (provenanceIt == childMap.sourceNamedShape->mappedNameProvenance.end()) {
+                continue;
+            }
+            if (const auto publication =
+                    publicationFromProvenance(childMap.sourceOwner + ".", indexed, provenanceIt->second)) {
+                return publication;
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<ResponseMappedNamePublication> bodyTipMappedNamePublicationFor(
+    const std::string& indexed,
+    const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+    const part::NamedShape* namedShape)
+{
+    if (const auto publication =
+            bodyTipMappedNamePublicationFromOwner(indexed, tipContext, namedShape)) {
+        return publication;
+    }
+    return bodyTipMappedNamePublicationFromChildMap(indexed, tipContext, namedShape);
+}
+
+std::optional<ResponseMappedNamePublication> mappedNamePublicationFor(
+    const std::string& indexed,
+    const std::optional<BodyTipSubshapeResponseContext>& tipContext,
+    const part::NamedShape* namedShape)
+{
+    if (const auto publication = bodyTipMappedNamePublicationFor(indexed, tipContext, namedShape)) {
+        return publication;
+    }
+    return mappedNamePublicationFromNamedShape(indexed, namedShape);
+}
+
 std::string bodyTipQualifiedStableSubname(const std::string& objectName,
                                           const std::string& indexed,
                                           const std::string& stableSubname,
@@ -863,8 +1025,11 @@ std::string responseSubnameFor(const std::string& indexed,
 std::string responseFullSubnameFor(const std::string& objectName,
                                    const std::string& subname)
 {
-    if (subname.empty() || subname.find('.') == std::string::npos) {
+    if (subname.empty()) {
         return {};
+    }
+    if (subname.find('.') == std::string::npos) {
+        return objectName + "." + subname;
     }
     const std::string objectPrefix = objectName + ".";
     if (subname.rfind(objectPrefix, 0U) == 0U) {
@@ -1213,8 +1378,17 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             stableSubname.clear();
         }
         stableSubname = bodyDisplayCompoundQualifiedStableSubname(indexed, stableSubname, displayContext);
-        const std::string subname = responseSubnameFor(indexed, stableSubname, namedShape, tipContext, displayContext);
-        const std::string fullSubname = responseFullSubnameFor(objectName, indexed, subname, tipContext);
+        const auto mappedNamePublication =
+            mappedNamePublicationFor(indexed, tipContext, namedShape);
+        if (mappedNamePublication) {
+            stableSubname = mappedNamePublication->canonicalMappedName;
+        }
+        const std::string subname = mappedNamePublication
+            ? mappedNamePublication->resolvedIndexed
+            : responseSubnameFor(indexed, stableSubname, namedShape, tipContext, displayContext);
+        const std::string fullSubname = mappedNamePublication && !tipContext
+            ? objectName + "." + indexed
+            : responseFullSubnameFor(objectName, indexed, subname, tipContext);
         topo::SubshapeIdentityDecision identityDecision = topo::decideDisplayPublication({
             objectName,
             indexed,
@@ -1245,16 +1419,25 @@ nlohmann::json responseSubshapes(const std::string& objectName,
         if (!fullSubname.empty()) {
             responseSubshape["fullSubname"] = fullSubname;
         }
+        if (mappedNamePublication) {
+            responseSubshape["rawFreecadMappedName"] = mappedNamePublication->rawMappedName;
+            responseSubshape["canonicalFreecadMappedName"] = mappedNamePublication->canonicalMappedName;
+            responseSubshape["resolvedIndexed"] = mappedNamePublication->resolvedIndexed;
+        }
         for (const std::string& field :
              {"sourceStableSubname",
               "fragmentStableSubname",
               "sourceGeometryKind"}) {
+            if (mappedNamePublication && field == "sourceStableSubname") {
+                continue;
+            }
             const auto fieldIt = subshape.find(field);
             if (fieldIt != subshape.end() && fieldIt->is_string()) {
                 responseSubshape[field] = fieldIt->get<std::string>();
             }
         }
-        if (!downgradedSourceStableSubname.empty()
+        if (!mappedNamePublication
+            && !downgradedSourceStableSubname.empty()
             && responseSubshape.find("sourceStableSubname") == responseSubshape.end()) {
             responseSubshape["sourceStableSubname"] = downgradedSourceStableSubname;
         }

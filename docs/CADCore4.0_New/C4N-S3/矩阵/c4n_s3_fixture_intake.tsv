@@ -1,0 +1,8 @@
+id	group	fixture_or_family	classification	current_signal	next_action
+C4N-S3-INTAKE-001	c4m6	*	topoNamingState-focused-closed	C4N-S1/S2 focused parity guard	作为回归守卫，不重开
+C4N-S3-INTAKE-002	p2	rect-pad-pocket	topoNamingState-focused-closed	C4N-S2 已关闭 Body producer raw/canonical parity	作为回归守卫，不重开
+C4N-S3-INTAKE-003	p6	up-to-face-stable-body-history	topoNamingState-focused-closed	C4N-S2 已关闭 ProbePad PSM producer parity	作为回归守卫，不重开
+C4N-S3-INTAKE-004	adapter	test_c13m1_cli_c_api_worker_wasm_share_topo_naming_state_channel	producer-tag-determinism-blocker	raw :H tag 在入口间可漂移	进入 C4N-S3-BLK-001/002
+C4N-S3-INTAKE-005	adapter	test_c4s11_cli_c_api_worker_wasm_share_core_result_contract	producer-tag-determinism-blocker	core result contract diff 中包含 topoNamingState raw tag 漂移	进入 C4N-S3-BLK-001/002
+C4N-S3-INTAKE-006	all	expected/*.freecad.json	corpus-intake-needed	当前约 503 个 native expected 文件，不能直接视为同一实现批次	按 schema / topoNamingState relevance / product owner 分组
+C4N-S3-INTAKE-007	broad-suite	tests.test_expected_fixtures tests.test_adapters	non-goal-mixed-drift	包含旧 schema、missing expected、geometry/product drift 和 adapter drift	不作为 C4N-S3 首轮通过门槛

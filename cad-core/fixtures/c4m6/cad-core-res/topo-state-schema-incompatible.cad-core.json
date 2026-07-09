@@ -1,0 +1,14 @@
+{
+  "diagnostics": [
+    {
+      "actualSchemaVersion": "cad-core.topo-state.v0",
+      "code": "topo_state_schema_incompatible",
+      "expectedSchemaVersion": "cad-core.topo-state.v1",
+      "message": "topoNamingState schemaVersion is incompatible; request-level recompute is refused",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": []
+}

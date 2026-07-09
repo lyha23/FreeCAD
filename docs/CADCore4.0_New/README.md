@@ -16,6 +16,11 @@
 | `C4N-S2/7-9-10-26-【已实现】C4N-S2-FreeCAD-ElementMap-MappedName-producer语义通用化方案.md` | 已完成的 p2/p6 producer mapped-name 通用化方案 |
 | `C4N-S2/矩阵/c4n_s2_fixture_matrix.tsv` | C4N-S2 p2/p6 红线和 c4m6 回归守卫矩阵 |
 | `C4N-S2/工作步骤细分/7-9-10-26-【已实现】C4N-S2-S1-p2p6-producer语义通用化实施步骤.md` | 已完成的 C4N-S2 可执行步骤 |
+| `C4N-S3/7-9-11-01-C4N-S3-FreeCAD-mapped-name-producer-tag-deterministic-ledger方案.md` | 当前下一批 producer tag 跨入口确定性方案 |
+| `C4N-S3/矩阵/c4n_s3_scope.tsv` | C4N-S3 范围、落点和验收边界 |
+| `C4N-S3/矩阵/c4n_s3_blocker_queue.tsv` | C4N-S3 producer tag 与语料准入队列 |
+| `C4N-S3/矩阵/c4n_s3_fixture_intake.tsv` | C4N-S3 expected corpus 准入分层矩阵 |
+| `C4N-S3/工作步骤细分/7-9-11-01-C4N-S3-S1-producer-tag-deterministic-ledger实施步骤.md` | C4N-S3 第一批可执行步骤 |
 
 ## 执行规则
 
@@ -24,4 +29,5 @@
 - expected 以 `cad-core/fixtures/**/expected/*.freecad.json` 的 native FreeCADCmd 输出为权威；不得用当前 `cad-core` 输出反推 expected。
 - C4N-S1 已聚焦并关闭 `cad-core/fixtures/c4m6`，覆盖首次状态、Body Tip child map、Compound child map、mapperHistory、hard-fail 和 ReferenceShadow 边界。
 - C4N-S2 已关闭 p2 / p6 producer mapped-name 通用化红线；`test_topo_naming_state_response.py` 中对应 expectedFailure 已移除，c4m6 回归守卫保持通过。
+- C4N-S3 当前聚焦 FreeCAD mapped-name producer tag deterministic ledger：先让 raw `:H...` tag 在 CLI / C API / worker / wasm 等入口之间确定一致，再按准入矩阵扩大 expected parity。
 - 完成步骤后，按仓库文档规则把方案或步骤文件改名为 `【已实现】...`，再刷新矩阵和 README。

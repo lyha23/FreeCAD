@@ -251,14 +251,14 @@
     }
   ],
   "topoNamingState": {
-    "documentHash": "sha256:28648b646c9a70151be2092516bf1736572bb41164ff773d001de3d281591895",
+    "documentHash": "sha256:e8079c751ec71b965e9d82d7a008fa98e5a8140c454f0e4f87a98bb30b6304df",
     "objects": {
       "Box": {
         "childElementMaps": [],
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
           "entries": {},
-          "status": "history_partial"
+          "status": "indexed_only"
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [
@@ -915,49 +915,8 @@
         "childElementMaps": [],
         "elementMap": {
           "encoding": "cad-core.element-map.v1",
-          "entries": {
-            "Box.Box.Face1": {
-              "evidence": {
-                "mapperHistoryIndexes": [],
-                "source": "element_map"
-              },
-              "mappedName": {
-                "canonical": "Box.Box.Face1",
-                "raw": "Box.Box.Face1"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "face",
-              "source": {
-                "object": "Box.Box",
-                "subname": "Face1"
-              },
-              "target": {
-                "object": "BoxLink",
-                "subname": "Box.Box.Face1"
-              }
-            },
-            "Box.Face1": {
-              "evidence": {
-                "mapperHistoryIndexes": [],
-                "source": "element_map"
-              },
-              "mappedName": {
-                "canonical": "Box.Face1",
-                "raw": "Box.Face1"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "face",
-              "source": {
-                "object": "Box",
-                "subname": "Face1"
-              },
-              "target": {
-                "object": "BoxLink",
-                "subname": "Box.Box.Face1"
-              }
-            }
-          },
-          "status": "history_partial"
+          "entries": {},
+          "status": "indexed_only"
         },
         "elementMapVersion": "cad-core.element-map.v1",
         "mapperHistory": [
@@ -1209,7 +1168,7 @@
             }
           }
         ],
-        "objectHash": "sha256:9ff56fd2fb9caae2f9accb62840ea51637b6c491ea15c47b562190ac63bc5626",
+        "objectHash": "sha256:63498793b48a488fc93d3bab2dd122cc00bd23f960e4af4af116e4b0a6ec7c7c",
         "subshapes": {
           "Edge1": {
             "identityStatus": "current_only",

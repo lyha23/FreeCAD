@@ -1,5 +1,6 @@
 #include "cad_core/runtime/topo_naming_state.h"
 
+#include "cad_core/app/property_links.h"
 #include "cad_core/part/brep_snapshot.h"
 #include "cad_core/part/property_topo_shape.h"
 #include "cad_core/part/shape_exporter.h"
@@ -379,6 +380,94 @@ bool hasFreeCadEncodedElementToken(const std::string& rawMappedName)
     const std::size_t postfix = rawMappedName.find(';');
     const std::string data = rawMappedName.substr(0, postfix);
     return data.find('#') != std::string::npos;
+}
+
+bool requestTopoStateHasObject(const app::Document& document, const std::string& objectName)
+{
+    if (objectName.empty() || !document.topoNamingState.is_object()) {
+        return false;
+    }
+    const auto objectsIt = document.topoNamingState.find("objects");
+    return objectsIt != document.topoNamingState.end()
+        && objectsIt->is_object()
+        && objectsIt->find(objectName) != objectsIt->end();
+}
+
+bool linkHasFreeCadMappedStableSubname(const app::Link& link)
+{
+    return std::any_of(link.stableSubnames.begin(),
+                       link.stableSubnames.end(),
+                       [](const std::string& stableSubname) {
+                           return hasFreeCadEncodedElementToken(stableSubname);
+                       });
+}
+
+std::optional<std::string> linkedTopoStateOwner(const app::DocumentObject& object,
+                                                const app::Document& document)
+{
+    if (object.typeId != "App::Link") {
+        return std::nullopt;
+    }
+    const auto linkedObject = app::readLink(object, "LinkedObject");
+    if (!linkedObject || linkedObject->object.empty()
+        || linkedObject->stableSubnamesSource != "topoNamingState"
+        || !linkHasFreeCadMappedStableSubname(*linkedObject)
+        || !requestTopoStateHasObject(document, linkedObject->object)) {
+        return std::nullopt;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Link.cpp::Link::getSubObject(),
+    // "LinkedObject" delegates topology to the linked object. When the stable reference is a
+    // FreeCAD mapped-name token carried by topoNamingState, the state owner stays the linked
+    // source object instead of the App::Link display wrapper.
+    return linkedObject->object;
+}
+
+void addTopoStateLinkTargets(std::set<std::string>& objectNames,
+                             const app::Document& document)
+{
+    for (const app::DocumentObject& object : document.objects) {
+        for (const auto& propertyItem : object.properties.items()) {
+            std::vector<app::Link> links;
+            app::collectLinks(propertyItem.value(), links);
+            for (const app::Link& link : links) {
+                for (const app::ReferenceShadow& shadow : link.referenceShadows) {
+                    if (!shadow.target.empty()) {
+                        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/GeoFeature.cpp
+                        // ::updateElementReference(), carries ElementCache/ReferenceShadow for
+                        // old subshape recovery. The old target object remains part of the next
+                        // client-carried topoNamingState snapshot while that recovery evidence is
+                        // still being returned.
+                        objectNames.insert(shadow.target);
+                    }
+                }
+                if (link.stableSubnamesSource == "topoNamingState"
+                    && linkHasFreeCadMappedStableSubname(link)
+                    && requestTopoStateHasObject(document, link.object)) {
+                    objectNames.insert(link.object);
+                }
+            }
+        }
+    }
+}
+
+std::set<std::string> topoStateObjectNames(
+    const app::Document& document,
+    const std::map<std::string, nlohmann::json>& responseSubshapesByObject)
+{
+    std::set<std::string> objectNames;
+    for (const auto& [name, _] : responseSubshapesByObject) {
+        const auto documentObjectIt = document.indexByName.find(name);
+        if (documentObjectIt != document.indexByName.end()) {
+            const app::DocumentObject& object = document.objects.at(documentObjectIt->second);
+            if (const auto linkedOwner = linkedTopoStateOwner(object, document)) {
+                objectNames.insert(*linkedOwner);
+                continue;
+            }
+        }
+        objectNames.insert(name);
+    }
+    addTopoStateLinkTargets(objectNames, document);
+    return objectNames;
 }
 
 const part::MappedNameProvenance* sourceBackedMappedNameProvenance(
@@ -1185,13 +1274,8 @@ nlohmann::json topoNamingStateJson(
     const std::map<std::string, nlohmann::json>& responseSubshapesByObject
 )
 {
-    std::set<std::string> objectNames;
-    for (const auto& [name, _] : context.namedShapes) {
-        objectNames.insert(name);
-    }
-    for (const auto& [name, _] : responseSubshapesByObject) {
-        objectNames.insert(name);
-    }
+    const std::set<std::string> objectNames =
+        topoStateObjectNames(document, responseSubshapesByObject);
 
     nlohmann::json objects = nlohmann::json::object();
     for (const std::string& objectName : objectNames) {

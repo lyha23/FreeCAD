@@ -440,3 +440,12 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 
 根据'/Users/li/Chili3DProject/FreeCAD/docs/接口规定/7-8-11-08-topoNamingState客户端携带状态接口方案.md' 挨个查阅一下, '/Users/li/Chili3DProject/
   FreeCAD/cad-core/fixtures'里面的 `fixtures/<phase>/*.json` 是根输入 fixture。 这些输入 fixture 有不满足要求的吗
+
+----
+
+根据'/Users/li/Chili3DProject/FreeCAD/docs/接口规定/7-8-11-08-topoNamingState客户端携带状态接口方案.md' 挨个查阅一下, '/Users/li/Chili3DProject/
+  FreeCAD/cad-core/fixtures'里面的 `fixtures/<phase>/expected/*.freecad.json` 是 FreeCADCmd / native oracle 结果。 这些输出 fixture 有不满足要求的吗
+
+
+ '/Users/li/Chili3DProject/opencascade-rs/docs/框架/7-8-11-08-topoNamingState客户端携带状态接口方案.md'要实现这个方案, 并对其'/Users/li/
+  Chili3DProject/FreeCAD/cad-core/fixtures'中 FreeCAD 的expeted, 下一步该做什么
