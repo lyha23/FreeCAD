@@ -131,6 +131,12 @@ TRANSFORMED_TYPES = {
 }
 
 BODY_RESULT_TARGET_TYPES = DRESS_UP_TYPES | TRANSFORMED_TYPES | {"PartDesign::Boolean"}
+TOPO_LEDGER_ALWAYS_TYPES = {
+    "App::Link",
+    "App::LinkElement",
+    "PartDesign::Body",
+    "Part::Compound",
+}
 PART_HELPER_TYPES = {
     "Part::FilledFace",
     "Part::GeomPlateSurface",
@@ -2250,6 +2256,120 @@ def generated_topo_state_object(
     return topo_state_object_payload(object_name, summary, fixture_object_specs(fixture).get(object_name), created)
 
 
+def native_shape_is_present(shape: Any) -> bool:
+    if shape is None:
+        return False
+    try:
+        return not bool(shape.isNull())
+    except Exception:
+        return True
+
+
+def topo_ledger_object_has_native_shape(obj: Any) -> bool:
+    return native_shape_is_present(getattr(obj, "Shape", None)) or native_shape_is_present(
+        getattr(obj, "InternalShape", None)
+    )
+
+
+def topo_ledger_object_is_candidate(obj: Any) -> bool:
+    type_id = str(getattr(obj, "TypeId", ""))
+    return type_id in TOPO_LEDGER_ALWAYS_TYPES or topo_ledger_object_has_native_shape(obj)
+
+
+def topo_ledger_related_names_from_spec(spec: dict[str, Any]) -> list[str]:
+    properties = spec.get("Properties", {})
+    if not isinstance(properties, dict):
+        properties = {}
+    type_id = str(spec.get("TypeId") or "")
+
+    names: list[str] = []
+    if type_id == "PartDesign::Body":
+        names.extend(link_property_object_names(properties, "Group"))
+        tip_name = link_property_object_name(properties, "Tip")
+        if tip_name:
+            names.append(tip_name)
+    elif type_id in {"App::Link", "App::LinkElement"}:
+        linked_name = link_property_object_name(properties, "LinkedObject")
+        if linked_name:
+            names.append(linked_name)
+    elif type_id == "Part::Compound":
+        names.extend(compound_child_names_from_spec(spec))
+    return names
+
+
+def topo_ledger_target_names(
+    fixture: dict,
+    created: dict[str, Any],
+    result_targets: Sequence[str],
+) -> list[str]:
+    names: list[str] = []
+    seen: set[str] = set()
+    specs = fixture_object_specs(fixture)
+
+    def add(name: str) -> None:
+        if name in seen:
+            return
+        obj = created.get(name)
+        if obj is None or not topo_ledger_object_is_candidate(obj):
+            return
+        seen.add(name)
+        names.append(name)
+
+    def add_related(name: str) -> None:
+        spec = specs.get(name)
+        if spec is not None:
+            for related_name in topo_ledger_related_names_from_spec(spec):
+                add(str(related_name))
+        obj = created.get(name)
+        if obj is None:
+            return
+        if str(getattr(obj, "TypeId", "")) == "PartDesign::Body":
+            tip = object_tip(obj)
+            tip_name = str(getattr(tip, "Name", "")) if tip is not None else ""
+            if tip_name:
+                add(tip_name)
+        if str(getattr(obj, "TypeId", "")) in {"App::Link", "App::LinkElement"}:
+            linked_name = link_target_name(getattr(obj, "LinkedObject", None))
+            if linked_name:
+                add(linked_name)
+
+    for target_name in result_targets:
+        add(str(target_name))
+        add_related(str(target_name))
+
+    for spec in fixture.get("Objects", []):
+        if not isinstance(spec, dict) or not isinstance(spec.get("Name"), str):
+            continue
+        object_name = str(spec["Name"])
+        add(object_name)
+        for related_name in topo_ledger_related_names_from_spec(spec):
+            add(str(related_name))
+
+    for object_name in list(names):
+        add_related(object_name)
+
+    return names
+
+
+def topo_ledger_payloads(
+    fixture: dict,
+    created: dict[str, Any],
+    result_payloads: dict[str, dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    payloads: dict[str, dict[str, Any]] = {}
+    for object_name in topo_ledger_target_names(fixture, created, list(result_payloads)):
+        obj = created.get(object_name)
+        if obj is None:
+            continue
+        try:
+            payloads[object_name] = object_expected_payload(obj, fixture, created)
+        except UnsupportedFixture:
+            continue
+    for object_name, summary in result_payloads.items():
+        payloads.setdefault(object_name, summary)
+    return payloads
+
+
 def topo_state_object_has_stable_token(object_state: dict[str, Any], stable_subname: str) -> bool:
     element_map = object_state.get("elementMap")
     entries = element_map.get("entries") if isinstance(element_map, dict) else None
@@ -2357,9 +2477,10 @@ def topo_state_protocol_response(
     FreeCAD: Any,
     topo_state: dict[str, Any],
     diagnostics: list[dict[str, Any]] | None = None,
+    created: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
-    topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates)
+    topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
     return {
         "results": [],
         "topoNamingState": topo_state,
@@ -2376,18 +2497,12 @@ def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[
         created = create_objects(FreeCAD, doc, fixture)
         doc.recompute()
         specs = fixture_object_specs(fixture)
-        objects: dict[str, Any] = {}
-        for object_name, object_spec in specs.items():
-            obj = created.get(object_name)
-            if obj is None:
-                continue
-            if not generated_child_element_maps(object_name, object_spec, created):
-                continue
-            summary = object_expected_payload(obj, fixture, created)
-            object_state = topo_state_object_payload(object_name, summary, object_spec, created)
-            if object_state.get("childElementMaps"):
-                objects[object_name] = object_state
-        if not objects:
+        ledger_payloads = topo_ledger_payloads(fixture, created, {})
+        objects = {
+            object_name: topo_state_object_payload(object_name, summary, specs.get(object_name), created)
+            for object_name, summary in ledger_payloads.items()
+        }
+        if not any(object_state.get("childElementMaps") for object_state in objects.values()):
             raise UnsupportedFixture("topoNamingState childElementMaps fixture requires non-empty childElementMaps")
         topo_state = {
             "schemaVersion": TOPO_STATE_SCHEMA_VERSION,
@@ -2395,7 +2510,7 @@ def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[
             "documentHash": fixture_document_hash(fixture),
             "objects": objects,
         }
-        return topo_state_protocol_response(fixture, FreeCAD, topo_state)
+        return topo_state_protocol_response(fixture, FreeCAD, topo_state, created=created)
     finally:
         FreeCAD.closeDocument(doc.Name)
 
@@ -2974,11 +3089,13 @@ def topo_state_object_payload(
 def topo_naming_state_response(
     fixture: dict,
     FreeCAD: Any,
-    object_payloads: dict[str, dict[str, Any]],
+    result_payloads: dict[str, dict[str, Any]],
     created: dict[str, Any] | None = None,
+    ledger_payloads: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     specs = fixture_object_specs(fixture)
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
+    state_payloads = ledger_payloads if ledger_payloads is not None else result_payloads
     topo_state = {
         "schemaVersion": "cad-core.topo-state.v1",
         "producer": topo_state_producer(fixture, FreeCAD),
@@ -2988,7 +3105,7 @@ def topo_naming_state_response(
         }),
         "objects": {
             object_name: topo_state_object_payload(object_name, summary, specs.get(object_name), created)
-            for object_name, summary in object_payloads.items()
+            for object_name, summary in state_payloads.items()
         },
     }
     topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
@@ -2998,7 +3115,7 @@ def topo_naming_state_response(
                 "object": object_name,
                 **summary,
             }
-            for object_name, summary in object_payloads.items()
+            for object_name, summary in result_payloads.items()
         ],
         "topoNamingState": topo_state,
         "elementReferenceUpdates": reference_updates,
@@ -3052,11 +3169,21 @@ def wrap_topo_naming_response_if_needed(
     fixture: dict,
     FreeCAD: Any,
     payload: dict[str, Any],
+    created: dict[str, Any] | None = None,
+    ledger_payloads: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     if ACTIVE_TOPO_NAMING_STATE is None or "topoNamingState" in payload:
         return payload
     object_payloads = legacy_object_payloads(payload)
-    response = topo_naming_state_response(fixture, FreeCAD, object_payloads)
+    if ledger_payloads is None and created is not None:
+        ledger_payloads = topo_ledger_payloads(fixture, created, object_payloads)
+    response = topo_naming_state_response(
+        fixture,
+        FreeCAD,
+        object_payloads,
+        created,
+        ledger_payloads=ledger_payloads,
+    )
     diagnostics: list[dict[str, Any]] = []
     for code in payload.get("diagnostic_codes", []):
         diagnostics.append({"code": str(code), "source": "freecad_expected_collector"})
@@ -3394,7 +3521,7 @@ def collect_part_filled_face_expected(
             payload["objects"] = object_payloads
         if diagnostic_codes:
             payload["diagnostic_codes"] = diagnostic_codes
-        return payload
+        return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload, created)
     finally:
         FreeCAD.closeDocument(doc.Name)
 
@@ -3988,7 +4115,7 @@ def collect_part_geomplate_surface_expected(
             payload["objects"] = object_payloads
         if diagnostic_codes:
             payload["diagnostic_codes"] = diagnostic_codes
-        return payload
+        return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload, created)
     finally:
         FreeCAD.closeDocument(doc.Name)
 
@@ -6670,7 +6797,7 @@ def collect_part_sweep_wrapper_expected(
                 for item in diagnostic_split
                 if item["policy"].startswith("cad-core focused diagnostics")
             ]
-        return payload
+        return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload, created)
     finally:
         FreeCAD.closeDocument(doc.Name)
 
@@ -7400,7 +7527,14 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             object_payloads[name] = object_expected_payload(obj, fixture, created)
 
         if ACTIVE_TOPO_NAMING_STATE is not None:
-            return topo_naming_state_response(fixture, FreeCAD, object_payloads, created)
+            ledger_payloads = topo_ledger_payloads(fixture, created, object_payloads)
+            return topo_naming_state_response(
+                fixture,
+                FreeCAD,
+                object_payloads,
+                created,
+                ledger_payloads=ledger_payloads,
+            )
 
         reference_types = ", ".join(spec["TypeId"] for spec in fixture.get("Objects", []))
         payload: dict[str, Any] = {
@@ -7863,9 +7997,15 @@ def c4m6_protocol_contract_errors(path: Path, payload: dict, label: str) -> list
     if fixture_name == "topo-state-link-compound-child-maps":
         if not objects:
             errors.append(f"{label}:topoNamingState.objects.empty")
-        for object_name, object_state in objects.items():
-            if isinstance(object_state, dict):
-                errors.extend(child_element_map_contract_errors(str(object_name), object_state, label))
+        child_map_owners = [
+            (str(object_name), object_state)
+            for object_name, object_state in objects.items()
+            if isinstance(object_state, dict) and object_state.get("childElementMaps")
+        ]
+        if not child_map_owners:
+            errors.append(f"{label}:topoNamingState.childElementMaps.empty")
+        for object_name, object_state in child_map_owners:
+            errors.extend(child_element_map_contract_errors(object_name, object_state, label))
 
     if fixture_name == "topo-state-mapper-history-events":
         if not payload.get("diagnostics"):

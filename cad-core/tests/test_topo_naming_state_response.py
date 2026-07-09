@@ -53,8 +53,11 @@ def expected_topo_state_frontend_contract_difference(actual: dict, expected: dic
     if not isinstance(actual_objects, dict) or not isinstance(expected_objects, dict):
         return "topoNamingState.objects: must be JSON objects"
 
+    required_objects = expected_frontend_required_topo_objects(expected)
     for object_name, expected_object in expected_objects.items():
         if object_name not in actual_objects:
+            if object_name not in required_objects:
+                continue
             return f"topoNamingState.objects.{object_name}: missing from actual response"
         actual_object = actual_objects[object_name]
         if not isinstance(actual_object, dict) or not isinstance(expected_object, dict):
@@ -68,6 +71,54 @@ def expected_topo_state_frontend_contract_difference(actual: dict, expected: dic
             return diff
 
     return expected_response_subshape_identity_difference(actual, expected)
+
+
+def expected_frontend_required_topo_objects(expected: dict) -> set[str]:
+    required: set[str] = set()
+    state = expected.get("topoNamingState")
+    objects = state.get("objects") if isinstance(state, dict) else {}
+    object_names = set(objects) if isinstance(objects, dict) else set()
+
+    for result in expected.get("results") or []:
+        object_name = result.get("object") if isinstance(result, dict) else None
+        if isinstance(object_name, str) and object_name in object_names:
+            required.add(object_name)
+
+    for update in expected.get("elementReferenceUpdates") or []:
+        for item in reference_update_items(update):
+            stable_sub_list = item.get("StableSubList")
+            object_name = item.get("value")
+            if (
+                isinstance(stable_sub_list, list)
+                and stable_sub_list
+                and isinstance(object_name, str)
+                and object_name in object_names
+            ):
+                required.add(object_name)
+
+    return required
+
+
+def reference_update_items(update: object) -> list[dict]:
+    if not isinstance(update, dict):
+        return []
+    property_type = update.get("PropertyType")
+    if property_type in {
+        "App::PropertyLinkSub",
+        "App::PropertyLinkSubHidden",
+        "App::PropertyXLinkSub",
+        "App::PropertyXLinkSubHidden",
+    }:
+        return [update]
+    if property_type in {
+        "App::PropertyLinkSubList",
+        "App::PropertyLinkSubListHidden",
+        "App::PropertyXLinkSubList",
+    }:
+        sub_set = update.get("SubSet")
+        if isinstance(sub_set, list):
+            return [item for item in sub_set if isinstance(item, dict)]
+    return []
 
 
 def expected_subshape_state_difference(

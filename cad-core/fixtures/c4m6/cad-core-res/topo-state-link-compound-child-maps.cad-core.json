@@ -24,1282 +24,6 @@
   "topoNamingState": {
     "documentHash": "sha256:def8edc813e994d1edf78c035a5c325e4a5f3b4dc7cf3d80bb290eb1e1d3289f",
     "objects": {
-      "ChildBoxA": {
-        "childElementMaps": [],
-        "elementMap": {
-          "encoding": "cad-core.element-map.v1",
-          "entries": {},
-          "status": "indexed_only"
-        },
-        "elementMapVersion": "cad-core.element-map.v1",
-        "mapperHistory": [
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Face1"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Face1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Face2"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Face2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Face3"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Face3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Face4"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Face4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Face5"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Face5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Face6"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Face6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge1"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge2"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge3"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge4"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge5"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge6"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge7",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge7"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge7"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge8",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge8"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge8"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge9",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge9"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge9"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge10",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge10"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge10"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge11",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge11"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge11"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge12",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Edge12"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Edge12"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex1"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex2"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex3"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex4"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex5"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex6"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex7",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex7"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex7"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex8",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxA",
-              "subname": "Vertex8"
-            },
-            "target": {
-              "object": "ChildBoxA",
-              "subname": "Vertex8"
-            }
-          }
-        ],
-        "objectHash": "sha256:93a157b1df78c36075b29b04e1e84a62ee7c82c518e34a3a24c43996b2cd3866",
-        "subshapes": {
-          "Edge1": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge1",
-            "subname": "Edge1"
-          },
-          "Edge10": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge10",
-            "subname": "Edge10"
-          },
-          "Edge11": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge11",
-            "subname": "Edge11"
-          },
-          "Edge12": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge12",
-            "subname": "Edge12"
-          },
-          "Edge2": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge2",
-            "subname": "Edge2"
-          },
-          "Edge3": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge3",
-            "subname": "Edge3"
-          },
-          "Edge4": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge4",
-            "subname": "Edge4"
-          },
-          "Edge5": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge5",
-            "subname": "Edge5"
-          },
-          "Edge6": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge6",
-            "subname": "Edge6"
-          },
-          "Edge7": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge7",
-            "subname": "Edge7"
-          },
-          "Edge8": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge8",
-            "subname": "Edge8"
-          },
-          "Edge9": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge9",
-            "subname": "Edge9"
-          },
-          "Face1": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face1",
-            "subname": "Face1"
-          },
-          "Face2": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face2",
-            "subname": "Face2"
-          },
-          "Face3": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face3",
-            "subname": "Face3"
-          },
-          "Face4": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face4",
-            "subname": "Face4"
-          },
-          "Face5": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face5",
-            "subname": "Face5"
-          },
-          "Face6": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face6",
-            "subname": "Face6"
-          },
-          "Vertex1": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex1",
-            "subname": "Vertex1"
-          },
-          "Vertex2": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex2",
-            "subname": "Vertex2"
-          },
-          "Vertex3": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex3",
-            "subname": "Vertex3"
-          },
-          "Vertex4": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex4",
-            "subname": "Vertex4"
-          },
-          "Vertex5": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex5",
-            "subname": "Vertex5"
-          },
-          "Vertex6": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex6",
-            "subname": "Vertex6"
-          },
-          "Vertex7": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex7",
-            "subname": "Vertex7"
-          },
-          "Vertex8": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex8",
-            "subname": "Vertex8"
-          }
-        }
-      },
-      "ChildBoxB": {
-        "childElementMaps": [],
-        "elementMap": {
-          "encoding": "cad-core.element-map.v1",
-          "entries": {},
-          "status": "indexed_only"
-        },
-        "elementMapVersion": "cad-core.element-map.v1",
-        "mapperHistory": [
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Face1"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Face1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Face2"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Face2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Face3"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Face3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Face4"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Face4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Face5"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Face5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Face6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "face",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Face6"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Face6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge1"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge2"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge3"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge4"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge5"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge6"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge7",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge7"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge7"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge8",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge8"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge8"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge9",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge9"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge9"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge10",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge10"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge10"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge11",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge11"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge11"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Edge12",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "edge",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Edge12"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Edge12"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex1",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex1"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex1"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex2",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex2"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex2"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex3",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex3"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex3"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex4",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex4"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex4"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex5",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex5"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex5"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex6",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex6"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex6"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex7",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex7"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex7"
-            }
-          },
-          {
-            "diagnostic_status": "",
-            "evidence": {
-              "legacy_element": "Vertex8",
-              "legacy_history_kind": "indexed"
-            },
-            "maker_stage": "indexed",
-            "recoverability": "resolved",
-            "relation": "identity",
-            "shape_kind": "vertex",
-            "source": {
-              "object": "ChildBoxB",
-              "subname": "Vertex8"
-            },
-            "target": {
-              "object": "ChildBoxB",
-              "subname": "Vertex8"
-            }
-          }
-        ],
-        "objectHash": "sha256:1deaddcc2344dc3895c04d3babd460a7832233ad959ffa63ed03d4449e1f8fac",
-        "subshapes": {
-          "Edge1": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge1",
-            "subname": "Edge1"
-          },
-          "Edge10": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge10",
-            "subname": "Edge10"
-          },
-          "Edge11": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge11",
-            "subname": "Edge11"
-          },
-          "Edge12": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge12",
-            "subname": "Edge12"
-          },
-          "Edge2": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge2",
-            "subname": "Edge2"
-          },
-          "Edge3": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge3",
-            "subname": "Edge3"
-          },
-          "Edge4": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge4",
-            "subname": "Edge4"
-          },
-          "Edge5": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge5",
-            "subname": "Edge5"
-          },
-          "Edge6": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge6",
-            "subname": "Edge6"
-          },
-          "Edge7": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge7",
-            "subname": "Edge7"
-          },
-          "Edge8": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge8",
-            "subname": "Edge8"
-          },
-          "Edge9": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Edge9",
-            "subname": "Edge9"
-          },
-          "Face1": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face1",
-            "subname": "Face1"
-          },
-          "Face2": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face2",
-            "subname": "Face2"
-          },
-          "Face3": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face3",
-            "subname": "Face3"
-          },
-          "Face4": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face4",
-            "subname": "Face4"
-          },
-          "Face5": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face5",
-            "subname": "Face5"
-          },
-          "Face6": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Face6",
-            "subname": "Face6"
-          },
-          "Vertex1": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex1",
-            "subname": "Vertex1"
-          },
-          "Vertex2": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex2",
-            "subname": "Vertex2"
-          },
-          "Vertex3": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex3",
-            "subname": "Vertex3"
-          },
-          "Vertex4": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex4",
-            "subname": "Vertex4"
-          },
-          "Vertex5": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex5",
-            "subname": "Vertex5"
-          },
-          "Vertex6": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex6",
-            "subname": "Vertex6"
-          },
-          "Vertex7": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex7",
-            "subname": "Vertex7"
-          },
-          "Vertex8": {
-            "identityStatus": "indexed_only",
-            "resolvedIndexed": "Vertex8",
-            "subname": "Vertex8"
-          }
-        }
-      },
       "Compound": {
         "childElementMaps": [
           {
@@ -1316,7 +40,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge10;:H*,E",
-                    "raw": "Edge10;:H3f55902d,E"
+                    "raw": "Edge10;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1337,7 +61,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge11;:H*,E",
-                    "raw": "Edge11;:H3f55902d,E"
+                    "raw": "Edge11;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1358,7 +82,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge12;:H*,E",
-                    "raw": "Edge12;:H3f55902d,E"
+                    "raw": "Edge12;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1379,7 +103,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge1;:H*,E",
-                    "raw": "Edge1;:H3f55902d,E"
+                    "raw": "Edge1;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1400,7 +124,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge2;:H*,E",
-                    "raw": "Edge2;:H3f55902d,E"
+                    "raw": "Edge2;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1421,7 +145,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge3;:H*,E",
-                    "raw": "Edge3;:H3f55902d,E"
+                    "raw": "Edge3;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1442,7 +166,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge4;:H*,E",
-                    "raw": "Edge4;:H3f55902d,E"
+                    "raw": "Edge4;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1463,7 +187,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge5;:H*,E",
-                    "raw": "Edge5;:H3f55902d,E"
+                    "raw": "Edge5;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1484,7 +208,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge6;:H*,E",
-                    "raw": "Edge6;:H3f55902d,E"
+                    "raw": "Edge6;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1505,7 +229,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge7;:H*,E",
-                    "raw": "Edge7;:H3f55902d,E"
+                    "raw": "Edge7;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1526,7 +250,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge8;:H*,E",
-                    "raw": "Edge8;:H3f55902d,E"
+                    "raw": "Edge8;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1547,7 +271,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge9;:H*,E",
-                    "raw": "Edge9;:H3f55902d,E"
+                    "raw": "Edge9;:H89b198d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1568,7 +292,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face1;:H*,F",
-                    "raw": "Face1;:H3f55902d,F"
+                    "raw": "Face1;:H89b198d,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1589,7 +313,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face2;:H*,F",
-                    "raw": "Face2;:H3f55902d,F"
+                    "raw": "Face2;:H89b198d,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1610,7 +334,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face3;:H*,F",
-                    "raw": "Face3;:H3f55902d,F"
+                    "raw": "Face3;:H89b198d,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1631,7 +355,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face4;:H*,F",
-                    "raw": "Face4;:H3f55902d,F"
+                    "raw": "Face4;:H89b198d,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1652,7 +376,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face5;:H*,F",
-                    "raw": "Face5;:H3f55902d,F"
+                    "raw": "Face5;:H89b198d,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1673,7 +397,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face6;:H*,F",
-                    "raw": "Face6;:H3f55902d,F"
+                    "raw": "Face6;:H89b198d,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1694,7 +418,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex1;:H*,V",
-                    "raw": "Vertex1;:H3f55902d,V"
+                    "raw": "Vertex1;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1715,7 +439,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex2;:H*,V",
-                    "raw": "Vertex2;:H3f55902d,V"
+                    "raw": "Vertex2;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1736,7 +460,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex3;:H*,V",
-                    "raw": "Vertex3;:H3f55902d,V"
+                    "raw": "Vertex3;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1757,7 +481,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex4;:H*,V",
-                    "raw": "Vertex4;:H3f55902d,V"
+                    "raw": "Vertex4;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1778,7 +502,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex5;:H*,V",
-                    "raw": "Vertex5;:H3f55902d,V"
+                    "raw": "Vertex5;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1799,7 +523,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex6;:H*,V",
-                    "raw": "Vertex6;:H3f55902d,V"
+                    "raw": "Vertex6;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1820,7 +544,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex7;:H*,V",
-                    "raw": "Vertex7;:H3f55902d,V"
+                    "raw": "Vertex7;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1841,7 +565,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex8;:H*,V",
-                    "raw": "Vertex8;:H3f55902d,V"
+                    "raw": "Vertex8;:H89b198d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1875,7 +599,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge10;:H*,E",
-                    "raw": "Edge10;:H34824486,E"
+                    "raw": "Edge10;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1896,7 +620,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge11;:H*,E",
-                    "raw": "Edge11;:H34824486,E"
+                    "raw": "Edge11;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1917,7 +641,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge12;:H*,E",
-                    "raw": "Edge12;:H34824486,E"
+                    "raw": "Edge12;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1938,7 +662,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge1;:H*,E",
-                    "raw": "Edge1;:H34824486,E"
+                    "raw": "Edge1;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1959,7 +683,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge2;:H*,E",
-                    "raw": "Edge2;:H34824486,E"
+                    "raw": "Edge2;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1980,7 +704,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge3;:H*,E",
-                    "raw": "Edge3;:H34824486,E"
+                    "raw": "Edge3;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -2001,7 +725,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge4;:H*,E",
-                    "raw": "Edge4;:H34824486,E"
+                    "raw": "Edge4;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -2022,7 +746,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge5;:H*,E",
-                    "raw": "Edge5;:H34824486,E"
+                    "raw": "Edge5;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -2043,7 +767,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge6;:H*,E",
-                    "raw": "Edge6;:H34824486,E"
+                    "raw": "Edge6;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -2064,7 +788,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge7;:H*,E",
-                    "raw": "Edge7;:H34824486,E"
+                    "raw": "Edge7;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -2085,7 +809,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge8;:H*,E",
-                    "raw": "Edge8;:H34824486,E"
+                    "raw": "Edge8;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -2106,7 +830,7 @@
                   },
                   "mappedName": {
                     "canonical": "Edge9;:H*,E",
-                    "raw": "Edge9;:H34824486,E"
+                    "raw": "Edge9;:H2657d20c,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -2127,7 +851,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face1;:H*,F",
-                    "raw": "Face1;:H34824486,F"
+                    "raw": "Face1;:H2657d20c,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -2148,7 +872,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face2;:H*,F",
-                    "raw": "Face2;:H34824486,F"
+                    "raw": "Face2;:H2657d20c,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -2169,7 +893,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face3;:H*,F",
-                    "raw": "Face3;:H34824486,F"
+                    "raw": "Face3;:H2657d20c,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -2190,7 +914,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face4;:H*,F",
-                    "raw": "Face4;:H34824486,F"
+                    "raw": "Face4;:H2657d20c,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -2211,7 +935,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face5;:H*,F",
-                    "raw": "Face5;:H34824486,F"
+                    "raw": "Face5;:H2657d20c,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -2232,7 +956,7 @@
                   },
                   "mappedName": {
                     "canonical": "Face6;:H*,F",
-                    "raw": "Face6;:H34824486,F"
+                    "raw": "Face6;:H2657d20c,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -2253,7 +977,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex1;:H*,V",
-                    "raw": "Vertex1;:H34824486,V"
+                    "raw": "Vertex1;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -2274,7 +998,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex2;:H*,V",
-                    "raw": "Vertex2;:H34824486,V"
+                    "raw": "Vertex2;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -2295,7 +1019,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex3;:H*,V",
-                    "raw": "Vertex3;:H34824486,V"
+                    "raw": "Vertex3;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -2316,7 +1040,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex4;:H*,V",
-                    "raw": "Vertex4;:H34824486,V"
+                    "raw": "Vertex4;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -2337,7 +1061,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex5;:H*,V",
-                    "raw": "Vertex5;:H34824486,V"
+                    "raw": "Vertex5;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -2358,7 +1082,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex6;:H*,V",
-                    "raw": "Vertex6;:H34824486,V"
+                    "raw": "Vertex6;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -2379,7 +1103,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex7;:H*,V",
-                    "raw": "Vertex7;:H34824486,V"
+                    "raw": "Vertex7;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -2400,7 +1124,7 @@
                   },
                   "mappedName": {
                     "canonical": "Vertex8;:H*,V",
-                    "raw": "Vertex8;:H34824486,V"
+                    "raw": "Vertex8;:H2657d20c,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -4720,18 +3444,6 @@
             "subname": "Vertex9"
           }
         }
-      },
-      "CompoundLink": {
-        "childElementMaps": [],
-        "elementMap": {
-          "encoding": "cad-core.element-map.v1",
-          "entries": {},
-          "status": "indexed_only"
-        },
-        "elementMapVersion": "cad-core.element-map.v1",
-        "mapperHistory": [],
-        "objectHash": "sha256:71d532bad1c41aeff761cabfb61689f177f28fae9f6a556e9eef804b7c66d1a6",
-        "subshapes": {}
       }
     },
     "producer": {
