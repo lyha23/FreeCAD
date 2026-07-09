@@ -90,6 +90,11 @@ struct Link {
     std::string resolvedObjectFrom;
     std::vector<LabelReferenceRename> labelReferenceRenames;
     std::optional<LinkDocumentRef> documentRef;
+    // CAD Core topoNamingState protocol: request-side links may mark StableSubList as coming
+    // from the client-carried topoNamingState snapshot. Reference validation uses this only as
+    // provenance for stateless recovery/update decisions; the DocumentObject graph remains the
+    // authoritative model input.
+    std::string stableSubnamesSource;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/ExternalGeometryExtension.h
     // ::ExternalGeometryExtension::Flag stores "Defining", "Frozen", "Detached", "Missing", "Sync"
     // on external geometry entries. cad-core carries the request-side flag names on normalized

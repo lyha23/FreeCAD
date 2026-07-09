@@ -34,6 +34,7 @@
 #include "cad_core/sketcher/sketch_object.h"
 #include "cad_core/part_design/feature_thicken.h"
 #include "cad_core/part_design/feature_thickness.h"
+#include "cad_core/runtime/topo_naming_state_probe.h"
 
 #include <utility>
 
@@ -118,6 +119,7 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::FeatureXOR", part::executePartXor);
     registry.registerExecutor("Part::BooleanFragments", part::executePartBooleanFragments);
     registry.registerExecutor("Part::FeatureBooleanFragments", part::executePartBooleanFragments);
+    registry.registerExecutor("CadCore::TopoNamingStateProbe", runtime::executeTopoNamingStateProbe);
     registry.registerExecutor("App::Origin", part_design::executeDatumCoordinateSystem);
     registry.registerExecutor("App::Line", part_design::executeAppLine);
     registry.registerExecutor("App::Plane", part_design::executeDatumPlane);

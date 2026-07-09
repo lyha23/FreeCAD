@@ -25,8 +25,8 @@ struct FreeCadMappedNameCodecResult {
 std::string freeCadMappedNameCodecStatusName(FreeCadMappedNameCodecStatus status);
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
-// ::ElementMap::encodeElementName(... masterTag ... postfix ... tag ...) appends the operation
-// postfix and "POSTFIX_TAG" tag/type segment. /Users/li/Chili3DProject/FreeCAD/src/App/
+// ::ElementMap::encodeElementName(... masterTag ... postfix ... tag ...) appends the optional
+// operation postfix and "POSTFIX_TAG" tag/type segment. /Users/li/Chili3DProject/FreeCAD/src/App/
 // MappedName.cpp::MappedName::findTagInElementName() parses ";:H<tag>:<len>,<type>".
 // /Users/li/Chili3DProject/FreeCAD/src/App/ElementNamingUtils.h defines POSTFIX_TAG,
 // POSTFIX_GEN, POSTFIX_MOD, and POSTFIX_DUPLICATE. This helper is intentionally source-backed:

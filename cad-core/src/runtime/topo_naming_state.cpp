@@ -4,11 +4,11 @@
 #include "cad_core/part/property_topo_shape.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
+#include "cad_core/topo/freecad_mapped_name_codec.h"
 
 #include <algorithm>
 #include <cctype>
-#include <filesystem>
-#include <fstream>
+#include <exception>
 #include <map>
 #include <optional>
 #include <set>
@@ -107,77 +107,6 @@ bool shouldHardFailHashMismatch(const std::string& actualHash,
                                 const std::string& expectedHash)
 {
     return actualHash != expectedHash && explicitMismatchHash(actualHash);
-}
-
-bool fixtureContractProducer(const app::Document& document)
-{
-    if (!document.topoNamingState.is_object()) {
-        return false;
-    }
-    const auto producerIt = document.topoNamingState.find("producer");
-    return producerIt != document.topoNamingState.end() && producerIt->is_object()
-        && producerIt->value("cadCoreVersion", "") == "fixture-contract-v1";
-}
-
-nlohmann::json readJsonFileIfPresent(const std::filesystem::path& path)
-{
-    std::ifstream input(path);
-    if (!input) {
-        return nullptr;
-    }
-    try {
-        nlohmann::json value;
-        input >> value;
-        return value;
-    }
-    catch (const nlohmann::json::exception&) {
-        return nullptr;
-    }
-}
-
-std::optional<nlohmann::json> c4m6ExpectedPayloadOverlay(const app::Document& document)
-{
-    if (!fixtureContractProducer(document)) {
-        return std::nullopt;
-    }
-
-    // Temporary C4M6 protocol bridge.
-    // FreeCAD native expected files under fixtures/c4m6/expected are the current authority for
-    // raw/canonical mapped names, childElementMapKey, and mapperHistoryIds until cad-core's
-    // NamedShape/ElementMap ledger can publish those FreeCAD bytes directly. This path is gated
-    // to the fixture-contract producer and only affects the response snapshot; geometry still
-    // comes from the current DocumentObject graph. Delete this bridge when
-    // sourceBackedMappedNameProvenance() can produce the C4M6 expected entries without sidecar
-    // evidence.
-    const std::string currentDocumentHash = topoNamingStateDocumentHash(document);
-    const std::filesystem::path expectedDir =
-        std::filesystem::current_path() / "fixtures" / "c4m6" / "expected";
-    std::error_code error;
-    if (!std::filesystem::is_directory(expectedDir, error)) {
-        return std::nullopt;
-    }
-    for (const auto& entry : std::filesystem::directory_iterator(expectedDir, error)) {
-        if (error || !entry.is_regular_file()) {
-            continue;
-        }
-        const std::filesystem::path path = entry.path();
-        if (path.extension() != ".json"
-            || path.filename().string().find(".freecad.json") == std::string::npos) {
-            continue;
-        }
-        const nlohmann::json expected = readJsonFileIfPresent(path);
-        if (!expected.is_object()) {
-            continue;
-        }
-        const auto stateIt = expected.find("topoNamingState");
-        if (stateIt == expected.end() || !stateIt->is_object()) {
-            continue;
-        }
-        if (stateIt->value("documentHash", "") == currentDocumentHash) {
-            return expected;
-        }
-    }
-    return std::nullopt;
 }
 
 nlohmann::json hardFailPayload(std::vector<Diagnostic> diagnostics)
@@ -369,6 +298,16 @@ part::MapperHistoryEndpoint endpointFromElementName(const std::string& fallbackO
     return {elementName.substr(0, dot), elementName.substr(dot + 1U)};
 }
 
+part::MapperHistoryEndpoint endpointFromProvenance(const std::string& fallbackObject,
+                                                   const part::MappedNameProvenance& provenance,
+                                                   const std::string& fallbackElementName)
+{
+    if (!provenance.sourceElement.empty()) {
+        return endpointFromElementName(fallbackObject, provenance.sourceElement);
+    }
+    return endpointFromElementName(fallbackObject, fallbackElementName);
+}
+
 bool mapperEndpointMatches(const nlohmann::json& endpoint,
                            const part::MapperHistoryEndpoint& expected)
 {
@@ -377,16 +316,15 @@ bool mapperEndpointMatches(const nlohmann::json& endpoint,
         && endpoint.value("subname", "") == expected.subname;
 }
 
-nlohmann::json matchingMapperHistoryIndexes(const nlohmann::json& mapperHistory,
-                                            const part::MapperHistoryEndpoint& source,
-                                            const part::MapperHistoryEndpoint& target)
+nlohmann::json matchingMapperHistoryIds(const nlohmann::json& mapperHistory,
+                                        const part::MapperHistoryEndpoint& source,
+                                        const part::MapperHistoryEndpoint& target)
 {
-    nlohmann::json indexes = nlohmann::json::array();
+    nlohmann::json ids = nlohmann::json::array();
     if (!mapperHistory.is_array()) {
-        return indexes;
+        return ids;
     }
-    for (std::size_t index = 0; index < mapperHistory.size(); ++index) {
-        const nlohmann::json& event = mapperHistory.at(index);
+    for (const nlohmann::json& event : mapperHistory) {
         if (!event.is_object()) {
             continue;
         }
@@ -395,11 +333,15 @@ nlohmann::json matchingMapperHistoryIndexes(const nlohmann::json& mapperHistory,
         if (sourceIt == event.end() || targetIt == event.end()) {
             continue;
         }
-        if (mapperEndpointMatches(*sourceIt, source) && mapperEndpointMatches(*targetIt, target)) {
-            indexes.push_back(index);
+        if (!mapperEndpointMatches(*sourceIt, source) || !mapperEndpointMatches(*targetIt, target)) {
+            continue;
+        }
+        const auto idIt = event.find("id");
+        if (idIt != event.end() && idIt->is_string()) {
+            ids.push_back(idIt->get<std::string>());
         }
     }
-    return indexes;
+    return ids;
 }
 
 std::string recoverabilityForEntry(const nlohmann::json& mapperHistory,
@@ -463,6 +405,79 @@ const part::MappedNameProvenance* sourceBackedMappedNameProvenance(
     return &provenance;
 }
 
+bool sameEndpoint(const nlohmann::json& endpoint,
+                  const std::string& objectName,
+                  const std::string& subname)
+{
+    return endpoint.is_object()
+        && endpoint.value("object", "") == objectName
+        && endpoint.value("subname", "") == subname;
+}
+
+const nlohmann::json* resolvedMapperHistoryEventForStableName(
+    const nlohmann::json& mapperHistory,
+    const std::string& objectName,
+    const std::string& stableName,
+    const std::string& currentName
+)
+{
+    if (!mapperHistory.is_array()) {
+        return nullptr;
+    }
+    for (const nlohmann::json& event : mapperHistory) {
+        if (!event.is_object()) {
+            continue;
+        }
+        const auto sourceIt = event.find("source");
+        const auto targetIt = event.find("target");
+        if (sourceIt == event.end() || targetIt == event.end()) {
+            continue;
+        }
+        if (!sameEndpoint(*targetIt, objectName, currentName)) {
+            continue;
+        }
+        if (sameEndpoint(*sourceIt, objectName, stableName)
+            || sameEndpoint(*sourceIt, objectName, currentName)) {
+            return &event;
+        }
+        const nlohmann::json& mappedName = event.value("mappedName", nlohmann::json::object());
+        if (mappedName.is_object()
+            && (mappedName.value("raw", "") == stableName
+                || mappedName.value("canonical", "") == stableName)) {
+            return &event;
+        }
+    }
+    return nullptr;
+}
+
+nlohmann::json mapperHistoryIdsForStableName(const nlohmann::json& mapperHistory,
+                                             const std::string& objectName,
+                                             const std::string& stableName,
+                                             const std::string& currentName)
+{
+    nlohmann::json ids = nlohmann::json::array();
+    const nlohmann::json* event =
+        resolvedMapperHistoryEventForStableName(mapperHistory, objectName, stableName, currentName);
+    if (event == nullptr) {
+        return ids;
+    }
+    const auto idIt = event->find("id");
+    if (idIt != event->end() && idIt->is_string()) {
+        ids.push_back(idIt->get<std::string>());
+    }
+    return ids;
+}
+
+std::string recoverabilityForStableName(const nlohmann::json& mapperHistory,
+                                        const std::string& objectName,
+                                        const std::string& stableName,
+                                        const std::string& currentName)
+{
+    const nlohmann::json* event =
+        resolvedMapperHistoryEventForStableName(mapperHistory, objectName, stableName, currentName);
+    return event == nullptr ? "resolved" : event->value("recoverability", "resolved");
+}
+
 nlohmann::json elementMapEntriesJson(
     const std::string& objectName,
     const part::NamedShape& namedShape,
@@ -487,14 +502,15 @@ nlohmann::json elementMapEntriesJson(
         }
 
         const part::MapperHistoryEndpoint source =
-            endpointFromElementName(namedShape.owner, stableName);
-        const part::MapperHistoryEndpoint target {objectName, currentIt->second.subname};
+            endpointFromProvenance(namedShape.owner, *provenance, stableName);
+        const part::MapperHistoryEndpoint target {objectName, currentName};
         nlohmann::json evidence = {
             {"source", "element_map"},
-            {"mapperHistoryIndexes", matchingMapperHistoryIndexes(mapperHistory, source, target)},
+            {"mapperHistoryIds", matchingMapperHistoryIds(mapperHistory, source, target)},
+            {"childElementMapKey", nullptr},
         };
-        entries[provenance->rawMappedName] = {
-            {"target", {{"object", objectName}, {"subname", currentIt->second.subname}}},
+        entries[provenance->canonicalMappedName] = {
+            {"target", {{"object", objectName}, {"subname", currentName}}},
             {"shapeKind", currentIt->second.shapeKind},
             {"source", {{"object", source.object}, {"subname", source.subname}}},
             {"mappedName",
@@ -507,6 +523,372 @@ nlohmann::json elementMapEntriesJson(
         };
     }
     return entries;
+}
+
+std::string childMapKey(const std::string& ownerObject,
+                        const std::string& childObject,
+                        const std::string& pathPrefix)
+{
+    std::string key = ownerObject + ":" + childObject;
+    if (!pathPrefix.empty()) {
+        key += ":" + pathPrefix;
+    }
+    return key;
+}
+
+std::string localIndexedPrefix(const std::string& indexedName)
+{
+    std::string prefix;
+    for (char ch : indexedName) {
+        if (std::isdigit(static_cast<unsigned char>(ch)) != 0) {
+            break;
+        }
+        prefix.push_back(ch);
+    }
+    return prefix;
+}
+
+std::optional<int> localIndexedOrdinal(const std::string& indexedName)
+{
+    const std::string prefix = localIndexedPrefix(indexedName);
+    if (prefix.empty() || prefix.size() >= indexedName.size()) {
+        return std::nullopt;
+    }
+    try {
+        return std::stoi(indexedName.substr(prefix.size()));
+    }
+    catch (const std::exception&) {
+        return std::nullopt;
+    }
+}
+
+std::string targetNameForChildLocal(const std::string& localSubname, int offset)
+{
+    const auto ordinal = localIndexedOrdinal(localSubname);
+    if (!ordinal) {
+        return {};
+    }
+    return localIndexedPrefix(localSubname) + std::to_string(offset + *ordinal);
+}
+
+std::string sourceLocalNameFromStable(const std::string& stableName)
+{
+    const std::size_t dot = stableName.rfind('.');
+    return dot == std::string::npos ? stableName : stableName.substr(dot + 1U);
+}
+
+std::string shapeKindFromIndexedName(const std::string& indexedName)
+{
+    if (indexedName.rfind("Face", 0) == 0) {
+        return "face";
+    }
+    if (indexedName.rfind("Edge", 0) == 0) {
+        return "edge";
+    }
+    if (indexedName.rfind("Vertex", 0) == 0) {
+        return "vertex";
+    }
+    return "shape";
+}
+
+bool hasMappedName(const part::MappedNameProvenance& provenance)
+{
+    return provenance.status == part::MappedNameProvenanceStatus::SourceBacked
+        && !provenance.rawMappedName.empty()
+        && !provenance.canonicalMappedName.empty();
+}
+
+std::optional<std::pair<std::string, nlohmann::json>> childEntryFromProvenance(
+    const std::string& ownerObject,
+    const std::string& childObject,
+    const std::string& childKey,
+    const std::string& pathPrefix,
+    const std::string& childKind,
+    int offset,
+    const std::string& stableName,
+    const part::MappedNameProvenance& provenance,
+    const std::string& evidenceSource
+)
+{
+    if (!hasMappedName(provenance)) {
+        return std::nullopt;
+    }
+    const std::string localSubname = sourceLocalNameFromStable(stableName);
+    if (!childKind.empty() && shapeKindFromIndexedName(localSubname) != childKind) {
+        return std::nullopt;
+    }
+    const std::string targetSubname = targetNameForChildLocal(localSubname, offset);
+    if (targetSubname.empty()) {
+        return std::nullopt;
+    }
+    (void)pathPrefix;
+    return std::make_pair(
+        provenance.canonicalMappedName,
+        nlohmann::json {
+            {"target", {{"object", ownerObject}, {"subname", targetSubname}}},
+            {"shapeKind", shapeKindFromIndexedName(localSubname)},
+            {"source", {{"object", childObject}, {"subname", localSubname}}},
+            {"mappedName",
+             {
+                 {"raw", provenance.rawMappedName},
+                 {"canonical", provenance.canonicalMappedName},
+             }},
+            {"recoverability", "resolved"},
+            {"evidence",
+             {
+                 {"source", evidenceSource},
+                 {"mapperHistoryIds", nlohmann::json::array()},
+                 {"childElementMapKey", childKey},
+             }},
+        }
+    );
+}
+
+nlohmann::json childElementMapEntriesFromNamedShape(
+    const std::string& ownerObject,
+    const std::string& childObject,
+    const std::string& childKey,
+    const std::string& pathPrefix,
+    const std::string& childKind,
+    int offset,
+    const part::NamedShape& childShape,
+    const std::string& evidenceSource
+)
+{
+    nlohmann::json entries = nlohmann::json::object();
+    for (const auto& [stableName, currentName] : childShape.elementMap) {
+        if (stableName.empty() || currentName.empty()
+            || indexedOnlyAlias(childShape.owner, stableName, currentName)) {
+            continue;
+        }
+        const auto provenanceIt = childShape.mappedNameProvenance.find(stableName);
+        if (provenanceIt == childShape.mappedNameProvenance.end()) {
+            continue;
+        }
+        auto entry = childEntryFromProvenance(
+            ownerObject,
+            childObject,
+            childKey,
+            pathPrefix,
+            childKind,
+            offset,
+            currentName,
+            provenanceIt->second,
+            evidenceSource
+        );
+        if (entry) {
+            entries[entry->first] = std::move(entry->second);
+        }
+    }
+    return entries;
+}
+
+nlohmann::json childElementMapEntriesFromOwnerProvenance(
+    const std::string& ownerObject,
+    const std::string& childObject,
+    const std::string& childKey,
+    const std::string& pathPrefix,
+    const std::string& childKind,
+    int offset,
+    const part::NamedShape& ownerShape,
+    const std::string& evidenceSource
+)
+{
+    nlohmann::json entries = nlohmann::json::object();
+    const std::string childPrefix = childObject + ".";
+    for (const auto& [stableName, currentName] : ownerShape.elementMap) {
+        if (stableName.rfind(childPrefix, 0) != 0 || currentName.empty()) {
+            continue;
+        }
+        const auto provenanceIt = ownerShape.mappedNameProvenance.find(stableName);
+        if (provenanceIt == ownerShape.mappedNameProvenance.end()) {
+            continue;
+        }
+        auto provenance = provenanceIt->second;
+        if (!hasMappedName(provenance)
+            && provenance.sourceElement.rfind(childPrefix, 0) == 0
+            && provenance.sourceTag
+            && !provenance.elementType.empty()) {
+            provenance.sourceElement = provenance.sourceElement.substr(childPrefix.size());
+            provenance = topo::encodedMappedNameProvenance(std::move(provenance));
+        }
+        auto entry = childEntryFromProvenance(
+            ownerObject,
+            childObject,
+            childKey,
+            pathPrefix,
+            childKind,
+            offset,
+            stableName,
+            provenance,
+            evidenceSource
+        );
+        if (entry) {
+            entries[entry->first] = std::move(entry->second);
+        }
+    }
+    return entries;
+}
+
+nlohmann::json childElementMapsForTopoState(
+    const std::string& objectName,
+    const part::NamedShape& namedShape
+)
+{
+    struct ProtocolChildMap {
+        std::string key;
+        std::string childObject;
+        std::string pathPrefix;
+        nlohmann::json entries = nlohmann::json::object();
+    };
+
+    std::vector<std::string> order;
+    std::map<std::string, ProtocolChildMap> grouped;
+    for (const part::NamedShapeChildMap& childMap : namedShape.childElementMaps) {
+        if (objectName != "Body" && childMap.indexedName.rfind("Child", 0) != 0) {
+            continue;
+        }
+        const std::string childKey = childMapKey(objectName, childMap.sourceOwner, childMap.indexedName);
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp::addChildElements()
+        // carries the child ElementMap as a nested ledger. cad-core first consumes the owner's
+        // source-target provenance for this child range, then falls back to child-local provenance.
+        const std::string evidenceSource = objectName == "Body"
+            ? "freecad_partdesign_body_tip"
+            : "freecad_part_compound_links";
+        nlohmann::json entries = childElementMapEntriesFromOwnerProvenance(
+            objectName,
+            childMap.sourceOwner,
+            childKey,
+            childMap.indexedName,
+            childMap.kind,
+            childMap.offset,
+            namedShape,
+            evidenceSource
+        );
+        const part::NamedShape* childNamedShape = childMap.sourceNamedShape;
+        if (entries.empty() && childNamedShape != nullptr) {
+            entries = childElementMapEntriesFromNamedShape(
+                objectName,
+                childMap.sourceOwner,
+                childKey,
+                childMap.indexedName,
+                childMap.kind,
+                childMap.offset,
+                *childNamedShape,
+                evidenceSource
+            );
+        }
+        if (!entries.empty()) {
+            if (grouped.count(childKey) == 0U) {
+                grouped[childKey] = ProtocolChildMap {
+                    childKey,
+                    childMap.sourceOwner,
+                    childMap.indexedName,
+                    nlohmann::json::object(),
+                };
+                order.push_back(childKey);
+            }
+            for (const auto& entryItem : entries.items()) {
+                grouped[childKey].entries[entryItem.key()] = entryItem.value();
+            }
+        }
+    }
+
+    nlohmann::json childMaps = nlohmann::json::array();
+    for (const std::string& key : order) {
+        ProtocolChildMap& childMap = grouped[key];
+        if (childMap.entries.empty()) {
+            continue;
+        }
+        childMaps.push_back({
+            {"key", childMap.key},
+            {"ownerObject", objectName},
+            {"childObject", childMap.childObject},
+            {"childIndex", childMaps.size()},
+            {"pathPrefix", childMap.pathPrefix},
+            {"elementMap",
+             {
+                 {"encoding", elementMapVersion},
+                 {"status", "history_partial"},
+                 {"entries", std::move(childMap.entries)},
+             }},
+        });
+    }
+    return childMaps;
+}
+
+void mergeChildEntriesIntoTopLevel(nlohmann::json& entries,
+                                   const nlohmann::json& childElementMaps)
+{
+    if (!childElementMaps.is_array()) {
+        return;
+    }
+    for (const nlohmann::json& childMap : childElementMaps) {
+        const auto mapIt = childMap.find("elementMap");
+        if (mapIt == childMap.end() || !mapIt->is_object()) {
+            continue;
+        }
+        const auto entriesIt = mapIt->find("entries");
+        if (entriesIt == mapIt->end() || !entriesIt->is_object()) {
+            continue;
+        }
+        for (const auto& entryItem : entriesIt->items()) {
+            entries[entryItem.key()] = entryItem.value();
+        }
+    }
+}
+
+void mergeMapperHistoryEntriesIntoTopLevel(nlohmann::json& entries,
+                                           const std::string& objectName,
+                                           const part::NamedShape& namedShape,
+                                           const std::map<std::string, ResponseSubshapeInfo>& currentSubshapes,
+                                           const nlohmann::json& mapperHistory)
+{
+    for (const auto& [stableName, currentName] : namedShape.elementMap) {
+        const auto currentIt = currentSubshapes.find(currentName);
+        if (currentIt == currentSubshapes.end()) {
+            continue;
+        }
+        const auto provenanceIt = namedShape.mappedNameProvenance.find(stableName);
+        if (provenanceIt == namedShape.mappedNameProvenance.end()
+            || !hasMappedName(provenanceIt->second)) {
+            continue;
+        }
+        const nlohmann::json ids =
+            mapperHistoryIdsForStableName(mapperHistory, objectName, stableName, currentName);
+        const part::MapperHistoryEndpoint source =
+            endpointFromProvenance(objectName, provenanceIt->second, stableName);
+        const part::MapperHistoryEndpoint target {objectName, currentName};
+        nlohmann::json eventIds = ids;
+        if (eventIds.empty()) {
+            eventIds = matchingMapperHistoryIds(mapperHistory, source, target);
+        }
+        if (eventIds.empty()) {
+            continue;
+        }
+        entries[provenanceIt->second.canonicalMappedName] = {
+            {"target", {{"object", objectName}, {"subname", currentName}}},
+            {"shapeKind", currentIt->second.shapeKind},
+            {"source",
+             {
+                 {"object", source.object},
+                 {"subname", source.subname},
+             }},
+            {"mappedName",
+             {
+                 {"raw", provenanceIt->second.rawMappedName},
+                 {"canonical", provenanceIt->second.canonicalMappedName},
+             }},
+            {"recoverability",
+             recoverabilityForEntry(mapperHistory, source, target)},
+            {"evidence",
+             {
+                 {"source", "mapper_history"},
+                 {"mapperHistoryIds", eventIds},
+                 {"childElementMapKey", nullptr},
+             }},
+        };
+    }
 }
 
 nlohmann::json objectTopoStateJson(
@@ -534,10 +916,6 @@ nlohmann::json objectTopoStateJson(
     nlohmann::json mapperHistory = nlohmann::json::array();
     std::string elementMapStatus = "indexed_only";
     if (namedShapeProjection.is_object() && !namedShapeProjection.empty()) {
-        const auto childMapsIt = namedShapeProjection.find("child_element_maps");
-        if (childMapsIt != namedShapeProjection.end() && childMapsIt->is_array()) {
-            childElementMaps = *childMapsIt;
-        }
         const auto mapperHistoryIt = namedShapeProjection.find("mapper_history");
         if (mapperHistoryIt != namedShapeProjection.end() && mapperHistoryIt->is_array()) {
             mapperHistory = *mapperHistoryIt;
@@ -548,6 +926,11 @@ nlohmann::json objectTopoStateJson(
     nlohmann::json entries = nlohmann::json::object();
     if (namedShape != nullptr) {
         entries = elementMapEntriesJson(objectName, *namedShape, subshapes, mapperHistory);
+        childElementMaps = childElementMapsForTopoState(objectName, *namedShape);
+        if (objectName == "Body") {
+            mergeChildEntriesIntoTopLevel(entries, childElementMaps);
+        }
+        mergeMapperHistoryEntriesIntoTopLevel(entries, objectName, *namedShape, subshapes, mapperHistory);
     }
     if (entries.empty()) {
         elementMapStatus = "indexed_only";
@@ -713,26 +1096,12 @@ std::optional<nlohmann::json> topoNamingStateRequestFailureJson(
     return std::nullopt;
 }
 
-std::optional<nlohmann::json> topoNamingStateFixtureContractExpectedResponse(
-    const app::Document& document
-)
-{
-    return c4m6ExpectedPayloadOverlay(document);
-}
-
 nlohmann::json topoNamingStateJson(
     const app::Document& document,
     const ComputeContext& context,
     const std::map<std::string, nlohmann::json>& responseSubshapesByObject
 )
 {
-    if (auto overlay = c4m6ExpectedPayloadOverlay(document)) {
-        const auto stateIt = overlay->find("topoNamingState");
-        if (stateIt != overlay->end() && stateIt->is_object()) {
-            return *stateIt;
-        }
-    }
-
     std::set<std::string> objectNames;
     for (const auto& [name, _] : context.namedShapes) {
         objectNames.insert(name);

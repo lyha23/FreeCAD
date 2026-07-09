@@ -10,6 +10,8 @@
 #include <TopoDS_Shape.hxx>
 #include <gp_TrsfForm.hxx>
 #include <TopAbs_ShapeEnum.hxx>
+#include <TopExp.hxx>
+#include <TopTools_IndexedMapOfShape.hxx>
 
 #include <algorithm>
 #include <map>
@@ -679,6 +681,73 @@ void addDirectTipSubshapeAliases(part::NamedShape& namedShape,
     }
 }
 
+int subshapeCount(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
+{
+    TopTools_IndexedMapOfShape map;
+    TopExp::MapShapes(shape, kind, map);
+    return map.Extent();
+}
+
+std::string childMapKindName(TopAbs_ShapeEnum kind)
+{
+    switch (kind) {
+        case TopAbs_FACE:
+            return "face";
+        case TopAbs_EDGE:
+            return "edge";
+        case TopAbs_VERTEX:
+            return "vertex";
+        default:
+            break;
+    }
+    return "shape";
+}
+
+std::string childMapPrefix(TopAbs_ShapeEnum kind)
+{
+    switch (kind) {
+        case TopAbs_FACE:
+            return "Face";
+        case TopAbs_EDGE:
+            return "Edge";
+        case TopAbs_VERTEX:
+            return "Vertex";
+        default:
+            break;
+    }
+    return {};
+}
+
+void addDirectTipChildMaps(part::NamedShape& namedShape,
+                           const std::string& tipOwner,
+                           const part::NamedShape* tipNamedShape)
+{
+    if (tipOwner.empty() || tipNamedShape == nullptr || tipNamedShape->shape.IsNull()) {
+        return;
+    }
+    for (const TopAbs_ShapeEnum kind : {TopAbs_FACE, TopAbs_EDGE, TopAbs_VERTEX}) {
+        const int count = subshapeCount(tipNamedShape->shape, kind);
+        if (count == 0) {
+            continue;
+        }
+        const std::string prefix = childMapPrefix(kind);
+        part::NamedShapeChildMap childMap;
+        childMap.sourceOwner = tipOwner;
+        childMap.kind = childMapKindName(kind);
+        childMap.indexedName = tipOwner;
+        childMap.offset = 0;
+        childMap.count = count;
+        childMap.targetStart = prefix + "1";
+        childMap.targetEnd = prefix + std::to_string(count);
+        childMap.sourceNamedShape = tipNamedShape;
+        childMap.hasSourceElementMap = !tipNamedShape->elementMap.empty();
+        childMap.sourceElementMapSize = tipNamedShape->elementMap.size();
+        childMap.sourceChildMapCount = tipNamedShape->childElementMaps.size();
+        namedShape.childElementMaps.push_back(childMap);
+    }
+    addDistinctString(namedShape.elementHistoryStatus, "partdesign_body:tip_child_element_map");
+}
+
 std::optional<part::NamedShape> namedShapeForDisplayOnlyFeature(
     const std::string& feature,
     const runtime::ComputeContext& context)
@@ -939,7 +1008,10 @@ std::optional<std::string> directTipSubshapeOwnerForBody(
     const std::vector<std::string>& refinedFeatures,
     bool hasNonIdentityPlacement)
 {
-    if (hasNonIdentityPlacement || body.properties.contains("BaseFeature") || !refinedFeatures.empty()) {
+    if (hasNonIdentityPlacement || body.properties.contains("BaseFeature")) {
+        return std::nullopt;
+    }
+    if (!refinedFeatures.empty() && refinedFeatures.back() != stopFeature) {
         return std::nullopt;
     }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::Body::execute(),
@@ -1326,6 +1398,7 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
     }
     if (bodyNamedShape && directTipSubshapeOwner) {
         addDirectTipSubshapeAliases(*bodyNamedShape, *directTipSubshapeOwner, directTipNamedShape);
+        addDirectTipChildMaps(*bodyNamedShape, *directTipSubshapeOwner, directTipNamedShape);
     }
 
     return BodyTopoShapeResult {

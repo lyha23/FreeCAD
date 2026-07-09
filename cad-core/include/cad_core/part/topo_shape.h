@@ -58,6 +58,8 @@ struct NamedElement
     std::vector<std::string> sources;
 };
 
+struct NamedShape;
+
 struct NamedShapeChildMap
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
@@ -72,6 +74,11 @@ struct NamedShapeChildMap
     std::string targetStart;
     std::string targetEnd;
     std::string postfix;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements() stores the child's "elementMap" beside the mapped child
+    // range. cad-core keeps a request-local pointer so runtime topoNamingState publication can
+    // read child mapped-name provenance without re-deriving it from fixture output.
+    const NamedShape* sourceNamedShape = nullptr;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
     // ::ElementMap::hashChildMaps(), rewrites eligible child map postfixes into encoded
     // child-map keys using "MAPPED_CHILD_ELEMENTS_PREFIX". cad-core keeps this as request-local

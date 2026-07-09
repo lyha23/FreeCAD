@@ -23,6 +23,8 @@ std::string mapperHistoryRelationName(MapperHistoryRelation relation)
             return "merge";
         case MapperHistoryRelation::Deleted:
             return "deleted";
+        case MapperHistoryRelation::Ambiguous:
+            return "ambiguous";
     }
     return "unknown";
 }
@@ -61,7 +63,8 @@ nlohmann::json endpointToJson(const MapperHistoryEndpoint& endpoint)
 
 bool sameMapperHistoryEvent(const MapperHistoryEvent& left, const MapperHistoryEvent& right)
 {
-    return left.source.object == right.source.object && left.source.subname == right.source.subname
+    return left.id == right.id
+        && left.source.object == right.source.object && left.source.subname == right.source.subname
         && left.target.object == right.target.object && left.target.subname == right.target.subname
         && left.shapeKind == right.shapeKind && left.relation == right.relation
         && left.makerStage == right.makerStage && left.recoverability == right.recoverability
@@ -73,7 +76,7 @@ bool sameMapperHistoryEvent(const MapperHistoryEvent& left, const MapperHistoryE
 
 nlohmann::json mapperHistoryEventToJson(const MapperHistoryEvent& event)
 {
-    return {
+    nlohmann::json result = {
         {"source", endpointToJson(event.source)},
         {"target", endpointToJson(event.target)},
         {"shape_kind", event.shapeKind},
@@ -83,6 +86,10 @@ nlohmann::json mapperHistoryEventToJson(const MapperHistoryEvent& event)
         {"recoverability", mapperHistoryRecoverabilityName(event.recoverability)},
         {"diagnostic_status", event.diagnosticStatus},
     };
+    if (!event.id.empty()) {
+        result["id"] = event.id;
+    }
+    return result;
 }
 
 nlohmann::json mapperHistoryToJson(const std::vector<MapperHistoryEvent>& events)

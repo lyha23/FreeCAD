@@ -2016,6 +2016,7 @@ void collectChildElementMaps(
             childMap.targetStart = prefix + std::to_string(offset + 1);
             childMap.targetEnd = childMapTargetName(prefix, offset, count);
             childMap.postfix = source.childElementMapPostfix;
+            childMap.sourceNamedShape = source.namedShape;
             if (!childMap.postfix.empty()) {
                 sawPostfixChildMap = true;
             }
@@ -2044,6 +2045,7 @@ void collectChildElementMaps(
                         continue;
                     }
                     NamedShapeChildMap recursiveChildMap = sourceChildMap;
+                    recursiveChildMap.sourceNamedShape = sourceChildMap.sourceNamedShape;
                     recursiveChildMap.offset = childMap.offset + sourceChildMap.offset;
                     recursiveChildMap.targetStart = prefix
                         + std::to_string(recursiveChildMap.offset + 1);

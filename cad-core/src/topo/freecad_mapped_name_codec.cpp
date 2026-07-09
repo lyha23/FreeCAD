@@ -119,12 +119,6 @@ FreeCadMappedNameCodecResult encodeFreeCadMappedName(
         return {FreeCadMappedNameCodecStatus::MissingTag, {}, {}, "source tag evidence is required"};
     }
     const std::string operationPostfix = normalizedOperationPostfix(provenance.operationPostfix);
-    if (operationPostfix.empty()) {
-        return {FreeCadMappedNameCodecStatus::MissingOperation,
-                {},
-                {},
-                "operation postfix evidence is required"};
-    }
     const std::string typeCode = elementTypeCode(provenance.elementType);
     if (typeCode.empty()) {
         return {FreeCadMappedNameCodecStatus::MissingElementType,
@@ -136,8 +130,10 @@ FreeCadMappedNameCodecResult encodeFreeCadMappedName(
     std::string raw = provenance.sourceElement + operationPostfix;
     raw += postfixTag;
     raw += hexLong(*provenance.sourceTag);
-    raw += ':';
-    raw += hexLong(static_cast<long>(operationPostfix.size()));
+    if (!operationPostfix.empty()) {
+        raw += ':';
+        raw += hexLong(static_cast<long>(operationPostfix.size()));
+    }
     raw += ',';
     raw += typeCode;
 

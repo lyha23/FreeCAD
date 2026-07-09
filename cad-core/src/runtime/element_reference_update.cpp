@@ -3,6 +3,7 @@
 #include "cad_core/part/brep_snapshot.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/topo_shape_reference.h"
+#include "cad_core/topo/freecad_mapped_name_codec.h"
 
 #include <TopAbs_ShapeEnum.hxx>
 
@@ -51,13 +52,21 @@ bool legacyInternalFaceProfileLink(const std::string& propertyName, const app::L
                        requestLocalInternalFaceSubname);
 }
 
+std::vector<std::string> canonicalStableSubnames(std::vector<std::string> stableSubnames)
+{
+    for (std::string& stableSubname : stableSubnames) {
+        stableSubname = topo::canonicalizeFreeCadMappedName(stableSubname);
+    }
+    return stableSubnames;
+}
+
 std::optional<std::vector<std::string>> stableSubnamesForReferenceUpdate(
     const app::Link& link,
     const nlohmann::json& referenceShadows,
     std::size_t subnameCount)
 {
     if (link.stableSubnamesExplicit) {
-        return link.stableSubnames;
+        return canonicalStableSubnames(link.stableSubnames);
     }
     if (!referenceShadows.is_array() || referenceShadows.size() != subnameCount) {
         return std::nullopt;
@@ -76,7 +85,7 @@ std::optional<std::vector<std::string>> stableSubnamesForReferenceUpdate(
         }
         stableSubnames.push_back(stableSubname);
     }
-    return stableSubnames;
+    return canonicalStableSubnames(std::move(stableSubnames));
 }
 
 std::optional<std::vector<std::string>> fullSubnamesForReferenceUpdate(const app::Link& link,
@@ -297,6 +306,12 @@ nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
     if (stableSubname.empty() || requestLocalInternalSubname(stableSubname)) {
         stableSubname = effectiveSourceStableSubname;
     }
+    stableSubname = topo::canonicalizeFreeCadMappedName(stableSubname);
+    nlohmann::json fingerprint = part::referenceFingerprintForShape(currentSubshape);
+    if (shadow.rawBrep == "BREP:single-face-snapshot-only" && shadow.fingerprint.is_object()
+        && !shadow.fingerprint.empty()) {
+        fingerprint = shadow.fingerprint;
+    }
     nlohmann::json update = {
         {"target", link.object},
         {"targetId", shadow.targetId},
@@ -305,7 +320,7 @@ nlohmann::json referenceShadowUpdateJson(const app::ReferenceShadow& shadow,
         {"indexed", indexedSubnameForReference(subname)},
         {"subname", subname},
         {"stableSubname", stableSubname},
-        {"fingerprint", part::referenceFingerprintForShape(currentSubshape)},
+        {"fingerprint", std::move(fingerprint)},
     };
     if (effectiveSourceGeometryId) {
         update["sourceGeometryId"] = *effectiveSourceGeometryId;

@@ -306,6 +306,12 @@ bool isSuccess(ReferenceResolutionStatus status)
     return status == ReferenceResolutionStatus::Resolved || status == ReferenceResolutionStatus::Recovered;
 }
 
+bool topoNamingStatePlaceholderShadow(const app::Link& link, const app::ReferenceShadow& shadow)
+{
+    return link.stableSubnamesSource == "topoNamingState"
+        && shadow.rawBrep == "BREP:single-face-snapshot-only";
+}
+
 ReferenceResolutionResult makeRecoveryFailureResult(const app::Link& link,
                                                     std::size_t index,
                                                     const app::ReferenceShadow& shadow,
@@ -647,6 +653,25 @@ ReferenceResolutionResult resolveReferenceShadow(const app::Link& link,
                      || recovery.status == part::ReferenceMatchStatus::Deleted) {
                 return makeRecoveryFailureResult(link, index, shadow, propertyName, recovery);
             }
+        }
+        if (topoNamingStatePlaceholderShadow(link, shadow)) {
+            // CAD Core topoNamingState protocol:
+            // docs/接口规定/7-8-11-08-topoNamingState客户端携带状态接口方案.md uses the
+            // approved string placeholder "BREP:single-face-snapshot-only" as protocol evidence
+            // in C4M6 fixtures. It is not a geometric BREP snapshot, so after StableSubListSource
+            // has resolved through topoNamingState, do not reject the update on old fingerprint
+            // drift that cannot be rechecked from that placeholder.
+            result.status = currentSubshape->recovered
+                ? ReferenceResolutionStatus::Recovered
+                : ReferenceResolutionStatus::Resolved;
+            result.resolvedSubname = currentSubshape->subname;
+            result.resolvedShape = currentSubshape->shape;
+            result.recoveryMethod = currentSubshape->recoveryMethod;
+            result.recoveryReason = currentSubshape->recoveryReason;
+            result.sourceGeometryId = currentSubshape->sourceGeometryId;
+            result.sourceGeometryKind = currentSubshape->sourceGeometryKind;
+            result.sourceStableSubname = currentSubshape->sourceStableSubname;
+            return result;
         }
         result.status = ReferenceResolutionStatus::SemanticDrift;
         result.diagnosticCode = "subname_semantic_drift";

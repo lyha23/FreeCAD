@@ -36,8 +36,4 @@ std::optional<nlohmann::json> topoNamingStateRequestFailureJson(
     const std::vector<Diagnostic>& diagnostics
 );
 
-std::optional<nlohmann::json> topoNamingStateFixtureContractExpectedResponse(
-    const app::Document& document
-);
-
 }  // namespace cad_core::runtime

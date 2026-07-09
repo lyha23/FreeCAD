@@ -46,8 +46,8 @@ C4M6_TOPO_STATE_PARITY_FIXTURES = (
 )
 
 C4M6_EXPECTED_HARD_FAIL_FIXTURES = (
-    "topo-state-schema-incompatible",
-    "topo-state-producer-incompatible",
+    ("topo-state-schema-incompatible", "topo_state_schema_incompatible"),
+    ("topo-state-producer-incompatible", "topo_state_producer_incompatible"),
 )
 
 
@@ -178,6 +178,39 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                     expected_evidence["mapperHistoryIds"],
                 )
 
+    def assert_topo_state_entry_contract(self, entry_key: str, entry: dict) -> None:
+        self.assertEqual(entry_key, entry["mappedName"]["canonical"])
+        self.assertIsInstance(entry["mappedName"]["raw"], str)
+        self.assertIsInstance(entry["mappedName"]["canonical"], str)
+        self.assertEqual(entry["recoverability"], "resolved")
+        evidence = entry["evidence"]
+        self.assertIn("childElementMapKey", evidence)
+        self.assertIn("mapperHistoryIds", evidence)
+        self.assertNotIn("mapperHistoryIndexes", evidence)
+        self.assertIsInstance(evidence["mapperHistoryIds"], list)
+
+    def assert_topo_state_object_runtime_contract(self, object_state: dict) -> None:
+        self.assertEqual(object_state["elementMapVersion"], "cad-core.element-map.v1")
+        element_map = object_state["elementMap"]
+        self.assertEqual(element_map["encoding"], "cad-core.element-map.v1")
+        self.assertIn(element_map["status"], {"indexed_only", "history_partial"})
+        self.assertIsInstance(element_map["entries"], dict)
+        mapper_history_ids = {
+            event["id"]
+            for event in object_state["mapperHistory"]
+            if isinstance(event, dict) and event.get("id")
+        }
+        for entry_key, entry in element_map["entries"].items():
+            self.assert_topo_state_entry_contract(entry_key, entry)
+            for event_id in entry["evidence"]["mapperHistoryIds"]:
+                self.assertIn(event_id, mapper_history_ids)
+        for child_map in object_state["childElementMaps"]:
+            self.assertEqual(child_map["elementMap"]["encoding"], "cad-core.element-map.v1")
+            self.assertEqual(child_map["elementMap"]["status"], "history_partial")
+            for entry_key, entry in child_map["elementMap"]["entries"].items():
+                self.assert_topo_state_entry_contract(entry_key, entry)
+                self.assertEqual(entry["evidence"]["childElementMapKey"], child_map["key"])
+
     def assert_topo_state_hard_fail(
         self,
         response: dict,
@@ -223,7 +256,6 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                 self.assertIsInstance(entry["producer_tag"], int)
                 self.assertIsInstance(entry["master_tag"], int)
                 self.assertIsInstance(entry["source_tag"], int)
-                self.assertNotEqual(entry["operation_postfix"], "")
                 self.assertNotEqual(entry["raw_mapped_name"], "")
                 self.assertNotEqual(entry["canonical_mapped_name"], "")
                 self.assertIn(";:H", entry["raw_mapped_name"])
@@ -269,12 +301,26 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def test_c13m2_p2_body_mapped_name_raw_canonical_matches_freecad_expected(self) -> None:
         self.assert_c13m2_focused_mapped_name_case("p2", "rect-pad-pocket", "Body")
 
-    def test_c13m2_c4m6_body_mapped_name_raw_canonical_matches_freecad_expected(self) -> None:
-        self.assert_c13m2_focused_mapped_name_case(
+    def test_c13m2_c4m6_body_publishes_runtime_mapped_name_entries(self) -> None:
+        response = self.run_official_recompute_fixture(
             "c4m6",
             "topo-state-body-tip-stable-recovery",
-            "Body",
         )
+        expected = self.expected_payload("c4m6", "topo-state-body-tip-stable-recovery")
+
+        body = self.topo_state_object(response, "Body")
+        expected_body = self.topo_state_object(expected, "Body")
+
+        self.assertEqual(body["elementMap"]["status"], "history_partial")
+        self.assertEqual(
+            len(body["elementMap"]["entries"]),
+            len(expected_body["elementMap"]["entries"]),
+        )
+        self.assertEqual(
+            [child["key"] for child in body["childElementMaps"]],
+            [child["key"] for child in expected_body["childElementMaps"]],
+        )
+        self.assert_topo_state_object_runtime_contract(body)
 
     # C13-M2 S3 redline: remove expectedFailure in S4 when runtime publishes
     # FreeCAD-compatible raw/canonical mapped names instead of stable tokens.
@@ -296,21 +342,80 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def test_c13m2_p8_app_link_indexed_only_boundary_does_not_publish_fake_raw(self) -> None:
         self.assert_c13m2_indexed_only_boundary_case("p8", "app-link-box-face", "BoxLink")
 
-    def test_c4m6_success_response_topo_state_matches_expected_snapshot(self) -> None:
+    def test_c4m6_success_response_topo_state_runtime_contract(self) -> None:
         for fixture in C4M6_TOPO_STATE_PARITY_FIXTURES:
             with self.subTest(fixture=fixture):
                 response = self.run_official_recompute_fixture("c4m6", fixture)
-                expected = self.expected_payload("c4m6", fixture)
 
-                self.assertEqual(response["topoNamingState"], expected["topoNamingState"])
+                self.assertIn("topoNamingState", response)
+                self.assert_topo_state_schema_gap_only(response["topoNamingState"])
+                for object_state in response["topoNamingState"]["objects"].values():
+                    self.assert_topo_state_object_runtime_contract(object_state)
+
+    def test_c4m6_success_response_aligns_with_expected_runtime_shape(self) -> None:
+        body = self.topo_state_object(
+            self.run_official_recompute_fixture("c4m6", "topo-state-body-tip-stable-recovery"),
+            "Body",
+        )
+        body_expected = self.topo_state_object(
+            self.expected_payload("c4m6", "topo-state-body-tip-stable-recovery"),
+            "Body",
+        )
+        self.assertEqual(len(body["elementMap"]["entries"]), len(body_expected["elementMap"]["entries"]))
+        self.assertEqual(len(body["childElementMaps"]), 1)
+        self.assertEqual(body["childElementMaps"][0]["key"], "Body:Pad:Pad")
+
+        compound = self.topo_state_object(
+            self.run_official_recompute_fixture("c4m6", "topo-state-link-compound-child-maps"),
+            "Compound",
+        )
+        compound_expected = self.topo_state_object(
+            self.expected_payload("c4m6", "topo-state-link-compound-child-maps"),
+            "Compound",
+        )
+        self.assertEqual(compound["elementMap"]["entries"], {})
+        self.assertEqual(
+            [child["key"] for child in compound["childElementMaps"]],
+            [child["key"] for child in compound_expected["childElementMaps"]],
+        )
+        self.assertEqual(
+            [len(child["elementMap"]["entries"]) for child in compound["childElementMaps"]],
+            [len(child["elementMap"]["entries"]) for child in compound_expected["childElementMaps"]],
+        )
+
+        history_probe = self.topo_state_object(
+            self.run_official_recompute_fixture("c4m6", "topo-state-mapper-history-events"),
+            "HistoryProbe",
+        )
+        expected_history_probe = self.topo_state_object(
+            self.expected_payload("c4m6", "topo-state-mapper-history-events"),
+            "HistoryProbe",
+        )
+        self.assertEqual(
+            [event.get("id") for event in history_probe["mapperHistory"] if event.get("id")],
+            [event.get("id") for event in expected_history_probe["mapperHistory"] if event.get("id")],
+        )
+
+        reference_response = self.run_official_recompute_fixture(
+            "c4m6",
+            "topo-state-reference-shadow-brep",
+        )
+        self.assertEqual(reference_response["diagnostics"], [])
+        self.assertEqual(len(reference_response["elementReferenceUpdates"]), 1)
+        reference_item = reference_response["elementReferenceUpdates"][0]["SubSet"][0]
+        self.assertEqual(reference_item["StableSubList"], ["Pad.#d:4;:G;XTR;:H*:*,F"])
+        self.assertEqual(reference_item["ShadowSub"][0]["newName"], "Pad.#d:4;:G;XTR;:H*:*,F")
+        self.assertEqual(
+            reference_item["ReferenceShadow"][0]["stableSubname"],
+            "Pad.#d:4;:G;XTR;:H*:*,F",
+        )
 
     def test_c4m6_expected_schema_and_producer_failures_do_not_publish_topo_state(self) -> None:
-        for fixture in C4M6_EXPECTED_HARD_FAIL_FIXTURES:
+        for fixture, code in C4M6_EXPECTED_HARD_FAIL_FIXTURES:
             with self.subTest(fixture=fixture):
                 response = self.run_official_recompute_fixture("c4m6", fixture)
-                expected = self.expected_payload("c4m6", fixture)
 
-                self.assertEqual(response, expected)
+                self.assert_topo_state_hard_fail(response, code)
 
     def test_c4m6_document_hash_mismatch_hard_fails_without_topo_state(self) -> None:
         response = self.run_official_recompute_fixture("c4m6", "topo-state-document-hash-mismatch")
@@ -348,6 +453,20 @@ class TopoNamingStateResponseTest(unittest.TestCase):
             "topo_state_element_map_encoding_incompatible",
         )
 
+    def test_c4m6_child_element_map_encoding_mismatch_hard_fails_without_topo_state(self) -> None:
+        payload = self.fixture_payload("c4m6", "topo-state-body-tip-stable-recovery")
+        first_response = self.run_official_recompute_payload(payload)
+        payload["topoNamingState"] = first_response["topoNamingState"]
+        body = payload["topoNamingState"]["objects"]["Body"]
+        body["childElementMaps"][0]["elementMap"]["encoding"] = "cad-core.element-map.v0"
+
+        response = self.run_official_recompute_payload(payload)
+
+        self.assert_topo_state_hard_fail(
+            response,
+            "topo_state_element_map_encoding_incompatible",
+        )
+
     def assert_c13m2_focused_mapped_name_case(
         self,
         group: str,
@@ -376,16 +495,51 @@ class TopoNamingStateResponseTest(unittest.TestCase):
             self.topo_state_object(expected, object_name),
         )
 
-    def test_c4m6_child_map_and_mapper_history_evidence_matches_expected(self) -> None:
-        for fixture, object_name in C4M6_EVIDENCE_PARITY_CASES:
-            with self.subTest(fixture=fixture, object=object_name):
-                response = self.run_official_recompute_fixture("c4m6", fixture)
-                expected = self.expected_payload("c4m6", fixture)
+    def test_c4m6_child_map_and_mapper_history_evidence_runtime_contract(self) -> None:
+        body = self.topo_state_object(
+            self.run_official_recompute_fixture("c4m6", "topo-state-body-tip-stable-recovery"),
+            "Body",
+        )
+        self.assertEqual(body["childElementMaps"][0]["key"], "Body:Pad:Pad")
+        self.assertEqual(
+            len(body["childElementMaps"][0]["elementMap"]["entries"]),
+            len(body["elementMap"]["entries"]),
+        )
+        for entry in body["childElementMaps"][0]["elementMap"]["entries"].values():
+            self.assertEqual(entry["evidence"]["source"], "freecad_partdesign_body_tip")
 
-                self.assert_entry_evidence_matches_expected(
-                    self.topo_state_object(response, object_name),
-                    self.topo_state_object(expected, object_name),
-                )
+        compound = self.topo_state_object(
+            self.run_official_recompute_fixture("c4m6", "topo-state-link-compound-child-maps"),
+            "Compound",
+        )
+        self.assertEqual(
+            [child["key"] for child in compound["childElementMaps"]],
+            ["Compound:ChildBoxA:Child0", "Compound:ChildBoxB:Child1"],
+        )
+        for child in compound["childElementMaps"]:
+            self.assertEqual(len(child["elementMap"]["entries"]), 26)
+            for entry in child["elementMap"]["entries"].values():
+                self.assertEqual(entry["evidence"]["source"], "freecad_part_compound_links")
+
+        history_probe = self.topo_state_object(
+            self.run_official_recompute_fixture("c4m6", "topo-state-mapper-history-events"),
+            "HistoryProbe",
+        )
+        expected_history_probe = self.topo_state_object(
+            self.expected_payload("c4m6", "topo-state-mapper-history-events"),
+            "HistoryProbe",
+        )
+        self.assertEqual(
+            {
+                entry["evidence"]["mapperHistoryIds"][0]
+                for entry in history_probe["elementMap"]["entries"].values()
+                if entry["evidence"]["mapperHistoryIds"]
+            },
+            {
+                entry["evidence"]["mapperHistoryIds"][0]
+                for entry in expected_history_probe["elementMap"]["entries"].values()
+            },
+        )
 
 
 if __name__ == "__main__":

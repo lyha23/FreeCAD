@@ -20,6 +20,7 @@ enum class MapperHistoryRelation
     Split,
     Merge,
     Deleted,
+    Ambiguous,
 };
 
 enum class MapperHistoryRecoverability
@@ -41,6 +42,7 @@ struct MapperHistoryEndpoint
 
 struct MapperHistoryEvent
 {
+    std::string id;
     MapperHistoryEndpoint source;
     MapperHistoryEndpoint target;
     std::string shapeKind;

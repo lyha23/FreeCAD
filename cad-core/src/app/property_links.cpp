@@ -393,6 +393,7 @@ std::optional<Link> readLinkObject(const nlohmann::json& value, const std::strin
     link.fullSubnamesExplicit = fullSubnamesExplicit;
     link.documentRef = readLinkDocumentRef(value);
     link.externalGeometryFlags = readExternalGeometryFlags(value);
+    link.stableSubnamesSource = value.value("StableSubListSource", "");
     return link;
 }
 
@@ -460,6 +461,7 @@ std::optional<Link> readLinkSubListItem(const nlohmann::json& value, const std::
     link.fullSubnamesExplicit = fullSubnamesExplicit;
     link.documentRef = readLinkDocumentRef(value);
     link.externalGeometryFlags = readExternalGeometryFlags(value);
+    link.stableSubnamesSource = value.value("StableSubListSource", "");
     return link;
 }
 
