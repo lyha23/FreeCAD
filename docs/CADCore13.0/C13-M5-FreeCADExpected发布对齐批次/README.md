@@ -14,6 +14,7 @@ C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到所有 checked-i
 - FreeCAD raw mapped-name 中的 `:H...` token 允许随机漂移，严格比较必须先 canonicalize；对象集合、subshape 数量、diagnostic code、stableSubname、elementMap key 不能因 hash 漂移被放宽。
 - 第一批 strict lane 仍选 `c4m6`，因为它覆盖 first recompute、Body/Tip recovery、compound child maps、mapperHistory、ReferenceShadow、schema/producer/hash mismatch。
 - S1 strict comparator 与生成入口已关闭：`compare_freecad_expected.py` 可按 expected discovery 生成 strict report，`regenerate_cad_core_res.py` 可只重生成同名 `cad-core-res`，当前 `c4m6` report 为 red（9 个 case，2 green / 7 red）。
+- S2 c4m6 strict red baseline 已关闭：每个 red diff 都带 `owner`、`owner_step`、`decision`、`freecad_authority`、`next_action`、`close_condition`，当前 decision 分组为 `runtime_publication_gap`=470、`mapper_history_publication_gap`=328、`stable_subname_diagnostic_policy`=13、`hash_mismatch_policy`=6、`protocol_decision_required`=5；S3 继续做 runtime/protocol 对齐实现。
 - 本轮 S0 不纳入无关 dirty 文件：`DESIGN.md`、`docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md`。
 
 ## S0 比较边界
@@ -58,7 +59,7 @@ find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
 | --- | --- | --- |
 | S0 | expected inventory 与比较边界冻结 | 已实现：phase inventory、字段策略、非目标和首批 lane 已冻结。 |
 | S1 | strict comparator 与 cad-core-res 生成入口 | 已实现：可按 phase 生成 cad-core-res，并输出 canonical strict diff report。 |
-| S2 | c4m6 strict public parity 红灯基线 | 当前 c4m6 strict diff 被机器化记录，区分发布缺口和协议决策。 |
+| S2 | c4m6 strict public parity 红灯基线 | 已实现：当前 c4m6 strict diff 被机器化记录，区分发布缺口和协议决策。 |
 | S3 | topoNamingState 发布策略对齐 | object set、mapperHistory、hash mismatch、link diagnostic 等 public publication gap 有实现计划和 focused tests。 |
 | S4 | phase family 扩展 | 按 fixture 家族推进，不把全量 phase 混成一个不可关闭的任务。 |
 | S5 | release gate 收口 | 每个 green phase 都有 expected/cad-core-res/report/test 证据，known gap 可追踪。 |

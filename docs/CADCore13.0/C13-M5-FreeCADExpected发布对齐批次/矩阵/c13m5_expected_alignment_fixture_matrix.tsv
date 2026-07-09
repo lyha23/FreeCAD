@@ -14,7 +14,7 @@ c4m2	10	14	complete	complete	4	T2_topo_feature	compare --phase c4m2	Native expec
 c4m3	8	18	complete	complete	10	T2_topo_feature	compare --phase c4m3	Native expected subset only.
 c4m4	2	9	complete	complete	7	T1_small_phase	compare --phase c4m4	Small expected subset with many extras.
 c4m5	3	3	complete	complete	0	T1_small_phase	compare --phase c4m5	Small expected subset.
-c4m6	9	9	complete	complete	0	T0_topoNamingState_strict	compare --phase c4m6	First strict lane; covers topoNamingState publication, child maps, mapperHistory, ReferenceShadow and hash/version failures.
+c4m6	9	9	complete	complete	0	T0_topoNamingState_strict	compare --phase c4m6	First strict lane; S2 classified current red baseline across topoNamingState publication, mapperHistory, ReferenceShadow, hash policy and protocol-decision gaps.
 c51m1	7	12	complete	complete	5	T2_partdesign_variant	compare --phase c51m1	Native expected subset only.
 c51m3	2	3	complete	complete	1	T1_small_phase	compare --phase c51m3	Small expected subset.
 c51m4	3	4	complete	complete	1	T1_small_phase	compare --phase c51m4	Small expected subset.

@@ -127,16 +127,62 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             self.assertEqual(json.loads(expected.read_text(encoding="utf-8")), {"expected": "native"})
             self.assertEqual(json.loads(extra.read_text(encoding="utf-8")), {"extra": True})
 
-    def test_c4m6_strict_report_is_structured_and_exits_red_or_green(self) -> None:
+    def test_c4m6_strict_report_is_current_classified_red_baseline(self) -> None:
         output = ROOT / "out" / "freecad-expected-parity" / "c4m6.unittest.json"
         report = compare_freecad_expected.run_strict_compare(ROOT, phase="c4m6", output=output)
 
         self.assertTrue(output.exists())
         self.assertEqual(report["schemaVersion"], "cad-core.freecad-expected-parity.v1")
+        self.assertEqual(report["status"], "red")
         self.assertEqual(report["summary"]["cases"], 9)
-        self.assertIn(report["status"], {"green", "red"})
+        self.assertEqual(report["summary"]["passed"], 2)
+        self.assertEqual(report["summary"]["red"], 7)
+        self.assertEqual(
+            report["summary"]["categories"],
+            {
+                "diagnostics": 14,
+                "results": 14,
+                "results.subshapes": 1,
+                "topoNamingState.objects": 13,
+                "topoNamingState.subshapes": 449,
+                "topoNamingState.elementMap": 1,
+                "topoNamingState.childElementMaps": 0,
+                "topoNamingState.mapperHistory": 328,
+                "geometry.numeric": 2,
+                "json": 0,
+            },
+        )
+        self.assertEqual(
+            report["summary"]["decisions"],
+            {
+                "hash_mismatch_policy": 6,
+                "mapper_history_publication_gap": 328,
+                "protocol_decision_required": 5,
+                "runtime_publication_gap": 470,
+                "stable_subname_diagnostic_policy": 13,
+            },
+        )
+
+        case_statuses = {item["case"]: item["status"] for item in report["cases"]}
+        self.assertEqual(
+            {case for case, status in case_statuses.items() if status == "green"},
+            {
+                "topo-state-producer-incompatible",
+                "topo-state-schema-incompatible",
+            },
+        )
         for category in compare_freecad_expected.REPORT_CATEGORIES:
             self.assertIn(category, report["summary"]["categories"])
+        for case_report in report["cases"]:
+            self.assertEqual(case_report["diffCount"], len(case_report["diffs"]))
+            self.assertEqual(sum(case_report["categories"].values()), case_report["diffCount"])
+            self.assertEqual(sum(case_report["decisions"].values()), case_report["diffCount"])
+            if case_report["status"] == "red":
+                self.assertGreater(case_report["diffCount"], 0)
+                for diff in case_report["diffs"]:
+                    for field in compare_freecad_expected.CLASSIFICATION_FIELDS:
+                        self.assertIsInstance(diff.get(field), str)
+                        self.assertNotEqual(diff[field], "")
 
     @unittest.skipUnless(BIN.exists(), "cad-core binary is missing; run cmake --build build first")
     def test_c4m6_write_current_entrypoint_generates_same_named_output(self) -> None:

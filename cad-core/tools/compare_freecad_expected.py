@@ -32,6 +32,21 @@ REPORT_CATEGORIES = (
     "geometry.numeric",
     "json",
 )
+CLASSIFICATION_FIELDS = (
+    "owner",
+    "owner_step",
+    "decision",
+    "freecad_authority",
+    "next_action",
+    "close_condition",
+)
+HASH_MISMATCH_CASES = {
+    "topo-state-document-hash-mismatch",
+    "topo-state-object-hash-mismatch",
+}
+LINK_COMPOUND_CASES = {
+    "topo-state-link-compound-child-maps",
+}
 RAW_MAPPED_NAME_FIELDS = {
     "rawFreecadMappedName",
     "raw_mapped_name",
@@ -339,24 +354,163 @@ def compare_payloads(expected: dict[str, Any], actual: dict[str, Any]) -> list[d
     return diff_values(expected_canonical, actual_canonical)
 
 
+def classification(
+    owner: str,
+    owner_step: str,
+    decision: str,
+    freecad_authority: str,
+    next_action: str,
+    close_condition: str,
+) -> dict[str, str]:
+    return {
+        "owner": owner,
+        "owner_step": owner_step,
+        "decision": decision,
+        "freecad_authority": freecad_authority,
+        "next_action": next_action,
+        "close_condition": close_condition,
+    }
+
+
+def classify_diff(phase: str, case_name: str, diff: dict[str, Any]) -> dict[str, Any]:
+    classified = dict(diff)
+    classified.update(classification_for_diff(phase, case_name, diff))
+    return classified
+
+
+def classification_for_diff(
+    phase: str,
+    case_name: str,
+    diff: dict[str, Any],
+) -> dict[str, str]:
+    category = str(diff.get("category", "json"))
+    path = str(diff.get("path", ""))
+
+    if case_name in HASH_MISMATCH_CASES:
+        return classification(
+            "cad-core/src/runtime/topo_naming_state.cpp; cad-core/src/runtime/recompute.cpp",
+            "S3",
+            "hash_mismatch_policy",
+            "c4m6 native expected hash-mismatch fixtures and topoNamingState protocol boundary",
+            "Decide whether document/object hash mismatch remains a hard failure or recomputes to match native expected public output.",
+            "The hash mismatch c4m6 cases are strict green, or an intentional protocol divergence is documented.",
+        )
+
+    if category == "topoNamingState.mapperHistory":
+        return classification(
+            "cad-core/src/runtime/topo_naming_state.cpp; cad-core/src/part/topo_shape.cpp",
+            "S3",
+            "mapper_history_publication_gap",
+            "src/App/ElementMap.cpp; src/Mod/Part/App/TopoShapeMapper.cpp",
+            "Publish expected-facing mapperHistory events from the topo history ledger without leaking unrelated indexed history.",
+            "c4m6 mapperHistory diffs are green, or each remaining event is documented as an intentional divergence.",
+        )
+
+    if category in {
+        "topoNamingState.objects",
+        "topoNamingState.subshapes",
+        "topoNamingState.elementMap",
+        "topoNamingState.childElementMaps",
+    }:
+        return classification(
+            "cad-core/src/runtime/topo_naming_state.cpp",
+            "S3",
+            "runtime_publication_gap",
+            "src/App/ElementMap.cpp; src/Mod/Part/App/TopoShapeExpansion.cpp",
+            "Publish the full native expected public object set, subshapes, elementMap and childElementMaps for c4m6.",
+            "c4m6 topoNamingState object/subshape/elementMap publication diffs are strict green.",
+        )
+
+    if category == "diagnostics" or (
+        case_name in LINK_COMPOUND_CASES and category == "results"
+    ):
+        return classification(
+            "cad-core/src/runtime/recompute.cpp",
+            "S3",
+            "stable_subname_diagnostic_policy",
+            "src/App/PropertyLinks.cpp; src/Mod/Part/App/TopoShapeExpansion.cpp",
+            "Align stableSubname diagnostics and Link compound result publication with the native expected policy.",
+            "c4m6 stableSubname diagnostic/result diffs are strict green, or the protocol divergence is recorded.",
+        )
+
+    if category in {"results", "geometry.numeric"}:
+        if path.endswith(".mesh") or path.endswith(".subshapes") or path in {
+            "results.CompoundLink",
+            "results.HistoryProbe",
+        }:
+            return classification(
+                "cad-core/src/runtime/recompute.cpp",
+                "S2/S3",
+                "protocol_decision_required",
+                "c4m6 native expected result payload and release-output protocol boundary",
+                "Decide whether strict native expected release output should include current mesh/helper result fields or treat them as transport metadata.",
+                "The release-output protocol is documented, and the comparator/runtime behavior follows that decision.",
+            )
+        return classification(
+            "cad-core/src/runtime/recompute.cpp",
+            "S3",
+            "runtime_publication_gap",
+            "c4m6 native expected result payload",
+            "Publish native expected result fields such as bbox, topology_counts, volume and sketch metadata.",
+            "c4m6 result-field diffs are strict green.",
+        )
+
+    if category == "results.subshapes":
+        return classification(
+            "cad-core/src/runtime/recompute.cpp",
+            "S2/S3",
+            "protocol_decision_required",
+            "c4m6 native expected result payload and release-output protocol boundary",
+            "Decide whether strict native expected release output should expose current result subshape maps for this path.",
+            "The release-output protocol is documented, and result subshape publication follows that decision.",
+        )
+
+    if phase == "c4m6":
+        return classification(
+            "cad-core/src/runtime/recompute.cpp",
+            "S2/S3",
+            "protocol_decision_required",
+            "c4m6 native expected payload and release-output protocol boundary",
+            "Classify this remaining c4m6 strict diff before treating the phase as release comparable.",
+            "Every c4m6 strict diff has a concrete implementation owner or documented protocol decision.",
+        )
+
+    return classification(
+        "cad-core/tools/compare_freecad_expected.py",
+        "S4",
+        "unclassified_phase_gap",
+        "phase-family expected payload",
+        "Classify this phase-family diff before closing its strict release gate.",
+        "The selected phase-family report has complete owner and decision metadata.",
+    )
+
+
 def relative(path: Path, root: Path) -> str:
     return str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
 
 
 def missing_case_report(case: ExpectedCase, kind: str, path: Path, root: Path) -> dict[str, Any]:
+    diffs = [
+        classify_diff(
+            case.phase,
+            case.case,
+            {
+                "category": "results",
+                "kind": kind,
+                "path": relative(path, root),
+            },
+        )
+    ]
     return {
         "phase": case.phase,
         "case": case.case,
         "expected": relative(case.expected_path, root),
         "current": relative(case.current_path, root),
         "status": "red",
-        "diffs": [
-            {
-                "category": "results",
-                "kind": kind,
-                "path": relative(path, root),
-            }
-        ],
+        "diffCount": len(diffs),
+        "categories": count_field(diffs, "category"),
+        "decisions": count_field(diffs, "decision"),
+        "diffs": diffs,
     }
 
 
@@ -365,28 +519,48 @@ def compare_case(case: ExpectedCase, root: Path = ROOT) -> dict[str, Any]:
         return missing_case_report(case, "missing_current", case.current_path, root)
     expected = load_json(case.expected_path)
     actual = load_json(case.current_path)
-    diffs = compare_payloads(expected, actual)
+    diffs = [
+        classify_diff(case.phase, case.case, diff)
+        for diff in compare_payloads(expected, actual)
+    ]
     return {
         "phase": case.phase,
         "case": case.case,
         "expected": relative(case.expected_path, root),
         "current": relative(case.current_path, root),
         "status": "green" if not diffs else "red",
+        "diffCount": len(diffs),
+        "categories": count_field(diffs, "category"),
+        "decisions": count_field(diffs, "decision"),
         "diffs": diffs,
     }
 
 
+def count_field(diffs: list[dict[str, Any]], field: str) -> dict[str, int]:
+    counts: Counter[str] = Counter()
+    for diff in diffs:
+        value = diff.get(field)
+        if isinstance(value, str) and value:
+            counts[value] += 1
+    return dict(sorted(counts.items()))
+
+
 def summarize_cases(cases: list[dict[str, Any]]) -> dict[str, Any]:
     categories: dict[str, int] = {category: 0 for category in REPORT_CATEGORIES}
+    decisions: Counter[str] = Counter()
     for case in cases:
         for diff in case["diffs"]:
             categories[diff.get("category", "json")] = categories.get(diff.get("category", "json"), 0) + 1
+            decision = diff.get("decision")
+            if isinstance(decision, str) and decision:
+                decisions[decision] += 1
     red_cases = [case for case in cases if case["status"] != "green"]
     return {
         "cases": len(cases),
         "passed": len(cases) - len(red_cases),
         "red": len(red_cases),
         "categories": categories,
+        "decisions": dict(sorted(decisions.items())),
     }
 
 

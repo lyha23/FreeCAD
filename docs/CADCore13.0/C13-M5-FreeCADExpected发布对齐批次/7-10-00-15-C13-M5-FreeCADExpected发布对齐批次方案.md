@@ -93,8 +93,10 @@ S0 live inventory 已冻结：当前发现到的 `.freecad.json` phase 数量是
 
 关闭条件：
 
-- 每个 c4m6 strict diff 都有 owner file、FreeCAD source authority、实现路径或协议决策。
-- 测试不再只验证前端最低合同，而是新增 strict expected parity 测试。
+- 已实现：每个 c4m6 strict diff 都有 `owner`、`owner_step`、`decision`、`freecad_authority`、`next_action`、`close_condition` 分类字段。
+- 已实现：当前 c4m6 strict report 仍为 red，9 cases，2 green / 7 red；summary 为 diagnostics=14、results=14、results.subshapes=1、topoNamingState.objects=13、topoNamingState.elementMap=1、topoNamingState.mapperHistory=328、topoNamingState.subshapes=449、geometry.numeric=2。
+- 已实现：decision 分组为 `runtime_publication_gap`=470、`mapper_history_publication_gap`=328、`stable_subname_diagnostic_policy`=13、`hash_mismatch_policy`=6、`protocol_decision_required`=5。
+- 已实现：`tests.test_topo_naming_state_response` 继续覆盖 consumer smoke，`tests.test_freecad_expected_public_parity` 新增 strict expected parity 红灯基线断言。
 
 ### S3 topoNamingState 发布策略对齐
 
