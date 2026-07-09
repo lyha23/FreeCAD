@@ -14,16 +14,18 @@ C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输�
 - S2 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5a12e7fdc6`（`5a12e7fdc6 docs: 关闭 C13-M2 S1 源码权威冻结`），起点 worktree clean。
 - S3 已关闭：`工作步骤细分/7-8-20-20-【已实现】C13-M2-S3-focused-red-tests.md` 已新增 guarded focused red tests，锁定 p2/c4m6/p6 FreeCAD `mappedName.raw/canonical` parity、p5/p8 indexed-only no-fake-raw 边界，以及 S5 `childElementMapKey` / `mapperHistoryIds` 空证据守卫。
 - S3 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=696a4d0f29`（`696a4d0f29 文档：关闭 C13-M2 S2 证据矩阵`），起点 worktree clean。
-- C13-M3 S5 已回流：C13-M3 S1-S4 解除 S4 的 producer-ledger 前置阻塞，S4 可恢复/继续执行；本批次仍从 S4 `mappedName codec 实现`、S5 `childKey 与 mapperId 对齐验证`、S6 `发布闸门` 继续。
+- C13-M3 S5 已回流：C13-M3 S1-S4 解除 S4 的 producer-ledger 前置阻塞。
+- S4 已关闭：`工作步骤细分/7-8-20-21-【已实现】C13-M2-S4-mappedName-codec实现.md` 已复核 live codec/runtime/tests，确认 focused `mappedName.raw/canonical` parity 普通通过，runtime 只消费 source-backed producer ledger / codec 输出，并保持 indexed-only no-fake-raw 边界。
+- S4 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=38be8d62a5`（`38be8d62a5 docs: 关闭 C13-M3 S5 发布闸门`），起点存在无关脏改 `DESIGN.md`、`docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md`、`docs/CADCore13.0/README.md` 与未跟踪 C13-M5 包；本步只收口 C13-M2 S4。
+- 本批次后续仍从 S5 `childKey 与 mapperId 对齐验证`、S6 `发布闸门` 继续。
 - S3 未改 C++ runtime、fixtures、expected、collector、adapter 或 `cad-core-res`，也未把 S5 key/id 空证据标成 implemented/supported。C13-M3 回流同样不把 `childElementMapKey` / `mapperHistoryIds` 标成 supported。
 
 ## 当前回流状态
 
-C13-M3 S4 live evidence 显示 producer-backed `mappedName.raw/canonical` 发布路径已可用：`tests.test_topo_naming_state_response` 为 `Ran 15 OK` 且无 expectedFailure，adapter channel 单测为 `Ran 1 OK`。这解除的是 C13-M2 S4 的前置 producer-ledger blocker，不等于本文件替 C13-M2 S4 做正式关闭。
+C13-M3 S4 live evidence 显示 producer-backed `mappedName.raw/canonical` 发布路径已可用：`tests.test_topo_naming_state_response` 为 `Ran 15 OK` 且无 expectedFailure，adapter channel 单测为 `Ran 1 OK`。C13-M2 S4 已在当前批次中正式复核并关闭：`cmake --build build`、`tests.test_topo_naming_state_response`、adapter channel 单测均通过。
 
-S4/S5 仍需按 C13-M2 队列处理的事项：
+S5/S6 仍需按 C13-M2 队列处理的事项：
 
-- `freecad_mapped_name_encoding_gap`：前置 producer ledger 已补齐，S4 应基于 live tests/docs 正式验证并关闭或记录 narrowed blocker；不得再以“缺 producer ledger”为阻塞理由。
 - `child_element_map_key_gap`：expected evidence 里有 `childElementMapKey`，runtime 目前只发布当前 child map 投影。
 - `mapper_history_id_gap`：expected 使用 `mapperHistoryIds`，runtime 目前发布 request-local `mapperHistory` 和 `mapperHistoryIndexes`。
 
@@ -33,11 +35,11 @@ C13-M2 只做这三个 evidence 的 focused parity；不做全量 expected fixtu
 
 | fixture | 当前状态 | gap 分类 |
 | --- | --- | --- |
-| `p2/rect-pad-pocket` | C13-M3 S4 live evidence 已让 `Body` raw/canonical parity 普通通过；C13-M2 S4 仍需正式关闭。 | `s4_resume_ready`、`child_element_map_key_gap`、`mapper_history_id_gap` |
-| `c4m6/topo-state-body-tip-stable-recovery` | C13-M3 S4 live evidence 已让 `Body` raw/canonical parity 普通通过，并保持 recovery 基线。 | `s4_resume_ready`、`child_element_map_key_gap`、`mapper_history_id_gap` |
-| `p5/sketch-internal-face` | `Sketch` indexed-only / no-fake-raw 边界在 C13-M3 S4 普通通过。 | `indexed_only_boundary_passed_s4` |
+| `p2/rect-pad-pocket` | C13-M2 S4 已正式复核 `Body` raw/canonical parity 普通通过。 | `raw_canonical_passed_s4`、`child_element_map_key_gap`、`mapper_history_id_gap` |
+| `c4m6/topo-state-body-tip-stable-recovery` | C13-M2 S4 已正式复核 `Body` raw/canonical parity 普通通过，并保持 recovery 基线。 | `raw_canonical_passed_s4`、`child_element_map_key_gap`、`mapper_history_id_gap` |
+| `p5/sketch-internal-face` | `Sketch` indexed-only / no-fake-raw 边界在 C13-M2 S4 普通通过。 | `indexed_only_boundary_passed_s4` |
 | `p6/up-to-face-stable-body-history` | 旧 focused fixture 已由 `718267783c` 删除，不是 live parity 证据；若恢复 `ProbePad`，必须重新采集 native expected。 | `retired_no_live_fixture` |
-| `p8/app-link-box` | 当前 live p8 fixture 的 `BoxLink` indexed-only / no-fake-raw 边界在 C13-M3 S4 普通通过；旧 `app-link-box-face` 已由 `718267783c` 删除。 | `child_path_identity_boundary_passed_s4` |
+| `p8/app-link-box` | 当前 live p8 fixture 的 `BoxLink` indexed-only / no-fake-raw 边界在 C13-M2 S4 普通通过；旧 `app-link-box-face` 已由 `718267783c` 删除。 | `child_path_identity_boundary_passed_s4` |
 
 ## FreeCAD source authority
 
