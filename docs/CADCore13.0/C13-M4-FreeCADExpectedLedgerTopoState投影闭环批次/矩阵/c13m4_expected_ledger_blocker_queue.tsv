@@ -1,0 +1,5 @@
+id	blocker	owner_step	status	close_condition	next_action
+C13M4-BLOCKER-001	C13-M4 live baseline frozen	S0	closed_s0	c4m6 strict ledger validator passed 9/9; focused runtime test first failure is Compound.subshapes.Child0.Face1 missing; diff and dirty-worktree boundary recorded	Closed; proceed to S1 runtime projection without editing expected or ledger sidecars.
+C13M4-BLOCKER-101	Compound child path projection is missing from runtime topoNamingState	S1	open	Compound public topoNamingState publishes Child0.Face1, Compound:ChildBoxA projection child map, and owner-qualified top-level elementMap entry without expected-string copy	Implement projection publisher in runtime/topo_naming_state.cpp.
+C13M4-BLOCKER-201	c4m6 focused runtime parity is red	S2	open	tests.test_topo_naming_state_response passes normally while c4m6 strict ledger validator remains green	Run focused parity after S1 and fix only projection-class regressions.
+C13M4-BLOCKER-301	C13-M4 package not closed	S3	open	README, matrices, CADCore13.0 index, and work-step queue reflect final implementation state	Close docs after runtime parity is green or record open blocker.

@@ -1,0 +1,7 @@
+id	validation	level	command	status	expected_result	owner_step
+C13M4-VAL-001	Queue renders	current_docs	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/工作步骤细分 --format markdown	passed_s0	After S0 heading close, queue starts at S1	S0
+C13M4-VAL-002	TSV field counts	current_docs	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/矩阵/*.tsv	passed_package	No malformed TSV rows	S0/S3
+C13M4-VAL-003	Whitespace diff	current_docs	git diff --check	passed_package	No whitespace errors	S0/S3
+C13M4-VAL-101	c4m6 ledger closure	expected_artifacts	cd cad-core && python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict	passed_s0	9 expected fixtures validate against ledger sidecars	S0/S2
+C13M4-VAL-102	Focused topoNamingState runtime parity	focused_runtime	cd cad-core && python3 -m unittest tests.test_topo_naming_state_response	red_s0_expected	Failed 2 assertions with same first cause: Compound.subshapes.Child0.Face1 missing; S2 closes when ordinary pass	S2
+C13M4-VAL-103	Build after C++ edit	focused_runtime	cd cad-core && cmake --build build	open	Build succeeds after runtime projection changes	S1/S2
