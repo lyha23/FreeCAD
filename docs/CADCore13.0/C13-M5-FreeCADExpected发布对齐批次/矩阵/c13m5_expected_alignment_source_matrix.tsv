@@ -1,0 +1,8 @@
+id	semantic_area	freecad_source	cad_core_landing	used_for
+C13M5-SRC-001	ElementMap and mapped-name ledger	src/App/ElementMap.cpp	cad-core/src/topo;cad-core/src/part/topo_shape.cpp;cad-core/src/runtime/topo_naming_state.cpp	elementMap entries, canonical/raw key policy, child element maps and ambiguity evidence.
+C13M5-SRC-002	Reference update and link subelements	src/App/PropertyLinks.cpp	cad-core/src/runtime/reference_resolution.cpp;cad-core/src/runtime/recompute.cpp	StableSubList recovery, ReferenceShadow evidence and diagnostics.
+C13M5-SRC-003	TopoShape expansion and child maps	src/Mod/Part/App/TopoShapeExpansion.cpp	cad-core/src/topo;cad-core/src/runtime/topo_naming_state.cpp	Compound child path projection, childElementMaps and subshape publication.
+C13M5-SRC-004	Part feature and primitive execution	src/Mod/Part/App	cad-core/src/features;cad-core/src/geometry	Part primitives, booleans, sweep, loft, section and surface features.
+C13M5-SRC-005	PartDesign feature chain	src/Mod/PartDesign/App	cad-core/src/features;cad-core/src/topo;cad-core/src/geometry	Body, Pad, Pocket, DressUp, Pattern, Hole and Tip publication.
+C13M5-SRC-006	Sketch object and internal shape	src/Mod/Sketcher/App	cad-core/src/features/sketch_object.cpp;cad-core/src/geometry;cad-core/src/topo	Sketch shape, InternalShape, split fragments, open wires and solver-facing geometry updates.
+C13M5-SRC-007	Assembly and App::Link semantics	src/Mod/Assembly/App;src/App/Link.cpp	cad-core/src/assembly;cad-core/src/features;cad-core/src/runtime	App::Link, placements, assembly marker and joint outputs.
