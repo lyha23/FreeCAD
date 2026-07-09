@@ -1,13 +1,13 @@
 phase	expected_freecad_count	current_cad_core_res_count	input_path_status	expected_named_cad_core_res_status	cad_core_res_extra_count	initial_lane	first_gate	notes
-c10m1	4	4	complete	complete	0	T1_sketch_internal_shape	compare --phase c10m1	Small sketch/internal-shape family; expand after c4m6 comparator is stable.
-c12m12	1	1	complete	complete	0	T1_pipe_sweep	compare --phase c12m12	Small Pipe/Sweep expected slice.
+c10m1	4	4	complete	complete	0	T1_sketch_internal_shape	compare --phase c10m1	S4 representative for Sketch/InternalShape; write-current passed 4/4 and strict status is red classified with C13M5-S4-KG-SKETCH-001.
+c12m12	1	1	complete	complete	0	T1_pipe_sweep	compare --phase c12m12	S4 representative for Part/Pipe; write-current passed 1/1 and strict status is red classified with C13M5-S4-KG-PART-001.
 c12m13	5	6	complete	complete	1	T1_pipe_lifecycle	compare --phase c12m13	cad-core-res has extra case; expected discovery must drive comparison.
 c12m16	1	2	complete	complete	1	T1_split_fragment	compare --phase c12m16	Split-fragment identity lane; cad-core-res has extra case.
-c3m1	3	12	complete	complete	9	T1_topo_elementmap	compare --phase c3m1	ElementMap/native topo expected subset; many cad-core-res extras.
+c3m1	3	12	complete	complete	9	T1_topo_elementmap	compare --phase c3m1	S4 representative for TopoNamingState/ElementMap; write-current passed 3/3 by expected discovery and strict status is red classified with C13M5-S4-KG-TOPO-001.
 c3m3	1	22	complete	complete	21	T2_sketch_solver_surface	compare --phase c3m3	Only native expected subset participates.
 c3m4	17	30	complete	complete	13	T2_part_surface_sweep	compare --phase c3m4	Part surface/sweep/loft family.
-c3m5	11	26	complete	complete	15	T2_partdesign_body_dressup	compare --phase c3m5	Body/dress-up stable history family.
-c3m6	71	73	complete	complete	2	T3_assembly_link_large	compare --phase c3m6	Large assembly/App::Link family; run after smaller lanes.
+c3m5	11	26	complete	complete	15	T2_partdesign_body_dressup	compare --phase c3m5	S4 representative for PartDesign Body/DressUp/Pattern; write-current passed 11/11 and strict status is red classified with C13M5-S4-KG-PD-001.
+c3m6	71	73	complete	complete	2	T3_assembly_link_large	compare --phase c3m6	S4 representative for Assembly/placement/App::Link; write-current passed 71/71 and strict status is red classified with C13M5-S4-KG-ASM-001.
 c3m7	1	1	complete	complete	0	T1_small_phase	compare --phase c3m7	Small single-case lane.
 c4m1	19	20	complete	complete	1	T2_topo_feature	compare --phase c4m1	Native expected subset only.
 c4m2	10	14	complete	complete	4	T2_topo_feature	compare --phase c4m2	Native expected subset only.

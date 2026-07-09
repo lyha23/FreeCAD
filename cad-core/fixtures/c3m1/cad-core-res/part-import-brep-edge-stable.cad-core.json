@@ -5,6 +5,18 @@
   "elementReferenceUpdates": [],
   "results": [
     {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          10.0
+        ],
+        "min": [
+          -2.0,
+          -2.0,
+          0.0
+        ]
+      },
       "mesh": {
         "edgeSegments": [
           {
@@ -1070,7 +1082,69 @@
           "stableSubname": "ImportedCylinder.Vertex2",
           "subname": "ImportedCylinder.Vertex2"
         }
-      ]
+      ],
+      "topology_counts": {
+        "edges": 3,
+        "faces": 3,
+        "vertices": 2
+      },
+      "volume": 125.66370614359178
     }
-  ]
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:1cdec72ff7632756c101e964fb719a1b67d3877aaefc07c8bba2501cd013ec23",
+    "objects": {
+      "ImportedCylinder": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3814241e44c829e6faf18bc775018aee2f1b2e1b6efc74d946990c7ea150eaa4",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Edge3"
+          },
+          "Face1": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Face1"
+          },
+          "Face2": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Face2"
+          },
+          "Face3": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Face3"
+          },
+          "Vertex1": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "stable",
+            "subname": "ImportedCylinder.Vertex2"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

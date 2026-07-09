@@ -4,6 +4,14 @@
 
 在 `c4m6` strict lane 关闭后，按语义家族扩展到其它 phase，避免全量 expected diff 变成不可关闭的大任务。
 
+## 实现结果
+
+- `compare_freecad_expected.py` 已增加 family-aware classification；非 `c4m6` diff 不再落入 `unclassified_phase_gap`，每个 diff 都带 `owner`、`owner_step`、`decision`、`source`、`freecad_authority`、`next_action`、`close_condition`。
+- 首批 representative tranche 已选定并重生成同名 `cad-core-res`：`c3m1`、`c10m1`、`c12m12`、`c3m5`、`c3m6`。
+- 五个代表 phase 的 strict report 均为 `red_classified`，这代表 S4 known-gap surface，不代表 expected 错误，也不把 phase 标记 green。
+- `tests.test_freecad_expected_public_parity` 已断言代表 phase report 可生成、没有 anonymous/unclassified diff，且 `c4m6` 仍只允许 `intentional_protocol_divergence`。
+- README、方案和矩阵已记录每个家族的 representative phase、strict status、known-gap id、原因、删除条件和下一步。
+
 ## 推进顺序
 
 1. TopoNamingState / ElementMap / App::Link：`c4m6`、`p8`、`c3m1`。

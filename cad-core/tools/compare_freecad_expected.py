@@ -36,6 +36,7 @@ CLASSIFICATION_FIELDS = (
     "owner",
     "owner_step",
     "decision",
+    "source",
     "freecad_authority",
     "next_action",
     "close_condition",
@@ -70,6 +71,133 @@ GEOMETRY_NUMERIC_FIELDS = {
     "summary",
     "volume",
 }
+
+
+@dataclass(frozen=True)
+class FamilyProfile:
+    code: str
+    label: str
+    owner: str
+    freecad_authority: str
+    next_action: str
+    close_condition: str
+
+
+FAMILY_PROFILES: dict[str, FamilyProfile] = {
+    "toponaming_elementmap": FamilyProfile(
+        code="toponaming_elementmap",
+        label="TopoNamingState / ElementMap / App::Link",
+        owner=(
+            "cad-core/src/topo; cad-core/src/runtime/topo_naming_state.cpp; "
+            "cad-core/src/app/link.cpp"
+        ),
+        freecad_authority=(
+            "src/App/ElementMap.cpp; src/App/PropertyLinks.cpp; "
+            "src/Mod/Part/App/TopoShapeExpansion.cpp"
+        ),
+        next_action=(
+            "Carry ElementMap, childElementMaps and App::Link owner projection through "
+            "the public expected release view before marking this family green."
+        ),
+        close_condition=(
+            "Representative ElementMap/App::Link phases have strict reports with no "
+            "anonymous diffs; remaining gaps have documented known-gap ids."
+        ),
+    ),
+    "sketch_internal_shape": FamilyProfile(
+        code="sketch_internal_shape",
+        label="Sketch / InternalShape / split fragment",
+        owner="cad-core/src/features/sketch_object.cpp; cad-core/src/geometry; cad-core/src/topo",
+        freecad_authority=(
+            "src/Mod/Sketcher/App/SketchObject.cpp; "
+            "src/Mod/Sketcher/App/SketchObjectGeometry.cpp; "
+            "src/Mod/Part/App/FaceMaker*.cpp; src/Mod/Part/App/WireJoiner.cpp"
+        ),
+        next_action=(
+            "Compare Sketch Shape/InternalShape, open wire and split-fragment evidence "
+            "against the native expected payload before changing geometry code."
+        ),
+        close_condition=(
+            "Sketch/internal-shape phases either strict green or carry explicit "
+            "split/internal-face known gaps with focused test coverage."
+        ),
+    ),
+    "part_primitive_pipe": FamilyProfile(
+        code="part_primitive_pipe",
+        label="Part primitives / boolean / sweep / loft / pipe",
+        owner="cad-core/src/features; cad-core/src/geometry; cad-core/src/topo",
+        freecad_authority="src/Mod/Part/App; src/Mod/PartDesign/App/FeaturePipe.cpp",
+        next_action=(
+            "Route primitive, boolean, loft, sweep and pipe differences to the Part "
+            "feature/geometry/topo implementation path instead of adapter trimming."
+        ),
+        close_condition=(
+            "Selected Part/Pipe phases have strict classified reports and each red "
+            "bucket is tied to a FreeCAD source-backed implementation task."
+        ),
+    ),
+    "partdesign_body_dressup": FamilyProfile(
+        code="partdesign_body_dressup",
+        label="PartDesign Body / dress-up / pattern / hole",
+        owner="cad-core/src/features; cad-core/src/topo; cad-core/src/geometry",
+        freecad_authority=(
+            "src/Mod/PartDesign/App/Body.cpp; "
+            "src/Mod/PartDesign/App/FeatureDressUp.cpp; "
+            "src/Mod/PartDesign/App/FeatureTransformed.cpp; "
+            "src/Mod/PartDesign/App/FeatureHole.cpp"
+        ),
+        next_action=(
+            "Keep Body/Tip replay, dress-up ownership, pattern history and Hole "
+            "differences grouped for focused PartDesign implementation batches."
+        ),
+        close_condition=(
+            "Body/dress-up/pattern/hole reports have no anonymous diffs and known "
+            "gaps name the missing PartDesign semantic batch."
+        ),
+    ),
+    "assembly_placement_link": FamilyProfile(
+        code="assembly_placement_link",
+        label="Assembly / placement / App::Link",
+        owner="cad-core/src/assembly; cad-core/src/app/link.cpp; cad-core/src/runtime/recompute.cpp",
+        freecad_authority="src/Mod/Assembly/App; src/App/Link.cpp; src/App/PropertyLinks.cpp",
+        next_action=(
+            "Classify App::Link, Assembly marker, solver DTO and placement writeback "
+            "differences before expanding the release gate to large assembly phases."
+        ),
+        close_condition=(
+            "Assembly/App::Link representative phases have strict reports with "
+            "solver/placement/link gaps recorded and deletion conditions documented."
+        ),
+    ),
+    "phase_family_registry": FamilyProfile(
+        code="phase_family_registry",
+        label="Phase family registry",
+        owner="cad-core/tools/compare_freecad_expected.py",
+        freecad_authority="docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次/矩阵",
+        next_action=(
+            "Assign this phase or case to one of the S4 semantic families before "
+            "using it as a release gate candidate."
+        ),
+        close_condition=(
+            "The phase is registered under a semantic family and no report uses the "
+            "generic registry bucket."
+        ),
+    ),
+}
+
+PART_PRIMITIVE_PHASES = {
+    "c3m4",
+    "c6m4",
+    "c6m5",
+    "c6m6",
+    "c12m12",
+    "c12m13",
+    "p3b",
+}
+SKETCH_INTERNAL_PHASES = {"c10m1", "c12m16", "p2", "p6"}
+PARTDESIGN_PHASES = {"c3m5", "p3a", "p5", "p7"}
+TOPO_ELEMENTMAP_PHASES = {"c3m1", "c4m1", "c4m2", "c4m3", "c4m4", "c4m5", "c4m6"}
+ASSEMBLY_PHASES = {"c3m6"}
 
 
 @dataclass(frozen=True)
@@ -366,6 +494,7 @@ def classification(
         "owner": owner,
         "owner_step": owner_step,
         "decision": decision,
+        "source": freecad_authority,
         "freecad_authority": freecad_authority,
         "next_action": next_action,
         "close_condition": close_condition,
@@ -385,6 +514,9 @@ def classification_for_diff(
 ) -> dict[str, str]:
     category = str(diff.get("category", "json"))
     path = str(diff.get("path", ""))
+
+    if phase != "c4m6":
+        return family_classification_for_diff(phase, case_name, diff)
 
     if case_name in HASH_MISMATCH_CASES:
         return classification(
@@ -490,6 +622,170 @@ def classification_for_diff(
         "phase-family expected payload",
         "Classify this phase-family diff before closing its strict release gate.",
         "The selected phase-family report has complete owner and decision metadata.",
+    )
+
+
+def family_profile_for_case(phase: str, case_name: str) -> FamilyProfile:
+    case_lower = case_name.lower()
+    if phase in ASSEMBLY_PHASES or case_lower.startswith("assembly-"):
+        return FAMILY_PROFILES["assembly_placement_link"]
+    if case_lower.startswith("app-link") or "app-link" in case_lower:
+        return FAMILY_PROFILES["assembly_placement_link"]
+    if phase in TOPO_ELEMENTMAP_PHASES or case_lower.startswith("element-map"):
+        return FAMILY_PROFILES["toponaming_elementmap"]
+    if phase in SKETCH_INTERNAL_PHASES or any(
+        token in case_lower
+        for token in (
+            "sketch",
+            "internal",
+            "split",
+            "wirejoiner",
+            "face-maker",
+        )
+    ):
+        return FAMILY_PROFILES["sketch_internal_shape"]
+    if phase in PART_PRIMITIVE_PHASES or case_lower.startswith(
+        (
+            "part-",
+            "mesh-import",
+            "partdesign-pipe",
+        )
+    ):
+        return FAMILY_PROFILES["part_primitive_pipe"]
+    if phase in PARTDESIGN_PHASES or phase.startswith(("c5", "c51")) or any(
+        token in case_lower
+        for token in (
+            "body",
+            "dressup",
+            "fillet",
+            "chamfer",
+            "draft",
+            "thickness",
+            "pattern",
+            "mirrored",
+            "scaled",
+            "multi-transform",
+            "hole",
+            "pad",
+            "pocket",
+        )
+    ):
+        return FAMILY_PROFILES["partdesign_body_dressup"]
+    if phase == "p8":
+        return FAMILY_PROFILES["part_primitive_pipe"]
+    return FAMILY_PROFILES["phase_family_registry"]
+
+
+def family_owner_for_category(profile: FamilyProfile, category: str) -> str:
+    if category.startswith("topoNamingState"):
+        return f"cad-core/src/runtime/topo_naming_state.cpp; cad-core/src/topo; {profile.owner}"
+    if category == "results.subshapes":
+        return f"cad-core/src/runtime/recompute.cpp; cad-core/src/topo; {profile.owner}"
+    if category == "diagnostics":
+        return f"cad-core/src/runtime/recompute.cpp; {profile.owner}"
+    return profile.owner
+
+
+def is_transport_metadata_diff(category: str, kind: str, path: str) -> bool:
+    return (
+        (category == "results" and kind == "extra" and path.endswith(".mesh"))
+        or (category == "results.subshapes" and kind == "extra" and path.endswith(".subshapes"))
+    )
+
+
+def family_decision_for_diff(profile: FamilyProfile, diff: dict[str, Any]) -> str:
+    category = str(diff.get("category", "json"))
+    kind = str(diff.get("kind", ""))
+    path = str(diff.get("path", ""))
+
+    if is_transport_metadata_diff(category, kind, path):
+        return f"{profile.code}_transport_metadata_gap"
+    if category.startswith("topoNamingState"):
+        return f"{profile.code}_topo_state_publication_gap"
+    if category == "diagnostics":
+        return f"{profile.code}_diagnostic_policy_gap"
+    if category == "results.subshapes":
+        return f"{profile.code}_subshape_identity_gap"
+    if category == "geometry.numeric":
+        return f"{profile.code}_geometry_summary_gap"
+    if category == "results":
+        return f"{profile.code}_result_publication_gap"
+    return f"{profile.code}_json_contract_gap"
+
+
+def family_next_action_for_decision(profile: FamilyProfile, decision: str) -> str:
+    if decision.endswith("_transport_metadata_gap"):
+        return (
+            f"{profile.label}: keep cad-core frontend transport metadata separate from "
+            "native public expected fields until the release view masks or documents it."
+        )
+    if decision.endswith("_topo_state_publication_gap"):
+        return (
+            f"{profile.label}: publish or intentionally scope topoNamingState fields "
+            "for this family using the same public-state boundary as c4m6."
+        )
+    if decision.endswith("_subshape_identity_gap"):
+        return (
+            f"{profile.label}: compare subshape identity, stableSubname and mapped-name "
+            "evidence before changing feature geometry."
+        )
+    if decision.endswith("_diagnostic_policy_gap"):
+        return (
+            f"{profile.label}: align diagnostic code/severity/policy with the native "
+            "expected collector before treating the phase as green."
+        )
+    if decision.endswith("_geometry_summary_gap"):
+        return (
+            f"{profile.label}: decide whether bbox/volume/topology summary fields are "
+            "runtime publication gaps or real geometry parity gaps."
+        )
+    return profile.next_action
+
+
+def family_close_condition_for_decision(profile: FamilyProfile, decision: str) -> str:
+    if decision.endswith("_transport_metadata_gap"):
+        return (
+            "S5 release gate either excludes frontend-only transport fields with evidence "
+            "or documents them as intentional family divergence."
+        )
+    if decision.endswith("_topo_state_publication_gap"):
+        return (
+            "The family report has no missing public topoNamingState fields, or each "
+            "missing field has a source-backed known-gap id and deletion condition."
+        )
+    if decision.endswith("_subshape_identity_gap"):
+        return (
+            "Subshape identity diffs are strict green, accepted as naming-order-only, "
+            "or assigned to a focused topo/geometry implementation batch."
+        )
+    if decision.endswith("_diagnostic_policy_gap"):
+        return (
+            "Diagnostic diffs are strict green or the known-gap entry names the exact "
+            "policy mismatch and removal trigger."
+        )
+    if decision.endswith("_geometry_summary_gap"):
+        return (
+            "Geometry summary diffs are strict green or separated into publication "
+            "versus implementation gaps with focused tests."
+        )
+    return profile.close_condition
+
+
+def family_classification_for_diff(
+    phase: str,
+    case_name: str,
+    diff: dict[str, Any],
+) -> dict[str, str]:
+    profile = family_profile_for_case(phase, case_name)
+    category = str(diff.get("category", "json"))
+    decision = family_decision_for_diff(profile, diff)
+    return classification(
+        family_owner_for_category(profile, category),
+        "S4",
+        decision,
+        profile.freecad_authority,
+        family_next_action_for_decision(profile, decision),
+        family_close_condition_for_decision(profile, decision),
     )
 
 

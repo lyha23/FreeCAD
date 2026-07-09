@@ -31,6 +31,15 @@ compare_freecad_expected = load_tool("compare_freecad_expected")
 regenerate_cad_core_res = load_tool("regenerate_cad_core_res")
 
 
+S4_FAMILY_REPRESENTATIVE_PHASES = {
+    "c3m1": "toponaming_elementmap",
+    "c10m1": "sketch_internal_shape",
+    "c12m12": "part_primitive_pipe",
+    "c3m5": "partdesign_body_dressup",
+    "c3m6": "assembly_placement_link",
+}
+
+
 class FreecadExpectedPublicParityTest(unittest.TestCase):
     def write_json(self, path: Path, payload: dict) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -196,6 +205,38 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                     for field in compare_freecad_expected.CLASSIFICATION_FIELDS:
                         self.assertIsInstance(diff.get(field), str)
                         self.assertNotEqual(diff[field], "")
+
+    def test_s4_family_representative_reports_are_classified_without_anonymous_gaps(self) -> None:
+        for phase, expected_decision_prefix in S4_FAMILY_REPRESENTATIVE_PHASES.items():
+            with self.subTest(phase=phase):
+                output = ROOT / "out" / "freecad-expected-parity" / f"{phase}.s4-family.unittest.json"
+                report = compare_freecad_expected.run_strict_compare(ROOT, phase=phase, output=output)
+
+                self.assertTrue(output.exists())
+                self.assertEqual(report["schemaVersion"], "cad-core.freecad-expected-parity.v1")
+                self.assertGreater(report["summary"]["cases"], 0)
+                decisions = report["summary"]["decisions"]
+                self.assertNotIn("unclassified_phase_gap", decisions)
+                self.assertFalse(
+                    any("unclassified" in decision or "anonymous" in decision for decision in decisions),
+                    decisions,
+                )
+                if report["status"] != "green":
+                    self.assertTrue(
+                        any(decision.startswith(expected_decision_prefix) for decision in decisions),
+                        decisions,
+                    )
+
+                for case_report in report["cases"]:
+                    self.assertEqual(case_report["diffCount"], len(case_report["diffs"]))
+                    self.assertEqual(sum(case_report["categories"].values()), case_report["diffCount"])
+                    self.assertEqual(sum(case_report["decisions"].values()), case_report["diffCount"])
+                    for diff in case_report["diffs"]:
+                        for field in compare_freecad_expected.CLASSIFICATION_FIELDS:
+                            self.assertIsInstance(diff.get(field), str)
+                            self.assertNotEqual(diff[field], "")
+                        self.assertNotIn("unclassified", diff["decision"])
+                        self.assertNotIn("anonymous", diff["decision"])
 
     @unittest.skipUnless(BIN.exists(), "cad-core binary is missing; run cmake --build build first")
     def test_c4m6_write_current_entrypoint_generates_same_named_output(self) -> None:

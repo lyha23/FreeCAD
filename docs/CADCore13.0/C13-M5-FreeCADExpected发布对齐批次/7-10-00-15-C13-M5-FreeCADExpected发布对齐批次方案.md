@@ -116,7 +116,21 @@ S0 live inventory 已冻结：当前发现到的 `.freecad.json` phase 数量是
 
 ### S4 phase family 扩展
 
-不做“一次性全量修完”。按家族推进：
+已实现：S4 不做“一次性全量修完”，而是把 comparator 从 `c4m6` 单 lane 扩展成可持续的 phase family rollout。`compare_freecad_expected.py` 现在按 phase/case 选择语义家族，并为每个 diff 写入 `owner`、`owner_step`、`decision`、`source`、`freecad_authority`、`next_action`、`close_condition`。非 `c4m6` phase 不再落入 `unclassified_phase_gap`。
+
+首批 representative tranche：
+
+| 家族 | representative phase | strict status | 主要 decision |
+| --- | --- | --- | --- |
+| TopoNamingState / ElementMap / App::Link | `c3m1` | red classified | `toponaming_elementmap_*` |
+| Sketch / InternalShape / split fragment | `c10m1` | red classified | `sketch_internal_shape_*` |
+| Part primitives / boolean / sweep / loft / pipe | `c12m12` | red classified | `part_primitive_pipe_*` |
+| PartDesign Body / dress-up / pattern / hole | `c3m5` | red classified | `partdesign_body_dressup_*` |
+| Assembly / App::Link / placement | `c3m6` | red classified | `assembly_placement_link_*` |
+
+上述 phase 均已执行 `--write-current` 和 `--strict`；`--write-current` 只按 expected discovery 重生成同名 `cad-core-res`，未把 extra cad-core-res 反向纳入 expected。红灯结果登记为 known-gap surface，不能手改 expected 或在 executor 中按 fixture 名称分支关闭。
+
+后续继续按家族推进：
 
 1. TopoNamingState / ElementMap / App::Link：`c4m6`、`p8`、`c3m1`。
 2. Sketch / InternalShape / split fragment：`c10m1`、`c12m16`、`p2`、`p6`。
@@ -124,7 +138,7 @@ S0 live inventory 已冻结：当前发现到的 `.freecad.json` phase 数量是
 4. PartDesign Body / dress-up / pattern / hole：`c3m5`、`p7`、`c5*`、`c51*`。
 5. Assembly / App::Link / placement：`c3m6`、`p8`。
 
-每个家族必须先用 comparator 输出 diff 分组，再决定实现批次；不能从某个 case 的 JSON 形状直接倒推 C++ 规则。
+每个家族必须先用 comparator 输出 diff 分组，再决定实现批次；不能从某个 case 的 JSON 形状直接倒推 C++ 规则。完整 known-gap id、原因、删除条件和下一步见 `矩阵/c13m5_expected_alignment_family_rollout_matrix.tsv`。
 
 ### S5 release gate 收口
 
@@ -168,3 +182,20 @@ python3 -m unittest tests.test_topo_naming_state_response tests.test_freecad_exp
 ```
 
 `compare_freecad_expected.py` 和 `tests.test_freecad_expected_public_parity` 已在 S1 落地；S2/S3 继续消费 strict report 中的 `c4m6` 红灯差异。
+
+### S4 family rollout
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+python3 tools/compare_freecad_expected.py --phase c3m1 --write-current
+python3 tools/compare_freecad_expected.py --phase c3m1 --strict
+python3 tools/compare_freecad_expected.py --phase c10m1 --write-current
+python3 tools/compare_freecad_expected.py --phase c10m1 --strict
+python3 tools/compare_freecad_expected.py --phase c12m12 --write-current
+python3 tools/compare_freecad_expected.py --phase c12m12 --strict
+python3 tools/compare_freecad_expected.py --phase c3m5 --write-current
+python3 tools/compare_freecad_expected.py --phase c3m5 --strict
+python3 tools/compare_freecad_expected.py --phase c3m6 --write-current
+python3 tools/compare_freecad_expected.py --phase c3m6 --strict
+python3 -m unittest tests.test_freecad_expected_public_parity
+```

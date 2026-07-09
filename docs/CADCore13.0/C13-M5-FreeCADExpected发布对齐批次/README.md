@@ -16,6 +16,7 @@ C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到所有 checked-i
 - S1 strict comparator 与生成入口已关闭：`compare_freecad_expected.py` 可按 expected discovery 生成 strict report，`regenerate_cad_core_res.py` 可只重生成同名 `cad-core-res`，当前 `c4m6` report 为 red（9 个 case，2 green / 7 red）。
 - S2 c4m6 strict red baseline 已关闭：每个 red diff 都带 `owner`、`owner_step`、`decision`、`freecad_authority`、`next_action`、`close_condition`，红灯基线曾记录 `runtime_publication_gap`=470、`mapper_history_publication_gap`=328、`stable_subname_diagnostic_policy`=13、`hash_mismatch_policy`=6、`protocol_decision_required`=5。
 - S3 topoNamingState 发布策略已关闭：`c4m6` strict report 仍为 red，但只剩 `intentional_protocol_divergence`=8；`topoNamingState.objects/subshapes/elementMap/childElementMaps/mapperHistory`、diagnostics、geometry numeric 和旧 hash/stable/mapper/publication policy decision 均为 0。剩余 intentional divergence 是 cad-core 为前端保留的 mesh/result/subshape transport metadata，native expected 只记录 public semantic oracle。
+- S4 phase family 扩展已关闭：comparator 已按五个语义家族输出 family-aware classification，并为每个 diff 增加 `source` 字段；首批 representative tranche 为 `c3m1`、`c10m1`、`c12m12`、`c3m5`、`c3m6`，均按 expected discovery 重生成同名 `cad-core-res` 并生成 strict classified red report。S4 不把这些 phase 标记 green，只把每个 family 的 known-gap id、原因、删除条件和下一步登记到矩阵。
 - 本轮 S0 不纳入无关 dirty 文件：`DESIGN.md`、`docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md`。
 
 ## S0 比较边界
@@ -62,8 +63,22 @@ find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
 | S1 | strict comparator 与 cad-core-res 生成入口 | 已实现：可按 phase 生成 cad-core-res，并输出 canonical strict diff report。 |
 | S2 | c4m6 strict public parity 红灯基线 | 已实现：当前 c4m6 strict diff 被机器化记录，区分发布缺口和协议决策。 |
 | S3 | topoNamingState 发布策略对齐 | 已实现：object set、mapperHistory、hash mismatch、link diagnostic 等 public publication gap 关闭；剩余 red 均登记为 intentional transport divergence。 |
-| S4 | phase family 扩展 | 按 fixture 家族推进，不把全量 phase 混成一个不可关闭的任务。 |
+| S4 | phase family 扩展 | 已实现：五个代表 phase 已生成 classified strict report；每个 family 都有 known-gap id、原因、删除条件和下一步。 |
 | S5 | release gate 收口 | 每个 green phase 都有 expected/cad-core-res/report/test 证据，known gap 可追踪。 |
+
+## S4 family tranche
+
+| 家族 | representative phase | strict status | 主要 known gap |
+| --- | --- | --- | --- |
+| TopoNamingState / ElementMap / App::Link | `c3m1` | red classified | `C13M5-S4-KG-TOPO-001`：ElementMap/childElementMaps/mapperHistory public state 与 subshape identity 仍未对齐。 |
+| Sketch / InternalShape / split fragment | `c10m1` | red classified | `C13M5-S4-KG-SKETCH-001`：Sketch `object_fields`、`sketch_internal`、`sketch_external` 和 topo state release view 仍缺口。 |
+| Part primitives / boolean / sweep / loft / pipe | `c12m12` | red classified | `C13M5-S4-KG-PART-001`：PartDesign Pipe 多线 sewing 的 topo state 与 subshape identity 需要后续 Part/geometry/topo 批次。 |
+| PartDesign Body / dress-up / pattern / hole | `c3m5` | red classified | `C13M5-S4-KG-PD-001`：Body/Tip、DressUp、Pattern 历史账本已可归类，但 release public state 未 green。 |
+| Assembly / placement / App::Link | `c3m6` | red classified | `C13M5-S4-KG-ASM-001`：Assembly solver DTO、placement writeback、native marker oracle 与 topo state release view 仍需 S5/后续实现拆分。 |
+
+完整 status、decision、删除条件和下一步见 `矩阵/c13m5_expected_alignment_family_rollout_matrix.tsv`。这些红灯是 S4 的 known-gap surface，不是 expected 错误，也不允许通过手改 expected 或 fixture 名称分支关闭。
+
+Focused test 边界：本轮已跑完整 `tests.test_freecad_expected_public_parity`、完整 `tests.test_topo_naming_state_response` 和代表 family 的 targeted methods；`test_feature_flows` 全模块仍有旧缺失 expected / p3b parity 失败，`c3m1` child-map 与 `c3m5` fillet-face volume 方法落在 S4 known-gap surface，完整 `test_p7_features` / `test_p8_features` 不作为 S4 release gate。
 
 ## 验收入口
 
@@ -71,6 +86,7 @@ find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次/工作步骤细分 --format markdown
 (cd cad-core && python3 tools/compare_freecad_expected.py --phase c4m6 --strict)
+(cd cad-core && python3 -m unittest tests.test_freecad_expected_public_parity)
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次/矩阵/*.tsv
 git diff --check -- docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次 docs/CADCore13.0/README.md
 ```
