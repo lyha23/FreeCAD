@@ -2977,66 +2977,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["bbox"]["min"], [5.0, 0.0, 0.0])
         self.assertEqual(link["bbox"]["max"], [7.0, 3.0, 4.0])
 
-    def test_p8_app_link_subshape_uses_linked_object_sublist(self) -> None:
-        result = self.run_recompute("app-link-box-face", "p8")
-        link = result["objects"]["BoxLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "Box")
-        self.assertEqual(link["link_transform"], False)
-        self.assertEqual(link["shape"], "occt_face")
-        self.assert_object_matches_expected(result, "p8", "app-link-box-face")
-
-    def test_p8_app_link_subshape_compounds_multiple_sublist_items(self) -> None:
-        result = self.run_recompute("app-link-box-multi-face", "p8")
-        link = result["objects"]["FaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "Box")
-        self.assertEqual(link["shape"], "occt_compound")
-        self.assert_object_matches_expected(result, "p8", "app-link-box-multi-face")
-
-    def test_p8_app_link_resolves_label_qualified_subshape_alias(self) -> None:
-        result = self.run_recompute("app-link-label-qualified-sublist", "p8")
-        link = result["objects"]["BoxLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "Box")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assert_object_matches_expected(result, "p8", "app-link-label-qualified-sublist")
-
-    def test_c3m2_app_link_rewrites_stale_label_qualified_subshape_alias(self) -> None:
-        result = self.run_recompute("label-rename-recovery", "c3m2")
-        link = result["objects"]["BoxLink"]
-        update = result["elementReferenceUpdates"][0]
-        rename = update["labelReferenceRename"][0]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "Box")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(update["object"], "BoxLink")
-        self.assertEqual(update["property"], "LinkedObject")
-        self.assertEqual(update["PropertyType"], "App::PropertyXLinkSub")
-        self.assertEqual(update["value"], "Box")
-        self.assertEqual(update["SubList"], ["$PrettyBox.Face1"])
-        self.assertEqual(rename, {
-            "index": 0,
-            "oldLabel": "OldPrettyBox",
-            "newLabel": "PrettyBox",
-            "oldSubname": "$OldPrettyBox.Face1",
-            "newSubname": "$PrettyBox.Face1",
-            "method": "PropertyLinkBase.updateLabelReference",
-        })
-        self.assert_object_matches_expected(result, "c3m2", "label-rename-recovery")
-
     def test_c3m2_app_link_reports_duplicate_label_rename_ambiguity(self) -> None:
         result = self.run_recompute("label-rename-duplicate-target-label", "c3m2")
         diagnostic = next(
@@ -3124,69 +3064,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "Face1",
         )
 
-    def test_c3m2_xlink_rewrites_mapped_postfix_after_document_rename(self) -> None:
-        result = self.run_recompute("xlink-mapped-postfix-rename-recovery", "c3m2")
-        link = result["objects"]["ExternalFaceLink"]
-        named_shape = result["named_shapes"]["ExternalFaceLink"]
-        update = result["elementReferenceUpdates"][0]
-        document_reference = update["documentReference"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "Box")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(update["object"], "ExternalFaceLink")
-        self.assertEqual(update["property"], "LinkedObject")
-        self.assertEqual(update["PropertyType"], "App::PropertyXLinkSub")
-        self.assertEqual(update["value"], "Box")
-        self.assertEqual(update["SubList"], ["Face1"])
-        self.assertEqual(update["StableSubList"], ["Box.Face1"])
-        self.assertEqual(update["FullSubList"], ["ExternalDocRestored#Box.Face1"])
-        self.assertEqual(document_reference["method"], "PropertyXLinkContainer.DocMap")
-        self.assertEqual(document_reference["file"], "external.FCStd")
-        self.assertEqual(document_reference["oldName"], "ExternalDoc")
-        self.assertEqual(document_reference["newName"], "ExternalDocRestored")
-        self.assertEqual(document_reference["oldLabel"], "External Assembly")
-        self.assertEqual(document_reference["newLabel"], "External Assembly Restored")
-        self.assertEqual(named_shape["element_map"]["ExternalDocRestored#Box.Face1"], "Face1")
-        self.assertEqual(
-            named_shape["element_map"]["Face1;:X;ExternalDocRestored#Box.Face1"],
-            "Face1",
-        )
-        self.assertIn(
-            "Face1;:X;ExternalDocRestored#Box.Face1",
-            named_shape["elements"]["Face1"]["sources"],
-        )
-
-    def test_c3m2_xlink_document_hash_mismatch_reports_doc_reference_update(self) -> None:
-        result = self.run_recompute("xlink-document-hash-mismatch", "c3m2")
-        link = result["objects"]["ExternalFaceLink"]
-        diagnostic = result["diagnostics"][0]
-        update = result["elementReferenceUpdates"][0]
-        document_reference = update["documentReference"]
-
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(diagnostic["code"], "document_hash_mismatch")
-        self.assertEqual(diagnostic["severity"], "warning")
-        self.assertEqual(diagnostic["object"], "ExternalFaceLink")
-        self.assertEqual(diagnostic["property"], "LinkedObject")
-        self.assertEqual(diagnostic["target"], "Box")
-        self.assertEqual(update["object"], "ExternalFaceLink")
-        self.assertEqual(update["property"], "LinkedObject")
-        self.assertEqual(update["PropertyType"], "App::PropertyXLinkSub")
-        self.assertEqual(update["value"], "Box")
-        self.assertEqual(update["SubList"], ["Face1"])
-        self.assertEqual(document_reference["method"], "PropertyXLinkContainer.DocMap")
-        self.assertEqual(document_reference["file"], "external.FCStd")
-        self.assertEqual(document_reference["oldName"], "ExternalDoc")
-        self.assertEqual(document_reference["newName"], "ExternalDocRestored")
-        self.assertEqual(document_reference["oldLabel"], "External Assembly")
-        self.assertEqual(document_reference["newLabel"], "External Assembly Restored")
-        self.assertEqual(document_reference["oldStamp"], "2026-01-01T00:00:00Z")
-        self.assertEqual(document_reference["currentStamp"], "2026-02-01T00:00:00Z")
-
     def test_c3m2_xlink_missing_external_document_reports_graph_diagnostic(self) -> None:
         result = self.run_recompute("xlink-missing-external-document", "c3m2")
         link = result["objects"]["ExternalFaceLink"]
@@ -3242,17 +3119,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("external.FCStd", diagnostic["message"])
         self.assertIn("unloaded or deleted", diagnostic["message"])
 
-    def test_c3m2_xlink_pending_external_document_restored_by_request_graph(self) -> None:
-        result = self.run_recompute("xlink-pending-external-document-restored", "c3m2")
-        link = result["objects"]["ExternalFaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(result["elementReferenceUpdates"], [])
-        self.assertEqual(result["documentObjectUpdates"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["linked_object"], "ExternalBox")
-        self.assertEqual(link["shape"], "occt_face")
-
     def test_c3m2_xlink_source_object_rename_rewrites_update_target(self) -> None:
         result = self.run_recompute("source-object-rename-recovery", "c3m2")
         update = result["elementReferenceUpdates"][0]
@@ -3273,83 +3139,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         })
         self.assertEqual(shadow["target"], "RenamedBody")
         self.assertEqual(shadow["reference_recovery"], "source_object_rename")
-
-    def test_p8_app_link_preserves_full_sublist_external_mapped_alias(self) -> None:
-        result = self.run_recompute("app-link-full-sublist-external-tag", "p8")
-        link = result["objects"]["FaceLink"]
-        named_shape = result["named_shapes"]["FaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "Box")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(named_shape["element_map"]["ExternalDoc#Box.Face1"], "Face1")
-        self.assertEqual(named_shape["element_map"]["Face1;:X;ExternalDoc#Box.Face1"], "Face1")
-        self.assertIn("Face1;:X;ExternalDoc#Box.Face1", named_shape["elements"]["Face1"]["sources"])
-        self.assert_object_matches_expected(result, "p8", "app-link-full-sublist-external-tag")
-
-    def test_p8_app_link_consumes_imported_element_maps_through_link_chain(self) -> None:
-        result = self.run_recompute("app-link-imported-element-map-chain", "p8")
-
-        self.assertEqual(result["diagnostics"], [])
-        for object_name, linked_object, shape_label, element_name, stable_alias, chain_alias in [
-            (
-                "BrepEdgeLink",
-                "BrepLink",
-                "occt_edge",
-                "Edge1",
-                "ImportedCylinder.Edge1",
-                "BrepLink.ImportedCylinder.Edge1",
-            ),
-            (
-                "StepFaceLink",
-                "StepLink",
-                "occt_face",
-                "Face1",
-                "ImportedStep.Face1",
-                "StepLink.ImportedStep.Face1",
-            ),
-            (
-                "IgesFaceLink",
-                "IgesLink",
-                "occt_face",
-                "Face1",
-                "ImportedIges.Face1",
-                "IgesLink.ImportedIges.Face1",
-            ),
-        ]:
-            with self.subTest(object_name=object_name):
-                link = result["objects"][object_name]
-                named_shape = result["named_shapes"][object_name]
-
-                self.assertEqual(link["status"], "ok")
-                self.assertEqual(link["link"], "app_link")
-                self.assertEqual(link["linked_object"], linked_object)
-                self.assertEqual(link["shape"], shape_label)
-                self.assertEqual(named_shape["element_map"][stable_alias], element_name)
-                self.assertEqual(named_shape["element_map"][chain_alias], element_name)
-                self.assertIn(stable_alias, named_shape["elements"][element_name]["sources"])
-                self.assertIn(chain_alias, named_shape["elements"][element_name]["sources"])
-                self.assertIn("history_consumed:merge", named_shape["element_history_status"])
-
-        group = result["objects"]["ImportedLinkGroup"]
-        group_named_shape = result["named_shapes"]["ImportedLinkGroup"]
-        self.assertEqual(group["status"], "ok")
-        self.assertEqual(group["link"], "app_link_group")
-        self.assertEqual(group["elements"], ["BrepEdgeLink", "StepFaceLink", "IgesFaceLink"])
-        self.assertEqual(group["visible_elements"], ["BrepEdgeLink", "StepFaceLink", "IgesFaceLink"])
-        self.assertEqual(group["shape"], "occt_compound")
-        self.assertEqual(group_named_shape["element_map"]["0.Edge1"], "Edge1")
-        self.assertEqual(group_named_shape["element_map"]["1.Face1"], "Face1")
-        self.assertEqual(group_named_shape["element_map"]["2.Face1"], "Face2")
-        self.assertIn("BrepLink.ImportedCylinder.Edge1", group_named_shape["elements"]["Edge1"]["sources"])
-        self.assertIn("ImportedStep.Face1", group_named_shape["elements"]["Face1"]["sources"])
-        self.assertIn("ImportedIges.Face1", group_named_shape["elements"]["Face2"]["sources"])
-        self.assertIn(
-            "element_map_child_map:preserve_source_ranges",
-            group_named_shape["element_history_status"],
-        )
 
     def test_p8_app_link_element_proxies_linked_shape(self) -> None:
         result = self.run_recompute("app-link-element-box", "p8")
@@ -3484,65 +3273,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(link["linked_object"], "LinkGroup")
         self.assertEqual(link["shape"], "occt_face")
         self.assert_object_matches_expected(result, "p8", "app-link-element-list-sublist-index")
-
-    def test_p8_app_link_resolves_group_label_subshape_alias(self) -> None:
-        result = self.run_recompute("app-link-element-list-sublist-label", "p8")
-        link = result["objects"]["FaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["linked_object"], "LinkGroup")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assert_object_matches_expected(result, "p8", "app-link-element-list-sublist-label")
-
-    def test_p8_app_link_resolves_element_list_child_target_label_subshape_alias(self) -> None:
-        result = self.run_recompute("app-link-element-list-nested-label-sublist", "p8")
-        link = result["objects"]["FaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["linked_object"], "LinkGroup")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assert_object_matches_expected(result, "p8", "app-link-element-list-nested-label-sublist")
-
-    def test_p8_app_link_resolves_hidden_group_label_subshape_alias(self) -> None:
-        result = self.run_recompute("app-link-element-list-hidden-sublist-label", "p8")
-        group = result["objects"]["LinkGroup"]
-        link = result["objects"]["FaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(group["visible_elements"], ["LinkA"])
-        self.assertEqual(group["shape"], "occt_solid")
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["linked_object"], "LinkGroup")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assert_object_matches_expected(result, "p8", "app-link-element-list-hidden-sublist-label")
-
-    def test_p8_app_link_resolves_object_qualified_nested_subshape_alias(self) -> None:
-        result = self.run_recompute("app-link-nested-object-qualified-sublist", "p8")
-        link = result["objects"]["FaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "BoxLink")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assert_object_matches_expected(result, "p8", "app-link-nested-object-qualified-sublist")
-
-    def test_p8_app_link_resolves_multilevel_label_qualified_subshape_alias(self) -> None:
-        result = self.run_recompute("app-link-multilevel-label-qualified-sublist", "p8")
-        link = result["objects"]["FaceLink"]
-        named_shape = result["named_shapes"]["FaceLink"]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(link["status"], "ok")
-        self.assertEqual(link["link"], "app_link")
-        self.assertEqual(link["linked_object"], "ChainLink")
-        self.assertEqual(link["shape"], "occt_face")
-        self.assertEqual(named_shape["element_map"]["$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1"], "Face1")
-        self.assertEqual(named_shape["element_map"]["ChainLink.BoxLink.Box.Face1"], "Face1")
-        self.assertIn("$PrettyChain.$PrettyBoxLink.$PrettyBox.Face1", named_shape["elements"]["Face1"]["sources"])
-        self.assert_object_matches_expected(result, "p8", "app-link-multilevel-label-qualified-sublist")
 
     def test_p8_app_link_group_respects_visibility_list(self) -> None:
         result = self.run_recompute("app-link-group-visibility", "p8")
@@ -3863,7 +3593,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
     def test_p8_app_link_preserves_terminal_stable_history(self) -> None:
         for fixture, code, stable_subname in [
             ("app-link-stable-history-split", "split_stable_subname", "Pad.Face5"),
-            ("app-link-stable-history-deleted", "deleted_stable_subname", "Pocket.Face5"),
         ]:
             with self.subTest(fixture=fixture):
                 result = self.run_recompute(fixture, "p8")

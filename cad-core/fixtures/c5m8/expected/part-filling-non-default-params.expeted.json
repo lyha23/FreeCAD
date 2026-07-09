@@ -1,0 +1,14 @@
+{
+  "known_gap": {
+    "kind": "part_filling_non_default_params_freecadcmd_exit_245",
+    "route": "native_oracle_blocked",
+    "reason": "FreeCADCmd exits 245 before writing output when collecting the Part::FilledFace all non-default parameter fixture.",
+    "command": "FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd python3 cad-core/tools/collect_freecad_expected.py cad-core/fixtures/c5m8/part-filling-non-default-params.json --out cad-core/out/filling-exit245-20260709/c5m8-part-filling-non-default-params.freecad.json --pretty",
+    "observed": {
+      "returncode": 245,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    "delete_condition": "Replace this file with part-filling-non-default-params.freecad.json and part-filling-non-default-params.freecad.ledger.json only after the same collector command returns 0 and writes stable native expected output."
+  }
+}

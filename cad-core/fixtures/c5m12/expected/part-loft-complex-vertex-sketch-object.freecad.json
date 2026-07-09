@@ -42,6 +42,18 @@
   "topoNamingState": {
     "documentHash": "sha256:bd3bea1f3b168776eed3b5b835e4cb7e3db743e4d134c294add51cb0e7f1433c",
     "objects": {
+      "BaseSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8504419efb3b71903fb5ad68d0d9077a6a476056cee5b65742780dbe5ccf4c8a",
+        "subshapes": {}
+      },
       "Loft": {
         "childElementMaps": [],
         "elementMap": {
@@ -53,6 +65,23 @@
         "mapperHistory": [],
         "objectHash": "sha256:b90143ef8a24e7b9ca3a7143e6c771dcf6d8a8f223959be75d83de6636998c6e",
         "subshapes": {}
+      },
+      "TipVertex": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:de1f4fa9103b91ed831a22264a17bdd110232f367ceb940fade298872173618e",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
       }
     },
     "producer": {

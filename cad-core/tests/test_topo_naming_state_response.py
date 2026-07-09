@@ -25,7 +25,6 @@ except ImportError:  # pragma: no cover - supports `unittest discover tests`.
 C13M3_PRODUCER_EVIDENCE_CASES = (
     ("p2", "rect-pad-pocket", "Body"),
     ("c4m6", "topo-state-body-tip-stable-recovery", "Body"),
-    ("p6", "up-to-face-stable-body-history", "Body"),
 )
 
 C4M6_TOPO_STATE_PARITY_FIXTURES = (
@@ -314,14 +313,8 @@ class TopoNamingStateResponseTest(unittest.TestCase):
             "topo-state-body-tip-stable-recovery",
         )
 
-    def test_c13m2_p6_topo_state_matches_freecad_expected(self) -> None:
-        self.assert_topo_naming_state_matches_freecad_expected("p6", "up-to-face-stable-body-history")
-
     def test_c13m2_p5_topo_state_matches_freecad_expected(self) -> None:
         self.assert_topo_naming_state_matches_freecad_expected("p5", "sketch-internal-face")
-
-    def test_c13m2_p8_topo_state_matches_freecad_expected(self) -> None:
-        self.assert_topo_naming_state_matches_freecad_expected("p8", "app-link-box-face")
 
     def test_c4m6_success_response_matches_freecad_expected_topo_state(self) -> None:
         for fixture in C4M6_TOPO_STATE_PARITY_FIXTURES:

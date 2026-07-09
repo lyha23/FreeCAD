@@ -26,7 +26,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hee4:7,F",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hed4:7,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:H*:*,F",
           "subname": "Face1"
@@ -40,7 +40,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hee4:7,F",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hed4:7,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:H*:*,F",
           "subname": "Face2"
@@ -54,7 +54,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hee4:7,F",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hed4:7,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:H*:*,F",
           "subname": "Face3"
@@ -68,7 +68,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hee4:7,F",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hed4:7,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:H*:*,F",
           "subname": "Face4"
@@ -82,7 +82,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hee4:a,F",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hed4:a,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:H*:*,F",
           "subname": "Face5"
@@ -96,7 +96,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hee4:a,F",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hed4:a,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:H*:*,F",
           "subname": "Face6"
@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
           "subname": "Edge1"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
           "subname": "Edge2"
@@ -138,7 +138,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
           "subname": "Edge3"
@@ -152,7 +152,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:H*:*,E",
           "subname": "Edge4"
@@ -166,7 +166,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:H*:*,E",
           "subname": "Edge5"
@@ -180,7 +180,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "AdditivePipeSelectedSpine.#20;:G;SEW;:H*:*,E",
           "subname": "Edge6"
@@ -194,7 +194,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:H*:*,E",
           "subname": "Edge7"
@@ -208,7 +208,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:H*:*,E",
           "subname": "Edge8"
@@ -222,7 +222,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "AdditivePipeSelectedSpine.#21;:G;SEW;:H*:*,E",
           "subname": "Edge9"
@@ -236,7 +236,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:H*:*,E",
           "subname": "Edge10"
@@ -250,7 +250,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:H*:*,E",
           "subname": "Edge11"
@@ -264,7 +264,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hee4:7,E",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hed4:7,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:H*:*,E",
           "subname": "Edge12"
@@ -278,7 +278,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:H*:*,V",
           "subname": "Vertex1"
@@ -292,7 +292,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
           "subname": "Vertex2"
@@ -306,7 +306,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:H*:*,V",
           "subname": "Vertex3"
@@ -320,7 +320,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
           "subname": "Vertex4"
@@ -334,7 +334,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:H*:*,V",
           "subname": "Vertex5"
@@ -348,7 +348,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:H*:*,V",
           "subname": "Vertex6"
@@ -362,7 +362,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:H*:*,V",
           "subname": "Vertex7"
@@ -376,7 +376,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hee4:7,V",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hed4:7,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:H*:*,V",
           "subname": "Vertex8"
@@ -393,6 +393,18 @@
   "topoNamingState": {
     "documentHash": "sha256:fbf20839ebdfc184dcbf8b8d6d3f109fdf34917a0ad79f6796188c9ce158f5aa",
     "objects": {
+      "AdditivePipeSelectedSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:906415cd298451c6b9e39ec3172a40ca4ef62baa98c378c2653de3434ec35ef9",
+        "subshapes": {}
+      },
       "Body": {
         "childElementMaps": [
           {
@@ -409,7 +421,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hee4:7,F"
+                    "raw": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hed4:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -430,7 +442,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hee4:7,F"
+                    "raw": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hed4:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -451,7 +463,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hee4:7,F"
+                    "raw": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hed4:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -472,7 +484,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:H*:*,F",
-                    "raw": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hee4:7,F"
+                    "raw": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hed4:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -493,7 +505,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -514,7 +526,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -535,7 +547,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#20;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -556,7 +568,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#21;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -577,7 +589,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -598,7 +610,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -619,7 +631,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -640,7 +652,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -661,7 +673,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -682,7 +694,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -703,7 +715,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -724,7 +736,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hee4:7,E"
+                    "raw": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hed4:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -745,7 +757,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -766,7 +778,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -787,7 +799,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -808,7 +820,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -829,7 +841,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -850,7 +862,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -871,7 +883,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -892,7 +904,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:H*:*,V",
-                    "raw": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hee4:7,V"
+                    "raw": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hed4:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -913,7 +925,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:H*:*,F",
-                    "raw": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hee4:a,F"
+                    "raw": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hed4:a,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -934,7 +946,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:H*:*,F",
-                    "raw": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hee4:a,F"
+                    "raw": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hed4:a,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -966,7 +978,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hee4:7,F"
+                "raw": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hed4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -987,7 +999,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hee4:7,F"
+                "raw": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hed4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1008,7 +1020,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hee4:7,F"
+                "raw": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hed4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1029,7 +1041,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:H*:*,F",
-                "raw": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hee4:7,F"
+                "raw": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hed4:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1050,7 +1062,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1071,7 +1083,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1092,7 +1104,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#20;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1113,7 +1125,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#21;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1134,7 +1146,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1155,7 +1167,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1176,7 +1188,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1197,7 +1209,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1218,7 +1230,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1239,7 +1251,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1260,7 +1272,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1281,7 +1293,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:H*:*,E",
-                "raw": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hee4:7,E"
+                "raw": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hed4:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1302,7 +1314,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1323,7 +1335,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1344,7 +1356,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1365,7 +1377,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1386,7 +1398,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1407,7 +1419,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1428,7 +1440,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1449,7 +1461,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:H*:*,V",
-                "raw": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hee4:7,V"
+                "raw": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hed4:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -1470,7 +1482,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:H*:*,F",
-                "raw": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hee4:a,F"
+                "raw": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hed4:a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1491,7 +1503,7 @@
               },
               "mappedName": {
                 "canonical": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:H*:*,F",
-                "raw": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hee4:a,F"
+                "raw": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hed4:a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1514,186 +1526,234 @@
           "Edge1": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#29:3;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2a:4;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2b:4;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#25:1;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#26:2;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#20;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#20;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#27:2;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#28:3;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#21;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hee4:7,E",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#21;:G;SEW;:Hed4:7,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hee4:7,F",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1a:1;:G;SEW;:Hed4:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hee4:7,F",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1b:2;:G;SEW;:Hed4:7,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hee4:7,F",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1c:3;:G;SEW;:Hed4:7,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hee4:7,F",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1d:4;:G;SEW;:Hed4:7,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hee4:a,F",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#36;SEW;:Hed4:a,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hee4:a,F",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#3a:1;:L#39;SEW;:Hed4:a,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2d:2;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#30:4;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#32:6;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#33:14;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#34:8;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hee4:7,V",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#35:15;:G;SEW;:Hed4:7,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           }
         }
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:53341220dabcec69426a23f7ec8489a05bf8578f2a2053c1fb711be8201f642b",
+        "subshapes": {}
+      },
+      "SketchPipeSectionEnd": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1ecac3ebc5fab5f01c352505f37ec8c8b4936ae7e44c852c89610c3dfc12f338",
+        "subshapes": {}
+      },
+      "SketchPipeSectionMid": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c9ab23ae10c3e35450065251c028f178e46a91ae21cda201966b9a457990a013",
+        "subshapes": {}
+      },
+      "SketchPipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4fc80b464fb7ccc28dc7906a65355c95a0c569e0c5363207d38a9efa8a196576",
+        "subshapes": {}
       }
     },
     "producer": {

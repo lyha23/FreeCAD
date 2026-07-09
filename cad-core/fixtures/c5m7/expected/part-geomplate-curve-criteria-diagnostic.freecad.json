@@ -26,6 +26,31 @@
   "topoNamingState": {
     "documentHash": "sha256:323fb2998aadd96d56765592b3c219a11ba8c7adbcb50e572e9fc71c9a8b454c",
     "objects": {
+      "BoundaryA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1300583343d3f7541efadf564853e55c9d90d02e46f4d527b857dbf4201ff274",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
       "CurveCriteriaDiagnostic": {
         "childElementMaps": [],
         "elementMap": {

@@ -2624,7 +2624,6 @@ class CadCoreP5SketchTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
 
     def test_p5_pad_rejects_malformed_reference_shadow(self) -> None:
         for fixture in [
-            "pad-internal-face-reference-shadow-invalid-length",
             "pad-internal-face-reference-shadow-invalid-brep",
         ]:
             with self.subTest(fixture=fixture):

@@ -1,0 +1,698 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "app-link-element-count-sublist-target-prefix",
+    "expectedPayloadHash": "sha256:e483be08355693ab884622af8b5db825dcac575c3f4248de7da205f28803dd9e",
+    "inputHash": "sha256:f78e5640b1c053ba16af2215478b104588dcf143901feb1c1b1c544eb677eecd",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:bdc4c79948c98a048c1562f155693d9ab730fc0069331886b45284443ec730bd"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ArrayLink": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [
+        {
+          "childIndex": 0,
+          "childObject": "Box",
+          "elementMap": {
+            "encoding": "cad-core.element-map.v1",
+            "entries": {
+              "Edge10;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge10;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge10;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge10"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge10"
+                }
+              },
+              "Edge11;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge11;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge11;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge11"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge11"
+                }
+              },
+              "Edge12;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge12;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge12;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge12"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge12"
+                }
+              },
+              "Edge1;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge1;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge1"
+                }
+              },
+              "Edge2;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge2;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge2;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge2"
+                }
+              },
+              "Edge3;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge3;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge3;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge3"
+                }
+              },
+              "Edge4;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge4;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge4;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge4"
+                }
+              },
+              "Edge5;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge5;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge5;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge5"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge5"
+                }
+              },
+              "Edge6;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge6;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge6;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge6"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge6"
+                }
+              },
+              "Edge7;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge7;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge7;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge7"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge7"
+                }
+              },
+              "Edge8;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge8;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge8;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge8"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge8"
+                }
+              },
+              "Edge9;:H*,E;:I0;:H*,E;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Edge9;:H*,E;:I0;:H*,E;:H*:*,E",
+                  "raw": "Edge9;:He08,E;:I0;:H:c,E;:He09:13,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Box",
+                  "subname": "Edge9"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Edge9"
+                }
+              },
+              "Face1;:H*,F;:I0;:H*,F;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Face1;:H*,F;:I0;:H*,F;:H*:*,F",
+                  "raw": "Face1;:He08,F;:I0;:H:c,F;:He09:13,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Box",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face1"
+                }
+              },
+              "Face2;:H*,F;:I0;:H*,F;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Face2;:H*,F;:I0;:H*,F;:H*:*,F",
+                  "raw": "Face2;:He08,F;:I0;:H:c,F;:He09:13,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Box",
+                  "subname": "Face2"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face2"
+                }
+              },
+              "Face3;:H*,F;:I0;:H*,F;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Face3;:H*,F;:I0;:H*,F;:H*:*,F",
+                  "raw": "Face3;:He08,F;:I0;:H:c,F;:He09:13,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Box",
+                  "subname": "Face3"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face3"
+                }
+              },
+              "Face4;:H*,F;:I0;:H*,F;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Face4;:H*,F;:I0;:H*,F;:H*:*,F",
+                  "raw": "Face4;:He08,F;:I0;:H:c,F;:He09:13,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Box",
+                  "subname": "Face4"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face4"
+                }
+              },
+              "Face5;:H*,F;:I0;:H*,F;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Face5;:H*,F;:I0;:H*,F;:H*:*,F",
+                  "raw": "Face5;:He08,F;:I0;:H:c,F;:He09:13,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Box",
+                  "subname": "Face5"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face5"
+                }
+              },
+              "Face6;:H*,F;:I0;:H*,F;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Face6;:H*,F;:I0;:H*,F;:H*:*,F",
+                  "raw": "Face6;:He08,F;:I0;:H:c,F;:He09:13,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Box",
+                  "subname": "Face6"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Face6"
+                }
+              },
+              "Vertex1;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex1;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex1"
+                }
+              },
+              "Vertex2;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex2;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex2"
+                }
+              },
+              "Vertex3;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex3;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex3;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex3"
+                }
+              },
+              "Vertex4;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex4;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex4;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex4"
+                }
+              },
+              "Vertex5;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex5;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex5;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex5"
+                }
+              },
+              "Vertex6;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex6;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex6;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex6"
+                }
+              },
+              "Vertex7;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex7;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex7;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex7"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex7"
+                }
+              },
+              "Vertex8;:H*,V;:I0;:H*,V;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "ArrayLink:Box:Box",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_app_link_linked_object"
+                },
+                "mappedName": {
+                  "canonical": "Vertex8;:H*,V;:I0;:H*,V;:H*:*,V",
+                  "raw": "Vertex8;:He08,V;:I0;:H:c,V;:He09:13,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "Box",
+                  "subname": "Vertex8"
+                },
+                "target": {
+                  "object": "ArrayLink",
+                  "subname": "Vertex8"
+                }
+              }
+            },
+            "status": "history_partial"
+          },
+          "key": "ArrayLink:Box:Box",
+          "ownerObject": "ArrayLink",
+          "pathPrefix": "Box"
+        }
+      ],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "App::Link"
+    },
+    "Box": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "FaceLink": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "App::Link"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ArrayLink": {
+        "covers": [
+          "ArrayLink",
+          "Box"
+        ],
+        "ledgerObject": "ArrayLink",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Box": {
+        "covers": [
+          "Box"
+        ],
+        "ledgerObject": "Box",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "FaceLink": {
+        "covers": [
+          "FaceLink",
+          "ArrayLink"
+        ],
+        "ledgerObject": "FaceLink",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:bdc4c79948c98a048c1562f155693d9ab730fc0069331886b45284443ec730bd",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

@@ -50,6 +50,30 @@
         "mapperHistory": [],
         "objectHash": "sha256:f24df158735cbb8d642b978c28a730ee0ae3fe17bc1b40551d092aca7196d606",
         "subshapes": {}
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:53341220dabcec69426a23f7ec8489a05bf8578f2a2053c1fb711be8201f642b",
+        "subshapes": {}
+      },
+      "SketchPipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:29cfd053bf4a2df50aa7203e2e9fa84328dba52938590153fd91ff0febb373cc",
+        "subshapes": {}
       }
     },
     "producer": {

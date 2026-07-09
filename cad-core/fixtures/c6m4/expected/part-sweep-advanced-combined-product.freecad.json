@@ -12,7 +12,61 @@
   "results": [],
   "topoNamingState": {
     "documentHash": "sha256:19d25b72a36c4cc72d9f1ae24b709b2539c42e3fc6dea6ae37584b6075779433",
-    "objects": {},
+    "objects": {
+      "AuxiliarySpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8e42554f3a8b4b72f30bc47766982d9ca59037d0130c7878d64482d051a9f341",
+        "subshapes": {}
+      },
+      "PipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:35c2d7914263c7fbd36f5722431598c7320a2c474aab85730fc0c7d8ca430799",
+        "subshapes": {}
+      },
+      "ProfileLocation": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:443efd929b3f075afef6c455a5a98914b105ba6b97be571447df0427bbbfd958",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1e7d65765a3be1fa3170772425f7aeddf4affbd20b8e8f110332464675647054",
+        "subshapes": {}
+      }
+    },
     "producer": {
       "cadCoreVersion": "fixture-contract-v1",
       "freecadVersion": "1.2.0 revision 20260519",

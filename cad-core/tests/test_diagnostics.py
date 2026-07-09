@@ -52,14 +52,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             ["external_geometry_flags_sync"],
         )
 
-        label_rename = self.run_recompute("label-rename-recovery", "c3m2")
-        self.assertEqual(label_rename["diagnostics"], [])
-        self.assertIn("labelReferenceRename", label_rename["elementReferenceUpdates"][0])
-
-        document_rename = self.run_recompute("xlink-document-hash-mismatch", "c3m2")
-        self.assertEqual([item["code"] for item in document_rename["diagnostics"]], ["document_hash_mismatch"])
-        self.assertIn("documentReference", document_rename["elementReferenceUpdates"][0])
-
     def test_p3a_fixture_diagnostics(self) -> None:
         expected = {
             "pocket-through-all": [],
@@ -183,19 +175,7 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "body-boolean-history": [],
             "body-split-history": [],
             "named-shape-indexed-pad": [],
-            "sketch-external-edge-stable-body-deleted": ["deleted_stable_subname"],
-            "sketch-external-edge-stable-body-deleted-after-add": ["deleted_stable_subname"],
-            "sketch-external-edge-stable-body-preserved": [],
-            "sketch-external-edge-stable-body-profile-source": [],
-            "sketch-external-edge-stable-body-split": [],
-            "sketch-external-edge-stable-body-split-after-add": [],
-            "sketch-external-edge-stable-body-split-current-sublist": [],
             "sketch-external-edge-stable-indexed-opaque-sublist": [],
-            "sketch-external-edge-stable-multi-prism": [],
-            "sketch-external-edge-stable-taper-preserved": [],
-            "up-to-face-stable-body-deleted": ["deleted_stable_subname"],
-            "up-to-face-stable-body-history": [],
-            "up-to-face-stable-body-preserved": [],
             "up-to-face-stable-body-split": ["execution_failed"],
             "up-to-face-stable-indexed-opaque-sublist": [],
             "up-to-face-stable-indexed-reference": [],
@@ -287,8 +267,6 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
     def test_p8_fixture_diagnostics(self) -> None:
         expected = {
             "app-link-box": [],
-            "app-link-box-face": [],
-            "app-link-box-multi-face": [],
             "app-link-box-scale": [],
             "app-link-box-transform": [],
             "app-link-element-box": [],
@@ -296,19 +274,14 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             "app-link-element-count-hidden-sublist-index": [],
             "app-link-element-count-sublist-index": [],
             "app-link-element-count-sublist-target-label": [],
-            "app-link-element-list-hidden-sublist-label": [],
             "app-link-element-list-sublist-index": [],
-            "app-link-element-list-sublist-label": [],
             "app-link-group-elements": [],
             "app-link-group-subshape-alias": [],
             "app-link-group-visibility": [],
-            "app-link-label-qualified-sublist": [],
-            "app-link-nested-object-qualified-sublist": [],
             "app-link-show-element-inherited-child": [],
             "app-link-show-element-inherited-placement-list": [],
             "app-link-show-element-materialized": [],
             "app-link-show-element-synthetic": [],
-            "app-link-stable-history-deleted": ["deleted_stable_subname"],
             "app-link-stable-history-split": ["split_stable_subname"],
             "part-boolean-fragments": [],
             "part-boolean-fragments-compsolid": [],

@@ -282,6 +282,30 @@ def list_field(value: dict, *names: str) -> list:
     return []
 
 
+def link_list_targets(value: dict, field: str) -> list[str]:
+    targets: list[str] = []
+    for index, item in enumerate(list_field(value, "values", "value")):
+        if isinstance(item, str):
+            targets.append(item)
+            continue
+        if isinstance(item, dict):
+            raise UnsupportedFixture(
+                f"{field}[{index}] uses a subelement link; native App::PropertyLinkList "
+                "collector only supports object links"
+            )
+        raise UnsupportedFixture(f"{field}[{index}] must be an object name")
+    return targets
+
+
+def created_link_list(created: dict[str, Any], value: dict, field: str) -> list[Any]:
+    objects = []
+    for target in link_list_targets(value, field):
+        if target not in created:
+            raise UnsupportedFixture(f"{field} target {target} was not created")
+        objects.append(created[target])
+    return objects
+
+
 def display_path_stable_token(value: Any) -> bool:
     return isinstance(value, str) and TOPO_DISPLAY_PATH_STABLE_RE.match(value) is not None
 
@@ -830,11 +854,12 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             safe_setattr(obj, name, [placement_value(FreeCAD, item) for item in value.get("value", [])])
             return
         if property_type == "App::PropertyVectorList":
-            safe_setattr(
-                obj,
-                name,
-                [FreeCAD.Vector(float(item[0]), float(item[1]), float(item[2])) for item in value.get("value", [])],
-            )
+            vectors = []
+            for index, item in enumerate(value.get("value", [])):
+                if not isinstance(item, list) or len(item) != 3:
+                    raise UnsupportedFixture(f"{name}[{index}] must be a 3D vector")
+                vectors.append(FreeCAD.Vector(float(item[0]), float(item[1]), float(item[2])))
+            safe_setattr(obj, name, vectors)
             return
         if property_type == "App::PropertyBoolList":
             safe_setattr(obj, name, [bool(item) for item in value.get("value", [])])
@@ -856,7 +881,7 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             safe_setattr(obj, name, link_sub_value(created, value))
             return
         if property_type in {"App::PropertyLinkList", "App::PropertyLinkListHidden"}:
-            safe_setattr(obj, name, [created[target] for target in list_field(value, "values", "value")])
+            safe_setattr(obj, name, created_link_list(created, value, name))
             return
         if property_type in {
             "App::PropertyLinkSubList",
@@ -900,7 +925,10 @@ def link_group_element_names(fixture: dict) -> set[str]:
             continue
         element_list = spec.get("Properties", {}).get("ElementList")
         if isinstance(element_list, dict) and element_list.get("PropertyType") == "App::PropertyLinkList":
-            names.update(str(item) for item in list_field(element_list, "values", "value"))
+            try:
+                names.update(link_list_targets(element_list, "LinkGroup ElementList"))
+            except UnsupportedFixture:
+                continue
     return names
 
 
@@ -924,11 +952,7 @@ def create_native_object_for_fixture(
 def set_link_group_element_list(created: dict[str, Any], obj: Any, value: Any) -> None:
     if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyLinkList":
         raise UnsupportedFixture("App::LinkGroup ElementList must be an App::PropertyLinkList")
-    elements = []
-    for target in list_field(value, "values", "value"):
-        if target not in created:
-            raise UnsupportedFixture(f"LinkGroup element {target} was not created")
-        elements.append(created[target])
+    elements = created_link_list(created, value, "LinkGroup ElementList")
 
     # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
     # ::LinkBaseExtension::setLink(), in the LinkGroup assignment branch, updates

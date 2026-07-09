@@ -26,7 +26,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "#6:1;:G;XTR;:H1203:7,F",
+          "rawFreecadMappedName": "#6:1;:G;XTR;:H96f:7,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "#6:1;:G;XTR;:H*:*,F",
           "subname": "Face1"
@@ -40,7 +40,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "#6:1;;:H1203:1,F",
+          "rawFreecadMappedName": "#6:1;;:H96f:1,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "#6:1;;:H*:*,F",
           "subname": "Face2"
@@ -54,7 +54,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "#a:1;:G0;XTR;:H1203:8,F",
+          "rawFreecadMappedName": "#a:1;:G0;XTR;:H96f:8,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "#a:1;:G0;XTR;:H*:*,F",
           "subname": "Face3"
@@ -68,7 +68,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "#8:1;:G;XTR;:H1203:7,E",
+          "rawFreecadMappedName": "#8:1;:G;XTR;:H96f:7,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "#8:1;:G;XTR;:H*:*,E",
           "subname": "Edge1"
@@ -82,7 +82,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "#4:1;:H1203,E",
+          "rawFreecadMappedName": "#4:1;:H96f,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "#4:1;:H*,E",
           "subname": "Edge2"
@@ -96,7 +96,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "#c:1;:U;XTR;:H1203:7,E",
+          "rawFreecadMappedName": "#c:1;:U;XTR;:H96f:7,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "#c:1;:U;XTR;:H*:*,E",
           "subname": "Edge3"
@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#2:1;:H1203,V",
+          "rawFreecadMappedName": "#2:1;:H96f,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "#2:1;:H*,V",
           "subname": "Vertex1"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "#e:1;:U;XTR;:H1203:7,V",
+          "rawFreecadMappedName": "#e:1;:U;XTR;:H96f:7,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "#e:1;:U;XTR;:H*:*,V",
           "subname": "Vertex2"
@@ -154,7 +154,7 @@
               },
               "mappedName": {
                 "canonical": "#2:1;:H*,V",
-                "raw": "#2:1;:H1203,V"
+                "raw": "#2:1;:H96f,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -175,7 +175,7 @@
               },
               "mappedName": {
                 "canonical": "#4:1;:H*,E",
-                "raw": "#4:1;:H1203,E"
+                "raw": "#4:1;:H96f,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -196,7 +196,7 @@
               },
               "mappedName": {
                 "canonical": "#6:1;:G;XTR;:H*:*,F",
-                "raw": "#6:1;:G;XTR;:H1203:7,F"
+                "raw": "#6:1;:G;XTR;:H96f:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -217,7 +217,7 @@
               },
               "mappedName": {
                 "canonical": "#6:1;;:H*:*,F",
-                "raw": "#6:1;;:H1203:1,F"
+                "raw": "#6:1;;:H96f:1,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -238,7 +238,7 @@
               },
               "mappedName": {
                 "canonical": "#8:1;:G;XTR;:H*:*,E",
-                "raw": "#8:1;:G;XTR;:H1203:7,E"
+                "raw": "#8:1;:G;XTR;:H96f:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -259,7 +259,7 @@
               },
               "mappedName": {
                 "canonical": "#a:1;:G0;XTR;:H*:*,F",
-                "raw": "#a:1;:G0;XTR;:H1203:8,F"
+                "raw": "#a:1;:G0;XTR;:H96f:8,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -280,7 +280,7 @@
               },
               "mappedName": {
                 "canonical": "#c:1;:U;XTR;:H*:*,E",
-                "raw": "#c:1;:U;XTR;:H1203:7,E"
+                "raw": "#c:1;:U;XTR;:H96f:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -301,7 +301,7 @@
               },
               "mappedName": {
                 "canonical": "#e:1;:U;XTR;:H*:*,V",
-                "raw": "#e:1;:U;XTR;:H1203:7,V"
+                "raw": "#e:1;:U;XTR;:H96f:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -324,58 +324,100 @@
           "Edge1": {
             "canonicalFreecadMappedName": "#8:1;:G;XTR;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#8:1;:G;XTR;:H1203:7,E",
+            "rawFreecadMappedName": "#8:1;:G;XTR;:H96f:7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "#4:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#4:1;:H1203,E",
+            "rawFreecadMappedName": "#4:1;:H96f,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "#c:1;:U;XTR;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#c:1;:U;XTR;:H1203:7,E",
+            "rawFreecadMappedName": "#c:1;:U;XTR;:H96f:7,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Face1": {
             "canonicalFreecadMappedName": "#6:1;:G;XTR;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#6:1;:G;XTR;:H1203:7,F",
+            "rawFreecadMappedName": "#6:1;:G;XTR;:H96f:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face2": {
             "canonicalFreecadMappedName": "#6:1;;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#6:1;;:H1203:1,F",
+            "rawFreecadMappedName": "#6:1;;:H96f:1,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "#a:1;:G0;XTR;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#a:1;:G0;XTR;:H1203:8,F",
+            "rawFreecadMappedName": "#a:1;:G0;XTR;:H96f:8,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "#2:1;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#2:1;:H1203,V",
+            "rawFreecadMappedName": "#2:1;:H96f,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "#e:1;:U;XTR;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "#e:1;:U;XTR;:H1203:7,V",
+            "rawFreecadMappedName": "#e:1;:U;XTR;:H96f:7,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
+          }
+        }
+      },
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "g1;SKT;FAC": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "legacy_internal_face_fixture_migration"
+              },
+              "mappedName": {
+                "canonical": "g1;SKT;FAC",
+                "raw": "g1;SKT;FAC"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              },
+              "target": {
+                "object": "Sketch",
+                "subname": "InternalFace1"
+              }
+            }
+          },
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:858ab8b517dd63ee6b6680a3a66f23f17322d485a5c5c6a2096680eedad07597",
+        "subshapes": {
+          "InternalFace1": {
+            "canonicalFreecadMappedName": "g1;SKT;FAC",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1;SKT;FAC",
+            "resolvedIndexed": "InternalFace1",
+            "subname": "InternalFace1"
           }
         }
       }

@@ -1,0 +1,334 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-section",
+    "expectedPayloadHash": "sha256:ada9248c76a7d1255d1e87ffad8de90e1fc9ca56b45958bce444ff06cf9308d2",
+    "inputHash": "sha256:3edf7aae92c3bb2eb37c159d12fa1031eb88d1bc5ea9a094d799ff9663d57513",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:36f72803ae649972ae8a04773ea564f3cda643cfceedbc71a0320670983067e6"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Box": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "Plane": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Plane"
+    },
+    "Section": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "Edge1;:M;SEC;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:M;SEC;:H*:*,E",
+              "raw": "Edge1;:M;SEC;:H9dd:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Section",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Edge1"
+            }
+          },
+          "Edge2;:M;SEC;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:M;SEC;:H*:*,E",
+              "raw": "Edge2;:M;SEC;:H9dd:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Section",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Edge2"
+            }
+          },
+          "Edge3;:M;SEC;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:M;SEC;:H*:*,E",
+              "raw": "Edge3;:M;SEC;:H9dd:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Section",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Edge4"
+            }
+          },
+          "Edge4;:M;SEC;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:M;SEC;:H*:*,E",
+              "raw": "Edge4;:M;SEC;:H9dd:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Section",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Edge3"
+            }
+          },
+          "Vertex1;:M;SEC;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:M;SEC;:H*:*,V",
+              "raw": "Vertex1;:M;SEC;:H9dd:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Section",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex2;:M;SEC;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:M;SEC;:H*:*,V",
+              "raw": "Vertex2;:M;SEC;:H9dd:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Section",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Vertex2"
+            }
+          },
+          "Vertex3;:M;SEC;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:M;SEC;:H*:*,V",
+              "raw": "Vertex3;:M;SEC;:H9dd:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Section",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Vertex3"
+            }
+          },
+          "Vertex4;:M;SEC;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:M;SEC;:H*:*,V",
+              "raw": "Vertex4;:M;SEC;:H9dd:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Section",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Section",
+              "subname": "Vertex4"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Section"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Box": {
+        "covers": [
+          "Box"
+        ],
+        "ledgerObject": "Box",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Plane": {
+        "covers": [
+          "Plane"
+        ],
+        "ledgerObject": "Plane",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Section": {
+        "covers": [
+          "Section"
+        ],
+        "ledgerObject": "Section",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:36f72803ae649972ae8a04773ea564f3cda643cfceedbc71a0320670983067e6",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

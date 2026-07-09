@@ -59,7 +59,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#d:4;:G;XTR;:H5f5:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#d:4;:G;XTR;:H5e3:7,F;:H5e4,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "SubtractivePipe.#d:4;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face1"
@@ -73,7 +73,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#d:3;:G;XTR;:H5f5:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#d:3;:G;XTR;:H5e3:7,F;:H5e4,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "SubtractivePipe.#d:3;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face2"
@@ -87,7 +87,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#d:1;:G;XTR;:H5f5:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#d:1;:G;XTR;:H5e3:7,F;:H5e4,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "SubtractivePipe.#d:1;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face3"
@@ -101,7 +101,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#14:1;:M;CUT;:H5f5:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#14:1;:M;CUT;:H5e3:7,F;:H5e4,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "SubtractivePipe.#14:1;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face4"
@@ -115,7 +115,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#3d:1;:M;CUT;:H5f5:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#3d:1;:M;CUT;:H5e3:7,F;:H5e4,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face5"
@@ -129,7 +129,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#d:2;:G;XTR;:H5f5:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#d:2;:G;XTR;:H5e3:7,F;:H5e4,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "SubtractivePipe.#d:2;:G;XTR;:H*:*,F;:H*,F",
           "subname": "Face6"
@@ -143,7 +143,7 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#3f:1;:M;CUT;:H-5f9:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#3f:1;:M;CUT;:H-5e7:7,F;:H5e4,F",
           "resolvedIndexed": "Face7",
           "stableSubname": "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face7"
@@ -157,7 +157,7 @@
           "identityStatus": "stable",
           "indexed": "Face8",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#3f:2;:M;CUT;:H-5f9:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#3f:2;:M;CUT;:H-5e7:7,F;:H5e4,F",
           "resolvedIndexed": "Face8",
           "stableSubname": "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face8"
@@ -171,7 +171,7 @@
           "identityStatus": "stable",
           "indexed": "Face9",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#3f:3;:M;CUT;:H-5f9:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#3f:3;:M;CUT;:H-5e7:7,F;:H5e4,F",
           "resolvedIndexed": "Face9",
           "stableSubname": "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face9"
@@ -185,7 +185,7 @@
           "identityStatus": "stable",
           "indexed": "Face10",
           "kind": "Face",
-          "rawFreecadMappedName": "SubtractivePipe.#3f:4;:M;CUT;:H-5f9:7,F;:H5f6,F",
+          "rawFreecadMappedName": "SubtractivePipe.#3f:4;:M;CUT;:H-5e7:7,F;:H5e4,F",
           "resolvedIndexed": "Face10",
           "stableSubname": "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F",
           "subname": "Face10"
@@ -199,7 +199,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#f:2;:G;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#f:2;:G;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "SubtractivePipe.#f:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge1"
@@ -213,7 +213,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#10:1;:G;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#10:1;:G;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "SubtractivePipe.#10:1;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge2"
@@ -227,7 +227,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#b:4;:H5f5,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#b:4;:H5e3,E;:H5e4,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "SubtractivePipe.#b:4;:H*,E;:H*,E",
           "subname": "Edge3"
@@ -241,7 +241,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#16:4;:U;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#16:4;:U;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "SubtractivePipe.#16:4;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge4"
@@ -255,7 +255,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#11:2;:G;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#11:2;:G;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "SubtractivePipe.#11:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge5"
@@ -269,7 +269,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#b:3;:H5f5,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#b:3;:H5e3,E;:H5e4,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "SubtractivePipe.#b:3;:H*,E;:H*,E",
           "subname": "Edge6"
@@ -283,7 +283,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#16:3;:U;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#16:3;:U;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "SubtractivePipe.#16:3;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge7"
@@ -297,7 +297,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#12:2;:G;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#12:2;:G;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E",
           "subname": "Edge8"
@@ -311,7 +311,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#b:1;:H5f5,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#b:1;:H5e3,E;:H5e4,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "SubtractivePipe.#b:1;:H*,E;:H*,E",
           "subname": "Edge9"
@@ -325,7 +325,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#16:1;:U;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#16:1;:U;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "SubtractivePipe.#16:1;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge10"
@@ -339,7 +339,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#b:2;:H5f5,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#b:2;:H5e3,E;:H5e4,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "SubtractivePipe.#b:2;:H*,E;:H*,E",
           "subname": "Edge11"
@@ -353,7 +353,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#35:1;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#35:1;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge12"
@@ -367,7 +367,7 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#35:2;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#35:2;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge13",
           "stableSubname": "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge13"
@@ -381,7 +381,7 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#35:3;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#35:3;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge14",
           "stableSubname": "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge14"
@@ -395,7 +395,7 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#35:4;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#35:4;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge15",
           "stableSubname": "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge15"
@@ -409,7 +409,7 @@
           "identityStatus": "stable",
           "indexed": "Edge16",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#16:2;:U;XTR;:H5f5:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#16:2;:U;XTR;:H5e3:7,E;:H5e4,E",
           "resolvedIndexed": "Edge16",
           "stableSubname": "SubtractivePipe.#16:2;:U;XTR;:H*:*,E;:H*,E",
           "subname": "Edge16"
@@ -423,7 +423,7 @@
           "identityStatus": "stable",
           "indexed": "Edge17",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#37:1;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#37:1;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge17",
           "stableSubname": "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge17"
@@ -437,7 +437,7 @@
           "identityStatus": "stable",
           "indexed": "Edge18",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#37:2;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#37:2;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge18",
           "stableSubname": "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge18"
@@ -451,7 +451,7 @@
           "identityStatus": "stable",
           "indexed": "Edge19",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#37:3;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#37:3;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge19",
           "stableSubname": "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge19"
@@ -465,7 +465,7 @@
           "identityStatus": "stable",
           "indexed": "Edge20",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#37:4;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#37:4;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge20",
           "stableSubname": "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge20"
@@ -479,7 +479,7 @@
           "identityStatus": "stable",
           "indexed": "Edge21",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#38:15;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#38:15;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge21",
           "stableSubname": "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge21"
@@ -493,7 +493,7 @@
           "identityStatus": "stable",
           "indexed": "Edge22",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#39:16;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#39:16;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge22",
           "stableSubname": "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge22"
@@ -507,7 +507,7 @@
           "identityStatus": "stable",
           "indexed": "Edge23",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#3a:17;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#3a:17;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge23",
           "stableSubname": "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge23"
@@ -521,7 +521,7 @@
           "identityStatus": "stable",
           "indexed": "Edge24",
           "kind": "Edge",
-          "rawFreecadMappedName": "SubtractivePipe.#3b:18;:M;CUT;:H-5f9:7,E;:H5f6,E",
+          "rawFreecadMappedName": "SubtractivePipe.#3b:18;:M;CUT;:H-5e7:7,E;:H5e4,E",
           "resolvedIndexed": "Edge24",
           "stableSubname": "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E",
           "subname": "Edge24"
@@ -535,7 +535,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#8:2;:H5f5,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#8:2;:H5e3,V;:H5e4,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "SubtractivePipe.#8:2;:H*,V;:H*,V",
           "subname": "Vertex1"
@@ -549,7 +549,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#18:2;:U;XTR;:H5f5:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#18:2;:U;XTR;:H5e3:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "SubtractivePipe.#18:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex2"
@@ -563,7 +563,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#2:1;:H5f5,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#2:1;:H5e3,V;:H5e4,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "SubtractivePipe.#2:1;:H*,V;:H*,V",
           "subname": "Vertex3"
@@ -577,7 +577,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#19:1;:U;XTR;:H5f5:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#19:1;:U;XTR;:H5e3:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "SubtractivePipe.#19:1;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex4"
@@ -591,7 +591,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#6:2;:H5f5,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#6:2;:H5e3,V;:H5e4,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "SubtractivePipe.#6:2;:H*,V;:H*,V",
           "subname": "Vertex5"
@@ -605,7 +605,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#1a:2;:U;XTR;:H5f5:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#1a:2;:U;XTR;:H5e3:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "SubtractivePipe.#1a:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex6"
@@ -619,7 +619,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#4:2;:H5f5,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#4:2;:H5e3,V;:H5e4,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "SubtractivePipe.#4:2;:H*,V;:H*,V",
           "subname": "Vertex7"
@@ -633,7 +633,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#1b:2;:U;XTR;:H5f5:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#1b:2;:U;XTR;:H5e3:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V",
           "subname": "Vertex8"
@@ -647,7 +647,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#41:2;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#41:2;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex9",
           "stableSubname": "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex9"
@@ -661,7 +661,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#42:4;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#42:4;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex10",
           "stableSubname": "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex10"
@@ -675,7 +675,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex11",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#43:6;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#43:6;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex11",
           "stableSubname": "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex11"
@@ -689,7 +689,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex12",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#44:8;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#44:8;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex12",
           "stableSubname": "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex12"
@@ -703,7 +703,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex13",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#45:15;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#45:15;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex13",
           "stableSubname": "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex13"
@@ -717,7 +717,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex14",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#46:16;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#46:16;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex14",
           "stableSubname": "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex14"
@@ -731,7 +731,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex15",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#47:17;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#47:17;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex15",
           "stableSubname": "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex15"
@@ -745,7 +745,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex16",
           "kind": "Vertex",
-          "rawFreecadMappedName": "SubtractivePipe.#48:18;:M;CUT;:H-5f9:7,V;:H5f6,V",
+          "rawFreecadMappedName": "SubtractivePipe.#48:18;:M;CUT;:H-5e7:7,V;:H5e4,V",
           "resolvedIndexed": "Vertex16",
           "stableSubname": "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V",
           "subname": "Vertex16"
@@ -762,6 +762,748 @@
   "topoNamingState": {
     "documentHash": "sha256:d79eea629a705685d1b740e4ecffe4d947aaf5b62a84a8cfe06258b688b36f97",
     "objects": {
+      "BasePad": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "#10:1;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#10:1;:G;XTR;:H*:*,E",
+                "raw": "#10:1;:G;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge2"
+              }
+            },
+            "#11:2;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#11:2;:G;XTR;:H*:*,E",
+                "raw": "#11:2;:G;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge5"
+              }
+            },
+            "#12:2;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#12:2;:G;XTR;:H*:*,E",
+                "raw": "#12:2;:G;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge8"
+              }
+            },
+            "#14:1;:G0;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#14:1;:G0;XTR;:H*:*,F",
+                "raw": "#14:1;:G0;XTR;:H5e3:8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BasePad",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Face6"
+              }
+            },
+            "#16:1;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#16:1;:U;XTR;:H*:*,E",
+                "raw": "#16:1;:U;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge12"
+              }
+            },
+            "#16:2;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#16:2;:U;XTR;:H*:*,E",
+                "raw": "#16:2;:U;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge10"
+              }
+            },
+            "#16:3;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#16:3;:U;XTR;:H*:*,E",
+                "raw": "#16:3;:U;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge7"
+              }
+            },
+            "#16:4;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#16:4;:U;XTR;:H*:*,E",
+                "raw": "#16:4;:U;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge4"
+              }
+            },
+            "#18:2;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#18:2;:U;XTR;:H*:*,V",
+                "raw": "#18:2;:U;XTR;:H5e3:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex2"
+              }
+            },
+            "#19:1;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#19:1;:U;XTR;:H*:*,V",
+                "raw": "#19:1;:U;XTR;:H5e3:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex4"
+              }
+            },
+            "#1a:2;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1a:2;:U;XTR;:H*:*,V",
+                "raw": "#1a:2;:U;XTR;:H5e3:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex6"
+              }
+            },
+            "#1b:2;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1b:2;:U;XTR;:H*:*,V",
+                "raw": "#1b:2;:U;XTR;:H5e3:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex8"
+              }
+            },
+            "#2:1;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2:1;:H*,V",
+                "raw": "#2:1;:H5e3,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex3"
+              }
+            },
+            "#4:2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#4:2;:H*,V",
+                "raw": "#4:2;:H5e3,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex7"
+              }
+            },
+            "#6:2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#6:2;:H*,V",
+                "raw": "#6:2;:H5e3,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex5"
+              }
+            },
+            "#8:2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#8:2;:H*,V",
+                "raw": "#8:2;:H5e3,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "BasePad",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Vertex1"
+              }
+            },
+            "#b:1;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#b:1;:H*,E",
+                "raw": "#b:1;:H5e3,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge11"
+              }
+            },
+            "#b:2;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#b:2;:H*,E",
+                "raw": "#b:2;:H5e3,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge9"
+              }
+            },
+            "#b:3;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#b:3;:H*,E",
+                "raw": "#b:3;:H5e3,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge6"
+              }
+            },
+            "#b:4;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#b:4;:H*,E",
+                "raw": "#b:4;:H5e3,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge3"
+              }
+            },
+            "#d:1;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:1;:G;XTR;:H*:*,F",
+                "raw": "#d:1;:G;XTR;:H5e3:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BasePad",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Face4"
+              }
+            },
+            "#d:1;;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:1;;:H*:*,F",
+                "raw": "#d:1;;:H5e3:1,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BasePad",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Face5"
+              }
+            },
+            "#d:2;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:2;:G;XTR;:H*:*,F",
+                "raw": "#d:2;:G;XTR;:H5e3:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BasePad",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Face3"
+              }
+            },
+            "#d:3;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:3;:G;XTR;:H*:*,F",
+                "raw": "#d:3;:G;XTR;:H5e3:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BasePad",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Face2"
+              }
+            },
+            "#d:4;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:4;:G;XTR;:H*:*,F",
+                "raw": "#d:4;:G;XTR;:H5e3:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "BasePad",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Face1"
+              }
+            },
+            "#f:2;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#f:2;:G;XTR;:H*:*,E",
+                "raw": "#f:2;:G;XTR;:H5e3:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "BasePad",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "BasePad",
+                "subname": "Edge1"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1546ee685f25beb2634a120a16d1de8d185bc094a4fc978f93e1f5594daaca66",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "#f:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#f:2;:G;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "#16:2;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#16:2;:U;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "#b:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#b:1;:H5e3,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "#16:1;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#16:1;:U;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "#10:1;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#10:1;:G;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "#b:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#b:4;:H5e3,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "#16:4;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#16:4;:U;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "#11:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#11:2;:G;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "#b:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#b:3;:H5e3,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "#16:3;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#16:3;:U;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "#12:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#12:2;:G;XTR;:H5e3:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "#b:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#b:2;:H5e3,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "#d:4;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:4;:G;XTR;:H5e3:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "#d:3;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:3;:G;XTR;:H5e3:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "#d:2;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:2;:G;XTR;:H5e3:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "#d:1;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:1;:G;XTR;:H5e3:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "#d:1;;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:1;;:H5e3:1,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "#14:1;:G0;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#14:1;:G0;XTR;:H5e3:8,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "#8:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#8:2;:H5e3,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "#18:2;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#18:2;:U;XTR;:H5e3:7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "#2:1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2:1;:H5e3,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "#19:1;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#19:1;:U;XTR;:H5e3:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "#6:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#6:2;:H5e3,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "#1a:2;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#1a:2;:U;XTR;:H5e3:7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "#4:2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#4:2;:H5e3,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "#1b:2;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#1b:2;:U;XTR;:H5e3:7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          }
+        }
+      },
       "Body": {
         "childElementMaps": [
           {
@@ -778,7 +1520,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#10:1;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#10:1;:G;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#10:1;:G;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -799,7 +1541,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#11:2;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#11:2;:G;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#11:2;:G;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -820,7 +1562,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#12:2;:G;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#12:2;:G;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -841,7 +1583,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#14:1;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#14:1;:M;CUT;:H5f5:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#14:1;:M;CUT;:H5e3:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -862,7 +1604,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#16:1;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#16:1;:U;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#16:1;:U;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -883,7 +1625,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#16:2;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#16:2;:U;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#16:2;:U;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -904,7 +1646,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#16:3;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#16:3;:U;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#16:3;:U;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -925,7 +1667,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#16:4;:U;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#16:4;:U;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#16:4;:U;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -946,7 +1688,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#18:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#18:2;:U;XTR;:H5f5:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#18:2;:U;XTR;:H5e3:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -967,7 +1709,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#19:1;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#19:1;:U;XTR;:H5f5:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#19:1;:U;XTR;:H5e3:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -988,7 +1730,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#1a:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#1a:2;:U;XTR;:H5f5:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#1a:2;:U;XTR;:H5e3:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1009,7 +1751,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#1b:2;:U;XTR;:H5f5:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#1b:2;:U;XTR;:H5e3:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1030,7 +1772,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#2:1;:H*,V;:H*,V",
-                    "raw": "SubtractivePipe.#2:1;:H5f5,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#2:1;:H5e3,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1051,7 +1793,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#35:1;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#35:1;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1072,7 +1814,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#35:2;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#35:2;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1093,7 +1835,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#35:3;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#35:3;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1114,7 +1856,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#35:4;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#35:4;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1135,7 +1877,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#37:1;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#37:1;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1156,7 +1898,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#37:2;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#37:2;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1177,7 +1919,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#37:3;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#37:3;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1198,7 +1940,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#37:4;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#37:4;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1219,7 +1961,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#38:15;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#38:15;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1240,7 +1982,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#39:16;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#39:16;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1261,7 +2003,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#3a:17;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#3a:17;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1282,7 +2024,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#3b:18;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#3b:18;:M;CUT;:H-5e7:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1303,7 +2045,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#3d:1;:M;CUT;:H5f5:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#3d:1;:M;CUT;:H5e3:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1324,7 +2066,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#3f:1;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#3f:1;:M;CUT;:H-5e7:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1345,7 +2087,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#3f:2;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#3f:2;:M;CUT;:H-5e7:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1366,7 +2108,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#3f:3;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#3f:3;:M;CUT;:H-5e7:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1387,7 +2129,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#3f:4;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#3f:4;:M;CUT;:H-5e7:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1408,7 +2150,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#41:2;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#41:2;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1429,7 +2171,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#42:4;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#42:4;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1450,7 +2192,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#43:6;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#43:6;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1471,7 +2213,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#44:8;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#44:8;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1492,7 +2234,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#45:15;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#45:15;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1513,7 +2255,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#46:16;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#46:16;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1534,7 +2276,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#47:17;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#47:17;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1555,7 +2297,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V",
-                    "raw": "SubtractivePipe.#48:18;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#48:18;:M;CUT;:H-5e7:7,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1576,7 +2318,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#4:2;:H*,V;:H*,V",
-                    "raw": "SubtractivePipe.#4:2;:H5f5,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#4:2;:H5e3,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1597,7 +2339,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#6:2;:H*,V;:H*,V",
-                    "raw": "SubtractivePipe.#6:2;:H5f5,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#6:2;:H5e3,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1618,7 +2360,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#8:2;:H*,V;:H*,V",
-                    "raw": "SubtractivePipe.#8:2;:H5f5,V;:H5f6,V"
+                    "raw": "SubtractivePipe.#8:2;:H5e3,V;:H5e4,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1639,7 +2381,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#b:1;:H*,E;:H*,E",
-                    "raw": "SubtractivePipe.#b:1;:H5f5,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#b:1;:H5e3,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1660,7 +2402,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#b:2;:H*,E;:H*,E",
-                    "raw": "SubtractivePipe.#b:2;:H5f5,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#b:2;:H5e3,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1681,7 +2423,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#b:3;:H*,E;:H*,E",
-                    "raw": "SubtractivePipe.#b:3;:H5f5,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#b:3;:H5e3,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1702,7 +2444,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#b:4;:H*,E;:H*,E",
-                    "raw": "SubtractivePipe.#b:4;:H5f5,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#b:4;:H5e3,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1723,7 +2465,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#d:1;:G;XTR;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#d:1;:G;XTR;:H5f5:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#d:1;:G;XTR;:H5e3:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1744,7 +2486,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#d:2;:G;XTR;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#d:2;:G;XTR;:H5f5:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#d:2;:G;XTR;:H5e3:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1765,7 +2507,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#d:3;:G;XTR;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#d:3;:G;XTR;:H5f5:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#d:3;:G;XTR;:H5e3:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1786,7 +2528,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#d:4;:G;XTR;:H*:*,F;:H*,F",
-                    "raw": "SubtractivePipe.#d:4;:G;XTR;:H5f5:7,F;:H5f6,F"
+                    "raw": "SubtractivePipe.#d:4;:G;XTR;:H5e3:7,F;:H5e4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1807,7 +2549,7 @@
                   },
                   "mappedName": {
                     "canonical": "SubtractivePipe.#f:2;:G;XTR;:H*:*,E;:H*,E",
-                    "raw": "SubtractivePipe.#f:2;:G;XTR;:H5f5:7,E;:H5f6,E"
+                    "raw": "SubtractivePipe.#f:2;:G;XTR;:H5e3:7,E;:H5e4,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1839,7 +2581,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#10:1;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#10:1;:G;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#10:1;:G;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1860,7 +2602,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#11:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#11:2;:G;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#11:2;:G;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1881,7 +2623,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#12:2;:G;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#12:2;:G;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1902,7 +2644,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#14:1;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#14:1;:M;CUT;:H5f5:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#14:1;:M;CUT;:H5e3:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1923,7 +2665,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#16:1;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#16:1;:U;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#16:1;:U;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1944,7 +2686,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#16:2;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#16:2;:U;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#16:2;:U;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1965,7 +2707,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#16:3;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#16:3;:U;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#16:3;:U;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1986,7 +2728,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#16:4;:U;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#16:4;:U;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#16:4;:U;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2007,7 +2749,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#18:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#18:2;:U;XTR;:H5f5:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#18:2;:U;XTR;:H5e3:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2028,7 +2770,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#19:1;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#19:1;:U;XTR;:H5f5:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#19:1;:U;XTR;:H5e3:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2049,7 +2791,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#1a:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#1a:2;:U;XTR;:H5f5:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#1a:2;:U;XTR;:H5e3:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2070,7 +2812,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#1b:2;:U;XTR;:H5f5:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#1b:2;:U;XTR;:H5e3:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2091,7 +2833,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#2:1;:H*,V;:H*,V",
-                "raw": "SubtractivePipe.#2:1;:H5f5,V;:H5f6,V"
+                "raw": "SubtractivePipe.#2:1;:H5e3,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2112,7 +2854,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#35:1;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#35:1;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2133,7 +2875,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#35:2;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#35:2;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2154,7 +2896,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#35:3;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#35:3;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2175,7 +2917,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#35:4;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#35:4;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2196,7 +2938,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#37:1;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#37:1;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2217,7 +2959,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#37:2;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#37:2;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2238,7 +2980,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#37:3;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#37:3;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2259,7 +3001,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#37:4;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#37:4;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2280,7 +3022,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#38:15;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#38:15;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2301,7 +3043,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#39:16;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#39:16;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2322,7 +3064,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#3a:17;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#3a:17;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2343,7 +3085,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#3b:18;:M;CUT;:H-5f9:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#3b:18;:M;CUT;:H-5e7:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2364,7 +3106,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#3d:1;:M;CUT;:H5f5:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#3d:1;:M;CUT;:H5e3:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2385,7 +3127,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#3f:1;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#3f:1;:M;CUT;:H-5e7:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2406,7 +3148,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#3f:2;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#3f:2;:M;CUT;:H-5e7:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2427,7 +3169,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#3f:3;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#3f:3;:M;CUT;:H-5e7:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2448,7 +3190,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#3f:4;:M;CUT;:H-5f9:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#3f:4;:M;CUT;:H-5e7:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2469,7 +3211,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#41:2;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#41:2;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2490,7 +3232,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#42:4;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#42:4;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2511,7 +3253,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#43:6;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#43:6;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2532,7 +3274,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#44:8;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#44:8;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2553,7 +3295,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#45:15;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#45:15;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2574,7 +3316,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#46:16;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#46:16;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2595,7 +3337,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#47:17;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#47:17;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2616,7 +3358,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V",
-                "raw": "SubtractivePipe.#48:18;:M;CUT;:H-5f9:7,V;:H5f6,V"
+                "raw": "SubtractivePipe.#48:18;:M;CUT;:H-5e7:7,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2637,7 +3379,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#4:2;:H*,V;:H*,V",
-                "raw": "SubtractivePipe.#4:2;:H5f5,V;:H5f6,V"
+                "raw": "SubtractivePipe.#4:2;:H5e3,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2658,7 +3400,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#6:2;:H*,V;:H*,V",
-                "raw": "SubtractivePipe.#6:2;:H5f5,V;:H5f6,V"
+                "raw": "SubtractivePipe.#6:2;:H5e3,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2679,7 +3421,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#8:2;:H*,V;:H*,V",
-                "raw": "SubtractivePipe.#8:2;:H5f5,V;:H5f6,V"
+                "raw": "SubtractivePipe.#8:2;:H5e3,V;:H5e4,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2700,7 +3442,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#b:1;:H*,E;:H*,E",
-                "raw": "SubtractivePipe.#b:1;:H5f5,E;:H5f6,E"
+                "raw": "SubtractivePipe.#b:1;:H5e3,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2721,7 +3463,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#b:2;:H*,E;:H*,E",
-                "raw": "SubtractivePipe.#b:2;:H5f5,E;:H5f6,E"
+                "raw": "SubtractivePipe.#b:2;:H5e3,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2742,7 +3484,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#b:3;:H*,E;:H*,E",
-                "raw": "SubtractivePipe.#b:3;:H5f5,E;:H5f6,E"
+                "raw": "SubtractivePipe.#b:3;:H5e3,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2763,7 +3505,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#b:4;:H*,E;:H*,E",
-                "raw": "SubtractivePipe.#b:4;:H5f5,E;:H5f6,E"
+                "raw": "SubtractivePipe.#b:4;:H5e3,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2784,7 +3526,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#d:1;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#d:1;:G;XTR;:H5f5:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#d:1;:G;XTR;:H5e3:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2805,7 +3547,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#d:2;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#d:2;:G;XTR;:H5f5:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#d:2;:G;XTR;:H5e3:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2826,7 +3568,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#d:3;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#d:3;:G;XTR;:H5f5:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#d:3;:G;XTR;:H5e3:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2847,7 +3589,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#d:4;:G;XTR;:H*:*,F;:H*,F",
-                "raw": "SubtractivePipe.#d:4;:G;XTR;:H5f5:7,F;:H5f6,F"
+                "raw": "SubtractivePipe.#d:4;:G;XTR;:H5e3:7,F;:H5e4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2868,7 +3610,7 @@
               },
               "mappedName": {
                 "canonical": "SubtractivePipe.#f:2;:G;XTR;:H*:*,E;:H*,E",
-                "raw": "SubtractivePipe.#f:2;:G;XTR;:H5f5:7,E;:H5f6,E"
+                "raw": "SubtractivePipe.#f:2;:G;XTR;:H5e3:7,E;:H5e4,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2891,354 +3633,420 @@
           "Edge1": {
             "canonicalFreecadMappedName": "SubtractivePipe.#f:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#f:2;:G;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#f:2;:G;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "SubtractivePipe.#16:1;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#16:1;:U;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#16:1;:U;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "SubtractivePipe.#b:2;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#b:2;:H5f5,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#b:2;:H5e3,E;:H5e4,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#35:1;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#35:1;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#35:2;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#35:2;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge13",
             "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#35:3;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#35:3;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge14",
             "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#35:4;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#35:4;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge15",
             "subname": "Edge15"
           },
           "Edge16": {
             "canonicalFreecadMappedName": "SubtractivePipe.#16:2;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#16:2;:U;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#16:2;:U;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge16",
             "subname": "Edge16"
           },
           "Edge17": {
             "canonicalFreecadMappedName": "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#37:1;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#37:1;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge17",
             "subname": "Edge17"
           },
           "Edge18": {
             "canonicalFreecadMappedName": "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#37:2;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#37:2;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge18",
             "subname": "Edge18"
           },
           "Edge19": {
             "canonicalFreecadMappedName": "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#37:3;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#37:3;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge19",
             "subname": "Edge19"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "SubtractivePipe.#10:1;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#10:1;:G;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#10:1;:G;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge20": {
             "canonicalFreecadMappedName": "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#37:4;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#37:4;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge20",
             "subname": "Edge20"
           },
           "Edge21": {
             "canonicalFreecadMappedName": "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#38:15;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#38:15;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge21",
             "subname": "Edge21"
           },
           "Edge22": {
             "canonicalFreecadMappedName": "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#39:16;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#39:16;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge22",
             "subname": "Edge22"
           },
           "Edge23": {
             "canonicalFreecadMappedName": "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#3a:17;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#3a:17;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge23",
             "subname": "Edge23"
           },
           "Edge24": {
             "canonicalFreecadMappedName": "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#3b:18;:M;CUT;:H-5f9:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#3b:18;:M;CUT;:H-5e7:7,E;:H5e4,E",
             "resolvedIndexed": "Edge24",
             "subname": "Edge24"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "SubtractivePipe.#b:4;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#b:4;:H5f5,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#b:4;:H5e3,E;:H5e4,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "SubtractivePipe.#16:4;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#16:4;:U;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#16:4;:U;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "SubtractivePipe.#11:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#11:2;:G;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#11:2;:G;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "SubtractivePipe.#b:3;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#b:3;:H5f5,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#b:3;:H5e3,E;:H5e4,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "SubtractivePipe.#16:3;:U;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#16:3;:U;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#16:3;:U;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#12:2;:G;XTR;:H5f5:7,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#12:2;:G;XTR;:H5e3:7,E;:H5e4,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "SubtractivePipe.#b:1;:H*,E;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#b:1;:H5f5,E;:H5f6,E",
+            "rawFreecadMappedName": "SubtractivePipe.#b:1;:H5e3,E;:H5e4,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "SubtractivePipe.#d:4;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#d:4;:G;XTR;:H5f5:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#d:4;:G;XTR;:H5e3:7,F;:H5e4,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face10": {
             "canonicalFreecadMappedName": "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#3f:4;:M;CUT;:H-5f9:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#3f:4;:M;CUT;:H-5e7:7,F;:H5e4,F",
             "resolvedIndexed": "Face10",
             "subname": "Face10"
           },
           "Face2": {
             "canonicalFreecadMappedName": "SubtractivePipe.#d:3;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#d:3;:G;XTR;:H5f5:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#d:3;:G;XTR;:H5e3:7,F;:H5e4,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "SubtractivePipe.#d:1;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#d:1;:G;XTR;:H5f5:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#d:1;:G;XTR;:H5e3:7,F;:H5e4,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "SubtractivePipe.#14:1;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#14:1;:M;CUT;:H5f5:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#14:1;:M;CUT;:H5e3:7,F;:H5e4,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#3d:1;:M;CUT;:H5f5:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#3d:1;:M;CUT;:H5e3:7,F;:H5e4,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "SubtractivePipe.#d:2;:G;XTR;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#d:2;:G;XTR;:H5f5:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#d:2;:G;XTR;:H5e3:7,F;:H5e4,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#3f:1;:M;CUT;:H-5f9:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#3f:1;:M;CUT;:H-5e7:7,F;:H5e4,F",
             "resolvedIndexed": "Face7",
             "subname": "Face7"
           },
           "Face8": {
             "canonicalFreecadMappedName": "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#3f:2;:M;CUT;:H-5f9:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#3f:2;:M;CUT;:H-5e7:7,F;:H5e4,F",
             "resolvedIndexed": "Face8",
             "subname": "Face8"
           },
           "Face9": {
             "canonicalFreecadMappedName": "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#3f:3;:M;CUT;:H-5f9:7,F;:H5f6,F",
+            "rawFreecadMappedName": "SubtractivePipe.#3f:3;:M;CUT;:H-5e7:7,F;:H5e4,F",
             "resolvedIndexed": "Face9",
             "subname": "Face9"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "SubtractivePipe.#8:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#8:2;:H5f5,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#8:2;:H5e3,V;:H5e4,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#42:4;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#42:4;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex10",
             "subname": "Vertex10"
           },
           "Vertex11": {
             "canonicalFreecadMappedName": "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#43:6;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#43:6;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex11",
             "subname": "Vertex11"
           },
           "Vertex12": {
             "canonicalFreecadMappedName": "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#44:8;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#44:8;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex12",
             "subname": "Vertex12"
           },
           "Vertex13": {
             "canonicalFreecadMappedName": "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#45:15;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#45:15;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex13",
             "subname": "Vertex13"
           },
           "Vertex14": {
             "canonicalFreecadMappedName": "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#46:16;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#46:16;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex14",
             "subname": "Vertex14"
           },
           "Vertex15": {
             "canonicalFreecadMappedName": "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#47:17;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#47:17;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex15",
             "subname": "Vertex15"
           },
           "Vertex16": {
             "canonicalFreecadMappedName": "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#48:18;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#48:18;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex16",
             "subname": "Vertex16"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "SubtractivePipe.#18:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#18:2;:U;XTR;:H5f5:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#18:2;:U;XTR;:H5e3:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "SubtractivePipe.#2:1;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#2:1;:H5f5,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#2:1;:H5e3,V;:H5e4,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "SubtractivePipe.#19:1;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#19:1;:U;XTR;:H5f5:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#19:1;:U;XTR;:H5e3:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "SubtractivePipe.#6:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#6:2;:H5f5,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#6:2;:H5e3,V;:H5e4,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "SubtractivePipe.#1a:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#1a:2;:U;XTR;:H5f5:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#1a:2;:U;XTR;:H5e3:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "SubtractivePipe.#4:2;:H*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#4:2;:H5f5,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#4:2;:H5e3,V;:H5e4,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#1b:2;:U;XTR;:H5f5:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#1b:2;:U;XTR;:H5e3:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "SubtractivePipe.#41:2;:M;CUT;:H-5f9:7,V;:H5f6,V",
+            "rawFreecadMappedName": "SubtractivePipe.#41:2;:M;CUT;:H-5e7:7,V;:H5e4,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
           }
         }
+      },
+      "SketchBase": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "g1;SKT;FAC": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "legacy_internal_face_fixture_migration"
+              },
+              "mappedName": {
+                "canonical": "g1;SKT;FAC",
+                "raw": "g1;SKT;FAC"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "SketchBase",
+                "subname": "InternalFace1"
+              },
+              "target": {
+                "object": "SketchBase",
+                "subname": "InternalFace1"
+              }
+            }
+          },
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7f2628cef2efaed33b12d097b708c614eb4207c9ff40eafe72c364e9cbcfbf4f",
+        "subshapes": {
+          "InternalFace1": {
+            "canonicalFreecadMappedName": "g1;SKT;FAC",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "g1;SKT;FAC",
+            "resolvedIndexed": "InternalFace1",
+            "subname": "InternalFace1"
+          }
+        }
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:014ce136d911f9e23e7ab2b598a96da0866774d1b8989f5daf023cd54b56c683",
+        "subshapes": {}
+      },
+      "SketchPipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:2127f0719ad1372e8260bac8ca80b0d74e9116475a898e933acaeb48d432f9e5",
+        "subshapes": {}
       },
       "SubtractivePipe": {
         "childElementMaps": [],

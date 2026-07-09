@@ -135,6 +135,48 @@
         "objectHash": "sha256:8c8d4482283df630068d41dc9f01e0e52ec8ef920df52a83e687136dff2b40b9",
         "subshapes": {}
       },
+      "LineSource": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:27d24834470a97fc83f466f078574fdb5d2e37988355ffeeee293df2ebb7c627",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "PointSource": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3df85e27673f452dacbc00386ada64395d0efb92614cc8801df9382443238a00",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
       "UnsupportedPlateSurfaceCurves": {
         "childElementMaps": [],
         "elementMap": {

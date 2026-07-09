@@ -1,0 +1,76 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-regular-polygon",
+    "expectedPayloadHash": "sha256:160824454fbada8472b4130823308a9b418a020849d6d3e9bcea97e2c4204137",
+    "inputHash": "sha256:d5673e1fa60bb036a0cb64e4bf84783a4f3c49ba644347321e30146e4cb56ccd",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:2c135328a802a24af3c6dd01dd41a3c080d334058faa7a63f5755425295f9b85"
+  },
+  "inputReferences": [],
+  "objects": {
+    "RegularPolygon": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "RegularPolygon": {
+        "covers": [
+          "RegularPolygon"
+        ],
+        "ledgerObject": "RegularPolygon",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:2c135328a802a24af3c6dd01dd41a3c080d334058faa7a63f5755425295f9b85",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

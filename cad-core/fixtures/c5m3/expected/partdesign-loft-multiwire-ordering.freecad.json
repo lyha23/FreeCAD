@@ -26,7 +26,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face1",
           "stableSubname": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H*:*,F",
           "subname": "Face1"
@@ -40,7 +40,7 @@
           "identityStatus": "stable",
           "indexed": "Face2",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face2",
           "stableSubname": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H*:*,F",
           "subname": "Face2"
@@ -54,7 +54,7 @@
           "identityStatus": "stable",
           "indexed": "Face3",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#f:1;FAC;:H419:4,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#f:1;FAC;:H33d:4,F",
           "resolvedIndexed": "Face3",
           "stableSubname": "AdditiveLoftMultiWire.#f:1;FAC;:H*:*,F",
           "subname": "Face3"
@@ -68,7 +68,7 @@
           "identityStatus": "stable",
           "indexed": "Face4",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face4",
           "stableSubname": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H*:*,F",
           "subname": "Face4"
@@ -82,7 +82,7 @@
           "identityStatus": "stable",
           "indexed": "Face5",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face5",
           "stableSubname": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H*:*,F",
           "subname": "Face5"
@@ -96,7 +96,7 @@
           "identityStatus": "stable",
           "indexed": "Face6",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face6",
           "stableSubname": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H*:*,F",
           "subname": "Face6"
@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Face7",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face7",
           "stableSubname": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H*:*,F",
           "subname": "Face7"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Face8",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face8",
           "stableSubname": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H*:*,F",
           "subname": "Face8"
@@ -138,7 +138,7 @@
           "identityStatus": "stable",
           "indexed": "Face9",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face9",
           "stableSubname": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H*:*,F",
           "subname": "Face9"
@@ -152,7 +152,7 @@
           "identityStatus": "stable",
           "indexed": "Face10",
           "kind": "Face",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H418:7,F",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H33c:7,F",
           "resolvedIndexed": "Face10",
           "stableSubname": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H*:*,F",
           "subname": "Face10"
@@ -166,7 +166,7 @@
           "identityStatus": "stable",
           "indexed": "Edge1",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge1",
           "stableSubname": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H*:*,E",
           "subname": "Edge1"
@@ -180,7 +180,7 @@
           "identityStatus": "stable",
           "indexed": "Edge2",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge2",
           "stableSubname": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H*:*,E",
           "subname": "Edge2"
@@ -194,7 +194,7 @@
           "identityStatus": "stable",
           "indexed": "Edge3",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge3",
           "stableSubname": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H*:*,E",
           "subname": "Edge3"
@@ -208,7 +208,7 @@
           "identityStatus": "stable",
           "indexed": "Edge4",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge4",
           "stableSubname": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H*:*,E",
           "subname": "Edge4"
@@ -222,7 +222,7 @@
           "identityStatus": "stable",
           "indexed": "Edge5",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge5",
           "stableSubname": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H*:*,E",
           "subname": "Edge5"
@@ -236,7 +236,7 @@
           "identityStatus": "stable",
           "indexed": "Edge6",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge6",
           "stableSubname": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H*:*,E",
           "subname": "Edge6"
@@ -250,7 +250,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H*:*,E",
           "subname": "Edge7"
@@ -264,7 +264,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H*:*,E",
           "subname": "Edge8"
@@ -278,7 +278,7 @@
           "identityStatus": "stable",
           "indexed": "Edge9",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge9",
           "stableSubname": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H*:*,E",
           "subname": "Edge9"
@@ -292,7 +292,7 @@
           "identityStatus": "stable",
           "indexed": "Edge10",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:1;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:1;:H33d,E",
           "resolvedIndexed": "Edge10",
           "stableSubname": "AdditiveLoftMultiWire.#7:1;:H*,E",
           "subname": "Edge10"
@@ -306,7 +306,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H*:*,E",
           "subname": "Edge11"
@@ -320,7 +320,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:2;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:2;:H33d,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "AdditiveLoftMultiWire.#7:2;:H*,E",
           "subname": "Edge12"
@@ -334,7 +334,7 @@
           "identityStatus": "stable",
           "indexed": "Edge13",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:3;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:3;:H33d,E",
           "resolvedIndexed": "Edge13",
           "stableSubname": "AdditiveLoftMultiWire.#7:3;:H*,E",
           "subname": "Edge13"
@@ -348,7 +348,7 @@
           "identityStatus": "stable",
           "indexed": "Edge14",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:4;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:4;:H33d,E",
           "resolvedIndexed": "Edge14",
           "stableSubname": "AdditiveLoftMultiWire.#7:4;:H*,E",
           "subname": "Edge14"
@@ -362,7 +362,7 @@
           "identityStatus": "stable",
           "indexed": "Edge15",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:5;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:5;:H33d,E",
           "resolvedIndexed": "Edge15",
           "stableSubname": "AdditiveLoftMultiWire.#7:5;:H*,E",
           "subname": "Edge15"
@@ -376,7 +376,7 @@
           "identityStatus": "stable",
           "indexed": "Edge16",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:6;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:6;:H33d,E",
           "resolvedIndexed": "Edge16",
           "stableSubname": "AdditiveLoftMultiWire.#7:6;:H*,E",
           "subname": "Edge16"
@@ -390,7 +390,7 @@
           "identityStatus": "stable",
           "indexed": "Edge17",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:7;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:7;:H33d,E",
           "resolvedIndexed": "Edge17",
           "stableSubname": "AdditiveLoftMultiWire.#7:7;:H*,E",
           "subname": "Edge17"
@@ -404,7 +404,7 @@
           "identityStatus": "stable",
           "indexed": "Edge18",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:8;:H419,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:8;:H33d,E",
           "resolvedIndexed": "Edge18",
           "stableSubname": "AdditiveLoftMultiWire.#7:8;:H*,E",
           "subname": "Edge18"
@@ -418,7 +418,7 @@
           "identityStatus": "stable",
           "indexed": "Edge19",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge19",
           "stableSubname": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H*:*,E",
           "subname": "Edge19"
@@ -432,7 +432,7 @@
           "identityStatus": "stable",
           "indexed": "Edge20",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge20",
           "stableSubname": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H*:*,E",
           "subname": "Edge20"
@@ -446,7 +446,7 @@
           "identityStatus": "stable",
           "indexed": "Edge21",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge21",
           "stableSubname": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H*:*,E",
           "subname": "Edge21"
@@ -460,7 +460,7 @@
           "identityStatus": "stable",
           "indexed": "Edge22",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge22",
           "stableSubname": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H*:*,E",
           "subname": "Edge22"
@@ -474,7 +474,7 @@
           "identityStatus": "stable",
           "indexed": "Edge23",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#26;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#26;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge23",
           "stableSubname": "AdditiveLoftMultiWire.#26;:G;SEW;:H*:*,E",
           "subname": "Edge23"
@@ -488,7 +488,7 @@
           "identityStatus": "stable",
           "indexed": "Edge24",
           "kind": "Edge",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#27;:G;SEW;:H418:7,E",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#27;:G;SEW;:H33c:7,E",
           "resolvedIndexed": "Edge24",
           "stableSubname": "AdditiveLoftMultiWire.#27;:G;SEW;:H*:*,E",
           "subname": "Edge24"
@@ -502,7 +502,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex1",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex1",
           "stableSubname": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H*:*,V",
           "subname": "Vertex1"
@@ -516,7 +516,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex2",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex2",
           "stableSubname": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H*:*,V",
           "subname": "Vertex2"
@@ -530,7 +530,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex3",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex3",
           "stableSubname": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H*:*,V",
           "subname": "Vertex3"
@@ -544,7 +544,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H*:*,V",
           "subname": "Vertex4"
@@ -558,7 +558,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H*:*,V",
           "subname": "Vertex5"
@@ -572,7 +572,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex6",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex6",
           "stableSubname": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H*:*,V",
           "subname": "Vertex6"
@@ -586,7 +586,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex7",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#39;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#39;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex7",
           "stableSubname": "AdditiveLoftMultiWire.#39;:G;SEW;:H*:*,V",
           "subname": "Vertex7"
@@ -600,7 +600,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#3a;:G;SEW;:H418:7,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#3a;:G;SEW;:H33c:7,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "AdditiveLoftMultiWire.#3a;:G;SEW;:H*:*,V",
           "subname": "Vertex8"
@@ -614,7 +614,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#3;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#3;:H33d,V",
           "resolvedIndexed": "Vertex9",
           "stableSubname": "AdditiveLoftMultiWire.#3;:H*,V",
           "subname": "Vertex9"
@@ -628,7 +628,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex10",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#2;:H33d,V",
           "resolvedIndexed": "Vertex10",
           "stableSubname": "AdditiveLoftMultiWire.#2;:H*,V",
           "subname": "Vertex10"
@@ -642,7 +642,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex11",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#4;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#4;:H33d,V",
           "resolvedIndexed": "Vertex11",
           "stableSubname": "AdditiveLoftMultiWire.#4;:H*,V",
           "subname": "Vertex11"
@@ -656,7 +656,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex12",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#5;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#5;:H33d,V",
           "resolvedIndexed": "Vertex12",
           "stableSubname": "AdditiveLoftMultiWire.#5;:H*,V",
           "subname": "Vertex12"
@@ -670,7 +670,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex13",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#8;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#8;:H33d,V",
           "resolvedIndexed": "Vertex13",
           "stableSubname": "AdditiveLoftMultiWire.#8;:H*,V",
           "subname": "Vertex13"
@@ -684,7 +684,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex14",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#9;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#9;:H33d,V",
           "resolvedIndexed": "Vertex14",
           "stableSubname": "AdditiveLoftMultiWire.#9;:H*,V",
           "subname": "Vertex14"
@@ -698,7 +698,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex15",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#a;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#a;:H33d,V",
           "resolvedIndexed": "Vertex15",
           "stableSubname": "AdditiveLoftMultiWire.#a;:H*,V",
           "subname": "Vertex15"
@@ -712,7 +712,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex16",
           "kind": "Vertex",
-          "rawFreecadMappedName": "AdditiveLoftMultiWire.#b;:H419,V",
+          "rawFreecadMappedName": "AdditiveLoftMultiWire.#b;:H33d,V",
           "resolvedIndexed": "Vertex16",
           "stableSubname": "AdditiveLoftMultiWire.#b;:H*,V",
           "subname": "Vertex16"
@@ -729,6 +729,1420 @@
   "topoNamingState": {
     "documentHash": "sha256:ec17ef4a4051980a54ea3f835990ee2bad47cb12f72b87cf2134fb2448d879e5",
     "objects": {
+      "AdditiveLoftMultiWire": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "#20:3;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#20:3;:G;SEW;:H*:*,E",
+                "raw": "#20:3;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge9"
+              }
+            },
+            "#21:2;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#21:2;:G;SEW;:H*:*,E",
+                "raw": "#21:2;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge11"
+              }
+            },
+            "#22:4;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#22:4;:G;SEW;:H*:*,E",
+                "raw": "#22:4;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge19"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge19"
+              }
+            },
+            "#23:5;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#23:5;:G;SEW;:H*:*,E",
+                "raw": "#23:5;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge20"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge20"
+              }
+            },
+            "#24:9;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#24:9;:G;SEW;:H*:*,E",
+                "raw": "#24:9;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge21"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge21"
+              }
+            },
+            "#25:8;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#25:8;:G;SEW;:H*:*,E",
+                "raw": "#25:8;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge22"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge22"
+              }
+            },
+            "#26;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#26;:G;SEW;:H*:*,E",
+                "raw": "#26;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge23"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge23"
+              }
+            },
+            "#27;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27;:G;SEW;:H*:*,E",
+                "raw": "#27;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge24"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge24"
+              }
+            },
+            "#29:1;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#29:1;:G;SEW;:H*:*,F",
+                "raw": "#29:1;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face1"
+              }
+            },
+            "#2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2;:H*,V",
+                "raw": "#2;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex10"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex10"
+              }
+            },
+            "#2a:1;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2a:1;:G;SEW;:H*:*,F",
+                "raw": "#2a:1;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face2"
+              }
+            },
+            "#2b:2;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2b:2;:G;SEW;:H*:*,F",
+                "raw": "#2b:2;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face4"
+              }
+            },
+            "#2c:3;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2c:3;:G;SEW;:H*:*,F",
+                "raw": "#2c:3;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face5"
+              }
+            },
+            "#2d:4;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2d:4;:G;SEW;:H*:*,F",
+                "raw": "#2d:4;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face6"
+              }
+            },
+            "#2e:5;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2e:5;:G;SEW;:H*:*,F",
+                "raw": "#2e:5;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face7"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face7"
+              }
+            },
+            "#2f:6;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2f:6;:G;SEW;:H*:*,F",
+                "raw": "#2f:6;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face8"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face8"
+              }
+            },
+            "#30:7;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#30:7;:G;SEW;:H*:*,F",
+                "raw": "#30:7;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face9"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face9"
+              }
+            },
+            "#31:8;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#31:8;:G;SEW;:H*:*,F",
+                "raw": "#31:8;:G;SEW;:H33c:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face10"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face10"
+              }
+            },
+            "#33:2;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#33:2;:G;SEW;:H*:*,V",
+                "raw": "#33:2;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex1"
+              }
+            },
+            "#34:3;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#34:3;:G;SEW;:H*:*,V",
+                "raw": "#34:3;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex2"
+              }
+            },
+            "#35:4;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#35:4;:G;SEW;:H*:*,V",
+                "raw": "#35:4;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex3"
+              }
+            },
+            "#36:5;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#36:5;:G;SEW;:H*:*,V",
+                "raw": "#36:5;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex4"
+              }
+            },
+            "#37:8;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#37:8;:G;SEW;:H*:*,V",
+                "raw": "#37:8;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex5"
+              }
+            },
+            "#38:9;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#38:9;:G;SEW;:H*:*,V",
+                "raw": "#38:9;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex6"
+              }
+            },
+            "#39;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#39;:G;SEW;:H*:*,V",
+                "raw": "#39;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex7"
+              }
+            },
+            "#3;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#3;:H*,V",
+                "raw": "#3;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex9"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex9"
+              }
+            },
+            "#3a;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#3a;:G;SEW;:H*:*,V",
+                "raw": "#3a;:G;SEW;:H33c:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex8"
+              }
+            },
+            "#4;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#4;:H*,V",
+                "raw": "#4;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex11"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex11"
+              }
+            },
+            "#5;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#5;:H*,V",
+                "raw": "#5;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex12"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex12"
+              }
+            },
+            "#7:1;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:1;:H*,E",
+                "raw": "#7:1;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge10"
+              }
+            },
+            "#7:2;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:2;:H*,E",
+                "raw": "#7:2;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge12"
+              }
+            },
+            "#7:3;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:3;:H*,E",
+                "raw": "#7:3;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge13"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge13"
+              }
+            },
+            "#7:4;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:4;:H*,E",
+                "raw": "#7:4;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge14"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge14"
+              }
+            },
+            "#7:5;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:5;:H*,E",
+                "raw": "#7:5;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge15"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge15"
+              }
+            },
+            "#7:6;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:6;:H*,E",
+                "raw": "#7:6;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge16"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge16"
+              }
+            },
+            "#7:7;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:7;:H*,E",
+                "raw": "#7:7;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge17"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge17"
+              }
+            },
+            "#7:8;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:8;:H*,E",
+                "raw": "#7:8;:H33d,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge18"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge18"
+              }
+            },
+            "#8;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#8;:H*,V",
+                "raw": "#8;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex13"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex13"
+              }
+            },
+            "#9;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#9;:H*,V",
+                "raw": "#9;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex14"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex14"
+              }
+            },
+            "#a;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#a;:H*,V",
+                "raw": "#a;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex15"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex15"
+              }
+            },
+            "#b;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#b;:H*,V",
+                "raw": "#b;:H33d,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex16"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Vertex16"
+              }
+            },
+            "#d:1;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:1;:G;SEW;:H*:*,E",
+                "raw": "#d:1;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge1"
+              }
+            },
+            "#d:2;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:2;:G;SEW;:H*:*,E",
+                "raw": "#d:2;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge2"
+              }
+            },
+            "#d:3;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:3;:G;SEW;:H*:*,E",
+                "raw": "#d:3;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge3"
+              }
+            },
+            "#d:4;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:4;:G;SEW;:H*:*,E",
+                "raw": "#d:4;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge4"
+              }
+            },
+            "#d:5;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:5;:G;SEW;:H*:*,E",
+                "raw": "#d:5;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge5"
+              }
+            },
+            "#d:6;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:6;:G;SEW;:H*:*,E",
+                "raw": "#d:6;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge6"
+              }
+            },
+            "#d:7;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:7;:G;SEW;:H*:*,E",
+                "raw": "#d:7;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge7"
+              }
+            },
+            "#d:8;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#d:8;:G;SEW;:H*:*,E",
+                "raw": "#d:8;:G;SEW;:H33c:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Edge8"
+              }
+            },
+            "#f:1;FAC;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#f:1;FAC;:H*:*,F",
+                "raw": "#f:1;FAC;:H33d:4,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "AdditiveLoftMultiWire",
+                "subname": "Face3"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:ff96ed83935ee31bebe5ae399d1191c12b47c15a88641d64b41ed5415cdd813e",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "#d:1;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:1;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "#7:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:1;:H33d,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "#21:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#21:2;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "#7:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:2;:H33d,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "#7:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:3;:H33d,E",
+            "resolvedIndexed": "Edge13",
+            "subname": "Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "#7:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:4;:H33d,E",
+            "resolvedIndexed": "Edge14",
+            "subname": "Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "#7:5;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:5;:H33d,E",
+            "resolvedIndexed": "Edge15",
+            "subname": "Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "#7:6;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:6;:H33d,E",
+            "resolvedIndexed": "Edge16",
+            "subname": "Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "#7:7;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:7;:H33d,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "#7:8;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:8;:H33d,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "Edge18"
+          },
+          "Edge19": {
+            "canonicalFreecadMappedName": "#22:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#22:4;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge19",
+            "subname": "Edge19"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "#d:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:2;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge20": {
+            "canonicalFreecadMappedName": "#23:5;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#23:5;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge20",
+            "subname": "Edge20"
+          },
+          "Edge21": {
+            "canonicalFreecadMappedName": "#24:9;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#24:9;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge21",
+            "subname": "Edge21"
+          },
+          "Edge22": {
+            "canonicalFreecadMappedName": "#25:8;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#25:8;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge22",
+            "subname": "Edge22"
+          },
+          "Edge23": {
+            "canonicalFreecadMappedName": "#26;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#26;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge23",
+            "subname": "Edge23"
+          },
+          "Edge24": {
+            "canonicalFreecadMappedName": "#27;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge24",
+            "subname": "Edge24"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "#d:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:3;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "#d:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:4;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "#d:5;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:5;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "#d:6;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:6;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "#d:7;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:7;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "#d:8;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#d:8;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "#20:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#20:3;:G;SEW;:H33c:7,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "#29:1;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#29:1;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face10": {
+            "canonicalFreecadMappedName": "#31:8;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#31:8;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face10",
+            "subname": "Face10"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "#2a:1;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2a:1;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "#f:1;FAC;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#f:1;FAC;:H33d:4,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "#2b:2;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2b:2;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "#2c:3;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2c:3;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "#2d:4;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2d:4;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "#2e:5;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2e:5;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face7",
+            "subname": "Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "#2f:6;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2f:6;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face8",
+            "subname": "Face8"
+          },
+          "Face9": {
+            "canonicalFreecadMappedName": "#30:7;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#30:7;:G;SEW;:H33c:7,F",
+            "resolvedIndexed": "Face9",
+            "subname": "Face9"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "#33:2;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#33:2;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "#2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2;:H33d,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "#4;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#4;:H33d,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "#5;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#5;:H33d,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "Vertex12"
+          },
+          "Vertex13": {
+            "canonicalFreecadMappedName": "#8;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#8;:H33d,V",
+            "resolvedIndexed": "Vertex13",
+            "subname": "Vertex13"
+          },
+          "Vertex14": {
+            "canonicalFreecadMappedName": "#9;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#9;:H33d,V",
+            "resolvedIndexed": "Vertex14",
+            "subname": "Vertex14"
+          },
+          "Vertex15": {
+            "canonicalFreecadMappedName": "#a;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#a;:H33d,V",
+            "resolvedIndexed": "Vertex15",
+            "subname": "Vertex15"
+          },
+          "Vertex16": {
+            "canonicalFreecadMappedName": "#b;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#b;:H33d,V",
+            "resolvedIndexed": "Vertex16",
+            "subname": "Vertex16"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "#34:3;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#34:3;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "#35:4;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#35:4;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "#36:5;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#36:5;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "#37:8;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#37:8;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "#38:9;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#38:9;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "#39;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#39;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "#3a;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#3a;:G;SEW;:H33c:7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "#3;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#3;:H33d,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "Vertex9"
+          }
+        }
+      },
       "Body": {
         "childElementMaps": [
           {
@@ -745,7 +2159,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -766,7 +2180,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -787,7 +2201,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -808,7 +2222,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -829,7 +2243,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -850,7 +2264,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -871,7 +2285,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#26;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#26;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#26;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -892,7 +2306,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#27;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#27;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#27;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -913,7 +2327,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -934,7 +2348,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#2;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#2;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#2;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -955,7 +2369,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -976,7 +2390,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -997,7 +2411,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1018,7 +2432,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1039,7 +2453,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1060,7 +2474,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1081,7 +2495,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1102,7 +2516,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H418:7,F"
+                    "raw": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H33c:7,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1123,7 +2537,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1144,7 +2558,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1165,7 +2579,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1186,7 +2600,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1207,7 +2621,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1228,7 +2642,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1249,7 +2663,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#39;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#39;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#39;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1270,7 +2684,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#3;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#3;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#3;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1291,7 +2705,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#3a;:G;SEW;:H*:*,V",
-                    "raw": "AdditiveLoftMultiWire.#3a;:G;SEW;:H418:7,V"
+                    "raw": "AdditiveLoftMultiWire.#3a;:G;SEW;:H33c:7,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1312,7 +2726,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#4;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#4;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#4;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1333,7 +2747,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#5;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#5;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#5;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1354,7 +2768,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:1;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:1;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:1;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1375,7 +2789,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:2;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:2;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:2;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1396,7 +2810,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:3;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:3;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:3;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1417,7 +2831,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:4;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:4;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:4;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1438,7 +2852,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:5;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:5;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:5;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1459,7 +2873,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:6;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:6;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:6;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1480,7 +2894,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:7;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:7;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:7;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1501,7 +2915,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#7:8;:H*,E",
-                    "raw": "AdditiveLoftMultiWire.#7:8;:H419,E"
+                    "raw": "AdditiveLoftMultiWire.#7:8;:H33d,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1522,7 +2936,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#8;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#8;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#8;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1543,7 +2957,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#9;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#9;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#9;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1564,7 +2978,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#a;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#a;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#a;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1585,7 +2999,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#b;:H*,V",
-                    "raw": "AdditiveLoftMultiWire.#b;:H419,V"
+                    "raw": "AdditiveLoftMultiWire.#b;:H33d,V"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "vertex",
@@ -1606,7 +3020,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1627,7 +3041,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1648,7 +3062,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1669,7 +3083,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1690,7 +3104,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1711,7 +3125,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1732,7 +3146,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1753,7 +3167,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H*:*,E",
-                    "raw": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H418:7,E"
+                    "raw": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H33c:7,E"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "edge",
@@ -1774,7 +3188,7 @@
                   },
                   "mappedName": {
                     "canonical": "AdditiveLoftMultiWire.#f:1;FAC;:H*:*,F",
-                    "raw": "AdditiveLoftMultiWire.#f:1;FAC;:H419:4,F"
+                    "raw": "AdditiveLoftMultiWire.#f:1;FAC;:H33d:4,F"
                   },
                   "recoverability": "resolved",
                   "shapeKind": "face",
@@ -1806,7 +3220,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1827,7 +3241,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1848,7 +3262,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1869,7 +3283,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1890,7 +3304,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1911,7 +3325,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1932,7 +3346,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#26;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#26;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#26;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1953,7 +3367,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#27;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#27;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#27;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -1974,7 +3388,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1995,7 +3409,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#2;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#2;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#2;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2016,7 +3430,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2037,7 +3451,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2058,7 +3472,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2079,7 +3493,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2100,7 +3514,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2121,7 +3535,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2142,7 +3556,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2163,7 +3577,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H418:7,F"
+                "raw": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H33c:7,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2184,7 +3598,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2205,7 +3619,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2226,7 +3640,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2247,7 +3661,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2268,7 +3682,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2289,7 +3703,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2310,7 +3724,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#39;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#39;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#39;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2331,7 +3745,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#3;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#3;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#3;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2352,7 +3766,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#3a;:G;SEW;:H*:*,V",
-                "raw": "AdditiveLoftMultiWire.#3a;:G;SEW;:H418:7,V"
+                "raw": "AdditiveLoftMultiWire.#3a;:G;SEW;:H33c:7,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2373,7 +3787,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#4;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#4;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#4;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2394,7 +3808,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#5;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#5;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#5;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2415,7 +3829,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:1;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:1;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:1;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2436,7 +3850,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:2;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:2;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:2;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2457,7 +3871,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:3;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:3;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:3;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2478,7 +3892,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:4;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:4;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:4;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2499,7 +3913,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:5;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:5;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:5;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2520,7 +3934,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:6;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:6;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:6;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2541,7 +3955,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:7;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:7;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:7;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2562,7 +3976,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#7:8;:H*,E",
-                "raw": "AdditiveLoftMultiWire.#7:8;:H419,E"
+                "raw": "AdditiveLoftMultiWire.#7:8;:H33d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2583,7 +3997,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#8;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#8;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#8;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2604,7 +4018,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#9;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#9;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#9;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2625,7 +4039,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#a;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#a;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#a;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2646,7 +4060,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#b;:H*,V",
-                "raw": "AdditiveLoftMultiWire.#b;:H419,V"
+                "raw": "AdditiveLoftMultiWire.#b;:H33d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2667,7 +4081,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2688,7 +4102,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2709,7 +4123,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2730,7 +4144,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2751,7 +4165,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2772,7 +4186,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2793,7 +4207,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2814,7 +4228,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H*:*,E",
-                "raw": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H418:7,E"
+                "raw": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H33c:7,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2835,7 +4249,7 @@
               },
               "mappedName": {
                 "canonical": "AdditiveLoftMultiWire.#f:1;FAC;:H*:*,F",
-                "raw": "AdditiveLoftMultiWire.#f:1;FAC;:H419:4,F"
+                "raw": "AdditiveLoftMultiWire.#f:1;FAC;:H33d:4,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2858,354 +4272,378 @@
           "Edge1": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:1;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge1",
             "subname": "Edge1"
           },
           "Edge10": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:1;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:1;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:1;:H33d,E",
             "resolvedIndexed": "Edge10",
             "subname": "Edge10"
           },
           "Edge11": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#21:2;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:2;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:2;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:2;:H33d,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
           "Edge13": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:3;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:3;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:3;:H33d,E",
             "resolvedIndexed": "Edge13",
             "subname": "Edge13"
           },
           "Edge14": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:4;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:4;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:4;:H33d,E",
             "resolvedIndexed": "Edge14",
             "subname": "Edge14"
           },
           "Edge15": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:5;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:5;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:5;:H33d,E",
             "resolvedIndexed": "Edge15",
             "subname": "Edge15"
           },
           "Edge16": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:6;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:6;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:6;:H33d,E",
             "resolvedIndexed": "Edge16",
             "subname": "Edge16"
           },
           "Edge17": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:7;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:7;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:7;:H33d,E",
             "resolvedIndexed": "Edge17",
             "subname": "Edge17"
           },
           "Edge18": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#7:8;:H*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:8;:H419,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#7:8;:H33d,E",
             "resolvedIndexed": "Edge18",
             "subname": "Edge18"
           },
           "Edge19": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#22:4;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge19",
             "subname": "Edge19"
           },
           "Edge2": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:2;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge2",
             "subname": "Edge2"
           },
           "Edge20": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#23:5;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge20",
             "subname": "Edge20"
           },
           "Edge21": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#24:9;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge21",
             "subname": "Edge21"
           },
           "Edge22": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#25:8;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge22",
             "subname": "Edge22"
           },
           "Edge23": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#26;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#26;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#26;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge23",
             "subname": "Edge23"
           },
           "Edge24": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#27;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#27;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#27;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge24",
             "subname": "Edge24"
           },
           "Edge3": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:3;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge3",
             "subname": "Edge3"
           },
           "Edge4": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:4;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge4",
             "subname": "Edge4"
           },
           "Edge5": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:5;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge5",
             "subname": "Edge5"
           },
           "Edge6": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:6;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge6",
             "subname": "Edge6"
           },
           "Edge7": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:7;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#d:8;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
           "Edge9": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H*:*,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H418:7,E",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#20:3;:G;SEW;:H33c:7,E",
             "resolvedIndexed": "Edge9",
             "subname": "Edge9"
           },
           "Face1": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#29:1;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face1",
             "subname": "Face1"
           },
           "Face10": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#31:8;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face10",
             "subname": "Face10"
           },
           "Face2": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2a:1;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face2",
             "subname": "Face2"
           },
           "Face3": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#f:1;FAC;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#f:1;FAC;:H419:4,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#f:1;FAC;:H33d:4,F",
             "resolvedIndexed": "Face3",
             "subname": "Face3"
           },
           "Face4": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2b:2;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face4",
             "subname": "Face4"
           },
           "Face5": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2c:3;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face5",
             "subname": "Face5"
           },
           "Face6": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2d:4;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face6",
             "subname": "Face6"
           },
           "Face7": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2e:5;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face7",
             "subname": "Face7"
           },
           "Face8": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2f:6;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face8",
             "subname": "Face8"
           },
           "Face9": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H*:*,F",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H418:7,F",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#30:7;:G;SEW;:H33c:7,F",
             "resolvedIndexed": "Face9",
             "subname": "Face9"
           },
           "Vertex1": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#33:2;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex1",
             "subname": "Vertex1"
           },
           "Vertex10": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#2;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#2;:H33d,V",
             "resolvedIndexed": "Vertex10",
             "subname": "Vertex10"
           },
           "Vertex11": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#4;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#4;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#4;:H33d,V",
             "resolvedIndexed": "Vertex11",
             "subname": "Vertex11"
           },
           "Vertex12": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#5;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#5;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#5;:H33d,V",
             "resolvedIndexed": "Vertex12",
             "subname": "Vertex12"
           },
           "Vertex13": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#8;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#8;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#8;:H33d,V",
             "resolvedIndexed": "Vertex13",
             "subname": "Vertex13"
           },
           "Vertex14": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#9;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#9;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#9;:H33d,V",
             "resolvedIndexed": "Vertex14",
             "subname": "Vertex14"
           },
           "Vertex15": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#a;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#a;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#a;:H33d,V",
             "resolvedIndexed": "Vertex15",
             "subname": "Vertex15"
           },
           "Vertex16": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#b;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#b;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#b;:H33d,V",
             "resolvedIndexed": "Vertex16",
             "subname": "Vertex16"
           },
           "Vertex2": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#34:3;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex2",
             "subname": "Vertex2"
           },
           "Vertex3": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#35:4;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex3",
             "subname": "Vertex3"
           },
           "Vertex4": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#36:5;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#37:8;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
           "Vertex6": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#38:9;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex6",
             "subname": "Vertex6"
           },
           "Vertex7": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#39;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#39;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#39;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex7",
             "subname": "Vertex7"
           },
           "Vertex8": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#3a;:G;SEW;:H*:*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#3a;:G;SEW;:H418:7,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#3a;:G;SEW;:H33c:7,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "AdditiveLoftMultiWire.#3;:H*,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "AdditiveLoftMultiWire.#3;:H419,V",
+            "rawFreecadMappedName": "AdditiveLoftMultiWire.#3;:H33d,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
           }
         }
+      },
+      "SketchLoftProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:f25ee5cf15dfa908e7dec144ff39d7682f872eaa63c8069915ce2056959db3b8",
+        "subshapes": {}
+      },
+      "SketchLoftSection": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d00102a3cd63319ae73f1d5351713af26b35fb3474f886a81ecc727b3f9f6dd0",
+        "subshapes": {}
       }
     },
     "producer": {

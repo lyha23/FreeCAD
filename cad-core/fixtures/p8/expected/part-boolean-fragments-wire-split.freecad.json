@@ -110,7 +110,7 @@
           "identityStatus": "stable",
           "indexed": "Edge7",
           "kind": "Edge",
-          "rawFreecadMappedName": "Edge1;:H,E;D2269;:H,E",
+          "rawFreecadMappedName": "Edge1;:H,E;D94a;:H,E",
           "resolvedIndexed": "Edge7",
           "stableSubname": "Edge1;:H,E;D*;:H,E",
           "subname": "Edge7"
@@ -124,7 +124,7 @@
           "identityStatus": "stable",
           "indexed": "Edge8",
           "kind": "Edge",
-          "rawFreecadMappedName": "Edge2;:H,E;D1a29;:H,E",
+          "rawFreecadMappedName": "Edge2;:H,E;Deb9;:H,E",
           "resolvedIndexed": "Edge8",
           "stableSubname": "Edge2;:H,E;D*;:H,E",
           "subname": "Edge8"
@@ -166,7 +166,7 @@
           "identityStatus": "stable",
           "indexed": "Edge11",
           "kind": "Edge",
-          "rawFreecadMappedName": "Edge1;:C1;:H:4,E;D1d70;:H,E",
+          "rawFreecadMappedName": "Edge1;:C1;:H:4,E;D17ea;:H,E",
           "resolvedIndexed": "Edge11",
           "stableSubname": "Edge1;:C1;:H*,E;D*;:H,E",
           "subname": "Edge11"
@@ -180,7 +180,7 @@
           "identityStatus": "stable",
           "indexed": "Edge12",
           "kind": "Edge",
-          "rawFreecadMappedName": "Edge2;:C1;:H:4,E;D13d2;:H,E",
+          "rawFreecadMappedName": "Edge2;:C1;:H:4,E;D1a46;:H,E",
           "resolvedIndexed": "Edge12",
           "stableSubname": "Edge2;:C1;:H*,E;D*;:H,E",
           "subname": "Edge12"
@@ -236,7 +236,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex4",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Vertex3;:H,V;D3cf;:H,V",
+          "rawFreecadMappedName": "Vertex3;:H,V;D1595;:H,V",
           "resolvedIndexed": "Vertex4",
           "stableSubname": "Vertex3;:H,V;D*;:H,V",
           "subname": "Vertex4"
@@ -250,7 +250,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex5",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Vertex3;:H,V;D1f41;:H,V",
+          "rawFreecadMappedName": "Vertex3;:H,V;D1a60;:H,V",
           "resolvedIndexed": "Vertex5",
           "stableSubname": "Vertex3;:H,V;D*;:H,V",
           "subname": "Vertex5"
@@ -292,7 +292,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex8",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Vertex1;:H,V;D3b3;:H,V",
+          "rawFreecadMappedName": "Vertex1;:H,V;D1292;:H,V",
           "resolvedIndexed": "Vertex8",
           "stableSubname": "Vertex1;:H,V;D*;:H,V",
           "subname": "Vertex8"
@@ -306,7 +306,7 @@
           "identityStatus": "stable",
           "indexed": "Vertex9",
           "kind": "Vertex",
-          "rawFreecadMappedName": "Vertex1;:H,V;D198d;:H,V",
+          "rawFreecadMappedName": "Vertex1;:H,V;D12f8;:H,V",
           "resolvedIndexed": "Vertex9",
           "stableSubname": "Vertex1;:H,V;D*;:H,V",
           "subname": "Vertex9"
@@ -371,7 +371,7 @@
               },
               "mappedName": {
                 "canonical": "Edge1;:C1;:H*,E;D*;:H,E",
-                "raw": "Edge1;:C1;:H:4,E;D1d70;:H,E"
+                "raw": "Edge1;:C1;:H:4,E;D17ea;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -413,7 +413,7 @@
               },
               "mappedName": {
                 "canonical": "Edge1;:H,E;D*;:H,E",
-                "raw": "Edge1;:H,E;D2269;:H,E"
+                "raw": "Edge1;:H,E;D94a;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -455,7 +455,7 @@
               },
               "mappedName": {
                 "canonical": "Edge2;:C1;:H*,E;D*;:H,E",
-                "raw": "Edge2;:C1;:H:4,E;D13d2;:H,E"
+                "raw": "Edge2;:C1;:H:4,E;D1a46;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -497,7 +497,7 @@
               },
               "mappedName": {
                 "canonical": "Edge2;:H,E;D*;:H,E",
-                "raw": "Edge2;:H,E;D1a29;:H,E"
+                "raw": "Edge2;:H,E;Deb9;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -636,27 +636,6 @@
                 "subname": "Vertex1"
               }
             },
-            "Vertex1;:H,V;D*;:H,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex1;:H,V;D*;:H,V",
-                "raw": "Vertex1;:H,V;D198d;:H,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "BooleanFragments",
-                "subname": "Vertex9"
-              },
-              "target": {
-                "object": "BooleanFragments",
-                "subname": "Vertex9"
-              }
-            },
             "Vertex2;:C1;:H*,V;:H,V": {
               "evidence": {
                 "childElementMapKey": null,
@@ -740,33 +719,103 @@
                 "object": "BooleanFragments",
                 "subname": "Vertex3"
               }
-            },
-            "Vertex3;:H,V;D*;:H,V": {
-              "evidence": {
-                "childElementMapKey": null,
-                "mapperHistoryIds": [],
-                "source": "freecad_expected_collector"
-              },
-              "mappedName": {
-                "canonical": "Vertex3;:H,V;D*;:H,V",
-                "raw": "Vertex3;:H,V;D1f41;:H,V"
-              },
-              "recoverability": "resolved",
-              "shapeKind": "vertex",
-              "source": {
-                "object": "BooleanFragments",
-                "subname": "Vertex5"
-              },
-              "target": {
-                "object": "BooleanFragments",
-                "subname": "Vertex5"
-              }
             }
           },
           "status": "history_partial"
         },
         "elementMapVersion": "cad-core.element-map.v1",
-        "mapperHistory": [],
+        "mapperHistory": [
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex3;:H,V;D*;:H,V",
+                  "raw": "Vertex3;:H,V;D1595;:H,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex4"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex3;:H,V;D*;:H,V",
+                  "raw": "Vertex3;:H,V;D1a60;:H,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex5"
+                }
+              }
+            ],
+            "id": "canonical-collision-8565e86a4124683d",
+            "mappedName": {
+              "canonical": "Vertex3;:H,V;D*;:H,V",
+              "raw": "Vertex3;:H,V;D1595;:H,V"
+            },
+            "message": "Canonical elementMap key Vertex3;:H,V;D*;:H,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H,V;D*;:H,V",
+                  "raw": "Vertex1;:H,V;D1292;:H,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex8"
+                },
+                "target": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex8"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H,V;D*;:H,V",
+                  "raw": "Vertex1;:H,V;D12f8;:H,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex9"
+                },
+                "target": {
+                  "object": "BooleanFragments",
+                  "subname": "Vertex9"
+                }
+              }
+            ],
+            "id": "canonical-collision-c88c910b7d777e39",
+            "mappedName": {
+              "canonical": "Vertex1;:H,V;D*;:H,V",
+              "raw": "Vertex1;:H,V;D1292;:H,V"
+            },
+            "message": "Canonical elementMap key Vertex1;:H,V;D*;:H,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          }
+        ],
         "objectHash": "sha256:91e50a00e4f3b8e46398cdfccd3ef08e9378ef4a9e20e615fcccd41d04faafa8",
         "subshapes": {
           "Edge1": {
@@ -786,14 +835,14 @@
           "Edge11": {
             "canonicalFreecadMappedName": "Edge1;:C1;:H*,E;D*;:H,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Edge1;:C1;:H:4,E;D1d70;:H,E",
+            "rawFreecadMappedName": "Edge1;:C1;:H:4,E;D17ea;:H,E",
             "resolvedIndexed": "Edge11",
             "subname": "Edge11"
           },
           "Edge12": {
             "canonicalFreecadMappedName": "Edge2;:C1;:H*,E;D*;:H,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Edge2;:C1;:H:4,E;D13d2;:H,E",
+            "rawFreecadMappedName": "Edge2;:C1;:H:4,E;D1a46;:H,E",
             "resolvedIndexed": "Edge12",
             "subname": "Edge12"
           },
@@ -835,14 +884,14 @@
           "Edge7": {
             "canonicalFreecadMappedName": "Edge1;:H,E;D*;:H,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Edge1;:H,E;D2269;:H,E",
+            "rawFreecadMappedName": "Edge1;:H,E;D94a;:H,E",
             "resolvedIndexed": "Edge7",
             "subname": "Edge7"
           },
           "Edge8": {
             "canonicalFreecadMappedName": "Edge2;:H,E;D*;:H,E",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Edge2;:H,E;D1a29;:H,E",
+            "rawFreecadMappedName": "Edge2;:H,E;Deb9;:H,E",
             "resolvedIndexed": "Edge8",
             "subname": "Edge8"
           },
@@ -884,14 +933,14 @@
           "Vertex4": {
             "canonicalFreecadMappedName": "Vertex3;:H,V;D*;:H,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Vertex3;:H,V;D3cf;:H,V",
+            "rawFreecadMappedName": "Vertex3;:H,V;D1595;:H,V",
             "resolvedIndexed": "Vertex4",
             "subname": "Vertex4"
           },
           "Vertex5": {
             "canonicalFreecadMappedName": "Vertex3;:H,V;D*;:H,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Vertex3;:H,V;D1f41;:H,V",
+            "rawFreecadMappedName": "Vertex3;:H,V;D1a60;:H,V",
             "resolvedIndexed": "Vertex5",
             "subname": "Vertex5"
           },
@@ -912,16 +961,106 @@
           "Vertex8": {
             "canonicalFreecadMappedName": "Vertex1;:H,V;D*;:H,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Vertex1;:H,V;D3b3;:H,V",
+            "rawFreecadMappedName": "Vertex1;:H,V;D1292;:H,V",
             "resolvedIndexed": "Vertex8",
             "subname": "Vertex8"
           },
           "Vertex9": {
             "canonicalFreecadMappedName": "Vertex1;:H,V;D*;:H,V",
             "identityStatus": "stable",
-            "rawFreecadMappedName": "Vertex1;:H,V;D198d;:H,V",
+            "rawFreecadMappedName": "Vertex1;:H,V;D12f8;:H,V",
             "resolvedIndexed": "Vertex9",
             "subname": "Vertex9"
+          }
+        }
+      },
+      "PolyA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0145d875ef4b7744173013fe78635c6c9d578df0abf468098977a4a69a4bfff7",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "PolyB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:5f43572e3dddcd4ab13fa6a97e8dca344f5ab250089b222d8a1a469444e92db9",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
           }
         }
       }

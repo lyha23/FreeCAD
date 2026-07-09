@@ -1,0 +1,2024 @@
+{ // L0001: ledger 根对象开始；整个文件描述 topoNamingState 的内部恢复账本。
+  "coverage": { // L0002: coverage 块开始：输入引用覆盖摘要：说明哪些输入引用已经被账本事件解释，哪些还没解释。
+    "coveredInputReferenceIds": [ // L0003: coveredInputReferenceIds 数组开始：已经被事件覆盖的输入引用 id 列表。
+      "ref:1" // L0004: coveredInputReferenceIds 数组项："ref:1"，这个 ref 已被 ledger 事件解释。
+    ], // L0005: coveredInputReferenceIds 数组结束。
+    "uncoveredInputReferenceIds": [] // L0006: uncoveredInputReferenceIds：没有被任何终态事件覆盖的输入引用 id；这里为空表示没有遗漏。 当前值为 []。
+  }, // L0007: coverage 对象结束。
+  "diagnostics": [], // L0008: diagnostics 的值是 []。
+  "events": [ // L0009: events 块开始：账本事件流：把输入引用、ElementMap、MapperHistory 串起来，说明稳定引用如何恢复。
+    { // L0010: 开始一个 ledger 事件对象；描述一次引用解析、生成或历史传播。
+      "id": "event:1", // L0011: id="event:1"，供 coverage、projection 或 evidence 引用。
+      "inputReferenceIds": [ // L0012: inputReferenceIds 数组开始：该事件直接解释或关联的输入引用 id。
+        "ref:1" // L0013: inputReferenceIds 数组项："ref:1"，该事件关联的输入引用 id。
+      ], // L0014: inputReferenceIds 数组结束。
+      "kind": "resolved", // L0015: 事件类型是 "resolved"。
+      "provenance": "element_map", // L0016: 事件证据来源是 "element_map"。
+      "sources": [ // L0017: sources 数组开始：事件源端点列表：变化、生成或解析之前依赖的对象元素。
+        { // L0018: 开始一个事件源端点对象。
+          "element": "InternalFace1", // L0019: 端点子元素是 "InternalFace1"。
+          "object": "Sketch" // L0020: 端点所属对象是 "Sketch"。
+        } // L0021: sources[] 对象结束。
+      ], // L0022: sources 数组结束。
+      "targets": [ // L0023: targets 数组开始：事件目标端点列表：变化、生成或解析之后得到的对象元素。
+        { // L0024: 开始一个事件目标端点对象。
+          "element": "InternalFace1", // L0025: 端点子元素是 "InternalFace1"。
+          "object": "Sketch" // L0026: 端点所属对象是 "Sketch"。
+        } // L0027: targets[] 对象结束。
+      ] // L0028: targets 数组结束。
+    }, // L0029: events[] 对象结束。
+    { // L0030: 开始一个 ledger 事件对象；描述一次引用解析、生成或历史传播。
+      "id": "Sketch.mh-edge1-internal-face1", // L0031: id="Sketch.mh-edge1-internal-face1"，供 coverage、projection 或 evidence 引用。
+      "inputReferenceIds": [], // L0032: inputReferenceIds：该事件直接解释或关联的输入引用 id。 当前值为 []。
+      "kind": "generated", // L0033: 事件类型是 "generated"。
+      "provenance": "FreeCAD.TopologicalNaming.MapperHistory", // L0034: 事件证据来源是 "FreeCAD.TopologicalNaming.MapperHistory"。
+      "sources": [], // L0035: sources：事件源端点列表：变化、生成或解析之前依赖的对象元素。 当前值为 []。
+      "targets": [ // L0036: targets 数组开始：事件目标端点列表：变化、生成或解析之后得到的对象元素。
+        { // L0037: 开始一个事件目标端点对象。
+          "element": "InternalFace1", // L0038: 端点子元素是 "InternalFace1"。
+          "object": "Sketch" // L0039: 端点所属对象是 "Sketch"。
+        } // L0040: targets[] 对象结束。
+      ] // L0041: targets 数组结束。
+    }, // L0042: events[] 对象结束。
+    { // L0043: 开始一个 ledger 事件对象；描述一次引用解析、生成或历史传播。
+      "id": "Sketch.mh-edge2-internal-face1", // L0044: id="Sketch.mh-edge2-internal-face1"，供 coverage、projection 或 evidence 引用。
+      "inputReferenceIds": [], // L0045: inputReferenceIds：该事件直接解释或关联的输入引用 id。 当前值为 []。
+      "kind": "generated", // L0046: 事件类型是 "generated"。
+      "provenance": "FreeCAD.TopologicalNaming.MapperHistory", // L0047: 事件证据来源是 "FreeCAD.TopologicalNaming.MapperHistory"。
+      "sources": [], // L0048: sources：事件源端点列表：变化、生成或解析之前依赖的对象元素。 当前值为 []。
+      "targets": [ // L0049: targets 数组开始：事件目标端点列表：变化、生成或解析之后得到的对象元素。
+        { // L0050: 开始一个事件目标端点对象。
+          "element": "InternalFace1", // L0051: 端点子元素是 "InternalFace1"。
+          "object": "Sketch" // L0052: 端点所属对象是 "Sketch"。
+        } // L0053: targets[] 对象结束。
+      ] // L0054: targets 数组结束。
+    }, // L0055: events[] 对象结束。
+    { // L0056: 开始一个 ledger 事件对象；描述一次引用解析、生成或历史传播。
+      "id": "Sketch.mh-edge3-internal-face1", // L0057: id="Sketch.mh-edge3-internal-face1"，供 coverage、projection 或 evidence 引用。
+      "inputReferenceIds": [], // L0058: inputReferenceIds：该事件直接解释或关联的输入引用 id。 当前值为 []。
+      "kind": "generated", // L0059: 事件类型是 "generated"。
+      "provenance": "FreeCAD.TopologicalNaming.MapperHistory", // L0060: 事件证据来源是 "FreeCAD.TopologicalNaming.MapperHistory"。
+      "sources": [], // L0061: sources：事件源端点列表：变化、生成或解析之前依赖的对象元素。 当前值为 []。
+      "targets": [ // L0062: targets 数组开始：事件目标端点列表：变化、生成或解析之后得到的对象元素。
+        { // L0063: 开始一个事件目标端点对象。
+          "element": "InternalFace1", // L0064: 端点子元素是 "InternalFace1"。
+          "object": "Sketch" // L0065: 端点所属对象是 "Sketch"。
+        } // L0066: targets[] 对象结束。
+      ] // L0067: targets 数组结束。
+    }, // L0068: events[] 对象结束。
+    { // L0069: 开始一个 ledger 事件对象；描述一次引用解析、生成或历史传播。
+      "id": "Sketch.mh-edge4-internal-face1", // L0070: id="Sketch.mh-edge4-internal-face1"，供 coverage、projection 或 evidence 引用。
+      "inputReferenceIds": [], // L0071: inputReferenceIds：该事件直接解释或关联的输入引用 id。 当前值为 []。
+      "kind": "generated", // L0072: 事件类型是 "generated"。
+      "provenance": "FreeCAD.TopologicalNaming.MapperHistory", // L0073: 事件证据来源是 "FreeCAD.TopologicalNaming.MapperHistory"。
+      "sources": [], // L0074: sources：事件源端点列表：变化、生成或解析之前依赖的对象元素。 当前值为 []。
+      "targets": [ // L0075: targets 数组开始：事件目标端点列表：变化、生成或解析之后得到的对象元素。
+        { // L0076: 开始一个事件目标端点对象。
+          "element": "InternalFace1", // L0077: 端点子元素是 "InternalFace1"。
+          "object": "Sketch" // L0078: 端点所属对象是 "Sketch"。
+        } // L0079: targets[] 对象结束。
+      ] // L0080: targets 数组结束。
+    } // L0081: events[] 对象结束。
+  ], // L0082: events 数组结束。
+  "fixture": { // L0083: fixture 块开始：fixture 元信息和哈希，用来证明输入、expected payload、topoNamingState 没被悄悄改。
+    "case": "topo-state-body-tip-stable-recovery", // L0084: case：fixture 用例名。 当前值为 "topo-state-body-tip-stable-recovery"。
+    "expectedPayloadHash": "sha256:17437f47d7f9b94cf32ce4222c9d76b393784be81d839f50b93b0fa3010c6cce", // L0085: expectedPayloadHash="sha256:17437f47d7f9b94cf32ce4222c9d76b393784be81d839f50b93b0fa3010c6cce"；用于校验对应 JSON 子树没有漂移。
+    "inputHash": "sha256:99b4ec40e2997cae60540a76abe7cef1995a851eec45a3b2f203d8ac6783a77a", // L0086: inputHash="sha256:99b4ec40e2997cae60540a76abe7cef1995a851eec45a3b2f203d8ac6783a77a"；用于校验对应 JSON 子树没有漂移。
+    "phase": "c4m6", // L0087: phase：fixture 阶段目录名；这里是 c4m6。 当前值为 "c4m6"。
+    "topoNamingStateHash": "sha256:69d8ab39788a132a92e3e5c0794442c45dc1c8fc687a8bf0d5808ffcff5ae617" // L0088: topoNamingStateHash="sha256:69d8ab39788a132a92e3e5c0794442c45dc1c8fc687a8bf0d5808ffcff5ae617"；用于校验对应 JSON 子树没有漂移。
+  }, // L0089: fixture 对象结束。
+  "inputReferences": [ // L0090: inputReferences 块开始：从输入文档里抽出的待恢复引用，例如 Pad.Profile.SubSet 指向 Sketch 的哪个稳定面。
+    { // L0091: 开始一个输入引用对象；描述某个属性引用需要怎么恢复。
+      "displaySubname": "", // L0092: displaySubname：显示/当前路径用 subname；空字符串表示这条引用主要靠 stableSubname 恢复。 当前值为 ""。
+      "element": "g1;SKT;FAC", // L0093: 端点子元素是 "g1;SKT;FAC"。
+      "hasReferenceShadow": false, // L0094: 是否携带 ReferenceShadow 旧几何快照：false。
+      "id": "ref:1", // L0095: id="ref:1"，供 coverage、projection 或 evidence 引用。
+      "owner": "Pad", // L0096: owner：持有这个属性引用的对象；这里是 Pad 的 Profile。 当前值为 "Pad"。
+      "path": [ // L0097: path 数组开始：引用路径，从 owner 走到实际 target 的对象链。
+        "Pad", // L0098: path 数组项："Pad"，引用路径中的一个对象节点。
+        "Sketch" // L0099: path 数组项："Sketch"，引用路径中的一个对象节点。
+      ], // L0100: path 数组结束。
+      "propertyPath": "Profile.SubSet.0", // L0101: propertyPath：输入文档里的属性位置。 当前值为 "Profile.SubSet.0"。
+      "required": true, // L0102: 是否必需：true；true 表示该引用恢复失败会影响用例。
+      "source": "topoNamingState", // L0103: source：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。 当前值为 "topoNamingState"。
+      "stableSubname": "g1;SKT;FAC", // L0104: stableSubname：客户端携带的稳定子元素名，用来跨 recompute 找回当前子形状。 当前值为 "g1;SKT;FAC"。
+      "target": "Sketch" // L0105: target 字段给出恢复目标；这里的值是 "Sketch"。
+    } // L0106: inputReferences[] 对象结束。
+  ], // L0107: inputReferences 数组结束。
+  "objects": { // L0108: objects 块开始：按 FreeCAD 对象分组的内部账本：元素清单、ElementMap、childElementMaps、mapperHistory、发布状态。
+    "Body": { // L0109: Body 对象账本开始：记录该 FreeCAD 对象的子元素、稳定名映射、历史和发布状态。
+      "afterElements": { // L0110: afterElements 对象开始：recompute 后该对象可见的 indexed 子元素清单。
+        "Edge": [ // L0111: Edge 数组开始：Edge 类 indexed 子元素数组。
+          "Edge1", // L0112: Edge 数组项："Edge1"，当前对象的一个 edge 子元素名。
+          "Edge2", // L0113: Edge 数组项："Edge2"，当前对象的一个 edge 子元素名。
+          "Edge3", // L0114: Edge 数组项："Edge3"，当前对象的一个 edge 子元素名。
+          "Edge4", // L0115: Edge 数组项："Edge4"，当前对象的一个 edge 子元素名。
+          "Edge5", // L0116: Edge 数组项："Edge5"，当前对象的一个 edge 子元素名。
+          "Edge6", // L0117: Edge 数组项："Edge6"，当前对象的一个 edge 子元素名。
+          "Edge7", // L0118: Edge 数组项："Edge7"，当前对象的一个 edge 子元素名。
+          "Edge8", // L0119: Edge 数组项："Edge8"，当前对象的一个 edge 子元素名。
+          "Edge9", // L0120: Edge 数组项："Edge9"，当前对象的一个 edge 子元素名。
+          "Edge10", // L0121: Edge 数组项："Edge10"，当前对象的一个 edge 子元素名。
+          "Edge11", // L0122: Edge 数组项："Edge11"，当前对象的一个 edge 子元素名。
+          "Edge12" // L0123: Edge 数组项："Edge12"，当前对象的一个 edge 子元素名。
+        ], // L0124: Edge 数组结束。
+        "Face": [ // L0125: Face 数组开始：Face 类 indexed 子元素数组。
+          "Face1", // L0126: Face 数组项："Face1"，当前对象的一个 face 子元素名。
+          "Face2", // L0127: Face 数组项："Face2"，当前对象的一个 face 子元素名。
+          "Face3", // L0128: Face 数组项："Face3"，当前对象的一个 face 子元素名。
+          "Face4", // L0129: Face 数组项："Face4"，当前对象的一个 face 子元素名。
+          "Face5", // L0130: Face 数组项："Face5"，当前对象的一个 face 子元素名。
+          "Face6" // L0131: Face 数组项："Face6"，当前对象的一个 face 子元素名。
+        ], // L0132: Face 数组结束。
+        "Vertex": [ // L0133: Vertex 数组开始：Vertex 类 indexed 子元素数组。
+          "Vertex1", // L0134: Vertex 数组项："Vertex1"，当前对象的一个 vertex 子元素名。
+          "Vertex2", // L0135: Vertex 数组项："Vertex2"，当前对象的一个 vertex 子元素名。
+          "Vertex3", // L0136: Vertex 数组项："Vertex3"，当前对象的一个 vertex 子元素名。
+          "Vertex4", // L0137: Vertex 数组项："Vertex4"，当前对象的一个 vertex 子元素名。
+          "Vertex5", // L0138: Vertex 数组项："Vertex5"，当前对象的一个 vertex 子元素名。
+          "Vertex6", // L0139: Vertex 数组项："Vertex6"，当前对象的一个 vertex 子元素名。
+          "Vertex7", // L0140: Vertex 数组项："Vertex7"，当前对象的一个 vertex 子元素名。
+          "Vertex8" // L0141: Vertex 数组项："Vertex8"，当前对象的一个 vertex 子元素名。
+        ] // L0142: Vertex 数组结束。
+      }, // L0143: afterElements 对象结束。
+      "beforeElements": {}, // L0144: beforeElements：recompute 前或输入状态中该对象已有的 indexed 子元素清单。 当前值为 {}。
+      "childElementMaps": [ // L0145: childElementMaps 数组开始：父对象发布的子对象映射表；Body 用它把 Tip 子对象 Pad 的元素映射成 Body 范围内的元素。
+        { // L0146: 开始一个 child ElementMap；通常是 Body 发布 Tip 子对象元素的映射。
+          "childIndex": 0, // L0147: childIndex：子对象在父对象 childElementMaps 中的序号。 当前值为 0。
+          "childObject": "Pad", // L0148: childObject：被嵌入或被 Body Tip 覆盖的子对象名。 当前值为 "Pad"。
+          "elementMap": { // L0149: elementMap 对象开始：稳定名到账本端点的映射表，是 stableSubname 恢复的核心索引。
+            "encoding": "cad-core.element-map.v1", // L0150: encoding：ElementMap 的格式版本。 当前值为 "cad-core.element-map.v1"。
+            "entries": { // L0151: entries 对象开始：ElementMap 条目集合；key 是 canonical stable token，value 是这条 token 的证据和映射目标。
+              "Pad.#10:1;:G;XTR;:H*:*,E": { // L0152: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0153: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0154: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0155: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0156: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0157: evidence 对象结束。
+                "mappedName": { // L0158: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#10:1;:G;XTR;:H*:*,E", // L0159: canonical stable token："Pad.#10:1;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#10:1;:G;XTR;:H542:7,E" // L0160: raw FreeCAD token："Pad.#10:1;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0161: mappedName 对象结束。
+                "recoverability": "resolved", // L0162: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0163: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0164: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0165: 端点所属对象是 "Pad"。
+                  "subname": "Edge2" // L0166: 当前 indexed 子元素名是 "Edge2"。
+                }, // L0167: source 对象结束。
+                "target": { // L0168: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0169: 端点所属对象是 "Body"。
+                  "subname": "Edge2" // L0170: 当前 indexed 子元素名是 "Edge2"。
+                } // L0171: target 对象结束。
+              }, // L0172: Pad.#10:1;:G;XTR;:H*:*,E 对象结束。
+              "Pad.#11:2;:G;XTR;:H*:*,E": { // L0173: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0174: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0175: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0176: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0177: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0178: evidence 对象结束。
+                "mappedName": { // L0179: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#11:2;:G;XTR;:H*:*,E", // L0180: canonical stable token："Pad.#11:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#11:2;:G;XTR;:H542:7,E" // L0181: raw FreeCAD token："Pad.#11:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0182: mappedName 对象结束。
+                "recoverability": "resolved", // L0183: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0184: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0185: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0186: 端点所属对象是 "Pad"。
+                  "subname": "Edge5" // L0187: 当前 indexed 子元素名是 "Edge5"。
+                }, // L0188: source 对象结束。
+                "target": { // L0189: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0190: 端点所属对象是 "Body"。
+                  "subname": "Edge5" // L0191: 当前 indexed 子元素名是 "Edge5"。
+                } // L0192: target 对象结束。
+              }, // L0193: Pad.#11:2;:G;XTR;:H*:*,E 对象结束。
+              "Pad.#12:2;:G;XTR;:H*:*,E": { // L0194: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0195: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0196: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0197: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0198: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0199: evidence 对象结束。
+                "mappedName": { // L0200: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#12:2;:G;XTR;:H*:*,E", // L0201: canonical stable token："Pad.#12:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#12:2;:G;XTR;:H542:7,E" // L0202: raw FreeCAD token："Pad.#12:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0203: mappedName 对象结束。
+                "recoverability": "resolved", // L0204: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0205: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0206: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0207: 端点所属对象是 "Pad"。
+                  "subname": "Edge8" // L0208: 当前 indexed 子元素名是 "Edge8"。
+                }, // L0209: source 对象结束。
+                "target": { // L0210: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0211: 端点所属对象是 "Body"。
+                  "subname": "Edge8" // L0212: 当前 indexed 子元素名是 "Edge8"。
+                } // L0213: target 对象结束。
+              }, // L0214: Pad.#12:2;:G;XTR;:H*:*,E 对象结束。
+              "Pad.#14:1;:G0;XTR;:H*:*,F": { // L0215: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0216: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0217: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0218: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0219: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0220: evidence 对象结束。
+                "mappedName": { // L0221: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#14:1;:G0;XTR;:H*:*,F", // L0222: canonical stable token："Pad.#14:1;:G0;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#14:1;:G0;XTR;:H542:8,F" // L0223: raw FreeCAD token："Pad.#14:1;:G0;XTR;:H542:8,F"；保留原生 hash/细节作为证据。
+                }, // L0224: mappedName 对象结束。
+                "recoverability": "resolved", // L0225: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "face", // L0226: 该条目对应的几何子形状类型是 "face"。
+                "source": { // L0227: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0228: 端点所属对象是 "Pad"。
+                  "subname": "Face6" // L0229: 当前 indexed 子元素名是 "Face6"。
+                }, // L0230: source 对象结束。
+                "target": { // L0231: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0232: 端点所属对象是 "Body"。
+                  "subname": "Face6" // L0233: 当前 indexed 子元素名是 "Face6"。
+                } // L0234: target 对象结束。
+              }, // L0235: Pad.#14:1;:G0;XTR;:H*:*,F 对象结束。
+              "Pad.#16:1;:U;XTR;:H*:*,E": { // L0236: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0237: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0238: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0239: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0240: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0241: evidence 对象结束。
+                "mappedName": { // L0242: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#16:1;:U;XTR;:H*:*,E", // L0243: canonical stable token："Pad.#16:1;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#16:1;:U;XTR;:H542:7,E" // L0244: raw FreeCAD token："Pad.#16:1;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0245: mappedName 对象结束。
+                "recoverability": "resolved", // L0246: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0247: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0248: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0249: 端点所属对象是 "Pad"。
+                  "subname": "Edge12" // L0250: 当前 indexed 子元素名是 "Edge12"。
+                }, // L0251: source 对象结束。
+                "target": { // L0252: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0253: 端点所属对象是 "Body"。
+                  "subname": "Edge12" // L0254: 当前 indexed 子元素名是 "Edge12"。
+                } // L0255: target 对象结束。
+              }, // L0256: Pad.#16:1;:U;XTR;:H*:*,E 对象结束。
+              "Pad.#16:2;:U;XTR;:H*:*,E": { // L0257: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0258: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0259: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0260: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0261: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0262: evidence 对象结束。
+                "mappedName": { // L0263: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#16:2;:U;XTR;:H*:*,E", // L0264: canonical stable token："Pad.#16:2;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#16:2;:U;XTR;:H542:7,E" // L0265: raw FreeCAD token："Pad.#16:2;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0266: mappedName 对象结束。
+                "recoverability": "resolved", // L0267: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0268: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0269: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0270: 端点所属对象是 "Pad"。
+                  "subname": "Edge10" // L0271: 当前 indexed 子元素名是 "Edge10"。
+                }, // L0272: source 对象结束。
+                "target": { // L0273: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0274: 端点所属对象是 "Body"。
+                  "subname": "Edge10" // L0275: 当前 indexed 子元素名是 "Edge10"。
+                } // L0276: target 对象结束。
+              }, // L0277: Pad.#16:2;:U;XTR;:H*:*,E 对象结束。
+              "Pad.#16:3;:U;XTR;:H*:*,E": { // L0278: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0279: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0280: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0281: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0282: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0283: evidence 对象结束。
+                "mappedName": { // L0284: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#16:3;:U;XTR;:H*:*,E", // L0285: canonical stable token："Pad.#16:3;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#16:3;:U;XTR;:H542:7,E" // L0286: raw FreeCAD token："Pad.#16:3;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0287: mappedName 对象结束。
+                "recoverability": "resolved", // L0288: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0289: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0290: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0291: 端点所属对象是 "Pad"。
+                  "subname": "Edge7" // L0292: 当前 indexed 子元素名是 "Edge7"。
+                }, // L0293: source 对象结束。
+                "target": { // L0294: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0295: 端点所属对象是 "Body"。
+                  "subname": "Edge7" // L0296: 当前 indexed 子元素名是 "Edge7"。
+                } // L0297: target 对象结束。
+              }, // L0298: Pad.#16:3;:U;XTR;:H*:*,E 对象结束。
+              "Pad.#16:4;:U;XTR;:H*:*,E": { // L0299: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0300: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0301: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0302: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0303: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0304: evidence 对象结束。
+                "mappedName": { // L0305: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#16:4;:U;XTR;:H*:*,E", // L0306: canonical stable token："Pad.#16:4;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#16:4;:U;XTR;:H542:7,E" // L0307: raw FreeCAD token："Pad.#16:4;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0308: mappedName 对象结束。
+                "recoverability": "resolved", // L0309: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0310: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0311: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0312: 端点所属对象是 "Pad"。
+                  "subname": "Edge4" // L0313: 当前 indexed 子元素名是 "Edge4"。
+                }, // L0314: source 对象结束。
+                "target": { // L0315: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0316: 端点所属对象是 "Body"。
+                  "subname": "Edge4" // L0317: 当前 indexed 子元素名是 "Edge4"。
+                } // L0318: target 对象结束。
+              }, // L0319: Pad.#16:4;:U;XTR;:H*:*,E 对象结束。
+              "Pad.#18:2;:U;XTR;:H*:*,V": { // L0320: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0321: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0322: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0323: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0324: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0325: evidence 对象结束。
+                "mappedName": { // L0326: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#18:2;:U;XTR;:H*:*,V", // L0327: canonical stable token："Pad.#18:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#18:2;:U;XTR;:H542:7,V" // L0328: raw FreeCAD token："Pad.#18:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+                }, // L0329: mappedName 对象结束。
+                "recoverability": "resolved", // L0330: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0331: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0332: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0333: 端点所属对象是 "Pad"。
+                  "subname": "Vertex2" // L0334: 当前 indexed 子元素名是 "Vertex2"。
+                }, // L0335: source 对象结束。
+                "target": { // L0336: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0337: 端点所属对象是 "Body"。
+                  "subname": "Vertex2" // L0338: 当前 indexed 子元素名是 "Vertex2"。
+                } // L0339: target 对象结束。
+              }, // L0340: Pad.#18:2;:U;XTR;:H*:*,V 对象结束。
+              "Pad.#19:1;:U;XTR;:H*:*,V": { // L0341: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0342: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0343: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0344: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0345: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0346: evidence 对象结束。
+                "mappedName": { // L0347: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#19:1;:U;XTR;:H*:*,V", // L0348: canonical stable token："Pad.#19:1;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#19:1;:U;XTR;:H542:7,V" // L0349: raw FreeCAD token："Pad.#19:1;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+                }, // L0350: mappedName 对象结束。
+                "recoverability": "resolved", // L0351: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0352: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0353: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0354: 端点所属对象是 "Pad"。
+                  "subname": "Vertex4" // L0355: 当前 indexed 子元素名是 "Vertex4"。
+                }, // L0356: source 对象结束。
+                "target": { // L0357: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0358: 端点所属对象是 "Body"。
+                  "subname": "Vertex4" // L0359: 当前 indexed 子元素名是 "Vertex4"。
+                } // L0360: target 对象结束。
+              }, // L0361: Pad.#19:1;:U;XTR;:H*:*,V 对象结束。
+              "Pad.#1a:2;:U;XTR;:H*:*,V": { // L0362: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0363: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0364: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0365: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0366: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0367: evidence 对象结束。
+                "mappedName": { // L0368: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#1a:2;:U;XTR;:H*:*,V", // L0369: canonical stable token："Pad.#1a:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#1a:2;:U;XTR;:H542:7,V" // L0370: raw FreeCAD token："Pad.#1a:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+                }, // L0371: mappedName 对象结束。
+                "recoverability": "resolved", // L0372: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0373: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0374: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0375: 端点所属对象是 "Pad"。
+                  "subname": "Vertex6" // L0376: 当前 indexed 子元素名是 "Vertex6"。
+                }, // L0377: source 对象结束。
+                "target": { // L0378: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0379: 端点所属对象是 "Body"。
+                  "subname": "Vertex6" // L0380: 当前 indexed 子元素名是 "Vertex6"。
+                } // L0381: target 对象结束。
+              }, // L0382: Pad.#1a:2;:U;XTR;:H*:*,V 对象结束。
+              "Pad.#1b:2;:U;XTR;:H*:*,V": { // L0383: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0384: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0385: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0386: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0387: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0388: evidence 对象结束。
+                "mappedName": { // L0389: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#1b:2;:U;XTR;:H*:*,V", // L0390: canonical stable token："Pad.#1b:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#1b:2;:U;XTR;:H542:7,V" // L0391: raw FreeCAD token："Pad.#1b:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+                }, // L0392: mappedName 对象结束。
+                "recoverability": "resolved", // L0393: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0394: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0395: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0396: 端点所属对象是 "Pad"。
+                  "subname": "Vertex8" // L0397: 当前 indexed 子元素名是 "Vertex8"。
+                }, // L0398: source 对象结束。
+                "target": { // L0399: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0400: 端点所属对象是 "Body"。
+                  "subname": "Vertex8" // L0401: 当前 indexed 子元素名是 "Vertex8"。
+                } // L0402: target 对象结束。
+              }, // L0403: Pad.#1b:2;:U;XTR;:H*:*,V 对象结束。
+              "Pad.#2:1;:H*,V": { // L0404: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0405: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0406: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0407: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0408: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0409: evidence 对象结束。
+                "mappedName": { // L0410: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#2:1;:H*,V", // L0411: canonical stable token："Pad.#2:1;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#2:1;:H542,V" // L0412: raw FreeCAD token："Pad.#2:1;:H542,V"；保留原生 hash/细节作为证据。
+                }, // L0413: mappedName 对象结束。
+                "recoverability": "resolved", // L0414: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0415: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0416: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0417: 端点所属对象是 "Pad"。
+                  "subname": "Vertex3" // L0418: 当前 indexed 子元素名是 "Vertex3"。
+                }, // L0419: source 对象结束。
+                "target": { // L0420: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0421: 端点所属对象是 "Body"。
+                  "subname": "Vertex3" // L0422: 当前 indexed 子元素名是 "Vertex3"。
+                } // L0423: target 对象结束。
+              }, // L0424: Pad.#2:1;:H*,V 对象结束。
+              "Pad.#4:2;:H*,V": { // L0425: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0426: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0427: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0428: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0429: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0430: evidence 对象结束。
+                "mappedName": { // L0431: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#4:2;:H*,V", // L0432: canonical stable token："Pad.#4:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#4:2;:H542,V" // L0433: raw FreeCAD token："Pad.#4:2;:H542,V"；保留原生 hash/细节作为证据。
+                }, // L0434: mappedName 对象结束。
+                "recoverability": "resolved", // L0435: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0436: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0437: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0438: 端点所属对象是 "Pad"。
+                  "subname": "Vertex7" // L0439: 当前 indexed 子元素名是 "Vertex7"。
+                }, // L0440: source 对象结束。
+                "target": { // L0441: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0442: 端点所属对象是 "Body"。
+                  "subname": "Vertex7" // L0443: 当前 indexed 子元素名是 "Vertex7"。
+                } // L0444: target 对象结束。
+              }, // L0445: Pad.#4:2;:H*,V 对象结束。
+              "Pad.#6:2;:H*,V": { // L0446: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0447: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0448: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0449: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0450: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0451: evidence 对象结束。
+                "mappedName": { // L0452: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#6:2;:H*,V", // L0453: canonical stable token："Pad.#6:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#6:2;:H542,V" // L0454: raw FreeCAD token："Pad.#6:2;:H542,V"；保留原生 hash/细节作为证据。
+                }, // L0455: mappedName 对象结束。
+                "recoverability": "resolved", // L0456: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0457: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0458: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0459: 端点所属对象是 "Pad"。
+                  "subname": "Vertex5" // L0460: 当前 indexed 子元素名是 "Vertex5"。
+                }, // L0461: source 对象结束。
+                "target": { // L0462: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0463: 端点所属对象是 "Body"。
+                  "subname": "Vertex5" // L0464: 当前 indexed 子元素名是 "Vertex5"。
+                } // L0465: target 对象结束。
+              }, // L0466: Pad.#6:2;:H*,V 对象结束。
+              "Pad.#8:2;:H*,V": { // L0467: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0468: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0469: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0470: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0471: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0472: evidence 对象结束。
+                "mappedName": { // L0473: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#8:2;:H*,V", // L0474: canonical stable token："Pad.#8:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#8:2;:H542,V" // L0475: raw FreeCAD token："Pad.#8:2;:H542,V"；保留原生 hash/细节作为证据。
+                }, // L0476: mappedName 对象结束。
+                "recoverability": "resolved", // L0477: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "vertex", // L0478: 该条目对应的几何子形状类型是 "vertex"。
+                "source": { // L0479: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0480: 端点所属对象是 "Pad"。
+                  "subname": "Vertex1" // L0481: 当前 indexed 子元素名是 "Vertex1"。
+                }, // L0482: source 对象结束。
+                "target": { // L0483: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0484: 端点所属对象是 "Body"。
+                  "subname": "Vertex1" // L0485: 当前 indexed 子元素名是 "Vertex1"。
+                } // L0486: target 对象结束。
+              }, // L0487: Pad.#8:2;:H*,V 对象结束。
+              "Pad.#b:1;:H*,E": { // L0488: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0489: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0490: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0491: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0492: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0493: evidence 对象结束。
+                "mappedName": { // L0494: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#b:1;:H*,E", // L0495: canonical stable token："Pad.#b:1;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#b:1;:H542,E" // L0496: raw FreeCAD token："Pad.#b:1;:H542,E"；保留原生 hash/细节作为证据。
+                }, // L0497: mappedName 对象结束。
+                "recoverability": "resolved", // L0498: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0499: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0500: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0501: 端点所属对象是 "Pad"。
+                  "subname": "Edge11" // L0502: 当前 indexed 子元素名是 "Edge11"。
+                }, // L0503: source 对象结束。
+                "target": { // L0504: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0505: 端点所属对象是 "Body"。
+                  "subname": "Edge11" // L0506: 当前 indexed 子元素名是 "Edge11"。
+                } // L0507: target 对象结束。
+              }, // L0508: Pad.#b:1;:H*,E 对象结束。
+              "Pad.#b:2;:H*,E": { // L0509: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0510: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0511: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0512: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0513: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0514: evidence 对象结束。
+                "mappedName": { // L0515: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#b:2;:H*,E", // L0516: canonical stable token："Pad.#b:2;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#b:2;:H542,E" // L0517: raw FreeCAD token："Pad.#b:2;:H542,E"；保留原生 hash/细节作为证据。
+                }, // L0518: mappedName 对象结束。
+                "recoverability": "resolved", // L0519: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0520: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0521: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0522: 端点所属对象是 "Pad"。
+                  "subname": "Edge9" // L0523: 当前 indexed 子元素名是 "Edge9"。
+                }, // L0524: source 对象结束。
+                "target": { // L0525: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0526: 端点所属对象是 "Body"。
+                  "subname": "Edge9" // L0527: 当前 indexed 子元素名是 "Edge9"。
+                } // L0528: target 对象结束。
+              }, // L0529: Pad.#b:2;:H*,E 对象结束。
+              "Pad.#b:3;:H*,E": { // L0530: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0531: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0532: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0533: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0534: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0535: evidence 对象结束。
+                "mappedName": { // L0536: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#b:3;:H*,E", // L0537: canonical stable token："Pad.#b:3;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#b:3;:H542,E" // L0538: raw FreeCAD token："Pad.#b:3;:H542,E"；保留原生 hash/细节作为证据。
+                }, // L0539: mappedName 对象结束。
+                "recoverability": "resolved", // L0540: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0541: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0542: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0543: 端点所属对象是 "Pad"。
+                  "subname": "Edge6" // L0544: 当前 indexed 子元素名是 "Edge6"。
+                }, // L0545: source 对象结束。
+                "target": { // L0546: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0547: 端点所属对象是 "Body"。
+                  "subname": "Edge6" // L0548: 当前 indexed 子元素名是 "Edge6"。
+                } // L0549: target 对象结束。
+              }, // L0550: Pad.#b:3;:H*,E 对象结束。
+              "Pad.#b:4;:H*,E": { // L0551: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0552: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0553: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0554: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0555: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0556: evidence 对象结束。
+                "mappedName": { // L0557: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#b:4;:H*,E", // L0558: canonical stable token："Pad.#b:4;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#b:4;:H542,E" // L0559: raw FreeCAD token："Pad.#b:4;:H542,E"；保留原生 hash/细节作为证据。
+                }, // L0560: mappedName 对象结束。
+                "recoverability": "resolved", // L0561: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0562: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0563: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0564: 端点所属对象是 "Pad"。
+                  "subname": "Edge3" // L0565: 当前 indexed 子元素名是 "Edge3"。
+                }, // L0566: source 对象结束。
+                "target": { // L0567: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0568: 端点所属对象是 "Body"。
+                  "subname": "Edge3" // L0569: 当前 indexed 子元素名是 "Edge3"。
+                } // L0570: target 对象结束。
+              }, // L0571: Pad.#b:4;:H*,E 对象结束。
+              "Pad.#d:1;:G;XTR;:H*:*,F": { // L0572: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0573: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0574: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0575: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0576: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0577: evidence 对象结束。
+                "mappedName": { // L0578: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#d:1;:G;XTR;:H*:*,F", // L0579: canonical stable token："Pad.#d:1;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#d:1;:G;XTR;:H542:7,F" // L0580: raw FreeCAD token："Pad.#d:1;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+                }, // L0581: mappedName 对象结束。
+                "recoverability": "resolved", // L0582: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "face", // L0583: 该条目对应的几何子形状类型是 "face"。
+                "source": { // L0584: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0585: 端点所属对象是 "Pad"。
+                  "subname": "Face4" // L0586: 当前 indexed 子元素名是 "Face4"。
+                }, // L0587: source 对象结束。
+                "target": { // L0588: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0589: 端点所属对象是 "Body"。
+                  "subname": "Face4" // L0590: 当前 indexed 子元素名是 "Face4"。
+                } // L0591: target 对象结束。
+              }, // L0592: Pad.#d:1;:G;XTR;:H*:*,F 对象结束。
+              "Pad.#d:1;;:H*:*,F": { // L0593: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0594: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0595: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0596: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0597: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0598: evidence 对象结束。
+                "mappedName": { // L0599: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#d:1;;:H*:*,F", // L0600: canonical stable token："Pad.#d:1;;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#d:1;;:H542:1,F" // L0601: raw FreeCAD token："Pad.#d:1;;:H542:1,F"；保留原生 hash/细节作为证据。
+                }, // L0602: mappedName 对象结束。
+                "recoverability": "resolved", // L0603: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "face", // L0604: 该条目对应的几何子形状类型是 "face"。
+                "source": { // L0605: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0606: 端点所属对象是 "Pad"。
+                  "subname": "Face5" // L0607: 当前 indexed 子元素名是 "Face5"。
+                }, // L0608: source 对象结束。
+                "target": { // L0609: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0610: 端点所属对象是 "Body"。
+                  "subname": "Face5" // L0611: 当前 indexed 子元素名是 "Face5"。
+                } // L0612: target 对象结束。
+              }, // L0613: Pad.#d:1;;:H*:*,F 对象结束。
+              "Pad.#d:2;:G;XTR;:H*:*,F": { // L0614: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0615: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0616: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0617: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0618: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0619: evidence 对象结束。
+                "mappedName": { // L0620: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#d:2;:G;XTR;:H*:*,F", // L0621: canonical stable token："Pad.#d:2;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#d:2;:G;XTR;:H542:7,F" // L0622: raw FreeCAD token："Pad.#d:2;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+                }, // L0623: mappedName 对象结束。
+                "recoverability": "resolved", // L0624: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "face", // L0625: 该条目对应的几何子形状类型是 "face"。
+                "source": { // L0626: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0627: 端点所属对象是 "Pad"。
+                  "subname": "Face3" // L0628: 当前 indexed 子元素名是 "Face3"。
+                }, // L0629: source 对象结束。
+                "target": { // L0630: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0631: 端点所属对象是 "Body"。
+                  "subname": "Face3" // L0632: 当前 indexed 子元素名是 "Face3"。
+                } // L0633: target 对象结束。
+              }, // L0634: Pad.#d:2;:G;XTR;:H*:*,F 对象结束。
+              "Pad.#d:3;:G;XTR;:H*:*,F": { // L0635: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0636: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0637: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0638: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0639: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0640: evidence 对象结束。
+                "mappedName": { // L0641: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#d:3;:G;XTR;:H*:*,F", // L0642: canonical stable token："Pad.#d:3;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#d:3;:G;XTR;:H542:7,F" // L0643: raw FreeCAD token："Pad.#d:3;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+                }, // L0644: mappedName 对象结束。
+                "recoverability": "resolved", // L0645: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "face", // L0646: 该条目对应的几何子形状类型是 "face"。
+                "source": { // L0647: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0648: 端点所属对象是 "Pad"。
+                  "subname": "Face2" // L0649: 当前 indexed 子元素名是 "Face2"。
+                }, // L0650: source 对象结束。
+                "target": { // L0651: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0652: 端点所属对象是 "Body"。
+                  "subname": "Face2" // L0653: 当前 indexed 子元素名是 "Face2"。
+                } // L0654: target 对象结束。
+              }, // L0655: Pad.#d:3;:G;XTR;:H*:*,F 对象结束。
+              "Pad.#d:4;:G;XTR;:H*:*,F": { // L0656: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0657: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0658: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0659: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0660: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0661: evidence 对象结束。
+                "mappedName": { // L0662: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#d:4;:G;XTR;:H*:*,F", // L0663: canonical stable token："Pad.#d:4;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#d:4;:G;XTR;:H542:7,F" // L0664: raw FreeCAD token："Pad.#d:4;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+                }, // L0665: mappedName 对象结束。
+                "recoverability": "resolved", // L0666: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "face", // L0667: 该条目对应的几何子形状类型是 "face"。
+                "source": { // L0668: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0669: 端点所属对象是 "Pad"。
+                  "subname": "Face1" // L0670: 当前 indexed 子元素名是 "Face1"。
+                }, // L0671: source 对象结束。
+                "target": { // L0672: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0673: 端点所属对象是 "Body"。
+                  "subname": "Face1" // L0674: 当前 indexed 子元素名是 "Face1"。
+                } // L0675: target 对象结束。
+              }, // L0676: Pad.#d:4;:G;XTR;:H*:*,F 对象结束。
+              "Pad.#f:2;:G;XTR;:H*:*,E": { // L0677: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+                "evidence": { // L0678: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+                  "childElementMapKey": "Body:Pad:Pad", // L0679: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+                  "mapperHistoryIds": [], // L0680: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+                  "source": "freecad_partdesign_body_tip" // L0681: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+                }, // L0682: evidence 对象结束。
+                "mappedName": { // L0683: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+                  "canonical": "Pad.#f:2;:G;XTR;:H*:*,E", // L0684: canonical stable token："Pad.#f:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+                  "raw": "Pad.#f:2;:G;XTR;:H542:7,E" // L0685: raw FreeCAD token："Pad.#f:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+                }, // L0686: mappedName 对象结束。
+                "recoverability": "resolved", // L0687: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+                "shapeKind": "edge", // L0688: 该条目对应的几何子形状类型是 "edge"。
+                "source": { // L0689: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+                  "object": "Pad", // L0690: 端点所属对象是 "Pad"。
+                  "subname": "Edge1" // L0691: 当前 indexed 子元素名是 "Edge1"。
+                }, // L0692: source 对象结束。
+                "target": { // L0693: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+                  "object": "Body", // L0694: 端点所属对象是 "Body"。
+                  "subname": "Edge1" // L0695: 当前 indexed 子元素名是 "Edge1"。
+                } // L0696: target 对象结束。
+              } // L0697: Pad.#f:2;:G;XTR;:H*:*,E 对象结束。
+            }, // L0698: entries 对象结束。
+            "status": "history_partial" // L0699: 当前块状态是 "history_partial"。history_partial=映射可用但历史不全，indexed_only=只有索引级账本。
+          }, // L0700: elementMap 对象结束。
+          "key": "Body:Pad:Pad", // L0701: key 的值是 "Body:Pad:Pad"。
+          "ownerObject": "Body", // L0702: ownerObject 的值是 "Body"。
+          "pathPrefix": "Pad" // L0703: pathPrefix 的值是 "Pad"。
+        } // L0704: childElementMaps[] 对象结束。
+      ], // L0705: childElementMaps 数组结束。
+      "elementMap": { // L0706: elementMap 对象开始：稳定名到账本端点的映射表，是 stableSubname 恢复的核心索引。
+        "encoding": "cad-core.element-map.v1", // L0707: encoding：ElementMap 的格式版本。 当前值为 "cad-core.element-map.v1"。
+        "entries": { // L0708: entries 对象开始：ElementMap 条目集合；key 是 canonical stable token，value 是这条 token 的证据和映射目标。
+          "Pad.#10:1;:G;XTR;:H*:*,E": { // L0709: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0710: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0711: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0712: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0713: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0714: evidence 对象结束。
+            "mappedName": { // L0715: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#10:1;:G;XTR;:H*:*,E", // L0716: canonical stable token："Pad.#10:1;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#10:1;:G;XTR;:H542:7,E" // L0717: raw FreeCAD token："Pad.#10:1;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L0718: mappedName 对象结束。
+            "recoverability": "resolved", // L0719: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L0720: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L0721: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0722: 端点所属对象是 "Pad"。
+              "subname": "Edge2" // L0723: 当前 indexed 子元素名是 "Edge2"。
+            }, // L0724: source 对象结束。
+            "target": { // L0725: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0726: 端点所属对象是 "Body"。
+              "subname": "Edge2" // L0727: 当前 indexed 子元素名是 "Edge2"。
+            } // L0728: target 对象结束。
+          }, // L0729: Pad.#10:1;:G;XTR;:H*:*,E 对象结束。
+          "Pad.#11:2;:G;XTR;:H*:*,E": { // L0730: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0731: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0732: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0733: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0734: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0735: evidence 对象结束。
+            "mappedName": { // L0736: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#11:2;:G;XTR;:H*:*,E", // L0737: canonical stable token："Pad.#11:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#11:2;:G;XTR;:H542:7,E" // L0738: raw FreeCAD token："Pad.#11:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L0739: mappedName 对象结束。
+            "recoverability": "resolved", // L0740: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L0741: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L0742: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0743: 端点所属对象是 "Pad"。
+              "subname": "Edge5" // L0744: 当前 indexed 子元素名是 "Edge5"。
+            }, // L0745: source 对象结束。
+            "target": { // L0746: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0747: 端点所属对象是 "Body"。
+              "subname": "Edge5" // L0748: 当前 indexed 子元素名是 "Edge5"。
+            } // L0749: target 对象结束。
+          }, // L0750: Pad.#11:2;:G;XTR;:H*:*,E 对象结束。
+          "Pad.#12:2;:G;XTR;:H*:*,E": { // L0751: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0752: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0753: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0754: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0755: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0756: evidence 对象结束。
+            "mappedName": { // L0757: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#12:2;:G;XTR;:H*:*,E", // L0758: canonical stable token："Pad.#12:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#12:2;:G;XTR;:H542:7,E" // L0759: raw FreeCAD token："Pad.#12:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L0760: mappedName 对象结束。
+            "recoverability": "resolved", // L0761: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L0762: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L0763: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0764: 端点所属对象是 "Pad"。
+              "subname": "Edge8" // L0765: 当前 indexed 子元素名是 "Edge8"。
+            }, // L0766: source 对象结束。
+            "target": { // L0767: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0768: 端点所属对象是 "Body"。
+              "subname": "Edge8" // L0769: 当前 indexed 子元素名是 "Edge8"。
+            } // L0770: target 对象结束。
+          }, // L0771: Pad.#12:2;:G;XTR;:H*:*,E 对象结束。
+          "Pad.#14:1;:G0;XTR;:H*:*,F": { // L0772: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0773: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0774: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0775: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0776: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0777: evidence 对象结束。
+            "mappedName": { // L0778: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#14:1;:G0;XTR;:H*:*,F", // L0779: canonical stable token："Pad.#14:1;:G0;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#14:1;:G0;XTR;:H542:8,F" // L0780: raw FreeCAD token："Pad.#14:1;:G0;XTR;:H542:8,F"；保留原生 hash/细节作为证据。
+            }, // L0781: mappedName 对象结束。
+            "recoverability": "resolved", // L0782: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L0783: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L0784: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0785: 端点所属对象是 "Pad"。
+              "subname": "Face6" // L0786: 当前 indexed 子元素名是 "Face6"。
+            }, // L0787: source 对象结束。
+            "target": { // L0788: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0789: 端点所属对象是 "Body"。
+              "subname": "Face6" // L0790: 当前 indexed 子元素名是 "Face6"。
+            } // L0791: target 对象结束。
+          }, // L0792: Pad.#14:1;:G0;XTR;:H*:*,F 对象结束。
+          "Pad.#16:1;:U;XTR;:H*:*,E": { // L0793: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0794: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0795: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0796: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0797: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0798: evidence 对象结束。
+            "mappedName": { // L0799: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#16:1;:U;XTR;:H*:*,E", // L0800: canonical stable token："Pad.#16:1;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#16:1;:U;XTR;:H542:7,E" // L0801: raw FreeCAD token："Pad.#16:1;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L0802: mappedName 对象结束。
+            "recoverability": "resolved", // L0803: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L0804: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L0805: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0806: 端点所属对象是 "Pad"。
+              "subname": "Edge12" // L0807: 当前 indexed 子元素名是 "Edge12"。
+            }, // L0808: source 对象结束。
+            "target": { // L0809: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0810: 端点所属对象是 "Body"。
+              "subname": "Edge12" // L0811: 当前 indexed 子元素名是 "Edge12"。
+            } // L0812: target 对象结束。
+          }, // L0813: Pad.#16:1;:U;XTR;:H*:*,E 对象结束。
+          "Pad.#16:2;:U;XTR;:H*:*,E": { // L0814: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0815: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0816: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0817: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0818: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0819: evidence 对象结束。
+            "mappedName": { // L0820: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#16:2;:U;XTR;:H*:*,E", // L0821: canonical stable token："Pad.#16:2;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#16:2;:U;XTR;:H542:7,E" // L0822: raw FreeCAD token："Pad.#16:2;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L0823: mappedName 对象结束。
+            "recoverability": "resolved", // L0824: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L0825: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L0826: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0827: 端点所属对象是 "Pad"。
+              "subname": "Edge10" // L0828: 当前 indexed 子元素名是 "Edge10"。
+            }, // L0829: source 对象结束。
+            "target": { // L0830: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0831: 端点所属对象是 "Body"。
+              "subname": "Edge10" // L0832: 当前 indexed 子元素名是 "Edge10"。
+            } // L0833: target 对象结束。
+          }, // L0834: Pad.#16:2;:U;XTR;:H*:*,E 对象结束。
+          "Pad.#16:3;:U;XTR;:H*:*,E": { // L0835: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0836: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0837: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0838: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0839: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0840: evidence 对象结束。
+            "mappedName": { // L0841: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#16:3;:U;XTR;:H*:*,E", // L0842: canonical stable token："Pad.#16:3;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#16:3;:U;XTR;:H542:7,E" // L0843: raw FreeCAD token："Pad.#16:3;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L0844: mappedName 对象结束。
+            "recoverability": "resolved", // L0845: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L0846: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L0847: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0848: 端点所属对象是 "Pad"。
+              "subname": "Edge7" // L0849: 当前 indexed 子元素名是 "Edge7"。
+            }, // L0850: source 对象结束。
+            "target": { // L0851: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0852: 端点所属对象是 "Body"。
+              "subname": "Edge7" // L0853: 当前 indexed 子元素名是 "Edge7"。
+            } // L0854: target 对象结束。
+          }, // L0855: Pad.#16:3;:U;XTR;:H*:*,E 对象结束。
+          "Pad.#16:4;:U;XTR;:H*:*,E": { // L0856: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0857: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0858: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0859: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0860: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0861: evidence 对象结束。
+            "mappedName": { // L0862: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#16:4;:U;XTR;:H*:*,E", // L0863: canonical stable token："Pad.#16:4;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#16:4;:U;XTR;:H542:7,E" // L0864: raw FreeCAD token："Pad.#16:4;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L0865: mappedName 对象结束。
+            "recoverability": "resolved", // L0866: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L0867: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L0868: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0869: 端点所属对象是 "Pad"。
+              "subname": "Edge4" // L0870: 当前 indexed 子元素名是 "Edge4"。
+            }, // L0871: source 对象结束。
+            "target": { // L0872: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0873: 端点所属对象是 "Body"。
+              "subname": "Edge4" // L0874: 当前 indexed 子元素名是 "Edge4"。
+            } // L0875: target 对象结束。
+          }, // L0876: Pad.#16:4;:U;XTR;:H*:*,E 对象结束。
+          "Pad.#18:2;:U;XTR;:H*:*,V": { // L0877: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0878: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0879: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0880: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0881: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0882: evidence 对象结束。
+            "mappedName": { // L0883: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#18:2;:U;XTR;:H*:*,V", // L0884: canonical stable token："Pad.#18:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#18:2;:U;XTR;:H542:7,V" // L0885: raw FreeCAD token："Pad.#18:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L0886: mappedName 对象结束。
+            "recoverability": "resolved", // L0887: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L0888: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L0889: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0890: 端点所属对象是 "Pad"。
+              "subname": "Vertex2" // L0891: 当前 indexed 子元素名是 "Vertex2"。
+            }, // L0892: source 对象结束。
+            "target": { // L0893: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0894: 端点所属对象是 "Body"。
+              "subname": "Vertex2" // L0895: 当前 indexed 子元素名是 "Vertex2"。
+            } // L0896: target 对象结束。
+          }, // L0897: Pad.#18:2;:U;XTR;:H*:*,V 对象结束。
+          "Pad.#19:1;:U;XTR;:H*:*,V": { // L0898: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0899: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0900: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0901: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0902: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0903: evidence 对象结束。
+            "mappedName": { // L0904: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#19:1;:U;XTR;:H*:*,V", // L0905: canonical stable token："Pad.#19:1;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#19:1;:U;XTR;:H542:7,V" // L0906: raw FreeCAD token："Pad.#19:1;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L0907: mappedName 对象结束。
+            "recoverability": "resolved", // L0908: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L0909: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L0910: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0911: 端点所属对象是 "Pad"。
+              "subname": "Vertex4" // L0912: 当前 indexed 子元素名是 "Vertex4"。
+            }, // L0913: source 对象结束。
+            "target": { // L0914: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0915: 端点所属对象是 "Body"。
+              "subname": "Vertex4" // L0916: 当前 indexed 子元素名是 "Vertex4"。
+            } // L0917: target 对象结束。
+          }, // L0918: Pad.#19:1;:U;XTR;:H*:*,V 对象结束。
+          "Pad.#1a:2;:U;XTR;:H*:*,V": { // L0919: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0920: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0921: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0922: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0923: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0924: evidence 对象结束。
+            "mappedName": { // L0925: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#1a:2;:U;XTR;:H*:*,V", // L0926: canonical stable token："Pad.#1a:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#1a:2;:U;XTR;:H542:7,V" // L0927: raw FreeCAD token："Pad.#1a:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L0928: mappedName 对象结束。
+            "recoverability": "resolved", // L0929: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L0930: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L0931: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0932: 端点所属对象是 "Pad"。
+              "subname": "Vertex6" // L0933: 当前 indexed 子元素名是 "Vertex6"。
+            }, // L0934: source 对象结束。
+            "target": { // L0935: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0936: 端点所属对象是 "Body"。
+              "subname": "Vertex6" // L0937: 当前 indexed 子元素名是 "Vertex6"。
+            } // L0938: target 对象结束。
+          }, // L0939: Pad.#1a:2;:U;XTR;:H*:*,V 对象结束。
+          "Pad.#1b:2;:U;XTR;:H*:*,V": { // L0940: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0941: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0942: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0943: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0944: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0945: evidence 对象结束。
+            "mappedName": { // L0946: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#1b:2;:U;XTR;:H*:*,V", // L0947: canonical stable token："Pad.#1b:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#1b:2;:U;XTR;:H542:7,V" // L0948: raw FreeCAD token："Pad.#1b:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L0949: mappedName 对象结束。
+            "recoverability": "resolved", // L0950: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L0951: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L0952: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0953: 端点所属对象是 "Pad"。
+              "subname": "Vertex8" // L0954: 当前 indexed 子元素名是 "Vertex8"。
+            }, // L0955: source 对象结束。
+            "target": { // L0956: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0957: 端点所属对象是 "Body"。
+              "subname": "Vertex8" // L0958: 当前 indexed 子元素名是 "Vertex8"。
+            } // L0959: target 对象结束。
+          }, // L0960: Pad.#1b:2;:U;XTR;:H*:*,V 对象结束。
+          "Pad.#2:1;:H*,V": { // L0961: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0962: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0963: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0964: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0965: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0966: evidence 对象结束。
+            "mappedName": { // L0967: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#2:1;:H*,V", // L0968: canonical stable token："Pad.#2:1;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#2:1;:H542,V" // L0969: raw FreeCAD token："Pad.#2:1;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L0970: mappedName 对象结束。
+            "recoverability": "resolved", // L0971: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L0972: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L0973: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0974: 端点所属对象是 "Pad"。
+              "subname": "Vertex3" // L0975: 当前 indexed 子元素名是 "Vertex3"。
+            }, // L0976: source 对象结束。
+            "target": { // L0977: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0978: 端点所属对象是 "Body"。
+              "subname": "Vertex3" // L0979: 当前 indexed 子元素名是 "Vertex3"。
+            } // L0980: target 对象结束。
+          }, // L0981: Pad.#2:1;:H*,V 对象结束。
+          "Pad.#4:2;:H*,V": { // L0982: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L0983: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L0984: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L0985: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L0986: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L0987: evidence 对象结束。
+            "mappedName": { // L0988: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#4:2;:H*,V", // L0989: canonical stable token："Pad.#4:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#4:2;:H542,V" // L0990: raw FreeCAD token："Pad.#4:2;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L0991: mappedName 对象结束。
+            "recoverability": "resolved", // L0992: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L0993: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L0994: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L0995: 端点所属对象是 "Pad"。
+              "subname": "Vertex7" // L0996: 当前 indexed 子元素名是 "Vertex7"。
+            }, // L0997: source 对象结束。
+            "target": { // L0998: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L0999: 端点所属对象是 "Body"。
+              "subname": "Vertex7" // L1000: 当前 indexed 子元素名是 "Vertex7"。
+            } // L1001: target 对象结束。
+          }, // L1002: Pad.#4:2;:H*,V 对象结束。
+          "Pad.#6:2;:H*,V": { // L1003: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1004: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1005: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1006: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1007: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1008: evidence 对象结束。
+            "mappedName": { // L1009: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#6:2;:H*,V", // L1010: canonical stable token："Pad.#6:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#6:2;:H542,V" // L1011: raw FreeCAD token："Pad.#6:2;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L1012: mappedName 对象结束。
+            "recoverability": "resolved", // L1013: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1014: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1015: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1016: 端点所属对象是 "Pad"。
+              "subname": "Vertex5" // L1017: 当前 indexed 子元素名是 "Vertex5"。
+            }, // L1018: source 对象结束。
+            "target": { // L1019: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1020: 端点所属对象是 "Body"。
+              "subname": "Vertex5" // L1021: 当前 indexed 子元素名是 "Vertex5"。
+            } // L1022: target 对象结束。
+          }, // L1023: Pad.#6:2;:H*,V 对象结束。
+          "Pad.#8:2;:H*,V": { // L1024: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 vertex；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1025: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1026: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1027: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1028: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1029: evidence 对象结束。
+            "mappedName": { // L1030: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#8:2;:H*,V", // L1031: canonical stable token："Pad.#8:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#8:2;:H542,V" // L1032: raw FreeCAD token："Pad.#8:2;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L1033: mappedName 对象结束。
+            "recoverability": "resolved", // L1034: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1035: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1036: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1037: 端点所属对象是 "Pad"。
+              "subname": "Vertex1" // L1038: 当前 indexed 子元素名是 "Vertex1"。
+            }, // L1039: source 对象结束。
+            "target": { // L1040: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1041: 端点所属对象是 "Body"。
+              "subname": "Vertex1" // L1042: 当前 indexed 子元素名是 "Vertex1"。
+            } // L1043: target 对象结束。
+          }, // L1044: Pad.#8:2;:H*,V 对象结束。
+          "Pad.#b:1;:H*,E": { // L1045: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1046: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1047: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1048: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1049: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1050: evidence 对象结束。
+            "mappedName": { // L1051: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#b:1;:H*,E", // L1052: canonical stable token："Pad.#b:1;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#b:1;:H542,E" // L1053: raw FreeCAD token："Pad.#b:1;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1054: mappedName 对象结束。
+            "recoverability": "resolved", // L1055: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1056: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1057: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1058: 端点所属对象是 "Pad"。
+              "subname": "Edge11" // L1059: 当前 indexed 子元素名是 "Edge11"。
+            }, // L1060: source 对象结束。
+            "target": { // L1061: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1062: 端点所属对象是 "Body"。
+              "subname": "Edge11" // L1063: 当前 indexed 子元素名是 "Edge11"。
+            } // L1064: target 对象结束。
+          }, // L1065: Pad.#b:1;:H*,E 对象结束。
+          "Pad.#b:2;:H*,E": { // L1066: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1067: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1068: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1069: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1070: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1071: evidence 对象结束。
+            "mappedName": { // L1072: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#b:2;:H*,E", // L1073: canonical stable token："Pad.#b:2;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#b:2;:H542,E" // L1074: raw FreeCAD token："Pad.#b:2;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1075: mappedName 对象结束。
+            "recoverability": "resolved", // L1076: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1077: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1078: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1079: 端点所属对象是 "Pad"。
+              "subname": "Edge9" // L1080: 当前 indexed 子元素名是 "Edge9"。
+            }, // L1081: source 对象结束。
+            "target": { // L1082: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1083: 端点所属对象是 "Body"。
+              "subname": "Edge9" // L1084: 当前 indexed 子元素名是 "Edge9"。
+            } // L1085: target 对象结束。
+          }, // L1086: Pad.#b:2;:H*,E 对象结束。
+          "Pad.#b:3;:H*,E": { // L1087: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1088: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1089: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1090: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1091: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1092: evidence 对象结束。
+            "mappedName": { // L1093: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#b:3;:H*,E", // L1094: canonical stable token："Pad.#b:3;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#b:3;:H542,E" // L1095: raw FreeCAD token："Pad.#b:3;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1096: mappedName 对象结束。
+            "recoverability": "resolved", // L1097: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1098: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1099: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1100: 端点所属对象是 "Pad"。
+              "subname": "Edge6" // L1101: 当前 indexed 子元素名是 "Edge6"。
+            }, // L1102: source 对象结束。
+            "target": { // L1103: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1104: 端点所属对象是 "Body"。
+              "subname": "Edge6" // L1105: 当前 indexed 子元素名是 "Edge6"。
+            } // L1106: target 对象结束。
+          }, // L1107: Pad.#b:3;:H*,E 对象结束。
+          "Pad.#b:4;:H*,E": { // L1108: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1109: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1110: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1111: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1112: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1113: evidence 对象结束。
+            "mappedName": { // L1114: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#b:4;:H*,E", // L1115: canonical stable token："Pad.#b:4;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#b:4;:H542,E" // L1116: raw FreeCAD token："Pad.#b:4;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1117: mappedName 对象结束。
+            "recoverability": "resolved", // L1118: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1119: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1120: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1121: 端点所属对象是 "Pad"。
+              "subname": "Edge3" // L1122: 当前 indexed 子元素名是 "Edge3"。
+            }, // L1123: source 对象结束。
+            "target": { // L1124: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1125: 端点所属对象是 "Body"。
+              "subname": "Edge3" // L1126: 当前 indexed 子元素名是 "Edge3"。
+            } // L1127: target 对象结束。
+          }, // L1128: Pad.#b:4;:H*,E 对象结束。
+          "Pad.#d:1;:G;XTR;:H*:*,F": { // L1129: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1130: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1131: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1132: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1133: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1134: evidence 对象结束。
+            "mappedName": { // L1135: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#d:1;:G;XTR;:H*:*,F", // L1136: canonical stable token："Pad.#d:1;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#d:1;:G;XTR;:H542:7,F" // L1137: raw FreeCAD token："Pad.#d:1;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1138: mappedName 对象结束。
+            "recoverability": "resolved", // L1139: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1140: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1141: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1142: 端点所属对象是 "Pad"。
+              "subname": "Face4" // L1143: 当前 indexed 子元素名是 "Face4"。
+            }, // L1144: source 对象结束。
+            "target": { // L1145: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1146: 端点所属对象是 "Body"。
+              "subname": "Face4" // L1147: 当前 indexed 子元素名是 "Face4"。
+            } // L1148: target 对象结束。
+          }, // L1149: Pad.#d:1;:G;XTR;:H*:*,F 对象结束。
+          "Pad.#d:1;;:H*:*,F": { // L1150: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1151: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1152: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1153: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1154: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1155: evidence 对象结束。
+            "mappedName": { // L1156: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#d:1;;:H*:*,F", // L1157: canonical stable token："Pad.#d:1;;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#d:1;;:H542:1,F" // L1158: raw FreeCAD token："Pad.#d:1;;:H542:1,F"；保留原生 hash/细节作为证据。
+            }, // L1159: mappedName 对象结束。
+            "recoverability": "resolved", // L1160: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1161: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1162: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1163: 端点所属对象是 "Pad"。
+              "subname": "Face5" // L1164: 当前 indexed 子元素名是 "Face5"。
+            }, // L1165: source 对象结束。
+            "target": { // L1166: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1167: 端点所属对象是 "Body"。
+              "subname": "Face5" // L1168: 当前 indexed 子元素名是 "Face5"。
+            } // L1169: target 对象结束。
+          }, // L1170: Pad.#d:1;;:H*:*,F 对象结束。
+          "Pad.#d:2;:G;XTR;:H*:*,F": { // L1171: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1172: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1173: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1174: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1175: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1176: evidence 对象结束。
+            "mappedName": { // L1177: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#d:2;:G;XTR;:H*:*,F", // L1178: canonical stable token："Pad.#d:2;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#d:2;:G;XTR;:H542:7,F" // L1179: raw FreeCAD token："Pad.#d:2;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1180: mappedName 对象结束。
+            "recoverability": "resolved", // L1181: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1182: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1183: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1184: 端点所属对象是 "Pad"。
+              "subname": "Face3" // L1185: 当前 indexed 子元素名是 "Face3"。
+            }, // L1186: source 对象结束。
+            "target": { // L1187: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1188: 端点所属对象是 "Body"。
+              "subname": "Face3" // L1189: 当前 indexed 子元素名是 "Face3"。
+            } // L1190: target 对象结束。
+          }, // L1191: Pad.#d:2;:G;XTR;:H*:*,F 对象结束。
+          "Pad.#d:3;:G;XTR;:H*:*,F": { // L1192: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1193: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1194: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1195: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1196: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1197: evidence 对象结束。
+            "mappedName": { // L1198: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#d:3;:G;XTR;:H*:*,F", // L1199: canonical stable token："Pad.#d:3;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#d:3;:G;XTR;:H542:7,F" // L1200: raw FreeCAD token："Pad.#d:3;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1201: mappedName 对象结束。
+            "recoverability": "resolved", // L1202: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1203: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1204: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1205: 端点所属对象是 "Pad"。
+              "subname": "Face2" // L1206: 当前 indexed 子元素名是 "Face2"。
+            }, // L1207: source 对象结束。
+            "target": { // L1208: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1209: 端点所属对象是 "Body"。
+              "subname": "Face2" // L1210: 当前 indexed 子元素名是 "Face2"。
+            } // L1211: target 对象结束。
+          }, // L1212: Pad.#d:3;:G;XTR;:H*:*,F 对象结束。
+          "Pad.#d:4;:G;XTR;:H*:*,F": { // L1213: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 face；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1214: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1215: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1216: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1217: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1218: evidence 对象结束。
+            "mappedName": { // L1219: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#d:4;:G;XTR;:H*:*,F", // L1220: canonical stable token："Pad.#d:4;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#d:4;:G;XTR;:H542:7,F" // L1221: raw FreeCAD token："Pad.#d:4;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1222: mappedName 对象结束。
+            "recoverability": "resolved", // L1223: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1224: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1225: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1226: 端点所属对象是 "Pad"。
+              "subname": "Face1" // L1227: 当前 indexed 子元素名是 "Face1"。
+            }, // L1228: source 对象结束。
+            "target": { // L1229: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1230: 端点所属对象是 "Body"。
+              "subname": "Face1" // L1231: 当前 indexed 子元素名是 "Face1"。
+            } // L1232: target 对象结束。
+          }, // L1233: Pad.#d:4;:G;XTR;:H*:*,F 对象结束。
+          "Pad.#f:2;:G;XTR;:H*:*,E": { // L1234: ElementMap 条目 key：Body child map 中来自 Pad 的 canonical stable token，对应一个 edge；Pad. 前缀表示发布到 Body 边界时保留子对象来源。
+            "evidence": { // L1235: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": "Body:Pad:Pad", // L1236: child map key="Body:Pad:Pad"；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1237: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_partdesign_body_tip" // L1238: evidence.source：这条映射的证据来源是 "freecad_partdesign_body_tip"。
+            }, // L1239: evidence 对象结束。
+            "mappedName": { // L1240: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "Pad.#f:2;:G;XTR;:H*:*,E", // L1241: canonical stable token："Pad.#f:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "Pad.#f:2;:G;XTR;:H542:7,E" // L1242: raw FreeCAD token："Pad.#f:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1243: mappedName 对象结束。
+            "recoverability": "resolved", // L1244: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1245: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1246: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1247: 端点所属对象是 "Pad"。
+              "subname": "Edge1" // L1248: 当前 indexed 子元素名是 "Edge1"。
+            }, // L1249: source 对象结束。
+            "target": { // L1250: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Body", // L1251: 端点所属对象是 "Body"。
+              "subname": "Edge1" // L1252: 当前 indexed 子元素名是 "Edge1"。
+            } // L1253: target 对象结束。
+          } // L1254: Pad.#f:2;:G;XTR;:H*:*,E 对象结束。
+        }, // L1255: entries 对象结束。
+        "status": "history_partial" // L1256: 当前块状态是 "history_partial"。history_partial=映射可用但历史不全，indexed_only=只有索引级账本。
+      }, // L1257: elementMap 对象结束。
+      "mapperHistory": [], // L1258: mapperHistory：对象内部的 FreeCAD MapperHistory 事件列表。 当前值为 []。
+      "published": true, // L1259: 是否发布到 topoNamingState：true。
+      "role": "protocol_published", // L1260: 发布角色是 "protocol_published"；protocol_published 表示客户端会携带这个对象状态。
+      "type": "PartDesign::Body" // L1261: FreeCAD 对象类型是 "PartDesign::Body"。
+    }, // L1262: Body 对象结束。
+    "Pad": { // L1263: Pad 对象账本开始：记录该 FreeCAD 对象的子元素、稳定名映射、历史和发布状态。
+      "afterElements": { // L1264: afterElements 对象开始：recompute 后该对象可见的 indexed 子元素清单。
+        "Edge": [ // L1265: Edge 数组开始：Edge 类 indexed 子元素数组。
+          "Edge1", // L1266: Edge 数组项："Edge1"，当前对象的一个 edge 子元素名。
+          "Edge2", // L1267: Edge 数组项："Edge2"，当前对象的一个 edge 子元素名。
+          "Edge3", // L1268: Edge 数组项："Edge3"，当前对象的一个 edge 子元素名。
+          "Edge4", // L1269: Edge 数组项："Edge4"，当前对象的一个 edge 子元素名。
+          "Edge5", // L1270: Edge 数组项："Edge5"，当前对象的一个 edge 子元素名。
+          "Edge6", // L1271: Edge 数组项："Edge6"，当前对象的一个 edge 子元素名。
+          "Edge7", // L1272: Edge 数组项："Edge7"，当前对象的一个 edge 子元素名。
+          "Edge8", // L1273: Edge 数组项："Edge8"，当前对象的一个 edge 子元素名。
+          "Edge9", // L1274: Edge 数组项："Edge9"，当前对象的一个 edge 子元素名。
+          "Edge10", // L1275: Edge 数组项："Edge10"，当前对象的一个 edge 子元素名。
+          "Edge11", // L1276: Edge 数组项："Edge11"，当前对象的一个 edge 子元素名。
+          "Edge12" // L1277: Edge 数组项："Edge12"，当前对象的一个 edge 子元素名。
+        ], // L1278: Edge 数组结束。
+        "Face": [ // L1279: Face 数组开始：Face 类 indexed 子元素数组。
+          "Face1", // L1280: Face 数组项："Face1"，当前对象的一个 face 子元素名。
+          "Face2", // L1281: Face 数组项："Face2"，当前对象的一个 face 子元素名。
+          "Face3", // L1282: Face 数组项："Face3"，当前对象的一个 face 子元素名。
+          "Face4", // L1283: Face 数组项："Face4"，当前对象的一个 face 子元素名。
+          "Face5", // L1284: Face 数组项："Face5"，当前对象的一个 face 子元素名。
+          "Face6" // L1285: Face 数组项："Face6"，当前对象的一个 face 子元素名。
+        ], // L1286: Face 数组结束。
+        "Vertex": [ // L1287: Vertex 数组开始：Vertex 类 indexed 子元素数组。
+          "Vertex1", // L1288: Vertex 数组项："Vertex1"，当前对象的一个 vertex 子元素名。
+          "Vertex2", // L1289: Vertex 数组项："Vertex2"，当前对象的一个 vertex 子元素名。
+          "Vertex3", // L1290: Vertex 数组项："Vertex3"，当前对象的一个 vertex 子元素名。
+          "Vertex4", // L1291: Vertex 数组项："Vertex4"，当前对象的一个 vertex 子元素名。
+          "Vertex5", // L1292: Vertex 数组项："Vertex5"，当前对象的一个 vertex 子元素名。
+          "Vertex6", // L1293: Vertex 数组项："Vertex6"，当前对象的一个 vertex 子元素名。
+          "Vertex7", // L1294: Vertex 数组项："Vertex7"，当前对象的一个 vertex 子元素名。
+          "Vertex8" // L1295: Vertex 数组项："Vertex8"，当前对象的一个 vertex 子元素名。
+        ] // L1296: Vertex 数组结束。
+      }, // L1297: afterElements 对象结束。
+      "beforeElements": {}, // L1298: beforeElements：recompute 前或输入状态中该对象已有的 indexed 子元素清单。 当前值为 {}。
+      "childElementMaps": [], // L1299: childElementMaps：父对象发布的子对象映射表；Body 用它把 Tip 子对象 Pad 的元素映射成 Body 范围内的元素。 当前值为 []。
+      "elementMap": { // L1300: elementMap 对象开始：稳定名到账本端点的映射表，是 stableSubname 恢复的核心索引。
+        "encoding": "cad-core.element-map.v1", // L1301: encoding：ElementMap 的格式版本。 当前值为 "cad-core.element-map.v1"。
+        "entries": { // L1302: entries 对象开始：ElementMap 条目集合；key 是 canonical stable token，value 是这条 token 的证据和映射目标。
+          "#10:1;:G;XTR;:H*:*,E": { // L1303: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1304: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1305: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1306: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1307: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1308: evidence 对象结束。
+            "mappedName": { // L1309: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#10:1;:G;XTR;:H*:*,E", // L1310: canonical stable token："#10:1;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#10:1;:G;XTR;:H542:7,E" // L1311: raw FreeCAD token："#10:1;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1312: mappedName 对象结束。
+            "recoverability": "resolved", // L1313: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1314: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1315: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1316: 端点所属对象是 "Pad"。
+              "subname": "Edge2" // L1317: 当前 indexed 子元素名是 "Edge2"。
+            }, // L1318: source 对象结束。
+            "target": { // L1319: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1320: 端点所属对象是 "Pad"。
+              "subname": "Edge2" // L1321: 当前 indexed 子元素名是 "Edge2"。
+            } // L1322: target 对象结束。
+          }, // L1323: #10:1;:G;XTR;:H*:*,E 对象结束。
+          "#11:2;:G;XTR;:H*:*,E": { // L1324: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1325: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1326: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1327: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1328: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1329: evidence 对象结束。
+            "mappedName": { // L1330: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#11:2;:G;XTR;:H*:*,E", // L1331: canonical stable token："#11:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#11:2;:G;XTR;:H542:7,E" // L1332: raw FreeCAD token："#11:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1333: mappedName 对象结束。
+            "recoverability": "resolved", // L1334: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1335: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1336: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1337: 端点所属对象是 "Pad"。
+              "subname": "Edge5" // L1338: 当前 indexed 子元素名是 "Edge5"。
+            }, // L1339: source 对象结束。
+            "target": { // L1340: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1341: 端点所属对象是 "Pad"。
+              "subname": "Edge5" // L1342: 当前 indexed 子元素名是 "Edge5"。
+            } // L1343: target 对象结束。
+          }, // L1344: #11:2;:G;XTR;:H*:*,E 对象结束。
+          "#12:2;:G;XTR;:H*:*,E": { // L1345: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1346: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1347: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1348: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1349: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1350: evidence 对象结束。
+            "mappedName": { // L1351: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#12:2;:G;XTR;:H*:*,E", // L1352: canonical stable token："#12:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#12:2;:G;XTR;:H542:7,E" // L1353: raw FreeCAD token："#12:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1354: mappedName 对象结束。
+            "recoverability": "resolved", // L1355: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1356: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1357: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1358: 端点所属对象是 "Pad"。
+              "subname": "Edge8" // L1359: 当前 indexed 子元素名是 "Edge8"。
+            }, // L1360: source 对象结束。
+            "target": { // L1361: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1362: 端点所属对象是 "Pad"。
+              "subname": "Edge8" // L1363: 当前 indexed 子元素名是 "Edge8"。
+            } // L1364: target 对象结束。
+          }, // L1365: #12:2;:G;XTR;:H*:*,E 对象结束。
+          "#14:1;:G0;XTR;:H*:*,F": { // L1366: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 face；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1367: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1368: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1369: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1370: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1371: evidence 对象结束。
+            "mappedName": { // L1372: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#14:1;:G0;XTR;:H*:*,F", // L1373: canonical stable token："#14:1;:G0;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#14:1;:G0;XTR;:H542:8,F" // L1374: raw FreeCAD token："#14:1;:G0;XTR;:H542:8,F"；保留原生 hash/细节作为证据。
+            }, // L1375: mappedName 对象结束。
+            "recoverability": "resolved", // L1376: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1377: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1378: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1379: 端点所属对象是 "Pad"。
+              "subname": "Face6" // L1380: 当前 indexed 子元素名是 "Face6"。
+            }, // L1381: source 对象结束。
+            "target": { // L1382: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1383: 端点所属对象是 "Pad"。
+              "subname": "Face6" // L1384: 当前 indexed 子元素名是 "Face6"。
+            } // L1385: target 对象结束。
+          }, // L1386: #14:1;:G0;XTR;:H*:*,F 对象结束。
+          "#16:1;:U;XTR;:H*:*,E": { // L1387: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1388: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1389: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1390: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1391: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1392: evidence 对象结束。
+            "mappedName": { // L1393: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#16:1;:U;XTR;:H*:*,E", // L1394: canonical stable token："#16:1;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#16:1;:U;XTR;:H542:7,E" // L1395: raw FreeCAD token："#16:1;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1396: mappedName 对象结束。
+            "recoverability": "resolved", // L1397: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1398: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1399: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1400: 端点所属对象是 "Pad"。
+              "subname": "Edge12" // L1401: 当前 indexed 子元素名是 "Edge12"。
+            }, // L1402: source 对象结束。
+            "target": { // L1403: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1404: 端点所属对象是 "Pad"。
+              "subname": "Edge12" // L1405: 当前 indexed 子元素名是 "Edge12"。
+            } // L1406: target 对象结束。
+          }, // L1407: #16:1;:U;XTR;:H*:*,E 对象结束。
+          "#16:2;:U;XTR;:H*:*,E": { // L1408: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1409: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1410: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1411: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1412: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1413: evidence 对象结束。
+            "mappedName": { // L1414: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#16:2;:U;XTR;:H*:*,E", // L1415: canonical stable token："#16:2;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#16:2;:U;XTR;:H542:7,E" // L1416: raw FreeCAD token："#16:2;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1417: mappedName 对象结束。
+            "recoverability": "resolved", // L1418: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1419: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1420: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1421: 端点所属对象是 "Pad"。
+              "subname": "Edge10" // L1422: 当前 indexed 子元素名是 "Edge10"。
+            }, // L1423: source 对象结束。
+            "target": { // L1424: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1425: 端点所属对象是 "Pad"。
+              "subname": "Edge10" // L1426: 当前 indexed 子元素名是 "Edge10"。
+            } // L1427: target 对象结束。
+          }, // L1428: #16:2;:U;XTR;:H*:*,E 对象结束。
+          "#16:3;:U;XTR;:H*:*,E": { // L1429: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1430: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1431: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1432: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1433: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1434: evidence 对象结束。
+            "mappedName": { // L1435: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#16:3;:U;XTR;:H*:*,E", // L1436: canonical stable token："#16:3;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#16:3;:U;XTR;:H542:7,E" // L1437: raw FreeCAD token："#16:3;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1438: mappedName 对象结束。
+            "recoverability": "resolved", // L1439: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1440: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1441: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1442: 端点所属对象是 "Pad"。
+              "subname": "Edge7" // L1443: 当前 indexed 子元素名是 "Edge7"。
+            }, // L1444: source 对象结束。
+            "target": { // L1445: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1446: 端点所属对象是 "Pad"。
+              "subname": "Edge7" // L1447: 当前 indexed 子元素名是 "Edge7"。
+            } // L1448: target 对象结束。
+          }, // L1449: #16:3;:U;XTR;:H*:*,E 对象结束。
+          "#16:4;:U;XTR;:H*:*,E": { // L1450: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1451: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1452: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1453: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1454: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1455: evidence 对象结束。
+            "mappedName": { // L1456: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#16:4;:U;XTR;:H*:*,E", // L1457: canonical stable token："#16:4;:U;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#16:4;:U;XTR;:H542:7,E" // L1458: raw FreeCAD token："#16:4;:U;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1459: mappedName 对象结束。
+            "recoverability": "resolved", // L1460: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1461: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1462: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1463: 端点所属对象是 "Pad"。
+              "subname": "Edge4" // L1464: 当前 indexed 子元素名是 "Edge4"。
+            }, // L1465: source 对象结束。
+            "target": { // L1466: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1467: 端点所属对象是 "Pad"。
+              "subname": "Edge4" // L1468: 当前 indexed 子元素名是 "Edge4"。
+            } // L1469: target 对象结束。
+          }, // L1470: #16:4;:U;XTR;:H*:*,E 对象结束。
+          "#18:2;:U;XTR;:H*:*,V": { // L1471: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1472: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1473: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1474: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1475: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1476: evidence 对象结束。
+            "mappedName": { // L1477: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#18:2;:U;XTR;:H*:*,V", // L1478: canonical stable token："#18:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#18:2;:U;XTR;:H542:7,V" // L1479: raw FreeCAD token："#18:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L1480: mappedName 对象结束。
+            "recoverability": "resolved", // L1481: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1482: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1483: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1484: 端点所属对象是 "Pad"。
+              "subname": "Vertex2" // L1485: 当前 indexed 子元素名是 "Vertex2"。
+            }, // L1486: source 对象结束。
+            "target": { // L1487: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1488: 端点所属对象是 "Pad"。
+              "subname": "Vertex2" // L1489: 当前 indexed 子元素名是 "Vertex2"。
+            } // L1490: target 对象结束。
+          }, // L1491: #18:2;:U;XTR;:H*:*,V 对象结束。
+          "#19:1;:U;XTR;:H*:*,V": { // L1492: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1493: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1494: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1495: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1496: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1497: evidence 对象结束。
+            "mappedName": { // L1498: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#19:1;:U;XTR;:H*:*,V", // L1499: canonical stable token："#19:1;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#19:1;:U;XTR;:H542:7,V" // L1500: raw FreeCAD token："#19:1;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L1501: mappedName 对象结束。
+            "recoverability": "resolved", // L1502: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1503: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1504: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1505: 端点所属对象是 "Pad"。
+              "subname": "Vertex4" // L1506: 当前 indexed 子元素名是 "Vertex4"。
+            }, // L1507: source 对象结束。
+            "target": { // L1508: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1509: 端点所属对象是 "Pad"。
+              "subname": "Vertex4" // L1510: 当前 indexed 子元素名是 "Vertex4"。
+            } // L1511: target 对象结束。
+          }, // L1512: #19:1;:U;XTR;:H*:*,V 对象结束。
+          "#1a:2;:U;XTR;:H*:*,V": { // L1513: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1514: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1515: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1516: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1517: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1518: evidence 对象结束。
+            "mappedName": { // L1519: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#1a:2;:U;XTR;:H*:*,V", // L1520: canonical stable token："#1a:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#1a:2;:U;XTR;:H542:7,V" // L1521: raw FreeCAD token："#1a:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L1522: mappedName 对象结束。
+            "recoverability": "resolved", // L1523: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1524: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1525: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1526: 端点所属对象是 "Pad"。
+              "subname": "Vertex6" // L1527: 当前 indexed 子元素名是 "Vertex6"。
+            }, // L1528: source 对象结束。
+            "target": { // L1529: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1530: 端点所属对象是 "Pad"。
+              "subname": "Vertex6" // L1531: 当前 indexed 子元素名是 "Vertex6"。
+            } // L1532: target 对象结束。
+          }, // L1533: #1a:2;:U;XTR;:H*:*,V 对象结束。
+          "#1b:2;:U;XTR;:H*:*,V": { // L1534: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1535: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1536: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1537: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1538: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1539: evidence 对象结束。
+            "mappedName": { // L1540: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#1b:2;:U;XTR;:H*:*,V", // L1541: canonical stable token："#1b:2;:U;XTR;:H*:*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#1b:2;:U;XTR;:H542:7,V" // L1542: raw FreeCAD token："#1b:2;:U;XTR;:H542:7,V"；保留原生 hash/细节作为证据。
+            }, // L1543: mappedName 对象结束。
+            "recoverability": "resolved", // L1544: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1545: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1546: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1547: 端点所属对象是 "Pad"。
+              "subname": "Vertex8" // L1548: 当前 indexed 子元素名是 "Vertex8"。
+            }, // L1549: source 对象结束。
+            "target": { // L1550: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1551: 端点所属对象是 "Pad"。
+              "subname": "Vertex8" // L1552: 当前 indexed 子元素名是 "Vertex8"。
+            } // L1553: target 对象结束。
+          }, // L1554: #1b:2;:U;XTR;:H*:*,V 对象结束。
+          "#2:1;:H*,V": { // L1555: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1556: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1557: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1558: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1559: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1560: evidence 对象结束。
+            "mappedName": { // L1561: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#2:1;:H*,V", // L1562: canonical stable token："#2:1;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#2:1;:H542,V" // L1563: raw FreeCAD token："#2:1;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L1564: mappedName 对象结束。
+            "recoverability": "resolved", // L1565: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1566: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1567: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1568: 端点所属对象是 "Pad"。
+              "subname": "Vertex3" // L1569: 当前 indexed 子元素名是 "Vertex3"。
+            }, // L1570: source 对象结束。
+            "target": { // L1571: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1572: 端点所属对象是 "Pad"。
+              "subname": "Vertex3" // L1573: 当前 indexed 子元素名是 "Vertex3"。
+            } // L1574: target 对象结束。
+          }, // L1575: #2:1;:H*,V 对象结束。
+          "#4:2;:H*,V": { // L1576: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1577: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1578: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1579: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1580: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1581: evidence 对象结束。
+            "mappedName": { // L1582: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#4:2;:H*,V", // L1583: canonical stable token："#4:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#4:2;:H542,V" // L1584: raw FreeCAD token："#4:2;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L1585: mappedName 对象结束。
+            "recoverability": "resolved", // L1586: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1587: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1588: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1589: 端点所属对象是 "Pad"。
+              "subname": "Vertex7" // L1590: 当前 indexed 子元素名是 "Vertex7"。
+            }, // L1591: source 对象结束。
+            "target": { // L1592: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1593: 端点所属对象是 "Pad"。
+              "subname": "Vertex7" // L1594: 当前 indexed 子元素名是 "Vertex7"。
+            } // L1595: target 对象结束。
+          }, // L1596: #4:2;:H*,V 对象结束。
+          "#6:2;:H*,V": { // L1597: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1598: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1599: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1600: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1601: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1602: evidence 对象结束。
+            "mappedName": { // L1603: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#6:2;:H*,V", // L1604: canonical stable token："#6:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#6:2;:H542,V" // L1605: raw FreeCAD token："#6:2;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L1606: mappedName 对象结束。
+            "recoverability": "resolved", // L1607: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1608: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1609: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1610: 端点所属对象是 "Pad"。
+              "subname": "Vertex5" // L1611: 当前 indexed 子元素名是 "Vertex5"。
+            }, // L1612: source 对象结束。
+            "target": { // L1613: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1614: 端点所属对象是 "Pad"。
+              "subname": "Vertex5" // L1615: 当前 indexed 子元素名是 "Vertex5"。
+            } // L1616: target 对象结束。
+          }, // L1617: #6:2;:H*,V 对象结束。
+          "#8:2;:H*,V": { // L1618: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 vertex；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1619: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1620: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1621: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1622: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1623: evidence 对象结束。
+            "mappedName": { // L1624: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#8:2;:H*,V", // L1625: canonical stable token："#8:2;:H*,V"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#8:2;:H542,V" // L1626: raw FreeCAD token："#8:2;:H542,V"；保留原生 hash/细节作为证据。
+            }, // L1627: mappedName 对象结束。
+            "recoverability": "resolved", // L1628: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "vertex", // L1629: 该条目对应的几何子形状类型是 "vertex"。
+            "source": { // L1630: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1631: 端点所属对象是 "Pad"。
+              "subname": "Vertex1" // L1632: 当前 indexed 子元素名是 "Vertex1"。
+            }, // L1633: source 对象结束。
+            "target": { // L1634: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1635: 端点所属对象是 "Pad"。
+              "subname": "Vertex1" // L1636: 当前 indexed 子元素名是 "Vertex1"。
+            } // L1637: target 对象结束。
+          }, // L1638: #8:2;:H*,V 对象结束。
+          "#b:1;:H*,E": { // L1639: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1640: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1641: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1642: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1643: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1644: evidence 对象结束。
+            "mappedName": { // L1645: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#b:1;:H*,E", // L1646: canonical stable token："#b:1;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#b:1;:H542,E" // L1647: raw FreeCAD token："#b:1;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1648: mappedName 对象结束。
+            "recoverability": "resolved", // L1649: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1650: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1651: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1652: 端点所属对象是 "Pad"。
+              "subname": "Edge11" // L1653: 当前 indexed 子元素名是 "Edge11"。
+            }, // L1654: source 对象结束。
+            "target": { // L1655: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1656: 端点所属对象是 "Pad"。
+              "subname": "Edge11" // L1657: 当前 indexed 子元素名是 "Edge11"。
+            } // L1658: target 对象结束。
+          }, // L1659: #b:1;:H*,E 对象结束。
+          "#b:2;:H*,E": { // L1660: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1661: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1662: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1663: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1664: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1665: evidence 对象结束。
+            "mappedName": { // L1666: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#b:2;:H*,E", // L1667: canonical stable token："#b:2;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#b:2;:H542,E" // L1668: raw FreeCAD token："#b:2;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1669: mappedName 对象结束。
+            "recoverability": "resolved", // L1670: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1671: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1672: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1673: 端点所属对象是 "Pad"。
+              "subname": "Edge9" // L1674: 当前 indexed 子元素名是 "Edge9"。
+            }, // L1675: source 对象结束。
+            "target": { // L1676: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1677: 端点所属对象是 "Pad"。
+              "subname": "Edge9" // L1678: 当前 indexed 子元素名是 "Edge9"。
+            } // L1679: target 对象结束。
+          }, // L1680: #b:2;:H*,E 对象结束。
+          "#b:3;:H*,E": { // L1681: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1682: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1683: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1684: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1685: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1686: evidence 对象结束。
+            "mappedName": { // L1687: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#b:3;:H*,E", // L1688: canonical stable token："#b:3;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#b:3;:H542,E" // L1689: raw FreeCAD token："#b:3;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1690: mappedName 对象结束。
+            "recoverability": "resolved", // L1691: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1692: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1693: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1694: 端点所属对象是 "Pad"。
+              "subname": "Edge6" // L1695: 当前 indexed 子元素名是 "Edge6"。
+            }, // L1696: source 对象结束。
+            "target": { // L1697: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1698: 端点所属对象是 "Pad"。
+              "subname": "Edge6" // L1699: 当前 indexed 子元素名是 "Edge6"。
+            } // L1700: target 对象结束。
+          }, // L1701: #b:3;:H*,E 对象结束。
+          "#b:4;:H*,E": { // L1702: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1703: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1704: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1705: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1706: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1707: evidence 对象结束。
+            "mappedName": { // L1708: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#b:4;:H*,E", // L1709: canonical stable token："#b:4;:H*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#b:4;:H542,E" // L1710: raw FreeCAD token："#b:4;:H542,E"；保留原生 hash/细节作为证据。
+            }, // L1711: mappedName 对象结束。
+            "recoverability": "resolved", // L1712: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1713: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1714: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1715: 端点所属对象是 "Pad"。
+              "subname": "Edge3" // L1716: 当前 indexed 子元素名是 "Edge3"。
+            }, // L1717: source 对象结束。
+            "target": { // L1718: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1719: 端点所属对象是 "Pad"。
+              "subname": "Edge3" // L1720: 当前 indexed 子元素名是 "Edge3"。
+            } // L1721: target 对象结束。
+          }, // L1722: #b:4;:H*,E 对象结束。
+          "#d:1;:G;XTR;:H*:*,F": { // L1723: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 face；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1724: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1725: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1726: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1727: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1728: evidence 对象结束。
+            "mappedName": { // L1729: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#d:1;:G;XTR;:H*:*,F", // L1730: canonical stable token："#d:1;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#d:1;:G;XTR;:H542:7,F" // L1731: raw FreeCAD token："#d:1;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1732: mappedName 对象结束。
+            "recoverability": "resolved", // L1733: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1734: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1735: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1736: 端点所属对象是 "Pad"。
+              "subname": "Face4" // L1737: 当前 indexed 子元素名是 "Face4"。
+            }, // L1738: source 对象结束。
+            "target": { // L1739: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1740: 端点所属对象是 "Pad"。
+              "subname": "Face4" // L1741: 当前 indexed 子元素名是 "Face4"。
+            } // L1742: target 对象结束。
+          }, // L1743: #d:1;:G;XTR;:H*:*,F 对象结束。
+          "#d:1;;:H*:*,F": { // L1744: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 face；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1745: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1746: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1747: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1748: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1749: evidence 对象结束。
+            "mappedName": { // L1750: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#d:1;;:H*:*,F", // L1751: canonical stable token："#d:1;;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#d:1;;:H542:1,F" // L1752: raw FreeCAD token："#d:1;;:H542:1,F"；保留原生 hash/细节作为证据。
+            }, // L1753: mappedName 对象结束。
+            "recoverability": "resolved", // L1754: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1755: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1756: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1757: 端点所属对象是 "Pad"。
+              "subname": "Face5" // L1758: 当前 indexed 子元素名是 "Face5"。
+            }, // L1759: source 对象结束。
+            "target": { // L1760: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1761: 端点所属对象是 "Pad"。
+              "subname": "Face5" // L1762: 当前 indexed 子元素名是 "Face5"。
+            } // L1763: target 对象结束。
+          }, // L1764: #d:1;;:H*:*,F 对象结束。
+          "#d:2;:G;XTR;:H*:*,F": { // L1765: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 face；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1766: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1767: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1768: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1769: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1770: evidence 对象结束。
+            "mappedName": { // L1771: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#d:2;:G;XTR;:H*:*,F", // L1772: canonical stable token："#d:2;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#d:2;:G;XTR;:H542:7,F" // L1773: raw FreeCAD token："#d:2;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1774: mappedName 对象结束。
+            "recoverability": "resolved", // L1775: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1776: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1777: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1778: 端点所属对象是 "Pad"。
+              "subname": "Face3" // L1779: 当前 indexed 子元素名是 "Face3"。
+            }, // L1780: source 对象结束。
+            "target": { // L1781: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1782: 端点所属对象是 "Pad"。
+              "subname": "Face3" // L1783: 当前 indexed 子元素名是 "Face3"。
+            } // L1784: target 对象结束。
+          }, // L1785: #d:2;:G;XTR;:H*:*,F 对象结束。
+          "#d:3;:G;XTR;:H*:*,F": { // L1786: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 face；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1787: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1788: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1789: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1790: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1791: evidence 对象结束。
+            "mappedName": { // L1792: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#d:3;:G;XTR;:H*:*,F", // L1793: canonical stable token："#d:3;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#d:3;:G;XTR;:H542:7,F" // L1794: raw FreeCAD token："#d:3;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1795: mappedName 对象结束。
+            "recoverability": "resolved", // L1796: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1797: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1798: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1799: 端点所属对象是 "Pad"。
+              "subname": "Face2" // L1800: 当前 indexed 子元素名是 "Face2"。
+            }, // L1801: source 对象结束。
+            "target": { // L1802: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1803: 端点所属对象是 "Pad"。
+              "subname": "Face2" // L1804: 当前 indexed 子元素名是 "Face2"。
+            } // L1805: target 对象结束。
+          }, // L1806: #d:3;:G;XTR;:H*:*,F 对象结束。
+          "#d:4;:G;XTR;:H*:*,F": { // L1807: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 face；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1808: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1809: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1810: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1811: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1812: evidence 对象结束。
+            "mappedName": { // L1813: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#d:4;:G;XTR;:H*:*,F", // L1814: canonical stable token："#d:4;:G;XTR;:H*:*,F"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#d:4;:G;XTR;:H542:7,F" // L1815: raw FreeCAD token："#d:4;:G;XTR;:H542:7,F"；保留原生 hash/细节作为证据。
+            }, // L1816: mappedName 对象结束。
+            "recoverability": "resolved", // L1817: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1818: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1819: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1820: 端点所属对象是 "Pad"。
+              "subname": "Face1" // L1821: 当前 indexed 子元素名是 "Face1"。
+            }, // L1822: source 对象结束。
+            "target": { // L1823: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1824: 端点所属对象是 "Pad"。
+              "subname": "Face1" // L1825: 当前 indexed 子元素名是 "Face1"。
+            } // L1826: target 对象结束。
+          }, // L1827: #d:4;:G;XTR;:H*:*,F 对象结束。
+          "#f:2;:G;XTR;:H*:*,E": { // L1828: ElementMap 条目 key：Pad 对象自身的 canonical stable token，对应一个 edge；不带 Pad. 前缀表示 Pad 本地命名空间。
+            "evidence": { // L1829: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1830: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [], // L1831: mapperHistoryIds：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。 当前值为 []。
+              "source": "freecad_expected_collector" // L1832: evidence.source：这条映射的证据来源是 "freecad_expected_collector"。
+            }, // L1833: evidence 对象结束。
+            "mappedName": { // L1834: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "#f:2;:G;XTR;:H*:*,E", // L1835: canonical stable token："#f:2;:G;XTR;:H*:*,E"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "#f:2;:G;XTR;:H542:7,E" // L1836: raw FreeCAD token："#f:2;:G;XTR;:H542:7,E"；保留原生 hash/细节作为证据。
+            }, // L1837: mappedName 对象结束。
+            "recoverability": "resolved", // L1838: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "edge", // L1839: 该条目对应的几何子形状类型是 "edge"。
+            "source": { // L1840: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Pad", // L1841: 端点所属对象是 "Pad"。
+              "subname": "Edge1" // L1842: 当前 indexed 子元素名是 "Edge1"。
+            }, // L1843: source 对象结束。
+            "target": { // L1844: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Pad", // L1845: 端点所属对象是 "Pad"。
+              "subname": "Edge1" // L1846: 当前 indexed 子元素名是 "Edge1"。
+            } // L1847: target 对象结束。
+          } // L1848: #f:2;:G;XTR;:H*:*,E 对象结束。
+        }, // L1849: entries 对象结束。
+        "status": "history_partial" // L1850: 当前块状态是 "history_partial"。history_partial=映射可用但历史不全，indexed_only=只有索引级账本。
+      }, // L1851: elementMap 对象结束。
+      "mapperHistory": [], // L1852: mapperHistory：对象内部的 FreeCAD MapperHistory 事件列表。 当前值为 []。
+      "published": true, // L1853: 是否发布到 topoNamingState：true。
+      "role": "protocol_published", // L1854: 发布角色是 "protocol_published"；protocol_published 表示客户端会携带这个对象状态。
+      "type": "PartDesign::Pad" // L1855: FreeCAD 对象类型是 "PartDesign::Pad"。
+    }, // L1856: Pad 对象结束。
+    "Sketch": { // L1857: Sketch 对象账本开始：记录该 FreeCAD 对象的子元素、稳定名映射、历史和发布状态。
+      "afterElements": { // L1858: afterElements 对象开始：recompute 后该对象可见的 indexed 子元素清单。
+        "Face": [ // L1859: Face 数组开始：Face 类 indexed 子元素数组。
+          "InternalFace1" // L1860: Face 数组项："InternalFace1"，当前对象的一个 face 子元素名。
+        ] // L1861: Face 数组结束。
+      }, // L1862: afterElements 对象结束。
+      "beforeElements": { // L1863: beforeElements 对象开始：recompute 前或输入状态中该对象已有的 indexed 子元素清单。
+        "Face": [ // L1864: Face 数组开始：Face 类 indexed 子元素数组。
+          "InternalFace1" // L1865: Face 数组项："InternalFace1"，当前对象的一个 face 子元素名。
+        ] // L1866: Face 数组结束。
+      }, // L1867: beforeElements 对象结束。
+      "childElementMaps": [], // L1868: childElementMaps：父对象发布的子对象映射表；Body 用它把 Tip 子对象 Pad 的元素映射成 Body 范围内的元素。 当前值为 []。
+      "elementMap": { // L1869: elementMap 对象开始：稳定名到账本端点的映射表，是 stableSubname 恢复的核心索引。
+        "encoding": "cad-core.element-map.v1", // L1870: encoding：ElementMap 的格式版本。 当前值为 "cad-core.element-map.v1"。
+        "entries": { // L1871: entries 对象开始：ElementMap 条目集合；key 是 canonical stable token，value 是这条 token 的证据和映射目标。
+          "g1;SKT;FAC": { // L1872: ElementMap 条目 key：Sketch 内部面 InternalFace1 的稳定名；SKT/FAC 表示 sketch face。
+            "evidence": { // L1873: evidence 对象开始：这条映射的证据来源：child map key、mapperHistory id、collector 来源等。
+              "childElementMapKey": null, // L1874: child map key=null；null 表示不是从父子映射表来的。
+              "mapperHistoryIds": [ // L1875: mapperHistoryIds 数组开始：支撑该 ElementMap 条目的 mapperHistory 事件 id 列表。
+                "Sketch.mh-edge1-internal-face1", // L1876: mapperHistoryIds 数组项："Sketch.mh-edge1-internal-face1"，支撑映射的 mapperHistory 事件 id。
+                "Sketch.mh-edge2-internal-face1", // L1877: mapperHistoryIds 数组项："Sketch.mh-edge2-internal-face1"，支撑映射的 mapperHistory 事件 id。
+                "Sketch.mh-edge3-internal-face1", // L1878: mapperHistoryIds 数组项："Sketch.mh-edge3-internal-face1"，支撑映射的 mapperHistory 事件 id。
+                "Sketch.mh-edge4-internal-face1" // L1879: mapperHistoryIds 数组项："Sketch.mh-edge4-internal-face1"，支撑映射的 mapperHistory 事件 id。
+              ], // L1880: mapperHistoryIds 数组结束。
+              "source": "element_map" // L1881: evidence.source：这条映射的证据来源是 "element_map"。
+            }, // L1882: evidence 对象结束。
+            "mappedName": { // L1883: mappedName 对象开始：FreeCAD mapped-name 的双形态：canonical 用于稳定比较，raw 保留原始 FreeCAD token。
+              "canonical": "g1;SKT;FAC", // L1884: canonical stable token："g1;SKT;FAC"；用于比较和恢复，已去除易漂移 hash。
+              "raw": "g1;SKT;FAC" // L1885: raw FreeCAD token："g1;SKT;FAC"；保留原生 hash/细节作为证据。
+            }, // L1886: mappedName 对象结束。
+            "recoverability": "resolved", // L1887: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+            "shapeKind": "face", // L1888: 该条目对应的几何子形状类型是 "face"。
+            "source": { // L1889: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+              "object": "Sketch", // L1890: 端点所属对象是 "Sketch"。
+              "subname": "InternalFace1" // L1891: 当前 indexed 子元素名是 "InternalFace1"。
+            }, // L1892: source 对象结束。
+            "target": { // L1893: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+              "object": "Sketch", // L1894: 端点所属对象是 "Sketch"。
+              "subname": "InternalFace1" // L1895: 当前 indexed 子元素名是 "InternalFace1"。
+            } // L1896: target 对象结束。
+          } // L1897: g1;SKT;FAC 对象结束。
+        }, // L1898: entries 对象结束。
+        "status": "indexed_only" // L1899: 当前块状态是 "indexed_only"。history_partial=映射可用但历史不全，indexed_only=只有索引级账本。
+      }, // L1900: elementMap 对象结束。
+      "mapperHistory": [ // L1901: mapperHistory 数组开始：对象内部的 FreeCAD MapperHistory 事件列表。
+        { // L1902: 开始一个 mapperHistory 事件；表示 FreeCAD 内部 maker/history 关系。
+          "id": "Sketch.mh-edge1-internal-face1", // L1903: id="Sketch.mh-edge1-internal-face1"，供 coverage、projection 或 evidence 引用。
+          "maker_stage": "FaceMakerBuildFace", // L1904: maker_stage：产生该 mapperHistory 事件的 maker 阶段；这里是 Sketch FaceMakerBuildFace。 当前值为 "FaceMakerBuildFace"。
+          "recoverability": "resolved", // L1905: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+          "relation": "generated", // L1906: relation：mapperHistory 关系类型；generated 表示由源边生成目标面。 当前值为 "generated"。
+          "shape_kind": "face", // L1907: 该条目对应的几何子形状类型是 "face"。
+          "source": { // L1908: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+            "object": "Sketch", // L1909: 端点所属对象是 "Sketch"。
+            "subname": "Edge1" // L1910: 当前 indexed 子元素名是 "Edge1"。
+          }, // L1911: source 对象结束。
+          "target": { // L1912: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+            "object": "Sketch", // L1913: 端点所属对象是 "Sketch"。
+            "subname": "InternalFace1" // L1914: 当前 indexed 子元素名是 "InternalFace1"。
+          } // L1915: target 对象结束。
+        }, // L1916: mapperHistory[] 对象结束。
+        { // L1917: 开始一个 mapperHistory 事件；表示 FreeCAD 内部 maker/history 关系。
+          "id": "Sketch.mh-edge2-internal-face1", // L1918: id="Sketch.mh-edge2-internal-face1"，供 coverage、projection 或 evidence 引用。
+          "maker_stage": "FaceMakerBuildFace", // L1919: maker_stage：产生该 mapperHistory 事件的 maker 阶段；这里是 Sketch FaceMakerBuildFace。 当前值为 "FaceMakerBuildFace"。
+          "recoverability": "resolved", // L1920: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+          "relation": "generated", // L1921: relation：mapperHistory 关系类型；generated 表示由源边生成目标面。 当前值为 "generated"。
+          "shape_kind": "face", // L1922: 该条目对应的几何子形状类型是 "face"。
+          "source": { // L1923: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+            "object": "Sketch", // L1924: 端点所属对象是 "Sketch"。
+            "subname": "Edge2" // L1925: 当前 indexed 子元素名是 "Edge2"。
+          }, // L1926: source 对象结束。
+          "target": { // L1927: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+            "object": "Sketch", // L1928: 端点所属对象是 "Sketch"。
+            "subname": "InternalFace1" // L1929: 当前 indexed 子元素名是 "InternalFace1"。
+          } // L1930: target 对象结束。
+        }, // L1931: mapperHistory[] 对象结束。
+        { // L1932: 开始一个 mapperHistory 事件；表示 FreeCAD 内部 maker/history 关系。
+          "id": "Sketch.mh-edge3-internal-face1", // L1933: id="Sketch.mh-edge3-internal-face1"，供 coverage、projection 或 evidence 引用。
+          "maker_stage": "FaceMakerBuildFace", // L1934: maker_stage：产生该 mapperHistory 事件的 maker 阶段；这里是 Sketch FaceMakerBuildFace。 当前值为 "FaceMakerBuildFace"。
+          "recoverability": "resolved", // L1935: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+          "relation": "generated", // L1936: relation：mapperHistory 关系类型；generated 表示由源边生成目标面。 当前值为 "generated"。
+          "shape_kind": "face", // L1937: 该条目对应的几何子形状类型是 "face"。
+          "source": { // L1938: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+            "object": "Sketch", // L1939: 端点所属对象是 "Sketch"。
+            "subname": "Edge3" // L1940: 当前 indexed 子元素名是 "Edge3"。
+          }, // L1941: source 对象结束。
+          "target": { // L1942: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+            "object": "Sketch", // L1943: 端点所属对象是 "Sketch"。
+            "subname": "InternalFace1" // L1944: 当前 indexed 子元素名是 "InternalFace1"。
+          } // L1945: target 对象结束。
+        }, // L1946: mapperHistory[] 对象结束。
+        { // L1947: 开始一个 mapperHistory 事件；表示 FreeCAD 内部 maker/history 关系。
+          "id": "Sketch.mh-edge4-internal-face1", // L1948: id="Sketch.mh-edge4-internal-face1"，供 coverage、projection 或 evidence 引用。
+          "maker_stage": "FaceMakerBuildFace", // L1949: maker_stage：产生该 mapperHistory 事件的 maker 阶段；这里是 Sketch FaceMakerBuildFace。 当前值为 "FaceMakerBuildFace"。
+          "recoverability": "resolved", // L1950: 恢复状态是 "resolved"；resolved 表示能解析到当前子元素。
+          "relation": "generated", // L1951: relation：mapperHistory 关系类型；generated 表示由源边生成目标面。 当前值为 "generated"。
+          "shape_kind": "face", // L1952: 该条目对应的几何子形状类型是 "face"。
+          "source": { // L1953: source 对象开始：来源字段；在 evidence 中表示证据来源，在端点中表示源对象/源子元素。
+            "object": "Sketch", // L1954: 端点所属对象是 "Sketch"。
+            "subname": "Edge4" // L1955: 当前 indexed 子元素名是 "Edge4"。
+          }, // L1956: source 对象结束。
+          "target": { // L1957: target 对象开始：目标端点或 ElementMap 的恢复结果；需要结合所在块看是对象还是子元素。
+            "object": "Sketch", // L1958: 端点所属对象是 "Sketch"。
+            "subname": "InternalFace1" // L1959: 当前 indexed 子元素名是 "InternalFace1"。
+          } // L1960: target 对象结束。
+        } // L1961: mapperHistory[] 对象结束。
+      ], // L1962: mapperHistory 数组结束。
+      "published": true, // L1963: 是否发布到 topoNamingState：true。
+      "role": "protocol_published", // L1964: 发布角色是 "protocol_published"；protocol_published 表示客户端会携带这个对象状态。
+      "type": "Sketcher::SketchObject" // L1965: FreeCAD 对象类型是 "Sketcher::SketchObject"。
+    } // L1966: Sketch 对象结束。
+  }, // L1967: objects 对象结束。
+  "outcome": "accepted", // L1968: outcome：整个 ledger 的验收结论；accepted 表示该 oracle/账本被接受。 当前值为 "accepted"。
+  "producer": { // L1969: producer 块开始：生成该 ledger 的原生环境信息，说明 FreeCADCmd、FreeCAD、OCCT 和脚本版本。
+    "freecadVersion": "1.2.0 revision 20260519", // L1970: freecadVersion：采集 expected 时使用的 FreeCAD 版本。 当前值为 "1.2.0 revision 20260519"。
+    "name": "FreeCADCmd", // L1971: name：生成程序名；这里是 FreeCADCmd。 当前值为 "FreeCADCmd"。
+    "occtVersion": "7.8.1", // L1972: occtVersion：采集 expected 时使用的 OpenCascade/OCCT 版本。 当前值为 "7.8.1"。
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1" // L1973: scriptVersion：采集脚本版本；ledger-v1 表示启用了 ledger 输出格式。 当前值为 "collect_freecad_expected.py:ledger-v1"。
+  }, // L1974: producer 对象结束。
+  "projection": { // L1975: projection 块开始：发布投影说明：哪些对象会出现在最终 topoNamingState 里，哪些对象被谁覆盖。
+    "droppedObjects": {}, // L1976: droppedObjects：没有被发布的对象及原因；空对象表示没有额外丢弃项。 当前值为 {}。
+    "publishedObjects": { // L1977: publishedObjects 对象开始：最终发布对象清单及每个发布对象覆盖哪些源对象。
+      "Body": { // L1978: projection 中的 Body 发布项开始：说明最终 topoNamingState 怎么发布这个对象。
+        "covers": [ // L1979: covers 数组开始：该发布对象覆盖/代表的源对象名列表。
+          "Body", // L1980: covers 数组项："Body"，该发布对象覆盖的源对象名。
+          "Sketch", // L1981: covers 数组项："Sketch"，该发布对象覆盖的源对象名。
+          "Pad" // L1982: covers 数组项："Pad"，该发布对象覆盖的源对象名。
+        ], // L1983: covers 数组结束。
+        "ledgerObject": "Body", // L1984: ledgerObject：ledger 中实际承载这份发布信息的对象名。 当前值为 "Body"。
+        "reason": "expected topoNamingState publication boundary", // L1985: reason：为什么按这个边界发布。 当前值为 "expected topoNamingState publication boundary"。
+        "sourceEventIds": [] // L1986: sourceEventIds：这个发布对象包含或关联的 ledger 事件 id。 当前值为 []。
+      }, // L1987: Body 对象结束。
+      "Pad": { // L1988: projection 中的 Pad 发布项开始：说明最终 topoNamingState 怎么发布这个对象。
+        "covers": [ // L1989: covers 数组开始：该发布对象覆盖/代表的源对象名列表。
+          "Pad" // L1990: covers 数组项："Pad"，该发布对象覆盖的源对象名。
+        ], // L1991: covers 数组结束。
+        "ledgerObject": "Pad", // L1992: ledgerObject：ledger 中实际承载这份发布信息的对象名。 当前值为 "Pad"。
+        "reason": "expected topoNamingState publication boundary", // L1993: reason：为什么按这个边界发布。 当前值为 "expected topoNamingState publication boundary"。
+        "sourceEventIds": [] // L1994: sourceEventIds：这个发布对象包含或关联的 ledger 事件 id。 当前值为 []。
+      }, // L1995: Pad 对象结束。
+      "Sketch": { // L1996: projection 中的 Sketch 发布项开始：说明最终 topoNamingState 怎么发布这个对象。
+        "covers": [ // L1997: covers 数组开始：该发布对象覆盖/代表的源对象名列表。
+          "Sketch" // L1998: covers 数组项："Sketch"，该发布对象覆盖的源对象名。
+        ], // L1999: covers 数组结束。
+        "ledgerObject": "Sketch", // L2000: ledgerObject：ledger 中实际承载这份发布信息的对象名。 当前值为 "Sketch"。
+        "reason": "expected topoNamingState publication boundary", // L2001: reason：为什么按这个边界发布。 当前值为 "expected topoNamingState publication boundary"。
+        "sourceEventIds": [ // L2002: sourceEventIds 数组开始：这个发布对象包含或关联的 ledger 事件 id。
+          "Sketch.mh-edge1-internal-face1", // L2003: sourceEventIds 数组项："Sketch.mh-edge1-internal-face1"，投影发布时包含的事件 id。
+          "Sketch.mh-edge2-internal-face1", // L2004: sourceEventIds 数组项："Sketch.mh-edge2-internal-face1"，投影发布时包含的事件 id。
+          "Sketch.mh-edge3-internal-face1", // L2005: sourceEventIds 数组项："Sketch.mh-edge3-internal-face1"，投影发布时包含的事件 id。
+          "Sketch.mh-edge4-internal-face1", // L2006: sourceEventIds 数组项："Sketch.mh-edge4-internal-face1"，投影发布时包含的事件 id。
+          "event:1" // L2007: sourceEventIds 数组项："event:1"，投影发布时包含的事件 id。
+        ] // L2008: sourceEventIds 数组结束。
+      } // L2009: Sketch 对象结束。
+    } // L2010: publishedObjects 对象结束。
+  }, // L2011: projection 对象结束。
+  "roundTrip": { // L2012: roundTrip 块开始：回放验证：把本次发布的 topoNamingState 再作为输入，检查引用能不能恢复。
+    "diagnostics": [], // L2013: diagnostics 的值是 []。
+    "inputTopoNamingStateHash": "sha256:69d8ab39788a132a92e3e5c0794442c45dc1c8fc687a8bf0d5808ffcff5ae617", // L2014: inputTopoNamingStateHash="sha256:69d8ab39788a132a92e3e5c0794442c45dc1c8fc687a8bf0d5808ffcff5ae617"；用于校验对应 JSON 子树没有漂移。
+    "results": [ // L2015: results 数组开始：round-trip 中每个输入引用的恢复结果。
+      { // L2016: 开始一个 round-trip 引用恢复结果。
+        "inputReferenceId": "ref:1", // L2017: inputReferenceId：round-trip 结果对应的输入引用 id。 当前值为 "ref:1"。
+        "status": "resolved" // L2018: 这个 inputReferenceId 的 round-trip 恢复结果是 "resolved"，表示 ref:1 能再次解析。
+      } // L2019: results[] 对象结束。
+    ], // L2020: results 数组结束。
+    "status": "passed" // L2021: round-trip 总状态是 "passed"；passed 表示再次输入后引用仍可恢复。
+  }, // L2022: roundTrip 对象结束。
+  "schema": "freecad-toponaming-ledger/v1" // L2023: schema：ledger 文件格式标识。 当前值为 "freecad-toponaming-ledger/v1"。
+} // L2024: root 对象结束。

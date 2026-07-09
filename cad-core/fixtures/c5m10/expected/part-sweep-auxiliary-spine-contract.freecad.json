@@ -102,6 +102,42 @@
   "topoNamingState": {
     "documentHash": "sha256:c0bae2d15900ff337ecf83c37f8b5d643d017cb893c08c7c1609c919e6dea7e2",
     "objects": {
+      "AuxiliarySpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8e42554f3a8b4b72f30bc47766982d9ca59037d0130c7878d64482d051a9f341",
+        "subshapes": {}
+      },
+      "PipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:35c2d7914263c7fbd36f5722431598c7320a2c474aab85730fc0c7d8ca430799",
+        "subshapes": {}
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1e7d65765a3be1fa3170772425f7aeddf4affbd20b8e8f110332464675647054",
+        "subshapes": {}
+      },
       "Sweep": {
         "childElementMaps": [],
         "elementMap": {

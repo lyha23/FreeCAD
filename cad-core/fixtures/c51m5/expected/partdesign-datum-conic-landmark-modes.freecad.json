@@ -352,6 +352,51 @@
         "mapperHistory": [],
         "objectHash": "sha256:4941543b7bd587d0f3da590a90d99ed57af4fa625153fc14cc2167e1e03acdd3",
         "subshapes": {}
+      },
+      "EllipseEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1d9e0aa0b5ddedf1c8ef344b3e049ffce929e16fe5dff4543876270a0f6d5621",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "HyperbolaSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:2c4d501dced26bf7fdfaceb9857d3404f85a853c3538bac222ebcd6df4c3ec2c",
+        "subshapes": {}
+      },
+      "ParabolaSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3bfd4a4326b9985512cd8d8f865892e3780c80a345729c3d7608f3f468c3672d",
+        "subshapes": {}
       }
     },
     "producer": {

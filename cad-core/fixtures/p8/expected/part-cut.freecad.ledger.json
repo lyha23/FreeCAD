@@ -1,0 +1,749 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-cut",
+    "expectedPayloadHash": "sha256:8265e60413954cba13237c8d95365c923042bea0cbe7a244f8f596f0bb06157b",
+    "inputHash": "sha256:5aca21acc8a856a72c5e01278d9cfcc7ff6efee15ef129d2de12fa98e9fd0300",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:7add2ad2849da1e60b6fc732163a81fa532c68245c6013c6077e32c785cc9b1d"
+  },
+  "inputReferences": [],
+  "objects": {
+    "BaseBox": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "Cut": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "Edge10;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge10;:M;CUT;:H*:*,E",
+              "raw": "Edge10;:M;CUT;:Ha12:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge7"
+            }
+          },
+          "Edge11;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge11;:M;CUT;:H*:*,E",
+              "raw": "Edge11;:M;CUT;:Ha12:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge10"
+            }
+          },
+          "Edge12;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge12;:M;CUT;:H*:*,E",
+              "raw": "Edge12;:M;CUT;:Ha12:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge8"
+            }
+          },
+          "Edge1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:Ha12,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge1"
+            }
+          },
+          "Edge1;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:M;CUT;:H*:*,E",
+              "raw": "Edge1;:M;CUT;:Ha13:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge6"
+            }
+          },
+          "Edge2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:H*,E",
+              "raw": "Edge2;:Ha12,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge2"
+            }
+          },
+          "Edge2;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:M;CUT;:H*:*,E",
+              "raw": "Edge2;:M;CUT;:Ha13:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge9"
+            }
+          },
+          "Edge3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:H*,E",
+              "raw": "Edge3;:Ha12,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge3"
+            }
+          },
+          "Edge3;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:M;CUT;:H*:*,E",
+              "raw": "Edge3;:M;CUT;:Ha13:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge11"
+            }
+          },
+          "Edge4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:H*,E",
+              "raw": "Edge4;:Ha12,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge4"
+            }
+          },
+          "Edge4;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:M;CUT;:H*:*,E",
+              "raw": "Edge4;:M;CUT;:Ha13:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge12"
+            }
+          },
+          "Edge9;:M;CUT;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge9;:M;CUT;:H*:*,E",
+              "raw": "Edge9;:M;CUT;:Ha12:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Cut",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Edge5"
+            }
+          },
+          "Face1;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:H*,F",
+              "raw": "Face1;:Ha12,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Cut",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Face1"
+            }
+          },
+          "Face1;:M;CUT;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:M;CUT;:H*:*,F",
+              "raw": "Face1;:M;CUT;:Ha13:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Cut",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Face6"
+            }
+          },
+          "Face3;:M;CUT;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face3;:M;CUT;:H*:*,F",
+              "raw": "Face3;:M;CUT;:Ha12:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Cut",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Face2"
+            }
+          },
+          "Face4;:M;CUT;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face4;:M;CUT;:H*:*,F",
+              "raw": "Face4;:M;CUT;:Ha12:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Cut",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Face4"
+            }
+          },
+          "Face5;:M;CUT;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face5;:M;CUT;:H*:*,F",
+              "raw": "Face5;:M;CUT;:Ha12:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Cut",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Face5"
+            }
+          },
+          "Face6;:M;CUT;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face6;:M;CUT;:H*:*,F",
+              "raw": "Face6;:M;CUT;:Ha12:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Cut",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Face3"
+            }
+          },
+          "Vertex1;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:Ha12,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex1;:M;CUT;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:M;CUT;:H*:*,V",
+              "raw": "Vertex1;:M;CUT;:Ha13:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex6"
+            }
+          },
+          "Vertex2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:Ha12,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex2"
+            }
+          },
+          "Vertex2;:M;CUT;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:M;CUT;:H*:*,V",
+              "raw": "Vertex2;:M;CUT;:Ha13:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex5"
+            }
+          },
+          "Vertex3;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V",
+              "raw": "Vertex3;:Ha12,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex3"
+            }
+          },
+          "Vertex3;:M;CUT;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:M;CUT;:H*:*,V",
+              "raw": "Vertex3;:M;CUT;:Ha13:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex7"
+            }
+          },
+          "Vertex4;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V",
+              "raw": "Vertex4;:Ha12,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex4"
+            }
+          },
+          "Vertex4;:M;CUT;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:M;CUT;:H*:*,V",
+              "raw": "Vertex4;:M;CUT;:Ha13:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Cut",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Cut",
+              "subname": "Vertex8"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Cut"
+    },
+    "ToolBox": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "BaseBox": {
+        "covers": [
+          "BaseBox"
+        ],
+        "ledgerObject": "BaseBox",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Cut": {
+        "covers": [
+          "Cut"
+        ],
+        "ledgerObject": "Cut",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ToolBox": {
+        "covers": [
+          "ToolBox"
+        ],
+        "ledgerObject": "ToolBox",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:7add2ad2849da1e60b6fc732163a81fa532c68245c6013c6077e32c785cc9b1d",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

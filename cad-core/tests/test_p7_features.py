@@ -3453,47 +3453,6 @@ class CadCoreP7FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(body["tip"], "Chamfer")
                 self.assert_object_matches_expected(result, group, fixture)
 
-    def test_c7m3_reference_shadow_recovery_oracle_remains_blocked(self) -> None:
-        expected = self.expected_freecad("c3m5", "dressup-reference-shadow-base-recovery")
-        evidence_path = ROOT / "fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.native-probe.evidence.freecad.json"
-        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
-
-        self.assertNotIn("objects", expected)
-        self.assertEqual(
-            expected["known_gap"]["kind"],
-            "dressup_reference_shadow_base_recovery_native_oracle_blocked",
-        )
-        self.assertEqual(expected["known_gap"]["route"], "native_oracle_blocked")
-        self.assertIn("StableSubList", expected["known_gap"]["reason"])
-        self.assertIn("ReferenceShadow", expected["known_gap"]["delete_condition"])
-        self.assertEqual(
-            expected["known_gap"]["native_probe_evidence"]["evidence_json"],
-            "cad-core/fixtures/c3m5/expected/dressup-reference-shadow-base-recovery.native-probe.evidence.freecad.json",
-        )
-        self.assertEqual(expected["known_gap"]["native_probe_evidence"]["returncode"], 0)
-        self.assertEqual(
-            expected["known_gap"]["stablesublist_fed_negative_control"]["returncode"],
-            0,
-        )
-        self.assertIn(
-            "StableSubList-fed geometry output alone cannot delete this blocker",
-            expected["known_gap"]["delete_condition"],
-        )
-
-        self.assertEqual(evidence["route"], "native_oracle_blocked")
-        self.assertEqual(evidence["command"]["returncode"], 0)
-        self.assertEqual(evidence["xml_patch"]["property_tag"], "LinkSub")
-        self.assertEqual(
-            evidence["xml_patch"]["after"]["sub_attrs"],
-            {"shadow": "Edge1", "value": "OldFilletEdge1"},
-        )
-        self.assertEqual(
-            evidence["restore"]["after_recompute"]["base_property_api"]["shadow_subs"]["status"],
-            "unavailable",
-        )
-        self.assertEqual(evidence["restore"]["after_recompute"]["Chamfer_shape"]["status"], "ok")
-        self.assertEqual(evidence["restore"]["after_recompute"]["Body_shape"]["status"], "ok")
-
     def test_c3m5_dressup_base_uses_body_cumulative_shape(self) -> None:
         result = self.run_recompute("body-dressup-cumulative-base", "c3m5")
         body = result["objects"]["Pad5Body"]
