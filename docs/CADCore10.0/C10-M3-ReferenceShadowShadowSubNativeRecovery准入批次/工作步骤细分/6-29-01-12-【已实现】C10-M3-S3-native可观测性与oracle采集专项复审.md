@@ -36,12 +36,7 @@
 - 结论：`C10M3-SCOPE-101=notCollected`，`C10M3-SCOPE-102=notCollected`，`C10M3-BLOCKER-301=closed_s3`，`C10M3-CAT-101=notCollected`。
 - FreeCAD C++ 源码仍证明 native lifecycle 存在：`PropertyLinkBase::updateElementReferences()` 遍历 element-reference property，`_updateElementReference()` 调用 `GeoFeature::resolveElement()` 后更新 `ShadowSub`，`PropertyLinkSub::getSubValues(bool)` 和 `PropertyLinkSubList::getSubValues(bool)` 会用 `_ShadowSubList` 在 old/new style subname 间切换，`PropertyPartShape::afterRestore()` 在 shape restore failed 时触发 reverse element-reference regeneration。
 - 现有 C7-M4 native probe evidence 已证明 FCStd / XML restore 路径可跑通：`cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json` 的 `route=native_oracle_blocked`、`blocker_layer=python_property_api`，patched `LinkSub` 为 `Sub value=OldFilletEdge1 shadow=Edge1`，reopen/recompute 后 Python-visible `Chamfer.Base` 变为 `Edge1`。
-- 本轮在当前机器安全重跑 native probe，仅写 `/tmp/c10m3-c7m4-reference-shadow-native-probe.evidence.json`：
-
-```bash
-cd /home/user/Chili3DProject/FreeCAD
-FREECADCMD=/home/user/.local/bin/freecadcmd python3 cad-core/tools/c7m4_reference_shadow_native_probe.py cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.json --out /tmp/c10m3-c7m4-reference-shadow-native-probe.evidence.json --keep-workdir
-```
+- 本轮曾在当前机器安全重跑 C7-M4 ReferenceShadow native probe，仅写 `/tmp/c10m3-c7m4-reference-shadow-native-probe.evidence.json`；该历史 probe 脚本现已移除，不再保留可复跑命令。
 
 - 本轮采集基线：`FreeCADCmd=/home/user/.local/bin/freecadcmd`；启动输出 `FreeCAD 1.2.0, Libs: 1.2.0devR20260519 (Git shallow)`；`freecadcmd --version` 为 `FreeCAD 1.2.0 Revision: 20260519 (Git shallow)`；`FreeCAD.Version()` 为 `['1', '2', '0', '20260519 (Git shallow)', 'Unknown', '2026/05/19 20:59:45', '(HEAD detached at 5a5d8d042)', '5a5d8d0425fdb440fb5dcb47f1c48422d07d3267']`；`Part.OCC_VERSION=7.8.1`。
 - 本轮结果与既有 evidence 一致：`route=native_oracle_blocked`，`blocker_layer=python_property_api`，restore/recompute 成功，`Chamfer.Base=(Fillet, ['Edge1'])`，`dumpPropertyContent("Base")` 可见 `LinkSub value="Fillet"`、`Sub value="Edge1"` 和 FreeCAD 生成的 stable `shadow` token；但 Python-visible `Base` 仍是 tuple，不暴露 `getShadowSubs()`、`getSubValues()`、`getSubValues(false)` 或 `getSubValues(true)`。

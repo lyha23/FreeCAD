@@ -16,6 +16,14 @@ assert SPEC.loader is not None
 sys.modules[SPEC.name] = validator
 SPEC.loader.exec_module(validator)
 
+COLLECTOR_PATH = CAD_CORE_ROOT / "tools" / "collect_freecad_expected.py"
+COLLECTOR_SPEC = importlib.util.spec_from_file_location("collect_freecad_expected", COLLECTOR_PATH)
+assert COLLECTOR_SPEC is not None
+collector = importlib.util.module_from_spec(COLLECTOR_SPEC)
+assert COLLECTOR_SPEC.loader is not None
+sys.modules[COLLECTOR_SPEC.name] = collector
+COLLECTOR_SPEC.loader.exec_module(collector)
+
 
 class FreecadExpectedLedgerIntegrityTest(unittest.TestCase):
     def test_sidecar_ledger_validates_expected_projection(self) -> None:
@@ -252,6 +260,143 @@ class FreecadExpectedLedgerIntegrityTest(unittest.TestCase):
             errors = validator.validate_expected_file(expected_path, strict=True)
 
         self.assertIn("inputReferences not covered by terminal events: ['ref:optional']", errors)
+
+    def test_collector_builds_accepted_sidecar_ledger(self) -> None:
+        fixture = {
+            "Objects": [
+                {
+                    "Name": "Sketch",
+                    "TypeId": "Sketcher::SketchObject",
+                    "Properties": {},
+                },
+                {
+                    "Name": "Pad",
+                    "TypeId": "PartDesign::Pad",
+                    "Properties": {
+                        "Profile": {
+                            "PropertyType": "App::PropertyLinkSubList",
+                            "SubSet": [
+                                {
+                                    "value": "Sketch",
+                                    "StableSubList": ["g1;SKT;FAC"],
+                                    "StableSubListSource": "topoNamingState",
+                                }
+                            ],
+                        }
+                    },
+                },
+            ],
+            "recompute": {
+                "objs": ["Sketch"]
+            },
+            "topoNamingState": {
+                "schemaVersion": "cad-core.topo-state.v1",
+                "producer": {
+                    "cadCoreVersion": "fixture-contract-v1",
+                },
+                "objects": {
+                    "Sketch": {
+                        "subshapes": {
+                            "InternalFace1": {
+                                "subname": "InternalFace1"
+                            }
+                        },
+                        "elementMap": {
+                            "entries": {
+                                "g1;SKT;FAC": {
+                                    "source": {
+                                        "object": "Sketch",
+                                        "subname": "InternalFace1",
+                                    },
+                                    "target": {
+                                        "object": "Sketch",
+                                        "subname": "InternalFace1",
+                                    },
+                                    "recoverability": "resolved",
+                                    "evidence": {
+                                        "source": "element_map"
+                                    },
+                                }
+                            }
+                        },
+                    }
+                },
+            },
+        }
+        expected = {
+            "diagnostics": [],
+            "elementReferenceUpdates": [],
+            "results": [],
+            "topoNamingState": {
+                "schemaVersion": "cad-core.topo-state.v1",
+                "objects": fixture["topoNamingState"]["objects"],
+            },
+        }
+        topo_hash = collector.semantic_hash(expected["topoNamingState"])
+        ledger = collector.build_freecad_expected_ledger(
+            Path("fixtures/c4m6/case.json"),
+            fixture,
+            expected,
+            freecad_version_value="1.0",
+            occt_version_value="7.8",
+            round_trip={
+                "status": "passed",
+                "inputTopoNamingStateHash": topo_hash,
+                "results": [
+                    {
+                        "inputReferenceId": "ref:1",
+                        "status": "resolved",
+                    }
+                ],
+            },
+        )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            expected_path = Path(temp_dir) / "case.freecad.json"
+            ledger_path = Path(temp_dir) / "case.freecad.ledger.json"
+            expected_path.write_text(validator.json.dumps(expected, ensure_ascii=False), encoding="utf-8")
+            ledger_path.write_text(validator.json.dumps(ledger, ensure_ascii=False), encoding="utf-8")
+
+            errors = validator.validate_expected_file(expected_path, strict=True)
+
+        self.assertEqual([], errors)
+        self.assertEqual("accepted", ledger["outcome"])
+        self.assertEqual(["ref:1"], ledger["coverage"]["coveredInputReferenceIds"])
+
+    def test_rejected_sidecar_ledger_validates_without_topo_state(self) -> None:
+        expected = {
+            "diagnostics": [
+                {
+                    "code": "topo_state_schema_incompatible",
+                    "severity": "error",
+                }
+            ],
+            "elementReferenceUpdates": [],
+            "results": [],
+        }
+        ledger = collector.build_freecad_expected_ledger(
+            Path("fixtures/c4m6/schema-case.json"),
+            {
+                "Objects": [],
+                "topoNamingState": {
+                    "schemaVersion": "cad-core.topo-state.v0"
+                },
+            },
+            expected,
+            freecad_version_value="1.0",
+            occt_version_value="7.8",
+        )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            expected_path = Path(temp_dir) / "schema-case.freecad.json"
+            ledger_path = Path(temp_dir) / "schema-case.freecad.ledger.json"
+            expected_path.write_text(validator.json.dumps(expected, ensure_ascii=False), encoding="utf-8")
+            ledger_path.write_text(validator.json.dumps(ledger, ensure_ascii=False), encoding="utf-8")
+
+            errors = validator.validate_expected_file(expected_path, strict=True)
+
+        self.assertEqual([], errors)
+        self.assertEqual("rejected", ledger["outcome"])
 
 
 if __name__ == "__main__":

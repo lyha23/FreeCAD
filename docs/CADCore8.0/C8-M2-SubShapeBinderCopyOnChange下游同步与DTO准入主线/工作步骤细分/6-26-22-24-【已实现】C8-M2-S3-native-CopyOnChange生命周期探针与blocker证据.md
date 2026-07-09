@@ -13,7 +13,7 @@
 
 ## native probe 产物
 
-- Probe：`cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py`
+- Probe：`C8-M2 CopyOnChange native probe（脚本已移除）`
 - Source fixture：`cad-core/fixtures/c8m2/subshape-binder-copyonchange-lifecycle-probe.json`
 - Native evidence：`cad-core/fixtures/c8m2/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`
 - FreeCADCmd：`/home/user/.local/bin/freecadcmd`

@@ -48,7 +48,7 @@ S1 仍未实现，但不再要求先修改 FreeCAD 上游源码来恢复 helper 
 - support/order 最小 probe 使用 `Part::Plane` 的 `Face1` 和同一 face 的 `Edge1..Edge4` 作为 boundary，调用 `Part.makeFilledFace(edges, supports=[(Edge1, Face1)], orders=[(Edge1, 0)])`。脚本输出到 `probe:before support c0` 后 30 秒未返回，需中断。
 - 另两次 collector probe 分别使用 regular polygon boundary + coplanar support face、单 edge support + `G1` / `C0` order，也在 support face 进入 native helper 后超过 30 秒未返回。
 - 主线程复核发现同机 `FreeCADCmd` probe 调用 `Part.makeFilledFace(edges, surface=Part.makePlane(...))` 在 `before surface` 后以 `139` 退出，说明 S1 native helper oracle 在 `surface` / `supports` / `orders` kwargs 入口仍不稳定，不能据此生成 checked-in expected。
-- 复现脚本保留在 `cad-core/tools/probe_filling_s1_contract.py`；运行方式示例：`/opt/homebrew/bin/timeout 30 FreeCADCmd cad-core/tools/probe_filling_s1_contract.py surface`。
+- 历史复现脚本 C5-M8 Filling native helper probe 已移除；保留结论为 `surface` / `supports` / `orders` kwargs 入口不稳定，不能据此生成 checked-in expected。
 
 当前边界：
 

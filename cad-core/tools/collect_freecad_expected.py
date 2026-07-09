@@ -10,6 +10,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import traceback
 from pathlib import Path
 from typing import Any, Sequence
@@ -20,6 +21,8 @@ DEFAULT_FREECADCMD = "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcm
 SCHEMA_VERSION = "cad-core.freecad-expected.v1"
 TOPO_STATE_SCHEMA_VERSION = "cad-core.topo-state.v1"
 TOPO_STATE_PRODUCER_CAD_CORE_VERSION = "fixture-contract-v1"
+LEDGER_SCHEMA = "freecad-toponaming-ledger/v1"
+LEDGER_SCRIPT_VERSION = "collect_freecad_expected.py:ledger-v1"
 ENV_ARG_MARKER = "__cad_core_expected_args_env__"
 ENV_ARG_NAME = "CAD_CORE_EXPECTED_ARGS_JSON"
 FREECAD_PRECISION_CONFUSION = 1e-7
@@ -200,6 +203,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--check", action="store_true", help="Compare generated output with existing expected files.")
     parser.add_argument("--pretty", action="store_true", help="Print generated JSON to stdout.")
     parser.add_argument("--skip-unsupported", action="store_true", help="Skip unsupported fixtures in --phase mode.")
+    parser.add_argument("--emit-ledger", action="store_true", help="Write expected sidecar *.freecad.ledger.json files.")
+    parser.add_argument("--validate-ledger", action="store_true", help="Validate emitted ledger sidecars before returning success.")
     parser.add_argument("--freecadcmd", default=os.environ.get("FREECADCMD", DEFAULT_FREECADCMD))
     return parser.parse_args(script_args(argv))
 
@@ -233,6 +238,13 @@ def atomic_write_json(path: Path, payload: dict) -> None:
 def expected_path_for_fixture(fixtures_root: Path, fixture_path: Path) -> Path:
     phase = fixture_path.parent.name
     return fixtures_root / phase / "expected" / f"{fixture_path.stem}.freecad.json"
+
+
+def ledger_path_for_expected(expected_path: Path) -> Path:
+    name = expected_path.name
+    if not name.endswith(".freecad.json"):
+        raise ValueError(f"not a FreeCAD expected path: {expected_path}")
+    return expected_path.with_name(f"{name[:-len('.freecad.json')]}.freecad.ledger.json")
 
 
 def fixture_paths(args: argparse.Namespace) -> list[Path]:
@@ -2472,6 +2484,106 @@ def expand_topo_state_for_reference_updates(
     return expanded
 
 
+def merge_topo_state_object_for_reference_tokens(base: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
+    merged = copy.deepcopy(base)
+    for key, value in incoming.items():
+        if key not in merged:
+            merged[key] = copy.deepcopy(value)
+
+    base_subshapes = merged.setdefault("subshapes", {})
+    incoming_subshapes = incoming.get("subshapes")
+    if isinstance(base_subshapes, dict) and isinstance(incoming_subshapes, dict):
+        for subname, entry in incoming_subshapes.items():
+            base_subshapes.setdefault(subname, copy.deepcopy(entry))
+
+    base_element_map = merged.setdefault("elementMap", {})
+    incoming_element_map = incoming.get("elementMap")
+    base_entries = base_element_map.setdefault("entries", {}) if isinstance(base_element_map, dict) else {}
+    incoming_entries = incoming_element_map.get("entries") if isinstance(incoming_element_map, dict) else None
+    if isinstance(base_entries, dict) and isinstance(incoming_entries, dict):
+        for token, entry in incoming_entries.items():
+            base_entries.setdefault(token, copy.deepcopy(entry))
+
+    base_child_maps = merged.setdefault("childElementMaps", [])
+    incoming_child_maps = incoming.get("childElementMaps")
+    if isinstance(base_child_maps, list) and isinstance(incoming_child_maps, list):
+        existing_keys = {
+            child_map.get("key")
+            for child_map in base_child_maps
+            if isinstance(child_map, dict) and isinstance(child_map.get("key"), str)
+        }
+        for child_map in incoming_child_maps:
+            if not isinstance(child_map, dict):
+                continue
+            key = child_map.get("key")
+            if isinstance(key, str) and key in existing_keys:
+                continue
+            base_child_maps.append(copy.deepcopy(child_map))
+            if isinstance(key, str):
+                existing_keys.add(key)
+
+    base_history = merged.setdefault("mapperHistory", [])
+    incoming_history = incoming.get("mapperHistory")
+    if isinstance(base_history, list) and isinstance(incoming_history, list):
+        existing_ids = {
+            event.get("id")
+            for event in base_history
+            if isinstance(event, dict) and isinstance(event.get("id"), str)
+        }
+        for event in incoming_history:
+            if not isinstance(event, dict):
+                continue
+            event_id = event.get("id")
+            if isinstance(event_id, str) and event_id in existing_ids:
+                continue
+            base_history.append(copy.deepcopy(event))
+            if isinstance(event_id, str):
+                existing_ids.add(event_id)
+
+    return merged
+
+
+def expand_topo_state_for_input_references(fixture: dict, topo_state: dict[str, Any]) -> dict[str, Any]:
+    input_refs = collect_fixture_input_references(fixture)
+    if not input_refs:
+        return topo_state
+
+    expanded = copy.deepcopy(topo_state)
+    objects = expanded.get("objects")
+    if not isinstance(objects, dict):
+        raise UnsupportedFixture("topoNamingState.objects must be an object")
+
+    for ref in input_refs:
+        target_name = ref.get("target")
+        stable_token = ref.get("stableSubname")
+        if not isinstance(target_name, str) or not target_name:
+            continue
+        if not isinstance(stable_token, str) or not stable_token:
+            continue
+
+        current_state = objects.get(target_name)
+        if isinstance(current_state, dict) and topo_state_object_has_stable_token(current_state, stable_token):
+            continue
+
+        input_state = normalized_input_topo_state_object(fixture, target_name)
+        if input_state is None:
+            raise UnsupportedFixture(
+                f"topoNamingState input reference {target_name}.{stable_token} has no input object state"
+            )
+
+        if isinstance(current_state, dict):
+            objects[target_name] = merge_topo_state_object_for_reference_tokens(current_state, input_state)
+        else:
+            objects[target_name] = input_state
+
+        if not topo_state_object_has_stable_token(objects[target_name], stable_token):
+            raise UnsupportedFixture(
+                f"topoNamingState input reference {target_name}.{stable_token} cannot be preserved in response state"
+            )
+
+    return expanded
+
+
 def topo_state_protocol_response(
     fixture: dict,
     FreeCAD: Any,
@@ -2480,6 +2592,7 @@ def topo_state_protocol_response(
     created: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
+    topo_state = expand_topo_state_for_input_references(fixture, topo_state)
     topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
     return {
         "results": [],
@@ -3108,6 +3221,7 @@ def topo_naming_state_response(
             for object_name, summary in state_payloads.items()
         },
     }
+    topo_state = expand_topo_state_for_input_references(fixture, topo_state)
     topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
     return {
         "results": [
@@ -3121,6 +3235,676 @@ def topo_naming_state_response(
         "elementReferenceUpdates": reference_updates,
         "diagnostics": reference_diagnostics,
     }
+
+
+def ledger_element_bucket(element: Any) -> str:
+    text = str(element)
+    for prefix in ("InternalFace", "Face"):
+        if text.startswith(prefix):
+            return "Face"
+    for prefix in ("InternalEdge", "Edge"):
+        if text.startswith(prefix):
+            return "Edge"
+    for prefix in ("InternalVertex", "Vertex"):
+        if text.startswith(prefix):
+            return "Vertex"
+    if ".Face" in text or text.endswith("Face"):
+        return "Face"
+    if ".Edge" in text or text.endswith("Edge"):
+        return "Edge"
+    if ".Vertex" in text or text.endswith("Vertex"):
+        return "Vertex"
+    return "Shape"
+
+
+def ledger_add_element(record: dict[str, Any], field: str, element: Any) -> None:
+    if not isinstance(element, str) or not element:
+        return
+    elements = record.setdefault(field, {})
+    if not isinstance(elements, dict):
+        elements = {}
+        record[field] = elements
+    bucket = ledger_element_bucket(element)
+    bucket_values = elements.setdefault(bucket, [])
+    if element not in bucket_values:
+        bucket_values.append(element)
+
+
+def ledger_object_record(
+    objects: dict[str, dict[str, Any]],
+    object_name: str,
+    specs: dict[str, dict],
+    published_names: set[str],
+) -> dict[str, Any]:
+    record = objects.get(object_name)
+    if record is None:
+        spec = specs.get(object_name, {})
+        record = {
+            "type": str(spec.get("TypeId") or "unknown"),
+            "role": "protocol_published" if object_name in published_names else "internal_or_fixture",
+            "published": object_name in published_names,
+            "beforeElements": {},
+            "afterElements": {},
+        }
+        objects[object_name] = record
+    elif object_name in published_names:
+        record["published"] = True
+        record["role"] = "protocol_published"
+    return record
+
+
+def ledger_add_state_elements(record: dict[str, Any], object_state: dict[str, Any], field: str) -> None:
+    subshapes = object_state.get("subshapes")
+    if isinstance(subshapes, dict):
+        for subname in subshapes:
+            ledger_add_element(record, field, str(subname))
+
+    element_map = object_state.get("elementMap")
+    entries = element_map.get("entries") if isinstance(element_map, dict) else None
+    if isinstance(entries, dict):
+        for entry in entries.values():
+            if not isinstance(entry, dict):
+                continue
+            for endpoint in (entry.get("source"), entry.get("target")):
+                if isinstance(endpoint, dict):
+                    subname = endpoint.get("subname")
+                    if isinstance(subname, str) and subname:
+                        ledger_add_element(record, field, subname)
+
+
+def ledger_related_object_names_from_spec(spec: dict[str, Any]) -> list[str]:
+    properties = spec.get("Properties")
+    if not isinstance(properties, dict):
+        return []
+    type_id = str(spec.get("TypeId") or "")
+    names: list[str] = []
+    if type_id == "PartDesign::Body":
+        names.extend(link_property_object_names(properties, "Group"))
+        tip = link_property_object_name(properties, "Tip")
+        if tip:
+            names.append(tip)
+    elif type_id == "Part::Compound":
+        names.extend(compound_child_names_from_spec(spec))
+    elif type_id in {"App::Link", "App::LinkElement"}:
+        target = link_property_object_name(properties, "LinkedObject")
+        if target:
+            names.append(target)
+    return names
+
+
+def ledger_find_owner_for_child(specs: dict[str, dict], child_name: str) -> tuple[str, str] | None:
+    for owner_name, spec in specs.items():
+        type_id = str(spec.get("TypeId") or "")
+        related = ledger_related_object_names_from_spec(spec)
+        if child_name not in related:
+            continue
+        if type_id == "PartDesign::Body":
+            return owner_name, "covered_by_body_tip"
+        if type_id == "Part::Compound":
+            return owner_name, "covered_by_compound_child_map"
+        if type_id in {"App::Link", "App::LinkElement"}:
+            return owner_name, "covered_by_link_target"
+    return None
+
+
+def ledger_topo_state_entry_for_token(
+    objects: dict[str, Any],
+    target_name: str,
+    stable_token: str,
+) -> dict[str, Any] | None:
+    object_state = objects.get(target_name)
+    if not isinstance(object_state, dict):
+        return None
+
+    element_map = object_state.get("elementMap")
+    entries = element_map.get("entries") if isinstance(element_map, dict) else None
+    entry = matching_topo_state_entry(entries, stable_token)
+    if isinstance(entry, dict):
+        return entry
+
+    child_maps = object_state.get("childElementMaps")
+    if isinstance(child_maps, list):
+        for child_map in child_maps:
+            if not isinstance(child_map, dict):
+                continue
+            child_entries = child_map.get("elementMap", {}).get("entries")
+            entry = matching_topo_state_entry(child_entries, stable_token)
+            if isinstance(entry, dict):
+                return entry
+
+    mapper_history = object_state.get("mapperHistory")
+    if isinstance(mapper_history, list):
+        for event in mapper_history:
+            if not isinstance(event, dict) or not mapper_history_event_matches(event, stable_token):
+                continue
+            return {
+                "source": event.get("source"),
+                "target": event.get("target"),
+                "recoverability": event.get("recoverability"),
+                "evidence": {
+                    "source": "mapper_history",
+                    "mapperHistoryIds": [event.get("id")] if isinstance(event.get("id"), str) else [],
+                },
+            }
+    return None
+
+
+def ledger_endpoint(endpoint: Any, fallback_object: str, fallback_element: str) -> dict[str, str]:
+    if isinstance(endpoint, dict):
+        object_name = endpoint.get("object")
+        subname = endpoint.get("subname")
+        if isinstance(object_name, str) and object_name and isinstance(subname, str) and subname:
+            return {
+                "object": object_name,
+                "element": subname,
+            }
+    return {
+        "object": fallback_object,
+        "element": fallback_element,
+    }
+
+
+def collect_fixture_input_references(fixture: dict[str, Any]) -> list[dict[str, Any]]:
+    refs: list[dict[str, Any]] = []
+    for spec in fixture.get("Objects", []):
+        if not isinstance(spec, dict):
+            continue
+        owner = spec.get("Name")
+        if not isinstance(owner, str) or not owner:
+            continue
+        properties = spec.get("Properties")
+        if not isinstance(properties, dict):
+            continue
+
+        def visit(value: Any, property_path: list[str]) -> None:
+            if isinstance(value, dict):
+                target_name = value.get("value")
+                stable_sub_list = value.get("StableSubList")
+                if isinstance(target_name, str) and isinstance(stable_sub_list, list):
+                    sub_list = value.get("SubList") if isinstance(value.get("SubList"), list) else []
+                    shadows = value.get("ReferenceShadow") if isinstance(value.get("ReferenceShadow"), list) else []
+                    for index, stable_token in enumerate(stable_sub_list):
+                        if not isinstance(stable_token, str) or not stable_token:
+                            continue
+                        ref_id = f"ref:{len(refs) + 1}"
+                        refs.append({
+                            "id": ref_id,
+                            "owner": owner,
+                            "path": [owner, target_name],
+                            "propertyPath": ".".join(property_path),
+                            "target": target_name,
+                            "element": stable_token,
+                            "source": value.get("StableSubListSource") or "StableSubList",
+                            "required": True,
+                            "stableSubname": stable_token,
+                            "displaySubname": sub_list[index] if index < len(sub_list) else "",
+                            "hasReferenceShadow": index < len(shadows),
+                        })
+                for key, item in value.items():
+                    visit(item, property_path + [str(key)])
+            elif isinstance(value, list):
+                for index, item in enumerate(value):
+                    visit(item, property_path + [str(index)])
+
+        visit(properties, [])
+    return refs
+
+
+def ledger_event_kind_from_recoverability(recoverability: Any) -> str:
+    if recoverability in {"deleted", "ambiguous"}:
+        return str(recoverability)
+    return "resolved"
+
+
+def ledger_events_for_input_references(
+    fixture: dict[str, Any],
+    expected_payload: dict[str, Any],
+    input_refs: list[dict[str, Any]],
+    objects: dict[str, dict[str, Any]],
+    specs: dict[str, dict],
+    published_names: set[str],
+) -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    input_state = fixture.get("topoNamingState")
+    input_objects = input_state.get("objects") if isinstance(input_state, dict) else {}
+    expected_state = expected_payload.get("topoNamingState")
+    expected_objects = expected_state.get("objects") if isinstance(expected_state, dict) else {}
+
+    for ref in input_refs:
+        target_name = str(ref.get("target") or ref.get("owner") or "")
+        stable_token = str(ref.get("stableSubname") or ref.get("element") or "")
+        entry = None
+        if isinstance(input_objects, dict):
+            entry = ledger_topo_state_entry_for_token(input_objects, target_name, stable_token)
+        if entry is None and isinstance(expected_objects, dict):
+            entry = ledger_topo_state_entry_for_token(expected_objects, target_name, stable_token)
+
+        event_id = f"event:{len(events) + 1}"
+        if entry is None:
+            event = {
+                "id": event_id,
+                "kind": "failed_with_diagnostics",
+                "sources": [],
+                "targets": [],
+                "inputReferenceIds": [ref["id"]],
+                "diagnostics": [
+                    {
+                        "code": "stable_reference_not_found",
+                        "message": f"StableSubList {stable_token} was not found in topoNamingState object {target_name}",
+                    }
+                ],
+                "provenance": "FreeCADCmd.collect_freecad_expected",
+            }
+            events.append(event)
+            continue
+
+        source = ledger_endpoint(entry.get("source"), target_name, stable_token)
+        target = ledger_endpoint(entry.get("target"), target_name, stable_token)
+        source_record = ledger_object_record(objects, source["object"], specs, published_names)
+        target_record = ledger_object_record(objects, target["object"], specs, published_names)
+        ledger_add_element(source_record, "beforeElements", source["element"])
+        ledger_add_element(target_record, "afterElements", target["element"])
+
+        kind = ledger_event_kind_from_recoverability(entry.get("recoverability"))
+        event = {
+            "id": event_id,
+            "kind": kind,
+            "sources": [source],
+            "targets": [] if kind == "deleted" else [target],
+            "inputReferenceIds": [ref["id"]],
+            "provenance": (entry.get("evidence") or {}).get("source", "topoNamingState.elementMap"),
+        }
+        if kind in {"ambiguous", "failed_with_diagnostics"}:
+            event["diagnostics"] = [
+                {
+                    "code": f"{kind}_stable_reference",
+                    "stableSubname": stable_token,
+                }
+            ]
+        events.append(event)
+    return events
+
+
+def ledger_events_from_mapper_history(
+    topo_state: dict[str, Any],
+    objects: dict[str, dict[str, Any]],
+    specs: dict[str, dict],
+    published_names: set[str],
+    start_index: int,
+) -> list[dict[str, Any]]:
+    state_objects = topo_state.get("objects")
+    if not isinstance(state_objects, dict):
+        return []
+
+    events: list[dict[str, Any]] = []
+    split_groups: dict[tuple[str, str, str], list[dict[str, str]]] = {}
+    merge_groups: dict[tuple[str, str, str], list[dict[str, str]]] = {}
+
+    def add_endpoint_inventory(endpoint: dict[str, str], field: str) -> None:
+        record = ledger_object_record(objects, endpoint["object"], specs, published_names)
+        ledger_add_element(record, field, endpoint["element"])
+
+    for object_name, object_state in state_objects.items():
+        if not isinstance(object_state, dict):
+            continue
+        for raw_event in object_state.get("mapperHistory") or []:
+            if not isinstance(raw_event, dict):
+                continue
+            relation = raw_event.get("relation")
+            source_raw = raw_event.get("source")
+            target_raw = raw_event.get("target")
+            source = ledger_endpoint(source_raw, str(object_name), "")
+            target = ledger_endpoint(target_raw, str(object_name), "")
+
+            if relation == "split" and source["element"] and target["element"]:
+                split_groups.setdefault((source["object"], source["element"], target["object"]), []).append(target)
+                add_endpoint_inventory(source, "beforeElements")
+                add_endpoint_inventory(target, "afterElements")
+                continue
+            if relation == "merge" and source["element"] and target["element"]:
+                merge_groups.setdefault((target["object"], target["element"], source["object"]), []).append(source)
+                add_endpoint_inventory(source, "beforeElements")
+                add_endpoint_inventory(target, "afterElements")
+                continue
+
+            kind_by_relation = {
+                "generated": "generated",
+                "modified": "modified",
+                "deleted": "deleted",
+                "ambiguous": "ambiguous",
+            }
+            kind = kind_by_relation.get(str(relation))
+            if not kind:
+                continue
+
+            event: dict[str, Any] = {
+                "id": raw_event.get("id") or f"event:{start_index + len(events)}",
+                "kind": kind,
+                "inputReferenceIds": [],
+                "provenance": "FreeCAD.TopologicalNaming.MapperHistory",
+            }
+            if kind == "generated":
+                event["sources"] = []
+                event["targets"] = [target] if target["element"] else []
+                if target["element"]:
+                    add_endpoint_inventory(target, "afterElements")
+            elif kind == "deleted":
+                event["sources"] = [source] if source["element"] else []
+                event["targets"] = []
+                if source["element"]:
+                    add_endpoint_inventory(source, "beforeElements")
+            elif kind == "ambiguous":
+                event["sources"] = [source] if source["element"] else []
+                event["targets"] = []
+                event["diagnostics"] = [
+                    {
+                        "code": raw_event.get("diagnostic_status") or "stable_identity_ambiguous",
+                    }
+                ]
+                if source["element"]:
+                    add_endpoint_inventory(source, "beforeElements")
+            else:
+                event["sources"] = [source] if source["element"] else []
+                event["targets"] = [target] if target["element"] else []
+                if source["element"]:
+                    add_endpoint_inventory(source, "beforeElements")
+                if target["element"]:
+                    add_endpoint_inventory(target, "afterElements")
+            events.append(event)
+
+    for (source_object, source_element, target_object), targets in split_groups.items():
+        if len(targets) < 2:
+            continue
+        events.append({
+            "id": f"event:{start_index + len(events)}",
+            "kind": "split",
+            "sources": [{"object": source_object, "element": source_element}],
+            "targets": targets,
+            "inputReferenceIds": [],
+            "provenance": "FreeCAD.TopologicalNaming.MapperHistory",
+        })
+
+    for (target_object, target_element, source_object), sources in merge_groups.items():
+        if len(sources) < 2:
+            continue
+        events.append({
+            "id": f"event:{start_index + len(events)}",
+            "kind": "merged",
+            "sources": sources,
+            "targets": [{"object": target_object, "element": target_element}],
+            "inputReferenceIds": [],
+            "provenance": "FreeCAD.TopologicalNaming.MapperHistory",
+        })
+
+    return events
+
+
+def ledger_objects_from_states(
+    fixture: dict[str, Any],
+    expected_payload: dict[str, Any],
+    input_refs: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    specs = fixture_object_specs(fixture)
+    topo_state = expected_payload.get("topoNamingState")
+    expected_objects = topo_state.get("objects") if isinstance(topo_state, dict) else {}
+    input_state = fixture.get("topoNamingState")
+    input_objects = input_state.get("objects") if isinstance(input_state, dict) else {}
+    published_names = set(expected_objects) if isinstance(expected_objects, dict) else set()
+    objects: dict[str, dict[str, Any]] = {}
+
+    for object_name in specs:
+        ledger_object_record(objects, object_name, specs, published_names)
+    if isinstance(input_objects, dict):
+        for object_name, object_state in input_objects.items():
+            record = ledger_object_record(objects, str(object_name), specs, published_names)
+            if isinstance(object_state, dict):
+                ledger_add_state_elements(record, object_state, "beforeElements")
+    if isinstance(expected_objects, dict):
+        for object_name, object_state in expected_objects.items():
+            record = ledger_object_record(objects, str(object_name), specs, published_names)
+            if isinstance(object_state, dict):
+                ledger_add_state_elements(record, object_state, "afterElements")
+                record["elementMap"] = copy.deepcopy(object_state.get("elementMap", {}))
+                record["childElementMaps"] = copy.deepcopy(object_state.get("childElementMaps", []))
+                record["mapperHistory"] = copy.deepcopy(object_state.get("mapperHistory", []))
+
+    for ref in input_refs:
+        owner = ref.get("owner")
+        target = ref.get("target")
+        if isinstance(owner, str):
+            ledger_object_record(objects, owner, specs, published_names)
+        if isinstance(target, str):
+            ledger_object_record(objects, target, specs, published_names)
+    return objects
+
+
+def ledger_projection(
+    fixture: dict[str, Any],
+    expected_payload: dict[str, Any],
+    objects: dict[str, dict[str, Any]],
+    events: list[dict[str, Any]],
+) -> dict[str, Any]:
+    specs = fixture_object_specs(fixture)
+    topo_state = expected_payload.get("topoNamingState")
+    topo_objects = topo_state.get("objects") if isinstance(topo_state, dict) else {}
+    published_names = set(topo_objects) if isinstance(topo_objects, dict) else set()
+    first_published = sorted(published_names)[0] if published_names else ""
+
+    event_ids_by_object: dict[str, list[str]] = {}
+    for event in events:
+        event_id = str(event.get("id") or "")
+        for side in ("sources", "targets"):
+            for endpoint in event.get(side) or []:
+                if not isinstance(endpoint, dict):
+                    continue
+                object_name = endpoint.get("object")
+                if isinstance(object_name, str) and object_name and event_id:
+                    event_ids_by_object.setdefault(object_name, []).append(event_id)
+
+    published: dict[str, Any] = {}
+    for object_name in sorted(published_names):
+        covers = [object_name]
+        spec = specs.get(object_name)
+        if isinstance(spec, dict):
+            for related in ledger_related_object_names_from_spec(spec):
+                if related in objects and related not in covers:
+                    covers.append(related)
+        published[object_name] = {
+            "ledgerObject": object_name,
+            "covers": covers,
+            "sourceEventIds": sorted(set(event_ids_by_object.get(object_name, []))),
+            "reason": "expected topoNamingState publication boundary",
+        }
+
+    dropped: dict[str, Any] = {}
+    for object_name in sorted(objects):
+        if object_name in published_names:
+            continue
+        owner = ledger_find_owner_for_child(specs, object_name)
+        if owner and owner[0] in published_names:
+            covered_by, reason = owner
+        else:
+            record = objects.get(object_name, {})
+            type_id = str(record.get("type") or "")
+            if type_id in {"App::Link", "App::LinkElement"}:
+                related = ledger_related_object_names_from_spec(specs.get(object_name, {}))
+                covered_by = next((name for name in related if name in published_names), first_published)
+                reason = "covered_by_link_target"
+            else:
+                covered_by = first_published
+                reason = "not_referenced"
+        if not covered_by:
+            continue
+        dropped[object_name] = {
+            "reason": reason,
+            "coveredBy": covered_by,
+            "sourceEventIds": sorted(set(event_ids_by_object.get(object_name, []))),
+        }
+
+    return {
+        "publishedObjects": published,
+        "droppedObjects": dropped,
+    }
+
+
+def collect_round_trip_result(
+    fixture_path: Path,
+    fixture: dict[str, Any],
+    expected_payload: dict[str, Any],
+    target_override: Sequence[str] | None,
+    input_refs: list[dict[str, Any]],
+) -> dict[str, Any]:
+    topo_state = expected_payload.get("topoNamingState")
+    if not isinstance(topo_state, dict):
+        return {
+            "status": "not_applicable",
+            "results": [],
+        }
+
+    round_trip_fixture = copy.deepcopy(fixture)
+    round_trip_fixture["topoNamingState"] = topo_state
+    with tempfile.NamedTemporaryFile(
+        "w",
+        encoding="utf-8",
+        suffix=".json",
+        prefix=f"{fixture_path.stem}.roundtrip.",
+        dir=str(fixture_path.parent),
+        delete=False,
+    ) as handle:
+        temp_path = Path(handle.name)
+        json.dump(round_trip_fixture, handle, ensure_ascii=False)
+        handle.write("\n")
+
+    try:
+        try:
+            collect_one(temp_path, target_override)
+            status = "passed"
+            diagnostics: list[dict[str, Any]] = []
+        except Exception as exc:
+            status = "failed"
+            diagnostics = [
+                {
+                    "code": "round_trip_collect_failed",
+                    "message": str(exc),
+                }
+            ]
+    finally:
+        try:
+            temp_path.unlink()
+        except OSError:
+            pass
+
+    return {
+        "status": status,
+        "inputTopoNamingStateHash": semantic_hash(topo_state),
+        "results": [
+            {
+                "inputReferenceId": ref["id"],
+                "status": "resolved" if status == "passed" else "failed",
+            }
+            for ref in input_refs
+            if ref.get("required", True)
+        ],
+        "diagnostics": diagnostics,
+    }
+
+
+def build_freecad_expected_ledger(
+    fixture_path: Path,
+    fixture: dict[str, Any],
+    expected_payload: dict[str, Any],
+    *,
+    freecad_version_value: str,
+    occt_version_value: str,
+    round_trip: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    topo_state = expected_payload.get("topoNamingState")
+    diagnostics = expected_payload.get("diagnostics") if isinstance(expected_payload.get("diagnostics"), list) else []
+    outcome = "accepted" if isinstance(topo_state, dict) else "rejected"
+    input_refs = collect_fixture_input_references(fixture)
+    fixture_section: dict[str, Any] = {
+        "phase": fixture_path.parent.name,
+        "case": fixture_path.stem,
+        "inputHash": semantic_hash(fixture),
+        "expectedPayloadHash": semantic_hash(expected_payload),
+    }
+    if isinstance(topo_state, dict):
+        fixture_section["topoNamingStateHash"] = semantic_hash(topo_state)
+
+    ledger: dict[str, Any] = {
+        "schema": LEDGER_SCHEMA,
+        "outcome": outcome,
+        "producer": {
+            "name": "FreeCADCmd",
+            "freecadVersion": freecad_version_value,
+            "occtVersion": occt_version_value,
+            "scriptVersion": LEDGER_SCRIPT_VERSION,
+        },
+        "fixture": fixture_section,
+        "inputReferences": input_refs,
+        "diagnostics": copy.deepcopy(diagnostics),
+    }
+
+    if outcome == "rejected":
+        ledger["rejection"] = {
+            "diagnosticCodes": [
+                item.get("code")
+                for item in diagnostics
+                if isinstance(item, dict) and isinstance(item.get("code"), str)
+            ],
+            "reason": "FreeCADCmd rejected the request before publishing topoNamingState",
+        }
+        return ledger
+
+    specs = fixture_object_specs(fixture)
+    topo_objects = topo_state.get("objects") if isinstance(topo_state, dict) else {}
+    published_names = set(topo_objects) if isinstance(topo_objects, dict) else set()
+    objects = ledger_objects_from_states(fixture, expected_payload, input_refs)
+    events = ledger_events_for_input_references(fixture, expected_payload, input_refs, objects, specs, published_names)
+    events.extend(ledger_events_from_mapper_history(topo_state, objects, specs, published_names, len(events) + 1))
+    covered_refs = sorted({
+        ref_id
+        for event in events
+        for ref_id in event.get("inputReferenceIds", [])
+        if isinstance(ref_id, str) and ref_id
+    })
+    all_ref_ids = sorted(ref["id"] for ref in input_refs if isinstance(ref.get("id"), str))
+
+    ledger.update({
+        "objects": objects,
+        "events": events,
+        "projection": ledger_projection(fixture, expected_payload, objects, events),
+        "coverage": {
+            "coveredInputReferenceIds": covered_refs,
+            "uncoveredInputReferenceIds": sorted(set(all_ref_ids) - set(covered_refs)),
+        },
+        "roundTrip": round_trip or {
+            "status": "not_run",
+            "inputTopoNamingStateHash": semantic_hash(topo_state),
+            "results": [],
+        },
+    })
+    return ledger
+
+
+def collect_expected_ledger(
+    fixture_path: Path,
+    fixture: dict[str, Any],
+    expected_payload: dict[str, Any],
+    target_override: Sequence[str] | None,
+) -> dict[str, Any]:
+    import FreeCAD  # type: ignore
+
+    input_refs = collect_fixture_input_references(fixture)
+    round_trip = collect_round_trip_result(fixture_path, fixture, expected_payload, target_override, input_refs)
+    return build_freecad_expected_ledger(
+        fixture_path,
+        fixture,
+        expected_payload,
+        freecad_version_value=freecad_version(FreeCAD),
+        occt_version_value=occt_version_from_runtime("fixture-occt-unspecified"),
+        round_trip=round_trip,
+    )
 
 
 def legacy_object_payloads(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
@@ -8161,6 +8945,7 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
     skipped = 0
     for fixture_path in fixture_paths(args):
         out_path = Path(args.out) if args.out else expected_path_for_fixture(fixtures_root, fixture_path)
+        fixture = load_fixture(fixture_path)
         target_override: list[str] | None = None
         if args.check:
             if args.phase and args.skip_unsupported and not out_path.exists():
@@ -8196,10 +8981,34 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             failures += 1
             continue
 
+        ledger: dict[str, Any] | None = None
+        if args.emit_ledger:
+            try:
+                ledger = collect_expected_ledger(fixture_path, fixture, payload, target_override)
+            except Exception as exc:
+                print(f"failed ledger {fixture_path}: {exc}", file=sys.stderr)
+                print(traceback.format_exc(), file=sys.stderr)
+                failures += 1
+                continue
+
         if args.check:
             failures += 0 if compare_json(out_path, payload) else 1
         else:
             atomic_write_json(out_path, payload)
+            if ledger is not None:
+                atomic_write_json(ledger_path_for_expected(out_path), ledger)
+        if args.validate_ledger:
+            try:
+                from validate_freecad_expected_ledger import validate_expected_file  # type: ignore
+
+                ledger_errors = validate_expected_file(out_path, strict=True)
+            except Exception as exc:
+                ledger_errors = [f"ledger validator failed: {exc}"]
+            if ledger_errors:
+                print(f"ledger validation failed: {out_path}", file=sys.stderr)
+                for error in ledger_errors:
+                    print(f"  - {error}", file=sys.stderr)
+                failures += 1
         if args.pretty or (not args.out and not args.phase):
             print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
 

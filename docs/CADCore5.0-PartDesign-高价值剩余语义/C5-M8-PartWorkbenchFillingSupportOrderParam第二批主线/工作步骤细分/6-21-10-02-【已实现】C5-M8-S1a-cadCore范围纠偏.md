@@ -6,7 +6,7 @@
 
 - 上一轮把 `Part.makeFilledFace(...)` helper oracle 问题处理成 `src/Mod/Part/App/AppPartPy.cpp` 源码修复，超出了 C5-M8 的交付范围；本包只关心 `cad-core` 抽取实现，FreeCAD `src/` 只作为语义依据读取。
 - `AppPartPy.cpp` 已恢复到 S1a 之前的内容；后续 C5-M8 step 不得修改 FreeCAD 上游源码来“修 oracle”。
-- 当前机器安装版 `FreeCADCmd` 可用，但 `cad-core/tools/probe_filling_s1_contract.py surface` 仍以 `139` 退出，support/order helper probe 也不是可写入 expected 的稳定基线。这个事实只记录为 native helper oracle 缺口，不再作为必须修 FreeCAD 源码的任务。
+- 当前机器安装版 `FreeCADCmd` 可用，但历史 C5-M8 Filling native helper probe 的 `surface` case 仍以 `139` 退出，support/order helper probe 也不是可写入 expected 的稳定基线。该 probe 脚本现已移除；这个事实只记录为 native helper oracle 缺口，不再作为必须修 FreeCAD 源码的任务。
 - S1 可以继续，但边界必须改成 cad-core-only：优先使用现有 `FreeCADCmd` 能稳定返回的 expected；若 helper kwargs 仍不可采集，则只能做 source-backed / diagnostic-backed / known_gap，不能伪造 expected，也不能把 direct wrapper probe 当成 helper oracle。
 
 ## 目标
@@ -17,7 +17,7 @@
 
 - `src/Mod/Part/App/AppPartPy.cpp`
 - `src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace()`
-- `cad-core/tools/probe_filling_s1_contract.py`
+- `C5-M8 Filling native helper probe（脚本已移除）`
 - 本包 S1 step 和局部矩阵
 
 ## 产物

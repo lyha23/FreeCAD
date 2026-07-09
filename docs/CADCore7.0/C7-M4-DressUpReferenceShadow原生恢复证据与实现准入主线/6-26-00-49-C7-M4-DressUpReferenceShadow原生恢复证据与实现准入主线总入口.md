@@ -60,7 +60,7 @@ C7-M4 是 C7-M3 后续的单一 blocker 处理包。C7-M3 已证明 Fillet / Cha
 ## S2 完成状态
 
 - live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=dc041901a7`（`dc041901a7 文档：完成 C7-M4 S1 native probe 设计`），开始状态 `git status --short -uall` 无输出。
-- 已新增并运行 `cad-core/tools/c7m4_reference_shadow_native_probe.py`：baseline FCStd 由现有 fixture 构造，`Document.xml` 中 `Chamfer.Base` patch 为 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，reopen/recompute `returncode=0`。
+- 曾新增并运行 C7-M4 ReferenceShadow native probe（脚本现已移除）：baseline FCStd 由现有 fixture 构造，`Document.xml` 中 `Chamfer.Base` patch 为 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，reopen/recompute `returncode=0`。
 - 证据写入 `cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json`：XML patch、FreeCAD version、ReferenceShadow sidecar、Python-visible `Chamfer.Base`、`dumpPropertyContent()`、`Chamfer` / `Body` shape summary 和命令 returncode 已记录。
 - route=`native_oracle_blocked`：阻塞层不是 FreeCADCmd 或 geometry，而是 FreeCAD Python property API 只能观察 tuple / property dump，不能观察 `Base.getShadowSubs()`、`getSubValues(false)`、`getSubValues(true)`；StableSubList-fed 负控命令 `returncode=0`，但只能证明 Edge1-fed geometry。
 

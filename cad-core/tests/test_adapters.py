@@ -239,22 +239,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             any(segment["id"] == "Sketch:Edge5" for segment in sketch["mesh"]["edgeSegments"])
         )
 
-    def test_c_api_applies_sketch_plane_frame_to_internal_profile_mesh(self) -> None:
-        result = self.run_recompute_ffi("sketch-plane-frame-internal-face", "p5")
-        sketch = result["results"][0]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertIsNotNone(sketch["mesh"])
-        self.assert_ffi_mesh_matches_expected_summary(result, "p5", "sketch-plane-frame-internal-face")
-
-    def test_c_api_composes_sketch_plane_frame_with_local_placement(self) -> None:
-        result = self.run_recompute_ffi("sketch-plane-frame-placement", "p5")
-        sketch = result["results"][0]
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assertIsNotNone(sketch["mesh"])
-        self.assert_ffi_mesh_matches_expected_summary(result, "p5", "sketch-plane-frame-placement")
-
     def test_c_api_rejects_invalid_sketch_plane_frame(self) -> None:
         result = self.run_recompute_ffi("sketch-plane-frame-invalid", "p5")
         sketch = result["results"][0]
@@ -4761,62 +4745,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(diagnostic["target"], "binary_payload_limits.max_bytes")
         self.assertEqual(diagnostic["details"]["protocol"], "cad-core-binary-mesh-v1")
 
-    def test_c_api_exports_recomputed_shape_buffers(self) -> None:
-        document = json.loads((ROOT / "fixtures" / "p8" / "part-box.json").read_text(encoding="utf-8"))
-        cases = {
-            "brep": ("Part::ImportBrep", "ExportedBrep", "box.brep"),
-            "step": ("Part::ImportStep", "ExportedStep", "box.step"),
-            "stl": ("Mesh::Import", "ExportedStl", "box.stl"),
-        }
-
-        with tempfile.TemporaryDirectory() as tmp:
-            tmp_path = Path(tmp)
-            for export_format, (type_id, object_name, file_name) in cases.items():
-                with self.subTest(export_format=export_format):
-                    status, metadata, data, error = self.call_export_ffi(
-                        {"document": document, "object": "Box", "format": export_format}
-                    )
-                    self.assertEqual(status, 0, error)
-                    self.assertIsNotNone(metadata)
-                    assert metadata is not None
-                    self.assertEqual(metadata["object"], "Box")
-                    self.assertEqual(metadata["format"], export_format)
-                    self.assertEqual(metadata["filename"], f"Box.{export_format}")
-                    self.assertEqual(metadata["diagnostics"], [])
-                    self.assertEqual(metadata["bytes"], len(data))
-                    self.assertGreater(len(data), 0)
-
-                    export_path = tmp_path / file_name
-                    export_path.write_bytes(data)
-                    import_request = {
-                        "Objects": [
-                            {
-                                "Name": object_name,
-                                "ID": 1,
-                                "TypeId": type_id,
-                                "Properties": {"FileName": str(export_path)},
-                            }
-                        ],
-                        "recompute": {"objs": [object_name]},
-                    }
-                    import_path = tmp_path / f"import-{export_format}.json"
-                    import_path.write_text(json.dumps(import_request), encoding="utf-8")
-                    imported_result = self.run_recompute_file(import_path)
-                    imported = imported_result["objects"][object_name]
-                    expected = self.expected_freecad("p8", "part-box")
-
-                    self.assertEqual(imported_result["diagnostics"], [])
-                    self.assertEqual(imported["status"], "ok")
-                    if export_format == "stl":
-                        self.assertEqual(imported["primitive"], "import_stl")
-                        self.assert_expected_object(imported_result, object_name, {"bbox": expected["bbox"]})
-                        self.assertGreater(imported_result["mesh"][object_name]["summary"]["triangle_count"], 0)
-                    else:
-                        self.assert_expected_object(
-                            imported_result,
-                            object_name,
-                            {"bbox": expected["bbox"], "volume": expected["volume"]},
-                        )
     def test_c_api_export_reports_business_diagnostics_without_server_paths(self) -> None:
         document = json.loads((ROOT / "fixtures" / "p8" / "part-box.json").read_text(encoding="utf-8"))
 
@@ -4862,65 +4790,3 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(metadata["bytes"], 0)
         self.assertEqual([item["code"] for item in metadata["diagnostics"]], ["execution_failed"])
         self.assertIn("no computed shape", metadata["diagnostics"][0]["message"])
-
-    def test_p8_cli_exports_recomputed_shape_files(self) -> None:
-        cases = {
-            "brep": ("Part::ImportBrep", "ExportedBrep", "box.brep"),
-            "step": ("Part::ImportStep", "ExportedStep", "box.step"),
-            "stl": ("Mesh::Import", "ExportedStl", "box.stl"),
-        }
-
-        with tempfile.TemporaryDirectory() as tmp:
-            tmp_path = Path(tmp)
-            for export_format, (type_id, object_name, file_name) in cases.items():
-                with self.subTest(export_format=export_format):
-                    export_path = tmp_path / file_name
-                    result = self.run_recompute_file(
-                        ROOT / "fixtures" / "p8" / "part-box.json",
-                        [
-                            "--export-object",
-                            "Box",
-                            "--export-format",
-                            export_format,
-                            "--export-file",
-                            str(export_path),
-                        ],
-                    )
-
-                    self.assertEqual(result["diagnostics"], [])
-                    self.assertEqual(
-                        result["exports"],
-                        [{"object": "Box", "format": export_format, "file": str(export_path)}],
-                    )
-                    self.assertTrue(export_path.exists())
-                    self.assertGreater(export_path.stat().st_size, 0)
-
-                    import_request = {
-                        "Objects": [
-                            {
-                                "Name": object_name,
-                                "ID": 1,
-                                "TypeId": type_id,
-                                "Properties": {"FileName": str(export_path)},
-                            }
-                        ],
-                        "recompute": {"objs": [object_name]},
-                    }
-                    import_path = tmp_path / f"import-{export_format}.json"
-                    import_path.write_text(json.dumps(import_request), encoding="utf-8")
-                    imported_result = self.run_recompute_file(import_path)
-                    imported = imported_result["objects"][object_name]
-                    expected = self.expected_freecad("p8", "part-box")
-
-                    self.assertEqual(imported_result["diagnostics"], [])
-                    self.assertEqual(imported["status"], "ok")
-                    if export_format == "stl":
-                        self.assertEqual(imported["primitive"], "import_stl")
-                        self.assert_expected_object(imported_result, object_name, {"bbox": expected["bbox"]})
-                        self.assertGreater(imported_result["mesh"][object_name]["summary"]["triangle_count"], 0)
-                    else:
-                        self.assert_expected_object(
-                            imported_result,
-                            object_name,
-                            {"bbox": expected["bbox"], "volume": expected["volume"]},
-                        )

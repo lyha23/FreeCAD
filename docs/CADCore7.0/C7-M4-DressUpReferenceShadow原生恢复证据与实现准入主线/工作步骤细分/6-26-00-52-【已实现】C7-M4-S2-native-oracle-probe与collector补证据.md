@@ -54,7 +54,7 @@ git diff --check
 ## S2 完成结论
 
 - live 起点：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=dc041901a7`（`dc041901a7 文档：完成 C7-M4 S1 native probe 设计`），开始状态 `git status --short -uall` 无输出。
-- route=`native_oracle_blocked`。`cad-core/tools/c7m4_reference_shadow_native_probe.py` 已按 S1 设计构造 baseline FCStd、patch `Chamfer.Base` 的 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，并通过 FreeCADCmd reopen/recompute；命令 `returncode=0`，FreeCAD version=`1.2.0 revision 20260519`，`Chamfer` / `Body` shape summary 成功。
+- route=`native_oracle_blocked`。`C7-M4 ReferenceShadow native probe（脚本已移除）` 已按 S1 设计构造 baseline FCStd、patch `Chamfer.Base` 的 `LinkSub/Sub value=OldFilletEdge1 shadow=Edge1`，并通过 FreeCADCmd reopen/recompute；命令 `returncode=0`，FreeCAD version=`1.2.0 revision 20260519`，`Chamfer` / `Body` shape summary 成功。
 - 阻塞层：FreeCADCmd Python 可见 `Chamfer.Base=(Fillet, ["Edge1"])` 且 `dumpPropertyContent()` 可记录 reopen 后 property XML，但 Python property value 不暴露 `Base.getShadowSubs()`、`getSubValues(false)`、`getSubValues(true)`，因此不能证明 native ShadowSub lifecycle。
 - evidence：`cad-core/fixtures/c3m5/dressup-reference-shadow-base-recovery.native-probe.evidence.json`；expected known_gap 和 `test_c7m3_reference_shadow_recovery_oracle_remains_blocked` 已更新。
 - StableSubList-fed 负控命令已运行，`returncode=0`，输出 `/tmp/c7m4-dressup-reference-shadow-stablesublist-fed.freecad.json`；它只证明 Edge1-fed geometry，不能删除 native blocker。

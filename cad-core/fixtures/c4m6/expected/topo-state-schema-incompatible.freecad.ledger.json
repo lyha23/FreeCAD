@@ -1,0 +1,33 @@
+{
+  "diagnostics": [
+    {
+      "actualSchemaVersion": "cad-core.topo-state.v0",
+      "code": "topo_state_schema_incompatible",
+      "expectedSchemaVersion": "cad-core.topo-state.v1",
+      "message": "topoNamingState schemaVersion is incompatible; request-level recompute is refused",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "fixture": {
+    "case": "topo-state-schema-incompatible",
+    "expectedPayloadHash": "sha256:9f9187c821ad6f1715213bb7994173566e5cade98f03983890ef5e060f8f4eb4",
+    "inputHash": "sha256:0d3088c878699c859af09cf24dff7a26595c2b89c4afff014ddc6792861c14d1",
+    "phase": "c4m6"
+  },
+  "inputReferences": [],
+  "outcome": "rejected",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "rejection": {
+    "diagnosticCodes": [
+      "topo_state_schema_incompatible"
+    ],
+    "reason": "FreeCADCmd rejected the request before publishing topoNamingState"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

@@ -2,7 +2,7 @@
   "command": {
     "argv": [
       "/Users/li/.cargo/bin/freecadcmd",
-      "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py",
+      "historical:C9-M5 CopyOnChange native probe (script removed)",
       "--pass",
       "__cad_core_c9m5_subshapebinder_copyonchange_probe_args_env__"
     ],

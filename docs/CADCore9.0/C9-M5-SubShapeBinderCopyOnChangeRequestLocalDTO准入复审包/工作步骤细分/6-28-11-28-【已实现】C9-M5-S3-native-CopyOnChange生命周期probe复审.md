@@ -31,7 +31,7 @@
 
 ## native probe 产物
 
-- Probe：`cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py`
+- Probe：`C9-M5 CopyOnChange native probe（脚本已移除）`
 - Source fixture：`cad-core/fixtures/c9m5/subshape-binder-copyonchange-lifecycle-probe.json`
 - Native evidence：`cad-core/fixtures/c9m5/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`
 - FreeCADCmd：`/home/user/.local/bin/freecadcmd`

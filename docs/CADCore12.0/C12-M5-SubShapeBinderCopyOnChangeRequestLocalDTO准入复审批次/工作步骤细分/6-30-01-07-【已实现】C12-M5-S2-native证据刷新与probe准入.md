@@ -8,8 +8,8 @@
 
 - `../矩阵/c12m5_copy_on_change_scope_review_matrix.tsv`
 - `../矩阵/c12m5_copy_on_change_backend_gap_classification.tsv`
-- `cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py`
-- `cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py`
+- `C9-M5 CopyOnChange native probe（脚本已移除）`
+- `C8-M2 CopyOnChange native probe（脚本已移除）`
 - `cad-core/tools/collect_c8m1_shapebinder_expected.py`
 - `cad-core/fixtures/c9m5/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`
 - C9-M5 / C10-M4 README 中 S3 native evidence 结论。
@@ -31,7 +31,7 @@
 
 ## S2 证据复核结果
 
-- 已复核 `cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py`、`cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py`、`cad-core/tools/collect_c8m1_shapebinder_expected.py`、C9-M5 checked-in expected 和 C9/C10 README；未修改 probe、expected、fixture、C++、tests 或 adapter。
+- 已复核 `C9-M5 CopyOnChange native probe（脚本已移除）`、`C8-M2 CopyOnChange native probe（脚本已移除）`、`cad-core/tools/collect_c8m1_shapebinder_expected.py`、C9-M5 checked-in expected 和 C9/C10 README；未修改 probe、expected、fixture、C++、tests 或 adapter。
 - C9-M5 / C8-M2 probe schema 仍覆盖 Disabled / Enabled / Mutated / PartialLoad、dynamic CopyOnChange property、mutation-triggered Mutated、`_tmp_binder` document visibility、`_CopiedLink` hidden property value 和 Python-visible property state。
 - C9-M5 expected 仍是 FreeCAD `1.2.0 revision 20260519`，route 为 `native_evidence_collected_with_known_gap_blocker`；初次 recompute 与 mutation recompute 后均可见 `_tmp_binder` document。
 - `_CopiedObjs` 在 checked-in expected 中仍表现为 Python API 不可见：`hasattr=false`，property API 返回 no property / no attribute；它不能作为 request-local copied-object graph DTO。

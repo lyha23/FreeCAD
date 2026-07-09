@@ -10,13 +10,13 @@ from pathlib import Path
 
 try:
     from .fixture_runner import BIN, ROOT
-    from .test_topo_naming_state_expected_parity import (
+    from .topo_naming_state_test_helpers import (
         canonicalize_freecad_mapped_names_and_keys,
         response_subshape_identity_index,
     )
 except ImportError:  # pragma: no cover - supports `unittest discover tests`.
     from fixture_runner import BIN, ROOT
-    from test_topo_naming_state_expected_parity import (
+    from topo_naming_state_test_helpers import (
         canonicalize_freecad_mapped_names_and_keys,
         response_subshape_identity_index,
     )

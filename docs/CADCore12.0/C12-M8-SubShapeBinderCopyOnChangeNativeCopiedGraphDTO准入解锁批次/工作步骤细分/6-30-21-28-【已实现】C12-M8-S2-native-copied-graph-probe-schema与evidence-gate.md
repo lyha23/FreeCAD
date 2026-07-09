@@ -10,7 +10,7 @@
 - `../矩阵/c12m8_copy_on_change_backend_gap_classification.tsv`
 - `../矩阵/c12m8_copy_on_change_blocker_queue.tsv`
 - `docs/CADCore12.0/C12-M5-SubShapeBinderCopyOnChangeRequestLocalDTO准入复审批次/矩阵/c12m5_copy_on_change_source_candidates.tsv`
-- `cad-core/tools/probe_c9m5_subshapebinder_copyonchange.py`
+- `C9-M5 CopyOnChange native probe（脚本已移除）`
 - `cad-core/fixtures/c9m5/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`
 
 ## 操作

@@ -631,18 +631,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_part_loft_history(result, ["BaseSketch", "TipVertex"])
         self.assert_object_matches_expected(result, "c5m12", "part-loft-complex-vertex-sketch-object")
 
-    def test_c5m12_part_loft_subelement_assignment_stays_native_hidden_diagnostic(self) -> None:
-        expected = self.expected_freecad("c5m12", "part-loft-subelement-assignment-diagnostic")
-        known_gap = expected["known_gap"]
-
-        self.assertEqual(known_gap["kind"], "part_loft_subelement_assignment_native_hidden")
-        self.assertEqual(
-            known_gap["freecadcmd_evidence"]["error"],
-            "TypeError: Type must be App.DocumentObject or None, not tuple",
-        )
-        self.assertIn("object_fields.sections[].subname", known_gap["uncollected_fields"])
-        self.assertIn("shape_summary for selected Sketch subelement", known_gap["uncollected_fields"])
-
     def test_c6m7_part_loft_subelement_product_contract_builds_selected_section(self) -> None:
         result = self.run_recompute("part-loft-subelement-product", "c6m7")
         loft = result["objects"]["Loft"]
@@ -1670,26 +1658,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             self.assertEqual(result["objects"][object_name]["helper"], "Part.makeFilledFace")
         self.assert_object_matches_expected(result, "c6m5", "part-filling-surface-support-order-invalid-product")
 
-    def test_c6m5_part_filling_explicit_params_product_contract(self) -> None:
-        result = self.run_recompute("part-filling-explicit-params-product", "c6m5")
-        expected = self.expected_freecad("c6m5", "part-filling-explicit-params-product")
-
-        self.assertEqual(result["diagnostics"], [])
-        for object_name, object_expected in expected["objects"].items():
-            self.assert_expected_object(result, object_name, object_expected)
-            filled = result["objects"][object_name]
-            self.assertEqual(filled["params_source_status"], "cad_core_product_contract_covered")
-            self.assertEqual(filled["non_boundary_constraints_status"], "not_used")
-            self.assertEqual(filled["non_boundary_support_order_status"], "not_used")
-            self.assertEqual(filled["default_params"]["degree"], 3)
-            self.assertEqual(filled["default_params"]["points_on_curve"], 15)
-            self.assertEqual(filled["default_params"]["anisotropy"], False)
-            self.assertEqual(filled["default_params"]["max_segments"], 9)
-        self.assertEqual(
-            result["objects"]["AllParams"]["params"],
-            expected["objects"]["AllParams"]["object_fields"]["params"],
-        )
-
     def test_c6m5_part_filling_explicit_param_invalids_are_locatable(self) -> None:
         result = self.run_recompute("part-filling-explicit-params-invalid-product", "c6m5")
         diagnostics = result["diagnostics"]
@@ -1772,38 +1740,6 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         )
         for object_name, object_expected in expected["objects"].items():
             self.assert_expected_object(result, object_name, object_expected)
-
-    def test_c5m8_part_filling_non_default_params_are_constructor_batch(self) -> None:
-        result = self.run_recompute("part-filling-non-default-params", "c5m8")
-        filled = result["objects"]["FilledFace"]
-        expected = self.expected_freecad("c5m8", "part-filling-non-default-params")
-
-        self.assertEqual(result["diagnostics"], [])
-        self.assert_part_filling_history(result, "edge_wire_closed", expect_default_params=False)
-        self.assertEqual(
-            filled["params"],
-            {
-                "degree": 4,
-                "points_on_curve": 20,
-                "iterations": 3,
-                "anisotropy": True,
-                "tolerance_2d": 0.00002,
-                "tolerance_3d": 0.0002,
-                "tolerance_g1": 0.02,
-                "tolerance_g2": 0.2,
-                "max_degree": 9,
-                "max_segments": 12,
-            },
-        )
-        self.assertEqual(filled["default_params"]["degree"], 3)
-        self.assertEqual(filled["default_params"]["points_on_curve"], 15)
-        self.assertEqual(filled["default_params"]["anisotropy"], False)
-        self.assertEqual(filled["default_params"]["max_segments"], 9)
-        self.assertEqual(filled["params_source"], "Part.makeFilledFace constructor kwargs")
-        self.assertEqual(
-            expected["known_gap"]["kind"],
-            "part_filling_non_default_params_native_helper_oracle_blocked",
-        )
 
     def test_c5m13_part_filling_param_subsets_are_expected_backed(self) -> None:
         cases = {

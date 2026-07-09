@@ -10,7 +10,7 @@
 - CADCore5/6/11 中对应 family 的 S6 / release gate 文件。
 - `cad-core/fixtures/c5m7`、`c5m8`、`c5m9`、`c5m10`、`c5m12`、`c5m13`、`c6m4`、`c6m5`、`c6m6`、`c6m7` 的相关 input/expected。
 - `cad-core/tools/collect_freecad_expected.py`
-- `cad-core/tools/probe_filling_s1_contract.py`
+- `C5-M8 Filling native helper probe（脚本已移除）`
 - `docs/temp/6-29-10-15-c11m1-s3-sweep-location-combined-probe-output.json`
 - `docs/temp/6-29-12-27-c11m2-s3-filling-native-helper-probe-output.json`
 

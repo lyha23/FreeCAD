@@ -241,14 +241,40 @@ def validate_hashes(
         errors.append(f"missing fixture.expectedPayloadHash: {ledger_path}")
 
     topo_hash = fixture.get("topoNamingStateHash")
-    if isinstance(topo_hash, str) and topo_hash:
+    if isinstance(topo_state, dict):
+        if isinstance(topo_hash, str) and topo_hash:
+            require(errors, sha256_json(topo_state) == topo_hash, f"topoNamingStateHash mismatch: {expected_path}")
+        elif strict:
+            errors.append(f"missing fixture.topoNamingStateHash: {ledger_path}")
+    elif topo_hash:
+        errors.append(f"topoNamingStateHash present but expected has no topoNamingState: {expected_path}")
+
+
+def validate_rejected_ledger(
+    errors: list[str],
+    *,
+    expected_path: Path,
+    expected: dict[str, Any],
+    ledger: dict[str, Any],
+) -> None:
+    diagnostics = list_items(expected.get("diagnostics"))
+    rejection = dict_items(ledger.get("rejection"))
+    diagnostic_codes = [
+        item.get("code")
+        for item in diagnostics
+        if isinstance(item, dict) and isinstance(item.get("code"), str)
+    ]
+
+    require(errors, bool(diagnostic_codes), f"rejected expected must include diagnostics: {expected_path}")
+    require(errors, bool(rejection), "rejected ledger must include rejection evidence")
+    if rejection:
+        declared_codes = set(str(item) for item in list_items(rejection.get("diagnosticCodes")))
+        require(errors, bool(declared_codes), "rejection.diagnosticCodes must not be empty")
         require(
             errors,
-            isinstance(topo_state, dict) and sha256_json(topo_state) == topo_hash,
-            f"topoNamingStateHash mismatch: {expected_path}",
+            set(diagnostic_codes) <= declared_codes,
+            "rejection.diagnosticCodes must cover expected diagnostics",
         )
-    elif strict:
-        errors.append(f"missing fixture.topoNamingStateHash: {ledger_path}")
 
 
 def validate_projection(
@@ -380,6 +406,8 @@ def validate_expected_file(expected_path: Path, strict: bool = True) -> list[str
         return [f"ledger payload must be an object: {ledger_path}"]
 
     require(errors, ledger.get("schema") == LEDGER_SCHEMA, f"invalid or missing ledger.schema: {ledger_path}")
+    outcome = ledger.get("outcome", "accepted")
+    require(errors, outcome in {"accepted", "rejected"}, f"invalid ledger.outcome: {outcome}")
 
     producer = dict_items(ledger.get("producer"))
     require(errors, producer.get("name") == "FreeCADCmd", f"ledger.producer.name must be FreeCADCmd: {ledger_path}")
@@ -388,6 +416,10 @@ def validate_expected_file(expected_path: Path, strict: bool = True) -> list[str
             require(errors, isinstance(producer.get(key), str) and bool(producer.get(key)), f"producer.{key} missing")
 
     validate_hashes(errors, expected_path=expected_path, expected=expected, ledger_path=ledger_path, ledger=ledger, strict=strict)
+
+    if outcome == "rejected":
+        validate_rejected_ledger(errors, expected_path=expected_path, expected=expected, ledger=ledger)
+        return errors
 
     input_refs = list_items(ledger.get("inputReferences"))
     require(errors, isinstance(ledger.get("inputReferences"), list), f"ledger.inputReferences must be a list: {ledger_path}")

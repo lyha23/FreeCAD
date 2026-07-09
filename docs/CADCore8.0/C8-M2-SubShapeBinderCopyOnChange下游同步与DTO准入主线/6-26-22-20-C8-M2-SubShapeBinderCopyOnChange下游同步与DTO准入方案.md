@@ -47,7 +47,7 @@ S2 结论：C8-M1 ShapeBinder / SubShapeBinder capability、fixtures、expected 
 
 ## S3 native CopyOnChange 生命周期探针
 
-已完成。S3 新增 `cad-core/tools/probe_c8m2_subshapebinder_copyonchange.py`、`cad-core/fixtures/c8m2/subshape-binder-copyonchange-lifecycle-probe.json` 和 `cad-core/fixtures/c8m2/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`。FreeCADCmd 采集 `freecad_version=1.2.0 revision 20260519`；Disabled / Enabled / Mutated、动态 CopyOnChange 属性和 Enabled -> Mutated 触发均可 Python-visible；`PartialLoad=True` 与 `Support` 的 `AllowPartial` / `ReadOnly` 状态可见；但 `_CopiedObjs` private vector、`copyObject` dependency order 和 `recomputeFeature(true)` 生命周期不可作为稳定 request-local DTO 导出，所以 full temporary-document cache 继续 retained `oracle_blocked`。
+已完成。S3 曾通过 C8-M2 CopyOnChange native probe（脚本现已移除）采集 `cad-core/fixtures/c8m2/subshape-binder-copyonchange-lifecycle-probe.json` 和 `cad-core/fixtures/c8m2/expected/subshape-binder-copyonchange-lifecycle-probe.freecad.json`。FreeCADCmd 采集 `freecad_version=1.2.0 revision 20260519`；Disabled / Enabled / Mutated、动态 CopyOnChange 属性和 Enabled -> Mutated 触发均可 Python-visible；`PartialLoad=True` 与 `Support` 的 `AllowPartial` / `ReadOnly` 状态可见；但 `_CopiedObjs` private vector、`copyObject` dependency order 和 `recomputeFeature(true)` 生命周期不可作为稳定 request-local DTO 导出，所以 full temporary-document cache 继续 retained `oracle_blocked`。
 
 ## S4 下游 opencascade-rs 同步契约
 

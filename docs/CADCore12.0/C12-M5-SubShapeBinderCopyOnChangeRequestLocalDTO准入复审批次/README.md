@@ -40,7 +40,7 @@ C12-M5 承接 C12-M4 公开口径迁移完成后的 live capability 状态。当
 - S2 执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`。
 - S2 执行 HEAD：`b38b0647d6`（`b38b0647d6 docs: 完成 C12-M5 S1 source 覆盖复核`）。
 - S2 起点 dirty boundary：`git -c core.quotepath=false status --short -uall` 无输出，即 `<clean>`；未发现非本任务 dirty work。
-- S2 已复核 `probe_c9m5_subshapebinder_copyonchange.py`、`probe_c8m2_subshapebinder_copyonchange.py`、`collect_c8m1_shapebinder_expected.py`、C9-M5 expected 和 C9/C10 README；未修改 probe、expected、fixture、C++、tests 或 adapter。
+- S2 已复核 `C9-M5 CopyOnChange native probe（已移除）`、`C8-M2 CopyOnChange native probe（已移除）`、`collect_c8m1_shapebinder_expected.py`、C9-M5 expected 和 C9/C10 README；未修改 probe、expected、fixture、C++、tests 或 adapter。
 - C9-M5 probe schema 仍覆盖 `BindCopyOnChange=Disabled/Enabled/Mutated`、`PartialLoad=True`、dynamic CopyOnChange property、mutation-triggered Mutated、`_tmp_binder` document name、`_CopiedLink` 和 Python-visible property state。
 - checked-in expected 基线仍是 FreeCAD `1.2.0 revision 20260519`，route 为 `native_evidence_collected_with_known_gap_blocker`；可观察字段仍限于 property/session evidence、`_tmp_binder` document name 和 `_CopiedLink` 单值。
 - `_CopiedObjs` 仍不可通过 Python API 观察；`copyObject()` dependency order、copied support rewrite 的完整 graph、`recomputeFeature(true)` internal ElementMap lifecycle 仍不能导出为稳定 request-local DTO。

@@ -18,8 +18,9 @@ ALLOWED_PUBLIC_MODULES = {
     "part_design",
     "runtime",
     "sketcher",
+    "topo",
 }
-LEGACY_MODULES = ("document", "features", "geometry", "topo")
+LEGACY_MODULES = ("document", "features", "geometry")
 SKIP_DIRS = {"build", "graphify-out", "__pycache__", ".cache", ".pytest_cache", "cache"}
 SOURCE_SUFFIXES = {".c", ".cc", ".cpp", ".cxx", ".h", ".hh", ".hpp", ".hxx", ".py"}
 
