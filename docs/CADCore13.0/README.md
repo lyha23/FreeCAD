@@ -10,14 +10,15 @@ CADCore13.0 用来收口 `topoNamingState` 输出发布与 expected 对齐主线
 | C13-M2 FreeCAD MappedName Parity | active / S4 resume-ready; S5-S6 pending | [C13-M2-FreeCADMappedNameParity实现批次](C13-M2-FreeCADMappedNameParity实现批次/README.md) |
 | C13-M3 MappedName Producer Ledger 前置实现 | completed / 已完成 | [C13-M3-MappedNameProducerLedger前置实现批次](C13-M3-MappedNameProducerLedger前置实现批次/README.md) |
 | C13-M4 FreeCADExpectedLedger TopoState 投影闭环 | completed / 已完成 | [C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次](C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/README.md) |
-| C13-M5 FreeCADExpected 发布对齐 | planned / 入口已关闭，S0 pending | [C13-M5-FreeCADExpected发布对齐批次](C13-M5-FreeCADExpected发布对齐批次/README.md) |
+| C13-M5 FreeCADExpected 发布对齐 | active / S0 已完成，S1 pending | [C13-M5-FreeCADExpected发布对齐批次](C13-M5-FreeCADExpected发布对齐批次/README.md) |
 
 - C13-M2 工作步骤总入口已关闭：`C13-M2-FreeCADMappedNameParity实现批次/工作步骤细分/7-8-20-16-【已实现】C13-M2工作步骤总入口.md` 已确认包结构、S0-S6 初始队列和 8 个 TSV 字段数；入口关闭后队列从 S0 继续。
 - C13-M2 S0-S3 已关闭；S4 `mappedName codec 实现` 先前因缺少 FreeCAD-equivalent `TopoShape.Tag` / `ElementMap::encodeElementName()` producer ledger 暂停。C13-M3 S1-S4 已解除这个前置 producer-ledger blocker，C13-M2 队列仍从 S4/S5/S6 继续，本页不替 C13-M2 执行实现步骤。
 - C13-M3 已完成：`C13-M3-MappedNameProducerLedger前置实现批次/` 关闭 `C13M3-BLOCKER-501`，S5 发布闸门确认 C13-M2 S4 可恢复；`tests.test_topo_naming_state_response` 为 `Ran 15 OK` 且无 expectedFailure，adapter channel 单测为 `Ran 1 OK`。
 - C13-M4 已完成：`C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/` 关闭 `c4m6` public projection 闭环；ledger validator 9/9 green，focused topoNamingState runtime 14 tests OK，S1 projection 已发布。C13-M4 没有新增 C13-M2/C13-M3 回流 blocker。
-- C13-M5 工作步骤总入口已关闭：`C13-M5-FreeCADExpected发布对齐批次/工作步骤细分/7-10-00-16-【已实现】C13-M5工作步骤总入口.md` 已确认 README、方案、总入口、S0-S5 和 6 个 TSV 矩阵齐备；入口关闭后队列从 S0 继续。
-- C13-M5 已出方案：`C13-M5-FreeCADExpected发布对齐批次/` 建立 release output 对齐流程，目标是让 cad-core 当前输出按 phase 对齐 `fixtures/<phase>/expected/*.freecad.json`，先做 strict comparator 与 `c4m6` 红灯基线，再按 phase 家族扩展。
+- C13-M5 工作步骤总入口已关闭：`C13-M5-FreeCADExpected发布对齐批次/工作步骤细分/7-10-00-16-【已实现】C13-M5工作步骤总入口.md` 已确认 README、方案、总入口、S0-S5 和 6 个 TSV 矩阵齐备；S0 关闭后队列从 S1 继续。
+- C13-M5 S0 已关闭：live discovery 冻结为 42 个 phase、475 个 `expected/*.freecad.json`，同名 input 与同名 cad-core-res 均齐备；首批 strict lane 固定为 `c4m6`，并明确排除 `*.expeted.json`、`.freecad.ledger.json` sidecar 和 cad-core-res extra。
+- C13-M5 已出方案：`C13-M5-FreeCADExpected发布对齐批次/` 建立 release output 对齐流程，目标是让 cad-core 当前输出按 phase 对齐 `fixtures/<phase>/expected/*.freecad.json`，后续从 S1 strict comparator 与 `c4m6` 红灯基线继续，再按 phase 家族扩展。
 
 ## 阶段边界
 

@@ -1,43 +1,43 @@
-phase	expected_freecad_count	current_cad_core_res_count	initial_lane	first_gate	notes
-c4m6	9	9	T0_topoNamingState_strict	compare --phase c4m6	First strict lane; covers topoNamingState publication, child maps, mapperHistory, ReferenceShadow and hash/version failures.
-c10m1	4	4	T1_sketch_internal_shape	compare --phase c10m1	Small sketch/internal-shape family; expand after c4m6 comparator is stable.
-c12m12	1	1	T1_pipe_sweep	compare --phase c12m12	Small Pipe/Sweep expected slice.
-c12m13	5	6	T1_pipe_lifecycle	compare --phase c12m13	cad-core-res has extra case; expected discovery must drive comparison.
-c12m16	1	2	T1_split_fragment	compare --phase c12m16	Split-fragment identity lane; cad-core-res has extra case.
-c3m1	3	12	T1_topo_elementmap	compare --phase c3m1	ElementMap/native topo expected subset; many cad-core-res extras.
-c3m3	1	22	T2_sketch_solver_surface	compare --phase c3m3	Only native expected subset participates.
-c3m4	17	30	T2_part_surface_sweep	compare --phase c3m4	Part surface/sweep/loft family.
-c3m5	11	26	T2_partdesign_body_dressup	compare --phase c3m5	Body/dress-up stable history family.
-c3m6	71	73	T3_assembly_link_large	compare --phase c3m6	Large assembly/App::Link family; run after smaller lanes.
-c3m7	1	1	T1_small_phase	compare --phase c3m7	Small single-case lane.
-c4m1	19	20	T2_topo_feature	compare --phase c4m1	Native expected subset only.
-c4m2	10	14	T2_topo_feature	compare --phase c4m2	Native expected subset only.
-c4m3	8	18	T2_topo_feature	compare --phase c4m3	Native expected subset only.
-c4m4	2	9	T1_small_phase	compare --phase c4m4	Small expected subset with many extras.
-c4m5	3	3	T1_small_phase	compare --phase c4m5	Small expected subset.
-c51m1	7	12	T2_partdesign_variant	compare --phase c51m1	Native expected subset only.
-c51m3	2	3	T1_small_phase	compare --phase c51m3	Small expected subset.
-c51m4	3	4	T1_small_phase	compare --phase c51m4	Small expected subset.
-c51m5	15	16	T2_partdesign_variant	compare --phase c51m5	Native expected subset only.
-c5m1	6	10	T2_partdesign_variant	compare --phase c5m1	Native expected subset only.
-c5m10	6	6	T2_partdesign_variant	compare --phase c5m10	Expected and cad-core-res counts match.
-c5m12	4	5	T1_small_phase	compare --phase c5m12	Small expected subset.
-c5m13	5	5	T1_small_phase	compare --phase c5m13	Expected and cad-core-res counts match.
-c5m2	2	4	T1_small_phase	compare --phase c5m2	Small expected subset.
-c5m3	4	6	T1_small_phase	compare --phase c5m3	Small expected subset.
-c5m7	9	9	T2_partdesign_variant	compare --phase c5m7	Expected and cad-core-res counts match.
-c5m8	11	12	T2_partdesign_variant	compare --phase c5m8	Native expected subset only.
-c5m9	4	5	T1_small_phase	compare --phase c5m9	Small expected subset.
-c6m1	1	6	T1_small_phase	compare --phase c6m1	Single native expected case.
-c6m4	4	4	T1_small_phase	compare --phase c6m4	Expected and cad-core-res counts match.
-c6m5	6	7	T2_partdesign_variant	compare --phase c6m5	Native expected subset only.
-c6m6	2	2	T1_small_phase	compare --phase c6m6	Small expected subset.
-c8m4	1	1	T1_small_phase	compare --phase c8m4	Single native expected case.
-p2	3	4	T1_sketch_topo_identity	compare --phase p2	Sketch/topology legacy lane; cad-core-res has extra case.
-p3a	4	7	T1_small_phase	compare --phase p3a	Small expected subset.
-p3b	17	29	T2_part_surface	compare --phase p3b	Part surface/feature expected subset.
-p4	4	8	T1_small_phase	compare --phase p4	Small expected subset.
-p5	58	117	T3_large_partdesign	compare --phase p5	Large PartDesign family; run after comparator and smaller lanes are stable.
-p6	7	15	T2_sketch_topo_identity	compare --phase p6	Sketch/topology identity family.
-p7	56	109	T3_large_partdesign	compare --phase p7	Large PartDesign/dress-up/pattern family.
-p8	68	80	T3_large_link_part	compare --phase p8	Large App::Link/Part primitives family.
+phase	expected_freecad_count	current_cad_core_res_count	input_path_status	expected_named_cad_core_res_status	cad_core_res_extra_count	initial_lane	first_gate	notes
+c10m1	4	4	complete	complete	0	T1_sketch_internal_shape	compare --phase c10m1	Small sketch/internal-shape family; expand after c4m6 comparator is stable.
+c12m12	1	1	complete	complete	0	T1_pipe_sweep	compare --phase c12m12	Small Pipe/Sweep expected slice.
+c12m13	5	6	complete	complete	1	T1_pipe_lifecycle	compare --phase c12m13	cad-core-res has extra case; expected discovery must drive comparison.
+c12m16	1	2	complete	complete	1	T1_split_fragment	compare --phase c12m16	Split-fragment identity lane; cad-core-res has extra case.
+c3m1	3	12	complete	complete	9	T1_topo_elementmap	compare --phase c3m1	ElementMap/native topo expected subset; many cad-core-res extras.
+c3m3	1	22	complete	complete	21	T2_sketch_solver_surface	compare --phase c3m3	Only native expected subset participates.
+c3m4	17	30	complete	complete	13	T2_part_surface_sweep	compare --phase c3m4	Part surface/sweep/loft family.
+c3m5	11	26	complete	complete	15	T2_partdesign_body_dressup	compare --phase c3m5	Body/dress-up stable history family.
+c3m6	71	73	complete	complete	2	T3_assembly_link_large	compare --phase c3m6	Large assembly/App::Link family; run after smaller lanes.
+c3m7	1	1	complete	complete	0	T1_small_phase	compare --phase c3m7	Small single-case lane.
+c4m1	19	20	complete	complete	1	T2_topo_feature	compare --phase c4m1	Native expected subset only.
+c4m2	10	14	complete	complete	4	T2_topo_feature	compare --phase c4m2	Native expected subset only.
+c4m3	8	18	complete	complete	10	T2_topo_feature	compare --phase c4m3	Native expected subset only.
+c4m4	2	9	complete	complete	7	T1_small_phase	compare --phase c4m4	Small expected subset with many extras.
+c4m5	3	3	complete	complete	0	T1_small_phase	compare --phase c4m5	Small expected subset.
+c4m6	9	9	complete	complete	0	T0_topoNamingState_strict	compare --phase c4m6	First strict lane; covers topoNamingState publication, child maps, mapperHistory, ReferenceShadow and hash/version failures.
+c51m1	7	12	complete	complete	5	T2_partdesign_variant	compare --phase c51m1	Native expected subset only.
+c51m3	2	3	complete	complete	1	T1_small_phase	compare --phase c51m3	Small expected subset.
+c51m4	3	4	complete	complete	1	T1_small_phase	compare --phase c51m4	Small expected subset.
+c51m5	15	16	complete	complete	1	T2_partdesign_variant	compare --phase c51m5	Native expected subset only.
+c5m1	6	10	complete	complete	4	T2_partdesign_variant	compare --phase c5m1	Native expected subset only.
+c5m10	6	6	complete	complete	0	T2_partdesign_variant	compare --phase c5m10	Expected and cad-core-res counts match.
+c5m12	4	5	complete	complete	1	T1_small_phase	compare --phase c5m12	Small expected subset.
+c5m13	5	5	complete	complete	0	T1_small_phase	compare --phase c5m13	Expected and cad-core-res counts match.
+c5m2	2	4	complete	complete	2	T1_small_phase	compare --phase c5m2	Small expected subset.
+c5m3	4	6	complete	complete	2	T1_small_phase	compare --phase c5m3	Small expected subset.
+c5m7	9	9	complete	complete	0	T2_partdesign_variant	compare --phase c5m7	Expected and cad-core-res counts match.
+c5m8	11	12	complete	complete	1	T2_partdesign_variant	compare --phase c5m8	Native expected subset only.
+c5m9	4	5	complete	complete	1	T1_small_phase	compare --phase c5m9	Small expected subset.
+c6m1	1	6	complete	complete	5	T1_small_phase	compare --phase c6m1	Single native expected case.
+c6m4	4	4	complete	complete	0	T1_small_phase	compare --phase c6m4	Expected and cad-core-res counts match.
+c6m5	6	7	complete	complete	1	T2_partdesign_variant	compare --phase c6m5	Native expected subset only.
+c6m6	2	2	complete	complete	0	T1_small_phase	compare --phase c6m6	Small expected subset.
+c8m4	1	1	complete	complete	0	T1_small_phase	compare --phase c8m4	Single native expected case.
+p2	3	4	complete	complete	1	T1_sketch_topo_identity	compare --phase p2	Sketch/topology legacy lane; cad-core-res has extra case.
+p3a	4	7	complete	complete	3	T1_small_phase	compare --phase p3a	Small expected subset.
+p3b	17	29	complete	complete	12	T2_part_surface	compare --phase p3b	Part surface/feature expected subset.
+p4	4	8	complete	complete	4	T1_small_phase	compare --phase p4	Small expected subset.
+p5	58	117	complete	complete	59	T3_large_partdesign	compare --phase p5	Large PartDesign family; run after comparator and smaller lanes are stable.
+p6	7	15	complete	complete	8	T2_sketch_topo_identity	compare --phase p6	Sketch/topology identity family.
+p7	56	109	complete	complete	53	T3_large_partdesign	compare --phase p7	Large PartDesign/dress-up/pattern family.
+p8	68	80	complete	complete	12	T3_large_link_part	compare --phase p8	Large App::Link/Part primitives family.

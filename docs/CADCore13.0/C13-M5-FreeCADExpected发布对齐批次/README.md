@@ -6,11 +6,35 @@ C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到所有 checked-i
 
 ## 当前结论
 
-- 当前仓库已经有 40 个 phase 含 `expected/*.freecad.json`。
+- S0 live inventory 已冻结：当前仓库有 42 个 phase、475 个 checked-in `expected/*.freecad.json`。
+- 所有 expected 都有同名 input `fixtures/<phase>/<case>.json`，也都有同名当前输出 `fixtures/<phase>/cad-core-res/<case>.cad-core.json`。
 - `expected/*.freecad.json` 是 native FreeCADCmd oracle；`cad-core-res/*.cad-core.json` 是 cad-core 当前实现输出，不能混放。
+- `cad-core-res` 额外文件只记录 extra count，不参与 expected discovery，也不自动成为 release parity 缺口。
 - 不能手改 expected 来追 cad-core；cad-core 输出应通过实现、发布策略或明确 known-gap 机制对齐 expected。
 - FreeCAD raw mapped-name 中的 `:H...` token 允许随机漂移，严格比较必须先 canonicalize；对象集合、subshape 数量、diagnostic code、stableSubname、elementMap key 不能因 hash 漂移被放宽。
 - 第一批 strict lane 仍选 `c4m6`，因为它覆盖 first recompute、Body/Tip recovery、compound child maps、mapperHistory、ReferenceShadow、schema/producer/hash mismatch。
+- 本轮 S0 不纳入无关 dirty 文件：`DESIGN.md`、`docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md`。
+
+## S0 比较边界
+
+Discovery 只从 live 命令取得：
+
+```bash
+find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
+```
+
+固定排除：
+
+- `*.expeted.json`：协议手写合同，不是 native expected。
+- `*.freecad.ledger.json`：FreeCADCmd 账本 sidecar，只是 expected provenance/evidence。
+- `cad-core-res/*.cad-core.json` extra：当前 cad-core 输出目录里的额外文件，不反向扩大 expected discovery。
+
+字段策略：
+
+- strict：public object set、diagnostic code、results key、subshape path/type/count、stableSubname、mappedName.canonical、canonical elementMap key、childElementMaps key、mapperHistory public event identity、ReferenceShadow 边界。
+- canonicalized：`mappedName.raw` 等 raw FreeCAD token 中的随机 `:H...` 片段，只在 comparator 内规整，不改 expected 和 runtime。
+- tolerant：明确为数值输出的 bbox、placement、matrix、volume、area、length 等浮点字段，只允许小容差，不允许掩盖拓扑数量或诊断差异。
+- ignored-with-evidence：只存在于 `.freecad.ledger.json` sidecar、collector coverage/projection/roundTrip/inputReferences 等 provenance 字段，或 cad-core response 中非 native public expected 的 transport/adapter metadata；忽略时必须能指向证据来源。
 
 ## 批次目标
 
@@ -31,7 +55,7 @@ C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到所有 checked-i
 
 | 步骤 | 主题 | 关闭条件 |
 | --- | --- | --- |
-| S0 | expected inventory 与比较边界冻结 | phase inventory、字段策略、非目标和首批 lane 冻结。 |
+| S0 | expected inventory 与比较边界冻结 | 已实现：phase inventory、字段策略、非目标和首批 lane 已冻结。 |
 | S1 | strict comparator 与 cad-core-res 生成入口 | 可以按 phase 生成 cad-core-res，并输出 canonical diff / gap report。 |
 | S2 | c4m6 strict public parity 红灯基线 | 当前 c4m6 strict diff 被机器化记录，区分发布缺口和协议决策。 |
 | S3 | topoNamingState 发布策略对齐 | object set、mapperHistory、hash mismatch、link diagnostic 等 public publication gap 有实现计划和 focused tests。 |

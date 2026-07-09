@@ -15,7 +15,7 @@ C13-M1 到 C13-M4 已经让 `topoNamingState` 能进入 cad-core response，并�
 
 ## 当前基线
 
-当前发现到的 `.freecad.json` phase 数量：40 个。它们覆盖 Part primitives、Sketch/InternalShape、PartDesign Body/DressUp/Pattern、Assembly/App::Link、Pipe/Sweep/Loft、TopoNamingState 等多条语义线。部分 phase 的 `cad-core-res` 数量大于 expected，说明发布对齐必须按 expected discovery 驱动，不能把 `cad-core-res` 目录里的额外文件自动算作缺口。
+S0 live inventory 已冻结：当前发现到的 `.freecad.json` phase 数量是 42 个，expected 文件总数是 475 个。它们覆盖 Part primitives、Sketch/InternalShape、PartDesign Body/DressUp/Pattern、Assembly/App::Link、Pipe/Sweep/Loft、TopoNamingState 等多条语义线。所有 expected 都有同名 input `fixtures/<phase>/<case>.json`，也都有同名当前输出 `fixtures/<phase>/cad-core-res/<case>.cad-core.json`。部分 phase 的 `cad-core-res` 数量大于 expected，说明发布对齐必须按 expected discovery 驱动，不能把 `cad-core-res` 目录里的额外文件自动算作缺口。
 
 `c4m6` 是首批 strict lane，因为它已暴露当前 release publication 的代表性缺口：
 
@@ -35,6 +35,14 @@ C13-M1 到 C13-M4 已经让 `topoNamingState` 能进入 cad-core response，并�
 5. `raw` 里的 `:H...` token 可随机漂移，只在 comparator 层 canonicalize；canonical key、stableSubname、subshape path、diagnostic code、object publication set 不因此放宽。
 6. 几何误差只允许在明确字段上使用容差，例如 bbox 浮点微差；拓扑数量、elementMap key、ReferenceShadow 边界和 diagnostic 语义不能用容差掩盖。
 7. 每个实现缺口必须落到 FreeCAD 对应语义模块：`runtime` 只做 response assembly 和 publication，`topo` 做命名账本，`geometry` 做 OCCT 低层能力，`features` 做 FreeCAD feature 调用链。
+8. 当前无关 dirty 文件 `DESIGN.md` 和 `docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md` 不属于 C13-M5 S0，不纳入本批次 diff 或提交。
+
+## 字段策略冻结
+
+- strict：public object set、diagnostic code、results key、subshape path/type/count、stableSubname、mappedName.canonical、canonical elementMap key、childElementMaps key、mapperHistory public event identity、ReferenceShadow 边界。
+- canonicalized：`mappedName.raw` 等 raw FreeCAD token 中的随机 `:H...` 片段，只在 comparator 内规整，不改 expected 和 runtime。
+- tolerant：明确为数值输出的 bbox、placement、matrix、volume、area、length 等浮点字段，只允许小容差，不允许掩盖拓扑数量或诊断差异。
+- ignored-with-evidence：只存在于 `.freecad.ledger.json` sidecar、collector coverage/projection/roundTrip/inputReferences 等 provenance 字段，或 cad-core response 中非 native public expected 的 transport/adapter metadata；忽略时必须能指向证据来源。
 
 ## 实现框架
 
@@ -42,14 +50,14 @@ C13-M1 到 C13-M4 已经让 `topoNamingState` 能进入 cad-core response，并�
 
 产出：
 
-- native expected inventory：phase、case、expected path、对应 input path、当前 cad-core-res path。
-- 字段策略：strict、canonicalized、tolerant、ignored-with-evidence 四类。
-- 首批 lane：`c4m6` strict public expected。
+- 已完成 native expected inventory：42 个 phase、475 个 expected、同名 input 完整、同名 cad-core-res 完整，cad-core-res extra 只记录不参与 discovery。
+- 已冻结字段策略：strict、canonicalized、tolerant、ignored-with-evidence 四类。
+- 已冻结首批 lane：`c4m6` strict public expected。
 
 关闭条件：
 
 - 不再依赖人工翻目录判断 expected 覆盖面。
-- 明确排除 `*.expeted.json` 和 cad-core-res 额外文件。
+- 明确排除 `*.expeted.json`、`.freecad.ledger.json` 和 cad-core-res 额外文件。
 - 当前 dirty 工作区中无关文件不进入本批次。
 
 ### S1 strict comparator 与生成入口

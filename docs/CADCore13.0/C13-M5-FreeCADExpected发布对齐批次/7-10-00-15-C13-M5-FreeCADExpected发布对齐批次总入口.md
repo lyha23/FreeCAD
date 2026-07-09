@@ -17,6 +17,7 @@
 - `.freecad.ledger.json` 是 sidecar 证据，不进入 runtime。
 - `*.expeted.json` 是协议手写合同，不纳入本批次自动 expected discovery。
 - `cad-core-res/*.cad-core.json` 是生成物，只能由当前 cad-core recompute 重生成。
+- S0 已冻结 live discovery：42 个 phase、475 个 expected；同名 input 和同名 cad-core-res 均齐备，cad-core-res extra 只记录不反向扩大 discovery。
 - 随机 raw hash 只在 comparator 层 canonicalize，不改变 expected 或 runtime。
 
 ## 使用方式
@@ -31,7 +32,7 @@ python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore
 - 包结构齐备：README、方案、总入口、S0-S5、矩阵。
 - TSV 字段数校验通过。
 - 顶层 `CADCore13.0/README.md` 已加入 C13-M5 索引。
-- 本入口关闭后队列从 S0 开始。
+- S0 关闭后队列从 S1 开始。
 
 ## 验收
 
