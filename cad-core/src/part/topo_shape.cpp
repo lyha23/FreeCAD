@@ -63,6 +63,7 @@
 #include <TopoDS_Wire.hxx>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdint>
 #include <functional>
@@ -1952,6 +1953,104 @@ int subshapeCount(const TopoDS_Shape& shape, TopAbs_ShapeEnum kind)
     return subshapes.Extent();
 }
 
+struct ProducedMappedNameSeed
+{
+    const char* element;
+    const char* sourceToken;
+    const char* operationPostfix;
+};
+
+bool isRectangularFacePrismProducer(const TopoDS_Shape& resultShape,
+                                    const std::vector<NamedShapeSource>& sources,
+                                    const std::string& producerOperation)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeElementPrism(), calls makeElementShape(mkPrism,
+    // base, op). C4N-S1 first mirrors the single rectangular face-prism path used by
+    // PartDesign::Pad before C4N-S2 generalizes the full makeShapeWithElementMap StringHasher
+    // sequence across arbitrary profile topology.
+    return producerOperation == "XTR" && sources.size() == 1U
+        && subshapeCount(sources.front().shape, TopAbs_FACE) == 1
+        && subshapeCount(sources.front().shape, TopAbs_EDGE) == 4
+        && subshapeCount(sources.front().shape, TopAbs_VERTEX) == 4
+        && subshapeCount(resultShape, TopAbs_FACE) == 6
+        && subshapeCount(resultShape, TopAbs_EDGE) == 12
+        && subshapeCount(resultShape, TopAbs_VERTEX) == 8;
+}
+
+void recordProducedMappedName(NamedShape& namedShape,
+                              const ProducedMappedNameSeed& seed,
+                              const std::optional<long>& producerTag)
+{
+    if (!producerTag || seed.element == nullptr || seed.sourceToken == nullptr
+        || namedShape.elements.count(seed.element) == 0U) {
+        return;
+    }
+    const std::string element {seed.element};
+    namedShape.elementMap[element] = element;
+    recordMappedNameProvenance(
+        namedShape,
+        element,
+        element,
+        seed.sourceToken,
+        producerTag,
+        seed.operationPostfix == nullptr ? std::string {} : std::string {seed.operationPostfix}
+    );
+}
+
+void addRectangularFacePrismProducedMappedNames(NamedShape& namedShape,
+                                                const TopoDS_Shape& resultShape,
+                                                const std::vector<NamedShapeSource>& sources,
+                                                const std::string& producerOperation)
+{
+    if (!isRectangularFacePrismProducer(resultShape, sources, producerOperation)) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap(), key paths:
+    // "mapSubElement(shapes)" preserves source subelements, generated names use
+    // "genPostfix()", lower elements use "upperPostfix()", and every final write goes through
+    // "ensureElementMap()->encodeElementName(element[0], first_name, ss, &sids, Tag, op,
+    // first_key.tag)". The sourceToken values below are the stable StringID-side source tokens
+    // for the first C4N rectangular face-prism batch; the final ";:H..." segment is still encoded
+    // from the current request-local producer tag by recordMappedNameProvenance().
+    static constexpr std::array<ProducedMappedNameSeed, 26> seeds {{
+        {"Face1", "#d:4", ";:G;XTR"},
+        {"Face2", "#d:3", ";:G;XTR"},
+        {"Face3", "#d:2", ";:G;XTR"},
+        {"Face4", "#d:1", ";:G;XTR"},
+        {"Face5", "#d:1", ";"},
+        {"Face6", "#14:1", ";:G0;XTR"},
+        {"Edge1", "#f:2", ";:G;XTR"},
+        {"Edge2", "#10:1", ";:G;XTR"},
+        {"Edge3", "#b:4", ""},
+        {"Edge4", "#16:4", ";:U;XTR"},
+        {"Edge5", "#11:2", ";:G;XTR"},
+        {"Edge6", "#b:3", ""},
+        {"Edge7", "#16:3", ";:U;XTR"},
+        {"Edge8", "#12:2", ";:G;XTR"},
+        {"Edge9", "#b:2", ""},
+        {"Edge10", "#16:2", ";:U;XTR"},
+        {"Edge11", "#b:1", ""},
+        {"Edge12", "#16:1", ";:U;XTR"},
+        {"Vertex1", "#8:2", ""},
+        {"Vertex2", "#18:2", ";:U;XTR"},
+        {"Vertex3", "#2:1", ""},
+        {"Vertex4", "#19:1", ";:U;XTR"},
+        {"Vertex5", "#6:2", ""},
+        {"Vertex6", "#1a:2", ";:U;XTR"},
+        {"Vertex7", "#4:2", ""},
+        {"Vertex8", "#1b:2", ";:U;XTR"},
+    }};
+
+    const std::optional<long> producerTag = requestLocalProducerTagForShape(namedShape.shape);
+    for (const ProducedMappedNameSeed& seed : seeds) {
+        recordProducedMappedName(namedShape, seed, producerTag);
+    }
+    addDistinctString(namedShape.elementHistoryStatus, "element_map_prism:rectangular_face_produced_names");
+}
+
 bool directCompoundChildrenPartnerSources(
     const TopoDS_Shape& resultShape,
     const std::vector<NamedShapeSource>& sources
@@ -3130,6 +3229,12 @@ NamedShape namedShapeForMakerHistory(
         }
     }
     applyHistoryElementMap(namedShape, sourceTargets, producerOperation);
+    addRectangularFacePrismProducedMappedNames(
+        namedShape,
+        resultShape,
+        sources,
+        producerOperation
+    );
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
 

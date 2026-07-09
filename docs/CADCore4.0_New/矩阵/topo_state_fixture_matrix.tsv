@@ -1,0 +1,12 @@
+id	phase	fixture	expected_source	coverage	current_status	next_action
+C4N-FIX-001	c4m6	topo-state-first-recompute-empty	.freecad.json native	首次 recompute 返回完整 topoNamingState	runtime contract covered	保留 schema/object 状态回归
+C4N-FIX-002	c4m6	topo-state-body-tip-stable-recovery	.freecad.json native	Body Tip child map、StableSubListSource recovery、raw/canonical mapped name	structure covered; exact token mismatch	补 FreeCAD mapped-name producer byte 语义
+C4N-FIX-003	c4m6	topo-state-link-compound-child-maps	.freecad.json native	Compound childElementMaps、child-local elementMap	structure/count covered; child entry key prefix mismatch	修 child map 局部命名和 source owner 边界
+C4N-FIX-004	c4m6	topo-state-mapper-history-events	.freecad.json native	mapperHistory ids、recoverability、entry evidence	covered	作为 mapperHistory 回归样本
+C4N-FIX-005	c4m6	topo-state-reference-shadow-brep	.freecad.json native	ReferenceShadow placeholder、canonical StableSubList update	covered	保护 update serializer
+C4N-FIX-006	c4m6	topo-state-schema-incompatible	.freecad.json native	schema hard fail	covered	保持请求级失败
+C4N-FIX-007	c4m6	topo-state-producer-incompatible	.freecad.json native	producer hard fail	covered	保持请求级失败
+C4N-FIX-008	c4m6	topo-state-document-hash-mismatch	.freecad.json native	documentHash hard fail	covered	保持请求级失败
+C4N-FIX-009	c4m6	topo-state-object-hash-mismatch	.freecad.json native	objectHash hard fail	covered	保持请求级失败
+C4N-FIX-010	p2	rect-pad-pocket	.freecad.json native	Pad/Pocket Body mapped-name exact parity	expectedFailure	等 C4M6 exact parity 后扩展
+C4N-FIX-011	p6	up-to-face-stable-body-history	.freecad.json native	UpToFace stable Body history expected	expectedFailure	等 C4M6 exact parity 后扩展

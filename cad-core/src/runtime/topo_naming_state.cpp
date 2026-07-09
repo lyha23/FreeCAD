@@ -598,6 +598,42 @@ bool hasMappedName(const part::MappedNameProvenance& provenance)
         && !provenance.canonicalMappedName.empty();
 }
 
+bool stripPrefix(std::string& value, const std::string& prefix)
+{
+    if (prefix.empty() || value.rfind(prefix, 0) != 0) {
+        return false;
+    }
+    value = value.substr(prefix.size());
+    return true;
+}
+
+void localizeChildMapProvenance(part::MappedNameProvenance& provenance,
+                                const std::string& childPrefix)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements(), in the direct child map expansion path, reads
+    // "name = child.elementMap->find(childIdx, &sids)" before encoding the parent index. The
+    // child map entry is therefore child-local; owner/source object evidence stays in the entry
+    // endpoints, not inside mappedName.raw/canonical.
+    stripPrefix(provenance.sourceElement, childPrefix);
+    if (stripPrefix(provenance.rawMappedName, childPrefix)) {
+        provenance.canonicalMappedName =
+            topo::canonicalizeFreeCadMappedName(provenance.rawMappedName);
+        return;
+    }
+    stripPrefix(provenance.canonicalMappedName, childPrefix);
+}
+
+void prefixMappedNameProvenance(part::MappedNameProvenance& provenance,
+                                const std::string& prefix)
+{
+    if (prefix.empty() || provenance.rawMappedName.rfind(prefix, 0) == 0) {
+        return;
+    }
+    provenance.rawMappedName = prefix + provenance.rawMappedName;
+    provenance.canonicalMappedName = prefix + provenance.canonicalMappedName;
+}
+
 std::optional<std::pair<std::string, nlohmann::json>> childEntryFromProvenance(
     const std::string& ownerObject,
     const std::string& childObject,
@@ -657,13 +693,20 @@ nlohmann::json childElementMapEntriesFromNamedShape(
 {
     nlohmann::json entries = nlohmann::json::object();
     for (const auto& [stableName, currentName] : childShape.elementMap) {
-        if (stableName.empty() || currentName.empty()
-            || indexedOnlyAlias(childShape.owner, stableName, currentName)) {
+        if (stableName.empty() || currentName.empty()) {
             continue;
         }
         const auto provenanceIt = childShape.mappedNameProvenance.find(stableName);
         if (provenanceIt == childShape.mappedNameProvenance.end()) {
             continue;
+        }
+        if (!hasFreeCadEncodedElementToken(provenanceIt->second.rawMappedName)
+            && (ownerObject == "Body" || indexedOnlyAlias(childShape.owner, stableName, currentName))) {
+            continue;
+        }
+        auto provenance = provenanceIt->second;
+        if (ownerObject == "Body") {
+            prefixMappedNameProvenance(provenance, childObject + ".");
         }
         auto entry = childEntryFromProvenance(
             ownerObject,
@@ -673,7 +716,7 @@ nlohmann::json childElementMapEntriesFromNamedShape(
             childKind,
             offset,
             currentName,
-            provenanceIt->second,
+            provenance,
             evidenceSource
         );
         if (entry) {
@@ -705,6 +748,9 @@ nlohmann::json childElementMapEntriesFromOwnerProvenance(
             continue;
         }
         auto provenance = provenanceIt->second;
+        if (ownerObject != "Body") {
+            localizeChildMapProvenance(provenance, childPrefix);
+        }
         if (!hasMappedName(provenance)
             && provenance.sourceElement.rfind(childPrefix, 0) == 0
             && provenance.sourceTag
@@ -755,17 +801,32 @@ nlohmann::json childElementMapsForTopoState(
         const std::string evidenceSource = objectName == "Body"
             ? "freecad_partdesign_body_tip"
             : "freecad_part_compound_links";
-        nlohmann::json entries = childElementMapEntriesFromOwnerProvenance(
-            objectName,
-            childMap.sourceOwner,
-            childKey,
-            childMap.indexedName,
-            childMap.kind,
-            childMap.offset,
-            namedShape,
-            evidenceSource
-        );
         const part::NamedShape* childNamedShape = childMap.sourceNamedShape;
+        nlohmann::json entries = nlohmann::json::object();
+        if (objectName == "Body" && childNamedShape != nullptr) {
+            entries = childElementMapEntriesFromNamedShape(
+                objectName,
+                childMap.sourceOwner,
+                childKey,
+                childMap.indexedName,
+                childMap.kind,
+                childMap.offset,
+                *childNamedShape,
+                evidenceSource
+            );
+        }
+        if (entries.empty()) {
+            entries = childElementMapEntriesFromOwnerProvenance(
+                objectName,
+                childMap.sourceOwner,
+                childKey,
+                childMap.indexedName,
+                childMap.kind,
+                childMap.offset,
+                namedShape,
+                evidenceSource
+            );
+        }
         if (entries.empty() && childNamedShape != nullptr) {
             entries = childElementMapEntriesFromNamedShape(
                 objectName,
