@@ -14,13 +14,16 @@ C13-M1 已经把 `topoNamingState` 发布链路打通：正式 response 会输�
 - S2 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=5a12e7fdc6`（`5a12e7fdc6 docs: 关闭 C13-M2 S1 源码权威冻结`），起点 worktree clean。
 - S3 已关闭：`工作步骤细分/7-8-20-20-【已实现】C13-M2-S3-focused-red-tests.md` 已新增 guarded focused red tests，锁定 p2/c4m6/p6 FreeCAD `mappedName.raw/canonical` parity、p5/p8 indexed-only no-fake-raw 边界，以及 S5 `childElementMapKey` / `mapperHistoryIds` 空证据守卫。
 - S3 关闭执行基线：`pwd=/Users/li/Chili3DProject/FreeCAD`，`HEAD=696a4d0f29`（`696a4d0f29 文档：关闭 C13-M2 S2 证据矩阵`），起点 worktree clean。
-- 后续队列从 S4 `mappedName codec 实现` 继续；S3 未改 C++ runtime、fixtures、expected、collector、adapter 或 `cad-core-res`，也未把 S5 key/id 空证据标成 implemented/supported。
+- C13-M3 S5 已回流：C13-M3 S1-S4 解除 S4 的 producer-ledger 前置阻塞，S4 可恢复/继续执行；本批次仍从 S4 `mappedName codec 实现`、S5 `childKey 与 mapperId 对齐验证`、S6 `发布闸门` 继续。
+- S3 未改 C++ runtime、fixtures、expected、collector、adapter 或 `cad-core-res`，也未把 S5 key/id 空证据标成 implemented/supported。C13-M3 回流同样不把 `childElementMapKey` / `mapperHistoryIds` 标成 supported。
 
-## 当前问题
+## 当前回流状态
 
-S4 已确认 focused output 的剩余差异集中在三类：
+C13-M3 S4 live evidence 显示 producer-backed `mappedName.raw/canonical` 发布路径已可用：`tests.test_topo_naming_state_response` 为 `Ran 15 OK` 且无 expectedFailure，adapter channel 单测为 `Ran 1 OK`。这解除的是 C13-M2 S4 的前置 producer-ledger blocker，不等于本文件替 C13-M2 S4 做正式关闭。
 
-- `freecad_mapped_name_encoding_gap`：expected 使用 FreeCAD raw mapped name，例如 `#...:H...` / `#...:G;XTR...`，runtime 目前只发布 `NamedShape.elementMap` 的稳定 token。
+S4/S5 仍需按 C13-M2 队列处理的事项：
+
+- `freecad_mapped_name_encoding_gap`：前置 producer ledger 已补齐，S4 应基于 live tests/docs 正式验证并关闭或记录 narrowed blocker；不得再以“缺 producer ledger”为阻塞理由。
 - `child_element_map_key_gap`：expected evidence 里有 `childElementMapKey`，runtime 目前只发布当前 child map 投影。
 - `mapper_history_id_gap`：expected 使用 `mapperHistoryIds`，runtime 目前发布 request-local `mapperHistory` 和 `mapperHistoryIndexes`。
 
@@ -30,11 +33,11 @@ C13-M2 只做这三个 evidence 的 focused parity；不做全量 expected fixtu
 
 | fixture | 当前状态 | gap 分类 |
 | --- | --- | --- |
-| `p2/rect-pad-pocket` | cad-core 输出 111 个 stable-token entries；expected `Body` 有 50 个 FreeCAD raw entries。 | `freecad_mapped_name_encoding_gap`、`child_element_map_key_gap`、`mapper_history_id_gap` |
-| `c4m6/topo-state-body-tip-stable-recovery` | cad-core 输出保持 response state 与 recovery 基线；expected `Body` 使用 FreeCAD raw mapped names。 | `freecad_mapped_name_encoding_gap`、`child_element_map_key_gap`、`mapper_history_id_gap` |
-| `p5/sketch-internal-face` | cad-core 输出 `Sketch` / `Sketch.InternalShape` stable-token entries；expected 为 indexed-only。 | `indexed_only_boundary` |
-| `p6/up-to-face-stable-body-history` | cad-core 输出 10 个对象的 stable-token history projection；expected 只看 `ProbePad` FreeCAD raw evidence。 | `freecad_mapped_name_encoding_gap`、`child_element_map_key_gap`、`mapper_history_id_gap` |
-| `p8/app-link-box-face` | cad-core 输出 Link display-path token；expected 为 indexed-only。 | `child_path_identity_boundary` |
+| `p2/rect-pad-pocket` | C13-M3 S4 live evidence 已让 `Body` raw/canonical parity 普通通过；C13-M2 S4 仍需正式关闭。 | `s4_resume_ready`、`child_element_map_key_gap`、`mapper_history_id_gap` |
+| `c4m6/topo-state-body-tip-stable-recovery` | C13-M3 S4 live evidence 已让 `Body` raw/canonical parity 普通通过，并保持 recovery 基线。 | `s4_resume_ready`、`child_element_map_key_gap`、`mapper_history_id_gap` |
+| `p5/sketch-internal-face` | `Sketch` indexed-only / no-fake-raw 边界在 C13-M3 S4 普通通过。 | `indexed_only_boundary_passed_s4` |
+| `p6/up-to-face-stable-body-history` | 旧 focused fixture 已由 `718267783c` 删除，不是 live parity 证据；若恢复 `ProbePad`，必须重新采集 native expected。 | `retired_no_live_fixture` |
+| `p8/app-link-box` | 当前 live p8 fixture 的 `BoxLink` indexed-only / no-fake-raw 边界在 C13-M3 S4 普通通过；旧 `app-link-box-face` 已由 `718267783c` 删除。 | `child_path_identity_boundary_passed_s4` |
 
 ## FreeCAD source authority
 
@@ -59,7 +62,7 @@ S1 已冻结的关键源码结论：
 - `cad-core/tools/collect_freecad_expected.py::canonical_freecad_mapped_name()` 只服务 expected/comparator：将 FreeCAD raw mapped name 中的 `:H...` 和 `;D...` 归一化，降低版本/运行时局部 tag 差异。
 - `topo_state_element_map_entry()` 从 `stableSubname` 或 `rawFreecadMappedName` 构造 `mappedName.raw/canonical` 和固定 evidence schema；当前 schema 包含 `childElementMapKey` 与 `mapperHistoryIds`，但 focused expected 里没有非空 key/id 证据。
 - `comparable_topo_naming_state()` 对 mapped names、entry keys 和 producer 的 FreeCAD/OCCT 版本做比较归一化；这是 expected 文件比较合同，不是 cad-core runtime source。
-- focused expected 当前证据：`p2 Body=50 entries`、`c4m6 Body=26 entries`、`p6 ProbePad=26 entries` 有 raw/canonical examples；`p5 Sketch=indexed_only/0`、`p8 BoxLink=indexed_only/0` 是 no-fake-raw 边界。
+- focused expected S2 历史证据：`p2 Body=50 entries`、`c4m6 Body=26 entries`、`p6 ProbePad=26 entries` 有 raw/canonical examples；`p5 Sketch=indexed_only/0`、`p8 BoxLink=indexed_only/0` 是 no-fake-raw 边界。S5 回流后的 live 证据不能继续引用已删除的旧 p6 / `app-link-box-face` fixture；当前 live p8 为 `app-link-box`。
 - `childElementMapKey` / `mapperHistoryIds` 当前只作为 schema/future S5 关注，S3 只用测试断言 focused expected 没有非空 key/id evidence，不能因字段存在或空值被标成 implemented。
 
 ## cad-core 落点
@@ -76,11 +79,11 @@ S1 已冻结的关键源码结论：
 
 | fixture | 覆盖目的 |
 | --- | --- |
-| `p2/rect-pad-pocket` | PartDesign Body / Pad / Pocket 的 mappedName raw/canonical 对齐。 |
-| `c4m6/topo-state-body-tip-stable-recovery` | persisted state round-trip 下 Body/Tip alias 不回退。 |
+| `p2/rect-pad-pocket` | PartDesign Body / Pad / Pocket 的 mappedName raw/canonical 对齐；C13-M3 已解除 producer-ledger 前置阻塞。 |
+| `c4m6/topo-state-body-tip-stable-recovery` | persisted state round-trip 下 Body/Tip alias 不回退；C13-M3 已解除 producer-ledger 前置阻塞。 |
 | `p5/sketch-internal-face` | Sketch InternalShape 与 indexed-only 状态不伪造 FreeCAD raw name。 |
-| `p6/up-to-face-stable-body-history` | StableSubList 通过 topo state 恢复，上游 face history evidence 对齐。 |
-| `p8/app-link-box-face` | Link / child path 不误当 durable identity，child map key gap 单独归类。 |
+| `p6/up-to-face-stable-body-history` | 旧 fixture 已删除，当前不作为 live parity 证据；后续若恢复需重新采集 native expected。 |
+| `p8/app-link-box` | Link / child path 不误当 durable identity，child map key gap 单独归类；旧 `app-link-box-face` 已删除。 |
 
 ## 非目标
 
@@ -114,7 +117,7 @@ python3 -m unittest tests.test_adapters.CadCoreAdapterTest.test_c13m1_cli_c_api_
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD/cad-core
-for spec in p2:rect-pad-pocket c4m6:topo-state-body-tip-stable-recovery p5:sketch-internal-face p6:up-to-face-stable-body-history p8:app-link-box-face; do
+for spec in p2:rect-pad-pocket c4m6:topo-state-body-tip-stable-recovery p5:sketch-internal-face p8:app-link-box; do
   phase=${spec%%:*}; case=${spec#*:}
   build/cad-core recompute fixtures/$phase/$case.json --output fixtures/$phase/cad-core-res/$case.cad-core.json
 done

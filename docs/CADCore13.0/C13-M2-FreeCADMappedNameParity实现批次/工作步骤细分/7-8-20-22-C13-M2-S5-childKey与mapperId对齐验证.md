@@ -4,6 +4,10 @@
 
 验证或 blocker 化 `childElementMapKey` 与 `mapperHistoryIds` evidence，对 focused fixtures 做最终差异分类。
 
+## 前置状态
+
+C13-M3 S5 只解除 C13-M2 S4 的 producer-ledger 前置阻塞，不关闭本步骤。`childElementMapKey` 与 `mapperHistoryIds` 仍未标成 supported；S5 必须基于 FreeCAD source、live expected 和当前输出实现或 blocker 化，不能因 C13-M3 raw/canonical 通过而顺手标绿。
+
 ## 必读文件
 
 - S4 输出

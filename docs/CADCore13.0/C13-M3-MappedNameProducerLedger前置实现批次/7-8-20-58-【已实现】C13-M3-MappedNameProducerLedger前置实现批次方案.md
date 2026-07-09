@@ -1,4 +1,4 @@
-# C13-M3 MappedName Producer Ledger 前置实现批次方案
+# 【已实现】C13-M3 MappedName Producer Ledger 前置实现批次方案
 
 ## 背景
 
@@ -59,12 +59,12 @@ FreeCAD 的 raw mapped name 不是 response 阶段格式化出来的。它在 `T
 
 ## 实施边界
 
-第一轮做到：
+本批次已做到：
 
 - 设计并落地 producer ledger 类型。
 - 在 `NamedShape` construction / maker history / preserved source / generated / modified 传播点写入 source-backed raw mapped-name provenance。
 - runtime publisher 使用 ledger 输出 `mappedName.raw/canonical`。
-- S3 里 p2/c4m6/p6 raw/canonical expectedFailure 能删除并普通通过。
+- live S4 范围内 p2/c4m6 raw/canonical parity 普通通过，p5/current p8 no-fake-raw 边界普通通过，`tests.test_topo_naming_state_response` 为 `Ran 15 OK` 且无 expectedFailure。
 - p5/p8 不发布 fake raw name。
 
 后续再做：
@@ -73,9 +73,16 @@ FreeCAD 的 raw mapped name 不是 response 阶段格式化出来的。它在 `T
 - 非空 `mapperHistoryIds` parity。
 - 全量 expected topo state parity。
 
+## 关闭结果
+
+- S1-S4 已完成 producer ledger 类型、FreeCAD mapped-name codec/helper、PartDesign focused producer 接线和 runtime publisher 消费。
+- S4 live evidence：`f385c2b5e5 fix: 关闭 C13-M3 S4 runtime 消费`；`tests.test_topo_naming_state_response` 为 `Ran 15 OK`；adapter channel 单测为 `Ran 1 OK`。
+- 旧 `p6/up-to-face-stable-body-history` 与 `p8/app-link-box-face` fixture 已由 `718267783c chore: 刷新 FreeCAD expected 账本基线` 删除，不能作为 live parity 证据；当前 p8 evidence 使用 `app-link-box`。
+- S5 发布闸门关闭 `C13M3-BLOCKER-501`：C13-M2 S4 的 producer-ledger 前置阻塞已解除，可恢复/继续执行 S4；C13-M2 S5/S6 仍由 C13-M2 队列处理。
+
 ## 关闭条件
 
 - C13-M3 队列全部关闭。
-- C13-M2 S4 blocker 从“缺 producer ledger”变成可实现状态，或 S4 直接回流关闭。
+- C13-M2 S4 blocker 从“缺 producer ledger”变成可恢复执行状态；本批次不直接关闭 C13-M2 S4。
 - `tests.test_topo_naming_state_response` 普通通过，不能只靠 expectedFailure。
 - 没有 expected 字符串复制、fixture 分支或 adapter 输出修剪。
