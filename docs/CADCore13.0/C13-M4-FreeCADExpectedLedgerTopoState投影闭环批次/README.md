@@ -4,12 +4,14 @@ C13-M4 承接 `docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁
 
 本批次不再扩展对外 expected schema，也不把 ledger 厚块塞回 `.freecad.json`。当前最小完整语义批次是 `cad-core/fixtures/c4m6`，因为它已经同时覆盖 first recompute、Body/Tip recovery、compound child maps、mapper history、ReferenceShadow、schema/producer/hash mismatch 和 sidecar ledger 闭包。
 
-## 当前基线
+## 当前结论
 
-- ledger 闭包已通过：`python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict` 可验证 9 个 `.freecad.json` 与同名 `.freecad.ledger.json`。
+- C13-M4 状态：closed / completed，本批次只关闭 `c4m6` public projection 闭环。
+- ledger 闭包已通过：`python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict` 验证 9 个 `.freecad.json` 与同名 `.freecad.ledger.json`，结果 9/9 green。
 - S2 focused runtime parity 已通过：`python3 -m unittest tests.test_topo_naming_state_response` 完整运行 14 个测试并普通通过。
 - S1 已补 runtime projection：actual response 现在发布 `topoNamingState.objects.Compound.subshapes.Child0.Face1`、`Compound:ChildBoxA` projection child map，以及顶层 owner-qualified entry `Compound/ChildBoxA.#f:1;BOX,F`。
-- 当前 runtime 保留普通 compound child maps，例如 `Compound:ChildBoxA:Child0` 与 `Compound:ChildBoxB:Child1`；S2 已完成 formal focused-parity closeout，S3 仍保留为包索引收口。
+- 当前 runtime 保留普通 compound child maps，例如 `Compound:ChildBoxA:Child0` 与 `Compound:ChildBoxB:Child1`；S3 已完成包 README、矩阵和 CADCore13.0 索引收口。
+- S2/S3 未发现新的 C13-M2 / C13-M3 回流 blocker；既有 C13-M2 S4 producer ledger blocker 与 C13-M3 前置实现边界保持不变。
 - S0 已冻结：`HEAD=718267783c`，c4m6 strict ledger validator 9/9 通过；focused response test 失败 2 个断言但同一首因均为 `Compound.subshapes.Child0.Face1` missing。actual/expected 最小 diff 是缺 `Compound:ChildBoxA` projection child map、`Child0.Face1` subshape、`Compound/ChildBoxA.#f:1;BOX,F` 顶层 entry；普通 `Compound:ChildBoxA:Child0` / `Compound:ChildBoxB:Child1` child maps 已存在。
 
 ## 批次目标
@@ -54,17 +56,24 @@ C13-M4 承接 `docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁
 - S0：已冻结 live baseline、ledger gate 与首个 runtime diff。
 - S1：已实现 `Compound` child path projection 发布。
 - S2：已实现，`c4m6` focused response parity 转绿；hard fail fixtures 不发布 `topoNamingState`，ReferenceShadow.brep 保持 recovery evidence 边界。
-- S3：收口文档、矩阵和 C13.0 索引，确认是否回流 C13-M2/C13-M3。
+- S3：已实现，收口文档、矩阵和 C13.0 索引；确认 C13-M4 不新增 C13-M2/C13-M3 回流 blocker。
 
 ## 验收入口
+
+### S3 文档收口
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/工作步骤细分 --format markdown
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/矩阵/*.tsv
+git diff --check
+```
+
+### S2 语义门禁
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD
 cd cad-core
 python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict
 python3 -m unittest tests.test_topo_naming_state_response
-cd ..
-git diff --check
 ```
