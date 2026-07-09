@@ -1,4 +1,4 @@
-# C13-M4 S1 Compound child-path 投影发布
+# 【已实现】C13-M4 S1 Compound child-path 投影发布
 
 ## 目标
 
@@ -28,6 +28,13 @@
 - `topo-state-link-compound-child-maps` actual response 包含 `topoNamingState.objects.Compound.subshapes.Child0.Face1`。
 - actual response 包含 `Compound:ChildBoxA` projection child map。
 - 不复制 expected JSON 字符串，不按 fixture 名称分支。
+
+## S1 实现结果
+
+- C++ 落点：`cad-core/src/runtime/topo_naming_state.cpp` 新增通用 reference-driven child path projection publisher；非 Body owner 基于 `NamedShape.childElementMaps` 与 request-side `StableSubList` evidence 发布 `Child0.Face1`。
+- actual response 已包含 `topoNamingState.objects.Compound.subshapes.Child0.Face1`、`Compound:ChildBoxA` projection child map，以及顶层 owner-qualified entry `Compound/ChildBoxA.#f:1;BOX,F`。
+- 保留普通 child maps `Compound:ChildBoxA:Child0` / `Compound:ChildBoxB:Child1`；未修改 expected/ledger JSON，未重采 oracle。
+- 本步只关闭 S1-owned projection 发布；S2/S3 队列仍保留为后续收口步骤。
 
 ## 验收
 

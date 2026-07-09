@@ -7,9 +7,9 @@ C13-M4 承接 `docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁
 ## 当前基线
 
 - ledger 闭包已通过：`python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict` 可验证 9 个 `.freecad.json` 与同名 `.freecad.ledger.json`。
-- runtime parity 未通过：`python3 -m unittest tests.test_topo_naming_state_response` 当前在 `c4m6/topo-state-link-compound-child-maps` 失败。
-- 首个失败点是 `topoNamingState.objects.Compound.subshapes.Child0.Face1` 缺失。
-- 当前 runtime 已发布普通 compound child maps，例如 `Compound:ChildBoxA:Child0` 与 `Compound:ChildBoxB:Child1`；缺口是 input reference 需要的 child path 投影 map：`Compound:ChildBoxA`，把 `ChildBoxA.Face1` 投影为 `Compound.Child0.Face1`，并合并到 `Compound.elementMap.entries`。
+- S0 runtime parity 未通过：`python3 -m unittest tests.test_topo_naming_state_response` 曾在 `c4m6/topo-state-link-compound-child-maps` 失败。
+- S1 已补 runtime projection：actual response 现在发布 `topoNamingState.objects.Compound.subshapes.Child0.Face1`、`Compound:ChildBoxA` projection child map，以及顶层 owner-qualified entry `Compound/ChildBoxA.#f:1;BOX,F`。
+- 当前 runtime 保留普通 compound child maps，例如 `Compound:ChildBoxA:Child0` 与 `Compound:ChildBoxB:Child1`；S2/S3 队列仍保留为 formal focused-parity 与包索引收口。
 - S0 已冻结：`HEAD=718267783c`，c4m6 strict ledger validator 9/9 通过；focused response test 失败 2 个断言但同一首因均为 `Compound.subshapes.Child0.Face1` missing。actual/expected 最小 diff 是缺 `Compound:ChildBoxA` projection child map、`Child0.Face1` subshape、`Compound/ChildBoxA.#f:1;BOX,F` 顶层 entry；普通 `Compound:ChildBoxA:Child0` / `Compound:ChildBoxB:Child1` child maps 已存在。
 
 ## 批次目标
@@ -52,7 +52,7 @@ C13-M4 承接 `docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁
 
 - 入口：`工作步骤细分/7-9-18-41-【已实现】C13-M4工作步骤总入口.md`
 - S0：已冻结 live baseline、ledger gate 与首个 runtime diff。
-- S1：实现 `Compound` child path projection 发布。
+- S1：已实现 `Compound` child path projection 发布。
 - S2：让 `c4m6` focused response parity 转绿。
 - S3：收口文档、矩阵和 C13.0 索引，确认是否回流 C13-M2/C13-M3。
 

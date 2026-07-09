@@ -206,6 +206,19 @@ struct ResponseSubshapeInfo {
     nlohmann::json stateSubshape = nlohmann::json::object();
 };
 
+struct ChildPathProjection {
+    std::string childObject;
+    std::string pathPrefix;
+    std::string localSubname;
+    std::size_t childIndex = 0U;
+    std::string targetSubname;
+    std::string shapeKind;
+    std::string rawChildMappedName;
+    std::string canonicalChildMappedName;
+    std::string rawOwnerMappedName;
+    std::string canonicalOwnerMappedName;
+};
+
 void copyStringIfPresent(nlohmann::json& target,
                          const nlohmann::json& source,
                          const std::string& field)
@@ -625,6 +638,24 @@ std::string childMapKey(const std::string& ownerObject,
     return key;
 }
 
+std::optional<std::size_t> childIndexFromPathPrefix(const std::string& pathPrefix)
+{
+    constexpr const char* childPrefix = "Child";
+    constexpr std::size_t childPrefixSize = 5U;
+    if (pathPrefix.rfind(childPrefix, 0) != 0 || pathPrefix.size() == childPrefixSize) {
+        return std::nullopt;
+    }
+    std::size_t index = 0U;
+    for (std::size_t i = childPrefixSize; i < pathPrefix.size(); ++i) {
+        const char ch = pathPrefix.at(i);
+        if (ch < '0' || ch > '9') {
+            return std::nullopt;
+        }
+        index = index * 10U + static_cast<std::size_t>(ch - '0');
+    }
+    return index;
+}
+
 std::string localIndexedPrefix(const std::string& indexedName)
 {
     std::string prefix;
@@ -666,6 +697,20 @@ std::string sourceLocalNameFromStable(const std::string& stableName)
     return dot == std::string::npos ? stableName : stableName.substr(dot + 1U);
 }
 
+std::optional<std::pair<std::string, std::string>> childPathSubnameParts(
+    const std::string& subname)
+{
+    const std::size_t dot = subname.find('.');
+    if (dot == std::string::npos || dot == 0U || dot + 1U >= subname.size()) {
+        return std::nullopt;
+    }
+    std::string pathPrefix = subname.substr(0, dot);
+    if (!childIndexFromPathPrefix(pathPrefix)) {
+        return std::nullopt;
+    }
+    return std::make_pair(std::move(pathPrefix), subname.substr(dot + 1U));
+}
+
 std::string shapeKindFromIndexedName(const std::string& indexedName)
 {
     if (indexedName.rfind("Face", 0) == 0) {
@@ -685,6 +730,76 @@ bool hasMappedName(const part::MappedNameProvenance& provenance)
     return provenance.status == part::MappedNameProvenanceStatus::SourceBacked
         && !provenance.rawMappedName.empty()
         && !provenance.canonicalMappedName.empty();
+}
+
+std::optional<ChildPathProjection> childPathProjectionFromStableReference(
+    const std::string& ownerObject,
+    const std::string& subname,
+    const std::string& stableSubname)
+{
+    const auto pathParts = childPathSubnameParts(subname);
+    if (!pathParts) {
+        return std::nullopt;
+    }
+
+    const std::string ownerPrefix = ownerObject + "/";
+    if (stableSubname.rfind(ownerPrefix, 0) != 0) {
+        return std::nullopt;
+    }
+
+    std::string childMappedName = stableSubname.substr(ownerPrefix.size());
+    const std::size_t dot = childMappedName.find('.');
+    if (dot == std::string::npos || dot == 0U || dot + 1U >= childMappedName.size()) {
+        return std::nullopt;
+    }
+    if (!hasFreeCadEncodedElementToken(childMappedName)) {
+        return std::nullopt;
+    }
+
+    const std::optional<std::size_t> childIndex = childIndexFromPathPrefix(pathParts->first);
+    if (!childIndex) {
+        return std::nullopt;
+    }
+
+    ChildPathProjection projection;
+    projection.childObject = childMappedName.substr(0, dot);
+    projection.pathPrefix = pathParts->first;
+    projection.localSubname = pathParts->second;
+    projection.childIndex = *childIndex;
+    projection.targetSubname = subname;
+    projection.shapeKind = shapeKindFromIndexedName(projection.localSubname);
+    projection.rawChildMappedName = std::move(childMappedName);
+    projection.canonicalChildMappedName =
+        topo::canonicalizeFreeCadMappedName(projection.rawChildMappedName);
+    projection.rawOwnerMappedName = stableSubname;
+    projection.canonicalOwnerMappedName =
+        topo::canonicalizeFreeCadMappedName(projection.rawOwnerMappedName);
+    return projection;
+}
+
+const part::NamedShapeChildMap* matchingChildPathMap(
+    const part::NamedShape& namedShape,
+    const ChildPathProjection& projection)
+{
+    const auto localOrdinal = localIndexedOrdinal(projection.localSubname);
+    if (!localOrdinal || *localOrdinal <= 0) {
+        return nullptr;
+    }
+    for (const part::NamedShapeChildMap& childMap : namedShape.childElementMaps) {
+        if (childMap.sourceOwner != projection.childObject
+            || childMap.indexedName != projection.pathPrefix
+            || childMap.kind != projection.shapeKind
+            || childMap.count <= 0
+            || *localOrdinal > childMap.count) {
+            continue;
+        }
+        if (childMap.sourceNamedShape != nullptr
+            && childMap.sourceNamedShape->elements.count(projection.localSubname) == 0U) {
+            continue;
+        }
+        return &childMap;
+    }
+    return nullptr;
 }
 
 bool stripPrefix(std::string& value, const std::string& prefix)
@@ -1010,6 +1125,160 @@ void mergeChildEntriesIntoTopLevel(nlohmann::json& entries,
     }
 }
 
+nlohmann::json childPathProjectionEntry(const std::string& ownerObject,
+                                        const ChildPathProjection& projection,
+                                        const std::string& childKey,
+                                        bool ownerQualified)
+{
+    return {
+        {"target", {{"object", ownerObject}, {"subname", projection.targetSubname}}},
+        {"shapeKind", projection.shapeKind},
+        {"source",
+         {
+             {"object", projection.childObject},
+             {"subname", projection.localSubname},
+         }},
+        {"mappedName",
+         {
+             {"raw",
+              ownerQualified ? projection.rawOwnerMappedName : projection.rawChildMappedName},
+             {"canonical",
+              ownerQualified ? projection.canonicalOwnerMappedName
+                             : projection.canonicalChildMappedName},
+         }},
+        {"recoverability", "resolved"},
+        {"evidence",
+         {
+             {"source", "child_element_map"},
+             {"mapperHistoryIds", nlohmann::json::array()},
+             {"childElementMapKey", childKey},
+         }},
+    };
+}
+
+nlohmann::json* childElementMapByKey(nlohmann::json& childElementMaps,
+                                     const std::string& key)
+{
+    if (!childElementMaps.is_array()) {
+        return nullptr;
+    }
+    for (nlohmann::json& childMap : childElementMaps) {
+        if (childMap.is_object() && childMap.value("key", "") == key) {
+            return &childMap;
+        }
+    }
+    return nullptr;
+}
+
+void mergeProjectionChildEntry(nlohmann::json& childElementMaps,
+                               const std::string& ownerObject,
+                               const ChildPathProjection& projection,
+                               const std::string& childKey)
+{
+    nlohmann::json* childMap = childElementMapByKey(childElementMaps, childKey);
+    if (childMap == nullptr) {
+        childElementMaps.push_back({
+            {"key", childKey},
+            {"ownerObject", ownerObject},
+            {"childObject", projection.childObject},
+            {"childIndex", projection.childIndex},
+            {"pathPrefix", projection.pathPrefix},
+            {"elementMap",
+             {
+                 {"encoding", elementMapVersion},
+                 {"status", "history_partial"},
+                 {"entries", nlohmann::json::object()},
+             }},
+        });
+        childMap = &childElementMaps.back();
+    }
+    nlohmann::json& entries = (*childMap)["elementMap"]["entries"];
+    if (!entries.contains(projection.canonicalChildMappedName)) {
+        entries[projection.canonicalChildMappedName] =
+            childPathProjectionEntry(ownerObject, projection, childKey, false);
+    }
+}
+
+void mergeProjectionSubshape(std::map<std::string, ResponseSubshapeInfo>& subshapes,
+                             const ChildPathProjection& projection)
+{
+    subshapes[projection.targetSubname] = ResponseSubshapeInfo {
+        projection.targetSubname,
+        projection.targetSubname,
+        projection.shapeKind,
+        nlohmann::json {
+            {"subname", projection.targetSubname},
+            {"rawFreecadMappedName", projection.rawOwnerMappedName},
+            {"canonicalFreecadMappedName", projection.canonicalOwnerMappedName},
+            {"resolvedIndexed", projection.targetSubname},
+            {"identityStatus", "stable"},
+        },
+    };
+}
+
+void publishReferenceDrivenChildPathProjections(
+    const std::string& objectName,
+    const app::Document& document,
+    const part::NamedShape& namedShape,
+    std::map<std::string, ResponseSubshapeInfo>& subshapes,
+    nlohmann::json& childElementMaps,
+    nlohmann::json& entries)
+{
+    if (objectName == "Body") {
+        return;
+    }
+
+    std::set<std::pair<std::string, std::string>> published;
+    for (const app::DocumentObject& object : document.objects) {
+        for (const auto& propertyItem : object.properties.items()) {
+            std::vector<app::Link> links;
+            app::collectLinks(propertyItem.value(), links);
+            for (const app::Link& link : links) {
+                if (link.object != objectName
+                    || link.stableSubnamesSource != "topoNamingState") {
+                    continue;
+                }
+                const std::size_t count =
+                    std::min(link.subnames.size(), link.stableSubnames.size());
+                for (std::size_t index = 0U; index < count; ++index) {
+                    auto projection = childPathProjectionFromStableReference(
+                        objectName,
+                        link.subnames.at(index),
+                        link.stableSubnames.at(index)
+                    );
+                    if (!projection || projection->shapeKind == "shape") {
+                        continue;
+                    }
+                    if (matchingChildPathMap(namedShape, *projection) == nullptr) {
+                        continue;
+                    }
+                    if (!published.insert({projection->targetSubname,
+                                           projection->canonicalOwnerMappedName})
+                             .second) {
+                        continue;
+                    }
+
+                    // FreeCAD:
+                    // /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+                    // ::ElementMap::addChildElements(), getAll() appends "child.postfix" to
+                    // child mapped names; /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+                    // TopoShapeExpansion.cpp::TopoShape::createChildMap() fills the child range
+                    // that explains "Child0.Face1". Public topoNamingState keeps this as a
+                    // projection of request StableSubList evidence, not as geometry input.
+                    const std::string childKey =
+                        childMapKey(objectName, projection->childObject, {});
+                    mergeProjectionSubshape(subshapes, *projection);
+                    mergeProjectionChildEntry(childElementMaps, objectName, *projection, childKey);
+                    if (!entries.contains(projection->canonicalOwnerMappedName)) {
+                        entries[projection->canonicalOwnerMappedName] =
+                            childPathProjectionEntry(objectName, *projection, childKey, true);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void mergeMapperHistoryEntriesIntoTopLevel(nlohmann::json& entries,
                                            const std::string& objectName,
                                            const part::NamedShape& namedShape,
@@ -1099,6 +1368,14 @@ nlohmann::json objectTopoStateJson(
     if (namedShape != nullptr) {
         entries = elementMapEntriesJson(objectName, *namedShape, subshapes, mapperHistory);
         childElementMaps = childElementMapsForTopoState(objectName, *namedShape);
+        publishReferenceDrivenChildPathProjections(
+            objectName,
+            document,
+            *namedShape,
+            subshapes,
+            childElementMaps,
+            entries
+        );
         if (objectName == "Body") {
             mergeChildEntriesIntoTopLevel(entries, childElementMaps);
         }
