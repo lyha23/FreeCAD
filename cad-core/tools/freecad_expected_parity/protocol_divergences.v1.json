@@ -1,4 +1,209 @@
 {
   "schemaVersion": "cad-core.freecad-expected-protocol-divergences.v1",
-  "entries": []
+  "entries": [
+    {
+      "id": "C13M5-C4M6-TRANSPORT-001",
+      "selector": {
+        "phase": "c4m6",
+        "case": "topo-state-body-tip-stable-recovery",
+        "category": "results",
+        "kind": "extra",
+        "path": "results.Body.mesh"
+      },
+      "actualContract": {
+        "type": "object",
+        "keysMode": "exact",
+        "requiredKeys": ["vertices", "normals", "indices", "faceIds", "edgeSegments", "vertexPoints"],
+        "properties": {
+          "vertices": {"type": "array"},
+          "normals": {"type": "array"},
+          "indices": {"type": "array"},
+          "faceIds": {"type": "array"},
+          "edgeSegments": {"type": "array"},
+          "vertexPoints": {"type": "array"}
+        }
+      },
+      "nativeExpected": "FreeCADCmd public result does not publish display mesh.",
+      "cadCoreProtocol": "Body result retains frontend display mesh and its IDs refer to current result subshapes.",
+      "frontendImpact": "Removing the mesh breaks Body display and picking consumers.",
+      "authority": "docs/CADCore方案/00-CAD-Core抽取方案.md",
+      "contractTests": [
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_transport_metadata_references_current_result_subshapes"
+      ],
+      "removeWhen": "Native public expected adopts the same display transport contract."
+    },
+    {
+      "id": "C13M5-C4M6-TRANSPORT-002",
+      "selector": {
+        "phase": "c4m6",
+        "case": "topo-state-first-recompute-empty",
+        "category": "results",
+        "kind": "extra",
+        "path": "results.Box.mesh"
+      },
+      "actualContract": {
+        "type": "object",
+        "keysMode": "exact",
+        "requiredKeys": ["vertices", "normals", "indices", "faceIds", "edgeSegments", "vertexPoints"],
+        "properties": {
+          "vertices": {"type": "array"},
+          "normals": {"type": "array"},
+          "indices": {"type": "array"},
+          "faceIds": {"type": "array"},
+          "edgeSegments": {"type": "array"},
+          "vertexPoints": {"type": "array"}
+        }
+      },
+      "nativeExpected": "FreeCADCmd public result does not publish display mesh.",
+      "cadCoreProtocol": "First recompute retains Box display mesh for the frontend response.",
+      "frontendImpact": "Removing the mesh breaks first-render and picking consumers.",
+      "authority": "docs/CADCore方案/00-CAD-Core抽取方案.md",
+      "contractTests": [
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_transport_metadata_references_current_result_subshapes"
+      ],
+      "removeWhen": "Native public expected adopts the same display transport contract."
+    },
+    {
+      "id": "C13M5-C4M6-TRANSPORT-003",
+      "selector": {
+        "phase": "c4m6",
+        "case": "topo-state-link-compound-child-maps",
+        "category": "results",
+        "kind": "extra",
+        "path": "results.CompoundLink.mesh"
+      },
+      "actualContract": {
+        "type": "object",
+        "keysMode": "exact",
+        "requiredKeys": ["vertices", "normals", "indices", "faceIds", "edgeSegments", "vertexPoints"],
+        "properties": {
+          "vertices": {"type": "array"},
+          "normals": {"type": "array"},
+          "indices": {"type": "array"},
+          "faceIds": {"type": "array"},
+          "edgeSegments": {"type": "array"},
+          "vertexPoints": {"type": "array"}
+        }
+      },
+      "nativeExpected": "CompoundLink native expected publishes bbox, volume, topology and subshape identity but not display mesh.",
+      "cadCoreProtocol": "CompoundLink retains frontend display mesh alongside the native semantic result.",
+      "frontendImpact": "Removing the mesh breaks Link display and picking without improving semantic parity.",
+      "authority": "docs/CADCore方案/00-CAD-Core抽取方案.md",
+      "contractTests": [
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_transport_metadata_references_current_result_subshapes",
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_compound_link_native_semantic_result_matches_freecad_expected"
+      ],
+      "removeWhen": "Native public expected adopts the same display transport contract."
+    },
+    {
+      "id": "C13M5-C4M6-TRANSPORT-004",
+      "selector": {
+        "phase": "c4m6",
+        "case": "topo-state-reference-shadow-brep",
+        "category": "results",
+        "kind": "extra",
+        "path": "results.ProbeSketch.mesh"
+      },
+      "actualContract": {
+        "type": "object",
+        "keysMode": "exact",
+        "requiredKeys": ["vertices", "normals", "indices", "faceIds", "edgeSegments", "vertexPoints"],
+        "properties": {
+          "vertices": {"type": "array"},
+          "normals": {"type": "array"},
+          "indices": {"type": "array"},
+          "faceIds": {"type": "array"},
+          "edgeSegments": {"type": "array"},
+          "vertexPoints": {"type": "array"}
+        }
+      },
+      "nativeExpected": "ReferenceShadow native expected keeps semantic recovery evidence but does not publish display mesh.",
+      "cadCoreProtocol": "ProbeSketch retains frontend display mesh while ReferenceShadow remains evidence-only.",
+      "frontendImpact": "Removing the mesh breaks sketch display and picking consumers.",
+      "authority": "docs/CADCore方案/00-CAD-Core抽取方案.md",
+      "contractTests": [
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_transport_metadata_references_current_result_subshapes",
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_reference_shadow_response_keeps_expected_update_contract"
+      ],
+      "removeWhen": "Native public expected adopts the same display transport contract."
+    },
+    {
+      "id": "C13M5-C4M6-TRANSPORT-005",
+      "selector": {
+        "phase": "c4m6",
+        "case": "topo-state-reference-shadow-brep",
+        "category": "results.subshapes",
+        "kind": "extra",
+        "path": "results.ProbeSketch.subshapes"
+      },
+      "actualContract": {
+        "type": "object",
+        "keysMode": "exact",
+        "requiredKeys": ["Edge1", "Vertex1", "Vertex2"],
+        "properties": {
+          "Edge1": {
+            "type": "object",
+            "keysMode": "exact",
+            "requiredKeys": ["ReferenceShadow", "ShadowSub", "fullSubname", "id", "identityStatus", "indexed", "kind", "sourceGeometryId", "sourceGeometryIndex", "sourceGeometryKind", "sourceStableSubname", "stableSubname", "subname"],
+            "properties": {
+              "ReferenceShadow": {"type": "array", "const": []},
+              "ShadowSub": {"type": "array", "const": []},
+              "fullSubname": {"type": "string", "const": "ProbeSketch.Edge1"},
+              "id": {"type": "string", "const": "ProbeSketch:Edge1"},
+              "identityStatus": {"type": "string", "const": "stable"},
+              "indexed": {"type": "string", "const": "Edge1"},
+              "kind": {"type": "string", "const": "Edge"},
+              "sourceGeometryId": {"type": "number", "const": 1},
+              "sourceGeometryIndex": {"type": "number", "const": 0},
+              "sourceGeometryKind": {"type": "string", "const": "LineSegment"},
+              "sourceStableSubname": {"type": "string", "const": "g1"},
+              "stableSubname": {"type": "string", "const": "g1"},
+              "subname": {"type": "string", "const": "Edge1"}
+            }
+          },
+          "Vertex1": {
+            "type": "object",
+            "keysMode": "exact",
+            "requiredKeys": ["ReferenceShadow", "ShadowSub", "fullSubname", "id", "identityStatus", "indexed", "kind", "stableSubname", "subname"],
+            "properties": {
+              "ReferenceShadow": {"type": "array", "const": []},
+              "ShadowSub": {"type": "array", "const": []},
+              "fullSubname": {"type": "string", "const": "ProbeSketch.Vertex1"},
+              "id": {"type": "string", "const": "ProbeSketch:Vertex1"},
+              "identityStatus": {"type": "string", "const": "current_only"},
+              "indexed": {"type": "string", "const": "Vertex1"},
+              "kind": {"type": "string", "const": "Vertex"},
+              "stableSubname": {"type": "string", "const": ""},
+              "subname": {"type": "string", "const": "Vertex1"}
+            }
+          },
+          "Vertex2": {
+            "type": "object",
+            "keysMode": "exact",
+            "requiredKeys": ["ReferenceShadow", "ShadowSub", "fullSubname", "id", "identityStatus", "indexed", "kind", "stableSubname", "subname"],
+            "properties": {
+              "ReferenceShadow": {"type": "array", "const": []},
+              "ShadowSub": {"type": "array", "const": []},
+              "fullSubname": {"type": "string", "const": "ProbeSketch.Vertex2"},
+              "id": {"type": "string", "const": "ProbeSketch:Vertex2"},
+              "identityStatus": {"type": "string", "const": "current_only"},
+              "indexed": {"type": "string", "const": "Vertex2"},
+              "kind": {"type": "string", "const": "Vertex"},
+              "stableSubname": {"type": "string", "const": ""},
+              "subname": {"type": "string", "const": "Vertex2"}
+            }
+          }
+        }
+      },
+      "nativeExpected": "Native expected does not publish frontend-only result subshape transport entries.",
+      "cadCoreProtocol": "ProbeSketch retains three current result-subshape entries needed by its display mesh.",
+      "frontendImpact": "Removing or reshaping this transport list breaks edge and vertex picking.",
+      "authority": "docs/CADCore方案/00-CAD-Core抽取方案.md",
+      "contractTests": [
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_transport_metadata_references_current_result_subshapes",
+        "tests.test_topo_naming_state_response.TopoNamingStateResponseTest.test_c4m6_reference_shadow_response_keeps_expected_update_contract"
+      ],
+      "removeWhen": "Native public expected adopts the same result-subshape transport contract."
+    }
+  ]
 }

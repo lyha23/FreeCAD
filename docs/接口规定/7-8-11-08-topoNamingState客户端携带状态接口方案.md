@@ -8,8 +8,8 @@ CAD Core 采用“服务端无会话、协议有状态”的拓扑命名方案�
 
 - `DocumentObject graph` 仍是唯一建模事实。
 - `topoNamingState` 不是建模几何输入，不能用于构造 shape、bbox、volume、mesh 或完整对象 BREP。
-- `topoNamingState` 可以携带旧 `NamedShape`、`ElementMap`、child element map、mapper history、raw mapped name、canonical mapped name、object hash 和版本信息。
-- 除 `ReferenceShadow.brep` 这个单个被引用 subshape 的旧快照外，不在 state 中保存完整对象 BREP。
+- `topoNamingState` 可以携带旧 `NamedShape`、`ElementMap`、child element map、mapper history、raw mapped name、canonical mapped name、object hash 和版本信息，但不携带 BREP。
+- 唯一允许的 BREP 例外是 item-local `ReferenceShadow.brep`：它是一个被引用 subshape 的旧快照证据，不属于 `topoNamingState`、results 或完整对象状态，也不能作为建模输入。
 - 服务端每次返回新的完整快照；调用方以下一次响应替换旧快照，不做客户端合并。
 
 ## 请求
@@ -33,7 +33,32 @@ CAD Core 采用“服务端无会话、协议有状态”的拓扑命名方案�
 }
 ```
 
-`topoNamingState` 可为空或缺省。首次 recompute 没有旧 state 时，CAD Core 只根据 graph 计算，并在响应中返回新 state。只要请求携带了 `topoNamingState`，CAD Core 必须先校验 `schemaVersion` 和 `producer` 兼容性；版本不兼容时直接返回请求级错误，不继续 recompute 当前 graph，也不把旧 state 当作可降级证据消费。
+`topoNamingState` 可为空或缺省。首次 recompute 没有旧 state 时，CAD Core 只根据 graph 计算，并在响应中返回新 state。只要请求携带了 `topoNamingState`，CAD Core 必须在进入 recompute 前校验 `schemaVersion`、`producer`、`documentHash`、每个 `objectHash`、element-map / child-element-map encoding，以及 `topoNamingState.objects` 顶层对象归属。任一失败都是请求级 hard fail；不继续 recompute，也不把旧 state 降级为可猜测的恢复证据。
+
+### 请求级 hard fail 响应
+
+hard fail 只返回 diagnostics-only envelope：
+
+```json
+{
+  "results": [],
+  "elementReferenceUpdates": [],
+  "diagnostics": [
+    {
+      "severity": "error",
+      "code": "topo_state_document_hash_mismatch",
+      "source": "topoNamingState"
+    }
+  ]
+}
+```
+
+- 顶层只允许 `diagnostics`、`elementReferenceUpdates`、`results`；不得发布新的 `topoNamingState`、`documentObjectUpdates` 或 `binaryPayloads`。
+- `topoNamingState` 缺省、`null` 或空 object 可表示没有旧 state；任何其它非 object 值使用 `topo_state_schema_incompatible`，并给出 `actualTopoNamingState` / `expectedTopoNamingStateType=object_or_null`。
+- `documentHash` / `objectHash` 不匹配分别使用 `topo_state_document_hash_mismatch` / `topo_state_object_hash_mismatch`；不再以“stale state”继续 recompute。
+- `topoNamingState.objects` 缺失或不是 JSON object 属于 schema 不兼容，使用 `topo_state_schema_incompatible` 并给出 `actualObjects` / `expectedObjectsType=object`；不得跳过 objectHash、encoding 与 ownership 校验后继续 recompute。
+- `topoNamingState.objects` 的每个顶层 key 必须是当前 `DocumentObject graph` 中的对象；未知对象或非 object state 使用 `topo_state_object_owner_incompatible`，并带 offending object。Link child path、property-local reference 和已明确允许的 `SubList=[] + StableSubList-only` 恢复仍是 item-local 证据，不得误判为 foreign top-level owner。
+- diagnostics 的 `code`、`severity`、`source`、message 与 case-specific actual/expected evidence 是可比较合同；本接口不为 hard fail 发明 `stage` 字段。
 
 ## 响应
 
@@ -82,8 +107,8 @@ CAD Core 采用“服务端无会话、协议有状态”的拓扑命名方案�
 | --- | --- |
 | `schemaVersion` | state schema 版本。当前接口不做向后兼容；不等于 CAD Core 支持版本时直接报错。 |
 | `producer` | 生成 state 的 CAD Core / FreeCAD / OCCT 版本。用于兼容性判断；不在当前 CAD Core 接受范围内时直接报错。 |
-| `documentHash` | 当前 graph 的规范化 hash。用于判断旧 state 是否属于同一文档族。 |
-| `objectHash` | 单对象输入语义 hash。对象属性、链接或依赖变化时会变化。 |
+| `documentHash` | 当前 graph 的规范化完整性 hash。请求携带 state 时必须相等，否则请求级 hard fail。 |
+| `objectHash` | 单对象输入语义完整性 hash。对象属性、链接或依赖变化时会变化；请求携带的同名 object state 不相等即 hard fail。 |
 | `elementMapVersion` | 对齐 FreeCAD ElementMap version / CAD Core topo ledger version。 |
 | `subshapes` | 当前响应发布的 indexed subshape 到稳定证据的映射。 |
 | `rawFreecadMappedName` | FreeCAD / CAD Core 原始 mapped-name token。只有配套 state 存在并校验通过时才可作为恢复证据。 |
@@ -157,9 +182,9 @@ CAD Core 采用“服务端无会话、协议有状态”的拓扑命名方案�
 
 解析顺序：
 
-1. 用当前 graph recompute 目标 shape。
-2. 校验传入 `topoNamingState` 的 schema、producer、document / object hash；schema / producer 版本不兼容时直接返回请求级错误，后续步骤不执行。
-3. 用 `StableSubList` 在旧 state 中定位旧 mapped-name / history 证据。
+1. 若请求携带 `topoNamingState`，先校验 schema、producer、document / object hash、element-map encoding、child-element-map encoding 和顶层 object ownership；任一失败直接返回 diagnostics-only hard fail，后续步骤不执行。
+2. 只有 state 缺省/为空，或第 1 步校验通过后，才用当前 graph recompute 目标 shape。
+3. 有旧 state 时，用 `StableSubList` 在已校验的旧 state 中定位 mapped-name / history 证据。
 4. 用当前 shape 的新 ElementMap / mapper history 尝试恢复到 current indexed subname。
 5. 成功时返回新的 `SubList`、`StableSubList`、`ShadowSub`、`ReferenceShadow` 和 `topoNamingState`。
 6. 失败时返回 `deleted_stable_subname`、`split_stable_subname`、`ambiguous_stable_subname` 或 `unsupported_stable_subname`，不得靠 bbox、顺序或 fixture 名称猜。
@@ -172,10 +197,10 @@ CAD Core 采用“服务端无会话、协议有状态”的拓扑命名方案�
 
 ## 安全与版本策略
 
-- 前端传回的 state 不可信。CAD Core 必须验证 schema、producer、document hash、object hash 和 property ownership。
+- 前端传回的 state 不可信。CAD Core 必须验证 schema、producer、document hash、object hash、element-map encoding、child map encoding 与 top-level object ownership；这些是进入 recompute 前的完整性边界，不是后处理 diagnostics。
 - state 只能影响引用恢复和 diagnostics，不能影响几何构造结果。
 - 当前接口不承诺向后兼容旧版 `topoNamingState`。`schemaVersion`、CAD Core 版本、FreeCAD 版本或 OCCT 版本不在当前接受范围内时，CAD Core 直接返回请求级错误。
-- 版本不兼容错误是硬失败：不继续 recompute 当前 graph，不返回新的 `topoNamingState`，不把旧引用恢复降级为 diagnostic，也不按当前版本尝试解析旧 state。
+- 上述任一不兼容或完整性错误都是硬失败：不继续 recompute 当前 graph，不返回新的 `topoNamingState`，不把旧引用恢复降级为 diagnostic，也不按当前版本尝试解析旧 state。
 - state payload 可能很大，后续可压缩传输，但压缩格式不得改变语义 schema。
 
 ## 非目标

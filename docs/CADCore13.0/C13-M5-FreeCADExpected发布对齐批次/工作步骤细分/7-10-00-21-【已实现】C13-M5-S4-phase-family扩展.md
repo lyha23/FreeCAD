@@ -1,5 +1,7 @@
 # C13-M5 S4 phase family 扩展
 
+> 后续状态：S5 已关闭 release-gate 基础设施。本文的 `intentional_protocol_divergence` 表述仅记录 S4 当时 report；当前可接受项由精确 registry selector 与 actual contract 决定，S4 family red surface 仍是后续实现工作，不是 release green。
+
 ## 目标
 
 在 `c4m6` strict lane 关闭后，按语义家族扩展到其它 phase，避免全量 expected diff 变成不可关闭的大任务。

@@ -18,7 +18,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 from freecad_expected_parity import EvaluationRequest, MaterializeRequest, evaluate, materialize_current
-from freecad_expected_parity.catalog import ROLES_SCHEMA
+from freecad_expected_parity.catalog import ROLES_SCHEMA, load_catalog
 from freecad_expected_parity.registry import REGISTRY_SCHEMA
 
 
@@ -39,6 +39,7 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             roles,
             {
                 "schemaVersion": ROLES_SCHEMA,
+                "legacyNativeExpectedDiscovery": False,
                 "requireCompleteInputCoverage": True,
                 "roles": [{"phase": "demo", "case": "case-a", "role": "native"}],
             },
@@ -168,6 +169,218 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
 
         self.assertEqual("invalid", stale["releaseStatus"])
         self.assertIn("DEMO-RESULT-001", stale["registryAudit"]["staleEntries"])
+
+    def test_registry_contract_drift_is_semantic_red_without_invalidating_the_registry(self) -> None:
+        expected = {"diagnostics": [], "results": []}
+        actual = {"diagnostics": [], "results": [{"object": "Box", "unexpected": True}]}
+        entry = {
+            "id": "DEMO-RESULT-001",
+            "selector": {
+                "phase": "demo",
+                "case": "case-a",
+                "category": "results",
+                "kind": "extra",
+                "path": "results.Box",
+            },
+            "actualContract": {"type": "object", "keysMode": "exact", "requiredKeys": ["object"]},
+            "nativeExpected": "Native response publishes no result.",
+            "cadCoreProtocol": "Demo transport result.",
+            "frontendImpact": "Test-only evidence.",
+            "authority": "tests.test_freecad_expected_public_parity",
+            "contractTests": [
+                "tests.test_freecad_expected_public_parity.FreecadExpectedPublicParityTest.test_registry_contract_drift_is_semantic_red_without_invalidating_the_registry"
+            ],
+            "removeWhen": "The test transport is removed.",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            self.write_json(registry, {"schemaVersion": REGISTRY_SCHEMA, "entries": [entry]})
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("red", report["exactStatus"])
+        self.assertEqual("red", report["semanticStatus"])
+        self.assertTrue(report["registryAudit"]["valid"])
+        self.assertEqual("DEMO-RESULT-001", report["registryAudit"]["contractFailures"][0]["id"])
+
+    def test_registry_contract_schema_rejects_incompatible_keywords_and_const_types(self) -> None:
+        expected = {"diagnostics": [], "results": []}
+        actual = {"diagnostics": [], "results": [{"object": "Box"}]}
+        entry = {
+            "id": "DEMO-RESULT-001",
+            "selector": {
+                "phase": "demo",
+                "case": "case-a",
+                "category": "results",
+                "kind": "extra",
+                "path": "results.Box",
+            },
+            "actualContract": {"type": "array", "keysMode": "exact", "requiredKeys": ["object"]},
+            "nativeExpected": "Native response publishes no result.",
+            "cadCoreProtocol": "Demo transport result.",
+            "frontendImpact": "Test-only evidence.",
+            "authority": "tests.test_freecad_expected_public_parity",
+            "contractTests": [
+                "tests.test_freecad_expected_public_parity.FreecadExpectedPublicParityTest.test_registry_contract_schema_rejects_incompatible_keywords_and_const_types"
+            ],
+            "removeWhen": "The test transport is removed.",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            invalid_const = dict(entry, id="DEMO-RESULT-002", actualContract={"type": "string", "const": 1})
+            wildcard = dict(
+                entry,
+                id="DEMO-RESULT-003",
+                selector=dict(entry["selector"], path="results.*.mesh"),
+                actualContract={"type": "object", "keysMode": "exact", "requiredKeys": ["object"]},
+            )
+            self.write_json(
+                registry,
+                {"schemaVersion": REGISTRY_SCHEMA, "entries": [entry, invalid_const, wildcard]},
+            )
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("invalid", report["releaseStatus"])
+        errors = report["registryAudit"]["validationErrors"]
+        self.assertTrue(any("object-only fields require type object" in error for error in errors))
+        self.assertTrue(any("const does not match" in error for error in errors))
+        self.assertTrue(any("exact literal, not a pattern" in error for error in errors))
+
+    def test_reference_shadow_transport_contract_rejects_nested_array_drift(self) -> None:
+        current_path = (
+            ROOT
+            / "fixtures"
+            / "c4m6"
+            / "cad-core-res"
+            / "topo-state-reference-shadow-brep.cad-core.json"
+        )
+        actual = json.loads(current_path.read_text(encoding="utf-8"))
+        probe = next(item for item in actual["results"] if item["object"] == "ProbeSketch")
+        edge = next(item for item in probe["subshapes"] if item["indexed"] == "Edge1")
+        edge["ReferenceShadow"] = [{"unexpected": "snapshot geometry"}]
+
+        report = evaluate(
+            EvaluationRequest(
+                root=ROOT,
+                phase="c4m6",
+                case="topo-state-reference-shadow-brep",
+                source_kind="in_memory",
+                in_memory_actuals={("c4m6", "topo-state-reference-shadow-brep"): actual},
+            )
+        ).to_dict()
+
+        self.assertTrue(report["registryAudit"]["valid"])
+        self.assertEqual("red", report["semanticStatus"])
+        self.assertEqual("C13M5-C4M6-TRANSPORT-005", report["registryAudit"]["contractFailures"][0]["id"])
+
+    def test_unregistered_mesh_field_remains_a_semantic_red_diff(self) -> None:
+        expected = {"diagnostics": [], "results": [{"object": "Box"}]}
+        actual = {"diagnostics": [], "results": [{"object": "Box", "mesh": {"vertices": []}}]}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("red", report["semanticStatus"])
+        self.assertEqual("results.Box.mesh", report["cases"][0]["diffs"][0]["path"])
+        diff = report["cases"][0]["diffs"][0]
+        self.assertEqual("phase_family_registry_transport_metadata_gap", diff["decision"])
+        self.assertFalse(diff["accepted"])
+        self.assertIsNone(diff["knownGapId"])
+
+    def test_fixture_role_artifact_audit_rejects_duplicate_orphan_and_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root)
+            roles_payload = json.loads(roles.read_text(encoding="utf-8"))
+            roles_payload["roles"].append(dict(roles_payload["roles"][0]))
+            self.write_json(roles, roles_payload)
+            self.write_json(root / "fixtures" / "demo" / "expected" / "orphan.freecad.json", {})
+            self.write_json(root / "fixtures" / "demo" / "expected" / "case-a.expeted.json", {})
+            report = evaluate(self.request(root, roles, registry)).to_dict()
+
+        self.assertEqual("invalid", report["releaseStatus"])
+        errors = report["preflight"]["errors"]
+        self.assertTrue(any("duplicate fixture role" in error for error in errors))
+        self.assertTrue(any("native expected has no fixture role" in error for error in errors))
+        self.assertTrue(any("non-protocol fixture retains protocol expected" in error for error in errors))
+
+    def test_fixture_roles_cannot_enable_legacy_discovery_or_coverage_opt_out(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root)
+            roles_payload = json.loads(roles.read_text(encoding="utf-8"))
+            roles_payload["legacyNativeExpectedDiscovery"] = True
+            self.write_json(roles, roles_payload)
+            legacy = evaluate(self.request(root, roles, registry)).to_dict()
+
+            roles_payload["legacyNativeExpectedDiscovery"] = False
+            roles_payload["requireCompleteInputCoverage"] = False
+            self.write_json(roles, roles_payload)
+            opt_out = evaluate(self.request(root, roles, registry)).to_dict()
+
+        self.assertEqual("invalid", legacy["releaseStatus"])
+        self.assertIn(
+            "fixture roles manifest must set legacyNativeExpectedDiscovery to false",
+            legacy["preflight"]["errors"],
+        )
+        self.assertEqual("invalid", opt_out["releaseStatus"])
+        self.assertIn(
+            "fixture roles manifest must set requireCompleteInputCoverage to true",
+            opt_out["preflight"]["errors"],
+        )
+
+    def test_checked_in_roles_preserve_representative_phase_snapshot_discovery(self) -> None:
+        for phase in ("c3m1", "c10m1", "c12m12", "c3m5", "c3m6"):
+            with self.subTest(phase=phase):
+                catalog = load_catalog(ROOT, phase=phase)
+                self.assertEqual([], catalog.errors)
+                self.assertGreater(len(catalog.cases), 0)
+
+    def test_representative_family_snapshot_reports_keep_metadata_without_acceptance(self) -> None:
+        expected_known_gap_ids = {
+            "c3m1": "C13M5-S4-KG-TOPO-001",
+            "c10m1": "C13M5-S4-KG-SKETCH-001",
+            "c12m12": "C13M5-S4-KG-PART-001",
+            "c3m5": "C13M5-S4-KG-PD-001",
+            "c3m6": "C13M5-S4-KG-ASM-001",
+        }
+        metadata_fields = (
+            "owner",
+            "owner_step",
+            "decision",
+            "source",
+            "freecad_authority",
+            "next_action",
+            "close_condition",
+            "knownGapId",
+        )
+        for phase, known_gap_id in expected_known_gap_ids.items():
+            with self.subTest(phase=phase):
+                report = evaluate(
+                    EvaluationRequest(root=ROOT, phase=phase, source_kind="snapshot")
+                ).to_dict()
+                self.assertTrue(report["preflight"]["valid"], report["preflight"]["errors"])
+                self.assertGreater(report["summary"]["cases"], 0)
+                self.assertEqual("red", report["exactStatus"])
+                self.assertEqual("red", report["semanticStatus"])
+                self.assertEqual("not_evaluated", report["releaseStatus"])
+                diffs = [diff for item in report["cases"] for diff in item["diffs"]]
+                self.assertGreater(len(diffs), 0)
+                for diff in diffs:
+                    self.assertFalse(diff["accepted"])
+                    self.assertEqual("S4", diff["owner_step"])
+                    self.assertEqual(known_gap_id, diff["knownGapId"])
+                    self.assertNotEqual("unaccepted_diff", diff["decision"])
+                    for field in metadata_fields:
+                        self.assertTrue(diff[field], f"{phase} {diff['path']} missing {field}")
 
     def test_live_freshness_and_materialization_are_atomic(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

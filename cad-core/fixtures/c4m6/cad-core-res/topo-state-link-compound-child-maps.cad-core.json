@@ -220,7 +220,7 @@
           "identityStatus": "stable",
           "indexed": "Face1",
           "kind": "Face",
-          "stableSubname": "ChildBoxA.Face1",
+          "stableSubname": "Compound/ChildBoxA.#f:1;BOX,F",
           "subname": "ChildBoxA.Face1"
         },
         {

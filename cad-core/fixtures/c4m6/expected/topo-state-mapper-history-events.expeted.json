@@ -1,4 +1,11 @@
 {
+  "oracle_evidence": {
+    "authority": "cad-core/src/runtime/topo_naming_state_probe.cpp::TopoNamingStateProbe",
+    "close_condition": "A native FreeCAD C++ exporter/probe publishes the same producer mapper-history evidence without the CAD Core synthetic helper shape.",
+    "freecad_native_parity": false,
+    "next_action": "Keep this DTO contract in the focused protocol test and exclude it from native expected discovery and release verdicts.",
+    "reason": "FreeCAD Python cannot expose the producer mapper history and CadCore::TopoNamingStateProbe constructs a synthetic helper shape."
+  },
   "diagnostics": [
     {
       "code": "unsupported_native_mapper_history",

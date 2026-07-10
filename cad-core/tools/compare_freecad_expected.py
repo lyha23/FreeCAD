@@ -21,7 +21,6 @@ except ImportError:  # ``python -m`` and package-oriented test runners.
 
 ROOT = Path(__file__).resolve().parents[1]
 ExpectedCase = FixtureCase  # Compatibility name; ownership lives in the catalogue.
-CLASSIFICATION_FIELDS = ("decision", "registryId", "contractTests")
 
 
 def discover_expected_cases(

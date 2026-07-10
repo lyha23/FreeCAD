@@ -13,6 +13,8 @@ from typing import Any
 REGISTRY_SCHEMA = "cad-core.freecad-expected-protocol-divergences.v1"
 SELECTOR_FIELDS = ("phase", "case", "category", "kind", "path")
 CONTRACT_TEST_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+$")
+CONTRACT_FIELDS = {"type", "keysMode", "requiredKeys", "properties", "items", "const"}
+SELECTOR_PATTERN_CHARS = set("*?[](){}|+^$\\")
 
 
 @dataclass
@@ -27,29 +29,66 @@ def _sha256(raw: bytes) -> str:
     return "sha256:" + hashlib.sha256(raw).hexdigest()
 
 
+def _value_type(value: Any) -> str:
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "boolean"
+    if isinstance(value, (int, float)):
+        return "number"
+    if isinstance(value, str):
+        return "string"
+    if isinstance(value, list):
+        return "array"
+    if isinstance(value, dict):
+        return "object"
+    return type(value).__name__
+
+
 def _contract_errors(contract: Any, context: str = "actualContract") -> list[str]:
     if not isinstance(contract, dict):
         return [f"{context} must be an object"]
     errors: list[str] = []
+    unknown = sorted(set(contract) - CONTRACT_FIELDS)
+    if unknown:
+        errors.append(f"{context} has unknown field(s): {unknown}")
     kind = contract.get("type")
     if kind not in {"object", "array", "string", "number", "boolean", "null"}:
         errors.append(f"{context}.type is invalid")
+        return errors
+    if "const" in contract and _value_type(contract["const"]) != kind:
+        errors.append(f"{context}.const does not match {context}.type")
+
     keys_mode = contract.get("keysMode")
-    if keys_mode is not None and keys_mode not in {"exact", "required"}:
-        errors.append(f"{context}.keysMode is invalid")
     required = contract.get("requiredKeys")
-    if required is not None and (
-        not isinstance(required, list) or any(not isinstance(item, str) or not item for item in required)
-    ):
-        errors.append(f"{context}.requiredKeys must be a string list")
     properties = contract.get("properties")
-    if properties is not None:
+    object_keywords = ("keysMode", "requiredKeys", "properties")
+    if any(keyword in contract for keyword in object_keywords) and kind != "object":
+        errors.append(f"{context} object-only fields require type object")
+    if kind == "object":
+        if keys_mode is not None and keys_mode not in {"exact", "required"}:
+            errors.append(f"{context}.keysMode is invalid")
+        if keys_mode is not None and required is None:
+            errors.append(f"{context}.keysMode requires requiredKeys")
+        if required is not None and (
+            not isinstance(required, list) or any(not isinstance(item, str) or not item for item in required)
+        ):
+            errors.append(f"{context}.requiredKeys must be a string list")
+        if isinstance(required, list) and len(required) != len(set(required)):
+            errors.append(f"{context}.requiredKeys must not contain duplicates")
+    if properties is not None and kind == "object":
         if not isinstance(properties, dict):
             errors.append(f"{context}.properties must be an object")
         else:
+            if isinstance(required, list):
+                unrequired = sorted(set(properties) - set(required))
+                if unrequired:
+                    errors.append(f"{context}.properties are not required keys: {unrequired}")
             for key, child in properties.items():
                 errors.extend(_contract_errors(child, f"{context}.properties.{key}"))
-    if "items" in contract:
+    if "items" in contract and kind != "array":
+        errors.append(f"{context}.items requires type array")
+    elif "items" in contract:
         errors.extend(_contract_errors(contract["items"], f"{context}.items"))
     return errors
 
@@ -70,6 +109,8 @@ def _entry_errors(entry: Any, index: int) -> list[str]:
         for field in SELECTOR_FIELDS:
             if not isinstance(selector.get(field), str) or not selector[field]:
                 errors.append(f"{context} selector.{field} must be non-empty")
+            elif any(character in selector[field] for character in SELECTOR_PATTERN_CHARS):
+                errors.append(f"{context} selector.{field} must be an exact literal, not a pattern")
     errors.extend(_contract_errors(entry.get("actualContract"), f"{context}.actualContract"))
     for field in ("nativeExpected", "cadCoreProtocol", "frontendImpact", "authority", "removeWhen"):
         if not isinstance(entry.get(field), str) or not entry[field]:
@@ -121,27 +162,13 @@ def load_registry(path: Path) -> Registry:
     return Registry(result, errors, path, sha256)
 
 
-def _value_type(value: Any) -> str:
-    if value is None:
-        return "null"
-    if isinstance(value, bool):
-        return "boolean"
-    if isinstance(value, (int, float)):
-        return "number"
-    if isinstance(value, str):
-        return "string"
-    if isinstance(value, list):
-        return "array"
-    if isinstance(value, dict):
-        return "object"
-    return type(value).__name__
-
-
 def validate_actual_contract(value: Any, contract: dict[str, Any], path: str = "actual") -> list[str]:
     errors: list[str] = []
     required_type = contract.get("type")
     if _value_type(value) != required_type:
         return [f"{path}.type expected {required_type}, got {_value_type(value)}"]
+    if "const" in contract and value != contract["const"]:
+        return [f"{path}.value expected {contract['const']!r}, got {value!r}"]
     if isinstance(value, dict):
         required_keys = contract.get("requiredKeys", [])
         if isinstance(required_keys, list):

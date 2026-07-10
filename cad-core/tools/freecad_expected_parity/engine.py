@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .catalog import CatalogResult, FixtureCase, load_catalog, relative, sha256_bytes
+from .family_metadata import metadata_for_unaccepted_diff
 from .model import (
     ArtifactEvidence,
     CaseReport,
@@ -296,6 +297,33 @@ def _visible_diff(diff: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in diff.items() if not key.startswith("_")}
 
 
+def _annotate_non_c4m6_unaccepted_family_metadata(cases: list[CaseReport]) -> None:
+    """Restore S4 ownership metadata without widening protocol acceptance.
+
+    ``apply_registry`` is intentionally the only code that can set
+    ``accepted=True``.  Family metadata is attached after that decision and
+    only makes unresolved non-c4m6 work actionable in snapshot reports.
+    """
+
+    for item in cases:
+        if item.phase == "c4m6":
+            continue
+        for diff in item.diffs:
+            if diff.get("accepted") is True:
+                continue
+            metadata = metadata_for_unaccepted_diff(item.phase, item.case, diff)
+            if diff.get("decision") == "unaccepted_diff":
+                diff.update(metadata)
+                continue
+            # Preserve a registry failure's explicit reason.  It remains red,
+            # while the family fields still point the implementation work at
+            # the same S4 known-gap surface.
+            diff["familyDecision"] = metadata["decision"]
+            for field, value in metadata.items():
+                if field != "decision":
+                    diff.setdefault(field, value)
+
+
 def _case_report(
     item: FixtureCase,
     root: Path,
@@ -364,12 +392,16 @@ def _case_report(
 
 def _summary(cases: list[CaseReport]) -> dict[str, Any]:
     categories = {category: 0 for category in REPORT_CATEGORIES}
+    decisions: Counter[str] = Counter()
     accepted = 0
     unaccepted = 0
     for item in cases:
         for diff in item.diffs:
             category = str(diff.get("category", "json"))
             categories[category] = categories.get(category, 0) + 1
+            decision = diff.get("decision")
+            if isinstance(decision, str) and decision:
+                decisions[decision] += 1
             if diff.get("accepted") is True:
                 accepted += 1
             else:
@@ -383,6 +415,7 @@ def _summary(cases: list[CaseReport]) -> dict[str, Any]:
         "accepted": accepted,
         "unaccepted": unaccepted,
         "categories": categories,
+        "decisions": dict(sorted(decisions.items())),
     }
 
 
@@ -437,6 +470,7 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
 
     all_diffs = [diff for item in cases for diff in item.diffs]
     registry_audit = apply_registry(registry, all_diffs, phase=request.phase, case=request.case)
+    _annotate_non_c4m6_unaccepted_family_metadata(cases)
     if not registry_audit["valid"]:
         global_errors.extend(str(error) for error in registry_audit["validationErrors"])
     if request.source_kind == "live" and any(

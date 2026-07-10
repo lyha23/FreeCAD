@@ -152,7 +152,10 @@ std::pair<Document, std::vector<runtime::Diagnostic>> parseDocument(const nlohma
     }
     document.displayMeshDeflection = readDisplayMeshDeflection(raw, diagnostics);
     const auto topoStateIt = raw.find("topoNamingState");
-    if (topoStateIt != raw.end() && topoStateIt->is_object()) {
+    if (topoStateIt != raw.end()) {
+        // Keep the untrusted payload verbatim for the request validator. Dropping a
+        // non-object here would turn an invalid client snapshot into an implicit
+        // no-state recompute instead of the required diagnostics-only hard fail.
         document.topoNamingState = *topoStateIt;
         document.hasTopoNamingState = true;
     }

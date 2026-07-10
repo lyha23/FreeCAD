@@ -166,7 +166,7 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "documentHash": "sha256:492d5dfdd739b066b5d7c09a822a15cb46ea506ac91f6b32521b91a51d1f4c0c",
+    "documentHash": "sha256:d2331a296b236e14814da04856d3166dfce5668497174769e235ba666c567fb9",
     "objects": {
       "Sketch": {
         "objectHash": "sha256:f9eb89a5470a6ce9d04496976c2527e2dd11cc358b25eb25f7cff747630d79b3",

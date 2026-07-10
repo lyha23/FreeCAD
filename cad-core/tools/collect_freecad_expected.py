@@ -252,10 +252,33 @@ def fixture_paths(args: argparse.Namespace) -> list[Path]:
     if args.phase:
         if args.fixture:
             raise ValueError("--phase and fixture path are mutually exclusive")
-        return sorted(path for path in (fixtures_root / args.phase).glob("*.json") if path.is_file())
+        catalog = fixture_role_catalog(args)
+        return [item.input_path for item in catalog.cases]
     if not args.fixture:
         raise ValueError("fixture path or --phase is required")
     return [Path(args.fixture)]
+
+
+def fixture_role_catalog(args: argparse.Namespace) -> Any:
+    """Load the one role manifest used by collection and parity discovery."""
+
+    cached = getattr(args, "_fixture_role_catalog", None)
+    if cached is not None:
+        return cached
+    if not args.phase:
+        raise ValueError("fixture role catalog is only used for --phase collection")
+    try:
+        try:
+            from freecad_expected_parity.catalog import load_catalog  # type: ignore
+        except ImportError:
+            from tools.freecad_expected_parity.catalog import load_catalog  # type: ignore
+    except ImportError as exc:
+        raise ValueError(f"cannot load fixture role catalog: {exc}") from exc
+    catalog = load_catalog(Path(args.fixtures_root).parent, phase=args.phase)
+    if catalog.errors:
+        raise ValueError("invalid fixture role catalog: " + "; ".join(catalog.errors))
+    args._fixture_role_catalog = catalog
+    return catalog
 
 
 def set_placement(FreeCAD: Any, obj: Any, value: dict) -> None:
@@ -1622,53 +1645,133 @@ def topo_state_producer(fixture: dict, FreeCAD: Any) -> dict[str, str]:
     }
 
 
-def topo_state_version_error_response(fixture: dict) -> dict[str, Any] | None:
+def topo_state_request_rejection(diagnostic: dict[str, Any]) -> dict[str, Any]:
+    """Mirror CAD Core's request-level diagnostics-only topo-state envelope."""
+    return {
+        "diagnostics": [diagnostic],
+        "elementReferenceUpdates": [],
+        "results": [],
+    }
+
+
+def topo_state_request_error_response(fixture: dict) -> dict[str, Any] | None:
     topo_state = fixture.get("topoNamingState")
+    if topo_state is None:
+        return None
     if not isinstance(topo_state, dict):
+        return topo_state_request_rejection({
+            "code": "topo_state_schema_incompatible",
+            "severity": "error",
+            "source": "topoNamingState",
+            "message": (
+                "topoNamingState must be an object or null; request-level recompute is refused"
+            ),
+            "actualTopoNamingState": topo_state,
+            "expectedTopoNamingStateType": "object_or_null",
+        })
+    if not topo_state:
         return None
 
     schema_version = topo_state.get("schemaVersion")
     if schema_version != TOPO_STATE_SCHEMA_VERSION:
-        return {
-            "diagnostics": [
-                {
-                    "code": "topo_state_schema_incompatible",
-                    "severity": "error",
-                    "source": "topoNamingState",
-                    "message": (
-                        "topoNamingState schemaVersion is incompatible; request-level "
-                        "recompute is refused"
-                    ),
-                    "actualSchemaVersion": schema_version,
-                    "expectedSchemaVersion": TOPO_STATE_SCHEMA_VERSION,
-                }
-            ],
-            "elementReferenceUpdates": [],
-            "results": [],
-        }
+        return topo_state_request_rejection({
+            "code": "topo_state_schema_incompatible",
+            "severity": "error",
+            "source": "topoNamingState",
+            "message": (
+                "topoNamingState schemaVersion is incompatible; request-level "
+                "recompute is refused"
+            ),
+            "actualSchemaVersion": schema_version,
+            "expectedSchemaVersion": TOPO_STATE_SCHEMA_VERSION,
+        })
 
     producer = topo_state.get("producer")
     cad_core_version = producer.get("cadCoreVersion") if isinstance(producer, dict) else None
     if not isinstance(producer, dict) or cad_core_version != TOPO_STATE_PRODUCER_CAD_CORE_VERSION:
-        return {
-            "diagnostics": [
-                {
-                    "code": "topo_state_producer_incompatible",
-                    "severity": "error",
-                    "source": "topoNamingState",
-                    "message": (
-                        "topoNamingState producer is incompatible; request-level recompute "
-                        "is refused"
-                    ),
-                    "actualProducer": producer,
-                    "expectedProducer": {
-                        "cadCoreVersion": TOPO_STATE_PRODUCER_CAD_CORE_VERSION,
-                    },
-                }
-            ],
-            "elementReferenceUpdates": [],
-            "results": [],
-        }
+        return topo_state_request_rejection({
+            "code": "topo_state_producer_incompatible",
+            "severity": "error",
+            "source": "topoNamingState",
+            "message": (
+                "topoNamingState producer is incompatible; request-level recompute "
+                "is refused"
+            ),
+            "actualProducer": producer,
+            "expectedProducer": {
+                "cadCoreVersion": TOPO_STATE_PRODUCER_CAD_CORE_VERSION,
+            },
+        })
+
+    actual_document_hash = str(topo_state.get("documentHash") or "")
+    expected_document_hash = fixture_document_hash(fixture)
+    if actual_document_hash != expected_document_hash:
+        return topo_state_request_rejection({
+            "code": "topo_state_document_hash_mismatch",
+            "severity": "error",
+            "source": "topoNamingState",
+            "message": (
+                "topoNamingState documentHash does not match the current DocumentObject graph; "
+                "request-level recompute is refused"
+            ),
+            "actualDocumentHash": actual_document_hash,
+            "expectedDocumentHash": expected_document_hash,
+        })
+
+    objects = topo_state.get("objects")
+    if not isinstance(objects, dict):
+        return topo_state_request_rejection({
+            "code": "topo_state_schema_incompatible",
+            "severity": "error",
+            "source": "topoNamingState",
+            "message": (
+                "topoNamingState.objects must be an object; request-level recompute is refused"
+            ),
+            "actualObjects": objects,
+            "expectedObjectsType": "object",
+        })
+    specs = fixture_object_specs(fixture)
+    for object_name in sorted(str(name) for name in objects):
+        object_state = objects[object_name]
+        if object_name not in specs:
+            return topo_state_request_rejection({
+                "code": "topo_state_object_owner_incompatible",
+                "severity": "error",
+                "source": "topoNamingState",
+                "object": object_name,
+                "message": (
+                    "topoNamingState contains an object that is not present in the current "
+                    "DocumentObject graph; request-level recompute is refused"
+                ),
+                "offendingObject": object_name,
+            })
+        if not isinstance(object_state, dict):
+            return topo_state_request_rejection({
+                "code": "topo_state_object_owner_incompatible",
+                "severity": "error",
+                "source": "topoNamingState",
+                "object": object_name,
+                "message": (
+                    "topoNamingState object state must be an object owned by the current "
+                    "DocumentObject graph; request-level recompute is refused"
+                ),
+                "offendingObject": object_name,
+            })
+        actual_object_hash = str(object_state.get("objectHash") or "")
+        expected_object_hash = semantic_hash(specs[object_name])
+        if actual_object_hash != expected_object_hash:
+            return topo_state_request_rejection({
+                "code": "topo_state_object_hash_mismatch",
+                "severity": "error",
+                "source": "topoNamingState",
+                "object": object_name,
+                "message": (
+                    "topoNamingState objectHash does not match the current object input; "
+                    "request-level recompute is refused"
+                ),
+                "actualObjectHash": actual_object_hash,
+                "expectedObjectHash": expected_object_hash,
+            })
 
     return None
 
@@ -2614,16 +2717,129 @@ def topo_state_protocol_response(
     topo_state: dict[str, Any],
     diagnostics: list[dict[str, Any]] | None = None,
     created: dict[str, Any] | None = None,
+    result_payloads: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
     topo_state = expand_topo_state_for_input_references(fixture, topo_state)
     topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
     return {
-        "results": [],
+        "results": [
+            {
+                "object": object_name,
+                **summary,
+            }
+            for object_name, summary in (result_payloads or {}).items()
+        ],
         "topoNamingState": topo_state,
         "elementReferenceUpdates": reference_updates,
         "diagnostics": (diagnostics or []) + reference_diagnostics,
     }
+
+
+def native_compound_link_subname(
+    target_spec: dict | None,
+    subname: str,
+) -> str:
+    """Translate CAD Core's Compound child ordinal to FreeCAD's native child-object path."""
+    match = re.match(r"^Child(\d+)\.(.+)$", subname)
+    if match is None or not isinstance(target_spec, dict) or target_spec.get("TypeId") != "Part::Compound":
+        return subname
+    child_names = compound_child_names_from_spec(target_spec)
+    child_index = int(match.group(1))
+    if child_index >= len(child_names):
+        raise UnsupportedFixture(
+            f"Compound child path {subname} has no native child at index {child_index}"
+        )
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Link.cpp
+    # ::LinkBaseExtension::extensionGetSubObject() follows the true linked object. Native
+    # Part::Compound resolves the child by object name (ChildBoxA.Face1), whereas cad-core's
+    # public child-map DTO exposes the ordinal path (Child0.Face1).
+    return f"{child_names[child_index]}.{match.group(2)}"
+
+
+def prepare_native_compound_link_targets(
+    fixture: dict,
+    created: dict[str, Any],
+) -> dict[str, list[str]]:
+    """Make native App::Link summaries use the equivalent FreeCAD child-object subpath."""
+    specs = fixture_object_specs(fixture)
+    resolved_subnames: dict[str, list[str]] = {}
+    for object_name, object_spec in specs.items():
+        if object_spec.get("TypeId") != "App::Link":
+            continue
+        link = created.get(object_name)
+        linked_value = getattr(link, "LinkedObject", None) if link is not None else None
+        if not isinstance(linked_value, tuple) or len(linked_value) < 2:
+            continue
+        target = linked_value[0]
+        target_name = str(getattr(target, "Name", ""))
+        raw_subnames = linked_value[1]
+        subnames = [raw_subnames] if isinstance(raw_subnames, str) else list(raw_subnames or [])
+        if not subnames:
+            continue
+        native_subnames = [
+            native_compound_link_subname(specs.get(target_name), str(subname))
+            for subname in subnames
+        ]
+        if native_subnames != [str(subname) for subname in subnames]:
+            for subname in native_subnames:
+                resolved = target.getSubObject(subname)
+                resolved_shape = getattr(resolved, "Shape", resolved)
+                if resolved_shape is None or resolved_shape.isNull():
+                    raise UnsupportedFixture(
+                        f"native App::Link target {target_name}.{subname} has no resolvable Shape"
+                    )
+            link.LinkedObject = (
+                target,
+                native_subnames[0] if isinstance(raw_subnames, str) else native_subnames,
+            )
+        # Keep the selected native paths even when they already used FreeCAD's child-object
+        # spelling. The response adapter needs the current display path independently from a
+        # state-backed StableSubList token.
+        resolved_subnames[object_name] = native_subnames
+    return resolved_subnames
+
+
+def state_backed_compound_link_stable_subnames(
+    fixture: dict,
+    object_name: str,
+    expected_count: int,
+) -> list[str]:
+    """Return durable Link identities only when the fixture proves them in topo state."""
+    object_spec = fixture_object_specs(fixture).get(object_name)
+    properties = object_spec.get("Properties") if isinstance(object_spec, dict) else None
+    linked_value = properties.get("LinkedObject") if isinstance(properties, dict) else None
+    if not isinstance(linked_value, dict) or linked_value.get("StableSubListSource") != "topoNamingState":
+        return []
+
+    target_name = linked_value.get("value")
+    stable_subnames = linked_value.get("StableSubList")
+    if not isinstance(target_name, str) or not target_name:
+        raise UnsupportedFixture(f"native compound Link {object_name} requires a LinkedObject value")
+    if not isinstance(stable_subnames, list) or len(stable_subnames) != expected_count:
+        raise UnsupportedFixture(
+            f"native compound Link {object_name} requires one StableSubList token per selected child"
+        )
+
+    result: list[str] = []
+    for stable_subname in stable_subnames:
+        if not isinstance(stable_subname, str) or not stable_subname:
+            raise UnsupportedFixture(
+                f"native compound Link {object_name} StableSubList entries must be non-empty strings"
+            )
+        reject_display_path_stable_token(stable_subname, "topoNamingState StableSubList")
+        indexed, diagnostic = topo_state_resolved_indexed_subname(
+            fixture,
+            target_name,
+            stable_subname,
+        )
+        if diagnostic is not None or indexed is None:
+            raise UnsupportedFixture(
+                f"native compound Link {object_name} StableSubList {stable_subname} "
+                "does not resolve through topoNamingState"
+            )
+        result.append(stable_subname)
+    return result
 
 
 def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[str, Any] | None:
@@ -2633,11 +2849,14 @@ def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[
     try:
         created = create_objects(FreeCAD, doc, fixture)
         doc.recompute()
+        native_link_subnames = prepare_native_compound_link_targets(fixture, created)
+        doc.recompute()
         specs = fixture_object_specs(fixture)
         ledger_payloads = topo_ledger_payloads(fixture, created, {})
         objects = {
             object_name: topo_state_object_payload(object_name, summary, specs.get(object_name), created)
             for object_name, summary in ledger_payloads.items()
+            if getattr(created.get(object_name), "TypeId", "") not in {"App::Link", "App::LinkElement"}
         }
         if not any(object_state.get("childElementMaps") for object_state in objects.values()):
             raise UnsupportedFixture("topoNamingState childElementMaps fixture requires non-empty childElementMaps")
@@ -2647,7 +2866,38 @@ def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[
             "documentHash": fixture_document_hash(fixture),
             "objects": objects,
         }
-        return topo_state_protocol_response(fixture, FreeCAD, topo_state, created=created)
+        result_payloads: dict[str, dict[str, Any]] = {}
+        for object_name in target_names(fixture):
+            obj = created.get(object_name)
+            if obj is None:
+                raise UnsupportedFixture(
+                    f"topoNamingState childElementMaps target object {object_name} was not created"
+                )
+            if getattr(obj, "TypeId", "") == "App::Link":
+                stable_subnames = state_backed_compound_link_stable_subnames(
+                    fixture,
+                    object_name,
+                    len(native_link_subnames.get(object_name, [])),
+                )
+                summary = app_link_payload(
+                    obj,
+                    "app_link",
+                    native_link_subnames.get(object_name, []),
+                    stable_subnames,
+                )
+                # `object_fields` is collector-local provenance, not part of the public
+                # cad-core result contract. Keep the native semantic shape/result evidence only.
+                summary.pop("object_fields", None)
+                result_payloads[object_name] = summary
+            else:
+                result_payloads[object_name] = object_expected_payload(obj, fixture, created)
+        return topo_state_protocol_response(
+            fixture,
+            FreeCAD,
+            topo_state,
+            created=created,
+            result_payloads=result_payloads,
+        )
     finally:
         FreeCAD.closeDocument(doc.Name)
 
@@ -5414,11 +5664,40 @@ def shape_kind(shape: Any) -> str:
     }.get(shape_type, "occt_shape")
 
 
-def app_link_payload(obj: Any, role: str) -> dict:
+def app_link_payload(
+    obj: Any,
+    role: str,
+    selected_subnames: Sequence[str] = (),
+    stable_subnames: Sequence[str] = (),
+) -> dict:
     shape = getattr(obj, "Shape", None)
     if shape is None or shape.isNull():
         raise UnsupportedFixture(f"target object {obj.Name} has no shape")
     payload = shape_summary(shape)
+    subshapes = subshape_response_entries(obj, shape)
+    if stable_subnames and len(stable_subnames) != len(selected_subnames):
+        raise UnsupportedFixture(
+            f"App::Link {obj.Name} requires one durable stable subname per selected subshape"
+        )
+    for index, selected_subname in enumerate(selected_subnames):
+        indexed = selected_subname.rsplit(".", 1)[-1]
+        for subshape in subshapes:
+            if subshape.get("indexed") != indexed:
+                continue
+            # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Link.cpp
+            # ::LinkBaseExtension::extensionGetSubObject() preserves the true linked child
+            # path. The native Face has indexed name Face1, while the public Link response
+            # carries its child-qualified current identity. A state-backed StableSubList,
+            # when present, remains the durable identity instead of being replaced by that
+            # display path.
+            subshape["subname"] = selected_subname
+            subshape["stableSubname"] = (
+                stable_subnames[index] if stable_subnames else selected_subname
+            )
+            subshape["identityStatus"] = "stable"
+            subshape["fullSubname"] = f"{obj.Name}.{selected_subname}"
+            break
+    payload["subshapes"] = subshapes
     payload["object_fields"] = {
         "link": role,
         "linked_object": link_target_name(getattr(obj, "LinkedObject", None)),
@@ -8273,7 +8552,7 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
 
     global ACTIVE_TOPO_NAMING_STATE
     fixture = load_fixture(fixture_path)
-    topo_state_error = topo_state_version_error_response(fixture)
+    topo_state_error = topo_state_request_error_response(fixture)
     if topo_state_error is not None:
         ACTIVE_TOPO_NAMING_STATE = None
         return topo_state_error
@@ -8967,7 +9246,26 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
     fixtures_root = Path(args.fixtures_root)
     failures = 0
     skipped = 0
-    for fixture_path in fixture_paths(args):
+    processed = 0
+    paths = fixture_paths(args)
+    if args.phase:
+        for entry in fixture_role_catalog(args).skipped:
+            role = entry["role"]
+            reason = entry["reason"]
+            if role == "protocol_only" or args.skip_unsupported:
+                skipped += 1
+                print(
+                    f"skip {role} {entry['phase']}/{entry['case']}: {reason}",
+                    file=sys.stderr,
+                )
+            else:
+                failures += 1
+                print(
+                    f"unsupported {entry['phase']}/{entry['case']}: {reason}; pass --skip-unsupported to skip",
+                    file=sys.stderr,
+                )
+    for fixture_path in paths:
+        failures_before_fixture = failures
         out_path = Path(args.out) if args.out else expected_path_for_fixture(fixtures_root, fixture_path)
         fixture = load_fixture(fixture_path)
         target_override: list[str] | None = None
@@ -9035,9 +9333,11 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
                 failures += 1
         if args.pretty or (not args.out and not args.phase):
             print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+        if failures == failures_before_fixture:
+            processed += 1
 
     if args.phase:
-        print(f"processed={len(fixture_paths(args)) - skipped - failures} skipped={skipped} failed={failures}", file=sys.stderr)
+        print(f"processed={processed} skipped={skipped} failed={failures}", file=sys.stderr)
     return 1 if failures else 0
 
 

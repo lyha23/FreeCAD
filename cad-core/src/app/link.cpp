@@ -1362,10 +1362,19 @@ std::optional<LinkShapeBuild> linkedCompoundChildPathSubshape(
             continue;
         }
         std::vector<std::string> exactAliases;
+        // `stableSubname` is the durable child-map token used to resolve this selection.
+        // It still has to be retagged onto the Link result: the current child path
+        // (Child0.Face1 / ChildBoxA.Face1) is display evidence, while the source-backed
+        // StableSubList token is the identity that a later recompute must preserve.
+        // Do not include stableSubname in the already-resolved names below, otherwise
+        // addRetagAliasCandidates() silently drops the very alias we need to publish.
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::addChildElements() retains child ElementMap names alongside a
+        // MappedChildElements range so a parent Link can retag the resolved child element.
         addRetagAliasCandidates(
             exactAliases,
             {rawSubname, rawStableSubname, rawFullSubname},
-            {subname, stableSubname, resolvedElement}
+            {subname, resolvedElement}
         );
         (void)object;
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp

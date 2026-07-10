@@ -1,6 +1,6 @@
 # C13-M5 FreeCADExpected 发布对齐批次
 
-C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到所有 checked-in `fixtures/<phase>/expected/*.freecad.json`。这里的对齐对象只包含 native FreeCADCmd oracle 产生的 `.freecad.json`，不包含协议手写合同 `*.expeted.json`，也不把 `.freecad.ledger.json` sidecar 当作 runtime 输入。
+C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到 fixture-role manifest 选中的 native `fixtures/<phase>/expected/*.freecad.json`。`fixture_roles.v1.json` 是 native / protocol-only / unsupported 的唯一机器来源；`*.expeted.json` 不进入 native release verdict，`.freecad.ledger.json` 不进入 runtime。
 
 本批次承接 C13-M4：C13-M4 已关闭 `c4m6` child path public projection，但那只是 topoNamingState 最小闭环。C13-M5 要把同一原则推广成 release gate：每个 phase 先用统一比较器生成 cad-core 当前输出、规范化非语义漂移，再把差异归类为 runtime publication、feature geometry、diagnostics、oracle/collector 或环境兼容性问题。
 
@@ -12,33 +12,30 @@ C13-M5 的目标是把 `cad-core` 的正式发布输出对齐到所有 checked-i
 - `cad-core-res` 额外文件只记录 extra count，不参与 expected discovery，也不自动成为 release parity 缺口。
 - 不能手改 expected 来追 cad-core；cad-core 输出应通过实现、发布策略或明确 known-gap 机制对齐 expected。
 - FreeCAD raw mapped-name 中的 `:H...` token 允许随机漂移，严格比较必须先 canonicalize；对象集合、subshape 数量、diagnostic code、stableSubname、elementMap key 不能因 hash 漂移被放宽。
-- 第一批 strict lane 仍选 `c4m6`，因为它覆盖 first recompute、Body/Tip recovery、compound child maps、mapperHistory、ReferenceShadow、schema/producer/hash mismatch。
-- S1 strict comparator 与生成入口已关闭：`compare_freecad_expected.py` 可按 expected discovery 生成 strict report，`regenerate_cad_core_res.py` 可只重生成同名 `cad-core-res`，当前 `c4m6` report 为 red（9 个 case，2 green / 7 red）。
+- 第一批 strict lane 仍选 `c4m6`，因为它覆盖 first recompute、Body/Tip recovery、CompoundLink、ReferenceShadow、schema/producer/hash/owner validation；mapperHistory probe 作为同批 protocol-only 合同保留。
+- S1/S5 comparator 与生成入口已关闭：`freecad_expected_parity` 深模块统一 catalog、diff、registry、live source 与 current materialization；两个 CLI 只是 adapter。report schema 为 v2，`--write-current` 先验证 live JSON 再原子替换同名 current。
 - S2 c4m6 strict red baseline 已关闭：每个 red diff 都带 `owner`、`owner_step`、`decision`、`freecad_authority`、`next_action`、`close_condition`，红灯基线曾记录 `runtime_publication_gap`=470、`mapper_history_publication_gap`=328、`stable_subname_diagnostic_policy`=13、`hash_mismatch_policy`=6、`protocol_decision_required`=5。
-- S3 topoNamingState 发布策略已关闭：`c4m6` strict report 仍为 red，但只剩 `intentional_protocol_divergence`=8；`topoNamingState.objects/subshapes/elementMap/childElementMaps/mapperHistory`、diagnostics、geometry numeric 和旧 hash/stable/mapper/publication policy decision 均为 0。剩余 intentional divergence 是 cad-core 为前端保留的 mesh/result/subshape transport metadata，native expected 只记录 public semantic oracle。
+- S3/S5 topoNamingState 发布与 release 策略已关闭：schema、producer、document/object hash、object/child encoding 与 foreign top-level owner 均在 recompute 前 diagnostics-only hard fail。`c4m6` native scope 由 9 个 pair 组成，另有 1 个 protocol-only HistoryProbe；exact report 可以为 red，但只有 registry 中五个精确 transport selector 且 actual contract 成立时 semantic 才是 green、live release 才是 `protocol_divergence`。不存在 whole-result、whole-category、`.mesh` 后缀或 `results.subshapes` 的宽泛豁免。
 - S4 phase family 扩展已关闭：comparator 已按五个语义家族输出 family-aware classification，并为每个 diff 增加 `source` 字段；首批 representative tranche 为 `c3m1`、`c10m1`、`c12m12`、`c3m5`、`c3m6`，均按 expected discovery 重生成同名 `cad-core-res` 并生成 strict classified red report。S4 不把这些 phase 标记 green，只把每个 family 的 known-gap id、原因、删除条件和下一步登记到矩阵。
-- 本轮 S0 不纳入无关 dirty 文件：`DESIGN.md`、`docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md`。
+- S5 release gate 已闭合：live binary、strict ledger preflight、role audit、registry audit、current freshness 与 registry-selected contract tests 必须同时成立；`protocol_divergence` 不被写成 exact green。
+- 本轮不纳入无关 dirty 文件：`DESIGN.md`、`docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md`。
 
 ## S0 比较边界
 
-Discovery 只从 live 命令取得：
-
-```bash
-find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
-```
+Discovery 由 `cad-core/tools/freecad_expected_parity/fixture_roles.v1.json` 驱动：每个 input 必须恰好一个 role。native role 需要同名 `.freecad.json` + ledger，protocol-only 必须有 `.expeted.json`，unsupported 必须写 reason / authority / next action / close condition。role audit 失败或 0 native case 直接 `invalid`。
 
 固定排除：
 
-- `*.expeted.json`：协议手写合同，不是 native expected。
-- `*.freecad.ledger.json`：FreeCADCmd 账本 sidecar，只是 expected provenance/evidence。
-- `cad-core-res/*.cad-core.json` extra：当前 cad-core 输出目录里的额外文件，不反向扩大 expected discovery。
+- `*.expeted.json`：focused protocol 合同，不是 native release input。
+- `*.freecad.ledger.json`：expected provenance sidecar，不是 runtime 输入。
+- `cad-core-res/*.cad-core.json` extra：不反向扩大 native discovery。
 
 字段策略：
 
 - strict：public object set、diagnostic code、results key、subshape path/type/count、stableSubname、mappedName.canonical、canonical elementMap key、childElementMaps key、mapperHistory public event identity、ReferenceShadow 边界。
 - canonicalized：`mappedName.raw` 等 raw FreeCAD token 中的随机 `:H...` 片段，只在 comparator 内规整，不改 expected 和 runtime。
 - tolerant：明确为数值输出的 bbox、placement、matrix、volume、area、length 等浮点字段，只允许小容差，不允许掩盖拓扑数量或诊断差异。
-- ignored-with-evidence：只存在于 `.freecad.ledger.json` sidecar、collector coverage/projection/roundTrip/inputReferences 等 provenance 字段，或 cad-core response 中非 native public expected 的 transport/adapter metadata；忽略时必须能指向证据来源。
+- provenance-only：`.freecad.ledger.json` 的 coverage/projection/roundTrip/inputReferences 不进入 response diff。CAD Core response transport metadata 不会被“忽略”；只有精确 `protocol_divergences.v1.json` selector、nested actual contract 与 consumer contract test 可形成 `protocol_divergence`。
 
 ## 批次目标
 
@@ -62,9 +59,9 @@ find cad-core/fixtures -path '*/expected/*.freecad.json' -type f | sort
 | S0 | expected inventory 与比较边界冻结 | 已实现：phase inventory、字段策略、非目标和首批 lane 已冻结。 |
 | S1 | strict comparator 与 cad-core-res 生成入口 | 已实现：可按 phase 生成 cad-core-res，并输出 canonical strict diff report。 |
 | S2 | c4m6 strict public parity 红灯基线 | 已实现：当前 c4m6 strict diff 被机器化记录，区分发布缺口和协议决策。 |
-| S3 | topoNamingState 发布策略对齐 | 已实现：object set、mapperHistory、hash mismatch、link diagnostic 等 public publication gap 关闭；剩余 red 均登记为 intentional transport divergence。 |
+| S3 | topoNamingState 发布策略对齐 | 已实现：request integrity failures 在 recompute 前 hard fail；CompoundLink native semantic result 与 ReferenceShadow evidence-only 边界已固定。 |
 | S4 | phase family 扩展 | 已实现：五个代表 phase 已生成 classified strict report；每个 family 都有 known-gap id、原因、删除条件和下一步。 |
-| S5 | release gate 收口 | 每个 green phase 都有 expected/cad-core-res/report/test 证据，known gap 可追踪。 |
+| S5 | release gate 收口 | 已实现：v2 three-layer verdict、role/ledger/registry audit、live freshness、atomic current materialization 与 contract-test CLI 已闭合；S4 family known gaps 仍保持 red/known-gap，不伪装为 green。 |
 
 ## S4 family tranche
 
@@ -86,6 +83,7 @@ Focused test 边界：本轮已跑完整 `tests.test_freecad_expected_public_par
 cd /Users/li/Chili3DProject/FreeCAD
 python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次/工作步骤细分 --format markdown
 (cd cad-core && python3 tools/compare_freecad_expected.py --phase c4m6 --strict)
+(cd cad-core && python3 tools/compare_freecad_expected.py --phase c4m6 --release-gate --run-contract-tests)
 (cd cad-core && python3 -m unittest tests.test_freecad_expected_public_parity)
 awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次/矩阵/*.tsv
 git diff --check -- docs/CADCore13.0/C13-M5-FreeCADExpected发布对齐批次 docs/CADCore13.0/README.md

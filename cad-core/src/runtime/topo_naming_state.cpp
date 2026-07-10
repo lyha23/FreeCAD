@@ -109,15 +109,11 @@ bool producerIsCompatible(const nlohmann::json& producer)
 bool shouldHardFailHashMismatch(const std::string& actualHash,
                                 const std::string& expectedHash)
 {
-    (void)actualHash;
-    (void)expectedHash;
-    // FreeCAD:
-    // /Users/li/Chili3DProject/FreeCAD/src/App/PropertyLinks.cpp
-    // ::PropertyLinkBase::_updateElementReference(), resolves the current object graph and
-    // updates ShadowSub evidence instead of rejecting recompute because the persisted reference
-    // metadata is stale. cad-core keeps schema/producer/encoding hard fails, but document/object
-    // hash mismatches are stale-state signals and the request graph remains the compute authority.
-    return false;
+    // CAD Core protocol authority: /Users/li/Chili3DProject/FreeCAD/AGENTS.md,
+    // "拓扑命名与引用状态纪律" requires document/object hash mismatches to reject the
+    // client-carried snapshot before recompute. This is a request-integrity boundary, not a
+    // FreeCAD geometry decision: the request graph remains the only modeling authority.
+    return actualHash != expectedHash;
 }
 
 nlohmann::json hardFailPayload(std::vector<Diagnostic> diagnostics)
@@ -1994,12 +1990,30 @@ std::optional<nlohmann::json> topoNamingStateRequestFailureJson(
     const std::vector<Diagnostic>& diagnostics
 )
 {
-    if (!document.hasTopoNamingState || !document.topoNamingState.is_object()
-        || document.topoNamingState.empty()) {
+    if (!document.hasTopoNamingState || document.topoNamingState.is_null()
+        || (document.topoNamingState.is_object() && document.topoNamingState.empty())) {
         return std::nullopt;
     }
 
     std::vector<Diagnostic> resultDiagnostics = diagnostics;
+    if (!document.topoNamingState.is_object()) {
+        resultDiagnostics.push_back({
+            "error",
+            "topo_state_schema_incompatible",
+            "topoNamingState must be an object or null; request-level recompute is refused",
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+                {"source", "topoNamingState"},
+                {"actualTopoNamingState", document.topoNamingState},
+                {"expectedTopoNamingStateType", "object_or_null"},
+            },
+        });
+        return hardFailPayload(std::move(resultDiagnostics));
+    }
     const nlohmann::json& state = document.topoNamingState;
     const std::string schemaVersion = state.value("schemaVersion", "");
     if (schemaVersion != topoStateSchemaVersion) {
@@ -2065,47 +2079,96 @@ std::optional<nlohmann::json> topoNamingStateRequestFailureJson(
     }
 
     const auto objectsIt = state.find("objects");
-    if (objectsIt != state.end() && objectsIt->is_object()) {
-        for (const auto& objectItem : objectsIt->items()) {
-            const std::string objectName = objectItem.key();
-            const nlohmann::json& objectState = objectItem.value();
-            if (!objectState.is_object()) {
-                continue;
-            }
+    if (objectsIt == state.end() || !objectsIt->is_object()) {
+        resultDiagnostics.push_back({
+            "error",
+            "topo_state_schema_incompatible",
+            "topoNamingState.objects must be an object; request-level recompute is refused",
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+                {"source", "topoNamingState"},
+                {"actualObjects", objectsIt == state.end() ? nlohmann::json(nullptr) : *objectsIt},
+                {"expectedObjectsType", "object"},
+            },
+        });
+        return hardFailPayload(std::move(resultDiagnostics));
+    }
+    for (const auto& objectItem : objectsIt->items()) {
+        const std::string objectName = objectItem.key();
+        const nlohmann::json& objectState = objectItem.value();
 
-            const auto documentObjectIt = document.indexByName.find(objectName);
-            if (documentObjectIt != document.indexByName.end()) {
-                const std::string actualObjectHash = objectState.value("objectHash", "");
-                const std::string expectedObjectHash =
-                    topoNamingStateObjectHash(document.objects.at(documentObjectIt->second));
-                if (shouldHardFailHashMismatch(actualObjectHash, expectedObjectHash)) {
-                    resultDiagnostics.push_back({
-                        "error",
-                        "topo_state_object_hash_mismatch",
-                        "topoNamingState objectHash does not match the current object input; request-level recompute is refused",
-                        objectName,
-                        {},
-                        {},
-                        {},
-                        {},
-                        {
-                            {"source", "topoNamingState"},
-                            {"actualObjectHash", actualObjectHash},
-                            {"expectedObjectHash", expectedObjectHash},
-                        },
-                    });
-                    return hardFailPayload(std::move(resultDiagnostics));
-                }
-            }
+        const auto documentObjectIt = document.indexByName.find(objectName);
+        if (documentObjectIt == document.indexByName.end()) {
+            // A top-level state object is allowed only when it names an object in the current
+            // request graph. Link children and property-local references stay nested evidence;
+            // they must not be promoted to a foreign top-level snapshot owner.
+            resultDiagnostics.push_back({
+                "error",
+                "topo_state_object_owner_incompatible",
+                "topoNamingState contains an object that is not present in the current DocumentObject graph; request-level recompute is refused",
+                objectName,
+                {},
+                {},
+                {},
+                {},
+                {
+                    {"source", "topoNamingState"},
+                    {"offendingObject", objectName},
+                },
+            });
+            return hardFailPayload(std::move(resultDiagnostics));
+        }
+        if (!objectState.is_object()) {
+            resultDiagnostics.push_back({
+                "error",
+                "topo_state_object_owner_incompatible",
+                "topoNamingState object state must be an object owned by the current DocumentObject graph; request-level recompute is refused",
+                objectName,
+                {},
+                {},
+                {},
+                {},
+                {
+                    {"source", "topoNamingState"},
+                    {"offendingObject", objectName},
+                },
+            });
+            return hardFailPayload(std::move(resultDiagnostics));
+        }
 
-            if (auto diagnostic = validateElementMapEncoding(objectState, objectName)) {
-                resultDiagnostics.push_back(std::move(*diagnostic));
-                return hardFailPayload(std::move(resultDiagnostics));
-            }
-            if (auto diagnostic = validateChildElementMapEncoding(objectState, objectName)) {
-                resultDiagnostics.push_back(std::move(*diagnostic));
-                return hardFailPayload(std::move(resultDiagnostics));
-            }
+        const std::string actualObjectHash = objectState.value("objectHash", "");
+        const std::string expectedObjectHash =
+            topoNamingStateObjectHash(document.objects.at(documentObjectIt->second));
+        if (shouldHardFailHashMismatch(actualObjectHash, expectedObjectHash)) {
+            resultDiagnostics.push_back({
+                "error",
+                "topo_state_object_hash_mismatch",
+                "topoNamingState objectHash does not match the current object input; request-level recompute is refused",
+                objectName,
+                {},
+                {},
+                {},
+                {},
+                {
+                    {"source", "topoNamingState"},
+                    {"actualObjectHash", actualObjectHash},
+                    {"expectedObjectHash", expectedObjectHash},
+                },
+            });
+            return hardFailPayload(std::move(resultDiagnostics));
+        }
+
+        if (auto diagnostic = validateElementMapEncoding(objectState, objectName)) {
+            resultDiagnostics.push_back(std::move(*diagnostic));
+            return hardFailPayload(std::move(resultDiagnostics));
+        }
+        if (auto diagnostic = validateChildElementMapEncoding(objectState, objectName)) {
+            resultDiagnostics.push_back(std::move(*diagnostic));
+            return hardFailPayload(std::move(resultDiagnostics));
         }
     }
 

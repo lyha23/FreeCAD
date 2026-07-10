@@ -77,19 +77,6 @@ def _load_manifest(path: Path) -> tuple[dict[str, Any] | None, list[str], str | 
     return payload, [], sha256_bytes(raw)
 
 
-def _legacy_native_roles(fixtures_root: Path) -> list[dict[str, str]]:
-    roles: list[dict[str, str]] = []
-    for expected_path in sorted(fixtures_root.glob("*/expected/*.freecad.json")):
-        roles.append(
-            {
-                "phase": expected_path.parent.parent.name,
-                "case": expected_path.name[: -len(".freecad.json")],
-                "role": "native",
-            }
-        )
-    return roles
-
-
 def _entry_error(entry: Any, index: int) -> str | None:
     if not isinstance(entry, dict):
         return f"fixture role {index} must be an object"
@@ -102,16 +89,24 @@ def _entry_error(entry: Any, index: int) -> str | None:
         return f"fixture role {index} missing case"
     if role not in VALID_ROLES:
         return f"fixture role {phase}/{case} has invalid role: {role}"
-    if role == "unsupported":
+    if role in {"protocol_only", "unsupported"}:
         for key in ("reason", "authority", "nextAction", "closeCondition"):
             if not isinstance(entry.get(key), str) or not entry[key]:
-                return f"unsupported fixture role {phase}/{case} missing {key}"
+                return f"{role} fixture role {phase}/{case} missing {key}"
     return None
 
 
 def _input_paths(fixtures_root: Path, phase: str | None) -> list[Path]:
     pattern = f"{phase}/*.json" if phase else "*/*.json"
     return sorted(path for path in fixtures_root.glob(pattern) if path.is_file())
+
+
+def _is_selected(entry_phase: str, entry_case: str, phase: str | None, case: str | None) -> bool:
+    return (phase is None or entry_phase == phase) and (case is None or entry_case == case)
+
+
+def _artifact_key(path: Path, suffix: str) -> tuple[str, str]:
+    return path.parent.parent.name, path.name[: -len(suffix)]
 
 
 def load_catalog(
@@ -123,10 +118,9 @@ def load_catalog(
 ) -> CatalogResult:
     """Load and audit selected roles before returning native comparison cases.
 
-    The checked-in bootstrap manifest deliberately enables the explicit
-    ``legacyNativeExpectedDiscovery`` bridge while all historic phases are
-    migrated.  Custom/complete manifests do not get this fallback and are
-    audited against every selected input fixture.
+    Every manifest must declare a complete, explicit role inventory.  A legacy
+    suffix-discovery bridge would allow a custom CLI manifest to silently omit
+    input fixtures, so it is intentionally rejected instead of supported.
     """
 
     root = Path(root)
@@ -135,6 +129,11 @@ def load_catalog(
     manifest, errors, roles_sha256 = _load_manifest(manifest_path)
     if manifest is None:
         return CatalogResult([], errors, [], manifest_path, roles_sha256)
+
+    if manifest.get("legacyNativeExpectedDiscovery") is not False:
+        errors.append("fixture roles manifest must set legacyNativeExpectedDiscovery to false")
+    if manifest.get("requireCompleteInputCoverage") is not True:
+        errors.append("fixture roles manifest must set requireCompleteInputCoverage to true")
 
     raw_entries = manifest.get("roles", manifest.get("cases", []))
     if not isinstance(raw_entries, list):
@@ -152,18 +151,10 @@ def load_catalog(
             continue
         by_key[key] = entry
 
-    # Explicit roles always win over the bootstrap inventory.  This lets the
-    # next provenance slice turn a legacy native case into protocol_only
-    # without first deleting the compatibility bridge.
-    if manifest.get("legacyNativeExpectedDiscovery") is True:
-        for entry in _legacy_native_roles(fixtures_root):
-            key = (entry["phase"], entry["case"])
-            by_key.setdefault(key, entry)
-
     selected_entries = [
         entry
         for (entry_phase, entry_case), entry in sorted(by_key.items())
-        if (phase is None or entry_phase == phase) and (case is None or entry_case == case)
+        if _is_selected(entry_phase, entry_case, phase, case)
     ]
 
     if manifest.get("requireCompleteInputCoverage") is True:
@@ -173,6 +164,43 @@ def load_catalog(
                 continue
             if key not in by_key:
                 errors.append(f"fixture input has no role: {relative(input_path, root)}")
+
+        # Discovery must never become green simply because a checked-in
+        # artifact fell out of the manifest.  Audit both native and manual
+        # expected artifacts against the selected role before choosing cases.
+        native_suffix = ".freecad.json"
+        protocol_suffix = ".expeted.json"
+        for expected_path in sorted(fixtures_root.glob(f"*/expected/*{native_suffix}")):
+            entry_phase, entry_case = _artifact_key(expected_path, native_suffix)
+            if not _is_selected(entry_phase, entry_case, phase, case):
+                continue
+            entry = by_key.get((entry_phase, entry_case))
+            if entry is None:
+                errors.append(f"native expected has no fixture role: {relative(expected_path, root)}")
+            elif entry.get("role") != "native":
+                errors.append(f"non-native fixture retains native expected: {entry_phase}/{entry_case}")
+        for ledger_path in sorted(fixtures_root.glob("*/expected/*.freecad.ledger.json")):
+            suffix = ".freecad.ledger.json"
+            entry_phase, entry_case = _artifact_key(ledger_path, suffix)
+            if not _is_selected(entry_phase, entry_case, phase, case):
+                continue
+            native_path = expected_path_for(fixtures_root, entry_phase, entry_case)
+            if not native_path.exists():
+                errors.append(f"native ledger has no expected: {relative(ledger_path, root)}")
+            entry = by_key.get((entry_phase, entry_case))
+            if entry is None:
+                errors.append(f"native ledger has no fixture role: {relative(ledger_path, root)}")
+            elif entry.get("role") != "native":
+                errors.append(f"non-native fixture retains native ledger: {entry_phase}/{entry_case}")
+        for protocol_path in sorted(fixtures_root.glob(f"*/expected/*{protocol_suffix}")):
+            entry_phase, entry_case = _artifact_key(protocol_path, protocol_suffix)
+            if not _is_selected(entry_phase, entry_case, phase, case):
+                continue
+            entry = by_key.get((entry_phase, entry_case))
+            if entry is None:
+                errors.append(f"protocol expected has no fixture role: {relative(protocol_path, root)}")
+            elif entry.get("role") != "protocol_only":
+                errors.append(f"non-protocol fixture retains protocol expected: {entry_phase}/{entry_case}")
 
     cases: list[FixtureCase] = []
     skipped: list[dict[str, str]] = []
@@ -206,14 +234,23 @@ def load_catalog(
                 )
             )
             continue
+        protocol_path = fixtures_root / entry_phase / "expected" / f"{entry_case}.expeted.json"
         if role == "protocol_only":
-            protocol_path = fixtures_root / entry_phase / "expected" / f"{entry_case}.expeted.json"
             if not protocol_path.exists():
                 errors.append(f"protocol-only fixture expected is missing: {relative(protocol_path, root)}")
             if expected_path.exists() or ledger_path.exists():
                 errors.append(f"protocol-only fixture retains native artifacts: {entry_phase}/{entry_case}")
-            skipped.append({"phase": entry_phase, "case": entry_case, "role": role, "reason": "protocol_only"})
+            skipped.append(
+                {
+                    "phase": entry_phase,
+                    "case": entry_case,
+                    "role": role,
+                    "reason": str(entry.get("reason", "protocol_only")),
+                }
+            )
             continue
+        if expected_path.exists() or ledger_path.exists() or protocol_path.exists():
+            errors.append(f"unsupported fixture retains expected artifacts: {entry_phase}/{entry_case}")
         skipped.append(
             {
                 "phase": entry_phase,

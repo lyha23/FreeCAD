@@ -1,5 +1,7 @@
 # C13-M5 S3 topoNamingState 发布策略对齐
 
+> 后续状态：本文件保留 S3 当时的 characterization。C13-M5 S5 已以当前接口合同覆盖其运行时结论：document/object hash 与 foreign top-level owner 现在在 recompute 前 hard fail，且 transport divergence 只剩精确 registry 的五个 path；不得再把下述 hash-recompute 或 `intentional_protocol_divergence=8` 视为当前规则。
+
 ## 目标
 
 关闭 `c4m6` strict public expected 中属于 topoNamingState publication 的缺口，为后续 phase 提供可复用的发布策略。

@@ -2,17 +2,19 @@
 
 C13-M4 承接 `docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md` 的实现落地：`.freecad.json` 保持 public `topoNamingState` 投影，`.freecad.ledger.json` 承担 FreeCADCmd 权威账本证明，`cad-core` runtime 输出必须对齐 `fixtures/<phase>/expected/*.freecad.json`。
 
-本批次不再扩展对外 expected schema，也不把 ledger 厚块塞回 `.freecad.json`。当前最小完整语义批次是 `cad-core/fixtures/c4m6`，因为它已经同时覆盖 first recompute、Body/Tip recovery、compound child maps、mapper history、ReferenceShadow、schema/producer/hash mismatch 和 sidecar ledger 闭包。
+本批次不再扩展对外 expected schema，也不把 ledger 厚块塞回 `.freecad.json`。`c4m6` 仍是最小完整语义批次：它覆盖 first recompute、Body/Tip recovery、CompoundLink、ReferenceShadow、schema/producer/hash/owner validation，并把 producer mapper history 留在独立 protocol-only 合同；native expected 与 protocol-only 角色以当前 fixture-role manifest 为准。
 
 ## 当前结论
 
 - C13-M4 状态：closed / completed，本批次只关闭 `c4m6` public projection 闭环。
-- ledger 闭包已通过：`python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict` 验证 9 个 `.freecad.json` 与同名 `.freecad.ledger.json`，结果 9/9 green。
+- 当前 native ledger 集合为 9 个 pair：4 个 accepted、5 个 rejected diagnostics-only；`topo-state-mapper-history-events` 已由后续 C13-M5 S5 迁为 protocol-only `.expeted.json`，不再是 native ledger case。
 - S2 focused runtime parity 已通过：`python3 -m unittest tests.test_topo_naming_state_response` 完整运行 14 个测试并普通通过。
 - S1 已补 runtime projection：actual response 现在发布 `topoNamingState.objects.Compound.subshapes.Child0.Face1`、`Compound:ChildBoxA` projection child map，以及顶层 owner-qualified entry `Compound/ChildBoxA.#f:1;BOX,F`。
 - 当前 runtime 保留普通 compound child maps，例如 `Compound:ChildBoxA:Child0` 与 `Compound:ChildBoxB:Child1`；S3 已完成包 README、矩阵和 CADCore13.0 索引收口。
 - S2/S3 未发现新的 C13-M2 / C13-M3 回流 blocker；既有 C13-M2 S4 producer ledger blocker 与 C13-M3 前置实现边界保持不变。
 - S0 已冻结：`HEAD=718267783c`，c4m6 strict ledger validator 9/9 通过；focused response test 失败 2 个断言但同一首因均为 `Compound.subshapes.Child0.Face1` missing。actual/expected 最小 diff 是缺 `Compound:ChildBoxA` projection child map、`Child0.Face1` subshape、`Compound/ChildBoxA.#f:1;BOX,F` 顶层 entry；普通 `Compound:ChildBoxA:Child0` / `Compound:ChildBoxB:Child1` child maps 已存在。
+
+后续 C13-M5 S5 已将 release 证据与本批次 ledger gate 分开：schema、producer、document/object hash、encoding 和 foreign top-level owner 都是 diagnostics-only hard fail；CompoundLink 有 native semantic result；transport divergence 只能由精确 registry selector 接受。C13-M4 的历史闭环证据仍有效，但不得用它单独宣称当前 binary 已通过 release gate。
 
 ## 批次目标
 

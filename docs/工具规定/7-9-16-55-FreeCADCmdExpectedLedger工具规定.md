@@ -19,6 +19,12 @@ foo.freecad.ledger.json
 
 不要手工补 ledger。ledger 必须由 `collect_freecad_expected.py --emit-ledger` 在生成 expected 的同一次 FreeCADCmd 运行里写出。
 
+## 与 release gate 的分工
+
+ledger validator 只证明 native expected 与其 provenance sidecar 闭包；它不运行 CAD Core，不能单独证明 current binary、checked-in `cad-core-res` 或前端 transport contract。完整 release gate 以 `docs/工具规定/7-10-08-10-FreeCADExpectedReleaseGate工具规定.md` 为准：它消费 fixture-role manifest、调用 strict ledger preflight、运行 live binary、审计精确 divergence registry 并验证 current freshness。
+
+反过来，release gate 也不能替代 ledger：native role 缺同名 sidecar、accepted/rejected outcome 不闭合或 round-trip 证据错误，release 结果必须是 `invalid`。
+
 ## 工具入口
 
 生成 expected 与 ledger：
@@ -157,13 +163,13 @@ ledger 目前有两类 outcome。
 cad-core/fixtures/c4m6
 ```
 
-结果：
+当前 role manifest 下，`c4m6` 有 10 个 input：9 个 native pair 与 1 个 protocol-only HistoryProbe。phase collection 必须显式报告 protocol-only skipped reason，不能因少发现 case 假绿。
 
-- `processed=9 skipped=0 failed=0`
-- 9 个 `*.freecad.json` 均已生成同名 `*.freecad.ledger.json`
-- 7 个 accepted ledger 的 `roundTrip.status` 为 `passed`
-- 2 个 rejected ledger 对应 schema / producer hard fail expected
-- `validate_freecad_expected_ledger.py --phase c4m6 --strict` 通过 9/9
+native pair 的当前边界是：
+
+- 4 个 accepted ledger：first recompute、Body/Tip stable recovery、CompoundLink native semantic result、ReferenceShadow。
+- 5 个 rejected ledger：schema、producer、document hash、object hash、foreign top-level object ownership。
+- `validate_freecad_expected_ledger.py --phase c4m6 --strict` 只验证这 9 个 native pair；`topo-state-mapper-history-events.expeted.json` 不得伪装成第十个 ledger case。
 
 ## 已暴露并修复的问题
 

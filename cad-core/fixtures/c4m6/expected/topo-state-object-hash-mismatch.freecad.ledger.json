@@ -1,96 +1,34 @@
 {
-  "coverage": {
-    "coveredInputReferenceIds": [],
-    "uncoveredInputReferenceIds": []
-  },
-  "diagnostics": [],
-  "events": [],
+  "diagnostics": [
+    {
+      "actualObjectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "code": "topo_state_object_hash_mismatch",
+      "expectedObjectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+      "message": "topoNamingState objectHash does not match the current object input; request-level recompute is refused",
+      "object": "Box",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
   "fixture": {
     "case": "topo-state-object-hash-mismatch",
-    "expectedPayloadHash": "sha256:76c321066d7fd54026f15f5519ddcc8aab7770775c9df7e3ab83a1aab58c98c5",
+    "expectedPayloadHash": "sha256:32df9015b1639aa64799f274899e2b00f6427d4d53e63b756fb420652f70f9e3",
     "inputHash": "sha256:322b871112716f229dedba8977ca07340f308dc6864dced2fa84a9610222ce16",
-    "phase": "c4m6",
-    "topoNamingStateHash": "sha256:e5941684fc2d52df1bc23dcfde96399f355cc72a82e8a708e3215395e6ff7445"
+    "phase": "c4m6"
   },
   "inputReferences": [],
-  "objects": {
-    "Box": {
-      "afterElements": {
-        "Edge": [
-          "Edge1",
-          "Edge2",
-          "Edge3",
-          "Edge4",
-          "Edge5",
-          "Edge6",
-          "Edge7",
-          "Edge8",
-          "Edge9",
-          "Edge10",
-          "Edge11",
-          "Edge12"
-        ],
-        "Face": [
-          "Face1",
-          "Face2",
-          "Face3",
-          "Face4",
-          "Face5",
-          "Face6"
-        ],
-        "Vertex": [
-          "Vertex1",
-          "Vertex2",
-          "Vertex3",
-          "Vertex4",
-          "Vertex5",
-          "Vertex6",
-          "Vertex7",
-          "Vertex8"
-        ]
-      },
-      "beforeElements": {
-        "Face": [
-          "Face1"
-        ]
-      },
-      "childElementMaps": [],
-      "elementMap": {
-        "encoding": "cad-core.element-map.v1",
-        "entries": {},
-        "status": "indexed_only"
-      },
-      "mapperHistory": [],
-      "published": true,
-      "role": "protocol_published",
-      "type": "Part::Box"
-    }
-  },
-  "outcome": "accepted",
+  "outcome": "rejected",
   "producer": {
     "freecadVersion": "1.2.0 revision 20260519",
     "name": "FreeCADCmd",
     "occtVersion": "7.8.1",
     "scriptVersion": "collect_freecad_expected.py:ledger-v1"
   },
-  "projection": {
-    "droppedObjects": {},
-    "publishedObjects": {
-      "Box": {
-        "covers": [
-          "Box"
-        ],
-        "ledgerObject": "Box",
-        "reason": "expected topoNamingState publication boundary",
-        "sourceEventIds": []
-      }
-    }
-  },
-  "roundTrip": {
-    "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:e5941684fc2d52df1bc23dcfde96399f355cc72a82e8a708e3215395e6ff7445",
-    "results": [],
-    "status": "passed"
+  "rejection": {
+    "diagnosticCodes": [
+      "topo_state_object_hash_mismatch"
+    ],
+    "reason": "FreeCADCmd rejected the request before publishing topoNamingState"
   },
   "schema": "freecad-toponaming-ledger/v1"
 }

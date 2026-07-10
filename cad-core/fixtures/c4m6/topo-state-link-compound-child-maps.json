@@ -81,10 +81,10 @@
       "freecadVersion": "1.2.0 revision 20260519",
       "occtVersion": "fixture-occt-unspecified"
     },
-    "documentHash": "sha256:d340f228d155036020482c594425988b54dda4198cc564e6a5b68a20d307c4dc",
+    "documentHash": "sha256:def8edc813e994d1edf78c035a5c325e4a5f3b4dc7cf3d80bb290eb1e1d3289f",
     "objects": {
       "Compound": {
-        "objectHash": "sha256:8fc3e887955b209e0a184764a940d5bdf4aaf0d60278742bfb62a429c7c6a9c6",
+        "objectHash": "sha256:660d8d333eb76558c2fa81991def0dda0756ddde3b87557310a5d2e46c2c0ee1",
         "elementMapVersion": "cad-core.element-map.v1",
         "subshapes": {
           "Child0.Face1": {

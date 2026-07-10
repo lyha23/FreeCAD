@@ -1,5 +1,7 @@
 # C13-M5 FreeCADExpected 发布对齐批次方案
 
+> 后续状态：本文保留 S0-S4 的设计与当时 characterization。当前 release-gate 合同以 `工作步骤细分/7-10-00-22-【已实现】C13-M5-S5-release-gate收口.md` 和 `docs/工具规定/7-10-08-10-FreeCADExpectedReleaseGate工具规定.md` 为准；其中 hash/foreign-owner 已改为 recompute 前 hard fail，transport divergence 仅能由精确 registry selector 接受。
+
 ## 背景
 
 C13-M1 到 C13-M4 已经让 `topoNamingState` 能进入 cad-core response，并用 `c4m6` 证明了 public projection、child path projection 和 ledger sidecar 的边界。但当前仍存在一个更大的发布问题：`cad-core` 的 release output 还没有系统性对齐所有 `fixtures/<phase>/expected/*.freecad.json`。

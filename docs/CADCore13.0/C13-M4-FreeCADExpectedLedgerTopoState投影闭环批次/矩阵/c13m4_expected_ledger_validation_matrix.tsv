@@ -2,6 +2,6 @@ id	validation	level	command	status	expected_result	owner_step
 C13M4-VAL-001	Queue renders	current_docs	python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py docs/CADCore13.0/C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/工作步骤细分 --format markdown	passed_s3	Queue is empty after S3 is marked implemented	S0/S3
 C13M4-VAL-002	TSV field counts	current_docs	awk -F '\t' 'FNR==1{n=NF; next} NF!=n{print FILENAME ":" FNR ": expected " n " fields, got " NF; bad=1} END{exit bad}' docs/CADCore13.0/C13-M4-FreeCADExpectedLedgerTopoState投影闭环批次/矩阵/*.tsv	passed_s3	No malformed TSV rows	S0/S3
 C13M4-VAL-003	Whitespace diff	current_docs	git diff --check	passed_s3	No whitespace errors	S0/S3
-C13M4-VAL-101	c4m6 ledger closure	expected_artifacts	cd cad-core && python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict	passed_s2	Validated 9 expected fixtures against ledger sidecars during S2 formal closeout	S0/S2
+C13M4-VAL-101	c4m6 ledger closure	expected_artifacts	cd cad-core && python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict	continued_S5	Validates 9 native pairs only: four accepted and five rejected; protocol-only HistoryProbe is excluded by role	S0/S2/S5
 C13M4-VAL-102	Focused topoNamingState runtime parity	focused_runtime	cd cad-core && python3 -m unittest tests.test_topo_naming_state_response	passed_s2	Ran 14 tests OK during S2 formal closeout	S2
 C13M4-VAL-103	Build after C++ edit	focused_runtime	cd cad-core && cmake --build build	passed_s2	Build succeeds during S2 formal closeout	S1/S2
