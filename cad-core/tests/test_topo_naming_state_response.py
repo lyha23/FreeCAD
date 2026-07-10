@@ -99,6 +99,48 @@ def nested_field_paths(
     return paths
 
 
+def canonical_collision_fingerprint(mapper_history: object) -> tuple[tuple[object, ...], ...]:
+    if not isinstance(mapper_history, list):
+        return ()
+    fingerprint: list[tuple[object, ...]] = []
+    for event in mapper_history:
+        if not isinstance(event, dict) or event.get("relation") != "ambiguous":
+            continue
+        mapped_name = event.get("mappedName", {})
+        candidates = event.get("candidates", [])
+        candidate_fingerprint = []
+        if isinstance(candidates, list):
+            for candidate in candidates:
+                if not isinstance(candidate, dict):
+                    continue
+                source = candidate.get("source", {})
+                target = candidate.get("target", {})
+                candidate_mapped_name = candidate.get("mappedName", {})
+                candidate_fingerprint.append(
+                    (
+                        source.get("object", "") if isinstance(source, dict) else "",
+                        source.get("subname", "") if isinstance(source, dict) else "",
+                        target.get("object", "") if isinstance(target, dict) else "",
+                        target.get("subname", "") if isinstance(target, dict) else "",
+                        candidate.get("shapeKind", ""),
+                        candidate_mapped_name.get("canonical", "")
+                        if isinstance(candidate_mapped_name, dict)
+                        else "",
+                        candidate.get("recoverability", ""),
+                    )
+                )
+        fingerprint.append(
+            (
+                event.get("id", ""),
+                event.get("source", ""),
+                mapped_name.get("canonical", "") if isinstance(mapped_name, dict) else "",
+                event.get("recoverability", ""),
+                tuple(sorted(candidate_fingerprint)),
+            )
+        )
+    return tuple(sorted(fingerprint))
+
+
 class TopoNamingStateResponseTest(unittest.TestCase):
     def fixture_payload(self, group: str, fixture: str) -> dict:
         path = ROOT / "fixtures" / group / f"{fixture}.json"
@@ -133,8 +175,9 @@ class TopoNamingStateResponseTest(unittest.TestCase):
     def run_official_recompute_fixture(self, group: str, fixture: str) -> dict:
         return self.run_official_recompute_payload(self.fixture_payload(group, fixture))
 
-    def run_legacy_recompute_fixture(self, group: str, fixture: str) -> dict:
-        payload = json.dumps(self.fixture_payload(group, fixture)).encode("utf-8")
+    def run_legacy_recompute_payload(self, payload: bytes | dict) -> dict:
+        if isinstance(payload, dict):
+            payload = json.dumps(payload).encode("utf-8")
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             input_path = tmp_path / "request.json"
@@ -149,6 +192,9 @@ class TopoNamingStateResponseTest(unittest.TestCase):
                 env=env,
             )
             return json.loads(output_path.read_text(encoding="utf-8"))
+
+    def run_legacy_recompute_fixture(self, group: str, fixture: str) -> dict:
+        return self.run_legacy_recompute_payload(self.fixture_payload(group, fixture))
 
     def assert_c4m6_native_parity_gate(self, fixture: str) -> None:
         response = self.run_official_recompute_fixture("c4m6", fixture)
@@ -362,6 +408,111 @@ class TopoNamingStateResponseTest(unittest.TestCase):
         actual_subshapes = {item["indexed"]: item for item in actual_result["subshapes"]}
         expected_subshapes = {item["indexed"]: item for item in expected_result["subshapes"]}
         self.assertEqual(actual_subshapes, expected_subshapes)
+
+    def test_c4m6_compound_child_map_part_ledger_materializes_collisions_without_reference(
+        self,
+    ) -> None:
+        payload = self.fixture_payload("c4m6", "topo-state-link-compound-child-maps")
+        payload["Objects"] = [
+            object_payload
+            for object_payload in payload["Objects"]
+            if object_payload["Name"] != "CompoundLink"
+        ]
+        payload.pop("topoNamingState")
+        payload["recompute"] = {"objs": ["Compound"]}
+
+        first = self.run_legacy_recompute_payload(payload)
+        second = self.run_legacy_recompute_payload(payload)
+        first_events = [
+            event
+            for event in first["named_shapes"]["Compound"]["mapper_history"]
+            if event.get("relation") == "ambiguous"
+        ]
+        second_events = [
+            event
+            for event in second["named_shapes"]["Compound"]["mapper_history"]
+            if event.get("relation") == "ambiguous"
+        ]
+
+        self.assertEqual(first_events, second_events)
+        self.assertEqual(len(first_events), 26)
+        self.assertTrue(all(event.get("source") == "part_element_map" for event in first_events))
+        self.assertFalse(
+            any(event.get("source") == "freecad_expected_collector" for event in first_events)
+        )
+
+        legacy_fingerprint = canonical_collision_fingerprint(first_events)
+        direct_response = self.run_official_recompute_payload(payload)
+        direct_compound_state = direct_response["topoNamingState"]["objects"]["Compound"]
+        self.assertEqual(
+            canonical_collision_fingerprint(direct_compound_state["mapperHistory"]),
+            legacy_fingerprint,
+        )
+
+        actual_targets_by_kind: dict[str, set[frozenset[str]]] = {
+            "edge": set(),
+            "face": set(),
+            "vertex": set(),
+        }
+        for event in first_events:
+            candidates = event["candidates"]
+            shape_kinds = {candidate["shapeKind"] for candidate in candidates}
+            self.assertEqual(len(shape_kinds), 1)
+            shape_kind = shape_kinds.pop()
+            targets = frozenset(candidate["target"]["subname"] for candidate in candidates)
+            self.assertEqual(len(targets), 2)
+            actual_targets_by_kind[shape_kind].add(targets)
+
+        self.assertEqual(
+            actual_targets_by_kind["edge"],
+            {frozenset({f"Edge{index}", f"Edge{index + 12}"}) for index in range(1, 13)},
+        )
+        self.assertEqual(
+            actual_targets_by_kind["face"],
+            {frozenset({f"Face{index}", f"Face{index + 6}"}) for index in range(1, 7)},
+        )
+        self.assertEqual(
+            actual_targets_by_kind["vertex"],
+            {frozenset({f"Vertex{index}", f"Vertex{index + 8}"}) for index in range(1, 9)},
+        )
+        collision_keys = {
+            event["mappedName"]["canonical"]
+            for event in first_events
+        }
+        self.assertTrue(
+            collision_keys.isdisjoint(first["named_shapes"]["Compound"]["element_map"])
+        )
+        self.assertTrue(
+            collision_keys.isdisjoint(direct_compound_state["elementMap"]["entries"])
+        )
+
+        link_response = self.run_official_recompute_fixture(
+            "c4m6",
+            "topo-state-link-compound-child-maps",
+        )
+        link_compound_state = link_response["topoNamingState"]["objects"]["Compound"]
+        self.assertEqual(
+            canonical_collision_fingerprint(link_compound_state["mapperHistory"]),
+            legacy_fingerprint,
+        )
+        self.assertEqual(
+            link_compound_state["subshapes"]["Child0.Face1"]["canonicalFreecadMappedName"],
+            "Compound/ChildBoxA.#f:1;BOX,F",
+        )
+        self.assertIn("Compound:ChildBoxA:Child0", {
+            child_map["key"] for child_map in link_compound_state["childElementMaps"]
+        })
+
+        round_trip_payload = self.fixture_payload("c4m6", "topo-state-link-compound-child-maps")
+        round_trip_payload["topoNamingState"] = link_response["topoNamingState"]
+        round_trip_response = self.run_official_recompute_payload(round_trip_payload)
+        self.assertEqual(round_trip_response["diagnostics"], [])
+        self.assertEqual(
+            canonical_collision_fingerprint(
+                round_trip_response["topoNamingState"]["objects"]["Compound"]["mapperHistory"]
+            ),
+            legacy_fingerprint,
+        )
 
     def test_c4m6_transport_metadata_references_current_result_subshapes(self) -> None:
         for fixture, object_name in C4M6_TRANSPORT_MESH_CASES:

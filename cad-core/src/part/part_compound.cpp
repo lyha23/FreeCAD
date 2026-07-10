@@ -153,6 +153,11 @@ void executePartCompound(const app::DocumentObject& object, runtime::ComputeCont
     NamedShape namedShape = sources.empty() ? indexedNamedShapeForObject(object.name, compound)
                                             : namedShapeForPreservedSources(object.name, compound, sources);
     appendProtocolChildMaps(namedShape, sources);
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements(), "try to resolve the grand child map now", then applies
+    // direct child ranges before findAll() exposes every mapped target.  Finalize canonical
+    // collision evidence only after the FeatureCompound ChildN ranges exist in the Part ledger.
+    appendProtocolChildMapCanonicalCollisionHistory(namedShape);
     namedShape.elementHistoryStatus.push_back("part_compound:make_element_compound");
 
     part_feature_detail::publishPartShape(

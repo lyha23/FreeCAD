@@ -141,6 +141,12 @@ struct MappedNameProvenance
     MappedNamePublicationScope publicationScope = MappedNamePublicationScope::Public;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+// ::ElementMap::findAll() returns its stored raw `MappedName` and appends `child.postfix` only
+// while resolving a child range. This classifies already-recorded Part provenance for the frozen
+// public DTO; runtime must project it rather than reclassifying mapped-name bytes or request data.
+std::string mappedNamePublicEvidenceSource(const MappedNameProvenance& provenance);
+
 struct NamedShape
 {
     std::string owner;
@@ -159,6 +165,13 @@ struct NamedShape
     std::vector<std::string> elementHistoryStatus;
     std::optional<nlohmann::json> sketchInternalHistoryDiagnostics;
 };
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+// ::ElementMap::addChildElements() keeps direct child ranges and resolves their mapped names
+// before callers query them.  This narrow Part finalizer consumes the already source-backed
+// owner aliases plus those ranges, records canonical collisions in NamedShape::mapperHistory,
+// and leaves runtime to project that ledger without synthesizing new history.
+void appendProtocolChildMapCanonicalCollisionHistory(NamedShape& namedShape);
 
 struct NamedShapeSource
 {

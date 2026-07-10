@@ -68,6 +68,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <cmath>
 #include <cstdint>
 #include <functional>
@@ -2735,6 +2736,69 @@ std::string canonicalCollisionCandidateSignature(const MapperHistoryCollisionCan
         .dump();
 }
 
+int canonicalCollisionShapeKindOrder(const std::string& shapeKind)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::createChildMap() records each direct child's `offset` and `count` per
+    // TopAbs kind, while /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::findAll() appends every `MappedNameRef` target to `res`.  This is only a
+    // CAD Core serialization tie-breaker over those ledger endpoints; it does not claim that
+    // FreeCAD itself creates a canonical-collision event or selects a collision owner.
+    if (shapeKind == "face") {
+        return 0;
+    }
+    if (shapeKind == "edge") {
+        return 1;
+    }
+    if (shapeKind == "vertex") {
+        return 2;
+    }
+    return 3;
+}
+
+int canonicalCollisionTopologicalOrdinal(const std::string& subname)
+{
+    std::size_t digitStart = subname.size();
+    while (digitStart > 0U
+           && std::isdigit(static_cast<unsigned char>(subname.at(digitStart - 1U))) != 0) {
+        --digitStart;
+    }
+    if (digitStart == subname.size()) {
+        return std::numeric_limits<int>::max();
+    }
+    try {
+        return std::stoi(subname.substr(digitStart));
+    }
+    catch (const std::exception&) {
+        return std::numeric_limits<int>::max();
+    }
+}
+
+bool canonicalCollisionCandidateLess(const MapperHistoryCollisionCandidate& left,
+                                     const MapperHistoryCollisionCandidate& right)
+{
+    const int leftKind = canonicalCollisionShapeKindOrder(left.shapeKind);
+    const int rightKind = canonicalCollisionShapeKindOrder(right.shapeKind);
+    if (leftKind != rightKind) {
+        return leftKind < rightKind;
+    }
+    const int leftOrdinal = canonicalCollisionTopologicalOrdinal(left.target.subname);
+    const int rightOrdinal = canonicalCollisionTopologicalOrdinal(right.target.subname);
+    if (leftOrdinal != rightOrdinal) {
+        return leftOrdinal < rightOrdinal;
+    }
+    if (left.target.object != right.target.object) {
+        return left.target.object < right.target.object;
+    }
+    if (left.target.subname != right.target.subname) {
+        return left.target.subname < right.target.subname;
+    }
+    if (left.source.object != right.source.object) {
+        return left.source.object < right.source.object;
+    }
+    return left.source.subname < right.source.subname;
+}
+
 std::string canonicalCollisionHistoryId(
     const std::string& context,
     const std::string& canonical,
@@ -2781,14 +2845,27 @@ void appendCanonicalCollisionHistory(
         if (candidate.canonicalMappedName.empty()) {
             continue;
         }
-        const auto [indexIt, inserted] = groupIndex.emplace(candidate.canonicalMappedName, groups.size());
+        const auto [indexIt, inserted]
+            = groupIndex.emplace(candidate.canonicalMappedName, groups.size());
         if (inserted) {
             groups.push_back(CollisionGroup {candidate.canonicalMappedName, {}});
         }
         groups.at(indexIt->second).candidates.push_back(candidate);
     }
 
-    for (const CollisionGroup& group : groups) {
+    std::sort(
+        groups.begin(),
+        groups.end(),
+        [](const CollisionGroup& left, const CollisionGroup& right) {
+            return left.canonical < right.canonical;
+        }
+    );
+    for (CollisionGroup& group : groups) {
+        std::sort(
+            group.candidates.begin(),
+            group.candidates.end(),
+            canonicalCollisionCandidateLess
+        );
         std::set<std::string> signatures;
         for (const MapperHistoryCollisionCandidate& candidate : group.candidates) {
             signatures.insert(canonicalCollisionCandidateSignature(candidate));
@@ -2957,6 +3034,74 @@ void appendPartCanonicalCollisionHistory(
 {
     appendOwnerCanonicalCollisionHistory(namedShape);
     appendDirectChildCanonicalCollisionHistory(namedShape, sources);
+}
+
+bool localizeProtocolChildMapProvenance(MappedNameProvenance& provenance,
+                                        const std::string& childPrefix)
+{
+    if (provenance.status != MappedNameProvenanceStatus::SourceBacked
+        || provenance.rawMappedName.empty()
+        || provenance.sourceElement.rfind(childPrefix, 0U) != 0U
+        || provenance.rawMappedName.rfind(childPrefix, 0U) != 0U) {
+        return false;
+    }
+    provenance.sourceElement = provenance.sourceElement.substr(childPrefix.size());
+    provenance.rawMappedName = provenance.rawMappedName.substr(childPrefix.size());
+    provenance.canonicalMappedName = topo::canonicalizeFreeCadMappedName(provenance.rawMappedName);
+    return !provenance.sourceElement.empty() && !provenance.canonicalMappedName.empty();
+}
+
+void appendProtocolChildMapCanonicalCollisionHistoryImpl(NamedShape& namedShape)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements() first resolves a direct child's map and only then applies
+    // its rebased range; ::ElementMap::findAll() returns every current target for a mapped name.
+    // FreeCAD's raw MappedName remains one-to-one.  CAD Core's public canonical codec can fold
+    // distinct raw child names, so record that ambiguity here in the Part ledger rather than
+    // allowing runtime response publication to infer it from StableSubList or response DTOs.
+    std::vector<MapperHistoryCollisionCandidate> candidates;
+    for (const NamedShapeChildMap& childMap : namedShape.childElementMaps) {
+        if (childMap.recursiveExpansion || childMap.indexedName.rfind("Child", 0U) != 0U
+            || childMap.sourceOwner.empty() || childMap.count <= 0) {
+            continue;
+        }
+        const std::string childPrefix = childMap.sourceOwner + ".";
+        for (const auto& [stableName, currentElement] : namedShape.elementMap) {
+            if (stableName.rfind(childPrefix, 0U) != 0U) {
+                continue;
+            }
+            const auto elementIt = namedShape.elements.find(currentElement);
+            const auto provenanceIt = namedShape.mappedNameProvenance.find(stableName);
+            if (elementIt == namedShape.elements.end()
+                || provenanceIt == namedShape.mappedNameProvenance.end()
+                || subshapeKindName(elementIt->second.subshape.kind) != childMap.kind
+                || elementIt->second.subshape.index <= childMap.offset
+                || elementIt->second.subshape.index > childMap.offset + childMap.count) {
+                continue;
+            }
+
+            const std::string localSourceElement = prefixForKind(elementIt->second.subshape.kind)
+                + std::to_string(elementIt->second.subshape.index - childMap.offset);
+            MappedNameProvenance provenance = provenanceIt->second;
+            if (!localizeProtocolChildMapProvenance(provenance, childPrefix)
+                || provenance.sourceElement != localSourceElement) {
+                continue;
+            }
+            candidates.push_back(MapperHistoryCollisionCandidate {
+                {childMap.sourceOwner, provenance.sourceElement},
+                {namedShape.owner, currentElement},
+                childMap.kind,
+                provenance.rawMappedName,
+                provenance.canonicalMappedName,
+                MapperHistoryRecoverability::Resolved,
+            });
+        }
+    }
+    appendCanonicalCollisionHistory(
+        namedShape,
+        "topoNamingState.objects." + namedShape.owner + ".elementMap.entries",
+        candidates
+    );
 }
 
 bool sameRefineSurface(const TopoDS_Face& sourceFace, const TopoDS_Face& resultFace)
@@ -3879,9 +4024,34 @@ std::vector<std::string> elementHistoryStatusForNamedShape(const NamedShape& nam
 
 }  // namespace
 
+void appendProtocolChildMapCanonicalCollisionHistory(NamedShape& namedShape)
+{
+    appendProtocolChildMapCanonicalCollisionHistoryImpl(namedShape);
+}
+
 std::optional<long> requestLocalProducerTagForShape(const TopoDS_Shape& shape)
 {
     return requestLocalProducerTagForShapeImpl(shape);
+}
+
+std::string mappedNamePublicEvidenceSource(const MappedNameProvenance& provenance)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::findAll() returns the stored `MappedName` before any child-range postfix is
+    // appended. This compatibility class is CAD Core public-DTO policy over that Part provenance,
+    // not a claim that FreeCAD produces an `evidence.source` field or a collision event.
+    const std::size_t postfix = provenance.rawMappedName.find(';');
+    const bool producerLocal = provenance.sourceElement.find('.') == std::string::npos
+        && postfix != std::string::npos
+        && provenance.rawMappedName.substr(0U, postfix) == provenance.sourceElement
+        && provenance.operationPostfix.rfind(";:M;", 0U) == 0U;
+    // This is a legacy public DTO evidence class for native producer-local MappedName tokens.
+    // The classification is based solely on the Part-owned provenance above, not a runtime
+    // collector or response-level reconstruction.
+    return producerLocal
+            || (!provenance.rawMappedName.empty() && provenance.rawMappedName.front() == '#')
+        ? "freecad_expected_collector"
+        : "element_map";
 }
 
 NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Shape& shape)
