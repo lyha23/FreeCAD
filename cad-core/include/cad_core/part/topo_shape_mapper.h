@@ -5,6 +5,7 @@
 // and TopoShapeExpansion.cpp history consumption.
 #include <nlohmann/json.hpp>
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -40,6 +41,28 @@ struct MapperHistoryEndpoint
     std::string subname;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp::findAll()
+// enumerates every current target of a mapped name.  When that set has more than one element,
+// the Part ledger records the collision instead of selecting an arbitrary terminal ElementMap
+// entry; runtime later projects this already-produced ambiguity into topoNamingState.
+struct MapperHistoryCollisionCandidate
+{
+    MapperHistoryEndpoint source;
+    MapperHistoryEndpoint target;
+    std::string shapeKind;
+    std::string rawMappedName;
+    std::string canonicalMappedName;
+    MapperHistoryRecoverability recoverability = MapperHistoryRecoverability::Resolved;
+};
+
+struct MapperHistoryCanonicalCollision
+{
+    std::string context;
+    std::string rawMappedName;
+    std::string canonicalMappedName;
+    std::vector<MapperHistoryCollisionCandidate> candidates;
+};
+
 struct MapperHistoryEvent
 {
     std::string id;
@@ -51,6 +74,7 @@ struct MapperHistoryEvent
     nlohmann::json evidence = nlohmann::json::object();
     MapperHistoryRecoverability recoverability = MapperHistoryRecoverability::Unknown;
     std::string diagnosticStatus;
+    std::optional<MapperHistoryCanonicalCollision> canonicalCollision;
 };
 
 // FreeCAD:

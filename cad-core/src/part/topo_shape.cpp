@@ -1,6 +1,7 @@
 #include "cad_core/part/topo_shape.h"
 
 #include "cad_core/part/extrusion_helper.h"
+#include "cad_core/part/brep_snapshot.h"
 #include "cad_core/part/face_maker.h"
 #include "cad_core/part/refine_model.h"
 #include "cad_core/part/shape_fix.h"
@@ -389,6 +390,10 @@ struct SourceTargets
     std::optional<MappedNameProvenance> inheritedMappedName;
     std::string preservedOperationPostfix;
     std::string sourceElement;
+    // A nested child ElementMap is resolved by FreeCAD's addChildElements() before its parent
+    // serializes the final mapped name.  Keep that lifecycle fact beside the source evidence so
+    // the inherited raw name is retagged at the Part boundary rather than synthesized by runtime.
+    bool composeInheritedChildMapTag = false;
 };
 
 struct FilledOffsetBuild
@@ -555,7 +560,7 @@ std::string producerTagFingerprint(const TopoDS_Shape& shape)
     return out.str();
 }
 
-std::optional<long> requestLocalProducerTagForShape(const TopoDS_Shape& shape)
+std::optional<long> requestLocalProducerTagForShapeImpl(const TopoDS_Shape& shape)
 {
     if (shape.IsNull()) {
         return std::nullopt;
@@ -619,7 +624,7 @@ void rememberSourceTargetEvidence(
         targets.sourceElement = sourceElement;
     }
     if (!targets.sourceTag) {
-        targets.sourceTag = requestLocalProducerTagForShape(sourceShape);
+        targets.sourceTag = requestLocalProducerTagForShapeImpl(sourceShape);
     }
     if (targets.preservedOperationPostfix.empty() && !preservedOperationPostfix.empty()) {
         targets.preservedOperationPostfix = preservedOperationPostfix;
@@ -637,7 +642,28 @@ void rememberSourceTargetEvidence(
     if (source.namedShape == nullptr) {
         return;
     }
-    const auto provenanceIt = source.namedShape->mappedNameProvenance.find(sourceElement);
+    auto provenanceIt = source.namedShape->mappedNameProvenance.find(sourceElement);
+    if (provenanceIt == source.namedShape->mappedNameProvenance.end()) {
+        // Only the recursive Sketch g<ID>;SKT handoff needs a relaxed owner/local lookup.
+        // Other makers already have an exact source key; accepting a generic #...;XTR alias
+        // here would replace Body's Tip-qualified Pad.#... provenance with a local raw token.
+        auto inheritedSketchIt = source.namedShape->mappedNameProvenance.end();
+        const std::string ownerPrefix = source.owner.empty() ? std::string {} : source.owner + ".";
+        if (!ownerPrefix.empty() && sourceElement.rfind(ownerPrefix, 0U) == 0U) {
+            inheritedSketchIt = source.namedShape->mappedNameProvenance.find(
+                sourceElement.substr(ownerPrefix.size())
+            );
+        }
+        if (inheritedSketchIt == source.namedShape->mappedNameProvenance.end()) {
+            inheritedSketchIt =
+                source.namedShape->mappedNameProvenance.find(localElementName(sourceElement));
+        }
+        if (inheritedSketchIt != source.namedShape->mappedNameProvenance.end()
+            && inheritedSketchIt->second.status == MappedNameProvenanceStatus::SourceBacked
+            && inheritedSketchIt->second.rawMappedName.find(";SKT;") != std::string::npos) {
+            provenanceIt = inheritedSketchIt;
+        }
+    }
     if (provenanceIt == source.namedShape->mappedNameProvenance.end()) {
         return;
     }
@@ -656,6 +682,13 @@ void rememberSourceTargetEvidence(
     }
     if (targets.preservedOperationPostfix.empty() && !inherited.operationPostfix.empty()) {
         targets.preservedOperationPostfix = inherited.operationPostfix;
+    }
+    if (!source.namedShape->childElementMaps.empty()) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::addChildElements() says "try to resolve the grand child map now" and
+        // calls encodeElementName() after that resolution.  A nested source therefore acquires
+        // this parent tag in Part, not in the response publisher.
+        targets.composeInheritedChildMapTag = true;
     }
 }
 
@@ -684,7 +717,7 @@ void recordMappedNameProvenance(
     provenance.currentElement = currentElement;
     provenance.sourceElement = sourceElement;
     provenance.elementType = mappedNameElementType(currentElement);
-    provenance.producerTag = requestLocalProducerTagForShape(namedShape.shape);
+    provenance.producerTag = requestLocalProducerTagForShapeImpl(namedShape.shape);
     provenance.masterTag = provenance.producerTag;
     provenance.sourceTag = sourceTag;
     provenance.operationPostfix = operationPostfix;
@@ -705,7 +738,11 @@ bool recordInheritedMappedNameProvenance(NamedShape& namedShape,
     MappedNameProvenance provenance = *targets.inheritedMappedName;
     if (provenance.status != MappedNameProvenanceStatus::SourceBacked
         || provenance.rawMappedName.empty()
-        || provenance.canonicalMappedName.empty()) {
+        || provenance.canonicalMappedName.empty()
+        // This inherited path exists for SketchObject's source-backed g<ID>;SKT ledger during
+        // nested Part compound expansion.  Preserve the established mapper lifecycle for every
+        // other producer (Body/Pad included), which must continue through recordMappedNameProvenance.
+        || provenance.rawMappedName.find(";SKT;") == std::string::npos) {
         return false;
     }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
@@ -716,6 +753,30 @@ bool recordInheritedMappedNameProvenance(NamedShape& namedShape,
     provenance.entryKey = entryKey;
     provenance.currentElement = currentElement;
     provenance.elementType = mappedNameElementType(currentElement);
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeShapeWithElementMap() consumes the Sketch producer map at this Part
+    // maker boundary.  The resulting owner map is public evidence; only the raw Sketch
+    // producer itself remains ProducerOnly.
+    provenance.publicationScope = MappedNamePublicationScope::Public;
+    if (targets.composeInheritedChildMapTag && !provenance.elementType.empty()) {
+        const std::optional<long> parentTag = requestLocalProducerTagForShapeImpl(namedShape.shape);
+        if (parentTag) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+            // ::ElementMap::addChildElements() resolves the grandchild ElementMap, then calls
+            // encodeElementName(idx[0], name, ..., masterTag, child.postfix, child.tag).  Its
+            // parent tag is appended to the already source-backed child mapped name.  Preserve
+            // that chain here; rebuilding from current EdgeN/VertexN would lose Sketch g<ID>
+            // provenance and falsely turn sibling collisions into splits.
+            std::ostringstream raw;
+            raw << provenance.rawMappedName << ";:H" << std::hex << *parentTag << ','
+                << provenance.elementType.front();
+            provenance.rawMappedName = raw.str();
+            provenance.canonicalMappedName =
+                cad_core::topo::canonicalizeFreeCadMappedName(provenance.rawMappedName);
+            provenance.producerTag = parentTag;
+            provenance.masterTag = parentTag;
+        }
+    }
     namedShape.mappedNameProvenance[entryKey] = std::move(provenance);
     return true;
 }
@@ -2019,22 +2080,64 @@ std::vector<std::string> sourceElementNames(
     // ::TopoShape::makeElementShape() and mapSubElement(shapes) carry existing element names
     // through chained makers. When a source already has an ElementMap, cad-core treats those
     // stable keys as aliases of the source-local FaceN/EdgeN/VertexN during the next maker pass.
-    std::vector<std::string> names {source.owner + "." + localElementName};
-    for (const std::string& aliasOwner : source.ownerAliases) {
-        if (!aliasOwner.empty()) {
-            addDistinctString(names, aliasOwner + "." + localElementName);
+    std::vector<std::string> names;
+    if (source.namedShape == nullptr) {
+        names.push_back(source.owner + "." + localElementName);
+        for (const std::string& aliasOwner : source.ownerAliases) {
+            if (!aliasOwner.empty()) {
+                addDistinctString(names, aliasOwner + "." + localElementName);
+            }
+        }
+        return names;
+    }
+
+    bool hasSketchProducerAlias = false;
+    for (const auto& [stableName, currentName] : source.namedShape->elementMap) {
+        if (currentName != localElementName || stableName == localElementName) {
+            continue;
+        }
+        const auto provenanceIt = source.namedShape->mappedNameProvenance.find(stableName);
+        if (provenanceIt != source.namedShape->mappedNameProvenance.end()
+            && provenanceIt->second.status == MappedNameProvenanceStatus::SourceBacked
+            && provenanceIt->second.rawMappedName.find(";SKT;") != std::string::npos) {
+            hasSketchProducerAlias = true;
+            break;
         }
     }
-    if (source.namedShape == nullptr) {
-        return names;
+
+    if (!hasSketchProducerAlias) {
+        names.push_back(source.owner + "." + localElementName);
+        for (const std::string& aliasOwner : source.ownerAliases) {
+            if (!aliasOwner.empty()) {
+                addDistinctString(names, aliasOwner + "." + localElementName);
+            }
+        }
     }
 
     for (const auto& [stableName, currentName] : source.namedShape->elementMap) {
         if (currentName != localElementName || stableName == localElementName) {
             continue;
         }
-        if (std::find(names.begin(), names.end(), stableName) == names.end()) {
-            names.push_back(stableName);
+        const auto provenanceIt = source.namedShape->mappedNameProvenance.find(stableName);
+        const bool sketchProducerAlias = provenanceIt != source.namedShape->mappedNameProvenance.end()
+            && provenanceIt->second.status == MappedNameProvenanceStatus::SourceBacked
+            && provenanceIt->second.rawMappedName.find(";SKT;") != std::string::npos;
+        if (hasSketchProducerAlias && !sketchProducerAlias) {
+            continue;
+        }
+        std::string sourceName = stableName;
+        if (sketchProducerAlias && !source.owner.empty()) {
+            const std::string ownerPrefix = source.owner + ".";
+            if (sourceName.rfind(ownerPrefix, 0U) != 0U) {
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+                // ::ElementMap::addChildElements() keeps each child ElementMap beside its range.
+                // Two Sketches may both own g1, so retain an owner-qualified internal key while
+                // the attached raw/canonical mapped-name evidence stays the native g1;SKT token.
+                sourceName = ownerPrefix + sourceName;
+            }
+        }
+        if (std::find(names.begin(), names.end(), sourceName) == names.end()) {
+            names.push_back(std::move(sourceName));
         }
     }
     return names;
@@ -2305,7 +2408,7 @@ void addRectangularFacePrismProducedMappedNames(NamedShape& namedShape,
         {"Vertex8", "#1b:2", ";:U;XTR"},
     }};
 
-    const std::optional<long> producerTag = requestLocalProducerTagForShape(namedShape.shape);
+    const std::optional<long> producerTag = requestLocalProducerTagForShapeImpl(namedShape.shape);
     for (const ProducedMappedNameSeed& seed : seeds) {
         recordProducedMappedName(namedShape, seed, producerTag);
     }
@@ -2546,6 +2649,11 @@ void collectChildElementMaps(
                         continue;
                     }
                     NamedShapeChildMap recursiveChildMap = sourceChildMap;
+                    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+                    // ::ElementMap::addChildElements() expands grandchild ranges for lookup.
+                    // Keep the expansion for request-local resolution, but distinguish it from
+                    // the direct FeatureCompound child range used by topoNamingState publication.
+                    recursiveChildMap.recursiveExpansion = true;
                     recursiveChildMap.sourceNamedShape = sourceChildMap.sourceNamedShape;
                     recursiveChildMap.offset = childMap.offset + sourceChildMap.offset;
                     recursiveChildMap.targetStart = prefix
@@ -2590,6 +2698,265 @@ void collectChildElementMaps(
     if (sawEncodedChildMapKey) {
         addDistinctString(namedShape.elementHistoryStatus, "element_map_child_map:hashed_child_map_keys");
     }
+}
+
+bool hasPublicSourceBackedMappedNameEvidence(const MappedNameProvenance& provenance)
+{
+    if (provenance.status != MappedNameProvenanceStatus::SourceBacked
+        || provenance.rawMappedName.empty() || provenance.canonicalMappedName.empty()) {
+        return false;
+    }
+    const std::size_t postfix = provenance.rawMappedName.find(';');
+    if (postfix == std::string::npos) {
+        return false;
+    }
+    const bool producerLocalMappedName = provenance.sourceElement.find('.') == std::string::npos
+        && provenance.rawMappedName.substr(0U, postfix) == provenance.sourceElement
+        && provenance.operationPostfix.rfind(";:M;", 0U) == 0U;
+    return provenance.rawMappedName.find('#') != std::string::npos
+        || provenance.rawMappedName.find(";SKT;") != std::string::npos
+        || producerLocalMappedName;
+}
+
+std::string canonicalCollisionCandidateSignature(const MapperHistoryCollisionCandidate& candidate)
+{
+    return nlohmann::json({
+                              {"target",
+                               {{"object", candidate.target.object},
+                                {"subname", candidate.target.subname}}},
+                              {"shapeKind", candidate.shapeKind},
+                              {"source",
+                               {{"object", candidate.source.object},
+                                {"subname", candidate.source.subname}}},
+                              {"mappedNameCanonical", candidate.canonicalMappedName},
+                              {"recoverability",
+                               mapperHistoryRecoverabilityName(candidate.recoverability)},
+                          })
+        .dump();
+}
+
+std::string canonicalCollisionHistoryId(
+    const std::string& context,
+    const std::string& canonical,
+    const std::vector<MapperHistoryCollisionCandidate>& candidates
+)
+{
+    nlohmann::json seedCandidates = nlohmann::json::array();
+    for (const MapperHistoryCollisionCandidate& candidate : candidates) {
+        seedCandidates.push_back({
+            {"target",
+             {{"object", candidate.target.object}, {"subname", candidate.target.subname}}},
+            {"shapeKind", candidate.shapeKind},
+            {"source",
+             {{"object", candidate.source.object}, {"subname", candidate.source.subname}}},
+            {"mappedNameCanonical", canonical},
+            {"recoverability", mapperHistoryRecoverabilityName(candidate.recoverability)},
+        });
+    }
+    return "canonical-collision-"
+        + sha256Hex(nlohmann::json({
+                                      {"context", context},
+                                      {"canonical", canonical},
+                                      {"candidates", std::move(seedCandidates)},
+                                  })
+                        .dump())
+              .substr(0U, 16U);
+}
+
+void appendCanonicalCollisionHistory(
+    NamedShape& namedShape,
+    const std::string& context,
+    const std::vector<MapperHistoryCollisionCandidate>& candidates
+)
+{
+    struct CollisionGroup
+    {
+        std::string canonical;
+        std::vector<MapperHistoryCollisionCandidate> candidates;
+    };
+
+    std::vector<CollisionGroup> groups;
+    std::map<std::string, std::size_t> groupIndex;
+    for (const MapperHistoryCollisionCandidate& candidate : candidates) {
+        if (candidate.canonicalMappedName.empty()) {
+            continue;
+        }
+        const auto [indexIt, inserted] = groupIndex.emplace(candidate.canonicalMappedName, groups.size());
+        if (inserted) {
+            groups.push_back(CollisionGroup {candidate.canonicalMappedName, {}});
+        }
+        groups.at(indexIt->second).candidates.push_back(candidate);
+    }
+
+    for (const CollisionGroup& group : groups) {
+        std::set<std::string> signatures;
+        for (const MapperHistoryCollisionCandidate& candidate : group.candidates) {
+            signatures.insert(canonicalCollisionCandidateSignature(candidate));
+        }
+        if (signatures.size() <= 1U || group.candidates.empty()) {
+            continue;
+        }
+
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp::findAll()
+        // returns every current target for the same mapped name.  Keep that ambiguity in the
+        // request-local Part MapperHistory ledger before runtime projects it; do not select one
+        // candidate or recreate the event from response DTOs.
+        MapperHistoryEvent event;
+        event.id = canonicalCollisionHistoryId(context, group.canonical, group.candidates);
+        event.source = group.candidates.front().source;
+        event.target = group.candidates.front().target;
+        event.shapeKind = group.candidates.front().shapeKind;
+        event.relation = MapperHistoryRelation::Ambiguous;
+        event.makerStage = "element_map_canonical_collision";
+        event.evidence = {
+            {"element_map", true},
+            {"canonical_collision", true},
+            {"context", context},
+        };
+        event.recoverability = MapperHistoryRecoverability::Ambiguous;
+        event.diagnosticStatus = "canonical_element_map_collision";
+        event.canonicalCollision = MapperHistoryCanonicalCollision {
+            context,
+            group.candidates.front().rawMappedName,
+            group.canonical,
+            group.candidates,
+        };
+        addMapperHistoryEvent(namedShape.mapperHistory, std::move(event));
+    }
+}
+
+const MappedNameProvenance* selectedSourceBackedMappedNameProvenance(
+    const NamedShape& namedShape,
+    const std::string& currentElement
+)
+{
+    for (const auto& [stableName, mappedCurrentElement] : namedShape.elementMap) {
+        if (mappedCurrentElement != currentElement) {
+            continue;
+        }
+        const auto provenanceIt = namedShape.mappedNameProvenance.find(stableName);
+        if (provenanceIt != namedShape.mappedNameProvenance.end()
+            && hasPublicSourceBackedMappedNameEvidence(provenanceIt->second)) {
+            return &provenanceIt->second;
+        }
+    }
+    return nullptr;
+}
+
+void appendOwnerCanonicalCollisionHistory(NamedShape& namedShape)
+{
+    std::vector<MapperHistoryCollisionCandidate> candidates;
+    for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+        for (const auto& [currentElement, element] : namedShape.elements) {
+            if (element.subshape.kind != kind) {
+                continue;
+            }
+            const MappedNameProvenance* provenance =
+                selectedSourceBackedMappedNameProvenance(namedShape, currentElement);
+            if (provenance == nullptr) {
+                continue;
+            }
+            candidates.push_back(MapperHistoryCollisionCandidate {
+                {namedShape.owner, currentElement},
+                {namedShape.owner, currentElement},
+                subshapeKindName(kind),
+                provenance->rawMappedName,
+                provenance->canonicalMappedName,
+                MapperHistoryRecoverability::Resolved,
+            });
+        }
+    }
+    appendCanonicalCollisionHistory(
+        namedShape,
+        "topoNamingState.objects." + namedShape.owner + ".elementMap.entries",
+        candidates
+    );
+}
+
+std::optional<std::size_t> directChildSourceIndex(
+    const std::vector<NamedShapeSource>& sources,
+    const std::string& sourceOwner
+)
+{
+    for (std::size_t index = 0U; index < sources.size(); ++index) {
+        if (sources.at(index).owner == sourceOwner) {
+            return index;
+        }
+    }
+    return std::nullopt;
+}
+
+void appendDirectChildCanonicalCollisionHistory(
+    NamedShape& namedShape,
+    const std::vector<NamedShapeSource>& sources
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements() resolves an already-owned child ElementMap into the
+    // parent range.  Only a direct child with its own child-map ledger contributes this second
+    // source->parent ambiguity; recursive expansion is lookup evidence, not another public map.
+    for (const TopAbs_ShapeEnum kind : mappableKinds()) {
+        for (const NamedShapeChildMap& childMap : namedShape.childElementMaps) {
+            if (childMap.recursiveExpansion || childMap.sourceNamedShape == nullptr
+                || childMap.sourceChildMapCount == 0U || childMap.count <= 0
+                || childMap.kind != subshapeKindName(kind)) {
+                continue;
+            }
+            const std::optional<std::size_t> sourceIndex =
+                directChildSourceIndex(sources, childMap.sourceOwner);
+            if (!sourceIndex) {
+                continue;
+            }
+
+            std::vector<MapperHistoryCollisionCandidate> candidates;
+            const std::string sourcePrefix = childMap.sourceOwner + ".";
+            const std::string elementPrefix = prefixForKind(kind);
+            for (const auto& [currentElement, element] : namedShape.elements) {
+                if (element.subshape.kind != kind || element.subshape.index <= childMap.offset
+                    || element.subshape.index > childMap.offset + childMap.count) {
+                    continue;
+                }
+                const std::string sourceElement = elementPrefix
+                    + std::to_string(element.subshape.index - childMap.offset);
+                for (const auto& [stableName, mappedCurrentElement] : namedShape.elementMap) {
+                    if (mappedCurrentElement != currentElement
+                        || stableName.rfind(sourcePrefix, 0U) != 0U) {
+                        continue;
+                    }
+                    const auto provenanceIt = namedShape.mappedNameProvenance.find(stableName);
+                    if (provenanceIt == namedShape.mappedNameProvenance.end()
+                        || !hasPublicSourceBackedMappedNameEvidence(provenanceIt->second)) {
+                        continue;
+                    }
+                    const MappedNameProvenance& provenance = provenanceIt->second;
+                    candidates.push_back(MapperHistoryCollisionCandidate {
+                        {childMap.sourceOwner, sourceElement},
+                        {namedShape.owner, currentElement},
+                        subshapeKindName(kind),
+                        provenance.rawMappedName,
+                        provenance.canonicalMappedName,
+                        MapperHistoryRecoverability::Resolved,
+                    });
+                }
+            }
+            appendCanonicalCollisionHistory(
+                namedShape,
+                "topoNamingState.childElementMaps." + namedShape.owner + ":"
+                    + childMap.sourceOwner + ":Child" + std::to_string(*sourceIndex)
+                    + ".elementMap.entries",
+                candidates
+            );
+        }
+    }
+}
+
+void appendPartCanonicalCollisionHistory(
+    NamedShape& namedShape,
+    const std::vector<NamedShapeSource>& sources
+)
+{
+    appendOwnerCanonicalCollisionHistory(namedShape);
+    appendDirectChildCanonicalCollisionHistory(namedShape, sources);
 }
 
 bool sameRefineSurface(const TopoDS_Face& sourceFace, const TopoDS_Face& resultFace)
@@ -2901,14 +3268,16 @@ void applyPreservedElementMap(
         if (targets.preserved.size() == 1U) {
             const std::string target = *targets.preserved.begin();
             namedShape.elementMap[sourceName] = target;
-            recordMappedNameProvenance(
-                namedShape,
-                sourceName,
-                target,
-                targets.sourceElement.empty() ? sourceName : targets.sourceElement,
-                targets.sourceTag,
-                targets.preservedOperationPostfix
-            );
+            if (!recordInheritedMappedNameProvenance(namedShape, sourceName, target, targets)) {
+                recordMappedNameProvenance(
+                    namedShape,
+                    sourceName,
+                    target,
+                    targets.sourceElement.empty() ? sourceName : targets.sourceElement,
+                    targets.sourceTag,
+                    targets.preservedOperationPostfix
+                );
+            }
             continue;
         }
         if (targets.preserved.size() <= 1U) {
@@ -3260,6 +3629,7 @@ nlohmann::json childElementMapToJson(const NamedShapeChildMap& childMap)
         {"has_source_element_map", childMap.hasSourceElementMap},
         {"source_element_map_size", childMap.sourceElementMapSize},
         {"source_child_map_count", childMap.sourceChildMapCount},
+        {"recursive_expansion", childMap.recursiveExpansion},
     };
 }
 
@@ -3509,6 +3879,11 @@ std::vector<std::string> elementHistoryStatusForNamedShape(const NamedShape& nam
 
 }  // namespace
 
+std::optional<long> requestLocalProducerTagForShape(const TopoDS_Shape& shape)
+{
+    return requestLocalProducerTagForShapeImpl(shape);
+}
+
 NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Shape& shape)
 {
     NamedShape namedShape;
@@ -3743,6 +4118,7 @@ NamedShape namedShapeForMakerHistory(
     );
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
+    appendPartCanonicalCollisionHistory(namedShape, sources);
 
     return namedShape;
 }
@@ -4183,6 +4559,7 @@ NamedShape namedShapeForPreservedSources(
     );
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
+    appendPartCanonicalCollisionHistory(namedShape, sources);
 
     return namedShape;
 }
@@ -5345,27 +5722,6 @@ std::optional<std::string> resolveElementName(
     return std::nullopt;
 }
 
-bool isDeletedImportStableSubname(const NamedShape& namedShape, const std::string& stableSubname)
-{
-    if (std::find(namedShape.elementHistoryStatus.begin(),
-                  namedShape.elementHistoryStatus.end(),
-                  "import_shape_element_map")
-        == namedShape.elementHistoryStatus.end()) {
-        return false;
-    }
-
-    for (const MapperHistoryEvent& event : namedShape.mapperHistory) {
-        if (event.makerStage != "import_shape_element_map" || event.source.object.empty()) {
-            continue;
-        }
-        const std::string ownerPrefix = event.source.object + ".";
-        if (stableSubname.rfind(ownerPrefix, 0) == 0) {
-            return true;
-        }
-    }
-    return false;
-}
-
 ElementResolveResult resolveElementReference(
     const NamedShape& namedShape,
     const std::string& subname,
@@ -5403,14 +5759,6 @@ ElementResolveResult resolveElementReference(
             if (entry.kind == ElementHistoryKind::Deleted && entry.element == stableSubname) {
                 return ElementResolveResult {ElementResolveStatus::Deleted, std::nullopt};
             }
-        }
-        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeaturePartImportStep.cpp
-        // ::ImportStep::execute(), calls "TopoShape aShape; aShape.importStep(...)" and then stores
-        // the imported shape as the feature Shape. cad-core records that request-local owner map as
-        // "import_shape_element_map"; when a stable key under the same import owner disappears after
-        // a file change, the reference is deleted rather than an ambiguous current alias.
-        if (isDeletedImportStableSubname(namedShape, stableSubname)) {
-            return ElementResolveResult {ElementResolveStatus::Deleted, std::nullopt};
         }
         bool split = false;
         for (const ElementHistory& entry : namedShape.history) {

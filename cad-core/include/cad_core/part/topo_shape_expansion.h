@@ -18,12 +18,6 @@
 namespace cad_core::part
 {
 
-struct ImportElementMapSource
-{
-    std::string format;
-    std::string fileName;
-};
-
 struct RuledSurfaceEdgeEvidence
 {
     TopoDS_Edge edge;
@@ -353,16 +347,15 @@ FilledFaceBuild makeElementFilledFaceFromSources(
     const std::vector<FilledFaceOrderSource>& orderSources = {}
 );
 
-// FreeCAD:
-// /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp::TopoShape::read(),
-// dispatches to "importStep", "importIges" and "importBrep"; ImportStep::execute() then stores
-// the resulting TopoShape in PropertyPartShape "Shape". cad-core keeps the same request-local
-// imported TopoDS_Shape and records object-qualified element aliases so LinkSub references can
-// survive a recompute without persisting BREP.
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FeaturePartImportBrep.cpp
+// ::ImportBrep::execute() and FeaturePartImportStep.cpp::ImportStep::execute() call
+// "aShape.importBrep(...)" / "aShape.importStep(...)" followed directly by
+// "this->Shape.setValue(aShape)". Neither path calls TopoShape::mapSubElement(),
+// makeShapeWithElementMap(), or a MapperHistory producer, so an imported shape exposes only its
+// current FaceN/EdgeN/VertexN indexes until real producer-side mapping evidence exists.
 NamedShape namedShapeForImportedShape(
     const std::string& owner,
-    const TopoDS_Shape& shape,
-    const ImportElementMapSource& source
+    const TopoDS_Shape& shape
 );
 
 }  // namespace cad_core::part

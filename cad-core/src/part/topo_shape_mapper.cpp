@@ -63,19 +63,84 @@ nlohmann::json endpointToJson(const MapperHistoryEndpoint& endpoint)
 
 bool sameMapperHistoryEvent(const MapperHistoryEvent& left, const MapperHistoryEvent& right)
 {
+    const auto sameCollision = [&] {
+        if (left.canonicalCollision.has_value() != right.canonicalCollision.has_value()) {
+            return false;
+        }
+        if (!left.canonicalCollision) {
+            return true;
+        }
+        const MapperHistoryCanonicalCollision& leftCollision = *left.canonicalCollision;
+        const MapperHistoryCanonicalCollision& rightCollision = *right.canonicalCollision;
+        if (leftCollision.context != rightCollision.context
+            || leftCollision.rawMappedName != rightCollision.rawMappedName
+            || leftCollision.canonicalMappedName != rightCollision.canonicalMappedName
+            || leftCollision.candidates.size() != rightCollision.candidates.size()) {
+            return false;
+        }
+        for (std::size_t index = 0; index < leftCollision.candidates.size(); ++index) {
+            const MapperHistoryCollisionCandidate& leftCandidate = leftCollision.candidates.at(index);
+            const MapperHistoryCollisionCandidate& rightCandidate = rightCollision.candidates.at(index);
+            if (leftCandidate.source.object != rightCandidate.source.object
+                || leftCandidate.source.subname != rightCandidate.source.subname
+                || leftCandidate.target.object != rightCandidate.target.object
+                || leftCandidate.target.subname != rightCandidate.target.subname
+                || leftCandidate.shapeKind != rightCandidate.shapeKind
+                || leftCandidate.rawMappedName != rightCandidate.rawMappedName
+                || leftCandidate.canonicalMappedName != rightCandidate.canonicalMappedName
+                || leftCandidate.recoverability != rightCandidate.recoverability) {
+                return false;
+            }
+        }
+        return true;
+    };
     return left.id == right.id
         && left.source.object == right.source.object && left.source.subname == right.source.subname
         && left.target.object == right.target.object && left.target.subname == right.target.subname
         && left.shapeKind == right.shapeKind && left.relation == right.relation
         && left.makerStage == right.makerStage && left.recoverability == right.recoverability
         && left.diagnosticStatus == right.diagnosticStatus
-        && left.evidence.dump() == right.evidence.dump();
+        && left.evidence.dump() == right.evidence.dump() && sameCollision();
 }
 
 }  // namespace
 
 nlohmann::json mapperHistoryEventToJson(const MapperHistoryEvent& event)
 {
+    if (event.canonicalCollision) {
+        const MapperHistoryCanonicalCollision& collision = *event.canonicalCollision;
+        nlohmann::json candidates = nlohmann::json::array();
+        for (const MapperHistoryCollisionCandidate& candidate : collision.candidates) {
+            candidates.push_back({
+                {"target", endpointToJson(candidate.target)},
+                {"shapeKind", candidate.shapeKind},
+                {"source", endpointToJson(candidate.source)},
+                {"mappedName",
+                 {
+                     {"raw", candidate.rawMappedName},
+                     {"canonical", candidate.canonicalMappedName},
+                 }},
+                {"recoverability", mapperHistoryRecoverabilityName(candidate.recoverability)},
+            });
+        }
+        return {
+            {"id", event.id},
+            {"relation", "ambiguous"},
+            {"recoverability", "ambiguous"},
+            // This describes the CAD Core Part ledger that detected the collision.  It is not a
+            // fabricated FreeCAD collector provenance and carries no geometry identity itself.
+            {"source", "part_element_map"},
+            {"mappedName",
+             {
+                 {"raw", collision.rawMappedName},
+                 {"canonical", collision.canonicalMappedName},
+             }},
+            {"candidates", std::move(candidates)},
+            {"message",
+             "Canonical elementMap key " + collision.canonicalMappedName
+                 + " maps to multiple current targets; Part keeps it out of ElementMap"},
+        };
+    }
     nlohmann::json result = {
         {"source", endpointToJson(event.source)},
         {"target", endpointToJson(event.target)},

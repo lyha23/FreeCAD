@@ -209,6 +209,15 @@ void publishPartShape(
 {
     const TopoDS_Shape shape = applyGlobalPlacement(object, context, localShape);
     context.shapes[object.name] = runtime::ShapeValue {shapeKindForPartShape(shape), shape};
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapePyImp.cpp
+    // ::TopoShapePy::optimalBoundingBox() reads the imported TopoShape before display meshing.
+    // meshForShape() may create or replace OCCT triangulation, so select the public bbox before
+    // generating the request-local mesh. GeometryOnly callers are unchanged because AddOptimal
+    // with useTriangulation=false ignores that display artifact.
+    const nlohmann::json bbox = publicResultFields.boundingBoxMode
+            == PartBoundingBoxMode::UseTriangulation
+        ? cad_core::part::bboxForShape(shape)
+        : cad_core::part::objectBBoxForShape(shape);
     context.mesh[object.name] = cad_core::part::meshForShape(shape);
     const nlohmann::json subshapes = part::subshapeMapForShape(shape);
     context.subshapes[object.name] = subshapes;
@@ -221,7 +230,6 @@ void publishPartShape(
         context.namedShapes[object.name] = part::indexedNamedShapeForObject(object.name, shape);
     }
 
-    const nlohmann::json bbox = cad_core::part::objectBBoxForShape(shape);
     const double volume = cad_core::part::volumeForShape(shape);
     nlohmann::json result = metadata;
     result["status"] = "ok";

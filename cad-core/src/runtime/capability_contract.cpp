@@ -3119,11 +3119,6 @@ nlohmann::json capabilityContractJson()
                // Modified history from profile Edge/Vertex sources to protoHole faces.
                "hole_find_holes_profile_source_history",
                // FreeCAD:
-               // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShape.cpp
-               // ::TopoShape::read(), dispatches importStep/importIges/importBrep and stores the
-               // recomputed TopoShape; cad-core exposes request-local import ElementMap aliases.
-               "import_shape_element_map",
-               // FreeCAD:
                // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
                // ::MapperThruSections maps "GeneratedFace(s)", "FirstShape()" and "LastShape()"
                // for BRepOffsetAPI_ThruSections results created by Part::Loft.
@@ -3199,8 +3194,8 @@ nlohmann::json capabilityContractJson()
                     {"covered", {"deleted_small_edge", "root_modified", "generated_empty_review"}},
                     {"remaining", nlohmann::json::array()}}},
                   {"import_shape",
-                   {{"status", "done_first_slice"},
-                    {"covered", {"step", "brep", "iges", "owner_qualified_alias"}},
+                   {{"status", "native_indexed_only"},
+                    {"covered", {"step", "brep", "iges", "indexed_current_subshapes"}},
                     {"remaining", nlohmann::json::array()}}},
                   {"link_retag",
                    {{"status", "covered"},
@@ -3324,7 +3319,6 @@ nlohmann::json capabilityContractJson()
                // "shape.makeShapeWithElementMap(comp, MapperHistory(aHistory),
                // {sourceEdges.begin(), sourceEdges.end()}, op)".
                "wire_joiner_history:element_map",
-               "import_shape_element_map",
                "shapefix_root_history_modified",
                // FreeCAD:
                // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp

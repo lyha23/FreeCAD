@@ -87,6 +87,11 @@ struct NamedShapeChildMap
     bool hasSourceElementMap = false;
     std::size_t sourceElementMapSize = 0;
     std::size_t sourceChildMapCount = 0;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::addChildElements() may expand a grandchild range internally so lookup can
+    // consume the nested ledger.  That expansion is request-local resolver evidence; only the
+    // direct FeatureCompound Links child belongs in the public childElementMaps projection.
+    bool recursiveExpansion = false;
 };
 
 enum class MappedNameProvenanceStatus
@@ -96,6 +101,17 @@ enum class MappedNameProvenanceStatus
     MissingTag,
     MissingOperation,
     Blocked,
+};
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+// ::SketchObject::buildShape() records g<ID>;SKT producer evidence for a later Part maker,
+// while the direct Sketch Shape and InternalShape have distinct public roles.  This scope is
+// assigned by the Part producer, so runtime can project the ledger without inferring policy
+// from an owner name or a mapped-name string.
+enum class MappedNamePublicationScope
+{
+    Public,
+    ProducerOnly,
 };
 
 struct MappedNameProvenance
@@ -122,6 +138,7 @@ struct MappedNameProvenance
     std::string rawMappedName;
     std::string canonicalMappedName;
     MappedNameProvenanceStatus status = MappedNameProvenanceStatus::IndexedOnly;
+    MappedNamePublicationScope publicationScope = MappedNamePublicationScope::Public;
 };
 
 struct NamedShape
@@ -201,6 +218,11 @@ struct ElementResolveResult
 // returns "Face", "Edge", "Vertex", while PropertyPartShape stores TopoShape as the shape property
 // and tracks ElementMap versioning for later GeoFeature link updates.
 NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Shape& shape);
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShape.h::TopoShape(long Tag, ...)
+// stores the request-local `Tag`; TopoShapeExpansion.cpp::TopoShape::mapSubElement() passes
+// `Tag` and `other.Tag` to ElementMap::encodeElementName(). cad-core derives an equivalent
+// request-local tag from the actual producer shape, never from an object display name.
+std::optional<long> requestLocalProducerTagForShape(const TopoDS_Shape& shape);
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getInternalElementMap(),
 // iterates InternalShape vertices/edges and records Internal* <-> raw Edge/Vertex aliases after

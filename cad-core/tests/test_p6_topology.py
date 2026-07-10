@@ -529,8 +529,13 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(result["elementReferenceUpdates"], [])
         self.assertEqual(result["documentObjectUpdates"], [])
         named_shape = result["named_shapes"]["ImportedStep"]
-        self.assertIn("import_shape_element_map", named_shape["element_history_status"])
-        self.assertEqual(named_shape["element_map"]["ImportedStep.Face1"], "Face1")
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertTrue(all(key == value for key, value in named_shape["element_map"].items()))
+        self.assertFalse(any(key.startswith("ImportedStep.") for key in named_shape["element_map"]))
+        self.assertEqual(named_shape["mapped_name_provenance"], {})
+        self.assertTrue(
+            all(event["maker_stage"] == "indexed" for event in named_shape["mapper_history"])
+        )
 
     def test_c4m4_topo_reference_pressure_needs_reselect_and_diagnostic_rows_are_locatable(self) -> None:
         self.assert_c4m4_diagnostic(
@@ -771,12 +776,28 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             "element_map_child_map:recursive_source_ranges",
             compound_nested["element_history_status"],
         )
-        self.assertEqual(compound_nested["element_map"]["SketchA.Edge1"], "Edge1")
-        self.assertEqual(compound_nested["element_map"]["SketchB.Edge1"], "Edge3")
-        self.assertEqual(compound_nested["element_map"]["SketchC.Edge1"], "Edge5")
+        # SketchObject publishes source-backed g<ID>;SKT identity.  Two children can both own
+        # g1, so the Part ledger scopes the internal key by its child owner rather than creating
+        # the old synthetic SketchA.Edge1/SketchB.Edge1 aliases.
+        for key, current, canonical in (
+            ("CompoundAB.SketchA.g1", "Edge1", "g1;SKT;:H*,E;:H*,E"),
+            ("CompoundAB.SketchB.g1", "Edge3", "g1;SKT;:H*,E;:H*,E"),
+            ("SketchC.g1", "Edge5", "g1;SKT;:H*,E"),
+        ):
+            with self.subTest(key=key):
+                self.assertEqual(compound_nested["element_map"][key], current)
+                self.assertEqual(
+                    compound_nested["mapped_name_provenance"][key]["canonical_mapped_name"],
+                    canonical,
+                )
 
+        # Only CompoundNested's direct ChildN ranges are normal child maps.  SketchA/B ranges
+        # are resolver-only recursive expansion and must retain that marker through the Part
+        # ledger instead of being emitted as a second public child path.
         edge_child_maps = [
-            item for item in compound_nested["child_element_maps"] if item["kind"] == "edge"
+            item
+            for item in compound_nested["child_element_maps"]
+            if item["kind"] == "edge" and item["indexed_name"].startswith("Child")
         ]
         self.assertEqual(
             [
@@ -787,19 +808,22 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     item["target_start"],
                     item["target_end"],
                     item["source_child_map_count"],
+                    item["recursive_expansion"],
                 )
                 for item in edge_child_maps
             ],
             [
-                ("CompoundAB", 0, 4, "Edge1", "Edge4", 4),
-                ("SketchA", 0, 2, "Edge1", "Edge2", 0),
-                ("SketchB", 2, 2, "Edge3", "Edge4", 0),
-                ("SketchC", 4, 1, "Edge5", "Edge5", 0),
+                ("SketchA", 0, 2, "Edge1", "Edge2", 0, True),
+                ("SketchB", 2, 2, "Edge3", "Edge4", 0, True),
+                ("CompoundAB", 0, 4, "Edge1", "Edge4", 8, False),
+                ("SketchC", 4, 1, "Edge5", "Edge5", 0, False),
             ],
         )
 
         vertex_child_maps = [
-            item for item in compound_nested["child_element_maps"] if item["kind"] == "vertex"
+            item
+            for item in compound_nested["child_element_maps"]
+            if item["kind"] == "vertex" and item["indexed_name"].startswith("Child")
         ]
         self.assertEqual(
             [
@@ -810,14 +834,15 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                     item["target_start"],
                     item["target_end"],
                     item["source_child_map_count"],
+                    item["recursive_expansion"],
                 )
                 for item in vertex_child_maps
             ],
             [
-                ("CompoundAB", 0, 6, "Vertex1", "Vertex6", 4),
-                ("SketchA", 0, 3, "Vertex1", "Vertex3", 0),
-                ("SketchB", 3, 3, "Vertex4", "Vertex6", 0),
-                ("SketchC", 6, 2, "Vertex7", "Vertex8", 0),
+                ("SketchA", 0, 3, "Vertex1", "Vertex3", 0, True),
+                ("SketchB", 3, 3, "Vertex4", "Vertex6", 0, True),
+                ("CompoundAB", 0, 6, "Vertex1", "Vertex6", 8, False),
+                ("SketchC", 6, 2, "Vertex7", "Vertex8", 0, False),
             ],
         )
 
@@ -932,45 +957,47 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         encoded_keys = [item["encoded_child_map_key"] for item in compound_nested_edge_maps]
         self.assertEqual(len(encoded_keys), len(set(encoded_keys)))
 
-    def test_c3m1_import_step_records_face_stable_element_map(self) -> None:
+    def test_c3m1_import_step_keeps_imported_faces_current_only_without_mapper_evidence(self) -> None:
         result = self.run_recompute("part-import-step-face-stable", "c3m1")
         named_shape = result["named_shapes"]["ImportedStep"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertIn("import_shape_element_map", named_shape["element_history_status"])
-        self.assertEqual(named_shape["element_map"]["ImportedStep.Face1"], "Face1")
-        self.assertIn("ImportedStep.Face1", named_shape["elements"]["Face1"]["sources"])
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertTrue(all(key == value for key, value in named_shape["element_map"].items()))
+        self.assertFalse(any(key.startswith("ImportedStep.") for key in named_shape["element_map"]))
+        self.assertEqual(named_shape["mapped_name_provenance"], {})
+        self.assertTrue(
+            all(event["maker_stage"] == "indexed" for event in named_shape["mapper_history"])
+        )
+        self.assertNotIn("import_shape_element_map", named_shape["element_history_status"])
+        self.assertFalse(
+            any(
+                source.startswith("ImportedStep.")
+                for element in named_shape["elements"].values()
+                for source in element["sources"]
+            )
+        )
 
-        import_events = [
-            event
-            for event in named_shape["mapper_history"]
-            if event["maker_stage"] == "import_shape_element_map"
-            and event["target"] == {"object": "ImportedStep", "subname": "Face1"}
-        ]
-        self.assertGreater(len(import_events), 0)
-        self.assertTrue(all(event["relation"] == "preserved" for event in import_events))
-        self.assertTrue(all(event["recoverability"] == "resolved" for event in import_events))
-        self.assertTrue(all(event["evidence"]["format"] == "step" for event in import_events))
-
-    def test_c3m1_import_brep_records_edge_stable_element_map(self) -> None:
+    def test_c3m1_import_brep_keeps_imported_edges_current_only_without_mapper_evidence(self) -> None:
         result = self.run_recompute("part-import-brep-edge-stable", "c3m1")
         named_shape = result["named_shapes"]["ImportedCylinder"]
 
         self.assertEqual(result["diagnostics"], [])
-        self.assertIn("import_shape_element_map", named_shape["element_history_status"])
-        self.assertEqual(named_shape["element_map"]["ImportedCylinder.Edge1"], "Edge1")
-        self.assertIn("ImportedCylinder.Edge1", named_shape["elements"]["Edge1"]["sources"])
-
-        import_events = [
-            event
-            for event in named_shape["mapper_history"]
-            if event["maker_stage"] == "import_shape_element_map"
-            and event["target"] == {"object": "ImportedCylinder", "subname": "Edge1"}
-        ]
-        self.assertGreater(len(import_events), 0)
-        self.assertTrue(all(event["relation"] == "preserved" for event in import_events))
-        self.assertTrue(all(event["recoverability"] == "resolved" for event in import_events))
-        self.assertTrue(all(event["evidence"]["format"] == "brep" for event in import_events))
+        self.assertEqual(named_shape["element_map_status"], "indexed_only")
+        self.assertTrue(all(key == value for key, value in named_shape["element_map"].items()))
+        self.assertFalse(any(key.startswith("ImportedCylinder.") for key in named_shape["element_map"]))
+        self.assertEqual(named_shape["mapped_name_provenance"], {})
+        self.assertTrue(
+            all(event["maker_stage"] == "indexed" for event in named_shape["mapper_history"])
+        )
+        self.assertNotIn("import_shape_element_map", named_shape["element_history_status"])
+        self.assertFalse(
+            any(
+                source.startswith("ImportedCylinder.")
+                for element in named_shape["elements"].values()
+                for source in element["sources"]
+            )
+        )
 
     def test_p6_named_shape_exports_indexed_element_ledger(self) -> None:
         result = self.run_recompute("named-shape-indexed-pad", "p6")

@@ -26,10 +26,20 @@ struct PartLinkedShape
 // ::Loft::execute() / ::Sweep::execute() own the properties exposed with their result Shape;
 // AppPartPy.cpp::makeFilledFace() owns the returned helper shape summary. This narrow interface
 // lets each Part producer select only its native public fields instead of exporting all metadata.
+enum class PartBoundingBoxMode {
+    GeometryOnly,
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapePyImp.cpp
+    // ::TopoShapePy::optimalBoundingBox(), whose default arguments call
+    // "BRepBndLib::AddOptimal(shape, bounds, true, false)". A Part producer opts into this only
+    // when its native import path preserves triangulation as public shape-summary evidence.
+    UseTriangulation,
+};
+
 struct PartPublicResultFields
 {
     std::optional<nlohmann::json> objectFields;
     bool includeShapeSummary = false;
+    PartBoundingBoxMode boundingBoxMode = PartBoundingBoxMode::GeometryOnly;
 };
 
 double readNumberProperty(const app::DocumentObject& object, const std::string& property, double fallback);

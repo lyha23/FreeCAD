@@ -1,13 +1,17 @@
 #include "cad_core/sketcher/sketch_edge_identity.h"
 
+#include "cad_core/topo/freecad_mapped_name_codec.h"
+
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopExp.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
 #include <TopoDS.hxx>
+#include <TopoDS_Vertex.hxx>
 
 #include <algorithm>
 #include <cctype>
 #include <map>
+#include <sstream>
 #include <set>
 #include <utility>
 
@@ -39,6 +43,80 @@ std::string stableSubnameForIdentity(const RawSketchEdgeIdentity& identity)
         return stableSubnameForGeometryId(*identity.source.geometryId);
     }
     return {};
+}
+
+std::optional<int> indexedOrdinal(const std::string& indexed, const std::string& prefix)
+{
+    if (indexed.rfind(prefix, 0U) != 0U || indexed.size() == prefix.size()) {
+        return std::nullopt;
+    }
+    int value = 0;
+    for (std::size_t index = prefix.size(); index < indexed.size(); ++index) {
+        const unsigned char ch = static_cast<unsigned char>(indexed.at(index));
+        if (std::isdigit(ch) == 0) {
+            return std::nullopt;
+        }
+        value = value * 10 + static_cast<int>(ch - static_cast<unsigned char>('0'));
+    }
+    return value > 0 ? std::optional<int> {value} : std::nullopt;
+}
+
+std::string sketchMappedElementType(const std::string& indexed)
+{
+    if (indexed.rfind("Edge", 0U) == 0U) {
+        return "Edge";
+    }
+    if (indexed.rfind("Vertex", 0U) == 0U) {
+        return "Vertex";
+    }
+    return {};
+}
+
+std::string rawSketchMappedName(const std::string& token,
+                                long ownerTag,
+                                const std::string& elementType)
+{
+    if (token.empty() || elementType.empty()) {
+        return {};
+    }
+    std::ostringstream raw;
+    raw << token << ";SKT;:H" << std::hex << ownerTag << ',' << elementType.front();
+    return raw.str();
+}
+
+void recordSketchMappedName(part::NamedShape& namedShape,
+                            const std::string& token,
+                            const std::string& indexed,
+                            long ownerTag)
+{
+    const std::string elementType = sketchMappedElementType(indexed);
+    if (token.empty() || elementType.empty() || namedShape.elements.count(indexed) == 0U) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::SketchObject::buildShape() calls getEdge(..., convertSubName(...)) and then
+    // makeElementWires(shapes, Part::OpCodes::Sketch); ::convertSubName() emits g<ID> and
+    // g<ID>v<point>.  Record that producer-side SKT name before a Part compound consumes it.
+    part::MappedNameProvenance provenance;
+    provenance.entryKey = token;
+    provenance.currentElement = indexed;
+    provenance.sourceElement = token;
+    provenance.elementType = elementType;
+    provenance.producerTag = ownerTag;
+    provenance.masterTag = ownerTag;
+    provenance.sourceTag = ownerTag;
+    provenance.operationPostfix = ";SKT";
+    provenance.rawMappedName = rawSketchMappedName(token, ownerTag, elementType);
+    provenance.canonicalMappedName = topo::canonicalizeFreeCadMappedName(provenance.rawMappedName);
+    provenance.status = part::MappedNameProvenanceStatus::SourceBacked;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::SketchObject::buildShape() hands this raw g<ID>;SKT ledger to Part makers.  It is not
+    // itself a direct-Sketch response identity; record that boundary at the producer so a
+    // downstream Part map can explicitly promote the consumed evidence.
+    provenance.publicationScope = part::MappedNamePublicationScope::ProducerOnly;
+    namedShape.elementMap[token] = indexed;
+    namedShape.mappedNameProvenance[token] = std::move(provenance);
 }
 
 std::string identityStatusForEntry(const RawSketchEdgeIdentity& identity)
@@ -351,15 +429,47 @@ part::NamedShape namedShapeForSketchRawEdgeIdentity(
     const RawSketchEdgeIdentityLedger& ledger)
 {
     part::NamedShape namedShape = part::indexedNamedShapeForObject(owner, rawShape);
+    const std::optional<long> producerTag = part::requestLocalProducerTagForShape(rawShape);
+    if (!producerTag) {
+        return namedShape;
+    }
+    TopTools_IndexedMapOfShape rawEdges;
+    TopTools_IndexedMapOfShape rawVertices;
+    TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
+    TopExp::MapShapes(rawShape, TopAbs_VERTEX, rawVertices);
+    std::set<int> mappedVertices;
+
     for (const RawSketchEdgeIdentity& identity : ledger.edges) {
         if (!identity.source.geometryId || namedShape.elements.count(identity.indexed) == 0U) {
             continue;
         }
-        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-        // ::SketchObject::convertSubName(), for normal geometry writes
-        // "'g' << GeometryFacade::getFacade(geo)->getId()" instead of preserving EdgeN.
-        namedShape.elementMap[stableSubnameForGeometryId(*identity.source.geometryId)] =
-            identity.indexed;
+        const std::string geometryToken = stableSubnameForGeometryId(*identity.source.geometryId);
+        recordSketchMappedName(namedShape, geometryToken, identity.indexed, *producerTag);
+
+        const auto edgeIndex = indexedOrdinal(identity.indexed, "Edge");
+        if (!edgeIndex || *edgeIndex > rawEdges.Extent()) {
+            continue;
+        }
+        TopoDS_Vertex first;
+        TopoDS_Vertex last;
+        TopExp::Vertices(TopoDS::Edge(rawEdges(*edgeIndex)), first, last);
+        const auto recordEndpoint = [&](const TopoDS_Vertex& vertex, int endpoint) {
+            if (vertex.IsNull()) {
+                return;
+            }
+            const int vertexIndex = rawVertices.FindIndex(vertex);
+            if (vertexIndex <= 0 || !mappedVertices.insert(vertexIndex).second) {
+                return;
+            }
+            recordSketchMappedName(
+                namedShape,
+                geometryToken + "v" + std::to_string(endpoint),
+                "Vertex" + std::to_string(vertexIndex),
+                *producerTag
+            );
+        };
+        recordEndpoint(first, 1);
+        recordEndpoint(last, 2);
     }
     return namedShape;
 }

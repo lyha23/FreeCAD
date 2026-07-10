@@ -113,11 +113,12 @@ void executePartImportBrep(const app::DocumentObject& object, runtime::ComputeCo
             context,
             shape,
             {{"primitive", "import_brep"}, {"file_name", importFile->name}},
-            part::namedShapeForImportedShape(
-                object.name,
-                shape,
-                part::ImportElementMapSource {"brep", importFile->name}
-            )
+            part::namedShapeForImportedShape(object.name, shape),
+            part_feature_detail::PartPublicResultFields {
+                std::nullopt,
+                false,
+                part_feature_detail::PartBoundingBoxMode::UseTriangulation,
+            }
         );
     }
     catch (const Standard_Failure& failure) {
@@ -190,11 +191,7 @@ void executePartImportStep(const app::DocumentObject& object, runtime::ComputeCo
             context,
             shape,
             {{"primitive", "import_step"}, {"file_name", importFile->name}},
-            part::namedShapeForImportedShape(
-                object.name,
-                shape,
-                part::ImportElementMapSource {"step", importFile->name}
-            )
+            part::namedShapeForImportedShape(object.name, shape)
         );
     }
     catch (const Standard_Failure& failure) {
@@ -271,11 +268,7 @@ void executePartImportIges(const app::DocumentObject& object, runtime::ComputeCo
             context,
             shape,
             {{"primitive", "import_iges"}, {"file_name", importFile->name}},
-            part::namedShapeForImportedShape(
-                object.name,
-                shape,
-                part::ImportElementMapSource {"iges", importFile->name}
-            )
+            part::namedShapeForImportedShape(object.name, shape)
         );
     }
     catch (const Standard_Failure& failure) {

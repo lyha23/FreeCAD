@@ -812,6 +812,26 @@ bool hasFreeCadEncodedElementToken(const std::string& rawMappedName)
     return data.find('#') != std::string::npos;
 }
 
+bool isProducerOnlyMappedElement(const std::string& indexed,
+                                 const part::NamedShape* namedShape)
+{
+    if (namedShape == nullptr) {
+        return false;
+    }
+    for (const auto& [stableName, currentName] : namedShape->elementMap) {
+        if (currentName != indexed) {
+            continue;
+        }
+        const auto provenanceIt = namedShape->mappedNameProvenance.find(stableName);
+        if (provenanceIt != namedShape->mappedNameProvenance.end()
+            && provenanceIt->second.publicationScope
+                == part::MappedNamePublicationScope::ProducerOnly) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::string prefixedMappedName(const std::string& prefix,
                                const std::string& mappedName)
 {
@@ -831,9 +851,17 @@ std::optional<ResponseMappedNamePublication> publicationFromProvenance(
         && postfix != std::string::npos
         && provenance.rawMappedName.substr(0, postfix) == provenance.sourceElement
         && provenance.operationPostfix.rfind(";:M;", 0U) == 0U;
+    const bool sketchProducerMappedName = provenance.rawMappedName.find(";SKT;") != std::string::npos;
     if (!hasSourceBackedMappedName(provenance)
+        || provenance.publicationScope
+            == part::MappedNamePublicationScope::ProducerOnly
         || (!hasFreeCadEncodedElementToken(provenance.rawMappedName)
-            && !producerLocalMappedName)) {
+            && !producerLocalMappedName
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+            // ::SketchObject::buildShape() calls makeElementWires(..., Part::OpCodes::Sketch)
+            // after convertSubName() produces g<ID>/g<ID>v<point>.  This admits the already
+            // source-backed g...;SKT; producer record; it never synthesizes a response token.
+            && !sketchProducerMappedName)) {
         return std::nullopt;
     }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
@@ -1369,6 +1397,11 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             // while the public Sketch Shape keeps its own EdgeN/VertexN namespace.
             stableSource = &*shapeValue->internalNamedShape;
         }
+        if (!internalIndexed && isProducerOnlyMappedElement(indexed, namedShape)) {
+            // The producer-owned scope distinguishes raw Sketch ledger evidence from a public
+            // shape identity.  No runtime string or object-type heuristic is involved.
+            stableSource = nullptr;
+        }
         std::string stableSubname = stableSubnameFor(indexed, stableSource);
         if (indexed.rfind("InternalEdge", 0) == 0) {
             stableSubname = normalizedInternalEdgeStableSubname(objectName, indexed, stableSubname, context);
@@ -1410,8 +1443,10 @@ nlohmann::json responseSubshapes(const std::string& objectName,
             stableSubname.clear();
         }
         stableSubname = bodyDisplayCompoundQualifiedStableSubname(indexed, stableSubname, displayContext);
-        const auto mappedNamePublication =
-            mappedNamePublicationFor(indexed, tipContext, namedShape);
+        // The Part producer declares whether a source-backed mapped name is direct-response
+        // evidence or only a request-local producer ledger.  This is a projection of that
+        // scope, not a runtime decision based on a Sketch object name or `;SKT;` bytes.
+        const auto mappedNamePublication = mappedNamePublicationFor(indexed, tipContext, namedShape);
         if (mappedNamePublication) {
             stableSubname = mappedNamePublication->canonicalMappedName;
         }

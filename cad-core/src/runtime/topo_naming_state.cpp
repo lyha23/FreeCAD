@@ -10,9 +10,11 @@
 #include <algorithm>
 #include <cctype>
 #include <exception>
+#include <iterator>
 #include <map>
 #include <optional>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -761,6 +763,10 @@ std::string recoverabilityForStableName(const nlohmann::json& mapperHistory,
     return event == nullptr ? "resolved" : event->value("recoverability", "resolved");
 }
 
+void requirePartSketchCollisionLedger(const nlohmann::json& mapperHistory,
+                                      const std::string& canonical,
+                                      const std::vector<nlohmann::json>& candidates);
+
 nlohmann::json elementMapEntriesJson(
     const std::string& objectName,
     const part::NamedShape& namedShape,
@@ -768,7 +774,7 @@ nlohmann::json elementMapEntriesJson(
     const nlohmann::json& mapperHistory
 )
 {
-    nlohmann::json entries = nlohmann::json::object();
+    std::map<std::string, std::vector<nlohmann::json>> candidates;
     for (const auto& [stableName, currentName] : namedShape.elementMap) {
         if (stableName.empty() || currentName.empty()) {
             continue;
@@ -780,6 +786,14 @@ nlohmann::json elementMapEntriesJson(
         const part::MappedNameProvenance* provenance =
             sourceBackedMappedNameProvenance(namedShape, stableName);
         if (provenance == nullptr) {
+            continue;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::buildShape() supplies a producer-only g<ID>;SKT ledger; the Part
+        // consumer promotes it when it writes its own ElementMap.  Runtime reads that explicit
+        // Part scope and does not derive publication policy from the mapped-name bytes.
+        if (provenance->publicationScope
+            != part::MappedNamePublicationScope::Public) {
             continue;
         }
         if (indexedOnlyAlias(objectName, stableName, currentName)
@@ -816,7 +830,7 @@ nlohmann::json elementMapEntriesJson(
             {"mapperHistoryIds", matchingMapperHistoryIds(mapperHistory, source, target)},
             {"childElementMapKey", nullptr},
         };
-        entries[provenance->canonicalMappedName] = {
+        candidates[provenance->canonicalMappedName].push_back({
             {"target", {{"object", objectName}, {"subname", currentName}}},
             {"shapeKind", currentIt->second.shapeKind},
             {"source", {{"object", publicSource.object}, {"subname", publicSource.subname}}},
@@ -827,8 +841,34 @@ nlohmann::json elementMapEntriesJson(
              }},
             {"recoverability", recoverabilityForEntry(mapperHistory, source, target)},
             {"evidence", std::move(evidence)},
-        };
+        });
     }
+
+    nlohmann::json entries = nlohmann::json::object();
+    for (const auto& [canonical, group] : candidates) {
+        std::set<std::string> signatures;
+        for (const nlohmann::json& entry : group) {
+            const nlohmann::json mappedName =
+                entry.value("mappedName", nlohmann::json::object());
+            signatures.insert(nlohmann::json({
+                {"target", entry.value("target", nlohmann::json(nullptr))},
+                {"shapeKind", entry.value("shapeKind", nlohmann::json(nullptr))},
+                {"source", entry.value("source", nlohmann::json(nullptr))},
+                {"mappedNameCanonical", mappedName.value("canonical", canonical)},
+                {"recoverability", entry.value("recoverability", nlohmann::json(nullptr))},
+                {"evidence", entry.value("evidence", nlohmann::json(nullptr))},
+            }).dump());
+        }
+        if (signatures.size() == 1U) {
+            entries[canonical] = group.front();
+        }
+        else {
+            requirePartSketchCollisionLedger(mapperHistory, canonical, group);
+        }
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp::findAll() can expose
+    // multiple current targets for one canonical mapped name.  Do not overwrite one terminal
+    // entry with another: Part has already recorded the corresponding MapperHistory ambiguity.
     return entries;
 }
 
@@ -896,6 +936,25 @@ std::string targetNameForChildLocal(const std::string& localSubname, int offset)
     return localIndexedPrefix(localSubname) + std::to_string(offset + *ordinal);
 }
 
+int shapeKindOrder(const std::string& shapeKind)
+{
+    if (shapeKind == "face") {
+        return 0;
+    }
+    if (shapeKind == "edge") {
+        return 1;
+    }
+    if (shapeKind == "vertex") {
+        return 2;
+    }
+    return 3;
+}
+
+int subshapeOrdinal(const std::string& subname)
+{
+    return localIndexedOrdinal(subname).value_or(0);
+}
+
 std::string sourceLocalNameFromStable(const std::string& stableName)
 {
     const std::size_t dot = stableName.rfind('.');
@@ -930,30 +989,124 @@ std::string shapeKindFromIndexedName(const std::string& indexedName)
     return "shape";
 }
 
-int shapeKindOrder(const std::string& shapeKind)
-{
-    if (shapeKind == "face") {
-        return 0;
-    }
-    if (shapeKind == "edge") {
-        return 1;
-    }
-    if (shapeKind == "vertex") {
-        return 2;
-    }
-    return 3;
-}
-
-int subshapeOrdinal(const std::string& subname)
-{
-    return localIndexedOrdinal(subname).value_or(0);
-}
-
 bool hasMappedName(const part::MappedNameProvenance& provenance)
 {
     return provenance.status == part::MappedNameProvenanceStatus::SourceBacked
         && !provenance.rawMappedName.empty()
         && !provenance.canonicalMappedName.empty();
+}
+
+using ElementMapEntryCandidate = std::pair<std::string, nlohmann::json>;
+using ElementMapEntryCandidates = std::vector<ElementMapEntryCandidate>;
+
+std::string elementMapEntryMergeSignature(const nlohmann::json& entry)
+{
+    const nlohmann::json mappedName = entry.value("mappedName", nlohmann::json::object());
+    return nlohmann::json({
+        {"target", entry.value("target", nlohmann::json(nullptr))},
+        {"shapeKind", entry.value("shapeKind", nlohmann::json(nullptr))},
+        {"source", entry.value("source", nlohmann::json(nullptr))},
+        {"mappedNameCanonical", mappedName.value("canonical", "")},
+        {"recoverability", entry.value("recoverability", nlohmann::json(nullptr))},
+        {"evidence", entry.value("evidence", nlohmann::json(nullptr))},
+    }).dump();
+}
+
+std::string canonicalCollisionLedgerSignature(const nlohmann::json& entry,
+                                              const std::string& canonical)
+{
+    return nlohmann::json({
+        {"target", entry.value("target", nlohmann::json(nullptr))},
+        {"shapeKind", entry.value("shapeKind", nlohmann::json(nullptr))},
+        {"source", entry.value("source", nlohmann::json(nullptr))},
+        {"mappedNameCanonical", canonical},
+        {"recoverability", entry.value("recoverability", nlohmann::json(nullptr))},
+    }).dump();
+}
+
+bool hasPartSketchCollisionLedger(const nlohmann::json& mapperHistory,
+                                  const std::string& canonical,
+                                  const std::vector<nlohmann::json>& candidates)
+{
+    const bool isSketchCollision = std::any_of(
+        candidates.begin(), candidates.end(), [](const nlohmann::json& candidate) {
+            const nlohmann::json mappedName =
+                candidate.value("mappedName", nlohmann::json::object());
+            return mappedName.is_object()
+                && mappedName.value("raw", "").find(";SKT;") != std::string::npos;
+        }
+    );
+    if (!isSketchCollision) {
+        return true;
+    }
+    std::set<std::string> expected;
+    for (const nlohmann::json& candidate : candidates) {
+        expected.insert(canonicalCollisionLedgerSignature(candidate, canonical));
+    }
+    for (const nlohmann::json& event : mapperHistory) {
+        if (!event.is_object() || event.value("relation", "") != "ambiguous"
+            || event.value("source", "") != "part_element_map") {
+            continue;
+        }
+        const nlohmann::json mappedName = event.value("mappedName", nlohmann::json::object());
+        if (!mappedName.is_object() || mappedName.value("canonical", "") != canonical) {
+            continue;
+        }
+        const nlohmann::json eventCandidates = event.value("candidates", nlohmann::json::array());
+        if (!eventCandidates.is_array()) {
+            continue;
+        }
+        std::set<std::string> actual;
+        for (const nlohmann::json& candidate : eventCandidates) {
+            actual.insert(canonicalCollisionLedgerSignature(candidate, canonical));
+        }
+        if (actual == expected) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void requirePartSketchCollisionLedger(const nlohmann::json& mapperHistory,
+                                      const std::string& canonical,
+                                      const std::vector<nlohmann::json>& candidates)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp::findAll()
+    // exposes every collision target. C3M1 requires Part to write that source-backed Sketch
+    // ambiguity into NamedShape::mapperHistory before runtime projects terminal ElementMap data.
+    if (!hasPartSketchCollisionLedger(mapperHistory, canonical, candidates)) {
+        throw std::logic_error(
+            "Part ElementMap collision is missing MapperHistory evidence for " + canonical
+        );
+    }
+}
+
+nlohmann::json canonicalizedElementMapEntries(const ElementMapEntryCandidates& candidates,
+                                              const nlohmann::json& mapperHistory)
+{
+    std::map<std::string, std::vector<nlohmann::json>> grouped;
+    for (const auto& [token, entry] : candidates) {
+        if (token.empty() || !entry.is_object()) {
+            continue;
+        }
+        const nlohmann::json mappedName = entry.value("mappedName", nlohmann::json::object());
+        const std::string canonical = mappedName.value("canonical", token);
+        grouped[canonical].push_back(entry);
+    }
+
+    nlohmann::json entries = nlohmann::json::object();
+    for (auto& [canonical, group] : grouped) {
+        std::set<std::string> signatures;
+        for (const nlohmann::json& entry : group) {
+            signatures.insert(elementMapEntryMergeSignature(entry));
+        }
+        if (signatures.size() > 1U) {
+            requirePartSketchCollisionLedger(mapperHistory, canonical, group);
+            continue;
+        }
+        entries[canonical] = group.front();
+    }
+    return entries;
 }
 
 bool isSketchInternalFaceMappedName(const std::string& stableName,
@@ -1286,7 +1439,7 @@ std::optional<std::pair<std::string, nlohmann::json>> childEntryFromProvenance(
     );
 }
 
-nlohmann::json childElementMapEntriesFromNamedShape(
+ElementMapEntryCandidates childElementMapEntriesFromNamedShape(
     const std::string& ownerObject,
     const std::string& childObject,
     const std::string& childKey,
@@ -1297,7 +1450,7 @@ nlohmann::json childElementMapEntriesFromNamedShape(
     const std::string& evidenceSource
 )
 {
-    nlohmann::json entries = nlohmann::json::object();
+    ElementMapEntryCandidates entries;
     for (const auto& [stableName, currentName] : childShape.elementMap) {
         if (stableName.empty() || currentName.empty()) {
             continue;
@@ -1326,13 +1479,23 @@ nlohmann::json childElementMapEntriesFromNamedShape(
             evidenceSource
         );
         if (entry) {
-            entries[entry->first] = std::move(entry->second);
+            entries.push_back(std::move(*entry));
         }
     }
     return entries;
 }
 
-nlohmann::json childElementMapEntriesFromOwnerProvenance(
+std::string childLocalSubnameForOwnerTarget(const std::string& currentName, int offset)
+{
+    const std::optional<int> ordinal = localIndexedOrdinal(currentName);
+    const std::string prefix = localIndexedPrefix(currentName);
+    if (!ordinal || prefix.empty() || *ordinal <= offset) {
+        return {};
+    }
+    return prefix + std::to_string(*ordinal - offset);
+}
+
+ElementMapEntryCandidates childElementMapEntriesFromOwnerProvenance(
     const std::string& ownerObject,
     const std::string& childObject,
     const std::string& childKey,
@@ -1343,7 +1506,7 @@ nlohmann::json childElementMapEntriesFromOwnerProvenance(
     const std::string& evidenceSource
 )
 {
-    nlohmann::json entries = nlohmann::json::object();
+    ElementMapEntryCandidates entries;
     const std::string childPrefix = childObject + ".";
     for (const auto& [stableName, currentName] : ownerShape.elementMap) {
         if (stableName.rfind(childPrefix, 0) != 0 || currentName.empty()) {
@@ -1367,6 +1530,16 @@ nlohmann::json childElementMapEntriesFromOwnerProvenance(
             provenance.sourceElement = provenance.sourceElement.substr(childPrefix.size());
             provenance = topo::encodedMappedNameProvenance(std::move(provenance));
         }
+        // A Body retains its Tip-qualified stable key (Pad.#...); its child map is also the
+        // public Body ElementMap projection.  A generic compound instead needs the local
+        // EdgeN/VertexN range to recover the child target for an owner-scoped g<ID> key.
+        std::string entryStableName = stableName;
+        if (ownerObject != "Body") {
+            entryStableName = childLocalSubnameForOwnerTarget(currentName, offset);
+            if (entryStableName.empty()) {
+                continue;
+            }
+        }
         auto entry = childEntryFromProvenance(
             ownerObject,
             childObject,
@@ -1374,12 +1547,12 @@ nlohmann::json childElementMapEntriesFromOwnerProvenance(
             pathPrefix,
             childKind,
             offset,
-            stableName,
+            entryStableName,
             provenance,
             evidenceSource
         );
         if (entry) {
-            entries[entry->first] = std::move(entry->second);
+            entries.push_back(std::move(*entry));
         }
     }
     return entries;
@@ -1387,19 +1560,27 @@ nlohmann::json childElementMapEntriesFromOwnerProvenance(
 
 nlohmann::json childElementMapsForTopoState(
     const std::string& objectName,
-    const part::NamedShape& namedShape
+    const part::NamedShape& namedShape,
+    const nlohmann::json& mapperHistory
 )
 {
     struct ProtocolChildMap {
         std::string key;
         std::string childObject;
         std::string pathPrefix;
-        nlohmann::json entries = nlohmann::json::object();
+        ElementMapEntryCandidates candidates;
     };
 
     std::vector<std::string> order;
     std::map<std::string, ProtocolChildMap> grouped;
     for (const part::NamedShapeChildMap& childMap : namedShape.childElementMaps) {
+        if (childMap.recursiveExpansion) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+            // ::ElementMap::addChildElements() resolves expanded grandchild ranges internally.
+            // topoNamingState publishes only direct graph children, never that resolver-only
+            // expansion as an additional ChildN map.
+            continue;
+        }
         if (objectName != "Body" && childMap.indexedName.rfind("Child", 0) != 0) {
             continue;
         }
@@ -1411,7 +1592,7 @@ nlohmann::json childElementMapsForTopoState(
             ? "freecad_partdesign_body_tip"
             : "freecad_part_compound_links";
         const part::NamedShape* childNamedShape = childMap.sourceNamedShape;
-        nlohmann::json entries = nlohmann::json::object();
+        ElementMapEntryCandidates entries;
         if (objectName == "Body") {
             entries = childElementMapEntriesFromOwnerProvenance(
                 objectName,
@@ -1466,33 +1647,38 @@ nlohmann::json childElementMapsForTopoState(
                     childKey,
                     childMap.sourceOwner,
                     childMap.indexedName,
-                    nlohmann::json::object(),
+                    {},
                 };
                 order.push_back(childKey);
             }
-            for (const auto& entryItem : entries.items()) {
-                grouped[childKey].entries[entryItem.key()] = entryItem.value();
-            }
+            grouped[childKey].candidates.insert(
+                grouped[childKey].candidates.end(),
+                std::make_move_iterator(entries.begin()),
+                std::make_move_iterator(entries.end())
+            );
         }
     }
 
     nlohmann::json childMaps = nlohmann::json::array();
     for (const std::string& key : order) {
         ProtocolChildMap& childMap = grouped[key];
-        if (childMap.entries.empty()) {
+        nlohmann::json entries = canonicalizedElementMapEntries(childMap.candidates, mapperHistory);
+        if (entries.empty()) {
             continue;
         }
+        const std::size_t childIndex =
+            childIndexFromPathPrefix(childMap.pathPrefix).value_or(childMaps.size());
         childMaps.push_back({
             {"key", childMap.key},
             {"ownerObject", objectName},
             {"childObject", childMap.childObject},
-            {"childIndex", childMaps.size()},
+            {"childIndex", childIndex},
             {"pathPrefix", childMap.pathPrefix},
             {"elementMap",
              {
                  {"encoding", elementMapVersion},
                  {"status", "history_partial"},
-                 {"entries", std::move(childMap.entries)},
+                 {"entries", std::move(entries)},
              }},
         });
     }
@@ -1500,7 +1686,8 @@ nlohmann::json childElementMapsForTopoState(
 }
 
 void mergeChildEntriesIntoTopLevel(nlohmann::json& entries,
-                                   const nlohmann::json& childElementMaps)
+                                   const nlohmann::json& childElementMaps,
+                                   bool addMissingEntries)
 {
     if (!childElementMaps.is_array()) {
         return;
@@ -1515,7 +1702,15 @@ void mergeChildEntriesIntoTopLevel(nlohmann::json& entries,
             continue;
         }
         for (const auto& entryItem : entriesIt->items()) {
-            entries[entryItem.key()] = entryItem.value();
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+            // ::ElementMap::addChildElements() lets Body publish its Tip child map as its public
+            // owner ledger.  A generic Part Compound is different: its direct child map may
+            // contain a canonical key omitted from the root because sibling children make it
+            // ambiguous.  Only Body may add a missing root entry; other owners may refine an
+            // already-resolved entry but must not manufacture an ambiguous terminal mapping.
+            if (addMissingEntries || entries.contains(entryItem.key())) {
+                entries[entryItem.key()] = entryItem.value();
+            }
         }
     }
 }
@@ -1572,6 +1767,10 @@ void mergeChildEntrySubshapeEvidence(std::map<std::string, ResponseSubshapeInfo>
     }
 }
 
+// This compatibility projection predates C3M1: reference-driven child-path state may carry
+// public mapped-name evidence for primitive children that have no Part ElementMap producer.
+// C3M1 Part-ledger collisions have the same deterministic event id, so the publisher validates
+// and retains that existing Part event instead of rebuilding it from response subshapes.
 std::string collisionEventHash(const std::string& objectName,
                                const std::string& canonical,
                                const std::vector<nlohmann::json>& candidates)
@@ -1594,9 +1793,20 @@ std::string collisionEventHash(const std::string& objectName,
     return part::sha256Hex(seed.dump()).substr(0U, 16U);
 }
 
-void appendCanonicalCollisionEvents(nlohmann::json& mapperHistory,
-                                    const std::string& objectName,
-                                    const std::map<std::string, ResponseSubshapeInfo>& subshapes)
+bool hasMapperHistoryEventId(const nlohmann::json& mapperHistory, const std::string& id)
+{
+    if (!mapperHistory.is_array()) {
+        return false;
+    }
+    return std::any_of(mapperHistory.begin(), mapperHistory.end(), [&](const nlohmann::json& event) {
+        return event.is_object() && event.value("id", "") == id;
+    });
+}
+
+void appendReferenceProjectionCanonicalCollisions(
+    nlohmann::json& mapperHistory,
+    const std::string& objectName,
+    const std::map<std::string, ResponseSubshapeInfo>& subshapes)
 {
     if (!mapperHistory.is_array()) {
         return;
@@ -1614,19 +1824,11 @@ void appendCanonicalCollisionEvents(nlohmann::json& mapperHistory,
         if (canonical.empty()) {
             continue;
         }
-        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
-        // ::ElementMap::findAll() reports collisions at the owner ElementMap level. Public
-        // ambiguity evidence therefore uses the owner object's current subshape as both source
-        // and target instead of leaking the child source object's internal ledger.
         grouped[canonical].push_back({
             {"target", {{"object", objectName}, {"subname", indexed}}},
             {"shapeKind", subshapeInfo.shapeKind},
             {"source", {{"object", objectName}, {"subname", indexed}}},
-            {"mappedName",
-             {
-                 {"raw", rawIt->get<std::string>()},
-                 {"canonical", canonical},
-             }},
+            {"mappedName", {{"raw", rawIt->get<std::string>()}, {"canonical", canonical}}},
             {"recoverability", "resolved"},
         });
     }
@@ -1664,6 +1866,11 @@ void appendCanonicalCollisionEvents(nlohmann::json& mapperHistory,
         if (signatures.size() <= 1U) {
             continue;
         }
+        const std::string id = "canonical-collision-"
+            + collisionEventHash(objectName, canonical, sortedGroup);
+        if (hasMapperHistoryEventId(mapperHistory, id)) {
+            continue;
+        }
         nlohmann::json candidates = nlohmann::json::array();
         for (const nlohmann::json& entry : sortedGroup) {
             candidates.push_back({
@@ -1677,7 +1884,7 @@ void appendCanonicalCollisionEvents(nlohmann::json& mapperHistory,
         const nlohmann::json& mappedName =
             sortedGroup.front().value("mappedName", nlohmann::json::object());
         appendDistinctJson(mapperHistory, {
-            {"id", "canonical-collision-" + collisionEventHash(objectName, canonical, sortedGroup)},
+            {"id", id},
             {"relation", "ambiguous"},
             {"recoverability", "ambiguous"},
             {"source", "freecad_expected_collector"},
@@ -1785,7 +1992,7 @@ void mergeProjectionSubshape(std::map<std::string, ResponseSubshapeInfo>& subsha
     };
 }
 
-void publishReferenceDrivenChildPathProjections(
+bool publishReferenceDrivenChildPathProjections(
     const std::string& objectName,
     const app::Document& document,
     const part::NamedShape& namedShape,
@@ -1794,7 +2001,7 @@ void publishReferenceDrivenChildPathProjections(
     nlohmann::json& entries)
 {
     if (objectName == "Body") {
-        return;
+        return false;
     }
 
     std::set<std::pair<std::string, std::string>> published;
@@ -1846,6 +2053,7 @@ void publishReferenceDrivenChildPathProjections(
             }
         }
     }
+    return !published.empty();
 }
 
 void mergeMapperHistoryEntriesIntoTopLevel(nlohmann::json& entries,
@@ -1918,7 +2126,13 @@ nlohmann::json objectTopoStateJson(
         responseSubshapes == nullptr
             ? std::map<std::string, ResponseSubshapeInfo> {}
             : responseSubshapeInfoByIndexed(*responseSubshapes);
-    if (subshapes.empty() && namedShape != nullptr) {
+    if (subshapes.empty() && namedShape != nullptr
+        && (responseSubshapes != nullptr || !isSketchObject(document, objectName))) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+        // ::SketchObject::buildShape() keeps its g<ID>;SKT ElementMap as producer evidence for
+        // downstream Part makers.  When the Sketch is not a public recompute result, do not
+        // promote that request-local source ledger into topoNamingState; Compound publication
+        // consumes the same evidence through NamedShapeChildMap instead.
         subshapes = namedShapeSubshapeInfoByIndexed(*namedShape);
     }
 
@@ -1934,10 +2148,16 @@ nlohmann::json objectTopoStateJson(
     }
 
     nlohmann::json entries = nlohmann::json::object();
+    bool hasReferenceDrivenChildProjection = false;
     if (namedShape != nullptr) {
-        entries = elementMapEntriesJson(objectName, *namedShape, subshapes, mapperHistory);
-        childElementMaps = childElementMapsForTopoState(objectName, *namedShape);
-        publishReferenceDrivenChildPathProjections(
+        entries = elementMapEntriesJson(
+            objectName,
+            *namedShape,
+            subshapes,
+            mapperHistory
+        );
+        childElementMaps = childElementMapsForTopoState(objectName, *namedShape, mapperHistory);
+        hasReferenceDrivenChildProjection = publishReferenceDrivenChildPathProjections(
             objectName,
             document,
             *namedShape,
@@ -1945,9 +2165,7 @@ nlohmann::json objectTopoStateJson(
             childElementMaps,
             entries
         );
-        if (objectName == "Body") {
-            mergeChildEntriesIntoTopLevel(entries, childElementMaps);
-        }
+        mergeChildEntriesIntoTopLevel(entries, childElementMaps, objectName == "Body");
         mergeChildEntrySubshapeEvidence(subshapes, childElementMaps);
         mergeMapperHistoryEntriesIntoTopLevel(entries, objectName, *namedShape, subshapes, mapperHistory);
     }
@@ -1963,7 +2181,9 @@ nlohmann::json objectTopoStateJson(
         childElementMaps,
         mapperHistory
     );
-    appendCanonicalCollisionEvents(mapperHistory, objectName, subshapes);
+    if (hasReferenceDrivenChildProjection) {
+        appendReferenceProjectionCanonicalCollisions(mapperHistory, objectName, subshapes);
+    }
     if (entries.empty()) {
         elementMapStatus = "indexed_only";
     }

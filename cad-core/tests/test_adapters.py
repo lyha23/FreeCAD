@@ -2822,7 +2822,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("chain_dressup_pattern_history", capabilities["topo_history"]["maker_history"])
         self.assertIn("shapefix_deleted_small_edge", capabilities["topo_history"]["maker_history"])
         self.assertIn("shapefix_root_modified_history", capabilities["topo_history"]["maker_history"])
-        self.assertIn("import_shape_element_map", capabilities["topo_history"]["maker_history"])
         self.assertIn("part_offset", capabilities["topo_history"]["maker_history"])
         self.assertIn("part_design_loft", capabilities["topo_history"]["maker_history"])
         self.assertIn("part_design_pipe", capabilities["topo_history"]["maker_history"])
@@ -2876,8 +2875,8 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
             producer_matrix["part_offset"]["remaining"],
         )
         import_shape = producer_matrix["import_shape"]
-        self.assertEqual(import_shape["status"], "done_first_slice")
-        for covered in ("step", "brep", "iges", "owner_qualified_alias"):
+        self.assertEqual(import_shape["status"], "native_indexed_only")
+        for covered in ("step", "brep", "iges", "indexed_current_subshapes"):
             self.assertIn(covered, import_shape["covered"])
         self.assertEqual(import_shape["remaining"], [])
         serialized_capabilities = json.dumps(capabilities, sort_keys=True)
@@ -3011,7 +3010,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "facemaker_splitter",
                 "facemaker_summary_only",
                 "wire_joiner_history:element_map",
-                "import_shape_element_map",
                 "shapefix_root_history_modified",
                 "element_map_policy_drop",
                 "element_map_child_map:preserve_source_ranges",
@@ -3040,7 +3038,6 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertNotIn("sketch_internalshape_main_path", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn("taper_full_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn("shapefix_history", capabilities["topo_history"]["remaining_gaps"])
-        self.assertNotIn("import_shape_element_map", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn("shapefix_modified_generated_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn("shapefix_generated_history", capabilities["topo_history"]["remaining_gaps"])
         self.assertNotIn("transformed_pattern_full_history", capabilities["topo_history"]["remaining_gaps"])
