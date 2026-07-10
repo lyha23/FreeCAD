@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ctypes
 import json
 import os
 import subprocess
@@ -11,6 +12,18 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .catalog import FixtureCase
+
+
+class CadRsBuffer(ctypes.Structure):
+    """Byte buffer returned by the Rust C ABI's ``CadRsResult``."""
+
+    _fields_ = [("ptr", ctypes.c_void_p), ("len", ctypes.c_size_t)]
+
+
+class CadRsResult(ctypes.Structure):
+    """The narrow recompute-result ABI from ``cad-core-ffi/include/cad_rs.h``."""
+
+    _fields_ = [("status", ctypes.c_int32), ("json", CadRsBuffer), ("error", CadRsBuffer)]
 
 
 @dataclass
@@ -131,20 +144,105 @@ class LiveCadCoreSource:
             return parsed
 
 
+class RustFfiActualSource:
+    """Obtain one live actual response from ``cad_rs_recompute_json`` per fixture.
+
+    This adapter deliberately has no comparison policy: the FFI's successful
+    JSON response is passed straight to the existing expected-parity engine.
+    A non-zero ABI status is an execution failure, even when its error JSON is
+    well formed; accepting it as a fixture response would hide a Rust runtime
+    failure behind the registry.
+    """
+
+    kind = "rust-ffi"
+
+    def __init__(self, library: Path | None) -> None:
+        self.library_path = library
+        self._library: Any | None = None
+        self._load_error: str | None = None
+
+    def _load_library(self) -> Any | None:
+        if self._library is not None or self._load_error is not None:
+            return self._library
+        if self.library_path is None:
+            self._load_error = "missing Rust FFI library (--ffi-lib is required for --actual-source rust-ffi)"
+            return None
+        if not self.library_path.exists():
+            self._load_error = f"missing Rust FFI library: {self.library_path}"
+            return None
+        try:
+            library = ctypes.CDLL(str(self.library_path))
+            recompute = library.cad_rs_recompute_json
+            recompute.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
+            recompute.restype = CadRsResult
+            free_result = library.cad_rs_free_result
+            free_result.argtypes = [ctypes.POINTER(CadRsResult)]
+            free_result.restype = None
+        except (AttributeError, OSError) as exc:
+            self._load_error = f"cannot load Rust FFI library {self.library_path}: {exc}"
+            return None
+        self._library = library
+        return library
+
+    @staticmethod
+    def _buffer_bytes(buffer: CadRsBuffer) -> bytes:
+        return ctypes.string_at(buffer.ptr, buffer.len) if buffer.ptr and buffer.len else b""
+
+    @staticmethod
+    def _error_text(raw: bytes) -> str:
+        return raw.decode("utf-8", errors="replace") if raw else ""
+
+    def load(self, item: FixtureCase) -> ActualPayload:
+        if not item.input_path.exists():
+            return ActualPayload(None, None, f"missing fixture input: {item.input_path}")
+        library = self._load_library()
+        if library is None:
+            return ActualPayload(None, None, self._load_error)
+        try:
+            request = item.input_path.read_bytes()
+        except OSError as exc:
+            return ActualPayload(None, None, f"cannot read fixture input {item.input_path}: {exc}")
+        try:
+            result = library.cad_rs_recompute_json(request, len(request))
+        except (OSError, ValueError, TypeError) as exc:
+            return ActualPayload(None, None, f"Rust FFI recompute failed for {item.label()}: {exc}")
+        try:
+            payload_raw = self._buffer_bytes(result.json)
+            error_raw = self._buffer_bytes(result.error)
+            if result.status != 0:
+                detail = self._error_text(error_raw)
+                suffix = f": {detail}" if detail else ""
+                return ActualPayload(
+                    None,
+                    payload_raw or None,
+                    f"Rust FFI cad_rs_recompute_json returned status {result.status} for {item.label()}{suffix}",
+                    stderr=detail or None,
+                )
+            parsed = parse_payload(payload_raw, label=f"Rust FFI output {item.label()}")
+            if error_raw:
+                parsed.stderr = self._error_text(error_raw)
+            return parsed
+        finally:
+            library.cad_rs_free_result(ctypes.byref(result))
+
+
 def make_actual_source(
     kind: str,
     *,
     root: Path,
     binary: Path | None,
+    ffi_library: Path | None,
     in_memory_actuals: Mapping[object, object] | None,
     timeout_seconds: float | None,
-) -> SnapshotActualSource | InMemoryActualSource | LiveCadCoreSource | None:
+) -> SnapshotActualSource | InMemoryActualSource | LiveCadCoreSource | RustFfiActualSource | None:
     if kind == "snapshot":
         return SnapshotActualSource()
     if kind == "in_memory":
         return InMemoryActualSource(in_memory_actuals)
     if kind == "live":
         return LiveCadCoreSource(root, binary, timeout_seconds)
+    if kind == "rust-ffi":
+        return RustFfiActualSource(ffi_library)
     return None
 
 

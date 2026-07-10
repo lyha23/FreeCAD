@@ -1,0 +1,41 @@
+{
+  "schema": "cad-rs.ffi-result.v2",
+  "entrypoint": "cad_rs_recompute_json",
+  "ffiStatus": 0,
+  "payload": {
+    "diagnostics": [
+      {
+        "actualObjectHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "code": "topo_state_object_hash_mismatch",
+        "expectedObjectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+        "message": "topoNamingState objectHash does not match the current object input; request-level recompute is refused",
+        "object": "Box",
+        "severity": "error",
+        "source": "topoNamingState"
+      }
+    ],
+    "elementReferenceUpdates": [],
+    "results": []
+  },
+  "error": "",
+  "errorJson": null,
+  "provenance": {
+    "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-object-hash-mismatch.json",
+    "fixtureSha256": "ff55e593acbb95e76915be569a5073fd969aa4445df8c15e8661fbf26e5a9064",
+    "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-object-hash-mismatch.freecad.json",
+    "expectedSha256": "fdadfd104135b63760d6028b356eb622e1419be9b37d6b92323be56ddbdd9370",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-object-hash-mismatch.freecad.ledger.json",
+    "ledgerSha256": "2fe3dc28c54a368652381e244b5baaa6f2418259a88c28fb26bf5c5ecf33dfd7",
+    "expectedSourceClass": "freecad_expected",
+    "fixtureRole": "native",
+    "roleCatalog": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json",
+    "roleCatalogSha256": "64f552a4dd8369d141936e44aa821cd97e885f68eb4008af2b68579493ca7cc9",
+    "fixtureRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-object-hash-mismatch.json",
+    "expectedRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-object-hash-mismatch.freecad.json",
+    "library": "/Users/li/Chili3DProject/opencascade-rs/target/debug/libcad_core_ffi.dylib",
+    "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+    "buildReceipt": "build-receipt.json",
+    "buildReceiptSha256": "7a92fa1a35221f43accec9f02b019b44421669b961bd83d170f8175f86cb6ddb",
+    "ffiInputSha256": "ff55e593acbb95e76915be569a5073fd969aa4445df8c15e8661fbf26e5a9064"
+  }
+}

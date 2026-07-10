@@ -24,6 +24,7 @@ class EvaluationRequest:
     case: str | None = None
     source_kind: str = "snapshot"
     binary: Path | str | None = None
+    ffi_library: Path | str | None = None
     roles_path: Path | str | None = None
     registry_path: Path | str | None = None
     in_memory_actuals: Mapping[object, object] | None = None

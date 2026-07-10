@@ -1,0 +1,978 @@
+{
+  "schema": "cad-rs.ffi-result.v2",
+  "entrypoint": "cad_rs_recompute_json",
+  "ffiStatus": 0,
+  "payload": {
+    "binaryPayloads": [],
+    "diagnostics": [
+      {
+        "code": "unsupported_native_mapper_history",
+        "message": "FreeCAD Python does not expose this fixture's producer history; CadCore::TopoNamingStateProbe records the CAD Core mapperHistory DTO contract",
+        "object": "HistoryProbe",
+        "severity": "info",
+        "source": "topoNamingState.mapperHistory"
+      },
+      {
+        "code": "split_stable_subname",
+        "message": "Stable subname Source.#e:2;MHS,E was split by mapper history and requires reselect",
+        "object": "HistoryProbe",
+        "severity": "warning",
+        "source": "topoNamingState.mapperHistory",
+        "stableSubname": "Source.#e:2;MHS,E"
+      },
+      {
+        "code": "deleted_stable_subname",
+        "message": "Stable subname Source.#f:2;MHS,F was deleted by mapper history",
+        "object": "HistoryProbe",
+        "severity": "warning",
+        "source": "topoNamingState.mapperHistory",
+        "stableSubname": "Source.#f:2;MHS,F"
+      },
+      {
+        "code": "stable_identity_ambiguous",
+        "message": "Stable subname Source.#f:3;MHS,F is ambiguous in mapper history and requires reselect",
+        "object": "HistoryProbe",
+        "severity": "warning",
+        "source": "topoNamingState.mapperHistory",
+        "stableSubname": "Source.#f:3;MHS,F"
+      }
+    ],
+    "documentObjectUpdates": [],
+    "elementReferenceUpdates": [],
+    "results": [
+      {
+        "mesh": {
+          "faceIds": [
+            "face_1",
+            "face_1",
+            "face_2",
+            "face_2",
+            "face_3",
+            "face_3",
+            "face_4",
+            "face_4",
+            "face_5",
+            "face_5",
+            "face_6",
+            "face_6"
+          ],
+          "indices": [
+            2,
+            0,
+            1,
+            3,
+            2,
+            1,
+            5,
+            4,
+            6,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            10,
+            8,
+            11,
+            15,
+            13,
+            12,
+            15,
+            12,
+            14,
+            16,
+            17,
+            19,
+            18,
+            16,
+            19,
+            23,
+            21,
+            20,
+            23,
+            20,
+            22
+          ],
+          "normals": [
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              1.0,
+              0.0,
+              -0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "summary": {
+            "triangle_count": 12,
+            "vertex_count": 8
+          },
+          "vertices": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              1.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              1.0
+            ],
+            [
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              1.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              1.0
+            ],
+            [
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0,
+              1.0
+            ],
+            [
+              1.0,
+              0.0,
+              1.0
+            ],
+            [
+              1.0,
+              1.0,
+              1.0
+            ]
+          ]
+        },
+        "metadata": {
+          "bbox": {
+            "max": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "min": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "volume": 0.9999999999999998
+        },
+        "namedShapeDebug": {
+          "childElementMapCount": 0,
+          "elementMap": [],
+          "elementResolveStatus": [],
+          "element_history_status": [
+            "history_consumed:generated_modified",
+            "terminal_history:split_deleted",
+            "subname_split_requires_reselect",
+            "history_consumed:merge"
+          ],
+          "element_map_status": "history_partial",
+          "history": [
+            {
+              "element": "",
+              "kind": "deleted",
+              "sources": [
+                "Source.Face2"
+              ]
+            },
+            {
+              "element": "Edge2",
+              "kind": "split",
+              "sources": [
+                "Source.Edge2"
+              ]
+            },
+            {
+              "element": "Edge3",
+              "kind": "split",
+              "sources": [
+                "Source.Edge2"
+              ]
+            }
+          ],
+          "historyLedgers": [],
+          "mapperHistory": [
+            {
+              "diagnostic_status": "",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-generated-face1",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "resolved",
+              "relation": "generated",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Face1"
+              }
+            },
+            {
+              "diagnostic_status": "",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-modified-edge1",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "resolved",
+              "relation": "modified",
+              "shape_kind": "edge",
+              "source": {
+                "object": "Source",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Edge1"
+              }
+            },
+            {
+              "diagnostic_status": "split_stable_subname",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-split-edge2-a",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "needs_reselect",
+              "relation": "split",
+              "shape_kind": "edge",
+              "source": {
+                "object": "Source",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Edge2"
+              }
+            },
+            {
+              "diagnostic_status": "split_stable_subname",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-split-edge2-b",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "needs_reselect",
+              "relation": "split",
+              "shape_kind": "edge",
+              "source": {
+                "object": "Source",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Edge3"
+              }
+            },
+            {
+              "diagnostic_status": "deleted_stable_subname",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-deleted-face2",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "deleted",
+              "relation": "deleted",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": ""
+              }
+            },
+            {
+              "diagnostic_status": "",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-merge-face4",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "resolved",
+              "relation": "merge",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Face1"
+              }
+            },
+            {
+              "diagnostic_status": "stable_identity_ambiguous",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-ambiguous-face3",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "ambiguous",
+              "relation": "ambiguous",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": ""
+              }
+            }
+          ],
+          "owner": "HistoryProbe"
+        },
+        "object": "HistoryProbe",
+        "subshapes": [
+          {
+            "id": "vertex_1",
+            "identityStatus": "current_only",
+            "indexed": "Vertex1",
+            "kind": "Vertex",
+            "subname": "Vertex1"
+          },
+          {
+            "id": "vertex_2",
+            "identityStatus": "current_only",
+            "indexed": "Vertex2",
+            "kind": "Vertex",
+            "subname": "Vertex2"
+          },
+          {
+            "id": "vertex_3",
+            "identityStatus": "current_only",
+            "indexed": "Vertex3",
+            "kind": "Vertex",
+            "subname": "Vertex3"
+          },
+          {
+            "id": "vertex_4",
+            "identityStatus": "current_only",
+            "indexed": "Vertex4",
+            "kind": "Vertex",
+            "subname": "Vertex4"
+          },
+          {
+            "id": "vertex_5",
+            "identityStatus": "current_only",
+            "indexed": "Vertex5",
+            "kind": "Vertex",
+            "subname": "Vertex5"
+          },
+          {
+            "id": "vertex_6",
+            "identityStatus": "current_only",
+            "indexed": "Vertex6",
+            "kind": "Vertex",
+            "subname": "Vertex6"
+          },
+          {
+            "id": "vertex_7",
+            "identityStatus": "current_only",
+            "indexed": "Vertex7",
+            "kind": "Vertex",
+            "subname": "Vertex7"
+          },
+          {
+            "id": "vertex_8",
+            "identityStatus": "current_only",
+            "indexed": "Vertex8",
+            "kind": "Vertex",
+            "subname": "Vertex8"
+          },
+          {
+            "id": "edge_1",
+            "identityStatus": "current_only",
+            "indexed": "Edge1",
+            "kind": "Edge",
+            "subname": "Edge1"
+          },
+          {
+            "id": "edge_2",
+            "identityStatus": "current_only",
+            "indexed": "Edge2",
+            "kind": "Edge",
+            "subname": "Edge2"
+          },
+          {
+            "id": "edge_3",
+            "identityStatus": "current_only",
+            "indexed": "Edge3",
+            "kind": "Edge",
+            "subname": "Edge3"
+          },
+          {
+            "id": "edge_4",
+            "identityStatus": "current_only",
+            "indexed": "Edge4",
+            "kind": "Edge",
+            "subname": "Edge4"
+          },
+          {
+            "id": "edge_5",
+            "identityStatus": "current_only",
+            "indexed": "Edge5",
+            "kind": "Edge",
+            "subname": "Edge5"
+          },
+          {
+            "id": "edge_6",
+            "identityStatus": "current_only",
+            "indexed": "Edge6",
+            "kind": "Edge",
+            "subname": "Edge6"
+          },
+          {
+            "id": "edge_7",
+            "identityStatus": "current_only",
+            "indexed": "Edge7",
+            "kind": "Edge",
+            "subname": "Edge7"
+          },
+          {
+            "id": "edge_8",
+            "identityStatus": "current_only",
+            "indexed": "Edge8",
+            "kind": "Edge",
+            "subname": "Edge8"
+          },
+          {
+            "id": "edge_9",
+            "identityStatus": "current_only",
+            "indexed": "Edge9",
+            "kind": "Edge",
+            "subname": "Edge9"
+          },
+          {
+            "id": "edge_10",
+            "identityStatus": "current_only",
+            "indexed": "Edge10",
+            "kind": "Edge",
+            "subname": "Edge10"
+          },
+          {
+            "id": "edge_11",
+            "identityStatus": "current_only",
+            "indexed": "Edge11",
+            "kind": "Edge",
+            "subname": "Edge11"
+          },
+          {
+            "id": "edge_12",
+            "identityStatus": "current_only",
+            "indexed": "Edge12",
+            "kind": "Edge",
+            "subname": "Edge12"
+          },
+          {
+            "id": "face_1",
+            "identityStatus": "current_only",
+            "indexed": "Face1",
+            "kind": "Face",
+            "subname": "Face1"
+          },
+          {
+            "id": "face_2",
+            "identityStatus": "current_only",
+            "indexed": "Face2",
+            "kind": "Face",
+            "subname": "Face2"
+          },
+          {
+            "id": "face_3",
+            "identityStatus": "current_only",
+            "indexed": "Face3",
+            "kind": "Face",
+            "subname": "Face3"
+          },
+          {
+            "id": "face_4",
+            "identityStatus": "current_only",
+            "indexed": "Face4",
+            "kind": "Face",
+            "subname": "Face4"
+          },
+          {
+            "id": "face_5",
+            "identityStatus": "current_only",
+            "indexed": "Face5",
+            "kind": "Face",
+            "subname": "Face5"
+          },
+          {
+            "id": "face_6",
+            "identityStatus": "current_only",
+            "indexed": "Face6",
+            "kind": "Face",
+            "subname": "Face6"
+          }
+        ]
+      }
+    ],
+    "topoNamingState": {
+      "documentHash": "sha256:c7f0c1a57314a5932a144479f256da8d4db68dcdb4573ea75da86c49efabd755",
+      "objects": {
+        "HistoryProbe": {
+          "childElementMaps": [],
+          "elementMap": {
+            "encoding": "cad-core.element-map.v1",
+            "entries": {
+              "Source.#e:1;MHS,E": {
+                "evidence": {
+                  "childElementMapKey": null,
+                  "mapperHistoryIds": [
+                    "HistoryProbe.mh-modified-edge1"
+                  ],
+                  "source": "mapper_history"
+                },
+                "mappedName": {
+                  "canonical": "Source.#e:1;MHS,E",
+                  "raw": "Source.#e:1;MHS,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "Source",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "HistoryProbe",
+                  "subname": "Edge1"
+                }
+              },
+              "Source.#f:1;MHS,F": {
+                "evidence": {
+                  "childElementMapKey": null,
+                  "mapperHistoryIds": [
+                    "HistoryProbe.mh-generated-face1"
+                  ],
+                  "source": "mapper_history"
+                },
+                "mappedName": {
+                  "canonical": "Source.#f:1;MHS,F",
+                  "raw": "Source.#f:1;MHS,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Source",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "HistoryProbe",
+                  "subname": "Face1"
+                }
+              },
+              "Source.#f:4;MHS,F": {
+                "evidence": {
+                  "childElementMapKey": null,
+                  "mapperHistoryIds": [
+                    "HistoryProbe.mh-merge-face4"
+                  ],
+                  "source": "mapper_history"
+                },
+                "mappedName": {
+                  "canonical": "Source.#f:4;MHS,F",
+                  "raw": "Source.#f:4;MHS,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "Source",
+                  "subname": "Face4"
+                },
+                "target": {
+                  "object": "HistoryProbe",
+                  "subname": "Face1"
+                }
+              }
+            },
+            "status": "history_partial"
+          },
+          "elementMapVersion": "cad-core.element-map.v1",
+          "mapperHistory": [
+            {
+              "diagnostic_status": "",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-generated-face1",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "resolved",
+              "relation": "generated",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Face1"
+              }
+            },
+            {
+              "diagnostic_status": "",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-modified-edge1",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "resolved",
+              "relation": "modified",
+              "shape_kind": "edge",
+              "source": {
+                "object": "Source",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Edge1"
+              }
+            },
+            {
+              "diagnostic_status": "split_stable_subname",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-split-edge2-a",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "needs_reselect",
+              "relation": "split",
+              "shape_kind": "edge",
+              "source": {
+                "object": "Source",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Edge2"
+              }
+            },
+            {
+              "diagnostic_status": "split_stable_subname",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-split-edge2-b",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "needs_reselect",
+              "relation": "split",
+              "shape_kind": "edge",
+              "source": {
+                "object": "Source",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Edge3"
+              }
+            },
+            {
+              "diagnostic_status": "deleted_stable_subname",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-deleted-face2",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "deleted",
+              "relation": "deleted",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": ""
+              }
+            },
+            {
+              "diagnostic_status": "",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-merge-face4",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "resolved",
+              "relation": "merge",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": "Face1"
+              }
+            },
+            {
+              "diagnostic_status": "stable_identity_ambiguous",
+              "evidence": {
+                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
+              },
+              "id": "HistoryProbe.mh-ambiguous-face3",
+              "maker_stage": "TopoNamingStateProbe",
+              "recoverability": "ambiguous",
+              "relation": "ambiguous",
+              "shape_kind": "face",
+              "source": {
+                "object": "Source",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "HistoryProbe",
+                "subname": ""
+              }
+            }
+          ],
+          "objectHash": "sha256:bfceb532497ca5e36a8f2cf969229c9ea3ccf294273c0e74a4d2dd1b7f9fa3c1",
+          "subshapes": {
+            "Edge1": {
+              "identityStatus": "stable",
+              "subname": "Edge1"
+            },
+            "Face1": {
+              "identityStatus": "stable",
+              "subname": "Face1"
+            }
+          }
+        }
+      },
+      "producer": {
+        "cadCoreVersion": "fixture-contract-v1",
+        "freecadVersion": "1.2.0 revision 20260519",
+        "occtVersion": "7.8.1"
+      },
+      "schemaVersion": "cad-core.topo-state.v1"
+    }
+  },
+  "error": "",
+  "errorJson": null,
+  "provenance": {
+    "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-mapper-history-events.json",
+    "fixtureSha256": "63faf746aeb8ea14665873cbb1c530d89cb1ec8a2fbf786aa26bbe5f5381a7b5",
+    "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-mapper-history-events.expeted.json",
+    "expectedSha256": "f74b1a268f19b0f1997bd4208b56ad50af0a396266554d98c7599aab969d49c2",
+    "ledger": null,
+    "ledgerSha256": null,
+    "expectedSourceClass": "protocol_only",
+    "fixtureRole": "protocol_only",
+    "roleCatalog": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json",
+    "roleCatalogSha256": "64f552a4dd8369d141936e44aa821cd97e885f68eb4008af2b68579493ca7cc9",
+    "fixtureRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-mapper-history-events.json",
+    "expectedRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-mapper-history-events.expeted.json",
+    "library": "/Users/li/Chili3DProject/opencascade-rs/target/debug/libcad_core_ffi.dylib",
+    "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+    "buildReceipt": "build-receipt.json",
+    "buildReceiptSha256": "7a92fa1a35221f43accec9f02b019b44421669b961bd83d170f8175f86cb6ddb",
+    "ffiInputSha256": "63faf746aeb8ea14665873cbb1c530d89cb1ec8a2fbf786aa26bbe5f5381a7b5"
+  }
+}

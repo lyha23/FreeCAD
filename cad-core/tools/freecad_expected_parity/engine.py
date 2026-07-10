@@ -429,9 +429,9 @@ def _release_status(
 ) -> tuple[str, bool]:
     if invalid:
         return "invalid", False
-    if source_kind != "live":
+    if source_kind not in {"live", "rust-ffi"}:
         return "not_evaluated", False
-    if any(item.artifact_evidence.current_fresh is not True for item in cases):
+    if source_kind == "live" and any(item.artifact_evidence.current_fresh is not True for item in cases):
         return "invalid", False
     if semantic == "red":
         return "red", False
@@ -455,6 +455,7 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
         request.source_kind,
         root=root,
         binary=_request_path(request.binary, root),
+        ffi_library=_request_path(request.ffi_library, root),
         in_memory_actuals=request.in_memory_actuals,
         timeout_seconds=request.timeout_seconds,
     )
@@ -504,6 +505,9 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
             "binarySha256": _binary_sha256(_request_path(request.binary, root), root)
             if request.source_kind == "live"
             else None,
+            "ffiLibrarySha256": _binary_sha256(_request_path(request.ffi_library, root), root)
+            if request.source_kind == "rust-ffi"
+            else None,
             "comparisonProfile": COMPARISON_PROFILE,
             "comparisonProfileSha256": _profile_sha256(),
             "registrySha256": registry.sha256,
@@ -552,6 +556,7 @@ def materialize_current(request: MaterializeRequest) -> GenerationReport:
         "live",
         root=root,
         binary=_request_path(request.binary, root),
+        ffi_library=None,
         in_memory_actuals=None,
         timeout_seconds=request.timeout_seconds,
     )

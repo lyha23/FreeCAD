@@ -7,14 +7,16 @@
 - 草图约束求解器不属于当前 `cad-core` 迁移实现目标；只保留 Sketcher solver-facing 输入、约束状态、diagnostics、几何更新入口和与几何 / 拓扑命名相关的必要语义，不要把完整约束求解当作待实现缺口。
 - 做架构取舍、API 设计、实现拆分或文档整理时，优先服务上述抽取目标；若“通用后端框架”风格与 FreeCAD 几何库抽取需求冲突，以 FreeCAD 业务语义、可重建能力和 `cad-core` 清晰边界为准。
 - 需要确认行为语义时，优先读取本仓库 `src/` 中对应 FreeCAD 实现，再决定 `cad-core` 中的 C++ API、拓扑命名模型、重建流程和 fixture 期望。
+- `cad-core` 是被对齐方。FreeCAD `src/` 是业务语义和实现调用链权威；由同一次 FreeCADCmd 生成、可复现且通过 ledger 闭包验证的 `.freecad.json` 与 `.freecad.ledger.json` 是对应 fixture 的公开结果验收权威。除已批准的 CAD Core 协议差异外，必须修正 `cad-core` 使其对齐权威，禁止修改 expected 追随当前实现，也禁止从 fixture 或当前 `cad-core` 输出反推业务实现。
 
 ## 几何库前后端架构
 
-- 当前几何库按前后端架构设计：前端负责保存和编辑完整的 FreeCAD 风格 `DocumentObject graph`，并在建模操作、参数修改或重算时把该 graph 作为请求数据发送给后端或 `cad-core` adapter。
+- 当前几何库按前后端架构设计：前端负责保存和编辑完整的 FreeCAD 风格 `DocumentObject graph`，并在建模操作、参数修改或重算时把该 graph 与（若存在）上一次响应的 `topoNamingState` 快照一起发送给后端或 `cad-core` adapter。
 - 后端 / CAD Core 是无状态几何计算服务：每次收到请求后，只根据请求里的 `DocumentObject graph`、`recompute` 目标和运行时参数重新计算目标 shape，不依赖上一次请求留下的文档、会话或几何缓存。
-- `DocumentObject graph` 是唯一真实数据；shape、`NamedShape`、`ElementMap`、topomap、subshape map 和 mesh 都是单次请求中的计算产物，请求结束后不得作为前端或后端长期状态保存。已批准的唯一 BREP 例外是 `ReferenceShadow.brep`：它只能保存被引用单个 subshape 的旧几何快照，用作引用恢复证据，不能作为建模输入或完整对象 BREP。
-- 后端只返回前端显示和拾取所需的 mesh、subshapes、完整 `subname`、引用更新建议与诊断信息；除 `ReferenceShadow.brep` 这个旧 subshape snapshot 例外外，不要在请求或响应中传递 BREP，也不要把 BREP 作为前端或后端长期几何状态保存。
-- 前后端接口、拓扑命名、重算流程和阶段边界以 `docs/CADCore方案/00-CAD-Core抽取方案.md` 及其细化方案为准；实现中不得绕过这些文档定义的无状态 CAD Core 边界。
+- `DocumentObject graph` 是唯一建模事实。shape、`NamedShape`、`ElementMap`、topomap、subshape map 和 mesh 都是单次请求的运行时产物；允许跨请求携带的只是 `topoNamingState` 里的公开身份证据投影，不是旧几何或建模真值。
+- `topoNamingState` 是客户端携带、服务端每次整包重建的快照，只用于旧引用恢复、stable identity、split / deleted / ambiguous 判定和诊断；不得用它构造 shape、bbox、volume、mesh 或完整对象 BREP。前端应以新响应整包替换旧快照，不在客户端合并账本。
+- 后端返回前端显示和拾取所需的 mesh、subshapes、`subname` / `stableSubname` 证据、引用更新建议、诊断信息和新的 `topoNamingState`。已批准的唯一 BREP 例外是 `ReferenceShadow.brep`：它只能保存被引用单个 subshape 的旧几何快照，用作引用恢复证据，不能作为建模输入、完整对象 BREP 或 `topoNamingState` 几何载荷。
+- 权威层级必须分清：长期无状态边界看 `docs/CADCore方案/`，模块与跨阶段原则看 `docs/框架/`，协议看 `docs/接口规定/`，工具契约看 `docs/工具规定/`。`docs/CADCore*.0/` 只记录当前实施范围、队列和状态，使用前必须再核对 live code / queue，不得把历史包状态升格为稳定接口。
 
 ## 项目结构与模块组织
 
@@ -25,50 +27,53 @@
 - `src/Mod/Sketcher/App`：承接 `Sketch.cpp`、`SketchObject.cpp`、`SketchObjectGeometry.cpp`、`SketchObjectConstraints.cpp`、`SketchObjectExternal.cpp`、`SketchObjectOperations.cpp` 等草图对象、几何、约束、外部引用和 solver-facing 状态。
 - `src/Mod/Assembly/App`：后续装配体、Link、Joint 和求解语义来源。
 - `cad-core/`：从 FreeCAD 抽出的独立 C++17/CMake Core；不依赖 Qt、`src/Gui`、Workbench、ViewProvider、TaskPanel 或 Web 会话。
-- `cad-core/include/cad_core/document` 与 `cad-core/src/document`：中立 `Document`、`DocumentObject`、属性链接和 JSON 解析。
-- `cad-core/include/cad_core/graph` 与 `cad-core/src/graph`：依赖分析、拓扑排序和 recompute plan。
-- `cad-core/include/cad_core/runtime` 与 `cad-core/src/runtime`：diagnostics、`ComputeContext`、feature registry 和 recompute loop。
-- `cad-core/include/cad_core/features` 与 `cad-core/src/features`：`SketchObject`、`Body`、`FeatureBase`、`FeatureExtrude`、`Pad`、`Pocket` 等 executor 和 FreeCAD 特征语义。
-- `cad-core/include/cad_core/geometry` 与 `cad-core/src/geometry`：OCCT 几何构造、bbox、volume、mesh、kernel metadata 和导出逻辑。
-- `cad-core/include/cad_core/topo` 与 `cad-core/src/topo`：subshape map、stable subname、后续 `NamedShape` / topo naming / ElementMap 落点。
+- `cad-core/include/cad_core/app` 与 `cad-core/src/app`：对齐 `src/App`，承接 `Document`、`DocumentObject`、properties、links、copy-on-change 和 App 层映射 helper；request-local `NamedShape` element map 的存储与传播在 `part/`。
+- `cad-core/include/cad_core/base` 与 `cad-core/src/base`：承接 placement 等跨模块基础值类型。
+- `cad-core/include/cad_core/graph` 与 `cad-core/src/graph`：依赖分析、目标选择、循环诊断和 recompute plan。
+- `cad-core/include/cad_core/runtime` 与 `cad-core/src/runtime`：diagnostics、`ComputeContext`、feature registry、请求期引用恢复调度/更新建议汇总、recompute loop 和对外 `topoNamingState` 投影；链接字段语义仍归 `app/`，几何恢复语义仍归 `part/`。
+- `cad-core/include/cad_core/sketcher` 与 `cad-core/src/sketcher`：`SketchObject` 几何、constraints、external geometry、operations、InternalShape 与 solver-facing 状态。
+- `cad-core/include/cad_core/part` 与 `cad-core/src/part`：`PartFeature`、`TopoShape`、`NamedShape`、request-local element map / child maps、`MapperHistory`、FaceMaker、WireJoiner、ShapeFix、布尔/扫掠/放样/导入导出和共享 OCCT 几何能力。
+- `cad-core/include/cad_core/part_design` 与 `cad-core/src/part_design`：Body、Pad、Pocket、Hole、DressUp、Pattern、Transform、Datum 等 PartDesign 特征链语义。
+- `cad-core/include/cad_core/topo` 与 `cad-core/src/topo`：跨模块 stable subshape identity 和 FreeCAD mapped-name codec；不要把 `part` / `app` 已有账本平行复制到这里。
+- `cad-core/include/cad_core/mesh` 与 `cad-core/src/mesh`：mesh import feature；`cad-core/include/cad_core/assembly` 与 `cad-core/src/assembly`：Assembly object、Link、Joint Group 和 Ondsel solver adapter。
 - `cad-core/include/cad_core/adapters` 与 `cad-core/src/adapters`：CLI 与 C ABI adapter。adapter 只做协议转换，不承接 FreeCAD 业务语义。
-- `cad-core/fixtures/mvp` 与 `cad-core/fixtures/p2`：当前 CAD Core 验收输入和 FreeCAD 期望输出。
-- `docs/CADCore方案`：CAD Core 抽取方案、MVP/P2 设计和当前状态。
-- `docs/建模过程说明`：面向实现理解的 FreeCAD 建模链路说明。
+- `cad-core/fixtures/<phase>/`：根目录 `*.json` 是输入 fixture，`expected/` 是期望/权威证据，`cad-core-res/` 是当前 CAD Core 对照输出。必须从 live tree 实时发现 phase，不得假定已删除的 `mvp` 或任何固定 phase 集合仍存在。
+- `docs/CADCore方案`：长期抽取方案和总边界；`docs/CADCore*.0/`：分阶段实施包、队列与矩阵；`docs/接口规定/`、`docs/框架/`、`docs/工具规定/`：分别承接协议、稳定框架原则和工具契约；`docs/建模过程说明/`：FreeCAD 建模链路说明。
 
 ## CAD Core 模块框架
 
-- `cad-core` 的长期结构按本地 FreeCAD module 语义对齐，而不是按一般后端分层随意重新命名；框架依据见 `docs/CADCore方案/00-CAD-Core抽取方案.md`。
-- `document/` 对齐 `src/App` 的文档对象和属性系统，只做中立输入模型、对象索引、链接解析和诊断，不塞入 PartDesign 或 Sketcher 业务规则。
+- `cad-core` 的长期结构按本地 FreeCAD module 语义对齐，而不是按一般后端分层随意重新命名；直接框架依据见 `docs/框架/06-04-23-01-CADCore-FreeCAD源码同构框架调整方案.md`。
+- `app/` 对齐 `src/App` 的文档对象、属性、链接、copy-on-change 与 App 层映射 helper，不塞入 PartDesign 或 Sketcher 业务规则；`base/` 只放跨模块基础值类型。
 - `graph/` 只处理对象依赖、目标选择、循环诊断和 recompute 顺序；不要把特征几何逻辑写到 graph 层。
-- `runtime/` 只负责 feature registry、compute context、diagnostics 和执行调度；`FeatureExecutor` 可以作为调度接口存在，但 executor 不是所有语义的归属地。
-- `features/` 对齐 `src/Mod/Sketcher/App` 与 `src/Mod/PartDesign/App` 的类和编译单元；新增或迁移 FreeCAD 语义时，优先落到和 FreeCAD 类/编译单元同名或同层的 C++ 文件。
-- `geometry/` 承接 OCCT shape 构造、mesh、bbox、volume 和低层几何能力；不要把高层 FreeCAD 属性语义散落在 geometry helper 中。
-- `topo/` 承接 stable subname、subshape map、`NamedShape`、`ElementMap`、MapperHistory 等命名传播能力；不要在 feature executor 或 adapter 中靠输出修正替代 topo 账本。
+- `runtime/` 只负责 registry、compute context、diagnostics、请求期引用恢复调度/更新建议汇总、执行调度和公开 response 投影；`FeatureExecutor` 可以作为调度接口存在，但 executor 不是链接或几何恢复业务语义的归属地。
+- `sketcher/`、`part/`、`part_design/` 分别对齐 `src/Mod/Sketcher/App`、`src/Mod/Part/App`、`src/Mod/PartDesign/App` 的类和编译单元；新增或迁移 FreeCAD 语义时，优先落到同名或同层的 C++ 文件。
+- 共享低层 OCCT / TopoShape 构造、NamedShape element map / MapperHistory、FaceMaker / WireJoiner / ShapeFix 归 `part/`；Body 和 PartDesign-specific 控制流/特征语义归 `part_design/`；不要把高层 FreeCAD 属性语义散落在通用 helper 中。
+- `topo/` 只承接跨模块 stable identity 与 mapped-name codec；`part/` 的 `NamedShape` element map / MapperHistory、`topo/` 的 identity/codec 和 `runtime/` 的 `topoNamingState` 发布必须保持一条清晰调用链，不得在 executor 或 adapter 中靠输出修正替代账本。
+- `mesh/` 和 `assembly/` 只承接各自 FreeCAD 模块语义；`adapters/` 仅作协议边界，不得反向容纳 feature / topology 规则。
 - 每次结构迁移优先做文件边界调整和清晰调用关系，行为变更另按具体 FreeCAD 源文件做实现任务；不要为了“小文件化”拆散 `WireJoiner`、FaceMaker、ElementMap / MapperHistory 这类依赖内部账本的状态机。
 
 ## 构建与运行
 
 - 上游 FreeCAD 的完整构建遵循仓库原有 `CMakeLists.txt`、`CMakePresets.json`、`pixi.toml` 与 `.github/workflows`；不要为了 `cad-core` 任务随意改动上游构建系统。
-- `cad-core` 使用 CMake、C++17、OpenCASCADE CONFIG package 和 `nlohmann/json.hpp`：
+- `cad-core` 使用 CMake 3.20+、C++17、OCCT 7.8.1 或 7.9.3、`nlohmann/json.hpp`、zstd 和上游树内 `src/3rdParty/OndselSolver`。需要指定 OCCT 前缀时使用 `-DCAD_CORE_OCCT_ROOT=<prefix>`，不要绕过 CMake 的版本白名单：
   ```bash
   cd ~/Chili3DProject/FreeCAD/cad-core
   cmake -S . -B build
   cmake --build build
   ```
-- 运行 MVP recompute：
+- 运行一个当前 fixture recompute：
   ```bash
   cd ~/Chili3DProject/FreeCAD/cad-core
   mkdir -p out
-  ./cad-core recompute fixtures/mvp/rect-pad.json --output out/rect-pad.result.json
+  ./cad-core recompute fixtures/p2/rect-pad-pocket.json --output out/rect-pad-pocket.result.json
   ```
-- 运行当前 Python 验收测试：
+- Python 测试按修改范围选择 focused module，例如：
   ```bash
   cd ~/Chili3DProject/FreeCAD/cad-core
-  python3 -m unittest tests/test_mvp.py
+  python3 -m unittest tests.test_topo_naming_state_response
   ```
-- `cad-core-lib` 是核心库 target；`cad-core` 是 CLI adapter；`cad_core_ffi` 是 C ABI adapter。新增能力时先保证核心库边界成立，再暴露到 adapter。
-- `cad-core/build/`、`cad-core/cad-core`、`__pycache__/` 属于生成物或本地构建产物；除非任务明确要求，不要把它们当作源码编辑。
+- `cad-core-lib` 是核心库 target；`cad-core` 是 CLI adapter；`cad_core_ffi` 是 C ABI adapter。其他专项 probe target 以当前 `cad-core/CMakeLists.txt` 为准。新增能力时先保证核心库边界成立，再暴露到 adapter。
+- `cad-core/cad-core` 是受版本控制的 shell wrapper，只转发到 `cad-core/build/cad-core`；本地生成物例如 `cad-core/build/`、`cad-core/out/`、`cad-core/Testing/`、`.pytest_cache/` 和 `__pycache__/`，除非任务明确要求，不要把它们当作源码编辑。
 - 采集 FreeCAD expected 前先确认本地 `FreeCADCmd` 可用。优先让 `freecadcmd`、`FreeCADCmd` 或 `freecadcmd-daily` 出现在 `PATH`；也可用 `FREECADCMD` 覆盖。常见平台路径示例：
   - Ubuntu / Debian：`/usr/bin/freecadcmd`、`/usr/bin/FreeCADCmd`。
   - macOS：`/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd`。
@@ -82,9 +87,9 @@
 
 ## OpenCascade / OCCT 使用规则
 
-- `cad-core` 直接使用 OCCT C++ API；新增几何能力时先确认 FreeCAD 在 `src/Mod/Part/App`、`src/Mod/PartDesign/App` 或相关模块中的调用路径，再决定是否封装到 `geometry/`、`features/` 或 `topo/`。
+- `cad-core` 直接使用 OCCT C++ API；新增几何能力时先确认 FreeCAD 在 `src/Mod/Part/App`、`src/Mod/PartDesign/App` 或相关模块中的调用路径，再决定落到 `part/`、`part_design/`、`sketcher/`、`mesh/` 或 `assembly/`。
 - 新增 OCCT 模块依赖时，同步维护 `cad-core/CMakeLists.txt` 的 source list、include、link library 和必要的 Apple RPATH 设置。
-- 低层 OCCT helper 放在 `geometry/` 或 `topo/`，不要让 adapter、JSON parser 或高层 feature 文件散落重复的 OCCT 细节。
+- 低层 OCCT shape 操作和历史账本放在 `part/` 的正式模块；只有真正跨模块的 stable identity / mapped-name codec 放 `topo/`。不要让 adapter、JSON parser 或高层 feature 文件散落重复的 OCCT 细节。
 - C++ API 边界要清楚：核心语义类型放在头文件中保持稳定；临时实现细节放 `.cpp`；不要把 GUI、Web 或测试 fixture 专用结构引入核心 public API。
 - 修改 C++ 代码后遵循仓库 `.clang-format` 风格；不要为局部修复重排大段无关代码。
 
@@ -92,48 +97,59 @@
 
 - 上游 `src/` 保持 FreeCAD 既有 C++/Python/CMake 风格和模块边界，不做无关重构。
 - `cad-core` 使用 C++17；公共头文件放 `include/cad_core/...`，实现放 `src/...`，命名空间保持 `cad_core::<module>`。
-- 文件和类型命名优先跟 FreeCAD 语义对齐：`FeatureExtrude` 相关通用逻辑放 `feature_extrude.*`，Pad/Pocket 只保留各自特化语义。
+- 文件和类型命名优先跟 FreeCAD 语义对齐：`FeatureExtrude` 相关通用逻辑放 `part_design/feature_extrude.*`，Pad/Pocket 只在 `part_design/feature_pad.*` / `part_design/feature_pocket.*` 保留各自特化语义。
 - 错误处理优先显式返回 diagnostics 或结构化结果，不要静默忽略 JSON 解析失败、链接缺失、OCCT 构造失败、文件导入失败或未支持属性。
 - 核心逻辑放 `cad-core-lib`；CLI 和 C ABI 只做参数解析、协议转换和错误封装，不承载建模语义。
-- 拓扑命名相关改动优先查看 FreeCAD 的 `TopoShape*`、`TopoShapeMapper*`、`PropertyTopoShape*`、FaceMaker、WireJoiner 和 `cad-core/src/topo/`，保持命名、映射与索引语义一致。
+- 拓扑命名相关改动优先查看 FreeCAD 的 `TopoShape*`、`TopoShapeMapper*`、`PropertyTopoShape*`、FaceMaker、WireJoiner，再对应到 `cad-core/src/part/topo_shape*.cpp`、`cad-core/src/part/topo_shape_mapper.cpp`、`cad-core/src/topo/` 和 `cad-core/src/runtime/topo_naming_state.cpp`，保持生产、映射、编码和发布语义一致。`cad-core/src/app/element_map.cpp` 当前只是 Sketch Internal* 映射 helper，不要把它当作通用 NamedShape element-map 账本归属地。
 - 修复 FreeCAD parity、拓扑命名、内部面、几何排序或 fixture 偏差时，起初就必须按完整通用语义设计，优先补齐 FreeCAD / OpenCascade 对应的通用流程、历史映射与排序规则；不得用只覆盖单一 fixture 形态的窄路径或特异化处理替代通用实现。若短期不得不落窄路径，必须在相邻代码注释和方案文档中说明临时性、适用边界、FreeCAD 依据与后续通用化路径，并避免继续扩大 fixture 特判。
 - 公开 API、核心语义类型、executor、mapper/history 规则等承载 FreeCAD 几何库抽取语义的新增函数、结构体、枚举或字段，必须在相邻 C++ 注释或实现注释中标注 FreeCAD 依据：写明 FreeCAD 源文件绝对路径、类/函数名，并摘录能支撑当前语义的 FreeCAD 原文短句或字段名；不要只写“参考 FreeCAD”。普通 helper、内部实现细节、测试辅助结构若不承载 FreeCAD 语义，不强制标注。示例：`// FreeCAD: ~/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePad.cpp::Pad::execute(), calls "buildExtrusion(ExtrudeOption::MakeFace | ExtrudeOption::MakeFuse)".`
 - 审计 FreeCAD 依据路径时，`/Users/li/...` 与 `/Users/admin/...` 只代表不同机器上的本地用户目录；只要后续仓库相对路径、源码文件、类/函数和关键短句一致，不得仅因 `li` / `admin` 用户目录不同判定依据路径不可追溯。若需要在当前机器复核，可把这两个前缀视为同一 FreeCAD 源码树根的等价用户目录前缀。
 
+## 拓扑命名与引用状态纪律
+
+- 请求携带的 `topoNamingState` 是不可信的客户端状态；在 recompute 前校验 schema、producer、document / object hash、element-map encoding 和对象归属。schema / producer 不兼容、document / object hash 不匹配或 encoding 不可解析都是请求级硬失败：不继续 recompute、不返回新 state、不降级猜测。
+- `subname` 是当前可选路径，`fullSubname` / `FullSubList` 是展示或路径证据，`stableSubname` / `StableSubList` 才是跨 recompute 引用 token。只有配套 `topoNamingState` / producer 账本证据可验证时才宣称长期 stable；客户端应把 token 当作 opaque value 保存和回传，不自行解析、重写或合并。
+- `ElementMap` 只发布已经唯一恢复、且 target 存在于当前 indexed subshape 集合的映射。split、deleted、ambiguous、needs-reselect 或 canonical collision 必须进入 MapperHistory 与 diagnostics，不得静默覆盖、丢弃或塞回终结 `ElementMap` entry。
+- `mappedName.raw` 必须来自 producer-side ledger；没有 source-backed 证据时保持 indexed-only，不得从 `stableSubname`、display path 或 `fullSubname` 伪造 raw mapped name。`mappedName.canonical` 只用于 expected / diff 稳定比较，不是原生解析输入。
+- runtime publisher 只投影 request-local `NamedShape` / `ElementMap` / MapperHistory 已有证据，不创造 feature 业务语义。对外 `topoNamingState` 是裁剪后的 public DTO；同名 `*.freecad.ledger.json` 是独立 authority/provenance sidecar，不得混入 public DTO 或 runtime 输入。
+- Link envelope 使用 `value` / `values` / `SubList` / `SubSet`，所有恢复证据必须保持 item-local。存在 current `SubList` 时，配套 `StableSubList`、`FullSubList`、`ShadowSub`、`ReferenceShadow` 按 current entries 对齐；允许 live parser 明确支持的 `SubList=[] + StableSubList-only` 恢复/产品扩展，其 Shadow / Reference 证据按 recovery cardinality 对齐。`PropertyXLinkList` 使用 `values` 或 `SubSet` 二选一，不得跨 item 借用证据。
+
 ## FreeCAD 迁移实现纪律
 
-- 涉及 FreeCAD parity、草图内部面、拓扑命名、WireJoiner、FaceMaker、ShapeFix、特征重建或历史映射的实现，必须先给出 FreeCAD 调用链和 `cad-core` 分层映射，再写代码。最少要明确：FreeCAD 源文件绝对路径、类/函数、关键字段/短句、调用顺序、对应的 `document` / `graph` / `runtime` / `features` / `geometry` / `topo` / `adapters` 落点。
-- 禁止从 fixture 输出倒推业务逻辑。不得在 `cad-core/src/features/sketch_object.cpp`、`cad-core/src/runtime`、`cad-core/src/graph` 或 adapter 层中新增 `ellipse && bspline`、几何类型排序、source edge 猜测、split edge compound 注入、degenerate face 注入、按 fixture 名称分支等补丁式逻辑。
+- 涉及 FreeCAD parity、草图内部面、拓扑命名、WireJoiner、FaceMaker、ShapeFix、特征重建或历史映射的实现，必须先给出 FreeCAD 调用链和 `cad-core` 模块映射，再写代码。最少要明确：FreeCAD 源文件绝对路径、类/函数、关键字段/短句、调用顺序、对应的 `app` / `base` / `graph` / `runtime` / `sketcher` / `part` / `part_design` / `topo` / `mesh` / `assembly` / `adapters` 落点。
+- 禁止从 fixture 输出倒推业务逻辑。不得在 `cad-core/src/sketcher/sketch_object.cpp`、`cad-core/src/runtime`、`cad-core/src/graph` 或 adapter 层中新增 `ellipse && bspline`、几何类型排序、source edge 猜测、split edge compound 注入、degenerate face 注入、按 fixture 名称分支等补丁式逻辑。
 - 出现 `InternalEdgeN`、`InternalVertexN`、open wire 或 split fragment 映射差异时，优先按四层矩阵定位：1）`FaceMakerBuildFace` 的 face / edge / vertex 几何结果是否与 FreeCAD 一致；2）`WireJoiner::getOpenWires()` 的 open wire 几何结果是否与 FreeCAD 一致；3）raw compound / child shape identity 是否在组合时被重建或复制；4）`NamedShape` / `ElementMap` 是否完整消费 `MapperHistory(aHistory)`。如果前 1-3 层一致，只在第 4 层出现 stable subname、internal element 或 source trace 差异，应归类为 history 到 `ElementMap` 的传播缺口，不得在 sketch executor 中按几何类型、fixture 名、split 顺序或 source index 继续补猜测逻辑。
-- 如果 FreeCAD 语义依赖底层能力，例如 `myPreSplitHistory`、`mySplitter`、`MapperMaker`、`MapperHistory`、`myShapesToReturn`、`FaceMaker::postBuild()`、`WireJoiner` history 或 `ShapeFix` history，而 `cad-core` 还没有对应能力，必须优先补 `geometry` / `topo` / 高层 API；不得在 sketch executor、document executor、adapter 或前端导出层用几何猜测绕过。
+- 如果 FreeCAD 语义依赖底层能力，例如 `myPreSplitHistory`、`mySplitter`、`MapperMaker`、`MapperHistory`、`myShapesToReturn`、`FaceMaker::postBuild()`、`WireJoiner` history 或 `ShapeFix` history，而 `cad-core` 还没有对应能力，必须优先补 `part` 内的 OCCT/历史运行态与 element-map/MapperHistory 类型、`topo` 身份 codec 和高层 API；不得在 sketch executor、runtime publisher、adapter 或前端导出层用几何猜测绕过。
 - 如果 FreeCAD 语义依赖某个内部账本或状态机，例如 `WireJoinerP::EdgeInfo`、`WireInfo`、`wireInfo/wireInfo2`、`iteration/iteration2`、`superEdge`、`MapperHistory` 或 `ElementMap` 生命周期，而 `cad-core` 里没有等价结构，不得先做结果 pruning、后处理过滤或输出修正当主路径；必须先补等价账本/状态机，或者把现有实现明确标成临时 fallback，并在相邻代码注释和方案文档中写清适用边界、FreeCAD 正确路径、删除条件和后续替换步骤。
 - 只要出现“输出端修修剪剪越来越多”、同一方向反复修改仍无法正确实现、fallback/pruning 规则继续叠加、或需要靠 source/split 几何形态推断 FreeCAD ownership 的迹象，必须立即视为流程告警：暂停继续加规则，重新按 FreeCAD 内部账本/状态机定位问题。
-- `cad-core/src/features/sketch_object.cpp` 只能表达 FreeCAD `SketchObject` 的业务调用顺序和属性语义，不承担几何内核推理、拓扑命名传播、split history 合成或 face 排序职责。FaceMaker / WireJoiner 账本放在 `geometry` 或 `features` 的对应正式模块，命名传播放在 `topo`。
+- `cad-core/src/sketcher/sketch_object.cpp` 只能表达 FreeCAD `SketchObject` 的业务调用顺序和属性语义，不承担 OCCT 几何推理、split history 合成、拓扑命名发布或 face 排序职责。FaceMaker / WireJoiner / internal history 账本放 `part/`，stable identity codec 放 `topo/`，对外 state 投影放 `runtime/`。
 - 若短期确实必须引入窄路径 fallback，必须同时满足：相邻代码注释标明“临时 fallback”；写清适用 fixture/边界；写明 FreeCAD 正确路径和对应源码依据；写明删除条件；不得继续在该 fallback 上叠加新的 fixture 特判。
-- 涉及实质 FreeCAD 语义迁移或 executor 主路径切换时，实施顺序固定为：1）读 FreeCAD 并记录调用链；2）补 OCCT/geometry 运行态；3）补 `topo` mapper/history；4）补正式 `NamedShape`/高层 API；5）切换 executor 主路径；6）用 fixture 和语义单测验证；7）删除旧 fallback 和 synthetic name。不得跳过前四步直接在 executor 中凑输出。
+- 涉及实质 FreeCAD 语义迁移或 executor 主路径切换时，实施顺序固定为：1）读 FreeCAD 并记录调用链；2）补 `part` 的 OCCT/历史运行态；3）补 `app` 的链接/属性契约、`part` 的 ElementMap / NamedShape / mapper 账本与 `topo` 的 identity codec；4）补正式高层 API；5）切换 `sketcher` / `part_design` / `part` 主路径；6）在 `runtime` 投影公开协议；7）用 fixture 和语义单测验证；8）删除旧 fallback 和 synthetic name。不得跳过前四步直接在 executor 或 publisher 中凑输出。
 - 验证不能只看现有 fixture parity。凡是修复内部面、split、open wire 或拓扑命名，至少补充能约束通用语义的单测或方案验收项，例如 self-intersection 与 inter-edge intersection 同时存在、bounded faces 与 open wires 同时存在、source edge 一对多 fragment 映射、splitter 失败继续使用原 edges、`ElementMapPolicy::Drop` 早退语义等。
 - fixture 评估中，`InternalFaceN`、`InternalEdgeN`、`InternalVertexN` 等命名顺序与 FreeCAD 不一致时，只要几何等价且本仓库输出顺序稳定，不得算作硬失败；应单独归类为“命名顺序差异”或类似非失败项。face/edge/vertex 数量不同、几何内容不同、稳定 subname 丢失或引用语义不稳定仍然算失败。
 
 ## 仓库工作偏好与排查入口
 
 - 处理 FreeCAD parity、fixture 或 oracle 问题时，先明确当前问题属于 oracle 采集、`cad-core` 实现、命名顺序差异、pending/known-mismatch 分组还是文档状态；结论必须直接回答 expected 与当前 `cad-core` 表现是否一致，并列出剩余不一致项。
-- 用户指定文档落点时，结果要写入对应仓库目录，而不是只在聊天里总结：CAD Core 抽取方案、fixture 偏差和排查方案优先放 `docs/CADCore方案`；建模链路和已经接受的业务语义优先放 `docs/建模过程说明`；后续计划或暂不实现方案放到对应主题目录或新增清晰命名的方案文件。
+- 用户指定文档落点时，结果要写入对应仓库目录，而不是只在聊天里总结：长期 CAD Core 抽取边界放 `docs/CADCore方案/`；当前里程碑包、队列和矩阵放对应 `docs/CADCore*.0/`；稳定跨阶段原则放 `docs/框架/`；建模链路和已接受语义放 `docs/建模过程说明/`。
+- 继续某个“工作步骤细分”或队列包前，先运行 `python3 ~/.codex/skills/goal-step-runner/scripts/step_goal_queue.py <工作步骤路径> --format markdown`，以当前磁盘队列为真值；不从 README 的历史数量、文件名或旧 memory 猜当前步骤。
 - 写方案、排查记录、实现状态或回归文档时，不要记录流水账，只记录值得关注的内容：当前基线、关键结论、FreeCAD / OpenCascade 依据、已完成的语义性调整、剩余风险、验收命令和下一步。不要逐条追加“修改某处后执行构建、结果通过、格式化 warning”这类过程日志；若验证结果重要，只保留最终验证结论或对判断有影响的失败输出。
 - 写方案、实施步骤或 goal prompt 时，必须让结果可以快速验证：验收命令按“本轮短跑 / 阶段回归 / 重型收口”分层列出，普通 goal 默认只要求本轮相关的粗 filter、`git diff --check`；不得把历史已锁 case、阶段回归、ignored fixture、全量 build/check 直接塞进普通 goal 的必跑项。只有阶段收口、oracle/runner 改动或用户明确要求时，才把阶段回归和重型收口列为必须执行。
+- 编写 `/goal` 时 objective 文本保持在 4,000 字符以内；详细指令超过限制时写入仓库文件，让 `/goal` 只引用该文件。
 - 规划实现内容、写方案、实施步骤、goal prompt 或响应“实现”请求时，必须先命中“最小完整语义批次”规则，不要等到落代码时才扩大范围，也不要默认只挑一个最小 oracle case 或单个 fixture。应优先把同一 FreeCAD 调用链、同一 DTO / API 边界、同一类 expected 能覆盖的多个代表性场景纳入同一轮，并在方案阶段就写清批量采集 oracle、补 cad-core / Rust 实现、fixtures、focused tests、capability/docs 和验收记录的闭环。只有出现 FreeCAD 调用链分叉、oracle 无法采集、语义边界不清、风险会跨模块扩散，或用户明确要求小步验证时，才拆成单个 case。拆分时必须在方案或 goal prompt 中说明为什么不能批量实现、下一批次范围是什么，以及如何避免长期停留在单 fixture 推进。
 - 用户说“不需要太详细，只需要把框架说清楚”时，文档保持框架级和短结论；用户说“大白话解释一下”时，先解释具体流程和对象关系，再进入源码、实现或文档更新。
 - 解释草图内部面时必须区分 sketch 的原始 `Shape` 和辅助结果 `InternalShape`：`FaceMakerBuildFace` 失败后得到空 `InternalShape` 是 FreeCAD parity，不代表原始 sketch 边丢失；open profile/open wire 语义应单独表达，不要强行混回 FreeCAD 风格 `InternalShape`。
-- 扩展 Pad/Pocket fixture 或 executor 前，先盘点 `cad-core/fixtures/{mvp,p2}`、`cad-core/src/features/feature_extrude.cpp`、`cad-core/src/features/pad.cpp`、`cad-core/src/features/pocket.cpp` 和对应 FreeCAD 源码的当前覆盖和缺口；优先新增或补齐 oracle case，只有证明 collector 或 expected 本身错误时才先改采集脚本/期望数据。
+- 扩展 Pad/Pocket fixture 或 executor 前，先在整个 `cad-core/fixtures/` phase 树中盘点当前 case，并同时读 `cad-core/src/part_design/feature_extrude.cpp`、`feature_pad.cpp`、`feature_pocket.cpp` 和对应 FreeCAD 源码；不得再以已删除的 `mvp` phase 作为盘点边界。优先补齐最小完整语义批次的 oracle case，只有证明 collector 或 expected 本身错误时才先改采集脚本/期望数据。
 
 ## 文档规则
 
 - 用户指定文档落点时，必须写入对应仓库路径，不要只在聊天里总结。
-- 接口契约写入 `docs/接口规定/`；CAD Core 阶段边界和抽取方案写入 `docs/CADCore方案/`；具体补齐或临时方案写入 `docs/补齐/`。
+- 接口契约写入 `docs/接口规定/`；跨阶段架构原则写入 `docs/框架/`；工具契约写入 `docs/工具规定/`；CAD Core 长期边界写入 `docs/CADCore方案/`；里程碑实施包写入对应 `docs/CADCore*.0/`；需要新建的具体补齐/临时方案使用 `docs/补齐/`，环境兼容性排查记录使用 `docs/temp/`。
 - 写方案、排查记录或验收文档时，保留当前基线、关键结论、FreeCAD / OCCT 依据、代码落点、剩余风险、验收命令和下一步；不要写流水账。
 - Markdown 文件（`*.md`）统一命名格式：`M-D-HH-mm-主题名称.md`，例如 `2-21-14-38-图求解实现核查问题清单.md`。
 - 修复方案、重构方案、实施方案等方案类文档在代码实现完成并验证后，应将文件重命名为 `M-D-HH-mm-【已实现】主题名称.md`，保持原时间前缀不变。
 - 已存在文档不要因为命名规则无关改名。
-- 文档里的能力状态要从当前代码、fixtures 和 docs 复核后再写；不要直接复制旧 memory 或旧方案里的数量和状态。
+- 文档里的能力状态要从当前代码、fixtures、队列和矩阵复核后再写；不要直接复制旧 memory、README 历史数量或旧方案里的状态。
 
 ## 测试指南
 
@@ -142,31 +158,44 @@
 - 代码修改后，只有在必要且用户未禁止时，最多执行一次相关范围的构建或测试；不要默认跑完整 FreeCAD CI。
 - 不要运行全仓库格式化、全量 lint 或全量 FreeCAD build，除非用户在当前任务中明确要求。
 - 排查、检查和验证时只看本次任务相关文件与目录，不要扫描无关目录。
-- `cad-core` 功能变更优先使用：
+- `cad-core` 功能变更优先构建与修改相关的 target，再按修改边界选一个 focused unittest module 或具体 method，CLI / topoNamingState 例如：
   ```bash
   cd ~/Chili3DProject/FreeCAD/cad-core
-  cmake --build build
-  python3 -m unittest tests/test_mvp.py
+  cmake --build build --target cad-core
+  python3 -m unittest tests.test_topo_naming_state_response
   ```
 - 如果 build 目录不存在或 CMake 配置过期，先运行：
   ```bash
   cd ~/Chili3DProject/FreeCAD/cad-core
   cmake -S . -B build
   ```
-- 排查 FreeCAD 语义不清或 expected 裁决问题时，优先采集单个 native expected：
+- 排查 FreeCAD 语义不清或 expected 裁决问题时，优先把单个 FreeCADCmd public expected 与同次生成的 ledger 写到临时 `cad-core/out/`：
   ```bash
   cd ~/Chili3DProject/FreeCAD
   FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
     python3 cad-core/tools/collect_freecad_expected.py \
-    path/to/input-or-fixture.json \
+    cad-core/fixtures/<phase>/<case>.json \
     --out cad-core/out/<case>.freecad.json \
-    --pretty
+    --emit-ledger \
+    --validate-ledger
   ```
-- `cad-core` fixture 的 FreeCADCmd 结果和 `cad-core` 自身 recompute 结果必须分目录保存，不得混放：
-  - FreeCADCmd / native oracle / expected 只放 `cad-core/fixtures/<phase>/expected/`，文件名使用 `<case>.freecad.json`；这里的内容必须来自 `cad-core/tools/collect_freecad_expected.py`、native probe，或明确记录 native unsupported / known gap 的 FreeCAD oracle 边界。
-  - `cad-core` 当前实现输出只放 `cad-core/fixtures/<phase>/cad-core-res/`，文件名使用 `<case>.cad-core.json`；生成方式示例：`cd cad-core && build/cad-core recompute fixtures/<phase>/<case>.json --output fixtures/<phase>/cad-core-res/<case>.cad-core.json`。
-  - 不要把 `cad-core` recompute response、`cad-core.expected.v1` 合同证据、或拼写错误的 `*.expeted.json` 放进 `expected/`；若需要保留 `cad-core` 侧对照结果，统一放到对应 phase 的 `cad-core-res/`。
-- 对已纳入 fixture phase 的 native expected 回归，使用：
+- fixture artifact 必须按来源和职责分开：
+  - `fixtures/<phase>/<case>.json` 是输入。
+  - `expected/<case>.freecad.json` 是 FreeCADCmd collector 生成的 public protocol expected；其中如果含 `topoNamingState`，该字段只保存裁剪后的 public 投影。rejected diagnostic expected 不得为了“字段齐全”伪造新 state。
+  - `expected/<case>.freecad.ledger.json` 是同次 FreeCADCmd 运行生成的 authority/provenance sidecar；accepted ledger 用 hash、projection、coverage 和 round-trip 解释 public expected，rejected ledger 用 hash 与 `rejection.diagnosticCodes` 证明拒绝边界。它不是 runtime 请求或响应。单独 `.freecad.json` 不足以证明权威，缺同名 ledger 是 hard fail。
+  - `expected/<case>.expeted.json` 是现存历史人工协议合同或 native-oracle-blocked 证据，不是 native expected、ledger 或 cad-core 运行时输出；strict/native discovery 必须忽略，不得把它当作 typo 自动迁入 `cad-core-res/`。
+  - `cad-core-res/<case>.cad-core.json` 只是当前 CAD Core 对照输出，不能反向成为 FreeCAD expected。`cad-core/out/` 只是临时报告/裁决输出，不是 checked-in baseline。
+- `*.freecad.json` 和 `*.freecad.ledger.json` 都是 collector-owned artifact；不要手改。需要更新正式基线时，先修 collector，再在同一次 FreeCADCmd 运行中成对生成并立即验证：
+  ```bash
+  cd ~/Chili3DProject/FreeCAD
+  FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
+    python3 cad-core/tools/collect_freecad_expected.py \
+    --phase <phase> \
+    --skip-unsupported \
+    --emit-ledger \
+    --validate-ledger
+  ```
+- 对已纳入 phase 的 checked-in expected，FreeCADCmd 可复现性和 artifact 账本闭包是两道独立门：
   ```bash
   cd ~/Chili3DProject/FreeCAD
   FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
@@ -174,7 +203,19 @@
     --phase <phase> \
     --check \
     --skip-unsupported
+  python3 cad-core/tools/validate_freecad_expected_ledger.py \
+    --phase <phase> \
+    --strict
   ```
+- collector 带 `--skip-unsupported` 时，即使有 skipped / diagnostic-only case 也可能返回 0；必须同时核对 stderr 的 `processed / skipped / failed` 统计和 phase 预期边界，不得把 exit 0 等同于整个 phase 完整覆盖。
+- validator 只读 checked-in expected 与 sidecar，不运行 CAD Core；当前 ledger v1 是 FreeCADCmd Python / public DTO 能取到的权威证据边界，不得夸大为 FreeCAD C++ 私有 `NamedShape` / `ElementMap` / MapperHistory 的完整导出。
+- 生成当前 `cad-core-res` 并与 public expected 比较时，使用统一入口；`--write-current` 只按 `*.freecad.json` discovery 重生成同名 `cad-core-res`，不修改 expected：
+  ```bash
+  cd ~/Chili3DProject/FreeCAD/cad-core
+  python3 tools/compare_freecad_expected.py --phase <phase> --case <case> --write-current
+  python3 tools/compare_freecad_expected.py --phase <phase> --case <case> --strict
+  ```
+- `--case` 可按需省略。strict-only 报告即使为 red 也返回 0，而 0 case discovery 还会产生假 green；验收必须确认 `summary.cases > 0`，并检查报告的 `status`、`decisions` 和 `diffs`，不得只看 shell exit code。每个 red diff 必须有 owner、decision、FreeCAD authority、next action 和 close condition，不得留 anonymous / unclassified gap。raw mapped-name 的随机 `:H...` 片段可在 comparator 内 canonicalize；object set、subshape 数量/类型、diagnostic code、stableSubname、canonical ElementMap key 等语义字段不得因此放宽。
 - 如果 collector 因输入不是 FreeCAD native 可接受形态、缺少 profile/support、或 FreeCAD Python API 暂不暴露所需账本而失败，应把结论记录为 collector unsupported / known gap / 需 native probe；不得用当前 `cad-core` JSON 输出补猜 FreeCAD 语义。
 - 涉及 OCCT、FreeCAD 原生 runtime、oracle 采集或 GUI/Qt 的验证可能依赖本机环境；运行前先确认是否确实需要，sandbox 中的 FreeCADCmd/Qt 错误不能直接当作实现失败。
 

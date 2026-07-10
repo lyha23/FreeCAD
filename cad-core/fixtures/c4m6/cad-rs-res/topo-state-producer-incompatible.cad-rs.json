@@ -1,0 +1,46 @@
+{
+  "schema": "cad-rs.ffi-result.v2",
+  "entrypoint": "cad_rs_recompute_json",
+  "ffiStatus": 0,
+  "payload": {
+    "diagnostics": [
+      {
+        "actualProducer": {
+          "cadCoreVersion": "fixture-contract-v0",
+          "freecadVersion": "0.19 incompatible fixture",
+          "occtVersion": "6.9 incompatible fixture"
+        },
+        "code": "topo_state_producer_incompatible",
+        "expectedProducer": {
+          "cadCoreVersion": "fixture-contract-v1"
+        },
+        "message": "topoNamingState producer is incompatible; request-level recompute is refused",
+        "severity": "error",
+        "source": "topoNamingState"
+      }
+    ],
+    "elementReferenceUpdates": [],
+    "results": []
+  },
+  "error": "",
+  "errorJson": null,
+  "provenance": {
+    "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-producer-incompatible.json",
+    "fixtureSha256": "3cd407c158cefee549575e0e1436a63ecc03c019ce877534e383a3084e219bb2",
+    "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-producer-incompatible.freecad.json",
+    "expectedSha256": "0ac06f51309c7b441e18ae4b5360ca879fae1e39035965713faa25d881ff97b1",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-producer-incompatible.freecad.ledger.json",
+    "ledgerSha256": "4c955f112190f33f9399e054defdfef6eec2b070008a7db57d07d8d28f823942",
+    "expectedSourceClass": "freecad_expected",
+    "fixtureRole": "native",
+    "roleCatalog": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json",
+    "roleCatalogSha256": "64f552a4dd8369d141936e44aa821cd97e885f68eb4008af2b68579493ca7cc9",
+    "fixtureRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-producer-incompatible.json",
+    "expectedRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-producer-incompatible.freecad.json",
+    "library": "/Users/li/Chili3DProject/opencascade-rs/target/debug/libcad_core_ffi.dylib",
+    "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+    "buildReceipt": "build-receipt.json",
+    "buildReceiptSha256": "7a92fa1a35221f43accec9f02b019b44421669b961bd83d170f8175f86cb6ddb",
+    "ffiInputSha256": "3cd407c158cefee549575e0e1436a63ecc03c019ce877534e383a3084e219bb2"
+  }
+}

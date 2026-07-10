@@ -1,0 +1,40 @@
+{
+  "schema": "cad-rs.ffi-result.v2",
+  "entrypoint": "cad_rs_recompute_json",
+  "ffiStatus": 0,
+  "payload": {
+    "diagnostics": [
+      {
+        "actualSchemaVersion": "cad-core.topo-state.v0",
+        "code": "topo_state_schema_incompatible",
+        "expectedSchemaVersion": "cad-core.topo-state.v1",
+        "message": "topoNamingState schemaVersion is incompatible; request-level recompute is refused",
+        "severity": "error",
+        "source": "topoNamingState"
+      }
+    ],
+    "elementReferenceUpdates": [],
+    "results": []
+  },
+  "error": "",
+  "errorJson": null,
+  "provenance": {
+    "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-schema-incompatible.json",
+    "fixtureSha256": "702d2d56e1df7cff8dc37bb15702390e571abf2cf1b4d971179a910db3e21733",
+    "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-schema-incompatible.freecad.json",
+    "expectedSha256": "947b4f2e7e21a12d628dcf586721c466712415be89a95fda57b94596c43543c9",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-schema-incompatible.freecad.ledger.json",
+    "ledgerSha256": "c372da3c523d88eb235b06236f1762657e344fdc841d58a5bfdfdc82aac3eb6f",
+    "expectedSourceClass": "freecad_expected",
+    "fixtureRole": "native",
+    "roleCatalog": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json",
+    "roleCatalogSha256": "64f552a4dd8369d141936e44aa821cd97e885f68eb4008af2b68579493ca7cc9",
+    "fixtureRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-schema-incompatible.json",
+    "expectedRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-schema-incompatible.freecad.json",
+    "library": "/Users/li/Chili3DProject/opencascade-rs/target/debug/libcad_core_ffi.dylib",
+    "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+    "buildReceipt": "build-receipt.json",
+    "buildReceiptSha256": "7a92fa1a35221f43accec9f02b019b44421669b961bd83d170f8175f86cb6ddb",
+    "ffiInputSha256": "702d2d56e1df7cff8dc37bb15702390e571abf2cf1b4d971179a910db3e21733"
+  }
+}

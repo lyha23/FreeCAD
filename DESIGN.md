@@ -453,3 +453,7 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 ---
 
 我觉得先不用考虑  cad-core 的 , FreeCADCmd 在生成 recomputed 的输入和输出的时候, 应该先考虑如何保证这个账本的完整性, 这样才能设置权威
+
+---
+
+要让'/Users/li/Chili3DProject/FreeCAD/cad-core' 的输出对齐 `fixtures/<phase>/expected/*.freecad.json` , 并实现这个方案 '/Users/li/Chili3DProject/FreeCAD/docs/框架/7-9-15-53-FreeCADCmd权威账本与topoNamingState裁剪原则.md' 下一步该做什么

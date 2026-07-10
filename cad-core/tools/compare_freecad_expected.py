@@ -60,6 +60,8 @@ def run_strict_compare(
     *,
     live: bool = False,
     binary: Path | None = None,
+    actual_source: str | None = None,
+    ffi_library: Path | None = None,
     roles_path: Path | None = None,
     registry_path: Path | None = None,
 ) -> dict[str, Any]:
@@ -68,8 +70,9 @@ def run_strict_compare(
             root=root,
             phase=phase,
             case=case,
-            source_kind="live" if live else "snapshot",
+            source_kind=actual_source or ("live" if live else "snapshot"),
             binary=binary,
+            ffi_library=ffi_library,
             roles_path=roles_path,
             registry_path=registry_path,
         )
@@ -100,9 +103,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--strict", action="store_true", help="Write a report-only v2 parity evaluation.")
     parser.add_argument("--write-current", action="store_true", help="Materialize current outputs through the live source.")
     parser.add_argument("--live", action="store_true", help="Evaluate one fresh live CAD Core result per case.")
+    parser.add_argument(
+        "--actual-source",
+        choices=("snapshot", "live", "rust-ffi"),
+        help="Actual-payload adapter; rust-ffi calls cad_rs_recompute_json once per fixture.",
+    )
     parser.add_argument("--release-gate", action="store_true", help="Run the live release gate and fail on non-passing verdicts.")
     parser.add_argument("--run-contract-tests", action="store_true", help="Run registry-selected dotted unittest ids.")
     parser.add_argument("--bin", type=Path, help="CAD Core binary for live/materialization modes.")
+    parser.add_argument("--ffi-lib", type=Path, help="Rust cad-core-ffi cdylib for --actual-source rust-ffi.")
     parser.add_argument("--roles", type=Path, help="Fixture-role manifest path.")
     parser.add_argument("--registry", type=Path, help="Protocol-divergence registry path.")
     parser.add_argument("--output", type=Path, help="Parity report output path.")
@@ -141,6 +150,8 @@ def _run_contract_tests(report: dict[str, Any], root: Path) -> tuple[dict[str, A
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    if args.actual_source == "rust-ffi" and args.ffi_lib is None:
+        raise SystemExit("--ffi-lib is required for --actual-source rust-ffi")
     root = ROOT
     payloads: list[dict[str, Any]] = []
     exit_code = 0
@@ -157,8 +168,10 @@ def main(argv: list[str] | None = None) -> int:
             args.phase,
             args.case,
             args.output,
-            live=args.live or args.release_gate,
+            live=args.live or (args.release_gate and args.actual_source is None),
             binary=args.bin,
+            actual_source=args.actual_source,
+            ffi_library=args.ffi_lib,
             roles_path=args.roles,
             registry_path=args.registry,
         )
