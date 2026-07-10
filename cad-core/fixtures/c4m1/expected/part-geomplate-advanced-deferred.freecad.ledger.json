@@ -21,7 +21,7 @@
   "fixture": {
     "case": "part-geomplate-advanced-deferred",
     "expectedPayloadHash": "sha256:83a6d50df2768763a7c89ffbdd343dd52242b42c89f7871fe835fb7082e1066e",
-    "inputHash": "sha256:f7bfa272b9b86ced50353aadbc089b8ca866df8ea2cc5adc45c1d0b114b9896b",
+    "inputHash": "sha256:dd0bcbb45d45467788561032b2796f75b77ed70c118c40a127326a68c7974313",
     "phase": "c4m1",
     "topoNamingStateHash": "sha256:3b68978eac8810120eeed0daf1dea61cebd75ff563a239e0cb7de88431e6b2a6"
   },

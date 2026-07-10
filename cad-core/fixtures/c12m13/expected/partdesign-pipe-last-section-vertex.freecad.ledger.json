@@ -7,10 +7,10 @@
   "events": [],
   "fixture": {
     "case": "partdesign-pipe-last-section-vertex",
-    "expectedPayloadHash": "sha256:18c03e9fadba70ad46f8dfc6242b6fe1a26c84e3924613a79ea6ac49a1dea149",
-    "inputHash": "sha256:d5db3978fbe544ede243b8f108ae0d86c7b03267e9b772a6c2248affbcc5fd1c",
+    "expectedPayloadHash": "sha256:5e374392e62fb17493c157bb7bda92be1662d20a15ac16a33b611cd7bbc928d3",
+    "inputHash": "sha256:8781471812f40f0d6fe3436df8c3e882fecbdcf9122683380765528815c428c1",
     "phase": "c12m13",
-    "topoNamingStateHash": "sha256:37ca24d0c6c6d1d772448f9b15993b4e90930fc7e294294c3469881cecb675bb"
+    "topoNamingStateHash": "sha256:8c45ef45258701deef18a5b713683865dd96d7c5ff4c87beba5ce3cbb5f4ee0c"
   },
   "inputReferences": [],
   "objects": {
@@ -71,7 +71,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#13:1;:G;SEW;:H*:*,F",
-                  "raw": "AdditivePipeLastVertex.#13:1;:G;SEW;:H49:7,F"
+                  "raw": "AdditivePipeLastVertex.#13:1;:G;SEW;:H5c:7,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -92,7 +92,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#13:2;:G;SEW;:H*:*,F",
-                  "raw": "AdditivePipeLastVertex.#13:2;:G;SEW;:H49:7,F"
+                  "raw": "AdditivePipeLastVertex.#13:2;:G;SEW;:H5c:7,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -113,7 +113,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#13:3;:G;SEW;:H*:*,F",
-                  "raw": "AdditivePipeLastVertex.#13:3;:G;SEW;:H49:7,F"
+                  "raw": "AdditivePipeLastVertex.#13:3;:G;SEW;:H5c:7,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -134,7 +134,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#13:4;:G;SEW;:H*:*,F",
-                  "raw": "AdditivePipeLastVertex.#13:4;:G;SEW;:H49:7,F"
+                  "raw": "AdditivePipeLastVertex.#13:4;:G;SEW;:H5c:7,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -155,7 +155,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#14;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#14;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#14;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -176,7 +176,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#14;:U2;PSH;:H*:*,V",
-                  "raw": "AdditivePipeLastVertex.#14;:U2;PSH;:H49:8,V"
+                  "raw": "AdditivePipeLastVertex.#14;:U2;PSH;:H5c:8,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -197,7 +197,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#15;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#15;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#15;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -218,7 +218,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#16;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#16;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#16;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -239,7 +239,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#17;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#17;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#17;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -260,7 +260,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#19:1;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#19:1;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#19:1;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -281,7 +281,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#19:2;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#19:2;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#19:2;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -302,7 +302,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#19:3;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#19:3;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#19:3;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -323,7 +323,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#19:4;:G;SEW;:H*:*,E",
-                  "raw": "AdditivePipeLastVertex.#19:4;:G;SEW;:H49:7,E"
+                  "raw": "AdditivePipeLastVertex.#19:4;:G;SEW;:H5c:7,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -344,7 +344,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#1b:2;:G;SEW;:H*:*,V",
-                  "raw": "AdditivePipeLastVertex.#1b:2;:G;SEW;:H49:7,V"
+                  "raw": "AdditivePipeLastVertex.#1b:2;:G;SEW;:H5c:7,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -365,7 +365,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#1c:4;:G;SEW;:H*:*,V",
-                  "raw": "AdditivePipeLastVertex.#1c:4;:G;SEW;:H49:7,V"
+                  "raw": "AdditivePipeLastVertex.#1c:4;:G;SEW;:H5c:7,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -386,7 +386,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#1d:6;:G;SEW;:H*:*,V",
-                  "raw": "AdditivePipeLastVertex.#1d:6;:G;SEW;:H49:7,V"
+                  "raw": "AdditivePipeLastVertex.#1d:6;:G;SEW;:H5c:7,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -407,7 +407,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#1e:8;:G;SEW;:H*:*,V",
-                  "raw": "AdditivePipeLastVertex.#1e:8;:G;SEW;:H49:7,V"
+                  "raw": "AdditivePipeLastVertex.#1e:8;:G;SEW;:H5c:7,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -428,7 +428,7 @@
                 },
                 "mappedName": {
                   "canonical": "AdditivePipeLastVertex.#21:1;:L#1f;SEW;:H*:*,F",
-                  "raw": "AdditivePipeLastVertex.#21:1;:L#1f;SEW;:H49:a,F"
+                  "raw": "AdditivePipeLastVertex.#21:1;:L#1f;SEW;:H5c:a,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -460,7 +460,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#13:1;:G;SEW;:H*:*,F",
-              "raw": "AdditivePipeLastVertex.#13:1;:G;SEW;:H49:7,F"
+              "raw": "AdditivePipeLastVertex.#13:1;:G;SEW;:H5c:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -481,7 +481,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#13:2;:G;SEW;:H*:*,F",
-              "raw": "AdditivePipeLastVertex.#13:2;:G;SEW;:H49:7,F"
+              "raw": "AdditivePipeLastVertex.#13:2;:G;SEW;:H5c:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -502,7 +502,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#13:3;:G;SEW;:H*:*,F",
-              "raw": "AdditivePipeLastVertex.#13:3;:G;SEW;:H49:7,F"
+              "raw": "AdditivePipeLastVertex.#13:3;:G;SEW;:H5c:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -523,7 +523,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#13:4;:G;SEW;:H*:*,F",
-              "raw": "AdditivePipeLastVertex.#13:4;:G;SEW;:H49:7,F"
+              "raw": "AdditivePipeLastVertex.#13:4;:G;SEW;:H5c:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -544,7 +544,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#14;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#14;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#14;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -565,7 +565,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#14;:U2;PSH;:H*:*,V",
-              "raw": "AdditivePipeLastVertex.#14;:U2;PSH;:H49:8,V"
+              "raw": "AdditivePipeLastVertex.#14;:U2;PSH;:H5c:8,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -586,7 +586,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#15;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#15;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#15;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -607,7 +607,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#16;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#16;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#16;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -628,7 +628,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#17;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#17;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#17;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -649,7 +649,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#19:1;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#19:1;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#19:1;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -670,7 +670,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#19:2;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#19:2;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#19:2;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -691,7 +691,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#19:3;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#19:3;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#19:3;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -712,7 +712,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#19:4;:G;SEW;:H*:*,E",
-              "raw": "AdditivePipeLastVertex.#19:4;:G;SEW;:H49:7,E"
+              "raw": "AdditivePipeLastVertex.#19:4;:G;SEW;:H5c:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -733,7 +733,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#1b:2;:G;SEW;:H*:*,V",
-              "raw": "AdditivePipeLastVertex.#1b:2;:G;SEW;:H49:7,V"
+              "raw": "AdditivePipeLastVertex.#1b:2;:G;SEW;:H5c:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -754,7 +754,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#1c:4;:G;SEW;:H*:*,V",
-              "raw": "AdditivePipeLastVertex.#1c:4;:G;SEW;:H49:7,V"
+              "raw": "AdditivePipeLastVertex.#1c:4;:G;SEW;:H5c:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -775,7 +775,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#1d:6;:G;SEW;:H*:*,V",
-              "raw": "AdditivePipeLastVertex.#1d:6;:G;SEW;:H49:7,V"
+              "raw": "AdditivePipeLastVertex.#1d:6;:G;SEW;:H5c:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -796,7 +796,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#1e:8;:G;SEW;:H*:*,V",
-              "raw": "AdditivePipeLastVertex.#1e:8;:G;SEW;:H49:7,V"
+              "raw": "AdditivePipeLastVertex.#1e:8;:G;SEW;:H5c:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -817,7 +817,7 @@
             },
             "mappedName": {
               "canonical": "AdditivePipeLastVertex.#21:1;:L#1f;SEW;:H*:*,F",
-              "raw": "AdditivePipeLastVertex.#21:1;:L#1f;SEW;:H49:a,F"
+              "raw": "AdditivePipeLastVertex.#21:1;:L#1f;SEW;:H5c:a,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -942,7 +942,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:37ca24d0c6c6d1d772448f9b15993b4e90930fc7e294294c3469881cecb675bb",
+    "inputTopoNamingStateHash": "sha256:8c45ef45258701deef18a5b713683865dd96d7c5ff4c87beba5ce3cbb5f4ee0c",
     "results": [],
     "status": "passed"
   },

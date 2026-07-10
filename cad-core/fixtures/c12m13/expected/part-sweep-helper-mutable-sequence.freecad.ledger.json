@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-sweep-helper-mutable-sequence",
     "expectedPayloadHash": "sha256:044b0c692561d567049d68f34a569c839da88a83250bbe22a906a14603da91e3",
-    "inputHash": "sha256:a32d4692f93b6014480a4c410a84a541b3f4c62fe4a604dd69fcd88955e89e3e",
+    "inputHash": "sha256:de343d34d349229c3a753cf6ae98119c7ee98f664113b67b217abc4213844a94",
     "phase": "c12m13",
     "topoNamingStateHash": "sha256:a3b96dea59f33f3f781e79c397dc7f75e53ddad9d4d3a40b499522461e57a109"
   },

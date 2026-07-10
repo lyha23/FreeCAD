@@ -13,7 +13,7 @@
   "fixture": {
     "case": "part-filling-wrapper-uv-point-boundary",
     "expectedPayloadHash": "sha256:41a82a4965a07f2ca6333b5f684c29c6d7229245b6ff4c359cc15777c515c517",
-    "inputHash": "sha256:cc5d046b51dd80a7dbb5d27f463737b19310340f41bd87c42ac80ea316267b61",
+    "inputHash": "sha256:18584e9a9dd9b3468a1c428c977489fd18e5cdb03117eb2e7b45b3998019a750",
     "phase": "c5m8",
     "topoNamingStateHash": "sha256:c7e4fefdee50cf9a30f749514451020a43a0e0fb21ea79c2ee679288c1257aee"
   },

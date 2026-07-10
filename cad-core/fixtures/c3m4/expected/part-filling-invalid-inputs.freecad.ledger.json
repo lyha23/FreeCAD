@@ -33,7 +33,7 @@
   "fixture": {
     "case": "part-filling-invalid-inputs",
     "expectedPayloadHash": "sha256:7e69022a1b03d9e47a2b82cad127ead193c0224b5eb38624c2ba9daab847ed5e",
-    "inputHash": "sha256:e510b911a7ca526c813740d3570a011372f9650aa1991b8992e85c57d8cc32a2",
+    "inputHash": "sha256:eaef2365eb6862f003ef1b065fd46458d1f82e177d1bceafb33c6191c5d3d6bf",
     "phase": "c3m4",
     "topoNamingStateHash": "sha256:17f6352a4e4ef4a28c05a28375b5c5cbc9e5410fb458eab9a49f224774050c90"
   },

@@ -13,7 +13,7 @@
   "fixture": {
     "case": "part-geomplate-wrapper-boundary",
     "expectedPayloadHash": "sha256:29e53c3f18a23ee7080f1cc26292fe2d348aab9ddc64c350730a1343eae349e0",
-    "inputHash": "sha256:b6c6be4b65c11e5a49f2cdbe1cf4e9b418e9e235ee8002005c9922139e0ccbf8",
+    "inputHash": "sha256:9845f3a6a4ecfac2bf6a398bae53944a2011d87031de9f9ec880b1b9c97a24bf",
     "phase": "c5m7",
     "topoNamingStateHash": "sha256:ea8070c952239aa9ed57e598f2183dcac3461e3b61b83e6b6395fce2f2ed5a36"
   },

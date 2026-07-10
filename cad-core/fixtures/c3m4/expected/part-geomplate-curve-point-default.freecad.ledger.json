@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-geomplate-curve-point-default",
     "expectedPayloadHash": "sha256:536375487d937405df072462dfaa6fcb092aa8d19ae35d4666aaa79210072d26",
-    "inputHash": "sha256:8a1fa913933eae53853b4e04aec45be49dd159a805ccae81b8194c839f18b560",
+    "inputHash": "sha256:18e93b1f7104af3f2bd04db599c7339fcf8043d72223034277d05dc67803596b",
     "phase": "c3m4",
     "topoNamingStateHash": "sha256:02402546bbc58f5e04d5043b6a89497c8e7fe56ce83ce8a1487e5bc05bb555cd"
   },

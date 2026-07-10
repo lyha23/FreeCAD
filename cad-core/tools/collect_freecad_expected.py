@@ -35,6 +35,8 @@ TOPO_CHILD_INDEX_PATH_RE = re.compile(
 )
 TOPO_DISPLAY_PATH_STABLE_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*\.(Face|Edge|Vertex)\d+$")
 ACTIVE_TOPO_NAMING_STATE: dict[str, Any] | None = None
+ACTIVE_RESOLVED_REFERENCE_BINDINGS: list[dict[str, str]] = []
+LAST_FREECAD_LEDGER_CAPTURE: dict[str, Any] | None = None
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
     "App::Line",
@@ -204,9 +206,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--pretty", action="store_true", help="Print generated JSON to stdout.")
     parser.add_argument("--skip-unsupported", action="store_true", help="Skip unsupported fixtures in --phase mode.")
     parser.add_argument("--emit-ledger", action="store_true", help="Write expected sidecar *.freecad.ledger.json files.")
+    parser.add_argument(
+        "--check-ledger",
+        action="store_true",
+        help="With --check, compare the regenerated ledger with the checked-in sidecar.",
+    )
     parser.add_argument("--validate-ledger", action="store_true", help="Validate emitted ledger sidecars before returning success.")
     parser.add_argument("--freecadcmd", default=os.environ.get("FREECADCMD", DEFAULT_FREECADCMD))
-    return parser.parse_args(script_args(argv))
+    args = parser.parse_args(script_args(argv))
+    if args.check_ledger and not args.check:
+        parser.error("--check-ledger requires --check")
+    return args
 
 
 def freecad_version(FreeCAD: Any) -> str:
@@ -497,7 +507,231 @@ def resolve_external_subname(created: dict[str, Any], target_name: str, subname:
     return target_name, subname
 
 
-def link_sub_value(created: dict[str, Any], value: dict) -> Any:
+NATIVE_RESOLUTION_EVIDENCE = {
+    "FreeCAD.getSubObject",
+    "FreeCAD.Shape.getElement",
+    "FreeCAD.objectReference",
+    "rawTopoNamingState.subshapes",
+    "rawTopoNamingState.elementMap",
+}
+
+
+def freecad_resolved_value_is_valid(value: Any) -> bool:
+    if value is None:
+        return False
+    shape = getattr(value, "Shape", value)
+    is_null = getattr(shape, "isNull", None)
+    if callable(is_null):
+        try:
+            return not bool(is_null())
+        except Exception:
+            return False
+    return True
+
+
+def native_subname_resolution_evidence(target: Any, subname: str) -> str | None:
+    if not subname:
+        return "FreeCAD.objectReference" if target is not None else None
+    get_sub_object = getattr(target, "getSubObject", None)
+    if callable(get_sub_object):
+        try:
+            if freecad_resolved_value_is_valid(get_sub_object(subname)):
+                return "FreeCAD.getSubObject"
+        except Exception:
+            pass
+    shape = getattr(target, "Shape", None)
+    get_element = getattr(shape, "getElement", None)
+    if callable(get_element):
+        try:
+            if freecad_resolved_value_is_valid(get_element(subname)):
+                return "FreeCAD.Shape.getElement"
+        except Exception:
+            pass
+    return None
+
+
+def record_resolved_reference_bindings(
+    value: dict[str, Any],
+    native_resolved_subnames: Sequence[str],
+    *,
+    owner: str,
+    property_path: str,
+    resolved_object: str | None = None,
+    published_resolved_subnames: Sequence[str] | None = None,
+    native_resolution_evidence: Sequence[str | None] | None = None,
+    assignment_succeeded: bool = False,
+) -> None:
+    stable_sub_list = value.get("StableSubList")
+    target_name = value.get("value")
+    if (
+        value.get("StableSubListSource") != "topoNamingState"
+        or not isinstance(stable_sub_list, list)
+        or not isinstance(target_name, str)
+        or len(stable_sub_list) != len(native_resolved_subnames)
+    ):
+        return
+    if (
+        published_resolved_subnames is not None
+        and len(published_resolved_subnames) != len(native_resolved_subnames)
+    ):
+        raise UnsupportedFixture(
+            "native and published resolved subname counts must match"
+        )
+    if (
+        native_resolution_evidence is not None
+        and len(native_resolution_evidence) != len(native_resolved_subnames)
+    ):
+        raise UnsupportedFixture(
+            "native resolution evidence count must match resolved subnames"
+        )
+    published_subnames = (
+        published_resolved_subnames
+        if published_resolved_subnames is not None
+        else native_resolved_subnames
+    )
+    resolution_evidence = (
+        native_resolution_evidence
+        if native_resolution_evidence is not None
+        else [None] * len(native_resolved_subnames)
+    )
+    for stable_subname, native_subname, published_subname, evidence in zip(
+        stable_sub_list,
+        native_resolved_subnames,
+        published_subnames,
+        resolution_evidence,
+    ):
+        if not isinstance(stable_subname, str) or not stable_subname:
+            continue
+        binding = {
+            "owner": owner,
+            "propertyPath": property_path,
+            "target": target_name,
+            "stableSubname": stable_subname,
+            "resolvedObject": resolved_object or target_name,
+            "resolvedSubname": str(published_subname),
+            "nativeResolvedSubname": str(native_subname),
+            "nativeResolutionEvidence": evidence,
+            "assignmentStatus": (
+                "succeeded"
+                if assignment_succeeded and evidence in NATIVE_RESOLUTION_EVIDENCE
+                else "assigned" if assignment_succeeded else "pending"
+            ),
+        }
+        binding_key = (
+            binding["owner"],
+            binding["propertyPath"],
+            binding["target"],
+            binding["stableSubname"],
+        )
+        ACTIVE_RESOLVED_REFERENCE_BINDINGS[:] = [
+            existing
+            for existing in ACTIVE_RESOLVED_REFERENCE_BINDINGS
+            if (
+                existing.get("owner"),
+                existing.get("propertyPath"),
+                existing.get("target"),
+                existing.get("stableSubname"),
+            )
+            != binding_key
+        ]
+        ACTIVE_RESOLVED_REFERENCE_BINDINGS.append(binding)
+
+
+def mark_resolved_reference_bindings_succeeded(
+    owner: str,
+    property_path_prefix: str,
+) -> None:
+    for binding in ACTIVE_RESOLVED_REFERENCE_BINDINGS:
+        property_path = binding.get("propertyPath")
+        if (
+            binding.get("owner") == owner
+            and isinstance(property_path, str)
+            and (
+                property_path == property_path_prefix
+                or property_path.startswith(property_path_prefix + ".SubSet.")
+            )
+            and binding.get("nativeResolutionEvidence") in NATIVE_RESOLUTION_EVIDENCE
+        ):
+            binding["assignmentStatus"] = "succeeded"
+        elif (
+            binding.get("owner") == owner
+            and isinstance(property_path, str)
+            and (
+                property_path == property_path_prefix
+                or property_path.startswith(property_path_prefix + ".SubSet.")
+            )
+        ):
+            binding["assignmentStatus"] = "assigned"
+
+
+def finalize_resolved_reference_bindings(
+    created: dict[str, Any] | None,
+    raw_topo_state: dict[str, Any],
+) -> None:
+    raw_objects = raw_topo_state.get("objects")
+    if not isinstance(raw_objects, dict):
+        raw_objects = {}
+    for binding in ACTIVE_RESOLVED_REFERENCE_BINDINGS:
+        if binding.get("assignmentStatus") != "assigned":
+            continue
+        resolved_object = binding.get("resolvedObject")
+        resolved_subname = binding.get("resolvedSubname")
+        native_subname = binding.get("nativeResolvedSubname")
+        target = created.get(resolved_object) if isinstance(created, dict) else None
+        evidence = (
+            native_subname_resolution_evidence(target, native_subname)
+            if isinstance(native_subname, str)
+            else None
+        )
+        if evidence is None:
+            object_state = raw_objects.get(resolved_object)
+            subshapes = object_state.get("subshapes") if isinstance(object_state, dict) else None
+            if (
+                isinstance(subshapes, dict)
+                and isinstance(resolved_subname, str)
+                and resolved_subname in subshapes
+            ):
+                evidence = "rawTopoNamingState.subshapes"
+        if evidence is None:
+            entry = ledger_topo_state_entry_for_token(
+                raw_objects,
+                binding.get("target"),
+                binding.get("stableSubname"),
+            )
+            entry_target = dict_items(entry.get("target")) if isinstance(entry, dict) else {}
+            if (
+                entry_target.get("object") == resolved_object
+                and entry_target.get("subname") == resolved_subname
+            ):
+                evidence = "rawTopoNamingState.elementMap"
+        if evidence in NATIVE_RESOLUTION_EVIDENCE:
+            binding["nativeResolutionEvidence"] = evidence
+            binding["assignmentStatus"] = "succeeded"
+
+
+def freecad_ledger_capture(
+    raw_topo_state: dict[str, Any],
+    published_topo_state: dict[str, Any],
+    resolved_reference_bindings: Sequence[dict[str, str]],
+) -> dict[str, Any]:
+    return {
+        "rawTopoNamingState": copy.deepcopy(raw_topo_state),
+        "publishedTopoNamingState": copy.deepcopy(published_topo_state),
+        "resolvedReferenceBindings": copy.deepcopy([
+            binding
+            for binding in resolved_reference_bindings
+            if binding.get("assignmentStatus") == "succeeded"
+        ]),
+    }
+
+
+def link_sub_value(
+    created: dict[str, Any],
+    value: dict,
+    *,
+    owner: str = "",
+    property_path: str = "",
+) -> Any:
     target_name = value["value"]
     if target_name not in created:
         raise UnsupportedFixture(f"link target {target_name} was not created")
@@ -508,11 +742,28 @@ def link_sub_value(created: dict[str, Any], value: dict) -> Any:
     # subname to PropertyLinkSub to collect the expected post-resolution geometry.
     sub_list = native_sub_list(value)
     if sub_list:
-        return target, [native_link_subname(target, subname) for subname in sub_list]
+        native_subnames = [native_link_subname(target, subname) for subname in sub_list]
+        record_resolved_reference_bindings(
+            value,
+            native_subnames,
+            owner=owner,
+            property_path=property_path,
+            native_resolution_evidence=[
+                native_subname_resolution_evidence(target, subname)
+                for subname in native_subnames
+            ],
+        )
+        return target, native_subnames
     return target
 
 
-def profile_link_sub_value_from_sublist(created: dict[str, Any], value: dict) -> Any:
+def profile_link_sub_value_from_sublist(
+    created: dict[str, Any],
+    value: dict,
+    *,
+    owner: str,
+    property_path: str,
+) -> Any:
     # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureSketchBased.h
     # ::ProfileBased stores "App::PropertyLinkSub Profile". cad-core fixtures intentionally model
     # Profile as PropertyLinkSubList so multiple selected faces can share one recompute DTO; native
@@ -526,7 +777,7 @@ def profile_link_sub_value_from_sublist(created: dict[str, Any], value: dict) ->
     target_name: str | None = None
     target = None
     subnames: list[str] = []
-    for item in sub_set:
+    for item_index, item in enumerate(sub_set):
         if not isinstance(item, dict):
             raise UnsupportedFixture("Profile.SubSet items must be objects")
         item_target_name = item.get("value")
@@ -541,22 +792,49 @@ def profile_link_sub_value_from_sublist(created: dict[str, Any], value: dict) ->
                 "multi-target Profile.SubSet directly"
             )
         item_target = created[item_target_name]
-        for subname in native_sub_list(item):
-            subnames.append(native_link_subname(item_target, subname))
+        item_subnames = [native_link_subname(item_target, subname) for subname in native_sub_list(item)]
+        record_resolved_reference_bindings(
+            item,
+            item_subnames,
+            owner=owner,
+            property_path=f"{property_path}.SubSet.{item_index}",
+            native_resolution_evidence=[
+                native_subname_resolution_evidence(item_target, subname)
+                for subname in item_subnames
+            ],
+        )
+        subnames.extend(item_subnames)
 
     if subnames:
         return target, subnames
     return target
 
 
-def assembly_joint_reference_value(created: dict[str, Any], value: dict) -> Any:
+def assembly_joint_reference_value(
+    created: dict[str, Any],
+    value: dict,
+    *,
+    owner: str,
+    property_path: str,
+) -> Any:
     target_name = value["value"]
     if target_name not in created:
         raise UnsupportedFixture(f"assembly joint reference target {target_name} was not created")
     target = created[target_name]
     sub_list = native_sub_list(value)
     if sub_list:
-        return target, [native_link_subname(target, subname) for subname in sub_list]
+        native_subnames = [native_link_subname(target, subname) for subname in sub_list]
+        record_resolved_reference_bindings(
+            value,
+            native_subnames,
+            owner=owner,
+            property_path=property_path,
+            native_resolution_evidence=[
+                native_subname_resolution_evidence(target, subname)
+                for subname in native_subnames
+            ],
+        )
+        return target, native_subnames
     # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Assembly/UtilsAssembly.py
     # ::getObject(), returns None when "len(subs) < 1"; an empty string sub-token is the
     # native representation of an object-level Assembly Joint reference.
@@ -804,7 +1082,7 @@ def set_sketch_external_geometry(created: dict[str, Any], obj: Any, value: Any) 
     if not isinstance(sub_set, list):
         raise UnsupportedFixture("Sketch ExternalGeometry.SubSet must be a list")
 
-    for item in sub_set:
+    for item_index, item in enumerate(sub_set):
         if not isinstance(item, dict):
             raise UnsupportedFixture("Sketch ExternalGeometry.SubSet items must be objects")
         target_name = item.get("value")
@@ -817,8 +1095,27 @@ def set_sketch_external_geometry(created: dict[str, Any], obj: Any, value: Any) 
         # SubElements). In oracle mode, resolve state-backed StableSubList through the
         # fixture topoNamingState before feeding native FreeCAD's current subname.
         flags = external_geometry_flags_from_item(item)
-        for subname in native_sub_list(item):
+        for subname_index, subname in enumerate(native_sub_list(item)):
             external_target_name, external_subname = resolve_external_subname(created, target_name, subname)
+            binding_property_path = f"ExternalGeometry.SubSet.{item_index}"
+            stable_sub_list = item.get("StableSubList")
+            if isinstance(stable_sub_list, list) and subname_index < len(stable_sub_list):
+                record_resolved_reference_bindings(
+                    {
+                        **item,
+                        "StableSubList": [stable_sub_list[subname_index]],
+                    },
+                    [external_subname],
+                    owner=str(getattr(obj, "Name", "")),
+                    property_path=binding_property_path,
+                    resolved_object=external_target_name,
+                    native_resolution_evidence=[
+                        native_subname_resolution_evidence(
+                            created[external_target_name],
+                            external_subname,
+                        )
+                    ],
+                )
             try:
                 # FreeCAD: /home/user/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObjectPyImp.cpp
                 # ::SketchObjectPy::addExternal(), parses "ss|O!O!" and forwards "defining" to
@@ -826,6 +1123,10 @@ def set_sketch_external_geometry(created: dict[str, Any], obj: Any, value: Any) 
                 # ::SketchObject::addExternal(), which sets ExternalGeometryExtension::Defining
                 # during rebuildExternalGeometry().
                 obj.addExternal(external_target_name, external_subname, "Defining" in flags)
+                mark_resolved_reference_bindings_succeeded(
+                    str(getattr(obj, "Name", "")),
+                    binding_property_path,
+                )
             except Exception as exc:
                 raise UnsupportedFixture(
                     f"Sketch ExternalGeometry cannot add {external_target_name}.{external_subname}"
@@ -842,9 +1143,21 @@ def safe_setattr(obj: Any, name: str, value: Any) -> None:
 
 def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, value: Any) -> None:
     if isinstance(value, dict):
+        owner_name = str(getattr(obj, "Name", ""))
         property_type = value.get("PropertyType")
         if value.get("__assembly_joint_reference"):
-            safe_setattr(obj, name, assembly_joint_reference_value(created, value))
+            resolved_value = assembly_joint_reference_value(
+                created,
+                value,
+                owner=owner_name,
+                property_path=name,
+            )
+            safe_setattr(
+                obj,
+                name,
+                resolved_value,
+            )
+            mark_resolved_reference_bindings_succeeded(owner_name, name)
             return
         if property_type == "App::PropertyPlacement":
             if name == "Placement":
@@ -893,7 +1206,14 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             "App::PropertyLinkHidden",
             "App::PropertyXLink",
         }:
-            safe_setattr(obj, name, link_sub_value(created, value))
+            resolved_value = link_sub_value(
+                created,
+                value,
+                owner=owner_name,
+                property_path=name,
+            )
+            safe_setattr(obj, name, resolved_value)
+            mark_resolved_reference_bindings_succeeded(owner_name, name)
             return
         if property_type in {
             "App::PropertyLinkSub",
@@ -901,7 +1221,14 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             "App::PropertyXLinkSub",
             "App::PropertyXLinkSubHidden",
         }:
-            safe_setattr(obj, name, link_sub_value(created, value))
+            resolved_value = link_sub_value(
+                created,
+                value,
+                owner=owner_name,
+                property_path=name,
+            )
+            safe_setattr(obj, name, resolved_value)
+            mark_resolved_reference_bindings_succeeded(owner_name, name)
             return
         if property_type in {"App::PropertyLinkList", "App::PropertyLinkListHidden"}:
             safe_setattr(obj, name, created_link_list(created, value, name))
@@ -912,9 +1239,31 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             "App::PropertyXLinkSubList",
         }:
             if name == "Profile" and getattr(obj, "TypeId", "") in NATIVE_PROFILE_LINK_SUB_TYPES:
-                safe_setattr(obj, name, profile_link_sub_value_from_sublist(created, value))
+                resolved_value = profile_link_sub_value_from_sublist(
+                    created,
+                    value,
+                    owner=owner_name,
+                    property_path=name,
+                )
+                safe_setattr(
+                    obj,
+                    name,
+                    resolved_value,
+                )
+                mark_resolved_reference_bindings_succeeded(owner_name, name)
                 return
-            safe_setattr(obj, name, [link_sub_value(created, item) for item in value.get("SubSet", [])])
+            resolved_items = []
+            for item_index, item in enumerate(value.get("SubSet", [])):
+                resolved_items.append(
+                    link_sub_value(
+                        created,
+                        item,
+                        owner=owner_name,
+                        property_path=f"{name}.SubSet.{item_index}",
+                    )
+                )
+            safe_setattr(obj, name, resolved_items)
+            mark_resolved_reference_bindings_succeeded(owner_name, name)
             return
         raise UnsupportedFixture(f"unsupported structured property {name}: {property_type or sorted(value)}")
     if isinstance(value, list) and any(isinstance(item, dict) for item in value):
@@ -1067,17 +1416,30 @@ def link_sub_value_with_empty_datum_subname(
     created: dict[str, Any],
     value: dict,
     empty_subname_type_ids: set[str],
+    *,
+    owner: str,
+    property_path: str,
 ) -> Any:
     target_name = value["value"]
     if target_name not in created:
         raise UnsupportedFixture(f"link target {target_name} was not created")
     target = created[target_name]
-    sub_list = list_field(value, "StableSubList", "SubList")
+    sub_list = native_sub_list(value)
     if sub_list:
+        record_resolved_reference_bindings(
+            value,
+            [str(item) for item in sub_list],
+            owner=owner,
+            property_path=property_path,
+            native_resolution_evidence=[
+                native_subname_resolution_evidence(target, str(item))
+                for item in sub_list
+            ],
+        )
         return target, sub_list
     if getattr(target, "TypeId", "") in empty_subname_type_ids:
         return target, [""]
-    return link_sub_value(created, value)
+    return link_sub_value(created, value, owner=owner, property_path=property_path)
 
 
 def set_linear_pattern_property(created: dict[str, Any], obj: Any, name: str, value: Any) -> bool:
@@ -1090,15 +1452,16 @@ def set_linear_pattern_property(created: dict[str, Any], obj: Any, name: str, va
             # DatumLine/DatumPlane. cad-core fixtures model datum directions with an empty SubList,
             # so the collector feeds a single empty subname to preserve fixture schema while using
             # FreeCAD's native direction path.
-            safe_setattr(
-                obj,
-                name,
-                link_sub_value_with_empty_datum_subname(
-                    created,
-                    value,
-                    {"PartDesign::Line", "PartDesign::Plane"},
-                ),
+            owner_name = str(getattr(obj, "Name", ""))
+            resolved_value = link_sub_value_with_empty_datum_subname(
+                created,
+                value,
+                {"PartDesign::Line", "PartDesign::Plane"},
+                owner=owner_name,
+                property_path=name,
             )
+            safe_setattr(obj, name, resolved_value)
+            mark_resolved_reference_bindings_succeeded(owner_name, name)
             return True
     return False
 
@@ -1112,11 +1475,16 @@ def set_polar_pattern_property(created: dict[str, Any], obj: Any, name: str, val
             # Axis.getSubValues() is empty before it checks whether the target is a DatumLine.
             # cad-core fixtures model DatumLine axes with an empty SubList, so native collection
             # supplies one empty subname while keeping the fixture schema unchanged.
-            safe_setattr(
-                obj,
-                name,
-                link_sub_value_with_empty_datum_subname(created, value, {"PartDesign::Line"}),
+            owner_name = str(getattr(obj, "Name", ""))
+            resolved_value = link_sub_value_with_empty_datum_subname(
+                created,
+                value,
+                {"PartDesign::Line"},
+                owner=owner_name,
+                property_path=name,
             )
+            safe_setattr(obj, name, resolved_value)
+            mark_resolved_reference_bindings_succeeded(owner_name, name)
             return True
     return False
 
@@ -1130,11 +1498,16 @@ def set_revolved_property(created: dict[str, Any], obj: Any, name: str, value: A
             # reading the linked datum direction. CAD Core fixtures model these object-level
             # datum axes with an empty SubList, so native collection supplies one empty subname
             # while preserving the request graph shape used by cad-core.
-            safe_setattr(
-                obj,
-                name,
-                link_sub_value_with_empty_datum_subname(created, value, {"App::Line", "PartDesign::Line"}),
+            owner_name = str(getattr(obj, "Name", ""))
+            resolved_value = link_sub_value_with_empty_datum_subname(
+                created,
+                value,
+                {"App::Line", "PartDesign::Line"},
+                owner=owner_name,
+                property_path=name,
             )
+            safe_setattr(obj, name, resolved_value)
+            mark_resolved_reference_bindings_succeeded(owner_name, name)
             return True
     return False
 
@@ -2719,9 +3092,22 @@ def topo_state_protocol_response(
     created: dict[str, Any] | None = None,
     result_payloads: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    global LAST_FREECAD_LEDGER_CAPTURE
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
-    topo_state = expand_topo_state_for_input_references(fixture, topo_state)
-    topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
+    raw_topo_state = copy.deepcopy(topo_state)
+    published_topo_state = expand_topo_state_for_input_references(fixture, copy.deepcopy(raw_topo_state))
+    published_topo_state = expand_topo_state_for_reference_updates(
+        fixture,
+        published_topo_state,
+        reference_updates,
+        created,
+    )
+    finalize_resolved_reference_bindings(created, raw_topo_state)
+    LAST_FREECAD_LEDGER_CAPTURE = freecad_ledger_capture(
+        raw_topo_state,
+        published_topo_state,
+        ACTIVE_RESOLVED_REFERENCE_BINDINGS,
+    )
     return {
         "results": [
             {
@@ -2730,7 +3116,7 @@ def topo_state_protocol_response(
             }
             for object_name, summary in (result_payloads or {}).items()
         ],
-        "topoNamingState": topo_state,
+        "topoNamingState": copy.deepcopy(published_topo_state),
         "elementReferenceUpdates": reference_updates,
         "diagnostics": (diagnostics or []) + reference_diagnostics,
     }
@@ -2781,17 +3167,52 @@ def prepare_native_compound_link_targets(
             native_compound_link_subname(specs.get(target_name), str(subname))
             for subname in subnames
         ]
+        for subname in native_subnames:
+            resolved = target.getSubObject(subname)
+            resolved_shape = getattr(resolved, "Shape", resolved)
+            if resolved_shape is None or resolved_shape.isNull():
+                raise UnsupportedFixture(
+                    f"native App::Link target {target_name}.{subname} has no resolvable Shape"
+                )
         if native_subnames != [str(subname) for subname in subnames]:
-            for subname in native_subnames:
-                resolved = target.getSubObject(subname)
-                resolved_shape = getattr(resolved, "Shape", resolved)
-                if resolved_shape is None or resolved_shape.isNull():
-                    raise UnsupportedFixture(
-                        f"native App::Link target {target_name}.{subname} has no resolvable Shape"
-                    )
             link.LinkedObject = (
                 target,
                 native_subnames[0] if isinstance(raw_subnames, str) else native_subnames,
+            )
+
+        properties = object_spec.get("Properties")
+        linked_spec = properties.get("LinkedObject") if isinstance(properties, dict) else None
+        stable_subnames = linked_spec.get("StableSubList") if isinstance(linked_spec, dict) else None
+        if (
+            isinstance(linked_spec, dict)
+            and linked_spec.get("StableSubListSource") == "topoNamingState"
+            and isinstance(stable_subnames, list)
+            and len(stable_subnames) == len(native_subnames)
+        ):
+            published_subnames: list[str] = []
+            for stable_subname in stable_subnames:
+                indexed, diagnostic = topo_state_resolved_indexed_subname(
+                    fixture,
+                    target_name,
+                    stable_subname,
+                )
+                if diagnostic is not None or indexed is None:
+                    raise UnsupportedFixture(
+                        f"native App::Link {object_name} StableSubList {stable_subname} "
+                        "does not resolve through topoNamingState"
+                    )
+                published_subnames.append(indexed)
+            record_resolved_reference_bindings(
+                linked_spec,
+                native_subnames,
+                owner=object_name,
+                property_path="LinkedObject",
+                resolved_object=target_name,
+                published_resolved_subnames=published_subnames,
+                native_resolution_evidence=[
+                    "FreeCAD.getSubObject" for _ in native_subnames
+                ],
+                assignment_succeeded=True,
             )
         # Keep the selected native paths even when they already used FreeCAD's child-object
         # spelling. The response adapter needs the current display path independently from a
@@ -3480,10 +3901,11 @@ def topo_naming_state_response(
     created: dict[str, Any] | None = None,
     ledger_payloads: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    global LAST_FREECAD_LEDGER_CAPTURE
     specs = fixture_object_specs(fixture)
     reference_updates, reference_diagnostics = topo_state_reference_shadow_updates_and_diagnostics(fixture)
     state_payloads = ledger_payloads if ledger_payloads is not None else result_payloads
-    topo_state = {
+    raw_topo_state = {
         "schemaVersion": "cad-core.topo-state.v1",
         "producer": topo_state_producer(fixture, FreeCAD),
         "documentHash": semantic_hash({
@@ -3495,8 +3917,19 @@ def topo_naming_state_response(
             for object_name, summary in state_payloads.items()
         },
     }
-    topo_state = expand_topo_state_for_input_references(fixture, topo_state)
-    topo_state = expand_topo_state_for_reference_updates(fixture, topo_state, reference_updates, created)
+    published_topo_state = expand_topo_state_for_input_references(fixture, copy.deepcopy(raw_topo_state))
+    published_topo_state = expand_topo_state_for_reference_updates(
+        fixture,
+        published_topo_state,
+        reference_updates,
+        created,
+    )
+    finalize_resolved_reference_bindings(created, raw_topo_state)
+    LAST_FREECAD_LEDGER_CAPTURE = freecad_ledger_capture(
+        raw_topo_state,
+        published_topo_state,
+        ACTIVE_RESOLVED_REFERENCE_BINDINGS,
+    )
     return {
         "results": [
             {
@@ -3505,7 +3938,7 @@ def topo_naming_state_response(
             }
             for object_name, summary in result_payloads.items()
         ],
-        "topoNamingState": topo_state,
+        "topoNamingState": copy.deepcopy(published_topo_state),
         "elementReferenceUpdates": reference_updates,
         "diagnostics": reference_diagnostics,
     }
@@ -3529,6 +3962,10 @@ def ledger_element_bucket(element: Any) -> str:
     if ".Vertex" in text or text.endswith("Vertex"):
         return "Vertex"
     return "Shape"
+
+
+def dict_items(value: Any) -> dict[str, Any]:
+    return value if isinstance(value, dict) else {}
 
 
 def ledger_add_element(record: dict[str, Any], field: str, element: Any) -> None:
@@ -3663,6 +4100,85 @@ def ledger_topo_state_entry_for_token(
     return None
 
 
+def resolved_binding_for_reference(
+    bindings: Sequence[dict[str, Any]],
+    ref: dict[str, Any],
+) -> dict[str, Any] | None:
+    ref_owner = ref.get("owner")
+    ref_property_path = ref.get("propertyPath")
+    ref_target = ref.get("target")
+    ref_token = ref.get("stableSubname") or ref.get("element")
+    for binding in bindings:
+        if not isinstance(binding, dict):
+            continue
+        if (
+            binding.get("owner") == ref_owner
+            and binding.get("propertyPath") == ref_property_path
+            and binding.get("target") == ref_target
+            and same_stable_token(binding.get("stableSubname"), ref_token)
+        ):
+            return binding
+    return None
+
+
+def topo_state_has_object(topo_state: dict[str, Any], object_name: Any) -> bool:
+    objects = topo_state.get("objects")
+    return (
+        isinstance(objects, dict)
+        and isinstance(object_name, str)
+        and bool(object_name)
+        and object_name in objects
+    )
+
+
+def resolved_binding_has_native_target(
+    topo_state: dict[str, Any],
+    binding: dict[str, Any] | None,
+) -> bool:
+    if not isinstance(binding, dict):
+        return False
+    resolved_object = binding.get("resolvedObject")
+    resolved_subname = binding.get("resolvedSubname")
+    native_resolved_subname = binding.get("nativeResolvedSubname")
+    if not (
+        binding.get("assignmentStatus") == "succeeded"
+        and binding.get("nativeResolutionEvidence") in NATIVE_RESOLUTION_EVIDENCE
+        and topo_state_has_object(topo_state, resolved_object)
+        and isinstance(resolved_subname, str)
+        and bool(resolved_subname)
+        and isinstance(native_resolved_subname, str)
+        and bool(native_resolved_subname)
+    ):
+        return False
+
+    objects = topo_state.get("objects")
+    object_state = objects.get(resolved_object) if isinstance(objects, dict) else None
+    subshapes = object_state.get("subshapes") if isinstance(object_state, dict) else None
+    if isinstance(subshapes, dict) and resolved_subname in subshapes:
+        return True
+
+    target_name = binding.get("target")
+    stable_subname = binding.get("stableSubname")
+    entry = ledger_topo_state_entry_for_token(objects, target_name, stable_subname)
+    entry_target = dict_items(entry.get("target")) if isinstance(entry, dict) else {}
+    if (
+        entry_target.get("object") == resolved_object
+        and entry_target.get("subname") == resolved_subname
+    ):
+        return True
+
+    if (
+        native_resolved_subname != resolved_subname
+        and binding.get("nativeResolutionEvidence")
+        in {"FreeCAD.getSubObject", "FreeCAD.Shape.getElement"}
+    ):
+        return True
+
+    # Some native objects (notably Sketch external-geometry sources) expose a
+    # resolvable EdgeN through getSubObject without publishing a subshape inventory.
+    return isinstance(subshapes, dict) and not subshapes
+
+
 def ledger_endpoint(endpoint: Any, fallback_object: str, fallback_element: str) -> dict[str, str]:
     if isinstance(endpoint, dict):
         object_name = endpoint.get("object")
@@ -3731,30 +4247,28 @@ def ledger_event_kind_from_recoverability(recoverability: Any) -> str:
 
 
 def ledger_events_for_input_references(
-    fixture: dict[str, Any],
-    expected_payload: dict[str, Any],
+    raw_topo_state: dict[str, Any],
+    resolved_reference_bindings: Sequence[dict[str, Any]],
     input_refs: list[dict[str, Any]],
     objects: dict[str, dict[str, Any]],
     specs: dict[str, dict],
     published_names: set[str],
 ) -> list[dict[str, Any]]:
     events: list[dict[str, Any]] = []
-    input_state = fixture.get("topoNamingState")
-    input_objects = input_state.get("objects") if isinstance(input_state, dict) else {}
-    expected_state = expected_payload.get("topoNamingState")
-    expected_objects = expected_state.get("objects") if isinstance(expected_state, dict) else {}
+    raw_objects = raw_topo_state.get("objects")
+    if not isinstance(raw_objects, dict):
+        raw_objects = {}
 
     for ref in input_refs:
         target_name = str(ref.get("target") or ref.get("owner") or "")
         stable_token = str(ref.get("stableSubname") or ref.get("element") or "")
-        entry = None
-        if isinstance(input_objects, dict):
-            entry = ledger_topo_state_entry_for_token(input_objects, target_name, stable_token)
-        if entry is None and isinstance(expected_objects, dict):
-            entry = ledger_topo_state_entry_for_token(expected_objects, target_name, stable_token)
+        binding = resolved_binding_for_reference(resolved_reference_bindings, ref)
+        entry = ledger_topo_state_entry_for_token(raw_objects, target_name, stable_token)
 
         event_id = f"event:{len(events) + 1}"
-        if entry is None:
+        resolved_object = binding.get("resolvedObject") if isinstance(binding, dict) else None
+        resolved_subname = binding.get("resolvedSubname") if isinstance(binding, dict) else None
+        if not resolved_binding_has_native_target(raw_topo_state, binding):
             event = {
                 "id": event_id,
                 "kind": "failed_with_diagnostics",
@@ -3764,7 +4278,10 @@ def ledger_events_for_input_references(
                 "diagnostics": [
                     {
                         "code": "stable_reference_not_found",
-                        "message": f"StableSubList {stable_token} was not found in topoNamingState object {target_name}",
+                        "message": (
+                            f"StableSubList {stable_token} for {ref.get('owner')}.{ref.get('propertyPath')} "
+                            "was not resolved by the native property assignment"
+                        ),
                     }
                 ],
                 "provenance": "FreeCADCmd.collect_freecad_expected",
@@ -3772,21 +4289,54 @@ def ledger_events_for_input_references(
             events.append(event)
             continue
 
-        source = ledger_endpoint(entry.get("source"), target_name, stable_token)
-        target = ledger_endpoint(entry.get("target"), target_name, stable_token)
+        source = ledger_endpoint(
+            entry.get("source") if isinstance(entry, dict) else None,
+            str(resolved_object),
+            str(resolved_subname),
+        )
+        target = {
+            "object": str(resolved_object),
+            "element": str(resolved_subname),
+        }
+        entry_target = dict_items(entry.get("target")) if isinstance(entry, dict) else {}
+        if entry_target and (
+            entry_target.get("object") != resolved_object
+            or entry_target.get("subname") != resolved_subname
+        ):
+            events.append({
+                "id": event_id,
+                "kind": "failed_with_diagnostics",
+                "sources": [source],
+                "targets": [],
+                "inputReferenceIds": [ref["id"]],
+                "diagnostics": [{
+                    "code": "native_reference_binding_mismatch",
+                    "stableSubname": stable_token,
+                    "expectedTarget": entry_target,
+                    "actualTarget": target,
+                }],
+                "provenance": "FreeCADCmd.native_property_assignment",
+            })
+            continue
         source_record = ledger_object_record(objects, source["object"], specs, published_names)
         target_record = ledger_object_record(objects, target["object"], specs, published_names)
         ledger_add_element(source_record, "beforeElements", source["element"])
         ledger_add_element(target_record, "afterElements", target["element"])
 
-        kind = ledger_event_kind_from_recoverability(entry.get("recoverability"))
+        kind = ledger_event_kind_from_recoverability(
+            entry.get("recoverability") if isinstance(entry, dict) else "resolved"
+        )
         event = {
             "id": event_id,
             "kind": kind,
             "sources": [source],
             "targets": [] if kind == "deleted" else [target],
             "inputReferenceIds": [ref["id"]],
-            "provenance": (entry.get("evidence") or {}).get("source", "topoNamingState.elementMap"),
+            "provenance": (
+                (entry.get("evidence") or {}).get("source", "FreeCADCmd.native_property_assignment")
+                if isinstance(entry, dict)
+                else "FreeCADCmd.native_property_assignment"
+            ),
         }
         if kind in {"ambiguous", "failed_with_diagnostics"}:
             event["diagnostics"] = [
@@ -3913,17 +4463,73 @@ def ledger_events_from_mapper_history(
     return events
 
 
+def ledger_element_maps_evidence_stable_subshape(
+    object_name: str,
+    subshape_name: str,
+    subshape: dict[str, Any],
+    object_state: dict[str, Any],
+) -> bool:
+    element_maps = [dict_items(object_state.get("elementMap"))]
+    for child_map in object_state.get("childElementMaps") or []:
+        if isinstance(child_map, dict):
+            element_maps.append(dict_items(child_map.get("elementMap")))
+
+    for element_map in element_maps:
+        for entry in dict_items(element_map.get("entries")).values():
+            if not isinstance(entry, dict):
+                continue
+            target = dict_items(entry.get("target"))
+            mapped_name = dict_items(entry.get("mappedName"))
+            if (
+                target.get("object") == object_name
+                and target.get("subname") == subshape_name
+                and mapped_name.get("raw") == subshape.get("rawFreecadMappedName")
+                and mapped_name.get("canonical") == subshape.get("canonicalFreecadMappedName")
+            ):
+                return True
+    return False
+
+
+def ledger_unmapped_stable_subshape_evidence(
+    object_name: str,
+    object_state: dict[str, Any],
+) -> dict[str, Any]:
+    evidence: dict[str, Any] = {}
+    subshapes = object_state.get("subshapes")
+    if not isinstance(subshapes, dict):
+        return evidence
+    for subshape_name, subshape in subshapes.items():
+        if not isinstance(subshape_name, str) or not isinstance(subshape, dict):
+            continue
+        if subshape.get("identityStatus") != "stable":
+            continue
+        if ledger_element_maps_evidence_stable_subshape(
+            object_name,
+            subshape_name,
+            subshape,
+            object_state,
+        ):
+            continue
+        evidence[subshape_name] = copy.deepcopy(subshape)
+    return evidence
+
+
 def ledger_objects_from_states(
     fixture: dict[str, Any],
-    expected_payload: dict[str, Any],
+    raw_topo_state: dict[str, Any],
+    published_topo_state: dict[str, Any],
     input_refs: list[dict[str, Any]],
 ) -> dict[str, dict[str, Any]]:
     specs = fixture_object_specs(fixture)
-    topo_state = expected_payload.get("topoNamingState")
-    expected_objects = topo_state.get("objects") if isinstance(topo_state, dict) else {}
+    raw_objects = raw_topo_state.get("objects")
+    if not isinstance(raw_objects, dict):
+        raw_objects = {}
+    published_objects = published_topo_state.get("objects")
+    if not isinstance(published_objects, dict):
+        published_objects = {}
     input_state = fixture.get("topoNamingState")
     input_objects = input_state.get("objects") if isinstance(input_state, dict) else {}
-    published_names = set(expected_objects) if isinstance(expected_objects, dict) else set()
+    published_names = set(published_objects)
     objects: dict[str, dict[str, Any]] = {}
 
     for object_name in specs:
@@ -3933,14 +4539,32 @@ def ledger_objects_from_states(
             record = ledger_object_record(objects, str(object_name), specs, published_names)
             if isinstance(object_state, dict):
                 ledger_add_state_elements(record, object_state, "beforeElements")
-    if isinstance(expected_objects, dict):
-        for object_name, object_state in expected_objects.items():
-            record = ledger_object_record(objects, str(object_name), specs, published_names)
-            if isinstance(object_state, dict):
-                ledger_add_state_elements(record, object_state, "afterElements")
-                record["elementMap"] = copy.deepcopy(object_state.get("elementMap", {}))
-                record["childElementMaps"] = copy.deepcopy(object_state.get("childElementMaps", []))
-                record["mapperHistory"] = copy.deepcopy(object_state.get("mapperHistory", []))
+    for object_name, object_state in raw_objects.items():
+        record = ledger_object_record(objects, str(object_name), specs, published_names)
+        if isinstance(object_state, dict):
+            ledger_add_state_elements(record, object_state, "afterElements")
+
+    for object_name, object_state in published_objects.items():
+        record = ledger_object_record(objects, str(object_name), specs, published_names)
+        if isinstance(object_state, dict):
+            # Publication can preserve a fixture-carried object that is not one of the
+            # collector's requested result targets. Keep its inventory explicit, while
+            # native event conclusions remain tied to rawTopoNamingState and bindings.
+            ledger_add_state_elements(record, object_state, "afterElements")
+            record["elementMap"] = copy.deepcopy(object_state.get("elementMap", {}))
+            record["childElementMaps"] = copy.deepcopy(object_state.get("childElementMaps", []))
+            record["mapperHistory"] = copy.deepcopy(object_state.get("mapperHistory", []))
+            raw_object_state = raw_objects.get(object_name)
+            subshape_evidence = (
+                ledger_unmapped_stable_subshape_evidence(
+                    str(object_name),
+                    raw_object_state,
+                )
+                if isinstance(raw_object_state, dict)
+                else {}
+            )
+            if subshape_evidence:
+                record["subshapeEvidence"] = subshape_evidence
 
     for ref in input_refs:
         owner = ref.get("owner")
@@ -3954,13 +4578,14 @@ def ledger_objects_from_states(
 
 def ledger_projection(
     fixture: dict[str, Any],
-    expected_payload: dict[str, Any],
+    native_topo_state: dict[str, Any],
     objects: dict[str, dict[str, Any]],
     events: list[dict[str, Any]],
 ) -> dict[str, Any]:
     specs = fixture_object_specs(fixture)
-    topo_state = expected_payload.get("topoNamingState")
-    topo_objects = topo_state.get("objects") if isinstance(topo_state, dict) else {}
+    topo_objects = native_topo_state.get("objects")
+    if not isinstance(topo_objects, dict):
+        topo_objects = {}
     published_names = set(topo_objects) if isinstance(topo_objects, dict) else set()
     first_published = sorted(published_names)[0] if published_names else ""
 
@@ -4021,6 +4646,69 @@ def ledger_projection(
     }
 
 
+def round_trip_reference_results(
+    replay_payload: dict[str, Any],
+    replay_capture: dict[str, Any] | None,
+    input_refs: list[dict[str, Any]],
+) -> tuple[list[dict[str, str]], list[dict[str, Any]]]:
+    replay_topo_state = replay_payload.get("topoNamingState")
+    raw_topo_state = (
+        replay_capture.get("rawTopoNamingState")
+        if isinstance(replay_capture, dict)
+        else None
+    )
+    bindings = (
+        replay_capture.get("resolvedReferenceBindings")
+        if isinstance(replay_capture, dict)
+        else None
+    )
+    published_topo_state = (
+        replay_capture.get("publishedTopoNamingState")
+        if isinstance(replay_capture, dict)
+        else None
+    )
+    if not isinstance(raw_topo_state, dict):
+        raw_topo_state = {}
+    if not isinstance(bindings, list):
+        bindings = []
+
+    results: list[dict[str, str]] = []
+    diagnostics: list[dict[str, Any]] = []
+    for ref in input_refs:
+        if not isinstance(ref, dict) or not ref.get("required", True):
+            continue
+        ref_id = ref.get("id")
+        target_name = ref.get("target") or ref.get("owner")
+        stable_token = ref.get("stableSubname") or ref.get("element")
+        if not all(isinstance(value, str) and value for value in (ref_id, target_name, stable_token)):
+            continue
+
+        binding = resolved_binding_for_reference(bindings, ref)
+        resolved_object = binding.get("resolvedObject") if isinstance(binding, dict) else None
+        resolved_subname = binding.get("resolvedSubname") if isinstance(binding, dict) else None
+        status = (
+            "resolved"
+            if published_topo_state == replay_topo_state
+            and resolved_binding_has_native_target(raw_topo_state, binding)
+            else "failed"
+        )
+        results.append({
+            "inputReferenceId": ref_id,
+            "status": status,
+        })
+        if status != "resolved":
+            diagnostics.append({
+                "code": "round_trip_reference_not_resolved",
+                "inputReferenceId": ref_id,
+                "target": target_name,
+                "stableSubname": stable_token,
+                "resolvedObject": resolved_object,
+                "resolvedSubname": resolved_subname,
+                "reason": "native_binding_or_raw_target_missing",
+            })
+    return results, diagnostics
+
+
 def collect_round_trip_result(
     fixture_path: Path,
     fixture: dict[str, Any],
@@ -4051,11 +4739,24 @@ def collect_round_trip_result(
 
     try:
         try:
-            collect_one(temp_path, target_override)
-            status = "passed"
-            diagnostics: list[dict[str, Any]] = []
+            replay_payload = collect_one(temp_path, target_override)
+            replay_capture = copy.deepcopy(LAST_FREECAD_LEDGER_CAPTURE)
+            results, diagnostics = round_trip_reference_results(
+                replay_payload,
+                replay_capture,
+                input_refs,
+            )
+            status = "passed" if not diagnostics else "failed"
         except Exception as exc:
             status = "failed"
+            results = [
+                {
+                    "inputReferenceId": ref["id"],
+                    "status": "failed",
+                }
+                for ref in input_refs
+                if ref.get("required", True) and isinstance(ref.get("id"), str)
+            ]
             diagnostics = [
                 {
                     "code": "round_trip_collect_failed",
@@ -4071,14 +4772,7 @@ def collect_round_trip_result(
     return {
         "status": status,
         "inputTopoNamingStateHash": semantic_hash(topo_state),
-        "results": [
-            {
-                "inputReferenceId": ref["id"],
-                "status": "resolved" if status == "passed" else "failed",
-            }
-            for ref in input_refs
-            if ref.get("required", True)
-        ],
+        "results": results,
         "diagnostics": diagnostics,
     }
 
@@ -4091,6 +4785,7 @@ def build_freecad_expected_ledger(
     freecad_version_value: str,
     occt_version_value: str,
     round_trip: dict[str, Any] | None = None,
+    freecad_capture: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     topo_state = expected_payload.get("topoNamingState")
     diagnostics = expected_payload.get("diagnostics") if isinstance(expected_payload.get("diagnostics"), list) else []
@@ -4130,12 +4825,58 @@ def build_freecad_expected_ledger(
         }
         return ledger
 
+    raw_topo_state = (
+        freecad_capture.get("rawTopoNamingState")
+        if isinstance(freecad_capture, dict)
+        else None
+    )
+    published_topo_state = (
+        freecad_capture.get("publishedTopoNamingState")
+        if isinstance(freecad_capture, dict)
+        else None
+    )
+    resolved_reference_bindings = (
+        freecad_capture.get("resolvedReferenceBindings")
+        if isinstance(freecad_capture, dict)
+        else None
+    )
+    if not isinstance(raw_topo_state, dict):
+        raise UnsupportedFixture("FreeCAD ledger capture is missing rawTopoNamingState")
+    if not isinstance(published_topo_state, dict) or published_topo_state != topo_state:
+        raise UnsupportedFixture(
+            "FreeCAD ledger capture does not match public topoNamingState"
+        )
+    if not isinstance(resolved_reference_bindings, list):
+        raise UnsupportedFixture(
+            "FreeCAD ledger capture is missing resolvedReferenceBindings"
+        )
+
     specs = fixture_object_specs(fixture)
-    topo_objects = topo_state.get("objects") if isinstance(topo_state, dict) else {}
+    topo_objects = published_topo_state.get("objects")
     published_names = set(topo_objects) if isinstance(topo_objects, dict) else set()
-    objects = ledger_objects_from_states(fixture, expected_payload, input_refs)
-    events = ledger_events_for_input_references(fixture, expected_payload, input_refs, objects, specs, published_names)
-    events.extend(ledger_events_from_mapper_history(topo_state, objects, specs, published_names, len(events) + 1))
+    objects = ledger_objects_from_states(
+        fixture,
+        raw_topo_state,
+        published_topo_state,
+        input_refs,
+    )
+    events = ledger_events_for_input_references(
+        raw_topo_state,
+        resolved_reference_bindings,
+        input_refs,
+        objects,
+        specs,
+        published_names,
+    )
+    events.extend(
+        ledger_events_from_mapper_history(
+            raw_topo_state,
+            objects,
+            specs,
+            published_names,
+            len(events) + 1,
+        )
+    )
     covered_refs = sorted({
         ref_id
         for event in events
@@ -4147,7 +4888,7 @@ def build_freecad_expected_ledger(
     ledger.update({
         "objects": objects,
         "events": events,
-        "projection": ledger_projection(fixture, expected_payload, objects, events),
+        "projection": ledger_projection(fixture, published_topo_state, objects, events),
         "coverage": {
             "coveredInputReferenceIds": covered_refs,
             "uncoveredInputReferenceIds": sorted(set(all_ref_ids) - set(covered_refs)),
@@ -4169,6 +4910,7 @@ def collect_expected_ledger(
 ) -> dict[str, Any]:
     import FreeCAD  # type: ignore
 
+    freecad_capture = copy.deepcopy(LAST_FREECAD_LEDGER_CAPTURE)
     input_refs = collect_fixture_input_references(fixture)
     round_trip = collect_round_trip_result(fixture_path, fixture, expected_payload, target_override, input_refs)
     return build_freecad_expected_ledger(
@@ -4178,6 +4920,7 @@ def collect_expected_ledger(
         freecad_version_value=freecad_version(FreeCAD),
         occt_version_value=occt_version_from_runtime("fixture-occt-unspecified"),
         round_trip=round_trip,
+        freecad_capture=freecad_capture,
     )
 
 
@@ -8550,7 +9293,9 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
 def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = None) -> dict:
     import FreeCAD  # type: ignore
 
-    global ACTIVE_TOPO_NAMING_STATE
+    global ACTIVE_TOPO_NAMING_STATE, ACTIVE_RESOLVED_REFERENCE_BINDINGS, LAST_FREECAD_LEDGER_CAPTURE
+    LAST_FREECAD_LEDGER_CAPTURE = None
+    ACTIVE_RESOLVED_REFERENCE_BINDINGS = []
     fixture = load_fixture(fixture_path)
     topo_state_error = topo_state_request_error_response(fixture)
     if topo_state_error is not None:
@@ -8737,6 +9482,39 @@ def comparable_topo_naming_state(value: dict) -> dict:
         producer["occtVersion"] = "*"
         comparable = dict(comparable)
         comparable["producer"] = producer
+    return comparable
+
+
+def comparable_freecad_ledger(value: dict[str, Any]) -> dict[str, Any]:
+    comparable = canonicalize_freecad_mapped_names(copy.deepcopy(value))
+    if not isinstance(comparable, dict):
+        return {}
+
+    fixture = comparable.get("fixture")
+    if isinstance(fixture, dict):
+        fixture["expectedPayloadHash"] = "*"
+        fixture["topoNamingStateHash"] = "*"
+
+    round_trip = comparable.get("roundTrip")
+    if isinstance(round_trip, dict):
+        round_trip["inputTopoNamingStateHash"] = "*"
+
+    objects = comparable.get("objects")
+    if isinstance(objects, dict):
+        for object_record in objects.values():
+            if not isinstance(object_record, dict):
+                continue
+            for inventory_name in ("beforeElements", "afterElements"):
+                inventory = object_record.get(inventory_name)
+                if not isinstance(inventory, dict):
+                    continue
+                for bucket, values in inventory.items():
+                    if isinstance(values, list):
+                        inventory[bucket] = sorted(set(str(value) for value in values))
+
+    events = comparable.get("events")
+    if isinstance(events, list) and all(isinstance(event, dict) for event in events):
+        comparable["events"] = sorted(events, key=lambda event: str(event.get("id") or ""))
     return comparable
 
 
@@ -9227,6 +10005,35 @@ def compare_json(path: Path, payload: dict) -> bool:
     return True
 
 
+def compare_ledger_json(path: Path, payload: dict[str, Any]) -> bool:
+    if not path.exists():
+        print(f"missing expected ledger: {path}", file=sys.stderr)
+        return False
+    existing = json.loads(path.read_text(encoding="utf-8"))
+    if comparable_freecad_ledger(existing) != comparable_freecad_ledger(payload):
+        print(f"expected ledger differs: {path}", file=sys.stderr)
+        return False
+    return True
+
+
+def validate_generated_expected_ledger(
+    fixture_path: Path,
+    fixture: dict[str, Any],
+    expected_payload: dict[str, Any],
+    ledger: dict[str, Any],
+) -> list[str]:
+    from validate_freecad_expected_ledger import validate_expected_file  # type: ignore
+
+    with tempfile.TemporaryDirectory(prefix="freecad-expected-ledger-") as temp_dir:
+        phase_dir = Path(temp_dir) / fixture_path.parent.name
+        expected_path = phase_dir / "expected" / f"{fixture_path.stem}.freecad.json"
+        temp_fixture_path = phase_dir / fixture_path.name
+        atomic_write_json(temp_fixture_path, fixture)
+        atomic_write_json(expected_path, expected_payload)
+        atomic_write_json(ledger_path_for_expected(expected_path), ledger)
+        return validate_expected_file(expected_path, strict=True)
+
+
 def expected_has_native_geometry_payload(path: Path) -> bool:
     expected = json.loads(path.read_text(encoding="utf-8"))
     return "object" in expected or "objects" in expected or "results" in expected
@@ -9304,7 +10111,7 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             continue
 
         ledger: dict[str, Any] | None = None
-        if args.emit_ledger:
+        if args.emit_ledger or args.check_ledger:
             try:
                 ledger = collect_expected_ledger(fixture_path, fixture, payload, target_override)
             except Exception as exc:
@@ -9315,15 +10122,27 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
 
         if args.check:
             failures += 0 if compare_json(out_path, payload) else 1
+            if args.check_ledger:
+                assert ledger is not None
+                failures += 0 if compare_ledger_json(ledger_path_for_expected(out_path), ledger) else 1
         else:
             atomic_write_json(out_path, payload)
             if ledger is not None:
                 atomic_write_json(ledger_path_for_expected(out_path), ledger)
         if args.validate_ledger:
             try:
-                from validate_freecad_expected_ledger import validate_expected_file  # type: ignore
+                if args.check and args.check_ledger:
+                    assert ledger is not None
+                    ledger_errors = validate_generated_expected_ledger(
+                        fixture_path,
+                        fixture,
+                        payload,
+                        ledger,
+                    )
+                else:
+                    from validate_freecad_expected_ledger import validate_expected_file  # type: ignore
 
-                ledger_errors = validate_expected_file(out_path, strict=True)
+                    ledger_errors = validate_expected_file(out_path, strict=True)
             except Exception as exc:
                 ledger_errors = [f"ledger validator failed: {exc}"]
             if ledger_errors:

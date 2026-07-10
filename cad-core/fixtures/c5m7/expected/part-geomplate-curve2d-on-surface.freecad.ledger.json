@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-geomplate-curve2d-on-surface",
     "expectedPayloadHash": "sha256:7c39bfa556a05b97863d57acc334b1eca8ccdc3bdc78106421cecaba2a9aef9c",
-    "inputHash": "sha256:53fa237eeed2eb442f19b5b2926b364deea99ac88f5a017d0e5d2f54d7575794",
+    "inputHash": "sha256:e5287805781f3c6a17f3bd53a30b6c145439560cccf2fc3e6a159a7f59d248e6",
     "phase": "c5m7",
     "topoNamingStateHash": "sha256:3e35d877a935cabd309bb00379aff3066221b637fac47ac96539f464b64cc95d"
   },

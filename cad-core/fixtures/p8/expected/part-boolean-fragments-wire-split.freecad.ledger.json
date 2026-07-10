@@ -34,10 +34,10 @@
   ],
   "fixture": {
     "case": "part-boolean-fragments-wire-split",
-    "expectedPayloadHash": "sha256:1113e6963d3f258f0287d786ad5cd21f138a5e5b1baf6ca18b6d8bfd895d02cb",
+    "expectedPayloadHash": "sha256:34f03d00ede0b5eaa57b9f688c088acf73b2c83c27b7eaf6e057cdf94c8e32da",
     "inputHash": "sha256:0f141c41e1f307f9c64917d602224d29006c1ba5483180cc03f81b71714737c4",
     "phase": "p8",
-    "topoNamingStateHash": "sha256:90c1da07d96e4317c0950ab5384871e295d3ee7bb8ecc2e9ebbf8e99d2775f90"
+    "topoNamingStateHash": "sha256:3d93dd063af6b81f26f9da13326239a6fd1996322e622328e41b04c924ea6110"
   },
   "inputReferences": [],
   "objects": {
@@ -104,7 +104,7 @@
             },
             "mappedName": {
               "canonical": "Edge1;:C1;:H*,E;D*;:H,E",
-              "raw": "Edge1;:C1;:H:4,E;D17ea;:H,E"
+              "raw": "Edge1;:C1;:H:4,E;D2533;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -146,7 +146,7 @@
             },
             "mappedName": {
               "canonical": "Edge1;:H,E;D*;:H,E",
-              "raw": "Edge1;:H,E;D94a;:H,E"
+              "raw": "Edge1;:H,E;D44e;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -188,7 +188,7 @@
             },
             "mappedName": {
               "canonical": "Edge2;:C1;:H*,E;D*;:H,E",
-              "raw": "Edge2;:C1;:H:4,E;D1a46;:H,E"
+              "raw": "Edge2;:C1;:H:4,E;D3c4;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -230,7 +230,7 @@
             },
             "mappedName": {
               "canonical": "Edge2;:H,E;D*;:H,E",
-              "raw": "Edge2;:H,E;Deb9;:H,E"
+              "raw": "Edge2;:H,E;D2656;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -462,7 +462,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex3;:H,V;D*;:H,V",
-                "raw": "Vertex3;:H,V;D1595;:H,V"
+                "raw": "Vertex3;:H,V;D22d8;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -478,7 +478,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex3;:H,V;D*;:H,V",
-                "raw": "Vertex3;:H,V;D1a60;:H,V"
+                "raw": "Vertex3;:H,V;Dd14;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -495,7 +495,7 @@
           "id": "canonical-collision-8565e86a4124683d",
           "mappedName": {
             "canonical": "Vertex3;:H,V;D*;:H,V",
-            "raw": "Vertex3;:H,V;D1595;:H,V"
+            "raw": "Vertex3;:H,V;D22d8;:H,V"
           },
           "message": "Canonical elementMap key Vertex3;:H,V;D*;:H,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -507,7 +507,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex1;:H,V;D*;:H,V",
-                "raw": "Vertex1;:H,V;D1292;:H,V"
+                "raw": "Vertex1;:H,V;D534;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -523,7 +523,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex1;:H,V;D*;:H,V",
-                "raw": "Vertex1;:H,V;D12f8;:H,V"
+                "raw": "Vertex1;:H,V;Df93;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -540,7 +540,7 @@
           "id": "canonical-collision-c88c910b7d777e39",
           "mappedName": {
             "canonical": "Vertex1;:H,V;D*;:H,V",
-            "raw": "Vertex1;:H,V;D1292;:H,V"
+            "raw": "Vertex1;:H,V;D534;:H,V"
           },
           "message": "Canonical elementMap key Vertex1;:H,V;D*;:H,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -550,6 +550,36 @@
       ],
       "published": true,
       "role": "protocol_published",
+      "subshapeEvidence": {
+        "Vertex4": {
+          "canonicalFreecadMappedName": "Vertex3;:H,V;D*;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Vertex3;:H,V;D22d8;:H,V",
+          "resolvedIndexed": "Vertex4",
+          "subname": "Vertex4"
+        },
+        "Vertex5": {
+          "canonicalFreecadMappedName": "Vertex3;:H,V;D*;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Vertex3;:H,V;Dd14;:H,V",
+          "resolvedIndexed": "Vertex5",
+          "subname": "Vertex5"
+        },
+        "Vertex8": {
+          "canonicalFreecadMappedName": "Vertex1;:H,V;D*;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Vertex1;:H,V;D534;:H,V",
+          "resolvedIndexed": "Vertex8",
+          "subname": "Vertex8"
+        },
+        "Vertex9": {
+          "canonicalFreecadMappedName": "Vertex1;:H,V;D*;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Vertex1;:H,V;Df93;:H,V",
+          "resolvedIndexed": "Vertex9",
+          "subname": "Vertex9"
+        }
+      },
       "type": "Part::BooleanFragments"
     },
     "PolyA": {
@@ -645,7 +675,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:90c1da07d96e4317c0950ab5384871e295d3ee7bb8ecc2e9ebbf8e99d2775f90",
+    "inputTopoNamingStateHash": "sha256:3d93dd063af6b81f26f9da13326239a6fd1996322e622328e41b04c924ea6110",
     "results": [],
     "status": "passed"
   },

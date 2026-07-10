@@ -20,7 +20,7 @@
   "fixture": {
     "case": "part-sweep-advanced-deferred",
     "expectedPayloadHash": "sha256:19fdfa05b7195ecfbb206f5f0816797d0a871c035cb1b4d734ab994cd4224283",
-    "inputHash": "sha256:c7807c0c41d41e774624778819037627373005ef1f806bdfc565cacf4d9f3d77",
+    "inputHash": "sha256:15890e686461f7440698bec5779da7b8902ee24caf5a5f31d859ce744c34e13f",
     "phase": "c4m1",
     "topoNamingStateHash": "sha256:c2ac7cb8573a851568d75d46399f99f76e7de1dafbf051f4f99ea6ab6cfef3e8"
   },

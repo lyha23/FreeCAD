@@ -13,7 +13,7 @@
         "ref:1"
       ],
       "kind": "resolved",
-      "provenance": "legacy_internal_face_fixture_migration",
+      "provenance": "FreeCADCmd.native_property_assignment",
       "sources": [
         {
           "element": "InternalFace1",
@@ -30,10 +30,10 @@
   ],
   "fixture": {
     "case": "sketch-ellipse-profile",
-    "expectedPayloadHash": "sha256:fc62aa5ead7b802c225135ea45c7a605ced65aaff3d40ab3fdcec1d4c3da6b0a",
+    "expectedPayloadHash": "sha256:654ab941ee4def80aa421123f76969fb62d6fcd714fab868b6a9642fcad5be2b",
     "inputHash": "sha256:6a840874c601ae9670eb92943f45ca0ebbc35b396f6f5fa52a560a5d41771b88",
     "phase": "p5",
-    "topoNamingStateHash": "sha256:b9ec50697261ddda0504db31613c133c50b65c0a2fb3c9f41be4ce9f98777ea0"
+    "topoNamingStateHash": "sha256:5dcf9ef1122d0cc897f29a502c138b2a9bb06427a532a8574153f9bfc4a74705"
   },
   "inputReferences": [
     {
@@ -84,7 +84,7 @@
             },
             "mappedName": {
               "canonical": "#2:1;:H*,V",
-              "raw": "#2:1;:H121b,V"
+              "raw": "#2:1;:H10f8,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -105,7 +105,7 @@
             },
             "mappedName": {
               "canonical": "#4:1;:H*,E",
-              "raw": "#4:1;:H121b,E"
+              "raw": "#4:1;:H10f8,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -126,7 +126,7 @@
             },
             "mappedName": {
               "canonical": "#6:1;:G;XTR;:H*:*,F",
-              "raw": "#6:1;:G;XTR;:H121b:7,F"
+              "raw": "#6:1;:G;XTR;:H10f8:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -147,7 +147,7 @@
             },
             "mappedName": {
               "canonical": "#6:1;;:H*:*,F",
-              "raw": "#6:1;;:H121b:1,F"
+              "raw": "#6:1;;:H10f8:1,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -168,7 +168,7 @@
             },
             "mappedName": {
               "canonical": "#8:1;:G;XTR;:H*:*,E",
-              "raw": "#8:1;:G;XTR;:H121b:7,E"
+              "raw": "#8:1;:G;XTR;:H10f8:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -189,7 +189,7 @@
             },
             "mappedName": {
               "canonical": "#a:1;:G0;XTR;:H*:*,F",
-              "raw": "#a:1;:G0;XTR;:H121b:8,F"
+              "raw": "#a:1;:G0;XTR;:H10f8:8,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -210,7 +210,7 @@
             },
             "mappedName": {
               "canonical": "#c:1;:U;XTR;:H*:*,E",
-              "raw": "#c:1;:U;XTR;:H121b:7,E"
+              "raw": "#c:1;:U;XTR;:H10f8:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -231,7 +231,7 @@
             },
             "mappedName": {
               "canonical": "#e:1;:U;XTR;:H*:*,V",
-              "raw": "#e:1;:U;XTR;:H121b:7,V"
+              "raw": "#e:1;:U;XTR;:H10f8:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -329,7 +329,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:b9ec50697261ddda0504db31613c133c50b65c0a2fb3c9f41be4ce9f98777ea0",
+    "inputTopoNamingStateHash": "sha256:5dcf9ef1122d0cc897f29a502c138b2a9bb06427a532a8574153f9bfc4a74705",
     "results": [
       {
         "inputReferenceId": "ref:1",

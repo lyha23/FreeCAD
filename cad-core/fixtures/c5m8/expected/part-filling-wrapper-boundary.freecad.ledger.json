@@ -13,7 +13,7 @@
   "fixture": {
     "case": "part-filling-wrapper-boundary",
     "expectedPayloadHash": "sha256:b856703fe58c7ba5432926c97a26f2fb758f64173711513ddca7f77a88a748d9",
-    "inputHash": "sha256:96fa5143e1c87671e7f70111e40160f5152929b664fc986d27fb68a60fa0fa8e",
+    "inputHash": "sha256:13593c70047590d12141f59d3cf209156148e5c66f90fb24b7a5eee298945163",
     "phase": "c5m8",
     "topoNamingStateHash": "sha256:180f7615cb985179c496c80360ffc9553934f0122a8721078273eba7e8cf8123"
   },

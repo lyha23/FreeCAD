@@ -21,7 +21,7 @@
   "fixture": {
     "case": "part-filling-advanced-deferred",
     "expectedPayloadHash": "sha256:e15ca5df480837a83749d346d3026a33bbe568f20c7418ad053763d7f05bcc9f",
-    "inputHash": "sha256:8ae19ae76c1734664b10db8e7848e7aa8a464cc82c80fc0ddc20d2399319b708",
+    "inputHash": "sha256:ccc91ef6c0f65021f3ccf74b6f203b970646934d11b9e803615ffb60900cac12",
     "phase": "c4m1",
     "topoNamingStateHash": "sha256:b09de4a2e7106e907f8685095e54be0cb66308e8b402ea32cbb328e9ecc4b0a8"
   },

@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-filling-non-boundary-face-point",
     "expectedPayloadHash": "sha256:71c6a74768c604a13ac5d158ed33ffb6d94503b8c1e0063aa211fac2828cef70",
-    "inputHash": "sha256:3590a04c8acd8ff0914c5ee893dd44e09027e3dc27cf90b3b5810b30f9ac553a",
+    "inputHash": "sha256:aae400b4ffc03d27157b69c50110af565abb7b2faaa7f21482fb7c789352c263",
     "phase": "c5m8",
     "topoNamingStateHash": "sha256:0855e3b6aaeed030516ae44e41046c1935571eb82981fbf8ff88376f77946e3a"
   },

@@ -17,7 +17,7 @@
   "fixture": {
     "case": "part-filling-non-boundary-diagnostics",
     "expectedPayloadHash": "sha256:c8bd5cfc7753e451921e9b93ba615f46f273c2b029c8e274ea45718910ccd2f8",
-    "inputHash": "sha256:43993b52bc22636a33a4b5cbb9ffb15c5bc60c9602631a938172514e7425704b",
+    "inputHash": "sha256:c10ee72f66bce3e8ba3b5202fb5f29d91daab5eb157cce83881b392a84bff373",
     "phase": "c5m8",
     "topoNamingStateHash": "sha256:d5788bd45f78e6f710273837acaa837547043e724a57a113247f5214712ba256"
   },

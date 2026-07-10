@@ -13,7 +13,7 @@
         "ref:1"
       ],
       "kind": "resolved",
-      "provenance": "legacy_internal_face_fixture_migration",
+      "provenance": "FreeCADCmd.native_property_assignment",
       "sources": [
         {
           "element": "InternalFace1",
@@ -30,10 +30,10 @@
   ],
   "fixture": {
     "case": "linear-pattern-custom-spacings",
-    "expectedPayloadHash": "sha256:7fa948612159d960c2f1dd2e26acf4e240d68b771a39c497794f6234491aeaa3",
+    "expectedPayloadHash": "sha256:b8e95892762f53c315c0ea4f45e51562ed2bfcca957a0f3787ba9f85d1db68e4",
     "inputHash": "sha256:3f1b9ee211693fbb6c761d26531c58ef75fe2877690e63feedf55b2f09356b29",
     "phase": "p7",
-    "topoNamingStateHash": "sha256:9cb3968ce0302e70d7cbc6b3089810a34b7cfa893f7055b6b018d98e2147f4ce"
+    "topoNamingStateHash": "sha256:913da932eb933f7ac7ed7690f79b911a2db996f59ab4d679841a40f4f7738b03"
   },
   "inputReferences": [
     {
@@ -157,7 +157,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#10:1;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#10:1;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#10:1;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -178,7 +178,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#10:1;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#10:1;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#10:1;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -199,7 +199,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#10:1;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#10:1;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#10:1;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -220,7 +220,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#11:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#11:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#11:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -241,7 +241,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#11:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#11:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#11:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -262,7 +262,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#11:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#11:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#11:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -283,7 +283,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#12:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#12:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#12:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -304,7 +304,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#12:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#12:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#12:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -325,7 +325,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#12:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#12:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#12:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -346,7 +346,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#14:1;:G0;XTR;:H*:*,F;:H*,F;:H*,F",
-                  "raw": "LinearPattern.#14:1;:G0;XTR;:H77a:8,F;:H77b,F;:H77b,F"
+                  "raw": "LinearPattern.#14:1;:G0;XTR;:Hdbe:8,F;:Hdbf,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -367,7 +367,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#14:1;:G0;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#14:1;:G0;XTR;:H77a:8,F;:H,F;:H77b:5,F;:H77b,F"
+                  "raw": "LinearPattern.#14:1;:G0;XTR;:Hdbe:8,F;:H,F;:Hdbf:5,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -388,7 +388,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#14:1;:G0;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#14:1;:G0;XTR;:H77a:8,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+                  "raw": "LinearPattern.#14:1;:G0;XTR;:Hdbe:8,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -409,7 +409,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:1;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#16:1;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#16:1;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -430,7 +430,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:1;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:1;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#16:1;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -451,7 +451,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:1;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:1;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#16:1;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -472,7 +472,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:2;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#16:2;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#16:2;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -493,7 +493,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:2;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:2;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#16:2;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -514,7 +514,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:2;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:2;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#16:2;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -535,7 +535,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:3;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#16:3;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#16:3;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -556,7 +556,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:3;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#16:3;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -577,7 +577,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:3;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#16:3;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -598,7 +598,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:4;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#16:4;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#16:4;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -619,7 +619,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:4;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:4;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#16:4;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -640,7 +640,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#16:4;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#16:4;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#16:4;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -661,7 +661,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#18:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#18:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#18:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -682,7 +682,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#18:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#18:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -703,7 +703,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#18:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#18:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -724,7 +724,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#19:1;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#19:1;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#19:1;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -745,7 +745,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#19:1;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#19:1;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#19:1;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -766,7 +766,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#19:1;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#19:1;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#19:1;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -787,7 +787,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#1a:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#1a:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -808,7 +808,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#1a:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#1a:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -829,7 +829,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#1a:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#1a:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -850,7 +850,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#1b:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#1b:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#1b:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -871,7 +871,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#1b:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#1b:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#1b:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -892,7 +892,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#1b:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#1b:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#1b:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -913,7 +913,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#2:1;:H*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#2:1;:H77a,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#2:1;:Hdbe,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -934,7 +934,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#2:1;:H*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#2:1;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#2:1;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -955,7 +955,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#2:1;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#2:1;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#2:1;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -976,7 +976,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#4:2;:H*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#4:2;:H77a,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#4:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -997,7 +997,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#4:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#4:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#4:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1018,7 +1018,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#4:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#4:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#4:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1039,7 +1039,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#6:2;:H*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#6:2;:H77a,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#6:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1060,7 +1060,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#6:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#6:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#6:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1081,7 +1081,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#6:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#6:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#6:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1102,7 +1102,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#8:2;:H*,V;:H*,V;:H*,V",
-                  "raw": "LinearPattern.#8:2;:H77a,V;:H77b,V;:H77b,V"
+                  "raw": "LinearPattern.#8:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1123,7 +1123,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#8:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#8:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+                  "raw": "LinearPattern.#8:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1144,7 +1144,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#8:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-                  "raw": "LinearPattern.#8:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+                  "raw": "LinearPattern.#8:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1165,7 +1165,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:1;:H*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#b:1;:H77a,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#b:1;:Hdbe,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1186,7 +1186,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:1;:H*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:1;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#b:1;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1207,7 +1207,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:1;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:1;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#b:1;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1228,7 +1228,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:2;:H*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#b:2;:H77a,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#b:2;:Hdbe,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1249,7 +1249,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:2;:H*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:2;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#b:2;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1270,7 +1270,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:2;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:2;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#b:2;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1291,7 +1291,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:3;:H*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#b:3;:H77a,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#b:3;:Hdbe,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1312,7 +1312,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:3;:H*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:3;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#b:3;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1333,7 +1333,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:3;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:3;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#b:3;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1354,7 +1354,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:4;:H*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#b:4;:H77a,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#b:4;:Hdbe,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1375,7 +1375,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:4;:H*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:4;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#b:4;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1396,7 +1396,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#b:4;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#b:4;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#b:4;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1417,7 +1417,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:1;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-                  "raw": "LinearPattern.#d:1;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+                  "raw": "LinearPattern.#d:1;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1438,7 +1438,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:1;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:1;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+                  "raw": "LinearPattern.#d:1;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1459,7 +1459,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:1;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:1;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+                  "raw": "LinearPattern.#d:1;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1480,7 +1480,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:1;;:H*:*,F;:H*,F;:H*,F",
-                  "raw": "LinearPattern.#d:1;;:H77a:1,F;:H77b,F;:H77b,F"
+                  "raw": "LinearPattern.#d:1;;:Hdbe:1,F;:Hdbf,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1501,7 +1501,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:1;;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:1;;:H77a:1,F;:H,F;:H77b:5,F;:H77b,F"
+                  "raw": "LinearPattern.#d:1;;:Hdbe:1,F;:H,F;:Hdbf:5,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1522,7 +1522,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:1;;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:1;;:H77a:1,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+                  "raw": "LinearPattern.#d:1;;:Hdbe:1,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1543,7 +1543,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:2;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-                  "raw": "LinearPattern.#d:2;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+                  "raw": "LinearPattern.#d:2;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1564,7 +1564,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:2;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:2;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+                  "raw": "LinearPattern.#d:2;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1585,7 +1585,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:2;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:2;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+                  "raw": "LinearPattern.#d:2;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1606,7 +1606,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:3;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-                  "raw": "LinearPattern.#d:3;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+                  "raw": "LinearPattern.#d:3;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1627,7 +1627,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:3;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:3;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+                  "raw": "LinearPattern.#d:3;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1648,7 +1648,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:3;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:3;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+                  "raw": "LinearPattern.#d:3;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1669,7 +1669,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:4;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-                  "raw": "LinearPattern.#d:4;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+                  "raw": "LinearPattern.#d:4;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1690,7 +1690,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:4;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:4;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+                  "raw": "LinearPattern.#d:4;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1711,7 +1711,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#d:4;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-                  "raw": "LinearPattern.#d:4;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+                  "raw": "LinearPattern.#d:4;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1732,7 +1732,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#f:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-                  "raw": "LinearPattern.#f:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+                  "raw": "LinearPattern.#f:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1753,7 +1753,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#f:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#f:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+                  "raw": "LinearPattern.#f:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1774,7 +1774,7 @@
                 },
                 "mappedName": {
                   "canonical": "LinearPattern.#f:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-                  "raw": "LinearPattern.#f:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+                  "raw": "LinearPattern.#f:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1806,7 +1806,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#10:1;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#10:1;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#10:1;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1827,7 +1827,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#10:1;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#10:1;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#10:1;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1848,7 +1848,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#10:1;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#10:1;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#10:1;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1869,7 +1869,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#11:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#11:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#11:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1890,7 +1890,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#11:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#11:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#11:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1911,7 +1911,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#11:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#11:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#11:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1932,7 +1932,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#12:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#12:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#12:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1953,7 +1953,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#12:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#12:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#12:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1974,7 +1974,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#12:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#12:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#12:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -1995,7 +1995,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#14:1;:G0;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "LinearPattern.#14:1;:G0;XTR;:H77a:8,F;:H77b,F;:H77b,F"
+              "raw": "LinearPattern.#14:1;:G0;XTR;:Hdbe:8,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -2016,7 +2016,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#14:1;:G0;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#14:1;:G0;XTR;:H77a:8,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "LinearPattern.#14:1;:G0;XTR;:Hdbe:8,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -2037,7 +2037,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#14:1;:G0;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#14:1;:G0;XTR;:H77a:8,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "LinearPattern.#14:1;:G0;XTR;:Hdbe:8,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -2058,7 +2058,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:1;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#16:1;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#16:1;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2079,7 +2079,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:1;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:1;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#16:1;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2100,7 +2100,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:1;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:1;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#16:1;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2121,7 +2121,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:2;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#16:2;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#16:2;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2142,7 +2142,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:2;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:2;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#16:2;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2163,7 +2163,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:2;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:2;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#16:2;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2184,7 +2184,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:3;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#16:3;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#16:3;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2205,7 +2205,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:3;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:3;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#16:3;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2226,7 +2226,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:3;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#16:3;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2247,7 +2247,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:4;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#16:4;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#16:4;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2268,7 +2268,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:4;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:4;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#16:4;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2289,7 +2289,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#16:4;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#16:4;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#16:4;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2310,7 +2310,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#18:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#18:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#18:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2331,7 +2331,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#18:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#18:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#18:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2352,7 +2352,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#18:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#18:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2373,7 +2373,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#19:1;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#19:1;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#19:1;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2394,7 +2394,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#19:1;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#19:1;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#19:1;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2415,7 +2415,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#19:1;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#19:1;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#19:1;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2436,7 +2436,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#1a:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#1a:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#1a:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2457,7 +2457,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#1a:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#1a:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#1a:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2478,7 +2478,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#1a:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#1a:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2499,7 +2499,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#1b:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#1b:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#1b:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2520,7 +2520,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#1b:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#1b:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#1b:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2541,7 +2541,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#1b:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#1b:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#1b:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2562,7 +2562,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#2:1;:H*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#2:1;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#2:1;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2583,7 +2583,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#2:1;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#2:1;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#2:1;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2604,7 +2604,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#2:1;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#2:1;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#2:1;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2625,7 +2625,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#4:2;:H*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#4:2;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#4:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2646,7 +2646,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#4:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#4:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#4:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2667,7 +2667,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#4:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#4:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#4:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2688,7 +2688,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#6:2;:H*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#6:2;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#6:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2709,7 +2709,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#6:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#6:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#6:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2730,7 +2730,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#6:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#6:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#6:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2751,7 +2751,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#8:2;:H*,V;:H*,V;:H*,V",
-              "raw": "LinearPattern.#8:2;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "LinearPattern.#8:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2772,7 +2772,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#8:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#8:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "LinearPattern.#8:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2793,7 +2793,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#8:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "LinearPattern.#8:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "LinearPattern.#8:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -2814,7 +2814,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:1;:H*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#b:1;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#b:1;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2835,7 +2835,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:1;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:1;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#b:1;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2856,7 +2856,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:1;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:1;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#b:1;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2877,7 +2877,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:2;:H*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#b:2;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#b:2;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2898,7 +2898,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:2;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:2;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#b:2;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2919,7 +2919,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:2;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:2;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#b:2;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2940,7 +2940,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:3;:H*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#b:3;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#b:3;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2961,7 +2961,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:3;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:3;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#b:3;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -2982,7 +2982,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:3;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:3;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#b:3;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3003,7 +3003,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:4;:H*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#b:4;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#b:4;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3024,7 +3024,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:4;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:4;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#b:4;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3045,7 +3045,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#b:4;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#b:4;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#b:4;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3066,7 +3066,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:1;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "LinearPattern.#d:1;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "LinearPattern.#d:1;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3087,7 +3087,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:1;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:1;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "LinearPattern.#d:1;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3108,7 +3108,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:1;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:1;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "LinearPattern.#d:1;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3129,7 +3129,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:1;;:H*:*,F;:H*,F;:H*,F",
-              "raw": "LinearPattern.#d:1;;:H77a:1,F;:H77b,F;:H77b,F"
+              "raw": "LinearPattern.#d:1;;:Hdbe:1,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3150,7 +3150,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:1;;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:1;;:H77a:1,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "LinearPattern.#d:1;;:Hdbe:1,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3171,7 +3171,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:1;;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:1;;:H77a:1,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "LinearPattern.#d:1;;:Hdbe:1,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3192,7 +3192,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:2;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "LinearPattern.#d:2;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "LinearPattern.#d:2;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3213,7 +3213,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:2;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:2;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "LinearPattern.#d:2;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3234,7 +3234,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:2;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:2;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "LinearPattern.#d:2;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3255,7 +3255,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:3;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "LinearPattern.#d:3;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "LinearPattern.#d:3;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3276,7 +3276,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:3;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:3;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "LinearPattern.#d:3;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3297,7 +3297,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:3;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:3;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "LinearPattern.#d:3;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3318,7 +3318,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:4;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "LinearPattern.#d:4;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "LinearPattern.#d:4;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3339,7 +3339,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:4;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:4;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "LinearPattern.#d:4;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3360,7 +3360,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#d:4;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "LinearPattern.#d:4;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "LinearPattern.#d:4;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3381,7 +3381,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#f:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "LinearPattern.#f:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "LinearPattern.#f:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3402,7 +3402,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#f:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#f:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "LinearPattern.#f:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3423,7 +3423,7 @@
             },
             "mappedName": {
               "canonical": "LinearPattern.#f:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "LinearPattern.#f:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "LinearPattern.#f:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3558,7 +3558,7 @@
             },
             "mappedName": {
               "canonical": "#10:1;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#10:1;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#10:1;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3579,7 +3579,7 @@
             },
             "mappedName": {
               "canonical": "#10:1;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#10:1;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#10:1;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3600,7 +3600,7 @@
             },
             "mappedName": {
               "canonical": "#10:1;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#10:1;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#10:1;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3621,7 +3621,7 @@
             },
             "mappedName": {
               "canonical": "#11:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#11:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#11:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3642,7 +3642,7 @@
             },
             "mappedName": {
               "canonical": "#11:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#11:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#11:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3663,7 +3663,7 @@
             },
             "mappedName": {
               "canonical": "#11:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#11:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#11:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3684,7 +3684,7 @@
             },
             "mappedName": {
               "canonical": "#12:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#12:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#12:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3705,7 +3705,7 @@
             },
             "mappedName": {
               "canonical": "#12:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#12:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#12:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3726,7 +3726,7 @@
             },
             "mappedName": {
               "canonical": "#12:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#12:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#12:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3747,7 +3747,7 @@
             },
             "mappedName": {
               "canonical": "#14:1;:G0;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "#14:1;:G0;XTR;:H77a:8,F;:H77b,F;:H77b,F"
+              "raw": "#14:1;:G0;XTR;:Hdbe:8,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3768,7 +3768,7 @@
             },
             "mappedName": {
               "canonical": "#14:1;:G0;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "#14:1;:G0;XTR;:H77a:8,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "#14:1;:G0;XTR;:Hdbe:8,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3789,7 +3789,7 @@
             },
             "mappedName": {
               "canonical": "#14:1;:G0;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "#14:1;:G0;XTR;:H77a:8,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "#14:1;:G0;XTR;:Hdbe:8,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -3810,7 +3810,7 @@
             },
             "mappedName": {
               "canonical": "#16:1;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#16:1;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#16:1;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3831,7 +3831,7 @@
             },
             "mappedName": {
               "canonical": "#16:1;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#16:1;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#16:1;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3852,7 +3852,7 @@
             },
             "mappedName": {
               "canonical": "#16:1;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#16:1;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#16:1;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3873,7 +3873,7 @@
             },
             "mappedName": {
               "canonical": "#16:2;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#16:2;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#16:2;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3894,7 +3894,7 @@
             },
             "mappedName": {
               "canonical": "#16:2;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#16:2;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#16:2;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3915,7 +3915,7 @@
             },
             "mappedName": {
               "canonical": "#16:2;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#16:2;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#16:2;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3936,7 +3936,7 @@
             },
             "mappedName": {
               "canonical": "#16:3;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#16:3;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#16:3;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3957,7 +3957,7 @@
             },
             "mappedName": {
               "canonical": "#16:3;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#16:3;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#16:3;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3978,7 +3978,7 @@
             },
             "mappedName": {
               "canonical": "#16:3;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#16:3;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#16:3;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -3999,7 +3999,7 @@
             },
             "mappedName": {
               "canonical": "#16:4;:U;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#16:4;:U;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#16:4;:U;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4020,7 +4020,7 @@
             },
             "mappedName": {
               "canonical": "#16:4;:U;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#16:4;:U;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#16:4;:U;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4041,7 +4041,7 @@
             },
             "mappedName": {
               "canonical": "#16:4;:U;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#16:4;:U;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#16:4;:U;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4062,7 +4062,7 @@
             },
             "mappedName": {
               "canonical": "#18:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "#18:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "#18:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4083,7 +4083,7 @@
             },
             "mappedName": {
               "canonical": "#18:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#18:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#18:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4104,7 +4104,7 @@
             },
             "mappedName": {
               "canonical": "#18:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#18:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#18:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4125,7 +4125,7 @@
             },
             "mappedName": {
               "canonical": "#19:1;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "#19:1;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "#19:1;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4146,7 +4146,7 @@
             },
             "mappedName": {
               "canonical": "#19:1;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#19:1;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#19:1;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4167,7 +4167,7 @@
             },
             "mappedName": {
               "canonical": "#19:1;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#19:1;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#19:1;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4188,7 +4188,7 @@
             },
             "mappedName": {
               "canonical": "#1a:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "#1a:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "#1a:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4209,7 +4209,7 @@
             },
             "mappedName": {
               "canonical": "#1a:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#1a:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#1a:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4230,7 +4230,7 @@
             },
             "mappedName": {
               "canonical": "#1a:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#1a:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#1a:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4251,7 +4251,7 @@
             },
             "mappedName": {
               "canonical": "#1b:2;:U;XTR;:H*:*,V;:H*,V;:H*,V",
-              "raw": "#1b:2;:U;XTR;:H77a:7,V;:H77b,V;:H77b,V"
+              "raw": "#1b:2;:U;XTR;:Hdbe:7,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4272,7 +4272,7 @@
             },
             "mappedName": {
               "canonical": "#1b:2;:U;XTR;:H*:*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#1b:2;:U;XTR;:H77a:7,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#1b:2;:U;XTR;:Hdbe:7,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4293,7 +4293,7 @@
             },
             "mappedName": {
               "canonical": "#1b:2;:U;XTR;:H*:*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#1b:2;:U;XTR;:H77a:7,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#1b:2;:U;XTR;:Hdbe:7,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4314,7 +4314,7 @@
             },
             "mappedName": {
               "canonical": "#2:1;:H*,V;:H*,V;:H*,V",
-              "raw": "#2:1;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "#2:1;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4335,7 +4335,7 @@
             },
             "mappedName": {
               "canonical": "#2:1;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#2:1;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#2:1;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4356,7 +4356,7 @@
             },
             "mappedName": {
               "canonical": "#2:1;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#2:1;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#2:1;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4377,7 +4377,7 @@
             },
             "mappedName": {
               "canonical": "#4:2;:H*,V;:H*,V;:H*,V",
-              "raw": "#4:2;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "#4:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4398,7 +4398,7 @@
             },
             "mappedName": {
               "canonical": "#4:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#4:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#4:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4419,7 +4419,7 @@
             },
             "mappedName": {
               "canonical": "#4:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#4:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#4:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4440,7 +4440,7 @@
             },
             "mappedName": {
               "canonical": "#6:2;:H*,V;:H*,V;:H*,V",
-              "raw": "#6:2;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "#6:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4461,7 +4461,7 @@
             },
             "mappedName": {
               "canonical": "#6:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#6:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#6:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4482,7 +4482,7 @@
             },
             "mappedName": {
               "canonical": "#6:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#6:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#6:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4503,7 +4503,7 @@
             },
             "mappedName": {
               "canonical": "#8:2;:H*,V;:H*,V;:H*,V",
-              "raw": "#8:2;:H77a,V;:H77b,V;:H77b,V"
+              "raw": "#8:2;:Hdbe,V;:Hdbf,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4524,7 +4524,7 @@
             },
             "mappedName": {
               "canonical": "#8:2;:H*,V;:H,V;:H*:*,V;:H*,V",
-              "raw": "#8:2;:H77a,V;:H,V;:H77b:5,V;:H77b,V"
+              "raw": "#8:2;:Hdbe,V;:H,V;:Hdbf:5,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4545,7 +4545,7 @@
             },
             "mappedName": {
               "canonical": "#8:2;:H*,V;_2;:H*,V;:H*:*,V;:H*,V",
-              "raw": "#8:2;:H77a,V;_2;:H:3,V;:H77b:a,V;:H77b,V"
+              "raw": "#8:2;:Hdbe,V;_2;:H:3,V;:Hdbf:a,V;:Hdbf,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -4566,7 +4566,7 @@
             },
             "mappedName": {
               "canonical": "#b:1;:H*,E;:H*,E;:H*,E",
-              "raw": "#b:1;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "#b:1;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4587,7 +4587,7 @@
             },
             "mappedName": {
               "canonical": "#b:1;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#b:1;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#b:1;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4608,7 +4608,7 @@
             },
             "mappedName": {
               "canonical": "#b:1;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#b:1;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#b:1;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4629,7 +4629,7 @@
             },
             "mappedName": {
               "canonical": "#b:2;:H*,E;:H*,E;:H*,E",
-              "raw": "#b:2;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "#b:2;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4650,7 +4650,7 @@
             },
             "mappedName": {
               "canonical": "#b:2;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#b:2;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#b:2;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4671,7 +4671,7 @@
             },
             "mappedName": {
               "canonical": "#b:2;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#b:2;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#b:2;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4692,7 +4692,7 @@
             },
             "mappedName": {
               "canonical": "#b:3;:H*,E;:H*,E;:H*,E",
-              "raw": "#b:3;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "#b:3;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4713,7 +4713,7 @@
             },
             "mappedName": {
               "canonical": "#b:3;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#b:3;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#b:3;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4734,7 +4734,7 @@
             },
             "mappedName": {
               "canonical": "#b:3;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#b:3;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#b:3;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4755,7 +4755,7 @@
             },
             "mappedName": {
               "canonical": "#b:4;:H*,E;:H*,E;:H*,E",
-              "raw": "#b:4;:H77a,E;:H77b,E;:H77b,E"
+              "raw": "#b:4;:Hdbe,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4776,7 +4776,7 @@
             },
             "mappedName": {
               "canonical": "#b:4;:H*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#b:4;:H77a,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#b:4;:Hdbe,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4797,7 +4797,7 @@
             },
             "mappedName": {
               "canonical": "#b:4;:H*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#b:4;:H77a,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#b:4;:Hdbe,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -4818,7 +4818,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "#d:1;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "#d:1;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4839,7 +4839,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "#d:1;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "#d:1;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4860,7 +4860,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "#d:1;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "#d:1;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4881,7 +4881,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;;:H*:*,F;:H*,F;:H*,F",
-              "raw": "#d:1;;:H77a:1,F;:H77b,F;:H77b,F"
+              "raw": "#d:1;;:Hdbe:1,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4902,7 +4902,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "#d:1;;:H77a:1,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "#d:1;;:Hdbe:1,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4923,7 +4923,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "#d:1;;:H77a:1,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "#d:1;;:Hdbe:1,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4944,7 +4944,7 @@
             },
             "mappedName": {
               "canonical": "#d:2;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "#d:2;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "#d:2;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4965,7 +4965,7 @@
             },
             "mappedName": {
               "canonical": "#d:2;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "#d:2;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "#d:2;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -4986,7 +4986,7 @@
             },
             "mappedName": {
               "canonical": "#d:2;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "#d:2;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "#d:2;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5007,7 +5007,7 @@
             },
             "mappedName": {
               "canonical": "#d:3;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "#d:3;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "#d:3;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5028,7 +5028,7 @@
             },
             "mappedName": {
               "canonical": "#d:3;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "#d:3;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "#d:3;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5049,7 +5049,7 @@
             },
             "mappedName": {
               "canonical": "#d:3;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "#d:3;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "#d:3;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5070,7 +5070,7 @@
             },
             "mappedName": {
               "canonical": "#d:4;:G;XTR;:H*:*,F;:H*,F;:H*,F",
-              "raw": "#d:4;:G;XTR;:H77a:7,F;:H77b,F;:H77b,F"
+              "raw": "#d:4;:G;XTR;:Hdbe:7,F;:Hdbf,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5091,7 +5091,7 @@
             },
             "mappedName": {
               "canonical": "#d:4;:G;XTR;:H*:*,F;:H,F;:H*:*,F;:H*,F",
-              "raw": "#d:4;:G;XTR;:H77a:7,F;:H,F;:H77b:5,F;:H77b,F"
+              "raw": "#d:4;:G;XTR;:Hdbe:7,F;:H,F;:Hdbf:5,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5112,7 +5112,7 @@
             },
             "mappedName": {
               "canonical": "#d:4;:G;XTR;:H*:*,F;_2;:H*,F;:H*:*,F;:H*,F",
-              "raw": "#d:4;:G;XTR;:H77a:7,F;_2;:H:3,F;:H77b:a,F;:H77b,F"
+              "raw": "#d:4;:G;XTR;:Hdbe:7,F;_2;:H:3,F;:Hdbf:a,F;:Hdbf,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5133,7 +5133,7 @@
             },
             "mappedName": {
               "canonical": "#f:2;:G;XTR;:H*:*,E;:H*,E;:H*,E",
-              "raw": "#f:2;:G;XTR;:H77a:7,E;:H77b,E;:H77b,E"
+              "raw": "#f:2;:G;XTR;:Hdbe:7,E;:Hdbf,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5154,7 +5154,7 @@
             },
             "mappedName": {
               "canonical": "#f:2;:G;XTR;:H*:*,E;:H,E;:H*:*,E;:H*,E",
-              "raw": "#f:2;:G;XTR;:H77a:7,E;:H,E;:H77b:5,E;:H77b,E"
+              "raw": "#f:2;:G;XTR;:Hdbe:7,E;:H,E;:Hdbf:5,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5175,7 +5175,7 @@
             },
             "mappedName": {
               "canonical": "#f:2;:G;XTR;:H*:*,E;_2;:H*,E;:H*:*,E;:H*,E",
-              "raw": "#f:2;:G;XTR;:H77a:7,E;_2;:H:3,E;:H77b:a,E;:H77b,E"
+              "raw": "#f:2;:G;XTR;:Hdbe:7,E;_2;:H:3,E;:Hdbf:a,E;:Hdbf,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5244,7 +5244,7 @@
             },
             "mappedName": {
               "canonical": "#10:1;:G;XTR;:H*:*,E",
-              "raw": "#10:1;:G;XTR;:H77a:7,E"
+              "raw": "#10:1;:G;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5265,7 +5265,7 @@
             },
             "mappedName": {
               "canonical": "#11:2;:G;XTR;:H*:*,E",
-              "raw": "#11:2;:G;XTR;:H77a:7,E"
+              "raw": "#11:2;:G;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5286,7 +5286,7 @@
             },
             "mappedName": {
               "canonical": "#12:2;:G;XTR;:H*:*,E",
-              "raw": "#12:2;:G;XTR;:H77a:7,E"
+              "raw": "#12:2;:G;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5307,7 +5307,7 @@
             },
             "mappedName": {
               "canonical": "#14:1;:G0;XTR;:H*:*,F",
-              "raw": "#14:1;:G0;XTR;:H77a:8,F"
+              "raw": "#14:1;:G0;XTR;:Hdbe:8,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5328,7 +5328,7 @@
             },
             "mappedName": {
               "canonical": "#16:1;:U;XTR;:H*:*,E",
-              "raw": "#16:1;:U;XTR;:H77a:7,E"
+              "raw": "#16:1;:U;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5349,7 +5349,7 @@
             },
             "mappedName": {
               "canonical": "#16:2;:U;XTR;:H*:*,E",
-              "raw": "#16:2;:U;XTR;:H77a:7,E"
+              "raw": "#16:2;:U;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5370,7 +5370,7 @@
             },
             "mappedName": {
               "canonical": "#16:3;:U;XTR;:H*:*,E",
-              "raw": "#16:3;:U;XTR;:H77a:7,E"
+              "raw": "#16:3;:U;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5391,7 +5391,7 @@
             },
             "mappedName": {
               "canonical": "#16:4;:U;XTR;:H*:*,E",
-              "raw": "#16:4;:U;XTR;:H77a:7,E"
+              "raw": "#16:4;:U;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5412,7 +5412,7 @@
             },
             "mappedName": {
               "canonical": "#18:2;:U;XTR;:H*:*,V",
-              "raw": "#18:2;:U;XTR;:H77a:7,V"
+              "raw": "#18:2;:U;XTR;:Hdbe:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5433,7 +5433,7 @@
             },
             "mappedName": {
               "canonical": "#19:1;:U;XTR;:H*:*,V",
-              "raw": "#19:1;:U;XTR;:H77a:7,V"
+              "raw": "#19:1;:U;XTR;:Hdbe:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5454,7 +5454,7 @@
             },
             "mappedName": {
               "canonical": "#1a:2;:U;XTR;:H*:*,V",
-              "raw": "#1a:2;:U;XTR;:H77a:7,V"
+              "raw": "#1a:2;:U;XTR;:Hdbe:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5475,7 +5475,7 @@
             },
             "mappedName": {
               "canonical": "#1b:2;:U;XTR;:H*:*,V",
-              "raw": "#1b:2;:U;XTR;:H77a:7,V"
+              "raw": "#1b:2;:U;XTR;:Hdbe:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5496,7 +5496,7 @@
             },
             "mappedName": {
               "canonical": "#2:1;:H*,V",
-              "raw": "#2:1;:H77a,V"
+              "raw": "#2:1;:Hdbe,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5517,7 +5517,7 @@
             },
             "mappedName": {
               "canonical": "#4:2;:H*,V",
-              "raw": "#4:2;:H77a,V"
+              "raw": "#4:2;:Hdbe,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5538,7 +5538,7 @@
             },
             "mappedName": {
               "canonical": "#6:2;:H*,V",
-              "raw": "#6:2;:H77a,V"
+              "raw": "#6:2;:Hdbe,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5559,7 +5559,7 @@
             },
             "mappedName": {
               "canonical": "#8:2;:H*,V",
-              "raw": "#8:2;:H77a,V"
+              "raw": "#8:2;:Hdbe,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -5580,7 +5580,7 @@
             },
             "mappedName": {
               "canonical": "#b:1;:H*,E",
-              "raw": "#b:1;:H77a,E"
+              "raw": "#b:1;:Hdbe,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5601,7 +5601,7 @@
             },
             "mappedName": {
               "canonical": "#b:2;:H*,E",
-              "raw": "#b:2;:H77a,E"
+              "raw": "#b:2;:Hdbe,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5622,7 +5622,7 @@
             },
             "mappedName": {
               "canonical": "#b:3;:H*,E",
-              "raw": "#b:3;:H77a,E"
+              "raw": "#b:3;:Hdbe,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5643,7 +5643,7 @@
             },
             "mappedName": {
               "canonical": "#b:4;:H*,E",
-              "raw": "#b:4;:H77a,E"
+              "raw": "#b:4;:Hdbe,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5664,7 +5664,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;:G;XTR;:H*:*,F",
-              "raw": "#d:1;:G;XTR;:H77a:7,F"
+              "raw": "#d:1;:G;XTR;:Hdbe:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5685,7 +5685,7 @@
             },
             "mappedName": {
               "canonical": "#d:1;;:H*:*,F",
-              "raw": "#d:1;;:H77a:1,F"
+              "raw": "#d:1;;:Hdbe:1,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5706,7 +5706,7 @@
             },
             "mappedName": {
               "canonical": "#d:2;:G;XTR;:H*:*,F",
-              "raw": "#d:2;:G;XTR;:H77a:7,F"
+              "raw": "#d:2;:G;XTR;:Hdbe:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5727,7 +5727,7 @@
             },
             "mappedName": {
               "canonical": "#d:3;:G;XTR;:H*:*,F",
-              "raw": "#d:3;:G;XTR;:H77a:7,F"
+              "raw": "#d:3;:G;XTR;:Hdbe:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5748,7 +5748,7 @@
             },
             "mappedName": {
               "canonical": "#d:4;:G;XTR;:H*:*,F",
-              "raw": "#d:4;:G;XTR;:H77a:7,F"
+              "raw": "#d:4;:G;XTR;:Hdbe:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -5769,7 +5769,7 @@
             },
             "mappedName": {
               "canonical": "#f:2;:G;XTR;:H*:*,E",
-              "raw": "#f:2;:G;XTR;:H77a:7,E"
+              "raw": "#f:2;:G;XTR;:Hdbe:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -5895,7 +5895,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:9cb3968ce0302e70d7cbc6b3089810a34b7cfa893f7055b6b018d98e2147f4ce",
+    "inputTopoNamingStateHash": "sha256:913da932eb933f7ac7ed7690f79b911a2db996f59ab4d679841a40f4f7738b03",
     "results": [
       {
         "inputReferenceId": "ref:1",

@@ -191,7 +191,7 @@
     },
     "objects": {
       "Sketch": {
-        "objectHash": "sha256:de12ed8baee0437c3f4a1a8c6e84c4adae85dfe67e38bc87d0a38d8e67ce1e03",
+        "objectHash": "sha256:45a91d15d3a5273940933e8da5c28ba357e7872853e6abe45dc11dd004fe86f7",
         "elementMapVersion": "cad-core.element-map.v1",
         "subshapes": {
           "InternalFace1": {
@@ -264,6 +264,6 @@
         ]
       }
     },
-    "documentHash": "sha256:20d79bc0f0436a580ec36d698979428cd564260009be49e9e747ccbf37f579a5"
+    "documentHash": "sha256:e33137f9df9809f0fc59cd290975f571d86e5a32906e90767fa4fe0dae36d91a"
   }
 }

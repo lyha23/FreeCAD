@@ -97,7 +97,7 @@
   "fixture": {
     "case": "part-sweep-support-mode-diagnostics",
     "expectedPayloadHash": "sha256:aa5743bc9a912f3bf02e7293c9eec12b92ce7eca4191645b3e48b1f375d72c6b",
-    "inputHash": "sha256:793c6054b4dd1ac2e5f8a350bafbd612f8cfeb73de5a3fc66b59cbadae6f6986",
+    "inputHash": "sha256:a0eadc5f42e280aa7a073c268d10b8980aca671fd4c7ffac3642b444640ef9d2",
     "phase": "c5m10",
     "topoNamingStateHash": "sha256:618195392a3696c801e2139c5ae98465dbc58443f577c4b043cf569f730ff041"
   },

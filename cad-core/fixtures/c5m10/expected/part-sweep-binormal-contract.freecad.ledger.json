@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-sweep-binormal-contract",
     "expectedPayloadHash": "sha256:dcd7fe07d88fb0d8942bccd9a97f2e9d1ea8d56b479c7c76e9eb003eb65eee60",
-    "inputHash": "sha256:98de42ce10de128fca57266a316ea2b563c707ff8724142e153f600682da06ec",
+    "inputHash": "sha256:40b9592e2eefbf956d7322941cdb51acab1848078f97e6d06caa37deeffc0e18",
     "phase": "c5m10",
     "topoNamingStateHash": "sha256:b1a9512cb8818e46285e44c7d2837e0f18bd92237e3940ea2664ac63cd200a8b"
   },

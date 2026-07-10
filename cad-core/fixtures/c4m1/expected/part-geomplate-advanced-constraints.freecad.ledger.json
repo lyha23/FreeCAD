@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-geomplate-advanced-constraints",
     "expectedPayloadHash": "sha256:6c802c3c3dc3d43d5d79d02c92e8bea625cffb0af6abb168e5ef36e17e2b2cae",
-    "inputHash": "sha256:b8dbc6dff51348932cc93909b8b575e33a0f0f158b2d3b9ebc722a95b235502d",
+    "inputHash": "sha256:0dacb48f46198c8470c4ee21fe57d20027c089ad69fae4dfb61042021b0f2e4d",
     "phase": "c4m1",
     "topoNamingStateHash": "sha256:fe8e75eee27a2367532b6c114c506a321761737ebd603d59b87c4491a14c451e"
   },

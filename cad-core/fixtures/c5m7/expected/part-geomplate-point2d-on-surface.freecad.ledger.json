@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-geomplate-point2d-on-surface",
     "expectedPayloadHash": "sha256:c0547468581c4fb3b3bba36e717eb4366c0407dbb8cc1bde23bcde63580b8844",
-    "inputHash": "sha256:72fb82ddffc72f3c542256a5f04bbe98b3877a8139aaa2d6e1f5c94fd1769f9e",
+    "inputHash": "sha256:43cc433a468d859fd301aceaa2dfa72de832ed6e31cf64226806e0f0fafb39be",
     "phase": "c5m7",
     "topoNamingStateHash": "sha256:5483d93ba1acb7aea28418ad4d2f086a42f1c818d1ff4ecc7e3d5d5a44892228"
   },

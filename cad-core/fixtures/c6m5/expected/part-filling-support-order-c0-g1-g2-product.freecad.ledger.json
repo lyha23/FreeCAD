@@ -17,7 +17,7 @@
   "fixture": {
     "case": "part-filling-support-order-c0-g1-g2-product",
     "expectedPayloadHash": "sha256:59d7643967a31130e85842aaffb5a01c30bd4bd63f2ff7e29fa4e8395d53d35e",
-    "inputHash": "sha256:832d92141807b18801b8b3a8c57385e17ecd2c16635c17c5b374d928f92291f9",
+    "inputHash": "sha256:daa84c91e7351b928b2697ae42ea75871a6903d086cbddd991958e6df6e69e51",
     "phase": "c6m5",
     "topoNamingStateHash": "sha256:66ddcedf5ca912b5de883d47b9f294c5fccdb3b85e9dd4724813f6688b6de23e"
   },

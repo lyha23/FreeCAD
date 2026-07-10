@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-filling-param-max-degree-only",
     "expectedPayloadHash": "sha256:34747134f82f45a7025efcaaec9b8ece8278908627644386c90721b9a0ea7db5",
-    "inputHash": "sha256:02e29c60caa029d2957361f5ef5d3f782718d7c095f95168b11d11b31f759044",
+    "inputHash": "sha256:e5a4b94e864bbc2d039869efd343bdc9976aa7c6fdc4af9372cc2af31f58a3d1",
     "phase": "c5m13",
     "topoNamingStateHash": "sha256:97bccc634f5387128a0dce8950dd8d6c60a22bdf6c2cc8fc0cb668cc949c0108"
   },

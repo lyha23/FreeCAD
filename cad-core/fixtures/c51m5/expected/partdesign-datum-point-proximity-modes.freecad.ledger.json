@@ -13,7 +13,7 @@
         "ref:1"
       ],
       "kind": "resolved",
-      "provenance": "mapper_history",
+      "provenance": "FreeCADCmd.native_property_assignment",
       "sources": [
         {
           "element": "Vertex1",
@@ -31,7 +31,7 @@
   "fixture": {
     "case": "partdesign-datum-point-proximity-modes",
     "expectedPayloadHash": "sha256:fb12c15e2fefd9a127d1f11cc823087b8179a2c67a45fa6f75464dffb55f1ed6",
-    "inputHash": "sha256:80a3eb9d09080700a570e713871e0993ea182eecc343c3b623dc844a691f1bab",
+    "inputHash": "sha256:cde6bee37afc9a8d82e7950abdbacd51acd0e6455b026e221ea78c1ad356be54",
     "phase": "c51m5",
     "topoNamingStateHash": "sha256:a156ebce9e295ca3c1aede6e8d5b4cdc1538252ae5dd9ab220a8c1459be6b9a4"
   },

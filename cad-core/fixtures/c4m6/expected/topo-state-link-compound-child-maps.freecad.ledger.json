@@ -13,11 +13,11 @@
         "ref:1"
       ],
       "kind": "resolved",
-      "provenance": "child_element_map",
+      "provenance": "FreeCADCmd.native_property_assignment",
       "sources": [
         {
-          "element": "Face1",
-          "object": "ChildBoxA"
+          "element": "Child0.Face1",
+          "object": "Compound"
         }
       ],
       "targets": [
@@ -368,10 +368,10 @@
   ],
   "fixture": {
     "case": "topo-state-link-compound-child-maps",
-    "expectedPayloadHash": "sha256:13e7bd3dc8afde6a0f330d68800a40e22450db580e43e9c9cd2fe21e27b04816",
+    "expectedPayloadHash": "sha256:023330a28e6396de6ccc6a34c2bf0804d3799bb6655851993a31aa2b3901e279",
     "inputHash": "sha256:20b889841765fcdd79a25bc27ff5181c2d0a400cc1ed76b16e4e4124134443b2",
     "phase": "c4m6",
-    "topoNamingStateHash": "sha256:7c38271ad540b3d70112baa5618284c485932c10d427890f96aa5519ba251f71"
+    "topoNamingStateHash": "sha256:895c8776dec9dd3fae5d67f1927986e4b274f7b6f188cc20d88606fbfd4ec3f3"
   },
   "inputReferences": [
     {
@@ -427,11 +427,7 @@
           "Vertex8"
         ]
       },
-      "beforeElements": {
-        "Face": [
-          "Face1"
-        ]
-      },
+      "beforeElements": {},
       "childElementMaps": [],
       "elementMap": {
         "encoding": "cad-core.element-map.v1",
@@ -573,7 +569,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge10;:H*,E",
-                  "raw": "Edge10;:H6c0,E"
+                  "raw": "Edge10;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -594,7 +590,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge11;:H*,E",
-                  "raw": "Edge11;:H6c0,E"
+                  "raw": "Edge11;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -615,7 +611,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge12;:H*,E",
-                  "raw": "Edge12;:H6c0,E"
+                  "raw": "Edge12;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -636,7 +632,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge1;:H*,E",
-                  "raw": "Edge1;:H6c0,E"
+                  "raw": "Edge1;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -657,7 +653,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge2;:H*,E",
-                  "raw": "Edge2;:H6c0,E"
+                  "raw": "Edge2;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -678,7 +674,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge3;:H*,E",
-                  "raw": "Edge3;:H6c0,E"
+                  "raw": "Edge3;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -699,7 +695,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge4;:H*,E",
-                  "raw": "Edge4;:H6c0,E"
+                  "raw": "Edge4;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -720,7 +716,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge5;:H*,E",
-                  "raw": "Edge5;:H6c0,E"
+                  "raw": "Edge5;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -741,7 +737,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge6;:H*,E",
-                  "raw": "Edge6;:H6c0,E"
+                  "raw": "Edge6;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -762,7 +758,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge7;:H*,E",
-                  "raw": "Edge7;:H6c0,E"
+                  "raw": "Edge7;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -783,7 +779,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge8;:H*,E",
-                  "raw": "Edge8;:H6c0,E"
+                  "raw": "Edge8;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -804,7 +800,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge9;:H*,E",
-                  "raw": "Edge9;:H6c0,E"
+                  "raw": "Edge9;:H16a,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -825,7 +821,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face1;:H*,F",
-                  "raw": "Face1;:H6c0,F"
+                  "raw": "Face1;:H16a,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -846,7 +842,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face2;:H*,F",
-                  "raw": "Face2;:H6c0,F"
+                  "raw": "Face2;:H16a,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -867,7 +863,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face3;:H*,F",
-                  "raw": "Face3;:H6c0,F"
+                  "raw": "Face3;:H16a,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -888,7 +884,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face4;:H*,F",
-                  "raw": "Face4;:H6c0,F"
+                  "raw": "Face4;:H16a,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -909,7 +905,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face5;:H*,F",
-                  "raw": "Face5;:H6c0,F"
+                  "raw": "Face5;:H16a,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -930,7 +926,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face6;:H*,F",
-                  "raw": "Face6;:H6c0,F"
+                  "raw": "Face6;:H16a,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -951,7 +947,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex1;:H*,V",
-                  "raw": "Vertex1;:H6c0,V"
+                  "raw": "Vertex1;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -972,7 +968,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex2;:H*,V",
-                  "raw": "Vertex2;:H6c0,V"
+                  "raw": "Vertex2;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -993,7 +989,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex3;:H*,V",
-                  "raw": "Vertex3;:H6c0,V"
+                  "raw": "Vertex3;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1014,7 +1010,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex4;:H*,V",
-                  "raw": "Vertex4;:H6c0,V"
+                  "raw": "Vertex4;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1035,7 +1031,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex5;:H*,V",
-                  "raw": "Vertex5;:H6c0,V"
+                  "raw": "Vertex5;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1056,7 +1052,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex6;:H*,V",
-                  "raw": "Vertex6;:H6c0,V"
+                  "raw": "Vertex6;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1077,7 +1073,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex7;:H*,V",
-                  "raw": "Vertex7;:H6c0,V"
+                  "raw": "Vertex7;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1098,7 +1094,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex8;:H*,V",
-                  "raw": "Vertex8;:H6c0,V"
+                  "raw": "Vertex8;:H16a,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1132,7 +1128,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge10;:H*,E",
-                  "raw": "Edge10;:H6c1,E"
+                  "raw": "Edge10;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1153,7 +1149,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge11;:H*,E",
-                  "raw": "Edge11;:H6c1,E"
+                  "raw": "Edge11;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1174,7 +1170,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge12;:H*,E",
-                  "raw": "Edge12;:H6c1,E"
+                  "raw": "Edge12;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1195,7 +1191,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge1;:H*,E",
-                  "raw": "Edge1;:H6c1,E"
+                  "raw": "Edge1;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1216,7 +1212,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge2;:H*,E",
-                  "raw": "Edge2;:H6c1,E"
+                  "raw": "Edge2;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1237,7 +1233,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge3;:H*,E",
-                  "raw": "Edge3;:H6c1,E"
+                  "raw": "Edge3;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1258,7 +1254,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge4;:H*,E",
-                  "raw": "Edge4;:H6c1,E"
+                  "raw": "Edge4;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1279,7 +1275,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge5;:H*,E",
-                  "raw": "Edge5;:H6c1,E"
+                  "raw": "Edge5;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1300,7 +1296,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge6;:H*,E",
-                  "raw": "Edge6;:H6c1,E"
+                  "raw": "Edge6;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1321,7 +1317,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge7;:H*,E",
-                  "raw": "Edge7;:H6c1,E"
+                  "raw": "Edge7;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1342,7 +1338,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge8;:H*,E",
-                  "raw": "Edge8;:H6c1,E"
+                  "raw": "Edge8;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1363,7 +1359,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge9;:H*,E",
-                  "raw": "Edge9;:H6c1,E"
+                  "raw": "Edge9;:H16b,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -1384,7 +1380,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face1;:H*,F",
-                  "raw": "Face1;:H6c1,F"
+                  "raw": "Face1;:H16b,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1405,7 +1401,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face2;:H*,F",
-                  "raw": "Face2;:H6c1,F"
+                  "raw": "Face2;:H16b,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1426,7 +1422,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face3;:H*,F",
-                  "raw": "Face3;:H6c1,F"
+                  "raw": "Face3;:H16b,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1447,7 +1443,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face4;:H*,F",
-                  "raw": "Face4;:H6c1,F"
+                  "raw": "Face4;:H16b,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1468,7 +1464,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face5;:H*,F",
-                  "raw": "Face5;:H6c1,F"
+                  "raw": "Face5;:H16b,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1489,7 +1485,7 @@
                 },
                 "mappedName": {
                   "canonical": "Face6;:H*,F",
-                  "raw": "Face6;:H6c1,F"
+                  "raw": "Face6;:H16b,F"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "face",
@@ -1510,7 +1506,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex1;:H*,V",
-                  "raw": "Vertex1;:H6c1,V"
+                  "raw": "Vertex1;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1531,7 +1527,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex2;:H*,V",
-                  "raw": "Vertex2;:H6c1,V"
+                  "raw": "Vertex2;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1552,7 +1548,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex3;:H*,V",
-                  "raw": "Vertex3;:H6c1,V"
+                  "raw": "Vertex3;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1573,7 +1569,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex4;:H*,V",
-                  "raw": "Vertex4;:H6c1,V"
+                  "raw": "Vertex4;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1594,7 +1590,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex5;:H*,V",
-                  "raw": "Vertex5;:H6c1,V"
+                  "raw": "Vertex5;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1615,7 +1611,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex6;:H*,V",
-                  "raw": "Vertex6;:H6c1,V"
+                  "raw": "Vertex6;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1636,7 +1632,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex7;:H*,V",
-                  "raw": "Vertex7;:H6c1,V"
+                  "raw": "Vertex7;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1657,7 +1653,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex8;:H*,V",
-                  "raw": "Vertex8;:H6c1,V"
+                  "raw": "Vertex8;:H16b,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -1745,7 +1741,7 @@
             {
               "mappedName": {
                 "canonical": "Face1;:H*,F",
-                "raw": "Face1;:H6c0,F"
+                "raw": "Face1;:H16a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1761,7 +1757,7 @@
             {
               "mappedName": {
                 "canonical": "Face1;:H*,F",
-                "raw": "Face1;:H6c1,F"
+                "raw": "Face1;:H16b,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1778,7 +1774,7 @@
           "id": "canonical-collision-8771b90ba438fb88",
           "mappedName": {
             "canonical": "Face1;:H*,F",
-            "raw": "Face1;:H6c0,F"
+            "raw": "Face1;:H16a,F"
           },
           "message": "Canonical elementMap key Face1;:H*,F maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -1790,7 +1786,7 @@
             {
               "mappedName": {
                 "canonical": "Face2;:H*,F",
-                "raw": "Face2;:H6c0,F"
+                "raw": "Face2;:H16a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1806,7 +1802,7 @@
             {
               "mappedName": {
                 "canonical": "Face2;:H*,F",
-                "raw": "Face2;:H6c1,F"
+                "raw": "Face2;:H16b,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1823,7 +1819,7 @@
           "id": "canonical-collision-31d6530c309b66ce",
           "mappedName": {
             "canonical": "Face2;:H*,F",
-            "raw": "Face2;:H6c0,F"
+            "raw": "Face2;:H16a,F"
           },
           "message": "Canonical elementMap key Face2;:H*,F maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -1835,7 +1831,7 @@
             {
               "mappedName": {
                 "canonical": "Face3;:H*,F",
-                "raw": "Face3;:H6c0,F"
+                "raw": "Face3;:H16a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1851,7 +1847,7 @@
             {
               "mappedName": {
                 "canonical": "Face3;:H*,F",
-                "raw": "Face3;:H6c1,F"
+                "raw": "Face3;:H16b,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1868,7 +1864,7 @@
           "id": "canonical-collision-65e0f466f0c9232a",
           "mappedName": {
             "canonical": "Face3;:H*,F",
-            "raw": "Face3;:H6c0,F"
+            "raw": "Face3;:H16a,F"
           },
           "message": "Canonical elementMap key Face3;:H*,F maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -1880,7 +1876,7 @@
             {
               "mappedName": {
                 "canonical": "Face4;:H*,F",
-                "raw": "Face4;:H6c0,F"
+                "raw": "Face4;:H16a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1896,7 +1892,7 @@
             {
               "mappedName": {
                 "canonical": "Face4;:H*,F",
-                "raw": "Face4;:H6c1,F"
+                "raw": "Face4;:H16b,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1913,7 +1909,7 @@
           "id": "canonical-collision-b00ec74987158873",
           "mappedName": {
             "canonical": "Face4;:H*,F",
-            "raw": "Face4;:H6c0,F"
+            "raw": "Face4;:H16a,F"
           },
           "message": "Canonical elementMap key Face4;:H*,F maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -1925,7 +1921,7 @@
             {
               "mappedName": {
                 "canonical": "Face5;:H*,F",
-                "raw": "Face5;:H6c0,F"
+                "raw": "Face5;:H16a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1941,7 +1937,7 @@
             {
               "mappedName": {
                 "canonical": "Face5;:H*,F",
-                "raw": "Face5;:H6c1,F"
+                "raw": "Face5;:H16b,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1958,7 +1954,7 @@
           "id": "canonical-collision-fd12ea359796f1c2",
           "mappedName": {
             "canonical": "Face5;:H*,F",
-            "raw": "Face5;:H6c0,F"
+            "raw": "Face5;:H16a,F"
           },
           "message": "Canonical elementMap key Face5;:H*,F maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -1970,7 +1966,7 @@
             {
               "mappedName": {
                 "canonical": "Face6;:H*,F",
-                "raw": "Face6;:H6c0,F"
+                "raw": "Face6;:H16a,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -1986,7 +1982,7 @@
             {
               "mappedName": {
                 "canonical": "Face6;:H*,F",
-                "raw": "Face6;:H6c1,F"
+                "raw": "Face6;:H16b,F"
               },
               "recoverability": "resolved",
               "shapeKind": "face",
@@ -2003,7 +1999,7 @@
           "id": "canonical-collision-05ea75fdf5f3fb3a",
           "mappedName": {
             "canonical": "Face6;:H*,F",
-            "raw": "Face6;:H6c0,F"
+            "raw": "Face6;:H16a,F"
           },
           "message": "Canonical elementMap key Face6;:H*,F maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2015,7 +2011,7 @@
             {
               "mappedName": {
                 "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H6c0,E"
+                "raw": "Edge1;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2031,7 +2027,7 @@
             {
               "mappedName": {
                 "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H6c1,E"
+                "raw": "Edge1;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2048,7 +2044,7 @@
           "id": "canonical-collision-55e185b22e3f6b16",
           "mappedName": {
             "canonical": "Edge1;:H*,E",
-            "raw": "Edge1;:H6c0,E"
+            "raw": "Edge1;:H16a,E"
           },
           "message": "Canonical elementMap key Edge1;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2060,7 +2056,7 @@
             {
               "mappedName": {
                 "canonical": "Edge2;:H*,E",
-                "raw": "Edge2;:H6c0,E"
+                "raw": "Edge2;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2076,7 +2072,7 @@
             {
               "mappedName": {
                 "canonical": "Edge2;:H*,E",
-                "raw": "Edge2;:H6c1,E"
+                "raw": "Edge2;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2093,7 +2089,7 @@
           "id": "canonical-collision-3596ec69a46a754e",
           "mappedName": {
             "canonical": "Edge2;:H*,E",
-            "raw": "Edge2;:H6c0,E"
+            "raw": "Edge2;:H16a,E"
           },
           "message": "Canonical elementMap key Edge2;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2105,7 +2101,7 @@
             {
               "mappedName": {
                 "canonical": "Edge3;:H*,E",
-                "raw": "Edge3;:H6c0,E"
+                "raw": "Edge3;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2121,7 +2117,7 @@
             {
               "mappedName": {
                 "canonical": "Edge3;:H*,E",
-                "raw": "Edge3;:H6c1,E"
+                "raw": "Edge3;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2138,7 +2134,7 @@
           "id": "canonical-collision-e81eff76be6b306f",
           "mappedName": {
             "canonical": "Edge3;:H*,E",
-            "raw": "Edge3;:H6c0,E"
+            "raw": "Edge3;:H16a,E"
           },
           "message": "Canonical elementMap key Edge3;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2150,7 +2146,7 @@
             {
               "mappedName": {
                 "canonical": "Edge4;:H*,E",
-                "raw": "Edge4;:H6c0,E"
+                "raw": "Edge4;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2166,7 +2162,7 @@
             {
               "mappedName": {
                 "canonical": "Edge4;:H*,E",
-                "raw": "Edge4;:H6c1,E"
+                "raw": "Edge4;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2183,7 +2179,7 @@
           "id": "canonical-collision-c4a15e195bd7c86a",
           "mappedName": {
             "canonical": "Edge4;:H*,E",
-            "raw": "Edge4;:H6c0,E"
+            "raw": "Edge4;:H16a,E"
           },
           "message": "Canonical elementMap key Edge4;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2195,7 +2191,7 @@
             {
               "mappedName": {
                 "canonical": "Edge5;:H*,E",
-                "raw": "Edge5;:H6c0,E"
+                "raw": "Edge5;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2211,7 +2207,7 @@
             {
               "mappedName": {
                 "canonical": "Edge5;:H*,E",
-                "raw": "Edge5;:H6c1,E"
+                "raw": "Edge5;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2228,7 +2224,7 @@
           "id": "canonical-collision-440bde712e977a59",
           "mappedName": {
             "canonical": "Edge5;:H*,E",
-            "raw": "Edge5;:H6c0,E"
+            "raw": "Edge5;:H16a,E"
           },
           "message": "Canonical elementMap key Edge5;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2240,7 +2236,7 @@
             {
               "mappedName": {
                 "canonical": "Edge6;:H*,E",
-                "raw": "Edge6;:H6c0,E"
+                "raw": "Edge6;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2256,7 +2252,7 @@
             {
               "mappedName": {
                 "canonical": "Edge6;:H*,E",
-                "raw": "Edge6;:H6c1,E"
+                "raw": "Edge6;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2273,7 +2269,7 @@
           "id": "canonical-collision-8794b22a53f801eb",
           "mappedName": {
             "canonical": "Edge6;:H*,E",
-            "raw": "Edge6;:H6c0,E"
+            "raw": "Edge6;:H16a,E"
           },
           "message": "Canonical elementMap key Edge6;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2285,7 +2281,7 @@
             {
               "mappedName": {
                 "canonical": "Edge7;:H*,E",
-                "raw": "Edge7;:H6c0,E"
+                "raw": "Edge7;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2301,7 +2297,7 @@
             {
               "mappedName": {
                 "canonical": "Edge7;:H*,E",
-                "raw": "Edge7;:H6c1,E"
+                "raw": "Edge7;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2318,7 +2314,7 @@
           "id": "canonical-collision-61d3a403551b14d4",
           "mappedName": {
             "canonical": "Edge7;:H*,E",
-            "raw": "Edge7;:H6c0,E"
+            "raw": "Edge7;:H16a,E"
           },
           "message": "Canonical elementMap key Edge7;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2330,7 +2326,7 @@
             {
               "mappedName": {
                 "canonical": "Edge8;:H*,E",
-                "raw": "Edge8;:H6c0,E"
+                "raw": "Edge8;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2346,7 +2342,7 @@
             {
               "mappedName": {
                 "canonical": "Edge8;:H*,E",
-                "raw": "Edge8;:H6c1,E"
+                "raw": "Edge8;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2363,7 +2359,7 @@
           "id": "canonical-collision-7f92eec7215dff1f",
           "mappedName": {
             "canonical": "Edge8;:H*,E",
-            "raw": "Edge8;:H6c0,E"
+            "raw": "Edge8;:H16a,E"
           },
           "message": "Canonical elementMap key Edge8;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2375,7 +2371,7 @@
             {
               "mappedName": {
                 "canonical": "Edge9;:H*,E",
-                "raw": "Edge9;:H6c0,E"
+                "raw": "Edge9;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2391,7 +2387,7 @@
             {
               "mappedName": {
                 "canonical": "Edge9;:H*,E",
-                "raw": "Edge9;:H6c1,E"
+                "raw": "Edge9;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2408,7 +2404,7 @@
           "id": "canonical-collision-f56ef32292d99d0f",
           "mappedName": {
             "canonical": "Edge9;:H*,E",
-            "raw": "Edge9;:H6c0,E"
+            "raw": "Edge9;:H16a,E"
           },
           "message": "Canonical elementMap key Edge9;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2420,7 +2416,7 @@
             {
               "mappedName": {
                 "canonical": "Edge10;:H*,E",
-                "raw": "Edge10;:H6c0,E"
+                "raw": "Edge10;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2436,7 +2432,7 @@
             {
               "mappedName": {
                 "canonical": "Edge10;:H*,E",
-                "raw": "Edge10;:H6c1,E"
+                "raw": "Edge10;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2453,7 +2449,7 @@
           "id": "canonical-collision-48a7c769f6bd18ba",
           "mappedName": {
             "canonical": "Edge10;:H*,E",
-            "raw": "Edge10;:H6c0,E"
+            "raw": "Edge10;:H16a,E"
           },
           "message": "Canonical elementMap key Edge10;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2465,7 +2461,7 @@
             {
               "mappedName": {
                 "canonical": "Edge11;:H*,E",
-                "raw": "Edge11;:H6c0,E"
+                "raw": "Edge11;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2481,7 +2477,7 @@
             {
               "mappedName": {
                 "canonical": "Edge11;:H*,E",
-                "raw": "Edge11;:H6c1,E"
+                "raw": "Edge11;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2498,7 +2494,7 @@
           "id": "canonical-collision-25fae88a8e066a6b",
           "mappedName": {
             "canonical": "Edge11;:H*,E",
-            "raw": "Edge11;:H6c0,E"
+            "raw": "Edge11;:H16a,E"
           },
           "message": "Canonical elementMap key Edge11;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2510,7 +2506,7 @@
             {
               "mappedName": {
                 "canonical": "Edge12;:H*,E",
-                "raw": "Edge12;:H6c0,E"
+                "raw": "Edge12;:H16a,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2526,7 +2522,7 @@
             {
               "mappedName": {
                 "canonical": "Edge12;:H*,E",
-                "raw": "Edge12;:H6c1,E"
+                "raw": "Edge12;:H16b,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -2543,7 +2539,7 @@
           "id": "canonical-collision-0a90cda00db89893",
           "mappedName": {
             "canonical": "Edge12;:H*,E",
-            "raw": "Edge12;:H6c0,E"
+            "raw": "Edge12;:H16a,E"
           },
           "message": "Canonical elementMap key Edge12;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2555,7 +2551,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H6c0,V"
+                "raw": "Vertex1;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2571,7 +2567,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H6c1,V"
+                "raw": "Vertex1;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2588,7 +2584,7 @@
           "id": "canonical-collision-409a126faa3ee83b",
           "mappedName": {
             "canonical": "Vertex1;:H*,V",
-            "raw": "Vertex1;:H6c0,V"
+            "raw": "Vertex1;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex1;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2600,7 +2596,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex2;:H*,V",
-                "raw": "Vertex2;:H6c0,V"
+                "raw": "Vertex2;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2616,7 +2612,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex2;:H*,V",
-                "raw": "Vertex2;:H6c1,V"
+                "raw": "Vertex2;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2633,7 +2629,7 @@
           "id": "canonical-collision-1ff628cdb96c6065",
           "mappedName": {
             "canonical": "Vertex2;:H*,V",
-            "raw": "Vertex2;:H6c0,V"
+            "raw": "Vertex2;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex2;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2645,7 +2641,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex3;:H*,V",
-                "raw": "Vertex3;:H6c0,V"
+                "raw": "Vertex3;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2661,7 +2657,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex3;:H*,V",
-                "raw": "Vertex3;:H6c1,V"
+                "raw": "Vertex3;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2678,7 +2674,7 @@
           "id": "canonical-collision-f02aa5f2dcd35865",
           "mappedName": {
             "canonical": "Vertex3;:H*,V",
-            "raw": "Vertex3;:H6c0,V"
+            "raw": "Vertex3;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex3;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2690,7 +2686,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex4;:H*,V",
-                "raw": "Vertex4;:H6c0,V"
+                "raw": "Vertex4;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2706,7 +2702,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex4;:H*,V",
-                "raw": "Vertex4;:H6c1,V"
+                "raw": "Vertex4;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2723,7 +2719,7 @@
           "id": "canonical-collision-e3ff2b840ca18f21",
           "mappedName": {
             "canonical": "Vertex4;:H*,V",
-            "raw": "Vertex4;:H6c0,V"
+            "raw": "Vertex4;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex4;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2735,7 +2731,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex5;:H*,V",
-                "raw": "Vertex5;:H6c0,V"
+                "raw": "Vertex5;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2751,7 +2747,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex5;:H*,V",
-                "raw": "Vertex5;:H6c1,V"
+                "raw": "Vertex5;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2768,7 +2764,7 @@
           "id": "canonical-collision-0ace600acc2c28ae",
           "mappedName": {
             "canonical": "Vertex5;:H*,V",
-            "raw": "Vertex5;:H6c0,V"
+            "raw": "Vertex5;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex5;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2780,7 +2776,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex6;:H*,V",
-                "raw": "Vertex6;:H6c0,V"
+                "raw": "Vertex6;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2796,7 +2792,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex6;:H*,V",
-                "raw": "Vertex6;:H6c1,V"
+                "raw": "Vertex6;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2813,7 +2809,7 @@
           "id": "canonical-collision-7a9339d5c425ad56",
           "mappedName": {
             "canonical": "Vertex6;:H*,V",
-            "raw": "Vertex6;:H6c0,V"
+            "raw": "Vertex6;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex6;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2825,7 +2821,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex7;:H*,V",
-                "raw": "Vertex7;:H6c0,V"
+                "raw": "Vertex7;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2841,7 +2837,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex7;:H*,V",
-                "raw": "Vertex7;:H6c1,V"
+                "raw": "Vertex7;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2858,7 +2854,7 @@
           "id": "canonical-collision-a6e07181783ca0c8",
           "mappedName": {
             "canonical": "Vertex7;:H*,V",
-            "raw": "Vertex7;:H6c0,V"
+            "raw": "Vertex7;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex7;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2870,7 +2866,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex8;:H*,V",
-                "raw": "Vertex8;:H6c0,V"
+                "raw": "Vertex8;:H16a,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2886,7 +2882,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex8;:H*,V",
-                "raw": "Vertex8;:H6c1,V"
+                "raw": "Vertex8;:H16b,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -2903,7 +2899,7 @@
           "id": "canonical-collision-d035ed81bde8cc24",
           "mappedName": {
             "canonical": "Vertex8;:H*,V",
-            "raw": "Vertex8;:H6c0,V"
+            "raw": "Vertex8;:H16a,V"
           },
           "message": "Canonical elementMap key Vertex8;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -2945,9 +2941,7 @@
         ],
         "ledgerObject": "ChildBoxA",
         "reason": "expected topoNamingState publication boundary",
-        "sourceEventIds": [
-          "event:1"
-        ]
+        "sourceEventIds": []
       },
       "ChildBoxB": {
         "covers": [
@@ -2973,7 +2967,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:7c38271ad540b3d70112baa5618284c485932c10d427890f96aa5519ba251f71",
+    "inputTopoNamingStateHash": "sha256:895c8776dec9dd3fae5d67f1927986e4b274f7b6f188cc20d88606fbfd4ec3f3",
     "results": [
       {
         "inputReferenceId": "ref:1",

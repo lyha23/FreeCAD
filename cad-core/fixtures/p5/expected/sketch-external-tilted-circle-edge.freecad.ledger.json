@@ -13,7 +13,7 @@
         "ref:1"
       ],
       "kind": "resolved",
-      "provenance": "legacy_internal_face_fixture_migration",
+      "provenance": "FreeCADCmd.native_property_assignment",
       "sources": [
         {
           "element": "InternalFace1",
@@ -30,10 +30,10 @@
   ],
   "fixture": {
     "case": "sketch-external-tilted-circle-edge",
-    "expectedPayloadHash": "sha256:fe91a3ccf3f9408fac77184576fd79dda7047c07417fab651e1394d20b6fd148",
+    "expectedPayloadHash": "sha256:16082a76135f7cdb4da1ec4e23f81d2def13ca31295ad09944d510d941628aa1",
     "inputHash": "sha256:48a4e35d2e8c41f20a1c71e9fda43822746e8ca8a5a97200b9e6a9bfef5ed0ad",
     "phase": "p5",
-    "topoNamingStateHash": "sha256:034763b5f9034989d17860ac59273341b027c294f5fd6d7d5e36258fd5c5cfc2"
+    "topoNamingStateHash": "sha256:a99865edca2840d528f319c0dcf2797336c1aac772bd9648b366365d0e4f0b29"
   },
   "inputReferences": [
     {
@@ -102,7 +102,7 @@
             },
             "mappedName": {
               "canonical": "#12;:G;XTR;:H*:*,E",
-              "raw": "#12;:G;XTR;:H12b4:7,E"
+              "raw": "#12;:G;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -123,7 +123,7 @@
             },
             "mappedName": {
               "canonical": "#16:1;:G0;XTR;:H*:*,F",
-              "raw": "#16:1;:G0;XTR;:H12b4:8,F"
+              "raw": "#16:1;:G0;XTR;:H10d9:8,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -144,7 +144,7 @@
             },
             "mappedName": {
               "canonical": "#18:1;:U;XTR;:H*:*,E",
-              "raw": "#18:1;:U;XTR;:H12b4:7,E"
+              "raw": "#18:1;:U;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -165,7 +165,7 @@
             },
             "mappedName": {
               "canonical": "#18:2;:U;XTR;:H*:*,E",
-              "raw": "#18:2;:U;XTR;:H12b4:7,E"
+              "raw": "#18:2;:U;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -186,7 +186,7 @@
             },
             "mappedName": {
               "canonical": "#18:3;:U;XTR;:H*:*,E",
-              "raw": "#18:3;:U;XTR;:H12b4:7,E"
+              "raw": "#18:3;:U;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -207,7 +207,7 @@
             },
             "mappedName": {
               "canonical": "#18:4;:U;XTR;:H*:*,E",
-              "raw": "#18:4;:U;XTR;:H12b4:7,E"
+              "raw": "#18:4;:U;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -228,7 +228,7 @@
             },
             "mappedName": {
               "canonical": "#1e;:G;XTR;:H*:*,E",
-              "raw": "#1e;:G;XTR;:H12b4:7,E"
+              "raw": "#1e;:G;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -249,7 +249,7 @@
             },
             "mappedName": {
               "canonical": "#1f;:G;XTR;:H*:*,E",
-              "raw": "#1f;:G;XTR;:H12b4:7,E"
+              "raw": "#1f;:G;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -270,7 +270,7 @@
             },
             "mappedName": {
               "canonical": "#20:8;:G;XTR;:H*:*,E",
-              "raw": "#20:8;:G;XTR;:H12b4:7,E"
+              "raw": "#20:8;:G;XTR;:H10d9:7,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -291,7 +291,7 @@
             },
             "mappedName": {
               "canonical": "#22:1;:U2;XTR;:H*:*,V",
-              "raw": "#22:1;:U2;XTR;:H12b4:8,V"
+              "raw": "#22:1;:U2;XTR;:H10d9:8,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -312,7 +312,7 @@
             },
             "mappedName": {
               "canonical": "#22:2;:U2;XTR;:H*:*,V",
-              "raw": "#22:2;:U2;XTR;:H12b4:8,V"
+              "raw": "#22:2;:U2;XTR;:H10d9:8,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -333,7 +333,7 @@
             },
             "mappedName": {
               "canonical": "#22:3;:U2;XTR;:H*:*,V",
-              "raw": "#22:3;:U2;XTR;:H12b4:8,V"
+              "raw": "#22:3;:U2;XTR;:H10d9:8,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -354,7 +354,7 @@
             },
             "mappedName": {
               "canonical": "#23:c;:U;XTR;:H*:*,V",
-              "raw": "#23:c;:U;XTR;:H12b4:7,V"
+              "raw": "#23:c;:U;XTR;:H10d9:7,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -375,7 +375,7 @@
             },
             "mappedName": {
               "canonical": "#2;:H*,V",
-              "raw": "#2;:H12b4,V"
+              "raw": "#2;:H10d9,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -396,7 +396,7 @@
             },
             "mappedName": {
               "canonical": "#4:1;:H*,E",
-              "raw": "#4:1;:H12b4,E"
+              "raw": "#4:1;:H10d9,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -417,7 +417,7 @@
             },
             "mappedName": {
               "canonical": "#4:2;:H*,E",
-              "raw": "#4:2;:H12b4,E"
+              "raw": "#4:2;:H10d9,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -438,7 +438,7 @@
             },
             "mappedName": {
               "canonical": "#4:3;:H*,E",
-              "raw": "#4:3;:H12b4,E"
+              "raw": "#4:3;:H10d9,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -459,7 +459,7 @@
             },
             "mappedName": {
               "canonical": "#4:4;:H*,E",
-              "raw": "#4:4;:H12b4,E"
+              "raw": "#4:4;:H10d9,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -480,7 +480,7 @@
             },
             "mappedName": {
               "canonical": "#8;:H*,V",
-              "raw": "#8;:H12b4,V"
+              "raw": "#8;:H10d9,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -501,7 +501,7 @@
             },
             "mappedName": {
               "canonical": "#a;:H*,V",
-              "raw": "#a;:H12b4,V"
+              "raw": "#a;:H10d9,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -522,7 +522,7 @@
             },
             "mappedName": {
               "canonical": "#c;:H*,V",
-              "raw": "#c;:H12b4,V"
+              "raw": "#c;:H10d9,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -543,7 +543,7 @@
             },
             "mappedName": {
               "canonical": "#f:1;:G;XTR;:H*:*,F",
-              "raw": "#f:1;:G;XTR;:H12b4:7,F"
+              "raw": "#f:1;:G;XTR;:H10d9:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -564,7 +564,7 @@
             },
             "mappedName": {
               "canonical": "#f:1;;:H*:*,F",
-              "raw": "#f:1;;:H12b4:1,F"
+              "raw": "#f:1;;:H10d9:1,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -585,7 +585,7 @@
             },
             "mappedName": {
               "canonical": "#f:2;:G;XTR;:H*:*,F",
-              "raw": "#f:2;:G;XTR;:H12b4:7,F"
+              "raw": "#f:2;:G;XTR;:H10d9:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -606,7 +606,7 @@
             },
             "mappedName": {
               "canonical": "#f:3;:G;XTR;:H*:*,F",
-              "raw": "#f:3;:G;XTR;:H12b4:7,F"
+              "raw": "#f:3;:G;XTR;:H10d9:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -627,7 +627,7 @@
             },
             "mappedName": {
               "canonical": "#f:4;:G;XTR;:H*:*,F",
-              "raw": "#f:4;:G;XTR;:H12b4:7,F"
+              "raw": "#f:4;:G;XTR;:H10d9:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -747,7 +747,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:034763b5f9034989d17860ac59273341b027c294f5fd6d7d5e36258fd5c5cfc2",
+    "inputTopoNamingStateHash": "sha256:a99865edca2840d528f319c0dcf2797336c1aac772bd9648b366365d0e4f0b29",
     "results": [
       {
         "inputReferenceId": "ref:1",

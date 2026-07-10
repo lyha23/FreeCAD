@@ -49,7 +49,7 @@
   "fixture": {
     "case": "part-sweep-located-profile-diagnostics",
     "expectedPayloadHash": "sha256:26a08b825309cfcab0accbf112b5b4c188f4e6018f347bc288ba45ba58dc0844",
-    "inputHash": "sha256:284bd2accbde29695a04b99598dd78dcad5a4d40607d3d31c12693e065bb1bd3",
+    "inputHash": "sha256:5871f06b535fc0a0f1c4886ab2375320174499c9e708b02080ff6a651c3162a6",
     "phase": "c6m4",
     "topoNamingStateHash": "sha256:32876aafb7328938ab503a0e8bc5dd4cfd4a8f5e497d08a321ad8bd2ebfa8195"
   },

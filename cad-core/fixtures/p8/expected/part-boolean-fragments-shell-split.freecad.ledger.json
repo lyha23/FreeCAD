@@ -47,10 +47,10 @@
   ],
   "fixture": {
     "case": "part-boolean-fragments-shell-split",
-    "expectedPayloadHash": "sha256:3f77eff720389d05e2f81dc10580b868b5f3c495c2813c38ef7b1e8d18c50bc7",
+    "expectedPayloadHash": "sha256:3bde6c5ef2c421e77a2566a585f68e3f5b28e71d23aaa98de815716baf43a9d4",
     "inputHash": "sha256:742f3e2d6cf648e13c898b703b97ca01e5f3225d7a12a17c454d8bafa2ba0f05",
     "phase": "p8",
-    "topoNamingStateHash": "sha256:8cbc901828536c28f2aea60acb17e4cce0bb7da9abf400be6e3289ba449a08eb"
+    "topoNamingStateHash": "sha256:104f2b030e6695bf30f2382a8883ce5dbfa0e693b5752d3b0a4d3a2f256c2620"
   },
   "inputReferences": [],
   "objects": {
@@ -103,7 +103,7 @@
             },
             "mappedName": {
               "canonical": "Edge1;:G(Edge4;K-1;:H*:*,E);GFS;:H*:*,V;:H,V",
-              "raw": "Edge1;:G(Edge4;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;:H,V"
+              "raw": "Edge1;:G(Edge4;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;:H,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -124,7 +124,7 @@
             },
             "mappedName": {
               "canonical": "Edge1;:H*,E;:H,E",
-              "raw": "Edge1;:Ha56,E;:H,E"
+              "raw": "Edge1;:H6d0,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -145,7 +145,7 @@
             },
             "mappedName": {
               "canonical": "Edge2;:M2;GFS;:H*:*,E;:H,E",
-              "raw": "Edge2;:M2;GFS;:Ha56:8,E;:H,E"
+              "raw": "Edge2;:M2;GFS;:H6d0:8,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -166,7 +166,7 @@
             },
             "mappedName": {
               "canonical": "Edge2;:M;GFS;:H*:*,E;:H,E",
-              "raw": "Edge2;:M;GFS;:Ha56:7,E;:H,E"
+              "raw": "Edge2;:M;GFS;:H6d0:7,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -187,7 +187,7 @@
             },
             "mappedName": {
               "canonical": "Edge3;:G(Edge2;K-1;:H*:*,E);GFS;:H*:*,V;:H,V",
-              "raw": "Edge3;:G(Edge2;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;:H,V"
+              "raw": "Edge3;:G(Edge2;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;:H,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -208,7 +208,7 @@
             },
             "mappedName": {
               "canonical": "Edge3;:H*,E;:H,E",
-              "raw": "Edge3;:Ha56,E;:H,E"
+              "raw": "Edge3;:H6d0,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -229,7 +229,7 @@
             },
             "mappedName": {
               "canonical": "Edge3;:M2;GFS;:H*:*,E;SHL;:H*:*,E;:H,E",
-              "raw": "Edge3;:M2;GFS;:Ha55:8,E;SHL;:Ha55:4,E;:H,E"
+              "raw": "Edge3;:M2;GFS;:H6cf:8,E;SHL;:H6cf:4,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -250,7 +250,7 @@
             },
             "mappedName": {
               "canonical": "Edge4;:H*,E;SHL;:H*:*,E;:H,E",
-              "raw": "Edge4;:Ha55,E;SHL;:Ha55:4,E;:H,E"
+              "raw": "Edge4;:H6cf,E;SHL;:H6cf:4,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -271,7 +271,7 @@
             },
             "mappedName": {
               "canonical": "Edge4;:M2;GFS;:H*:*,E;:H,E",
-              "raw": "Edge4;:M2;GFS;:Ha56:8,E;:H,E"
+              "raw": "Edge4;:M2;GFS;:H6d0:8,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -292,7 +292,7 @@
             },
             "mappedName": {
               "canonical": "Edge4;:M;GFS;:H*:*,E;:H,E",
-              "raw": "Edge4;:M;GFS;:Ha56:7,E;:H,E"
+              "raw": "Edge4;:M;GFS;:H6d0:7,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -313,7 +313,7 @@
             },
             "mappedName": {
               "canonical": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;:H,E",
-              "raw": "Face1;:G(Face1;K-1;:Ha56:4,F);GFS;:Ha55:1c,E;:H,E"
+              "raw": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;:H,E"
             },
             "recoverability": "resolved",
             "shapeKind": "edge",
@@ -334,7 +334,7 @@
             },
             "mappedName": {
               "canonical": "Face1;:M2;GFS;:H*:*,F",
-              "raw": "Face1;:M2;GFS;:Ha56:8,F"
+              "raw": "Face1;:M2;GFS;:H6d0:8,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -355,7 +355,7 @@
             },
             "mappedName": {
               "canonical": "Face1;:M2;GFS;:H*:*,F;SHL;:H*:*,F",
-              "raw": "Face1;:M2;GFS;:Ha55:8,F;SHL;:Ha55:4,F"
+              "raw": "Face1;:M2;GFS;:H6cf:8,F;SHL;:H6cf:4,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -376,7 +376,7 @@
             },
             "mappedName": {
               "canonical": "Face1;:M;GFS;:H*:*,F",
-              "raw": "Face1;:M;GFS;:Ha56:7,F"
+              "raw": "Face1;:M;GFS;:H6d0:7,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -397,7 +397,7 @@
             },
             "mappedName": {
               "canonical": "Face1;:M;GFS;:H*:*,F;SHL;:H*:*,F",
-              "raw": "Face1;:M;GFS;:Ha55:7,F;SHL;:Ha55:4,F"
+              "raw": "Face1;:M;GFS;:H6cf:7,F;SHL;:H6cf:4,F"
             },
             "recoverability": "resolved",
             "shapeKind": "face",
@@ -418,7 +418,7 @@
             },
             "mappedName": {
               "canonical": "Vertex1;:H*,V;:H,V",
-              "raw": "Vertex1;:Ha56,V;:H,V"
+              "raw": "Vertex1;:H6d0,V;:H,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -439,7 +439,7 @@
             },
             "mappedName": {
               "canonical": "Vertex2;:H*,V;:H,V",
-              "raw": "Vertex2;:Ha56,V;:H,V"
+              "raw": "Vertex2;:H6d0,V;:H,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -460,7 +460,7 @@
             },
             "mappedName": {
               "canonical": "Vertex3;:H*,V;:H,V",
-              "raw": "Vertex3;:Ha56,V;:H,V"
+              "raw": "Vertex3;:H6d0,V;:H,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -481,7 +481,7 @@
             },
             "mappedName": {
               "canonical": "Vertex4;:H*,V;:H,V",
-              "raw": "Vertex4;:Ha56,V;:H,V"
+              "raw": "Vertex4;:H6d0,V;:H,V"
             },
             "recoverability": "resolved",
             "shapeKind": "vertex",
@@ -503,7 +503,7 @@
             {
               "mappedName": {
                 "canonical": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
-                "raw": "Face1;:G(Face1;K-1;:Ha56:4,F);GFS;:Ha55:1c,E;D538;:Ha55:5,E;:H,E"
+                "raw": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;D18c7;:H6cf:6,E;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -519,7 +519,7 @@
             {
               "mappedName": {
                 "canonical": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
-                "raw": "Face1;:G(Face1;K-1;:Ha56:4,F);GFS;:Ha55:1c,E;D13c;:Ha55:5,E;:H,E"
+                "raw": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;Ddfb;:H6cf:5,E;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -535,7 +535,7 @@
             {
               "mappedName": {
                 "canonical": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
-                "raw": "Face1;:G(Face1;K-1;:Ha56:4,F);GFS;:Ha55:1c,E;D247e;:Ha55:6,E;:H,E"
+                "raw": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;D295;:H6cf:5,E;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -551,7 +551,7 @@
             {
               "mappedName": {
                 "canonical": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
-                "raw": "Face1;:G(Face1;K-1;:Ha56:4,F);GFS;:Ha55:1c,E;Ded1;:Ha55:5,E;:H,E"
+                "raw": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;D2355;:H6cf:6,E;:H,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -568,7 +568,7 @@
           "id": "canonical-collision-4a0089b83a07a871",
           "mappedName": {
             "canonical": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
-            "raw": "Face1;:G(Face1;K-1;:Ha56:4,F);GFS;:Ha55:1c,E;D538;:Ha55:5,E;:H,E"
+            "raw": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;D18c7;:H6cf:6,E;:H,E"
           },
           "message": "Canonical elementMap key Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -580,7 +580,7 @@
             {
               "mappedName": {
                 "canonical": "Edge1;:G(Edge4;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
-                "raw": "Edge1;:G(Edge4;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;D1e88;:Ha55:6,V;:H,V"
+                "raw": "Edge1;:G(Edge4;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;Dc35;:H6cf:5,V;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -596,7 +596,7 @@
             {
               "mappedName": {
                 "canonical": "Edge1;:G(Edge4;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
-                "raw": "Edge1;:G(Edge4;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;D219e;:Ha55:6,V;:H,V"
+                "raw": "Edge1;:G(Edge4;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;D782;:H6cf:5,V;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -613,7 +613,7 @@
           "id": "canonical-collision-f74b024ccd33f92a",
           "mappedName": {
             "canonical": "Edge1;:G(Edge4;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
-            "raw": "Edge1;:G(Edge4;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;D1e88;:Ha55:6,V;:H,V"
+            "raw": "Edge1;:G(Edge4;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;Dc35;:H6cf:5,V;:H,V"
           },
           "message": "Canonical elementMap key Edge1;:G(Edge4;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -625,7 +625,7 @@
             {
               "mappedName": {
                 "canonical": "Edge3;:G(Edge2;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
-                "raw": "Edge3;:G(Edge2;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;D23e0;:Ha55:6,V;:H,V"
+                "raw": "Edge3;:G(Edge2;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;D25d9;:H6cf:6,V;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -641,7 +641,7 @@
             {
               "mappedName": {
                 "canonical": "Edge3;:G(Edge2;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
-                "raw": "Edge3;:G(Edge2;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;D7a2;:Ha55:5,V;:H,V"
+                "raw": "Edge3;:G(Edge2;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;Dc39;:H6cf:5,V;:H,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -658,7 +658,7 @@
           "id": "canonical-collision-986c06b01246cd7a",
           "mappedName": {
             "canonical": "Edge3;:G(Edge2;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
-            "raw": "Edge3;:G(Edge2;K-1;:Ha56:4,E);GFS;:Ha55:1c,V;D23e0;:Ha55:6,V;:H,V"
+            "raw": "Edge3;:G(Edge2;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;D25d9;:H6cf:6,V;:H,V"
           },
           "message": "Canonical elementMap key Edge3;:G(Edge2;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -668,6 +668,64 @@
       ],
       "published": true,
       "role": "protocol_published",
+      "subshapeEvidence": {
+        "Edge11": {
+          "canonicalFreecadMappedName": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;D295;:H6cf:5,E;:H,E",
+          "resolvedIndexed": "Edge11",
+          "subname": "Edge11"
+        },
+        "Edge13": {
+          "canonicalFreecadMappedName": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;D2355;:H6cf:6,E;:H,E",
+          "resolvedIndexed": "Edge13",
+          "subname": "Edge13"
+        },
+        "Edge8": {
+          "canonicalFreecadMappedName": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;D18c7;:H6cf:6,E;:H,E",
+          "resolvedIndexed": "Edge8",
+          "subname": "Edge8"
+        },
+        "Edge9": {
+          "canonicalFreecadMappedName": "Face1;:G(Face1;K-1;:H*:*,F);GFS;:H*:*,E;D*;:H*:*,E;:H,E",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Face1;:G(Face1;K-1;:H6d0:4,F);GFS;:H6cf:1c,E;Ddfb;:H6cf:5,E;:H,E",
+          "resolvedIndexed": "Edge9",
+          "subname": "Edge9"
+        },
+        "Vertex10": {
+          "canonicalFreecadMappedName": "Edge3;:G(Edge2;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Edge3;:G(Edge2;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;Dc39;:H6cf:5,V;:H,V",
+          "resolvedIndexed": "Vertex10",
+          "subname": "Vertex10"
+        },
+        "Vertex6": {
+          "canonicalFreecadMappedName": "Edge1;:G(Edge4;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Edge1;:G(Edge4;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;Dc35;:H6cf:5,V;:H,V",
+          "resolvedIndexed": "Vertex6",
+          "subname": "Vertex6"
+        },
+        "Vertex7": {
+          "canonicalFreecadMappedName": "Edge1;:G(Edge4;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Edge1;:G(Edge4;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;D782;:H6cf:5,V;:H,V",
+          "resolvedIndexed": "Vertex7",
+          "subname": "Vertex7"
+        },
+        "Vertex8": {
+          "canonicalFreecadMappedName": "Edge3;:G(Edge2;K-1;:H*:*,E);GFS;:H*:*,V;D*;:H*:*,V;:H,V",
+          "identityStatus": "stable",
+          "rawFreecadMappedName": "Edge3;:G(Edge2;K-1;:H6d0:4,E);GFS;:H6cf:1c,V;D25d9;:H6cf:6,V;:H,V",
+          "resolvedIndexed": "Vertex8",
+          "subname": "Vertex8"
+        }
+      },
       "type": "Part::BooleanFragments"
     },
     "ShellBase": {
@@ -769,7 +827,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:8cbc901828536c28f2aea60acb17e4cce0bb7da9abf400be6e3289ba449a08eb",
+    "inputTopoNamingStateHash": "sha256:104f2b030e6695bf30f2382a8883ce5dbfa0e693b5752d3b0a4d3a2f256c2620",
     "results": [],
     "status": "passed"
   },

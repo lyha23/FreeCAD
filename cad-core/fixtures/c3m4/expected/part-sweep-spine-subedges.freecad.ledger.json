@@ -47,10 +47,10 @@
   ],
   "fixture": {
     "case": "part-sweep-spine-subedges",
-    "expectedPayloadHash": "sha256:4b80570e2aae65b629eec7216ef80df51f57a805f6c4638940182609e81dea8c",
-    "inputHash": "sha256:7ef5b303dcfc87a0e76a113e880af895fb2d59005e79d85bae9f294cdef19091",
+    "expectedPayloadHash": "sha256:6ca151e49eb57587bf598a70f749524ea9bb150562e6fbd1718176db14d95834",
+    "inputHash": "sha256:89253f23846281147013808dab791db09dbe176c142662380907ca1fe2ddc909",
     "phase": "c3m4",
-    "topoNamingStateHash": "sha256:6d76169b71c3ec5e5dc40938552300992df40a5dac9d191a1a86b92caa2929d7"
+    "topoNamingStateHash": "sha256:7759a14c7caa6661d1afae3bfa1ff393233a396fb8f0c382b7ec5be0950469ed"
   },
   "inputReferences": [],
   "objects": {
@@ -152,7 +152,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge1;:H*,E",
-                  "raw": "Edge1;:H58c,E"
+                  "raw": "Edge1;:H100d,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -173,7 +173,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex1;:H*,V",
-                  "raw": "Vertex1;:H58c,V"
+                  "raw": "Vertex1;:H100d,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -194,7 +194,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex2;:H*,V",
-                  "raw": "Vertex2;:H58c,V"
+                  "raw": "Vertex2;:H100d,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -228,7 +228,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge1;:H*,E",
-                  "raw": "Edge1;:H58d,E"
+                  "raw": "Edge1;:H100e,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -249,7 +249,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex1;:H*,V",
-                  "raw": "Vertex1;:H58d,V"
+                  "raw": "Vertex1;:H100e,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -270,7 +270,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex2;:H*,V",
-                  "raw": "Vertex2;:H58d,V"
+                  "raw": "Vertex2;:H100e,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -304,7 +304,7 @@
                 },
                 "mappedName": {
                   "canonical": "Edge1;:H*,E",
-                  "raw": "Edge1;:H58e,E"
+                  "raw": "Edge1;:H100f,E"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "edge",
@@ -325,7 +325,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex1;:H*,V",
-                  "raw": "Vertex1;:H58e,V"
+                  "raw": "Vertex1;:H100f,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -346,7 +346,7 @@
                 },
                 "mappedName": {
                   "canonical": "Vertex2;:H*,V",
-                  "raw": "Vertex2;:H58e,V"
+                  "raw": "Vertex2;:H100f,V"
                 },
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
@@ -378,7 +378,7 @@
             {
               "mappedName": {
                 "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H58c,E"
+                "raw": "Edge1;:H100d,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -394,7 +394,7 @@
             {
               "mappedName": {
                 "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H58d,E"
+                "raw": "Edge1;:H100e,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -410,7 +410,7 @@
             {
               "mappedName": {
                 "canonical": "Edge1;:H*,E",
-                "raw": "Edge1;:H58e,E"
+                "raw": "Edge1;:H100f,E"
               },
               "recoverability": "resolved",
               "shapeKind": "edge",
@@ -427,7 +427,7 @@
           "id": "canonical-collision-f830556f6a22e398",
           "mappedName": {
             "canonical": "Edge1;:H*,E",
-            "raw": "Edge1;:H58c,E"
+            "raw": "Edge1;:H100d,E"
           },
           "message": "Canonical elementMap key Edge1;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -439,7 +439,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H58c,V"
+                "raw": "Vertex1;:H100d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -455,7 +455,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H58d,V"
+                "raw": "Vertex1;:H100e,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -471,7 +471,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex1;:H*,V",
-                "raw": "Vertex1;:H58e,V"
+                "raw": "Vertex1;:H100f,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -488,7 +488,7 @@
           "id": "canonical-collision-4da08c1dfc2af35a",
           "mappedName": {
             "canonical": "Vertex1;:H*,V",
-            "raw": "Vertex1;:H58c,V"
+            "raw": "Vertex1;:H100d,V"
           },
           "message": "Canonical elementMap key Vertex1;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -500,7 +500,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex2;:H*,V",
-                "raw": "Vertex2;:H58c,V"
+                "raw": "Vertex2;:H100d,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -516,7 +516,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex2;:H*,V",
-                "raw": "Vertex2;:H58d,V"
+                "raw": "Vertex2;:H100e,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -532,7 +532,7 @@
             {
               "mappedName": {
                 "canonical": "Vertex2;:H*,V",
-                "raw": "Vertex2;:H58e,V"
+                "raw": "Vertex2;:H100f,V"
               },
               "recoverability": "resolved",
               "shapeKind": "vertex",
@@ -549,7 +549,7 @@
           "id": "canonical-collision-883d7c81ab7978ea",
           "mappedName": {
             "canonical": "Vertex2;:H*,V",
-            "raw": "Vertex2;:H58c,V"
+            "raw": "Vertex2;:H100d,V"
           },
           "message": "Canonical elementMap key Vertex2;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
           "recoverability": "ambiguous",
@@ -668,7 +668,7 @@
   },
   "roundTrip": {
     "diagnostics": [],
-    "inputTopoNamingStateHash": "sha256:6d76169b71c3ec5e5dc40938552300992df40a5dac9d191a1a86b92caa2929d7",
+    "inputTopoNamingStateHash": "sha256:7759a14c7caa6661d1afae3bfa1ff393233a396fb8f0c382b7ec5be0950469ed",
     "results": [],
     "status": "passed"
   },

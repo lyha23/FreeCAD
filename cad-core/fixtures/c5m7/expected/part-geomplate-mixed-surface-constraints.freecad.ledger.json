@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-geomplate-mixed-surface-constraints",
     "expectedPayloadHash": "sha256:e4d4d867d72376b9ecf55ab51bf1bb076c6931a74ea80dc0df4afac0c47a5e3b",
-    "inputHash": "sha256:1f7d1247fa21fd0a39428395541b2488589c9b6f4cefda05044ecc133ebbae69",
+    "inputHash": "sha256:01bd0e1fe9df6fd2e203e31cbf577867039a288c9c84c8646848fe896c6385e2",
     "phase": "c5m7",
     "topoNamingStateHash": "sha256:6d7137f21286ee3105a1c1c5a16b17cc607a528aafd2c2fd392c5f8c9894b30f"
   },

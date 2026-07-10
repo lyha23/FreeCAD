@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-sweep-auxiliary-spine-contract",
     "expectedPayloadHash": "sha256:e6b47d153007dfbb8528fef0c4a66215788d25004f131e145676976104ce9f0a",
-    "inputHash": "sha256:27726e7beba830c1918b09bc4b9a2ffd6212dbb85c6224da9c719eaffbaf6821",
+    "inputHash": "sha256:62158c8a1c8cdafea724d1c2b3fd2c320abbf38be729662cc2d17bf48d2abb58",
     "phase": "c5m10",
     "topoNamingStateHash": "sha256:d073703c0780888285819bb1a8f0d7adff58dc8d32ee8c1f6ca7311a1c95e41d"
   },

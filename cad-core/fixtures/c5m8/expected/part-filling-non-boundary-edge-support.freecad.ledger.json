@@ -17,7 +17,7 @@
   "fixture": {
     "case": "part-filling-non-boundary-edge-support",
     "expectedPayloadHash": "sha256:fb352adca34733edfcbf9691d1d9244ad8acf1f871c36dacffb2e7c84c2e5297",
-    "inputHash": "sha256:1e6008d46aed3e2ff4249defb11d5efd5007871d420511c616b436ddfa5173b0",
+    "inputHash": "sha256:fce354289a8d47ea3c63b2b2e69f6b19fcd602a286395d89ef042b9f100980de",
     "phase": "c5m8",
     "topoNamingStateHash": "sha256:f3f2ad0662537c2c87f2e990800e6b5e0b7db843049c64738c4a7a3b76accc72"
   },

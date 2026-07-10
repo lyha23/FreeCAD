@@ -25,7 +25,7 @@
   "fixture": {
     "case": "part-filling-explicit-params-invalid-product",
     "expectedPayloadHash": "sha256:a051ddad297ba8874e7668f521aa0603a7b42b58cafcaa011dd96b382eef2ec9",
-    "inputHash": "sha256:8b7d4fa4ae8d80fbfc51fd599d22ccda689518c8626493fe3202e9afcb50a337",
+    "inputHash": "sha256:90fcefdddf107cff69a549b027272c16910feb30c66df5364da0d1fde3cda914",
     "phase": "c6m5",
     "topoNamingStateHash": "sha256:a6e1d32dda01cabd1f0017f7576351d189585f2dd7ff1038ca86295e7d6282b6"
   },

@@ -13,7 +13,7 @@
   "fixture": {
     "case": "part-geomplate-curve-criteria-diagnostic",
     "expectedPayloadHash": "sha256:c33a4035bccd3d715087e06e090cad4f9fbb5de62253b72b35fc256dd6df42f9",
-    "inputHash": "sha256:6ef101485ddfa0c911d9335002a9b81586de5877bb9fe7a3557509b8a8b51ef9",
+    "inputHash": "sha256:1cd3a30b711c346f1eb60c53ab7315cd0acafd16403417aa361a172fd97f444e",
     "phase": "c5m7",
     "topoNamingStateHash": "sha256:79a635b4448e1b94c82f5b1c237953e39eb16a106e4195d1a4bc8d5d25320f1b"
   },

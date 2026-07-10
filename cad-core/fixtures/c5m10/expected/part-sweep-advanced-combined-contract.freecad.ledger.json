@@ -60,7 +60,7 @@
   "fixture": {
     "case": "part-sweep-advanced-combined-contract",
     "expectedPayloadHash": "sha256:3105a5b971bbab2064c777aea59e0da76b28ebe58589491fcca960f1a9da5a64",
-    "inputHash": "sha256:a3af88159f4e2313deb68fae9df6b2dbeb72c4918a60804829011f4f4560c915",
+    "inputHash": "sha256:b77fabef7c60e1d3e4a4e8f2b5ff32123a063ee102bed8b46eb54ab7dedd8759",
     "phase": "c5m10",
     "topoNamingStateHash": "sha256:399de456d23247c261bcc2d6885074a957dfae2c788169b46e52dbace1eef78b"
   },

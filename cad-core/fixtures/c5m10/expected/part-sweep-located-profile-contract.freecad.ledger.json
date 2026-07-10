@@ -16,7 +16,7 @@
   "fixture": {
     "case": "part-sweep-located-profile-contract",
     "expectedPayloadHash": "sha256:5426a175fc9d1848a45fc6da40f67ac8ac1416fef7754be3bf0a5106478d9be3",
-    "inputHash": "sha256:baf648d14930bea5d308d61681e93834f53bcda67c95e9a82a04f587c0a92f8b",
+    "inputHash": "sha256:3f9486a09a40d281453fd3e984aa2a5f292f5b810e04319ae7f4f3c545c5afbc",
     "phase": "c5m10",
     "topoNamingStateHash": "sha256:09d3c5f2de7be830928b1a819071063da79a558486f24e1019fcf7a8a6c22882"
   },

@@ -17,7 +17,7 @@
   "fixture": {
     "case": "part-filling-non-boundary-support-order-product",
     "expectedPayloadHash": "sha256:5f927f957a32efdea2ecde8930eb12212d52dffa620bba30db0dafb58c76c8cc",
-    "inputHash": "sha256:4d82c380fff7fe0e8ebd24f774d77d7e01d9a6000c357b57330b2ab4c67af98c",
+    "inputHash": "sha256:eeaa31ded13d26819189157d890e1843e25f1e16405983d8935f7474c45b8537",
     "phase": "c6m5",
     "topoNamingStateHash": "sha256:75485be39b813c218a1655778a2d8bc1e3a91a52c3ee71d7bd42dda04aeaa944"
   },

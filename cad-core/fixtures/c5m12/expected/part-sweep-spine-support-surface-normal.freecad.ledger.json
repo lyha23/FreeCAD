@@ -8,7 +8,7 @@
   "fixture": {
     "case": "part-sweep-spine-support-surface-normal",
     "expectedPayloadHash": "sha256:87ebf2a3cc3ea5b3021ef2ba27eccbd3773b4b8615f95c6539a76f61cc5a33d9",
-    "inputHash": "sha256:dd94b60a75cb34ce5d1031feaff79a4008e72e352d0db8642c781e5e58dd268f",
+    "inputHash": "sha256:9cdb323cd6d2217d99d68ee99d2b6e192c8aba45d87e9e2f27182518a0cc0d3c",
     "phase": "c5m12",
     "topoNamingStateHash": "sha256:af08bfd65550c625c65d36563d1129709b20023c9e66b530845c71fcbf1a04c2"
   },

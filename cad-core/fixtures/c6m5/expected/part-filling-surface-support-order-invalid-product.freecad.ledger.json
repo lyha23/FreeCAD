@@ -29,7 +29,7 @@
   "fixture": {
     "case": "part-filling-surface-support-order-invalid-product",
     "expectedPayloadHash": "sha256:bf1f87b681194566ec796b0000aafddef349bd54485c07bb2c7aba7c86487367",
-    "inputHash": "sha256:40dedc87e613e7abd137ffcdf9ed786132b176da7e424f6a10684b17ebf97b90",
+    "inputHash": "sha256:eb3ef9b047d7bbcaf0acb63000fd44066a2cf5a9771b5f195d8fa77716d8dd3f",
     "phase": "c6m5",
     "topoNamingStateHash": "sha256:552282159e7900125f1e3616a627e74209befdbbc98b7a1adfad81e47abe4dd1"
   },
