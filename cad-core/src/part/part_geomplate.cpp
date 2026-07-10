@@ -103,6 +103,10 @@ void addGeomPlateDiagnostic(
     const std::string& subname = {}
 )
 {
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /BuildPlateSurfacePyImp.cpp::BuildPlateSurfacePy::PyInit(), creates the transient
+    // "GeomPlate_BuildPlateSurface" helper rather than a DocumentObject. The native fixture
+    // collector therefore owns the admission diagnostic and its public error envelope.
     runtime::addDiagnostic(
         context.diagnostics,
         "error",
@@ -114,7 +118,14 @@ void addGeomPlateDiagnostic(
         target,
         subname
     );
-    context.objects[object.name] = errorObject();
+    context.diagnostics.back().details["source"] = "freecad_expected_collector";
+
+    nlohmann::json fields = errorObject();
+    context.objects[object.name] = fields;
+    runtime::PublicResultFields& publicFields = context.publicResultFields[object.name];
+    publicFields.objectFields = std::move(fields);
+    publicFields.nativeError = message;
+    publicFields.nativeErrorCode = code;
 }
 
 std::string firstGeomPlateDeferredTarget(const app::DocumentObject& object, const std::string& property)
@@ -161,8 +172,7 @@ bool rejectDeferredGeomPlateAdvancedProperties(
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
     // /PlateSurfacePyImp.cpp::PlateSurfacePy::PyInit() parses "Curves" but the branch is
     // still "TODO"; Geometry.cpp::GeomPlateSurface::Save()/Restore() both throw
-    // "NotImplementedError". cad-core keeps this as an explicit wrapper lifecycle diagnostic
-    // instead of fabricating a persistent PlateSurface object.
+    // "NotImplementedError". Preserve that exact collector-facing wrapper lifecycle boundary.
     static const std::vector<std::string> deferred {
         "PlateSurfaceCurves",
     };
@@ -175,9 +185,9 @@ bool rejectDeferredGeomPlateAdvancedProperties(
             object,
             context,
             "unsupported_wrapper_lifecycle",
-            "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; FreeCAD "
-            "PlateSurfacePyImp.cpp still leaves Curves as TODO and GeomPlateSurface persistence "
-            "is NotImplementedError",
+            "Part.PlateSurface.Curves requires PlateSurfacePy wrapper lifecycle; "
+            "PlateSurfacePyImp.cpp leaves Curves as TODO and GeomPlateSurface Save/Restore "
+            "throw NotImplementedError",
             property,
             firstGeomPlateDeferredTarget(object, property),
             firstGeomPlateDeferredSubname(object, property)
@@ -691,6 +701,23 @@ std::optional<std::vector<GeomPlateCurveConstraintSource>> readCurveConstraints(
                 );
                 return std::nullopt;
             }
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+            // /CurveConstraintPyImp.cpp::CurveConstraintPy::PyInit(), accepts GeometryCurvePy
+            // and constructs GeomPlate_CurveConstraint from its curve. Validate the resolved
+            // geometric capability rather than whitelisting a DocumentObject TypeId: any
+            // edge-backed curve can enter the helper, while a vertex/face/wire cannot.
+            if (shape->ShapeType() != TopAbs_EDGE) {
+                addGeomPlateDiagnostic(
+                    object,
+                    context,
+                    "invalid_curve_source",
+                    "Curve constraint source " + link.object
+                        + " is not a supported Part::Line",
+                    "CurveConstraints",
+                    link.object
+                );
+                return std::nullopt;
+            }
             GeomPlateCurveConstraintSource source;
             source.objectName = link.object;
             source.shape = *shape;
@@ -1017,6 +1044,10 @@ std::optional<std::array<double, 3>> pointFromJson(
     const std::string& code = "invalid_point_constraint"
 )
 {
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate
+    // /PointConstraintPyImp.cpp::PointConstraintPy::PyInit(), constructs
+    // "GeomPlate_PointConstraint(gp_Pnt(...), Order, TolDist)" from one Base::Vector. The
+    // collector DTO admits exactly three finite numbers for that vector.
     if (!value.is_array() || value.size() != 3U) {
         addGeomPlateDiagnostic(
             object,
@@ -1034,7 +1065,7 @@ std::optional<std::array<double, 3>> pointFromJson(
                 object,
                 context,
                 code,
-                property + "[" + std::to_string(index) + "] must contain finite numbers",
+                property + "[" + std::to_string(index) + "] must be a three-number vector",
                 property
             );
             return std::nullopt;
@@ -1068,14 +1099,15 @@ std::optional<std::vector<GeomPlatePointConstraintSource>> readPointConstraints(
         const nlohmann::json& item = payload->at(index);
         const nlohmann::json* point = &item;
         GeomPlatePointConstraintSource source;
-            if (item.is_object()) {
-                const auto pointIt = item.find("Point");
-                if (pointIt == item.end()) {
+        if (item.is_object()) {
+            const auto pointIt = item.find("Point");
+            if (pointIt == item.end()) {
                 addGeomPlateDiagnostic(
                     object,
                     context,
                     "invalid_point_constraint",
-                    "PointConstraints[" + std::to_string(index) + "] requires Point",
+                    "PointConstraints[" + std::to_string(index)
+                        + "] must be a three-number vector",
                     "PointConstraints"
                 );
                 return std::nullopt;
@@ -1083,25 +1115,19 @@ std::optional<std::vector<GeomPlatePointConstraintSource>> readPointConstraints(
             point = &*pointIt;
             source.order = intField(item, "Order", source.order);
             source.tolDist = positiveField(item, "TolDist", source.tolDist);
-            }
-            auto parsedPoint = pointFromJson(*point, object, context, index);
-            if (!parsedPoint) {
-                return std::nullopt;
-            }
-            source.point = *parsedPoint;
-            if (item.is_object()
-                && !readPointCriteriaFields(
-                    object,
-                    context,
-                    item,
-                    "PointConstraints",
-                    source
-                )) {
-                return std::nullopt;
-            }
-            result.push_back(source);
         }
-        return result;
+        auto parsedPoint = pointFromJson(*point, object, context, index);
+        if (!parsedPoint) {
+            return std::nullopt;
+        }
+        source.point = *parsedPoint;
+        if (item.is_object()
+            && !readPointCriteriaFields(object, context, item, "PointConstraints", source)) {
+            return std::nullopt;
+        }
+        result.push_back(source);
+    }
+    return result;
 }
 
 std::optional<std::vector<GeomPlatePointConstraintSource>> readPoint2dConstraints(
@@ -1996,11 +2022,7 @@ void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::Com
         return;
     }
 
-    part_feature_detail::publishPartShape(
-        object,
-        context,
-        build.shape,
-        {
+    nlohmann::json metadata = {
             {"feature", kFeatureName},
             {"helper", kHelperName},
             {"dto", "PartGeomPlateSurfaceDTO"},
@@ -2016,7 +2038,32 @@ void executePartGeomPlateSurface(const app::DocumentObject& object, runtime::Com
             {"build_params", buildParamsJson(buildParams)},
             {"approximation", approximationParamsJson(approximationParams, build)},
             {"source_evidence", sourceEvidenceJson(build.sourceEvidence)},
-        }
+    };
+    // FreeCAD:
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/GeomPlate/BuildPlateSurfacePyImp.cpp
+    // ::BuildPlateSurfacePy::perform(), ::isDone() and ::surface() own the helper lifecycle;
+    // PlateSurfacePyImp.cpp::PlateSurfacePy::makeApprox() produces the returned face. Publish
+    // only that native helper envelope, leaving approximation evidence internal to cad-core.
+    nlohmann::json publicObjectFields = {
+        {"feature", kFeatureName},
+        {"helper", kHelperName},
+        {"dto", "PartGeomPlateSurfaceDTO"},
+        {"source_backed_helper", true},
+        {"freecad_native_document_object", false},
+        {"is_done", build.isDone},
+        {"surface_kind", build.surfaceKind},
+        {"curve_constraint_count", build.curveConstraintCount},
+        {"point_constraint_count", build.pointConstraintCount},
+        {"shape", part_feature_detail::shapeLabelForPartShape(build.shape)},
+        {"status", "ok"},
+    };
+    part_feature_detail::publishPartShape(
+        object,
+        context,
+        build.shape,
+        metadata,
+        std::nullopt,
+        part_feature_detail::PartPublicResultFields {std::move(publicObjectFields), false}
     );
 }
 

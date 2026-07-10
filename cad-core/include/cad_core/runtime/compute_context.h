@@ -104,12 +104,26 @@ struct AddSubShape
     bool replacementRefined = false;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+// ::Loft::execute() and ::Sweep::execute() publish their feature properties together with the
+// Shape written through PropertyPartShape::setValue(); helper producers such as
+// AppPartPy.cpp::makeFilledFace() return an equivalent public shape summary. Keep those
+// producer-selected fields separate from cad-core's complete internal object metadata.
+struct PublicResultFields
+{
+    std::optional<nlohmann::json> objectFields;
+    std::optional<nlohmann::json> shapeSummary;
+    std::optional<std::string> nativeError;
+    std::optional<std::string> nativeErrorCode;
+};
+
 struct ComputeContext
 {
     std::vector<Diagnostic> diagnostics;
     std::map<std::string, ShapeValue> shapes;
     std::map<std::string, AddSubShape> addSubShapes;
     std::map<std::string, nlohmann::json> objects;
+    std::map<std::string, PublicResultFields> publicResultFields;
     std::map<std::string, nlohmann::json> mesh;
     std::map<std::string, nlohmann::json> subshapes;
     nlohmann::json elementReferenceUpdates = nlohmann::json::array();

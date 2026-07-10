@@ -5,6 +5,18 @@
   "elementReferenceUpdates": [],
   "results": [
     {
+      "bbox": {
+        "max": [
+          2.2000001,
+          2.0923244358493376,
+          3.5000001
+        ],
+        "min": [
+          -1.7798374876248846,
+          -2.092324435849338,
+          0.0
+        ]
+      },
       "mesh": {
         "edgeSegments": [
           {
@@ -1107,6 +1119,21 @@
         ]
       },
       "object": "Loft",
+      "object_fields": {
+        "closed": false,
+        "feature": "part_loft",
+        "linearize": false,
+        "max_degree": 5,
+        "ruled": false,
+        "sections": [
+          "LowerProfile",
+          "UpperProfile"
+        ],
+        "shape": "occt_solid",
+        "solid": true,
+        "status": "ok",
+        "topo_naming_history": "maker_history:loft_thru_sections"
+      },
       "subshapes": [
         {
           "ReferenceShadow": [],
@@ -1144,6 +1171,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Edge12",
           "id": "Loft:Edge12",
           "identityStatus": "current_only",
           "indexed": "Edge12",
@@ -1187,6 +1215,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Edge2",
           "id": "Loft:Edge2",
           "identityStatus": "current_only",
           "indexed": "Edge2",
@@ -1208,6 +1237,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Edge4",
           "id": "Loft:Edge4",
           "identityStatus": "current_only",
           "indexed": "Edge4",
@@ -1229,6 +1259,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Edge6",
           "id": "Loft:Edge6",
           "identityStatus": "current_only",
           "indexed": "Edge6",
@@ -1261,6 +1292,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Edge9",
           "id": "Loft:Edge9",
           "identityStatus": "current_only",
           "indexed": "Edge9",
@@ -1271,6 +1303,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Face1",
           "id": "Loft:Face1",
           "identityStatus": "current_only",
           "indexed": "Face1",
@@ -1281,6 +1314,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Face2",
           "id": "Loft:Face2",
           "identityStatus": "current_only",
           "indexed": "Face2",
@@ -1291,6 +1325,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Face3",
           "id": "Loft:Face3",
           "identityStatus": "current_only",
           "indexed": "Face3",
@@ -1301,6 +1336,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Face4",
           "id": "Loft:Face4",
           "identityStatus": "current_only",
           "indexed": "Face4",
@@ -1311,6 +1347,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Face5",
           "id": "Loft:Face5",
           "identityStatus": "current_only",
           "indexed": "Face5",
@@ -1321,6 +1358,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Face6",
           "id": "Loft:Face6",
           "identityStatus": "current_only",
           "indexed": "Face6",
@@ -1331,6 +1369,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Loft.Face7",
           "id": "Loft:Face7",
           "identityStatus": "current_only",
           "indexed": "Face7",
@@ -1448,7 +1487,271 @@
           "stableSubname": "LowerProfile.Vertex5",
           "subname": "LowerProfile.Vertex9"
         }
-      ]
+      ],
+      "topology_counts": {
+        "edges": 15,
+        "faces": 7,
+        "vertices": 10
+      },
+      "volume": 23.495058687974858
     }
-  ]
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:1acb1b2d3faf0453b524a8f9f2cce887413e49afac9790804cca2c2ca4ff2641",
+    "objects": {
+      "Loft": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:684079aa1b7142de30b804cc8d129df16cea31ef50ab487b5f714eebc266e7bd",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge13": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Edge13"
+          },
+          "Edge14": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Edge14"
+          },
+          "Edge15": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Edge15"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Face7": {
+            "identityStatus": "current_only",
+            "subname": "Face7"
+          },
+          "Vertex1": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Vertex1"
+          },
+          "Vertex10": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Vertex10"
+          },
+          "Vertex2": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "stable",
+            "subname": "UpperProfile.Vertex8"
+          },
+          "Vertex9": {
+            "identityStatus": "stable",
+            "subname": "LowerProfile.Vertex9"
+          }
+        }
+      },
+      "LowerProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:eb35520116cd85096bd45371dc939afe48f6d6e0a4312936e6f778d6656fec6d",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          }
+        }
+      },
+      "UpperProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3b188873ff35e24a7beb38531f6aefb8600c74f850528d6175d2d207c0cbdc1e",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

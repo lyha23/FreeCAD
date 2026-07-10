@@ -34,13 +34,16 @@
 #include <Law_Linear.hxx>
 #include <Law_S.hxx>
 #include <Precision.hxx>
-#include <ShapeFix_Wire.hxx>
+#include <ShapeAnalysis_FreeBounds.hxx>
+#include <ShapeFix_Shape.hxx>
 #include <Standard_Failure.hxx>
+#include <Standard_ConstructionError.hxx>
 #include <TColgp_Array1OfPnt2d.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopLoc_Location.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
 #include <TopTools_ListOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
@@ -407,27 +410,18 @@ bool wireHasEdges(const TopoDS_Wire& wire)
 
 TopoDS_Wire fixedFillingBoundaryWire(const TopoDS_Wire& wire)
 {
-    TopoDS_Wire fixed = wire;
-    BRepLib::BuildCurves3d(fixed);
-    BRepLib::SameParameter(fixed, Precision::Confusion(), Standard_True);
-
-    ShapeFix_Wire fixer;
-    fixer.Load(fixed);
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementFilledFace() calls bound.fix(Precision::Confusion(), ...);
+    // TopoShape.cpp::TopoShape::fix(double,double,double) drives ShapeFix_Shape::Perform(), then
+    // FixWireTool()->Perform() for a wire and keeps fix.Shape() for BRepOffsetAPI_MakeFilling.
+    ShapeFix_Shape fixer(wire);
     fixer.SetPrecision(Precision::Confusion());
-    fixer.ClosedWireMode() = BRep_Tool::IsClosed(fixed);
-    fixer.FixReorder();
-    fixer.FixConnected(Precision::Confusion());
-    if (BRep_Tool::IsClosed(fixed)) {
-        fixer.FixClosed(Precision::Confusion());
-    }
-    fixer.FixEdgeCurves();
-    TopoDS_Wire apiWire = fixer.WireAPIMake();
-    if (!apiWire.IsNull()) {
-        fixed = apiWire;
-    }
-    BRepLib::BuildCurves3d(fixed);
-    BRepLib::SameParameter(fixed, Precision::Confusion(), Standard_True);
-    return fixed;
+    fixer.SetMinTolerance(Precision::Confusion());
+    fixer.SetMaxTolerance(Precision::Confusion());
+    fixer.Perform();
+    fixer.FixWireTool()->Perform();
+    const TopoDS_Shape fixed = fixer.Shape();
+    return !fixed.IsNull() && fixed.ShapeType() == TopAbs_WIRE ? TopoDS::Wire(fixed) : wire;
 }
 
 std::optional<TopoDS_Wire> singleWireFromShape(const TopoDS_Shape& shape, std::string& error)
@@ -894,14 +888,13 @@ std::optional<FilledFaceBoundaryCandidate> buildFilledFaceBoundaryWireFromEdges(
     std::vector<FilledFaceWorkingShape>& shapes
 )
 {
-    BRepBuilderAPI_MakeWire wireBuilder;
+    Handle(TopTools_HSequenceOfShape) edges = new TopTools_HSequenceOfShape();
+    Handle(TopTools_HSequenceOfShape) wires = new TopTools_HSequenceOfShape();
     std::vector<FilledFaceBoundaryEvidence> evidence;
-    bool hasEdge = false;
     for (auto it = shapes.begin(); it != shapes.end();) {
         if (!it->shape.IsNull() && it->shape.ShapeType() == TopAbs_EDGE) {
             const TopoDS_Edge edge = TopoDS::Edge(it->shape);
-            wireBuilder.Add(edge);
-            hasEdge = true;
+            edges->Append(edge);
             if (it->source != nullptr) {
                 for (const auto& item : evidenceForBoundaryEdge(*it->source, edge)) {
                     addDistinctEvidence(evidence, item);
@@ -912,19 +905,42 @@ std::optional<FilledFaceBoundaryCandidate> buildFilledFaceBoundaryWireFromEdges(
         }
         ++it;
     }
-    if (!hasEdge) {
+    if (edges->Length() == 0) {
         return std::nullopt;
     }
 
-    wireBuilder.Build();
-    if (!wireBuilder.IsDone() || wireBuilder.Wire().IsNull()) {
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+    // ::TopoShape::makeElementFilledFace() sends loose edges through
+    // TopoShape::makeElementWires(... ConnectionPolicy::requireSharedVertex), whose implementation
+    // uses ShapeAnalysis_FreeBounds::ConnectEdgesToWires(). Keep every disconnected wire: one is
+    // the boundary and the remainder continue into BRepOffsetAPI_MakeFilling as constraints.
+    ShapeAnalysis_FreeBounds::ConnectEdgesToWires(
+        edges,
+        Precision::Confusion(),
+        Standard_True,
+        wires
+    );
+    if (wires->Length() == 0) {
         return std::nullopt;
+    }
+
+    int boundaryIndex = 1;
+    for (int index = 1; index <= wires->Length(); ++index) {
+        if (BRep_Tool::IsClosed(TopoDS::Wire(wires->Value(index)))) {
+            boundaryIndex = index;
+            break;
+        }
     }
 
     FilledFaceBoundaryCandidate candidate;
-    candidate.wire = wireBuilder.Wire();
+    candidate.wire = TopoDS::Wire(wires->Value(boundaryIndex));
     candidate.mode = BRep_Tool::IsClosed(candidate.wire) ? "edge_wire_closed" : "edge_wire";
     candidate.evidence = std::move(evidence);
+    for (int index = 1; index <= wires->Length(); ++index) {
+        if (index != boundaryIndex) {
+            shapes.push_back(FilledFaceWorkingShape {wires->Value(index), nullptr});
+        }
+    }
     return candidate;
 }
 
@@ -2725,7 +2741,6 @@ FilledFaceBuild makeElementFilledFaceFromSources(
         if (!boundary) {
             return FilledFaceBuild {TopoDS_Shape {}, std::nullopt, "No boundary wire"};
         }
-
         BRepOffsetAPI_MakeFilling maker(
             params.degree,
             params.pointsOnCurve,
@@ -2940,6 +2955,17 @@ FilledFaceBuild makeElementFilledFaceFromSources(
             nonBoundaryConstraintCount,
             static_cast<int>(supportSources.size()),
             static_cast<int>(orderSources.size()),
+        };
+    }
+    catch (const Standard_ConstructionError& failure) {
+        const char* rawMessage = failure.GetMessageString();
+        const std::string message = rawMessage != nullptr
+            ? rawMessage
+            : "Failed to created face by filling edges";
+        return FilledFaceBuild {
+            TopoDS_Shape {},
+            std::nullopt,
+            "Standard_ConstructionError: " + message
         };
     }
     catch (const Standard_Failure& failure) {

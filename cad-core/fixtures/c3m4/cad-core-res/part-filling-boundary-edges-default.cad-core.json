@@ -5,6 +5,18 @@
   "elementReferenceUpdates": [],
   "results": [
     {
+      "bbox": {
+        "max": [
+          2.0,
+          2.0,
+          0.0
+        ],
+        "min": [
+          -2.0,
+          -2.0,
+          0.0
+        ]
+      },
       "mesh": {
         "edgeSegments": [
           {
@@ -207,6 +219,36 @@
         ]
       },
       "object": "FilledFace",
+      "object_fields": {
+        "boundary_edge_count": 4,
+        "boundary_mode": "edge_wire_closed",
+        "feature": "part_filled_face",
+        "freecad_native_document_object": false,
+        "helper": "Part.makeFilledFace",
+        "source_backed_helper": true,
+        "status": "ok",
+        "topo_naming_history": "maker_history:filling"
+      },
+      "shape_summary": {
+        "bbox": {
+          "max": [
+            2.0,
+            2.0,
+            0.0
+          ],
+          "min": [
+            -2.0,
+            -2.0,
+            0.0
+          ]
+        },
+        "topology_counts": {
+          "edges": 4,
+          "faces": 1,
+          "vertices": 4
+        },
+        "volume": 0.0
+      },
       "subshapes": [
         {
           "ReferenceShadow": [],
@@ -255,6 +297,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "FilledFace.Face1",
           "id": "FilledFace:Face1",
           "identityStatus": "current_only",
           "indexed": "Face1",
@@ -306,7 +349,215 @@
           "stableSubname": "Profile.Vertex4",
           "subname": "Profile.Vertex4"
         }
-      ]
+      ],
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": 0.0
     }
-  ]
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:28b2cdba8067d11c5222cd49b0a78041dd979af774f96a79c8f13d8958714b1f",
+    "objects": {
+      "FilledFace": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "filling_boundary_source",
+            "evidence": {
+              "boundary_edge_count": 4,
+              "freecad_operation": "TopoShape::makeElementFilledFace",
+              "helper": "Part.makeFilledFace",
+              "is_bound": true,
+              "source_kind": "edge",
+              "source_subname": "Edge1",
+              "stable_subname": "Edge1"
+            },
+            "maker_stage": "maker_history:filling_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "FilledFace",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "filling_boundary_source",
+            "evidence": {
+              "boundary_edge_count": 4,
+              "freecad_operation": "TopoShape::makeElementFilledFace",
+              "helper": "Part.makeFilledFace",
+              "is_bound": true,
+              "source_kind": "edge",
+              "source_subname": "Edge2",
+              "stable_subname": "Edge2"
+            },
+            "maker_stage": "maker_history:filling_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "FilledFace",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "filling_boundary_source",
+            "evidence": {
+              "boundary_edge_count": 4,
+              "freecad_operation": "TopoShape::makeElementFilledFace",
+              "helper": "Part.makeFilledFace",
+              "is_bound": true,
+              "source_kind": "edge",
+              "source_subname": "Edge3",
+              "stable_subname": "Edge3"
+            },
+            "maker_stage": "maker_history:filling_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "FilledFace",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "filling_boundary_source",
+            "evidence": {
+              "boundary_edge_count": 4,
+              "freecad_operation": "TopoShape::makeElementFilledFace",
+              "helper": "Part.makeFilledFace",
+              "is_bound": true,
+              "source_kind": "edge",
+              "source_subname": "Edge4",
+              "stable_subname": "Edge4"
+            },
+            "maker_stage": "maker_history:filling_boundary",
+            "recoverability": "resolved",
+            "relation": "generated",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "FilledFace",
+              "subname": "Face1"
+            }
+          }
+        ],
+        "objectHash": "sha256:a12ecc3927eff7e42eb31263851a448284832ed5c5899f7824d190c7563611e4",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "stable",
+            "subname": "Profile.Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "stable",
+            "subname": "Profile.Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "stable",
+            "subname": "Profile.Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "stable",
+            "subname": "Profile.Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "stable",
+            "subname": "Profile.Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "stable",
+            "subname": "Profile.Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "stable",
+            "subname": "Profile.Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "stable",
+            "subname": "Profile.Vertex4"
+          }
+        }
+      },
+      "Profile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b33b91886aac013eaa98b01f8cd524f3fa619bbbfcadff4c0c56638c325570f8",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

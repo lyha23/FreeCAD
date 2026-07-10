@@ -419,6 +419,12 @@ void executePartLoft(const app::DocumentObject& object, runtime::ComputeContext&
         {"max_degree", *maxDegree},
         {"topo_naming_history", "maker_history:loft_thru_sections"},
     };
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+    // ::Loft::execute() reads Sections/Solid/Ruled/Closed/MaxDegree, delegates to
+    // TopoShape::makeElementLoft(), then publishes those feature properties with Shape.setValue().
+    nlohmann::json publicObjectFields = metadata;
+    publicObjectFields["status"] = "ok";
+    publicObjectFields["shape"] = part_feature_detail::shapeLabelForPartShape(build.shape);
     if (hasSelectedSections(*sections)) {
         metadata["contract"] = "cad_core_product_contract";
         metadata["contract_provenance"] = "cad_core_product_contract_non_parity";
@@ -438,7 +444,8 @@ void executePartLoft(const app::DocumentObject& object, runtime::ComputeContext&
         context,
         build.shape,
         metadata,
-        build.namedShape
+        build.namedShape,
+        part_feature_detail::PartPublicResultFields {std::move(publicObjectFields), false}
     );
 }
 

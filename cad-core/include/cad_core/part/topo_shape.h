@@ -218,6 +218,18 @@ void applyInternalShapeHistoryPublication(
     NamedShape& namedShape,
     const InternalShapeHistoryPublication& publication
 );
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+// ::TopoShape::makeShapeWithElementMap() receives the producer op code and maps only maker-backed
+// preserved/generated/modified elements. Producer wrappers decide whether an unmapped source is
+// a real transition and whether the result exposes operation-local IndexedName aliases.
+struct MakerHistoryOptions
+{
+    std::string producerOperation;
+    bool recordUnmappedSourceDeletions = true;
+    bool addProducerLocalAliases = false;
+};
+
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementPrism(),
 // creates BRepPrimAPI_MakePrism and then calls makeElementShape(...), which consumes
@@ -228,7 +240,7 @@ NamedShape namedShapeForMakerHistory(
     const std::string& sourceOwner,
     const TopoDS_Shape& sourceShape,
     BRepBuilderAPI_MakeShape& maker,
-    const std::string& producerOperation = {}
+    MakerHistoryOptions options = {}
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::makeElementBoolean(),
@@ -239,7 +251,7 @@ NamedShape namedShapeForMakerHistory(
     const TopoDS_Shape& resultShape,
     const std::vector<NamedShapeSource>& sources,
     BRepBuilderAPI_MakeShape& maker,
-    const std::string& producerOperation = {}
+    MakerHistoryOptions options = {}
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::MapperThruSections,

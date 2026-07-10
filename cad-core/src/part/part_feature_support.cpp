@@ -6,6 +6,7 @@
 #include <TopExp_Explorer.hxx>
 
 #include <cmath>
+#include <utility>
 
 namespace cad_core::part::part_feature_detail
 {
@@ -126,9 +127,14 @@ TopoDS_Shape applyGlobalPlacement(
 )
 {
     const auto placementIt = context.globalPlacements.find(object.name);
-    if (placementIt == context.globalPlacements.end()) {
+    if (placementIt == context.globalPlacements.end()
+        || placementIt->second.Form() == gp_Identity) {
         return shape;
     }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/GeoFeature.cpp
+    // ::GeoFeature::getGlobalPlacement() leaves an identity-placed PropertyTopoShape unchanged.
+    // Avoid a BRepBuilderAPI_Transform copy for identity: downstream helper makers consume the
+    // producer's original edge/wire representation, just as Document recompute does.
     return base::transformShape(shape, placementIt->second);
 }
 
@@ -163,18 +169,49 @@ runtime::ShapeValue::Kind shapeKindForPartShape(const TopoDS_Shape& shape)
                                 : runtime::ShapeValue::Kind::PartPrimitive;
 }
 
+nlohmann::json topologyCountsForPartSubshapes(const nlohmann::json& subshapes)
+{
+    nlohmann::json counts = {
+        {"faces", 0},
+        {"edges", 0},
+        {"vertices", 0},
+    };
+    if (!subshapes.is_object()) {
+        return counts;
+    }
+    for (const auto& [name, subshape] : subshapes.items()) {
+        static_cast<void>(name);
+        if (!subshape.is_object()) {
+            continue;
+        }
+        const std::string kind = subshape.value("kind", "");
+        if (kind == "face") {
+            counts["faces"] = counts["faces"].get<int>() + 1;
+        }
+        else if (kind == "edge") {
+            counts["edges"] = counts["edges"].get<int>() + 1;
+        }
+        else if (kind == "vertex") {
+            counts["vertices"] = counts["vertices"].get<int>() + 1;
+        }
+    }
+    return counts;
+}
+
 void publishPartShape(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const TopoDS_Shape& localShape,
     const nlohmann::json& metadata,
-    const std::optional<part::NamedShape>& namedShape
+    const std::optional<part::NamedShape>& namedShape,
+    PartPublicResultFields publicResultFields
 )
 {
     const TopoDS_Shape shape = applyGlobalPlacement(object, context, localShape);
     context.shapes[object.name] = runtime::ShapeValue {shapeKindForPartShape(shape), shape};
     context.mesh[object.name] = cad_core::part::meshForShape(shape);
-    context.subshapes[object.name] = part::subshapeMapForShape(shape);
+    const nlohmann::json subshapes = part::subshapeMapForShape(shape);
+    context.subshapes[object.name] = subshapes;
     if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
         context.namedShapes[object.name].owner = object.name;
@@ -184,13 +221,31 @@ void publishPartShape(
         context.namedShapes[object.name] = part::indexedNamedShapeForObject(object.name, shape);
     }
 
+    const nlohmann::json bbox = cad_core::part::objectBBoxForShape(shape);
+    const double volume = cad_core::part::volumeForShape(shape);
     nlohmann::json result = metadata;
     result["status"] = "ok";
     result["shape"] = shapeLabelForPartShape(shape);
-    result["bbox"] = cad_core::part::objectBBoxForShape(shape);
-    result["volume"] = cad_core::part::volumeForShape(shape);
+    result["bbox"] = bbox;
+    result["volume"] = volume;
     result["kernel"] = cad_core::part::kernelVersion();
     context.objects[object.name] = result;
+
+    if (publicResultFields.objectFields || publicResultFields.includeShapeSummary) {
+        runtime::PublicResultFields& published = context.publicResultFields[object.name];
+        published.objectFields = std::move(publicResultFields.objectFields);
+        if (publicResultFields.includeShapeSummary) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapePyImp.cpp
+            // ::TopoShapePy::optimalBoundingBox(), ::getVolume(), ::getFaces(), ::getEdges()
+            // and ::getVertexes() expose the summary of the shape returned by
+            // AppPartPy.cpp::makeFilledFace(). Materialize it at the Part producer seam.
+            published.shapeSummary = {
+                {"bbox", bbox},
+                {"topology_counts", topologyCountsForPartSubshapes(subshapes)},
+                {"volume", volume},
+            };
+        }
+    }
 }
 
 }  // namespace cad_core::part::part_feature_detail

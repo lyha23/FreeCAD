@@ -28,6 +28,11 @@ bool isPartDesignPipe(const app::DocumentObject& object)
     return object.typeId == "PartDesign::AdditivePipe" || object.typeId == "PartDesign::SubtractivePipe";
 }
 
+bool isTransientPartHelper(const app::DocumentObject& object)
+{
+    return object.typeId == "Part::FilledFace" || object.typeId == "Part::GeomPlateSurface";
+}
+
 bool isPartDesignBodyFeature(const app::DocumentObject& object)
 {
     return object.typeId.rfind("PartDesign::", 0U) == 0U && object.typeId != "PartDesign::Body";
@@ -72,6 +77,7 @@ std::optional<std::string> previousPartDesignBodyFeature(const std::string& name
 void visitObject(const std::string& name,
                  const app::Document& document,
                  const runtime::ReferenceLifecycleView& lifecycleView,
+                 const std::set<std::string>& producerMissingReferenceAdmissionTypeIds,
                  RecomputePlan& plan,
                  std::vector<runtime::Diagnostic>& diagnostics,
                  std::vector<std::string>& visiting,
@@ -124,6 +130,13 @@ void visitObject(const std::string& name,
             : propertyIt->second;
         const auto lifecycle =
             runtime::classifyReferenceLifecycle(object, propertyValue, link, lifecycleView);
+        if (lifecycle.state == runtime::ReferenceLifecycleState::MissingTarget
+            && producerMissingReferenceAdmissionTypeIds.count(object.typeId) != 0U) {
+            // Transient helpers registered with producer-owned reference admission must see the
+            // unresolved link themselves so their native helper envelope is produced at the Part
+            // seam. Graph records neither a dependency nor a generic DocumentObject diagnostic.
+            continue;
+        }
         if (lifecycle.action == runtime::ReferenceLifecycleAction::BlockRecompute) {
             if (lifecycle.diagnostic) {
                 diagnostics.push_back(*lifecycle.diagnostic);
@@ -135,7 +148,14 @@ void visitObject(const std::string& name,
             continue;
         }
         plan.dependencies[name].push_back(link.object);
-        visitObject(link.object, document, lifecycleView, plan, diagnostics, visiting, visited);
+        visitObject(link.object,
+                    document,
+                    lifecycleView,
+                    producerMissingReferenceAdmissionTypeIds,
+                    plan,
+                    diagnostics,
+                    visiting,
+                    visited);
     }
 
     if (isPartDesignPipe(object)) {
@@ -147,7 +167,14 @@ void visitObject(const std::string& name,
             previousFeature && seenDependencies.count(*previousFeature) == 0U) {
             seenDependencies.insert(*previousFeature);
             plan.dependencies[name].push_back(*previousFeature);
-            visitObject(*previousFeature, document, lifecycleView, plan, diagnostics, visiting, visited);
+            visitObject(*previousFeature,
+                        document,
+                        lifecycleView,
+                        producerMissingReferenceAdmissionTypeIds,
+                        plan,
+                        diagnostics,
+                        visiting,
+                        visited);
         }
     }
 
@@ -160,7 +187,11 @@ void visitObject(const std::string& name,
 
 }  // namespace
 
-RecomputePlan buildPlan(const app::Document& document, std::vector<runtime::Diagnostic>& diagnostics)
+RecomputePlan buildPlan(
+    const app::Document& document,
+    std::vector<runtime::Diagnostic>& diagnostics,
+    const std::set<std::string>& producerMissingReferenceAdmissionTypeIds
+)
 {
     RecomputePlan plan;
     std::set<std::string> visited;
@@ -180,7 +211,42 @@ RecomputePlan buildPlan(const app::Document& document, std::vector<runtime::Diag
                           target);
             continue;
         }
-        visitObject(target, document, lifecycleView, plan, diagnostics, visiting, visited);
+        visitObject(target,
+                    document,
+                    lifecycleView,
+                    producerMissingReferenceAdmissionTypeIds,
+                    plan,
+                    diagnostics,
+                    visiting,
+                    visited);
+    }
+
+    const bool collectsTransientPartHelpers = std::any_of(
+        document.targets.begin(), document.targets.end(), [&](const std::string& target) {
+            const auto it = document.indexByName.find(target);
+            return it != document.indexByName.end()
+                && isTransientPartHelper(document.objects.at(it->second));
+        });
+    if (collectsTransientPartHelpers) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp
+        // ::Document::recompute() obtains the dependency-sorted document list and calls
+        // _recomputeFeature() for every pending object. AppPartPy.cpp::makeFilledFace() and
+        // GeomPlate/BuildPlateSurfacePyImp.cpp build transient result helpers only after that
+        // source-document recompute. For this helper family, visit unreferenced non-helper source
+        // objects as well, so their NamedShape/ElementMap enters the document topo snapshot without
+        // changing the public result target set used by ordinary fixture requests.
+        for (const auto& object : document.objects) {
+            if (!isTransientPartHelper(object)) {
+                visitObject(object.name,
+                            document,
+                            lifecycleView,
+                            producerMissingReferenceAdmissionTypeIds,
+                            plan,
+                            diagnostics,
+                            visiting,
+                            visited);
+            }
+        }
     }
 
     return plan;

@@ -351,6 +351,16 @@ part::MapperHistoryEndpoint endpointFromProvenance(const std::string& fallbackOb
                                                    const std::string& fallbackElementName)
 {
     if (!provenance.sourceElement.empty()) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PropertyTopoShape.cpp
+        // ::PropertyPartShape::setValue() retags a producer-local ElementMap to the result
+        // object. For an unqualified mapped-name base, public source evidence is the current
+        // result IndexedName; the base token remains in mappedName.raw/canonical. This preserves
+        // auditable reorderings such as Section Edge3 -> current Edge4 without owner guessing.
+        if (provenance.sourceElement.find('.') == std::string::npos
+            && !provenance.currentElement.empty()
+            && provenance.rawMappedName.find(';') != std::string::npos) {
+            return {fallbackObject, provenance.currentElement};
+        }
         return endpointFromElementName(fallbackObject, provenance.sourceElement);
     }
     return endpointFromElementName(fallbackObject, fallbackElementName);
@@ -551,10 +561,21 @@ const part::MappedNameProvenance* sourceBackedMappedNameProvenance(
     if (provenance == nullptr) {
         return nullptr;
     }
+    const std::size_t postfix = provenance->rawMappedName.find(';');
+    const bool producerLocalMappedName = provenance->sourceElement.find('.') == std::string::npos
+        && postfix != std::string::npos
+        && provenance->rawMappedName.substr(0, postfix) == provenance->sourceElement
+        && provenance->operationPostfix.rfind(";:M;", 0U) == 0U;
     if (!hasFreeCadEncodedElementToken(provenance->rawMappedName)
-        && provenance->rawMappedName.find(";SKT;") == std::string::npos) {
+        && provenance->rawMappedName.find(";SKT;") == std::string::npos
+        && !producerLocalMappedName) {
         return nullptr;
     }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::encodeElementName() accepts a producer-local IndexedName as its base. Such
+    // Operation-local names carry maker/hash evidence after ';' even when no child-map '#'
+    // prefix exists. Require the raw base to equal the unqualified source element and the
+    // producer postfix to be maker-backed, so child/owner lookup aliases do not displace it.
     return provenance;
 }
 
@@ -773,9 +794,23 @@ nlohmann::json elementMapEntriesJson(
             publicSource.subname = currentName;
         }
         const part::MapperHistoryEndpoint target {objectName, currentName};
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+        // FeaturePartSection.cpp::Section::opCode() supplies SEC before
+        // PropertyPartShape::setValue() retags the producer-local ElementMap. The native public
+        // projection is collected by enumerating the result's current IndexedNames, so mark that
+        // exact local SEC projection as collector evidence; owner-qualified resolution aliases
+        // remain ordinary cad-core ElementMap evidence.
+        const std::size_t postfix = provenance->rawMappedName.find(';');
+        const bool collectorProjectedProducerLocal = provenance->sourceElement.find('.')
+                == std::string::npos
+            && postfix != std::string::npos
+            && provenance->rawMappedName.substr(0, postfix) == provenance->sourceElement
+            && provenance->operationPostfix.rfind(";:M;", 0U) == 0U;
         nlohmann::json evidence = {
             {"source",
-             !provenance->rawMappedName.empty() && provenance->rawMappedName.front() == '#'
+             collectorProjectedProducerLocal
+                     || (!provenance->rawMappedName.empty()
+                         && provenance->rawMappedName.front() == '#')
                  ? "freecad_expected_collector"
                  : "element_map"},
             {"mapperHistoryIds", matchingMapperHistoryIds(mapperHistory, source, target)},

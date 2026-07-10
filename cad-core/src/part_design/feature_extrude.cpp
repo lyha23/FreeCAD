@@ -1533,7 +1533,7 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                                          prism.Shape(),
                                                          std::vector<part::NamedShapeSource>{profileSource},
                                                          prism,
-                                                         "XTR");
+                                                         part::MakerHistoryOptions {"XTR"});
         }
         else {
             namedShape = part::namedShapeForMakerHistory(historyOwner,
@@ -1541,7 +1541,7 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                                          profileLink.object,
                                                          profile,
                                                          prism,
-                                                         "XTR");
+                                                         part::MakerHistoryOptions {"XTR"});
         }
         return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
     }

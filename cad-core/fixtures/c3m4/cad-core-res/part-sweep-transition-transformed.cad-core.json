@@ -5,6 +5,18 @@
   "elementReferenceUpdates": [],
   "results": [
     {
+      "bbox": {
+        "max": [
+          4.6000000000000005,
+          0.6000000000000001,
+          5.0
+        ],
+        "min": [
+          -0.6,
+          -0.6000000000000001,
+          0.0
+        ]
+      },
       "mesh": {
         "edgeSegments": [
           {
@@ -611,10 +623,25 @@
         ]
       },
       "object": "Sweep",
+      "object_fields": {
+        "feature": "part_sweep",
+        "frenet": true,
+        "linearize": false,
+        "sections": [
+          "Profile"
+        ],
+        "shape": "occt_shell",
+        "solid": false,
+        "spine": "PathWire",
+        "status": "ok",
+        "topo_naming_history": "maker_history:pipeshell",
+        "transition": "Transformed"
+      },
       "subshapes": [
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge1",
           "id": "Sweep:Edge1",
           "identityStatus": "current_only",
           "indexed": "Edge1",
@@ -625,6 +652,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge10",
           "id": "Sweep:Edge10",
           "identityStatus": "current_only",
           "indexed": "Edge10",
@@ -635,6 +663,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge11",
           "id": "Sweep:Edge11",
           "identityStatus": "current_only",
           "indexed": "Edge11",
@@ -645,6 +674,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge12",
           "id": "Sweep:Edge12",
           "identityStatus": "current_only",
           "indexed": "Edge12",
@@ -655,6 +685,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge13",
           "id": "Sweep:Edge13",
           "identityStatus": "current_only",
           "indexed": "Edge13",
@@ -665,6 +696,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge14",
           "id": "Sweep:Edge14",
           "identityStatus": "current_only",
           "indexed": "Edge14",
@@ -675,6 +707,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge15",
           "id": "Sweep:Edge15",
           "identityStatus": "current_only",
           "indexed": "Edge15",
@@ -685,6 +718,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge16",
           "id": "Sweep:Edge16",
           "identityStatus": "current_only",
           "indexed": "Edge16",
@@ -695,6 +729,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge17",
           "id": "Sweep:Edge17",
           "identityStatus": "current_only",
           "indexed": "Edge17",
@@ -705,6 +740,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge18",
           "id": "Sweep:Edge18",
           "identityStatus": "current_only",
           "indexed": "Edge18",
@@ -715,6 +751,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge19",
           "id": "Sweep:Edge19",
           "identityStatus": "current_only",
           "indexed": "Edge19",
@@ -725,6 +762,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge2",
           "id": "Sweep:Edge2",
           "identityStatus": "current_only",
           "indexed": "Edge2",
@@ -735,6 +773,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge20",
           "id": "Sweep:Edge20",
           "identityStatus": "current_only",
           "indexed": "Edge20",
@@ -745,6 +784,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge3",
           "id": "Sweep:Edge3",
           "identityStatus": "current_only",
           "indexed": "Edge3",
@@ -755,6 +795,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge4",
           "id": "Sweep:Edge4",
           "identityStatus": "current_only",
           "indexed": "Edge4",
@@ -765,6 +806,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge5",
           "id": "Sweep:Edge5",
           "identityStatus": "current_only",
           "indexed": "Edge5",
@@ -775,6 +817,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge6",
           "id": "Sweep:Edge6",
           "identityStatus": "current_only",
           "indexed": "Edge6",
@@ -785,6 +828,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge7",
           "id": "Sweep:Edge7",
           "identityStatus": "current_only",
           "indexed": "Edge7",
@@ -795,6 +839,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge8",
           "id": "Sweep:Edge8",
           "identityStatus": "current_only",
           "indexed": "Edge8",
@@ -805,6 +850,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Edge9",
           "id": "Sweep:Edge9",
           "identityStatus": "current_only",
           "indexed": "Edge9",
@@ -815,6 +861,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face1",
           "id": "Sweep:Face1",
           "identityStatus": "current_only",
           "indexed": "Face1",
@@ -825,6 +872,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face2",
           "id": "Sweep:Face2",
           "identityStatus": "current_only",
           "indexed": "Face2",
@@ -835,6 +883,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face3",
           "id": "Sweep:Face3",
           "identityStatus": "current_only",
           "indexed": "Face3",
@@ -845,6 +894,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face4",
           "id": "Sweep:Face4",
           "identityStatus": "current_only",
           "indexed": "Face4",
@@ -855,6 +905,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face5",
           "id": "Sweep:Face5",
           "identityStatus": "current_only",
           "indexed": "Face5",
@@ -865,6 +916,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face6",
           "id": "Sweep:Face6",
           "identityStatus": "current_only",
           "indexed": "Face6",
@@ -875,6 +927,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face7",
           "id": "Sweep:Face7",
           "identityStatus": "current_only",
           "indexed": "Face7",
@@ -885,6 +938,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Face8",
           "id": "Sweep:Face8",
           "identityStatus": "current_only",
           "indexed": "Face8",
@@ -895,6 +949,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex1",
           "id": "Sweep:Vertex1",
           "identityStatus": "current_only",
           "indexed": "Vertex1",
@@ -905,6 +960,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex10",
           "id": "Sweep:Vertex10",
           "identityStatus": "current_only",
           "indexed": "Vertex10",
@@ -915,6 +971,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex11",
           "id": "Sweep:Vertex11",
           "identityStatus": "current_only",
           "indexed": "Vertex11",
@@ -925,6 +982,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex12",
           "id": "Sweep:Vertex12",
           "identityStatus": "current_only",
           "indexed": "Vertex12",
@@ -935,6 +993,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex2",
           "id": "Sweep:Vertex2",
           "identityStatus": "current_only",
           "indexed": "Vertex2",
@@ -945,6 +1004,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex3",
           "id": "Sweep:Vertex3",
           "identityStatus": "current_only",
           "indexed": "Vertex3",
@@ -955,6 +1015,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex4",
           "id": "Sweep:Vertex4",
           "identityStatus": "current_only",
           "indexed": "Vertex4",
@@ -965,6 +1026,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex5",
           "id": "Sweep:Vertex5",
           "identityStatus": "current_only",
           "indexed": "Vertex5",
@@ -975,6 +1037,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex6",
           "id": "Sweep:Vertex6",
           "identityStatus": "current_only",
           "indexed": "Vertex6",
@@ -985,6 +1048,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex7",
           "id": "Sweep:Vertex7",
           "identityStatus": "current_only",
           "indexed": "Vertex7",
@@ -995,6 +1059,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex8",
           "id": "Sweep:Vertex8",
           "identityStatus": "current_only",
           "indexed": "Vertex8",
@@ -1005,6 +1070,7 @@
         {
           "ReferenceShadow": [],
           "ShadowSub": [],
+          "fullSubname": "Sweep.Vertex9",
           "id": "Sweep:Vertex9",
           "identityStatus": "current_only",
           "indexed": "Vertex9",
@@ -1012,7 +1078,1625 @@
           "stableSubname": "",
           "subname": "Vertex9"
         }
-      ]
+      ],
+      "topology_counts": {
+        "edges": 20,
+        "faces": 8,
+        "vertices": 12
+      },
+      "volume": 2.3999999999999995
     }
-  ]
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:89381e10b8f35e00f09ce631e7158b62f9a312bb932954573dbf14412095014b",
+    "objects": {
+      "PathEdgeA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c664462c2b63b4d5269784118967e9f5e6e997cb7361f640518ff9d15c88d280",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "PathEdgeB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:046571aff3a2b150eb4638e57f44e9bec82c19edb6fb600ab9ca3404aaf7b474",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "PathWire": {
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "PathEdgeA",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Edge1;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "PathWire:PathEdgeA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge1;:H*,E",
+                    "raw": "Edge1;:H481cbc60,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "PathEdgeA",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "PathWire",
+                    "subname": "Edge1"
+                  }
+                },
+                "Vertex1;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathWire:PathEdgeA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex1;:H*,V",
+                    "raw": "Vertex1;:H481cbc60,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeA",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "PathWire",
+                    "subname": "Vertex1"
+                  }
+                },
+                "Vertex2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathWire:PathEdgeA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex2;:H*,V",
+                    "raw": "Vertex2;:H481cbc60,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeA",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "PathWire",
+                    "subname": "Vertex2"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "PathWire:PathEdgeA:Child0",
+            "ownerObject": "PathWire",
+            "pathPrefix": "Child0"
+          },
+          {
+            "childIndex": 1,
+            "childObject": "PathEdgeB",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Edge1;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "PathWire:PathEdgeB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge1;:H*,E",
+                    "raw": "Edge1;:H48e3576a,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "PathEdgeB",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "PathWire",
+                    "subname": "Edge2"
+                  }
+                },
+                "Vertex1;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathWire:PathEdgeB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex1;:H*,V",
+                    "raw": "Vertex1;:H48e3576a,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeB",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "PathWire",
+                    "subname": "Vertex3"
+                  }
+                },
+                "Vertex2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathWire:PathEdgeB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex2;:H*,V",
+                    "raw": "Vertex2;:H48e3576a,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeB",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "PathWire",
+                    "subname": "Vertex4"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "PathWire:PathEdgeB:Child1",
+            "ownerObject": "PathWire",
+            "pathPrefix": "Child1"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H481cbc60,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "PathWire",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "PathWire",
+                  "subname": "Edge1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H48e3576a,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "PathWire",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "PathWire",
+                  "subname": "Edge2"
+                }
+              }
+            ],
+            "id": "canonical-collision-391bc9d37e1d07f5",
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:H481cbc60,E"
+            },
+            "message": "Canonical elementMap key Edge1;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H481cbc60,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathWire",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "PathWire",
+                  "subname": "Vertex1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H48e3576a,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathWire",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "PathWire",
+                  "subname": "Vertex3"
+                }
+              }
+            ],
+            "id": "canonical-collision-c3564526db797eb7",
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:H481cbc60,V"
+            },
+            "message": "Canonical elementMap key Vertex1;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V",
+                  "raw": "Vertex2;:H481cbc60,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathWire",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "PathWire",
+                  "subname": "Vertex2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V",
+                  "raw": "Vertex2;:H48e3576a,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathWire",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "PathWire",
+                  "subname": "Vertex4"
+                }
+              }
+            ],
+            "id": "canonical-collision-03cca74a3c977a78",
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:H481cbc60,V"
+            },
+            "message": "Canonical elementMap key Vertex2;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          }
+        ],
+        "objectHash": "sha256:52b21085c4e58ce47087058545ee92c6bd89ecb605573466e667700921e2b60d",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H481cbc60,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H48e3576a,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H481cbc60,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H481cbc60,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H48e3576a,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H48e3576a,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "Profile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1aa1b6fe2a3fecf1c50991ba536ca225666a203cccfa3972c86458d4a63b7929",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "Sweep": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face1",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face2",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face3",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face4",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge11",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge11"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge5",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge5"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge8",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge8"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge10",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge10"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge12",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge12"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge4",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge4"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge7",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeA",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge7"
+            }
+          },
+          {
+            "diagnostic_status": "deleted_stable_subname",
+            "evidence": {
+              "legacy_element": "PathEdgeB.Edge1",
+              "legacy_history_kind": "deleted"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "deleted",
+            "relation": "deleted",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeB",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": ""
+            }
+          },
+          {
+            "diagnostic_status": "deleted_stable_subname",
+            "evidence": {
+              "legacy_element": "PathEdgeB.Vertex1",
+              "legacy_history_kind": "deleted"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "deleted",
+            "relation": "deleted",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "PathEdgeB",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": ""
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge15",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeB",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge15"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge17",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeB",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge17"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge19",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeB",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge19"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge20",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathEdgeB",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge20"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face1",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathWire",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face2",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathWire",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face3",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathWire",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face4",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "PathWire",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "deleted_stable_subname",
+            "evidence": {
+              "legacy_element": "PathWire.Edge2",
+              "legacy_history_kind": "deleted"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "deleted",
+            "relation": "deleted",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": ""
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge11",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge11"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge2",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge2"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge5",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge5"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge8",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge8"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge10",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge10"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge12",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge12"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge4",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge4"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge7",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge7"
+            }
+          },
+          {
+            "diagnostic_status": "deleted_stable_subname",
+            "evidence": {
+              "legacy_element": "PathWire.Vertex3",
+              "legacy_history_kind": "deleted"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "deleted",
+            "relation": "deleted",
+            "shape_kind": "vertex",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": ""
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge15",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge15"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge17",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge17"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge19",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge19"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge20",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "PathWire",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge20"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face1",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face1"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face5",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face5"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face2",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face2"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face6",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face6"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face3",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face3"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face7",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face7"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face4",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face4"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Face8",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "face",
+            "source": {
+              "object": "Profile",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Face8"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge1",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge1"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge13",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge13"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge14",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge14"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge3",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge3"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge16",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge16"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge6",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge6"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge18",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge18"
+            }
+          },
+          {
+            "diagnostic_status": "split_stable_subname",
+            "evidence": {
+              "legacy_element": "Edge9",
+              "legacy_history_kind": "split"
+            },
+            "maker_stage": "terminal_history",
+            "recoverability": "needs_reselect",
+            "relation": "split",
+            "shape_kind": "edge",
+            "source": {
+              "object": "Profile",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Sweep",
+              "subname": "Edge9"
+            }
+          }
+        ],
+        "objectHash": "sha256:ab7aef67c71af0d666777b4f60c48865900e3176d28cafa5dd01c1bb6c819395",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "current_only",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "current_only",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge13": {
+            "identityStatus": "current_only",
+            "subname": "Edge13"
+          },
+          "Edge14": {
+            "identityStatus": "current_only",
+            "subname": "Edge14"
+          },
+          "Edge15": {
+            "identityStatus": "current_only",
+            "subname": "Edge15"
+          },
+          "Edge16": {
+            "identityStatus": "current_only",
+            "subname": "Edge16"
+          },
+          "Edge17": {
+            "identityStatus": "current_only",
+            "subname": "Edge17"
+          },
+          "Edge18": {
+            "identityStatus": "current_only",
+            "subname": "Edge18"
+          },
+          "Edge19": {
+            "identityStatus": "current_only",
+            "subname": "Edge19"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge20": {
+            "identityStatus": "current_only",
+            "subname": "Edge20"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "current_only",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "current_only",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Face7": {
+            "identityStatus": "current_only",
+            "subname": "Face7"
+          },
+          "Face8": {
+            "identityStatus": "current_only",
+            "subname": "Face8"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex10": {
+            "identityStatus": "current_only",
+            "subname": "Vertex10"
+          },
+          "Vertex11": {
+            "identityStatus": "current_only",
+            "subname": "Vertex11"
+          },
+          "Vertex12": {
+            "identityStatus": "current_only",
+            "subname": "Vertex12"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "current_only",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "current_only",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "current_only",
+            "subname": "Vertex8"
+          },
+          "Vertex9": {
+            "identityStatus": "current_only",
+            "subname": "Vertex9"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

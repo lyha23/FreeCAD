@@ -41,8 +41,15 @@
 namespace cad_core::runtime
 {
 
-void FeatureRegistry::registerExecutor(std::string typeId, runtime::ExecuteFn executor)
+void FeatureRegistry::registerExecutor(
+    std::string typeId,
+    runtime::ExecuteFn executor,
+    MissingReferenceAdmissionPolicy missingReferenceAdmission
+)
 {
+    if (missingReferenceAdmission == MissingReferenceAdmissionPolicy::ProducerValidated) {
+        producerMissingReferenceAdmissionTypeIds_.insert(typeId);
+    }
     executors_[std::move(typeId)] = executor;
 }
 
@@ -50,6 +57,11 @@ runtime::ExecuteFn FeatureRegistry::executorFor(const std::string& typeId) const
 {
     const auto it = executors_.find(typeId);
     return it == executors_.end() ? nullptr : it->second;
+}
+
+const std::set<std::string>& FeatureRegistry::producerMissingReferenceAdmissionTypeIds() const
+{
+    return producerMissingReferenceAdmissionTypeIds_;
 }
 
 std::vector<std::string> FeatureRegistry::typeIds() const
@@ -101,7 +113,11 @@ FeatureRegistry buildDefaultRegistry()
     registry.registerExecutor("Part::Loft", part::executePartLoft);
     registry.registerExecutor("Part::Sweep", part::executePartSweep);
     registry.registerExecutor("Part::ProjectOnSurface", part::executePartProjectOnSurface);
-    registry.registerExecutor("Part::FilledFace", part::executePartFilledFace);
+    registry.registerExecutor(
+        "Part::FilledFace",
+        part::executePartFilledFace,
+        MissingReferenceAdmissionPolicy::ProducerValidated
+    );
     registry.registerExecutor("Part::GeomPlateSurface", part::executePartGeomPlateSurface);
     registry.registerExecutor("Part::Offset", part::executePartOffset);
     registry.registerExecutor("Part::Offset2D", part::executePartOffset2D);

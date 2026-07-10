@@ -10,6 +10,8 @@ set(CAD_CORE_OCCT_SUPPORTED_VERSIONS 7.8.1 7.9.3)
 string(REPLACE ";" " or " CAD_CORE_OCCT_SUPPORTED_VERSIONS_TEXT "${CAD_CORE_OCCT_SUPPORTED_VERSIONS}")
 
 set(CAD_CORE_OCCT_ROOT "" CACHE PATH "Preferred OpenCASCADE/OCCT installation prefix")
+set(CAD_CORE_OCCT_LIBRARY_ROOT "" CACHE PATH
+  "Optional OCCT runtime prefix whose lib directory must match the FreeCAD oracle")
 if(NOT CAD_CORE_OCCT_ROOT)
   foreach(CAD_CORE_OCCT_CANDIDATE_VERSION IN LISTS CAD_CORE_OCCT_SUPPORTED_VERSIONS)
     set(CAD_CORE_OCCT_CANDIDATE_ROOT "$ENV{HOME}/.local/share/occt-${CAD_CORE_OCCT_CANDIDATE_VERSION}/.pixi/envs/default")
@@ -27,6 +29,30 @@ set(CAD_CORE_OCCT_COMPONENTS
   DataExchange
 )
 
+set(CAD_CORE_OCCT_LINK_LIBRARY_NAMES
+  TKernel
+  TKMath
+  TKG2d
+  TKG3d
+  TKGeomBase
+  TKBRep
+  TKGeomAlgo
+  TKTopAlgo
+  TKPrim
+  TKFeat
+  TKOffset
+  TKShHealing
+  TKMesh
+  TKBO
+  TKFillet
+  TKBool
+  TKXSBase
+  TKDE
+  TKDESTL
+  TKDEIGES
+  TKDESTEP
+)
+
 find_package(OpenCASCADE CONFIG QUIET
   PATHS ${CAD_CORE_OCCT_ROOT}
   COMPONENTS ${CAD_CORE_OCCT_COMPONENTS}
@@ -41,29 +67,7 @@ endif()
 if(OpenCASCADE_FOUND)
   set(CAD_CORE_OCCT_INCLUDE_DIRS ${OpenCASCADE_INCLUDE_DIR})
   set(CAD_CORE_OCCT_LIBRARY_DIRS ${OpenCASCADE_LIBRARY_DIR})
-  set(CAD_CORE_OCCT_LIBRARIES
-    TKernel
-    TKMath
-    TKG2d
-    TKG3d
-    TKGeomBase
-    TKBRep
-    TKGeomAlgo
-    TKTopAlgo
-    TKPrim
-    TKFeat
-    TKOffset
-    TKShHealing
-    TKMesh
-    TKBO
-    TKFillet
-    TKBool
-    TKXSBase
-    TKDE
-    TKDESTL
-    TKDEIGES
-    TKDESTEP
-  )
+  set(CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_LINK_LIBRARY_NAMES})
 else()
   find_path(CAD_CORE_OCCT_INCLUDE_DIR
     NAMES Standard_Version.hxx
@@ -167,6 +171,78 @@ file(STRINGS "${CAD_CORE_OCCT_VERSION_HEADER}" CAD_CORE_OCCT_VERSION_LINE
 string(REGEX REPLACE ".*\"([^\"]+)\".*" "\\1" CAD_CORE_OCCT_VERSION "${CAD_CORE_OCCT_VERSION_LINE}")
 if(NOT CAD_CORE_OCCT_VERSION IN_LIST CAD_CORE_OCCT_SUPPORTED_VERSIONS)
   message(FATAL_ERROR "CAD Core expected OpenCASCADE ${CAD_CORE_OCCT_SUPPORTED_VERSIONS_TEXT}, found ${CAD_CORE_OCCT_VERSION} at ${CAD_CORE_OCCT_VERSION_HEADER}")
+endif()
+
+if(CAD_CORE_OCCT_LIBRARY_ROOT)
+  set(CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR "${CAD_CORE_OCCT_LIBRARY_ROOT}/lib")
+  file(REAL_PATH "${CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR}" CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR_REAL)
+  string(REPLACE "." "\\." CAD_CORE_OCCT_RUNTIME_VERSION_REGEX "${CAD_CORE_OCCT_VERSION}")
+  set(CAD_CORE_OCCT_RUNTIME_LIBRARIES)
+  foreach(CAD_CORE_OCCT_LIBRARY_NAME IN LISTS CAD_CORE_OCCT_LINK_LIBRARY_NAMES)
+    unset(CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY CACHE)
+    find_library(CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY
+      NAMES ${CAD_CORE_OCCT_LIBRARY_NAME}
+      PATHS ${CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR}
+      NO_DEFAULT_PATH
+    )
+    if(NOT CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY)
+      message(FATAL_ERROR
+        "OCCT runtime library ${CAD_CORE_OCCT_LIBRARY_NAME} was not found under "
+        "${CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR}")
+    endif()
+    file(REAL_PATH
+      "${CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY}"
+      CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_REALPATH)
+    get_filename_component(CAD_CORE_OCCT_RUNTIME_LIBRARY_REALDIR
+      "${CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_REALPATH}" DIRECTORY)
+    get_filename_component(CAD_CORE_OCCT_RUNTIME_LIBRARY_REALNAME
+      "${CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_REALPATH}" NAME)
+    if(NOT CAD_CORE_OCCT_RUNTIME_LIBRARY_REALDIR STREQUAL CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR_REAL)
+      message(FATAL_ERROR
+        "OCCT runtime library ${CAD_CORE_OCCT_LIBRARY_NAME} resolves outside the selected "
+        "runtime prefix: ${CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_REALPATH}")
+    endif()
+    if(UNIX AND NOT CAD_CORE_OCCT_RUNTIME_LIBRARY_REALNAME
+       MATCHES "(^|[^0-9])${CAD_CORE_OCCT_RUNTIME_VERSION_REGEX}([^0-9]|$)")
+      message(FATAL_ERROR
+        "OCCT runtime library ${CAD_CORE_OCCT_RUNTIME_LIBRARY_REALNAME} does not match header "
+        "version ${CAD_CORE_OCCT_VERSION}")
+    endif()
+    list(APPEND CAD_CORE_OCCT_RUNTIME_LIBRARIES
+      ${CAD_CORE_OCCT_RUNTIME_${CAD_CORE_OCCT_LIBRARY_NAME}_LIBRARY})
+  endforeach()
+
+  file(GLOB CAD_CORE_OCCT_CONDA_MANIFESTS
+    "${CAD_CORE_OCCT_LIBRARY_ROOT}/conda-meta/occt-*.json")
+  list(LENGTH CAD_CORE_OCCT_CONDA_MANIFESTS CAD_CORE_OCCT_CONDA_MANIFEST_COUNT)
+  if(CAD_CORE_OCCT_CONDA_MANIFEST_COUNT GREATER 1)
+    message(FATAL_ERROR
+      "Multiple OCCT package manifests found under ${CAD_CORE_OCCT_LIBRARY_ROOT}/conda-meta")
+  elseif(CAD_CORE_OCCT_CONDA_MANIFEST_COUNT EQUAL 1)
+    list(GET CAD_CORE_OCCT_CONDA_MANIFESTS 0 CAD_CORE_OCCT_CONDA_MANIFEST)
+    file(READ "${CAD_CORE_OCCT_CONDA_MANIFEST}" CAD_CORE_OCCT_CONDA_MANIFEST_JSON)
+    string(JSON CAD_CORE_OCCT_CONDA_VERSION GET "${CAD_CORE_OCCT_CONDA_MANIFEST_JSON}" version)
+    if(NOT CAD_CORE_OCCT_CONDA_VERSION STREQUAL CAD_CORE_OCCT_VERSION)
+      message(FATAL_ERROR
+        "OCCT runtime manifest version ${CAD_CORE_OCCT_CONDA_VERSION} does not match header "
+        "version ${CAD_CORE_OCCT_VERSION}: ${CAD_CORE_OCCT_CONDA_MANIFEST}")
+    endif()
+  endif()
+
+  set(CAD_CORE_OCCT_LIBRARIES ${CAD_CORE_OCCT_RUNTIME_LIBRARIES})
+  # The override list contains absolute library paths. Do not add the oracle directory as a
+  # generic `-L` search path: the FreeCAD bundle may contain unrelated libraries with the same
+  # install name as cad-core dependencies (for example OndselSolver).
+  set(CAD_CORE_OCCT_LIBRARY_DIRS)
+  # This absolute build RPATH is intentional for a local native-oracle parity build. It is not an
+  # install/deployment contract; production packaging must select and relocate one coherent OCCT
+  # distribution instead of mixing libraries from the oracle prefix and the system prefix.
+  set(CMAKE_BUILD_RPATH
+    "${CMAKE_CURRENT_BINARY_DIR}/ondsel_solver/OndselSolver"
+    "${CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR}"
+  )
+  message(STATUS
+    "Using oracle-aligned OCCT runtime libraries from ${CAD_CORE_OCCT_RUNTIME_LIBRARY_DIR}")
 endif()
 
 set(CAD_CORE_NLOHMANN_JSON_SEARCH_PATHS)

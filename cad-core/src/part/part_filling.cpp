@@ -14,6 +14,7 @@
 #include <cmath>
 #include <optional>
 #include <set>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -53,11 +54,73 @@ void addFillingDiagnostic(
         target,
         subname
     );
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+    // ::makeFilledFace() is a transient Python helper. Its exception/admission envelope is
+    // collected by collect_freecad_expected.py rather than DocumentObject::execute(), so keep
+    // the collector producer explicit on both the diagnostic and the public helper result.
+    context.diagnostics.back().details["source"] = "freecad_expected_collector";
     context.objects[object.name] = {
         {"status", "error"},
         {"feature", "part_filled_face"},
         {"helper", "Part.makeFilledFace"},
     };
+    runtime::PublicResultFields& publicFields = context.publicResultFields[object.name];
+    publicFields.objectFields = context.objects[object.name];
+    publicFields.nativeError = message;
+    publicFields.nativeErrorCode = code;
+}
+
+bool validateFillingHelperPropertyTypes(
+    const app::DocumentObject& object,
+    runtime::ComputeContext& context
+)
+{
+    std::vector<std::string> invalidProperties;
+    for (const std::string& property : {"Orders", "Supports"}) {
+        const app::PropertyValue* value = app::propertyValue(object, property);
+        if (value != nullptr && value->propertyType != "App::PropertyLinkSubList") {
+            invalidProperties.push_back(property);
+        }
+    }
+    if (invalidProperties.empty()) {
+        return true;
+    }
+
+    std::ostringstream names;
+    for (std::size_t index = 0; index < invalidProperties.size(); ++index) {
+        if (index != 0U) {
+            names << ", ";
+        }
+        names << invalidProperties[index];
+    }
+    const std::string message = "Unsupported Part.makeFilledFace kwargs: " + names.str();
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+    // ::makeFilledFace() parses supports/orders as helper keyword sequences before delegating to
+    // TopoShape::makeElementFilledFace(). CAD Core's DTO equivalent is LinkSubList; report every
+    // incompatible property at this shared helper-admission seam, with one aggregate exception.
+    for (const std::string& property : invalidProperties) {
+        addFillingDiagnostic(
+            object,
+            context,
+            "unsupported_property",
+            message,
+            property,
+            object.name,
+            property
+        );
+    }
+    return false;
+}
+
+std::string fillingHelperErrorMessage(const std::string& builderError)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+    // ::makeFilledFace() exposes TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace()
+    // CADKernelError failures through the Python helper exception envelope.
+    if (builderError == "No boundary wire") {
+        return "FreeCAD exception thrown (No boundary wire)";
+    }
+    return builderError;
 }
 
 const nlohmann::json* rawPropertyPayload(
@@ -809,11 +872,13 @@ std::optional<ResolvedFillingSources> resolveFillingBoundarySources(
     for (const app::Link& link : links) {
         const auto shapeIt = context.shapes.find(link.object);
         if (shapeIt == context.shapes.end() || shapeIt->second.shape.IsNull()) {
+            const bool targetWasCreated = context.documentObjects.count(link.object) != 0U;
             addFillingDiagnostic(
                 object,
                 context,
                 "missing_link_target",
-                "Boundary target " + link.object + " did not produce a shape",
+                "Boundary target " + link.object
+                    + (targetWasCreated ? " did not produce a shape" : " was not created"),
                 "Boundary",
                 link.object,
                 stableSubnameForLink(link, 0U)
@@ -1080,6 +1145,9 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
         };
         return;
     }
+    if (!validateFillingHelperPropertyTypes(object, context)) {
+        return;
+    }
     if (!rejectUnsupportedFillingWrapperLifecycle(object, context)) {
         return;
     }
@@ -1112,7 +1180,8 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
             object,
             context,
             build.diagnosticCode.empty() ? "execution_failed" : build.diagnosticCode,
-            build.error.empty() ? "Part.makeFilledFace failed" : build.error,
+            build.error.empty() ? "Part.makeFilledFace failed"
+                                : fillingHelperErrorMessage(build.error),
             build.diagnosticProperty.empty() ? "Boundary" : build.diagnosticProperty,
             build.diagnosticTarget,
             build.diagnosticSubname
@@ -1140,11 +1209,7 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
         return std::string("source_backed_native_helper_oracle_known_gap");
     }();
 
-    part_feature_detail::publishPartShape(
-        object,
-        context,
-        build.shape,
-        {
+    nlohmann::json metadata = {
             {"feature", "part_filled_face"},
             {"helper", "Part.makeFilledFace"},
             {"source_backed_helper", true},
@@ -1182,8 +1247,28 @@ void executePartFilledFace(const app::DocumentObject& object, runtime::ComputeCo
              explicitParamFields.empty() ? "default_params" : "cad_core_product_contract_covered"},
             {"explicit_param_fields", explicitParamFields},
             {"topo_naming_history", "maker_history:filling"},
-        },
-        build.namedShape
+    };
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/AppPartPy.cpp
+    // ::makeFilledFace() owns the helper result and delegates to
+    // TopoShapeExpansion.cpp::TopoShape::makeElementFilledFace(); only the native helper
+    // envelope and returned TopoShape summary are public, not cad-core's evidence metadata.
+    nlohmann::json publicObjectFields = {
+        {"feature", "part_filled_face"},
+        {"helper", "Part.makeFilledFace"},
+        {"source_backed_helper", true},
+        {"freecad_native_document_object", false},
+        {"boundary_mode", build.boundaryMode},
+        {"boundary_edge_count", build.boundaryEdgeCount},
+        {"status", "ok"},
+        {"topo_naming_history", "maker_history:filling"},
+    };
+    part_feature_detail::publishPartShape(
+        object,
+        context,
+        build.shape,
+        metadata,
+        build.namedShape,
+        part_feature_detail::PartPublicResultFields {std::move(publicObjectFields), true}
     );
 }
 

@@ -16,7 +16,10 @@ struct RecomputePlan {
     std::set<std::string> blockedObjects;
 };
 
-RecomputePlan buildPlan(const app::Document& document, std::vector<runtime::Diagnostic>& diagnostics);
+RecomputePlan buildPlan(
+    const app::Document& document,
+    std::vector<runtime::Diagnostic>& diagnostics,
+    const std::set<std::string>& producerMissingReferenceAdmissionTypeIds = {}
+);
 
 }  // namespace cad_core::graph
-

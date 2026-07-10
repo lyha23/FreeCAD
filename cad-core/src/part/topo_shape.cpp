@@ -2709,7 +2709,8 @@ void applyRefineGenericGeneratedHistory(
 void applyHistoryElementMap(
     NamedShape& namedShape,
     const std::map<std::string, SourceTargets>& sourceTargets,
-    const std::string& producerOperation = {}
+    const std::string& producerOperation = {},
+    bool recordUnmappedSourceDeletions = true
 )
 {
     const auto applyAlias = [&](const std::string& sourceName,
@@ -2808,9 +2809,85 @@ void applyHistoryElementMap(
             applySplit(sourceName, targets.history);
             continue;
         }
-        addTerminalHistory(
+        if (recordUnmappedSourceDeletions) {
+            addTerminalHistory(
+                namedShape,
+                ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
+            );
+        }
+    }
+}
+
+void addUnambiguousProducerLocalHistoryAliases(
+    NamedShape& namedShape,
+    const std::map<std::string, SourceTargets>& sourceTargets,
+    const std::string& producerOperation
+)
+{
+    struct LocalAliasCandidate
+    {
+        std::string sourceName;
+        std::string currentElement;
+        const SourceTargets* targets = nullptr;
+    };
+
+    std::map<std::string, std::vector<LocalAliasCandidate>> candidatesByLocalName;
+    for (const auto& [sourceName, targets] : sourceTargets) {
+        const auto mappedIt = namedShape.elementMap.find(sourceName);
+        if (mappedIt == namedShape.elementMap.end()) {
+            continue;
+        }
+        const std::string localName = localElementName(sourceName);
+        if (localName.empty() || localName == sourceName) {
+            continue;
+        }
+        candidatesByLocalName[localName].push_back(
+            LocalAliasCandidate {sourceName, mappedIt->second, &targets}
+        );
+    }
+
+    for (const auto& [localName, candidates] : candidatesByLocalName) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+        // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap() obtains the incoming
+        // producer-local IndexedName (EdgeN/VertexN) before encodeElementName() appends the
+        // maker operation. Owner-qualified paths remain lookup aliases. Publish a local alias
+        // only when maker history identifies one source unambiguously; competing source-local
+        // names must retain their qualified aliases instead of being resolved by numbering.
+        if (candidates.size() != 1U || candidates.front().targets == nullptr) {
+            continue;
+        }
+        const LocalAliasCandidate& candidate = candidates.front();
+        const auto existingIt = namedShape.elementMap.find(localName);
+        if (existingIt != namedShape.elementMap.end()
+            && existingIt->second != candidate.currentElement) {
+            const auto provenanceIt = namedShape.mappedNameProvenance.find(localName);
+            if (provenanceIt != namedShape.mappedNameProvenance.end()
+                && provenanceIt->second.status == MappedNameProvenanceStatus::SourceBacked) {
+                continue;
+            }
+        }
+
+        const SourceTargets& targets = *candidate.targets;
+        std::string operationPostfix = targets.preservedOperationPostfix;
+        const auto historyKindIt = targets.historyKinds.find(candidate.currentElement);
+        if (historyKindIt != targets.historyKinds.end()) {
+            operationPostfix = operationPostfixForHistoryKind(
+                historyKindIt->second,
+                producerOperation
+            );
+        }
+        if (operationPostfix.empty()) {
+            continue;
+        }
+
+        namedShape.elementMap[localName] = candidate.currentElement;
+        recordMappedNameProvenance(
             namedShape,
-            ElementHistory {ElementHistoryKind::Deleted, sourceName, {sourceName}}
+            localName,
+            candidate.currentElement,
+            localName,
+            targets.sourceTag,
+            operationPostfix
         );
     }
 }
@@ -3567,7 +3644,7 @@ NamedShape namedShapeForMakerHistory(
     const std::string& sourceOwner,
     const TopoDS_Shape& sourceShape,
     BRepBuilderAPI_MakeShape& maker,
-    const std::string& producerOperation
+    MakerHistoryOptions options
 )
 {
     return namedShapeForMakerHistory(
@@ -3575,7 +3652,7 @@ NamedShape namedShapeForMakerHistory(
         resultShape,
         std::vector<NamedShapeSource> {{sourceOwner, sourceShape}},
         maker,
-        producerOperation
+        std::move(options)
     );
 }
 
@@ -3584,11 +3661,12 @@ NamedShape namedShapeForMakerHistory(
     const TopoDS_Shape& resultShape,
     const std::vector<NamedShapeSource>& sources,
     BRepBuilderAPI_MakeShape& maker,
-    const std::string& producerOperation
+    MakerHistoryOptions options
 )
 {
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
     std::map<std::string, SourceTargets> sourceTargets;
+    const std::string& producerOperation = options.producerOperation;
 
     for (const auto& source : sources) {
         for (const TopAbs_ShapeEnum kind : mappableKinds()) {
@@ -3632,7 +3710,19 @@ NamedShape namedShapeForMakerHistory(
             }
         }
     }
-    applyHistoryElementMap(namedShape, sourceTargets, producerOperation);
+    applyHistoryElementMap(
+        namedShape,
+        sourceTargets,
+        producerOperation,
+        options.recordUnmappedSourceDeletions
+    );
+    if (options.addProducerLocalAliases) {
+        addUnambiguousProducerLocalHistoryAliases(
+            namedShape,
+            sourceTargets,
+            producerOperation
+        );
+    }
     addRectangularFacePrismProducedMappedNames(
         namedShape,
         resultShape,
@@ -4564,7 +4654,13 @@ NamedShapeBuild makeElementBooleanFromSources(
     const TopoDS_Shape resultShape = maker->Shape();
     return NamedShapeBuild {
         resultShape,
-        namedShapeForMakerHistory(owner, resultShape, booleanSources, *maker, booleanOperationCode(operation)),
+        namedShapeForMakerHistory(
+            owner,
+            resultShape,
+            booleanSources,
+            *maker,
+            MakerHistoryOptions {booleanOperationCode(operation)}
+        ),
         {}
     };
 }
@@ -4697,7 +4793,17 @@ NamedShapeBuild makeElementSectionFromSources(
         }
         return NamedShapeBuild {
             resultShape,
-            namedShapeForMakerHistory(owner, resultShape, sources, maker),
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+            // FeaturePartSection.cpp::Section::opCode() returns Part::OpCodes::Section (SEC),
+            // and FeaturePartBoolean.cpp::Boolean::execute() passes it to
+            // TopoShape::makeElementShape() before PropertyPartShape::setValue().
+            namedShapeForMakerHistory(
+                owner,
+                resultShape,
+                sources,
+                maker,
+                MakerHistoryOptions {"SEC", false, true}
+            ),
             {},
         };
     }

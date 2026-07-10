@@ -2,46 +2,63 @@
   "binaryPayloads": [],
   "diagnostics": [
     {
-      "code": "missing_link_target",
-      "message": "Object links to missing object DoesNotExist",
-      "object": "MissingTarget",
-      "property": "Boundary",
-      "severity": "error",
-      "stage": "graph",
-      "target": "DoesNotExist"
-    },
-    {
       "code": "missing_property",
       "message": "No input shape",
       "object": "EmptyBoundary",
       "property": "Boundary",
       "severity": "error",
+      "source": "freecad_expected_collector",
       "stage": "runtime"
     },
     {
+      "code": "missing_link_target",
+      "message": "Boundary target DoesNotExist was not created",
+      "object": "MissingTarget",
+      "property": "Boundary",
+      "severity": "error",
+      "source": "freecad_expected_collector",
+      "stage": "runtime",
+      "target": "DoesNotExist"
+    },
+    {
       "code": "execution_failed",
-      "message": "No boundary wire",
+      "message": "FreeCAD exception thrown (No boundary wire)",
       "object": "FaceOnlyBoundary",
       "property": "Boundary",
       "severity": "error",
+      "source": "freecad_expected_collector",
       "stage": "runtime"
     },
     {
       "code": "execution_failed",
-      "message": "No boundary wire",
+      "message": "Standard_ConstructionError: Geom_RectangularTrimmedSurface::V1==V2",
       "object": "DisconnectedBoundary",
       "property": "Boundary",
       "severity": "error",
+      "source": "freecad_expected_collector",
       "stage": "runtime"
     },
     {
-      "code": "invalid_support_target",
-      "message": "Part.makeFilledFace support target must resolve to an edge",
+      "code": "unsupported_property",
+      "message": "Unsupported Part.makeFilledFace kwargs: Orders, Supports",
+      "object": "UnsupportedKwargs",
+      "property": "Orders",
+      "severity": "error",
+      "source": "freecad_expected_collector",
+      "stage": "runtime",
+      "subname": "Orders",
+      "target": "UnsupportedKwargs"
+    },
+    {
+      "code": "unsupported_property",
+      "message": "Unsupported Part.makeFilledFace kwargs: Orders, Supports",
       "object": "UnsupportedKwargs",
       "property": "Supports",
       "severity": "error",
+      "source": "freecad_expected_collector",
       "stage": "runtime",
-      "target": "Plane"
+      "subname": "Supports",
+      "target": "UnsupportedKwargs"
     }
   ],
   "documentObjectUpdates": [],
@@ -49,28 +66,278 @@
   "results": [
     {
       "mesh": null,
+      "native_error": "No input shape",
+      "native_error_code": "missing_property",
       "object": "EmptyBoundary",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      },
       "subshapes": []
     },
     {
       "mesh": null,
+      "native_error": "Boundary target DoesNotExist was not created",
+      "native_error_code": "missing_link_target",
       "object": "MissingTarget",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      },
       "subshapes": []
     },
     {
       "mesh": null,
+      "native_error": "FreeCAD exception thrown (No boundary wire)",
+      "native_error_code": "execution_failed",
       "object": "FaceOnlyBoundary",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      },
       "subshapes": []
     },
     {
       "mesh": null,
+      "native_error": "Standard_ConstructionError: Geom_RectangularTrimmedSurface::V1==V2",
+      "native_error_code": "execution_failed",
       "object": "DisconnectedBoundary",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      },
       "subshapes": []
     },
     {
       "mesh": null,
+      "native_error": "Unsupported Part.makeFilledFace kwargs: Orders, Supports",
+      "native_error_code": "unsupported_property",
       "object": "UnsupportedKwargs",
+      "object_fields": {
+        "feature": "part_filled_face",
+        "helper": "Part.makeFilledFace",
+        "status": "error"
+      },
       "subshapes": []
     }
-  ]
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:c74fdf9e0513b3e9d4b0e28890d23a0b24b1b3b1fd2818d4ca8f00238c9dd20e",
+    "objects": {
+      "DisconnectedBoundary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d6decb2ac46666ba0476792415cada5c566fcf023441bcc1778fb5618b955641",
+        "subshapes": {}
+      },
+      "EdgeA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7e4fb55e9b4946b3e93dc2d737f6f1a9ccbc728c3f11f213cbc1abe5084cf4d1",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "EdgeB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:946b53efa9cbde65dfd1e57eff3ade0af0644af3b326de27ac23529260e7a912",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "EmptyBoundary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:fefb3d03b1ed65de811e9bdacfbd88753487d174715b77d011addb6fc0657578",
+        "subshapes": {}
+      },
+      "FaceOnlyBoundary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:384c49ec73134b265937210c2a18ed47336ac0fd492cc5ee582b1ba0ff912b7a",
+        "subshapes": {}
+      },
+      "MissingTarget": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c5033fd7c3d3b56eaac0242bea2febd23f700912c57c12120d461896dd4937ca",
+        "subshapes": {}
+      },
+      "Plane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3f45ce4a4e83a4a8c834f88028d6c8df6f06cac372bcce44d1ae978d02a5fe95",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "Profile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b33b91886aac013eaa98b01f8cd524f3fa619bbbfcadff4c0c56638c325570f8",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "UnsupportedKwargs": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:679c194e2aab6bbfdddc543032e9288e95e3ca3cce17378dd578fe25a816ca42",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
 }

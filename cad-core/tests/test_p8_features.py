@@ -441,7 +441,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(section["approximation"], False)
         self.assertEqual(named_shape["element_map_status"], "history_partial")
         self.assertIn("history_consumed:generated_modified", named_shape["element_history_status"])
-        self.assertIn("terminal_history:split_deleted", named_shape["element_history_status"])
+        self.assertNotIn("terminal_history:split_deleted", named_shape["element_history_status"])
         self.assertEqual(named_shape["element_map"]["Plane.Edge1"], "Edge1")
         self.assertEqual(named_shape["element_map"]["Plane.Edge2"], "Edge2")
         self.assertTrue(
@@ -451,7 +451,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for item in history
             )
         )
-        self.assertTrue(
+        self.assertFalse(
             any(
                 item["kind"] == "deleted"
                 and "Box.Edge1" in item.get("sources", [])
@@ -467,7 +467,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 for item in mapper_history
             )
         )
-        self.assertTrue(
+        self.assertFalse(
             any(
                 item["relation"] == "deleted"
                 and item.get("maker_stage") == "terminal_history"
@@ -1450,14 +1450,15 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertEqual(
             codes,
             [
-                "missing_link_target",
                 "missing_property",
+                "missing_link_target",
                 "execution_failed",
                 "execution_failed",
-                "invalid_support_target",
+                "unsupported_property",
+                "unsupported_property",
             ],
         )
-        self.assertCountEqual(codes, expected["diagnostic_codes"])
+        self.assertCountEqual(codes, [item["code"] for item in expected["diagnostics"]])
         for object_name in (
             "EmptyBoundary",
             "FaceOnlyBoundary",
@@ -2044,7 +2045,7 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 "unsupported_wrapper_lifecycle",
             ],
         )
-        self.assertCountEqual(codes, expected["diagnostic_codes"])
+        self.assertCountEqual(codes, [item["code"] for item in expected["diagnostics"]])
         for object_name in (
             "EmptyConstraints",
             "InvalidCurveSource",

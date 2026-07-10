@@ -826,10 +826,21 @@ std::optional<ResponseMappedNamePublication> publicationFromProvenance(
     const std::string& indexed,
     const part::MappedNameProvenance& provenance)
 {
+    const std::size_t postfix = provenance.rawMappedName.find(';');
+    const bool producerLocalMappedName = provenance.sourceElement.find('.') == std::string::npos
+        && postfix != std::string::npos
+        && provenance.rawMappedName.substr(0, postfix) == provenance.sourceElement
+        && provenance.operationPostfix.rfind(";:M;", 0U) == 0U;
     if (!hasSourceBackedMappedName(provenance)
-        || !hasFreeCadEncodedElementToken(provenance.rawMappedName)) {
+        || (!hasFreeCadEncodedElementToken(provenance.rawMappedName)
+            && !producerLocalMappedName)) {
         return std::nullopt;
     }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::encodeElementName() may encode an operation directly after a producer-local
+    // IndexedName (for example Edge1;:M;SEC;:H...), without a leading child-map '#'. Require the
+    // raw base to be the unqualified producer source and the postfix to be maker-backed, so
+    // owner-qualified lookup aliases do not replace an existing child-map identity.
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp::execute(),
     // "Shape.setValue(tipShape)" publishes the Tip shape as Body display geometry, while
     // /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp::addChildElements() keeps the Tip
@@ -874,6 +885,8 @@ std::optional<ResponseMappedNamePublication> mappedNamePublicationFromNamedShape
     if (namedShape == nullptr) {
         return std::nullopt;
     }
+    std::optional<ResponseMappedNamePublication> selected;
+    int selectedPriority = 2;
     for (const auto& [stableName, currentName] : namedShape->elementMap) {
         if (currentName != indexed) {
             continue;
@@ -884,10 +897,18 @@ std::optional<ResponseMappedNamePublication> mappedNamePublicationFromNamedShape
         }
         if (const auto publication =
                 publicationFromProvenance({}, indexed, provenanceIt->second)) {
-            return publication;
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+            // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap() encodes the incoming
+            // producer-local IndexedName. Owner-qualified names are resolution aliases, so a
+            // source-backed local mapped name wins when both resolve to the same current shape.
+            const int priority = stableName.find('.') == std::string::npos ? 0 : 1;
+            if (!selected || priority < selectedPriority) {
+                selected = *publication;
+                selectedPriority = priority;
+            }
         }
     }
-    return std::nullopt;
+    return selected;
 }
 
 std::optional<ResponseMappedNamePublication> bodyTipMappedNamePublicationFromChildMap(
@@ -1639,13 +1660,44 @@ void appendObjectSummaryResultFields(nlohmann::json& result,
     appendSketchSummaryResultFields(result, objectResult);
 }
 
+void appendProducerPublicResultFields(nlohmann::json& result,
+                                      const std::string& objectName,
+                                      const ComputeContext& context)
+{
+    const auto fieldsIt = context.publicResultFields.find(objectName);
+    if (fieldsIt == context.publicResultFields.end()) {
+        return;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PropertyTopoShape.cpp
+    // ::PropertyPartShape::setValue(const TopoShape&) publishes the producer's Shape while
+    // PartFeatures.cpp::Loft::execute() / ::Sweep::execute() and helper wrappers own their
+    // adjacent public fields. Runtime only merges that producer-owned carrier into the result.
+    if (fieldsIt->second.objectFields) {
+        result["object_fields"] = *fieldsIt->second.objectFields;
+    }
+    if (fieldsIt->second.shapeSummary) {
+        result["shape_summary"] = *fieldsIt->second.shapeSummary;
+    }
+    if (fieldsIt->second.nativeError) {
+        result["native_error"] = *fieldsIt->second.nativeError;
+    }
+    if (fieldsIt->second.nativeErrorCode) {
+        result["native_error_code"] = *fieldsIt->second.nativeErrorCode;
+    }
+}
+
 }  // namespace
 
 ComputeContext recomputeContext(const app::Document& document,
                                 std::vector<Diagnostic> diagnostics)
 {
-    graph::RecomputePlan plan = graph::buildPlan(document, diagnostics);
     FeatureRegistry registry = buildDefaultRegistry();
+    graph::RecomputePlan plan = graph::buildPlan(
+        document,
+        diagnostics,
+        registry.producerMissingReferenceAdmissionTypeIds()
+    );
 
     ComputeContext context;
     context.diagnostics = std::move(diagnostics);
@@ -1752,6 +1804,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
         };
         appendDatumFrameResultFields(result, target, context);
         appendObjectSummaryResultFields(result, target, context, subshapes);
+        appendProducerPublicResultFields(result, target, context);
         results.push_back(std::move(result));
     }
 

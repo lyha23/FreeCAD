@@ -1906,6 +1906,12 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
         {"linearize", linearize},
         {"topo_naming_history", "maker_history:pipeshell"},
     };
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+    // ::Sweep::execute() reads Sections/Spine/Solid/Frenet/Transition, delegates to
+    // TopoShape::makeElementPipeShell(), then publishes those feature properties with
+    // Shape.setValue(). Product-only advanced metadata stays out of this native public subset.
+    nlohmann::json publicObjectFields = metadata;
+    publicObjectFields["status"] = "ok";
     if (!advanced->metadata.empty()) {
         metadata["advanced"] = advanced->metadata;
     }
@@ -1980,13 +1986,15 @@ void executePartSweep(const app::DocumentObject& object, runtime::ComputeContext
         );
         return;
     }
+    publicObjectFields["shape"] = part_feature_detail::shapeLabelForPartShape(build.shape);
 
     part_feature_detail::publishPartShape(
         object,
         context,
         build.shape,
         metadata,
-        build.namedShape
+        build.namedShape,
+        part_feature_detail::PartPublicResultFields {std::move(publicObjectFields), false}
     );
 }
 

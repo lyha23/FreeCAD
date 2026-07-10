@@ -22,6 +22,16 @@ struct PartLinkedShape
     const part::NamedShape* namedShape = nullptr;
 };
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeatures.cpp
+// ::Loft::execute() / ::Sweep::execute() own the properties exposed with their result Shape;
+// AppPartPy.cpp::makeFilledFace() owns the returned helper shape summary. This narrow interface
+// lets each Part producer select only its native public fields instead of exporting all metadata.
+struct PartPublicResultFields
+{
+    std::optional<nlohmann::json> objectFields;
+    bool includeShapeSummary = false;
+};
+
 double readNumberProperty(const app::DocumentObject& object, const std::string& property, double fallback);
 double radians(double degrees);
 void addPartOffsetDiagnostic(
@@ -52,7 +62,8 @@ void publishPartShape(
     runtime::ComputeContext& context,
     const TopoDS_Shape& localShape,
     const nlohmann::json& metadata,
-    const std::optional<part::NamedShape>& namedShape = std::nullopt
+    const std::optional<part::NamedShape>& namedShape = std::nullopt,
+    PartPublicResultFields publicResultFields = {}
 );
 
 }  // namespace cad_core::part::part_feature_detail
