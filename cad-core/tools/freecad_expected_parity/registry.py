@@ -215,8 +215,15 @@ def apply_registry(
             if selector == tuple(str(entry["selector"].get(field, "")) for field in SELECTOR_FIELDS)
         ]
         if len(matches) == 0:
-            diff["decision"] = "unaccepted_diff"
-            diff["accepted"] = False
+            if diff.get("comparisonClass") == "product_extension":
+                diff["decision"] = "allowed_product_extension"
+                diff["accepted"] = True
+            elif diff.get("comparisonClass") == "representation_difference":
+                diff["decision"] = "allowed_representation_difference"
+                diff["accepted"] = True
+            else:
+                diff["decision"] = "unaccepted_diff"
+                diff["accepted"] = False
             continue
         if len(matches) != 1:
             label = "/".join(selector)

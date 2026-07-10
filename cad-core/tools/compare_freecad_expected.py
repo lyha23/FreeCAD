@@ -138,6 +138,8 @@ def _run_contract_tests(report: dict[str, Any], root: Path) -> tuple[dict[str, A
     tests = report.get("registryAudit", {}).get("contractTests", [])
     if not isinstance(tests, list):
         return {"contractTests": [], "status": "invalid"}, 1
+    if report.get("releaseStatus") == "not_applicable":
+        return {"contractTests": tests, "status": "not_run_not_applicable"}, 0
     if report.get("releaseStatus") == "invalid":
         return {"contractTests": tests, "status": "not_run_invalid_parity"}, 1
     if report.get("semanticStatus") != "green":
@@ -178,7 +180,7 @@ def main(argv: list[str] | None = None) -> int:
         payloads.append(report)
         if report["releaseStatus"] == "invalid":
             exit_code = 1
-        if args.release_gate and not report["releaseGatePassed"]:
+        if args.release_gate and report["releaseStatus"] != "not_applicable" and not report["releaseGatePassed"]:
             exit_code = 1
         if args.run_contract_tests:
             contract_payload, contract_code = _run_contract_tests(report, root)

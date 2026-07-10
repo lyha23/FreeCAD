@@ -85,6 +85,7 @@ class CaseReport:
     current: str
     input: str
     artifact_evidence: ArtifactEvidence = field(default_factory=ArtifactEvidence)
+    artifact_diff_count: int = 0
     diffs: list[dict[str, Any]] = field(default_factory=list)
     preflight_errors: list[str] = field(default_factory=list)
     source_error: str | None = None
@@ -107,6 +108,7 @@ class CaseReport:
             "expected": self.expected,
             "current": self.current,
             "artifactEvidence": self.artifact_evidence.to_dict(),
+            "artifactDiffCount": self.artifact_diff_count,
             "diffCount": len(self.diffs),
             "categories": dict(sorted(categories.items())),
             "decisions": dict(sorted(decisions.items())),
@@ -136,6 +138,8 @@ class ParityReport:
     @property
     def status(self) -> str:
         """Compatibility aggregate used by the old report-only CLI."""
+        if self.release_status == "not_applicable":
+            return "not_applicable"
         if self.release_status == "invalid":
             return "invalid"
         if self.exact_status == "not_evaluated":

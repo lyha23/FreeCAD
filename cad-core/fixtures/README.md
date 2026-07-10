@@ -37,7 +37,7 @@ manifest 对每个 input 恰好声明一个 role，并 fail closed：缺失、�
 - protocol-only：`topo-state-mapper-history-events.expeted.json`。`CadCore::TopoNamingStateProbe` 构造 synthetic helper shape，而 FreeCAD Python 不能导出同一 producer history；因此它由 focused protocol test 保护，明确排除 native release verdict。
 - `ReferenceShadow.brep` 只可作为 item-local 单 subshape recovery evidence；不得进入 `topoNamingState`、results 或完整对象状态，也不得被直接复用为建模几何。
 
-display mesh 与 `results.ProbeSketch.subshapes` 不因其后缀自动忽略。当前仅 `protocol_divergences.v1.json` 中精确 selector 所列的五个 c4m6 transport diff 可被接受，且其 actual contract、consumer test、authority 与 remove condition 都必须通过审计；whole-result 或新路径一律是 red。
+display mesh、前端 transport 字段和 producer-local raw/stable token 属于 artifact representation。它们会保留在 artifact diff 观察中，但不进入公共 semantic parity；对应产品字段仍必须由 adapter/consumer contract 测试保护。diagnostics、elementReferenceUpdates、canonical mapped-name、几何公共字段和必需 topoNamingState 仍按 semantic diff 严格比较。`protocol_divergences.v1.json` 继续只处理公共语义层明确批准的例外。
 
 ## 常用验证
 

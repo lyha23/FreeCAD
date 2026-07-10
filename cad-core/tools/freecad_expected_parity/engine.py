@@ -19,6 +19,7 @@ from .model import (
     ParityReport,
 )
 from .registry import Registry, apply_registry, load_registry
+from .public_semantics import compare_public_semantics
 from .sources import ActualPayload, atomic_write_json, make_actual_source, parse_payload
 
 
@@ -63,8 +64,11 @@ FREECAD_MAPPED_NAME_COLON_HASH_RE = re.compile(r":H:(?!\*)-?[0-9A-Fa-f]+")
 FREECAD_MAPPED_NAME_DELETE_RE = re.compile(r";D(?!\*)[0-9A-Fa-f]+")
 
 COMPARISON_PROFILE: dict[str, Any] = {
-    "schemaVersion": "cad-core.freecad-expected-comparison-profile.v1",
-    "rawMappedNameCanonicalization": "FreeCAD :H/:D fragments",
+    "schemaVersion": "cad-core.freecad-expected-comparison-profile.v2",
+    "artifactRawMappedNameNormalization": "FreeCAD :H/:D fragments",
+    "publicSemanticMappedName": "canonical-only; producer-local raw/stable tokens excluded",
+    "publicSemanticProductExtensions": ["mesh", "binaryPayloads", "documentObjectUpdates", "result_fields"],
+    "publicSemanticMapperHistory": "relation/recoverability/candidate-shape outcome",
     "keyedLists": ["diagnostics", "results", "subshapes", "childElementMaps", "mapperHistory"],
     "geometryNumericTolerance": FLOAT_TOLERANCE,
     "ignoredActualTopLevelKeys": sorted(IGNORED_ACTUAL_TOP_LEVEL_KEYS),
@@ -207,8 +211,15 @@ def category_for_path(path: tuple[str, ...], expected: Any = None, actual: Any =
 
 
 def _make_diff(kind: str, path: tuple[str, ...], expected: Any, actual: Any) -> dict[str, Any]:
+    if _is_raw_mapped_name_path(path):
+        comparison_class = "representation_difference"
+    elif kind == "extra" and len(path) >= 3 and path[0] == "results":
+        comparison_class = "product_extension"
+    else:
+        comparison_class = "public_semantic"
     diff: dict[str, Any] = {
         "category": category_for_path(path, expected, actual),
+        "comparisonClass": comparison_class,
         "kind": kind,
         "path": _path_string(path),
         "_actualValue": actual,
@@ -381,12 +392,26 @@ def _case_report(
     if report.preflight_errors or expected.payload is None or actual.payload is None:
         report.preflight_errors = list(dict.fromkeys(report.preflight_errors))
         return report
-    diffs = compare_payloads(expected.payload, actual.payload)
+    artifact_diffs = compare_payloads(expected.payload, actual.payload)
+    semantic_diffs = compare_public_semantics(expected.payload, actual.payload)
+    semantic_paths = {str(diff.get("path")) for diff in semantic_diffs}
+    observations: list[dict[str, Any]] = []
+    for artifact_diff in artifact_diffs:
+        if artifact_diff.get("comparisonClass") != "public_semantic":
+            observations.append(artifact_diff)
+            continue
+        if str(artifact_diff.get("path")) in semantic_paths:
+            continue
+        representation = dict(artifact_diff)
+        representation["comparisonClass"] = "representation_difference"
+        observations.append(representation)
+    diffs = [*semantic_diffs, *observations]
     for diff in diffs:
         diff["phase"] = item.phase
         diff["case"] = item.case
+    report.artifact_diff_count = len(artifact_diffs)
     report.diffs = diffs
-    report.status = "green" if not diffs else "red"
+    report.status = "green" if not artifact_diffs else "red"
     return report
 
 
@@ -395,8 +420,10 @@ def _summary(cases: list[CaseReport]) -> dict[str, Any]:
     decisions: Counter[str] = Counter()
     accepted = 0
     unaccepted = 0
+    comparison_classes: Counter[str] = Counter()
     for item in cases:
         for diff in item.diffs:
+            comparison_classes[str(diff.get("comparisonClass", "public_semantic"))] += 1
             category = str(diff.get("category", "json"))
             categories[category] = categories.get(category, 0) + 1
             decision = diff.get("decision")
@@ -412,6 +439,10 @@ def _summary(cases: list[CaseReport]) -> dict[str, Any]:
         "red": sum(item.status == "red" for item in cases),
         "invalid": sum(item.status == "invalid" for item in cases),
         "diffs": accepted + unaccepted,
+        "artifactDiffs": sum(item.artifact_diff_count for item in cases),
+        "semanticDiffs": comparison_classes["public_semantic"],
+        "productExtensions": comparison_classes["product_extension"],
+        "representationDifferences": comparison_classes["representation_difference"],
         "accepted": accepted,
         "unaccepted": unaccepted,
         "categories": categories,
@@ -461,7 +492,13 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
     )
     if source is None:
         global_errors.append(f"unsupported actual source kind: {request.source_kind}")
-    if not catalog.cases:
+    # A selected phase/case may contain only protocol-only, unsupported, or
+    # permanent internal-probe fixtures.  With no native expected artifact
+    # there is nothing for this comparator to compare; report that scope as
+    # not applicable.  Keep fail-closed behavior for an unknown selection or
+    # any catalogue/preflight error (those have no skipped role evidence).
+    not_applicable = not catalog.cases and bool(catalog.skipped) and not global_errors
+    if not catalog.cases and not not_applicable:
         global_errors.append("zero native fixture cases selected")
 
     cases: list[CaseReport] = []
@@ -484,16 +521,22 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
     if invalid:
         exact_status = "not_evaluated"
         semantic_status = "not_evaluated"
+    elif not_applicable:
+        exact_status = "not_evaluated"
+        semantic_status = "not_evaluated"
     else:
-        exact_status = "green" if not all_diffs else "red"
+        exact_status = "green" if not any(item.artifact_diff_count for item in cases) else "red"
         semantic_status = "green" if all(diff.get("accepted") is True for diff in all_diffs) else "red"
-    release_status, passed = _release_status(
-        source_kind=request.source_kind,
-        invalid=invalid,
-        exact=exact_status,
-        semantic=semantic_status,
-        cases=cases,
-    )
+    if not_applicable:
+        release_status, passed = "not_applicable", False
+    else:
+        release_status, passed = _release_status(
+            source_kind=request.source_kind,
+            invalid=invalid,
+            exact=exact_status,
+            semantic=semantic_status,
+            cases=cases,
+        )
     summary = _summary(cases)
     for item in cases:
         item.diffs = [_visible_diff(diff) for diff in item.diffs]

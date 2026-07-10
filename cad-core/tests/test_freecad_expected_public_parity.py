@@ -91,6 +91,116 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
         self.assertIn("comparisonProfileSha256", report["runEvidence"])
         self.assertIn("fixtureRolesSha256", report["runEvidence"])
 
+    def test_raw_mapped_name_may_differ_when_canonical_identity_matches(self) -> None:
+        expected = {
+            "diagnostics": [],
+            "results": [
+                {
+                    "object": "Box",
+                    "subshapes": [
+                        {
+                            "indexed": "Face1",
+                            "mappedName": {"raw": "freecad-local-token", "canonical": "Face1;:H*,F"},
+                        }
+                    ],
+                }
+            ],
+        }
+        actual = json.loads(json.dumps(expected))
+        actual["results"][0]["subshapes"][0]["mappedName"]["raw"] = "cad-core-local-token"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("red", report["exactStatus"])
+        self.assertEqual("green", report["semanticStatus"])
+        self.assertEqual(1, report["summary"]["diffs"])
+        diff = report["cases"][0]["diffs"][0]
+        self.assertEqual("representation_difference", diff["comparisonClass"])
+        self.assertEqual("allowed_representation_difference", diff["decision"])
+        self.assertTrue(diff["accepted"])
+
+    def test_canonical_mapped_name_difference_remains_semantic_red(self) -> None:
+        expected = {
+            "diagnostics": [],
+            "results": [
+                {
+                    "object": "Box",
+                    "subshapes": [
+                        {
+                            "indexed": "Face1",
+                            "mappedName": {"raw": "freecad-token", "canonical": "Face1;:H*,F"},
+                        }
+                    ],
+                }
+            ],
+        }
+        actual = json.loads(json.dumps(expected))
+        actual["results"][0]["subshapes"][0]["mappedName"]["canonical"] = "Face2;:H*,F"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("red", report["semanticStatus"])
+        diff = report["cases"][0]["diffs"][0]
+        self.assertTrue(diff["path"].startswith("results.Box.subshapes.Face1;:H*,F"))
+        self.assertEqual("public_semantic", diff["comparisonClass"])
+        self.assertFalse(diff["accepted"])
+
+    def test_producer_local_subshape_tokens_may_differ_when_canonical_identity_matches(self) -> None:
+        expected = {
+            "diagnostics": [],
+            "results": [
+                {
+                    "object": "Box",
+                    "subshapes": [
+                        {
+                            "id": "Box:Face1",
+                            "fullSubname": "Box.Face1",
+                            "indexed": "Face1",
+                            "subname": "Face1",
+                            "resolvedIndexed": "Face1",
+                            "stableSubname": "freecad-stable-token",
+                            "rawFreecadMappedName": "freecad-raw-token",
+                            "canonicalFreecadMappedName": "Box.Face;:H*,F",
+                            "identityStatus": "stable",
+                            "kind": "Face",
+                        }
+                    ],
+                }
+            ],
+        }
+        actual = json.loads(json.dumps(expected))
+        subshape = actual["results"][0]["subshapes"][0]
+        subshape.update(
+            {
+                "id": "Box:Face7",
+                "fullSubname": "Box.Face7",
+                "indexed": "Face7",
+                "subname": "Face7",
+                "resolvedIndexed": "Face7",
+                "stableSubname": "cad-core-stable-token",
+                "rawFreecadMappedName": "cad-core-raw-token",
+            }
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("red", report["exactStatus"])
+        self.assertEqual("green", report["semanticStatus"])
+        self.assertEqual(0, report["summary"]["semanticDiffs"])
+        self.assertGreater(report["summary"]["representationDifferences"], 0)
+
     def test_zero_case_and_missing_role_are_fail_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -104,6 +214,49 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
 
         self.assertEqual("invalid", missing_role["releaseStatus"])
         self.assertTrue(any("has no role" in error for error in missing_role["preflight"]["errors"]))
+
+    def test_phase_without_native_expected_is_not_applicable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_json(root / "fixtures" / "probe-only" / "shape-fix.json", {"TypeId": "CadCore::Probe"})
+            roles = root / "fixture_roles.v1.json"
+            self.write_json(
+                roles,
+                {
+                    "schemaVersion": ROLES_SCHEMA,
+                    "legacyNativeExpectedDiscovery": False,
+                    "requireCompleteInputCoverage": True,
+                    "roles": [
+                        {
+                            "phase": "probe-only",
+                            "case": "shape-fix",
+                            "role": "unsupported",
+                            "reason": "internal semantic probe",
+                            "authority": "cad-core probe test",
+                            "nextAction": "run focused probe",
+                            "closeCondition": "probe test green",
+                        }
+                    ],
+                },
+            )
+            registry = root / "protocol_divergences.v1.json"
+            self.write_json(registry, {"schemaVersion": REGISTRY_SCHEMA, "entries": []})
+            report = evaluate(
+                EvaluationRequest(
+                    root=root,
+                    phase="probe-only",
+                    roles_path=roles,
+                    registry_path=registry,
+                    source_kind="snapshot",
+                    validate_ledger=False,
+                )
+            ).to_dict()
+
+        self.assertEqual("not_applicable", report["releaseStatus"])
+        self.assertEqual("not_applicable", report["status"])
+        self.assertFalse(report["releaseGatePassed"])
+        self.assertEqual([], report["cases"])
+        self.assertTrue(report["preflight"]["valid"])
 
     def test_missing_ledger_is_invalid_even_when_ledger_validation_is_disabled(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -278,7 +431,7 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
         self.assertEqual("red", report["semanticStatus"])
         self.assertEqual("C13M5-C4M6-TRANSPORT-005", report["registryAudit"]["contractFailures"][0]["id"])
 
-    def test_unregistered_mesh_field_remains_a_semantic_red_diff(self) -> None:
+    def test_unregistered_mesh_field_is_a_non_blocking_product_extension(self) -> None:
         expected = {"diagnostics": [], "results": [{"object": "Box"}]}
         actual = {"diagnostics": [], "results": [{"object": "Box", "mesh": {"vertices": []}}]}
         with tempfile.TemporaryDirectory() as directory:
@@ -288,12 +441,63 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                 self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
             ).to_dict()
 
-        self.assertEqual("red", report["semanticStatus"])
+        self.assertEqual("red", report["exactStatus"])
+        self.assertEqual("green", report["semanticStatus"])
         self.assertEqual("results.Box.mesh", report["cases"][0]["diffs"][0]["path"])
         diff = report["cases"][0]["diffs"][0]
-        self.assertEqual("phase_family_registry_transport_metadata_gap", diff["decision"])
+        self.assertEqual("product_extension", diff["comparisonClass"])
+        self.assertEqual("allowed_product_extension", diff["decision"])
+        self.assertTrue(diff["accepted"])
+
+    def test_actual_only_result_field_is_a_non_blocking_product_extension(self) -> None:
+        expected = {"diagnostics": [], "results": [{"object": "Box", "volume": 1.0}]}
+        actual = {
+            "diagnostics": [],
+            "results": [
+                {
+                    "object": "Box",
+                    "volume": 1.0,
+                    "frontendTransport": {"pickable": True},
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("green", report["semanticStatus"])
+        diff = report["cases"][0]["diffs"][0]
+        self.assertEqual("results.Box.frontendTransport", diff["path"])
+        self.assertEqual("product_extension", diff["comparisonClass"])
+        self.assertEqual("allowed_product_extension", diff["decision"])
+
+    def test_actual_only_diagnostic_remains_semantic_red(self) -> None:
+        expected = {"diagnostics": [], "results": []}
+        actual = {
+            "diagnostics": [
+                {
+                    "code": "unexpected_failure",
+                    "severity": "error",
+                    "object": "Box",
+                }
+            ],
+            "results": [],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            roles, registry = self.bootstrap(root, expected=expected, current=actual)
+            report = evaluate(
+                self.request(root, roles, registry, source_kind="in_memory", in_memory_actuals={"demo/case-a": actual})
+            ).to_dict()
+
+        self.assertEqual("red", report["semanticStatus"])
+        diff = report["cases"][0]["diffs"][0]
+        self.assertEqual("diagnostics.unexpected_failure", diff["path"])
+        self.assertEqual("public_semantic", diff["comparisonClass"])
         self.assertFalse(diff["accepted"])
-        self.assertIsNone(diff["knownGapId"])
 
     def test_fixture_role_artifact_audit_rejects_duplicate_orphan_and_mismatch(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -373,14 +577,22 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                 self.assertEqual("red", report["semanticStatus"])
                 self.assertEqual("not_evaluated", report["releaseStatus"])
                 diffs = [diff for item in report["cases"] for diff in item["diffs"]]
-                self.assertGreater(len(diffs), 0)
-                for diff in diffs:
+                semantic_diffs = [diff for diff in diffs if diff["comparisonClass"] == "public_semantic"]
+                observations = [diff for diff in diffs if diff["comparisonClass"] != "public_semantic"]
+                self.assertGreater(len(semantic_diffs), 0)
+                for diff in semantic_diffs:
                     self.assertFalse(diff["accepted"])
                     self.assertEqual("S4", diff["owner_step"])
                     self.assertEqual(known_gap_id, diff["knownGapId"])
                     self.assertNotEqual("unaccepted_diff", diff["decision"])
                     for field in metadata_fields:
                         self.assertTrue(diff[field], f"{phase} {diff['path']} missing {field}")
+                for observation in observations:
+                    self.assertTrue(observation["accepted"])
+                    self.assertIn(
+                        observation["decision"],
+                        {"allowed_product_extension", "allowed_representation_difference"},
+                    )
 
     def test_live_freshness_and_materialization_are_atomic(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
