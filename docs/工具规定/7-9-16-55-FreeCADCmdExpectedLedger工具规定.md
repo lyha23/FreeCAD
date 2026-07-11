@@ -1,55 +1,68 @@
-# FreeCADCmd expected ledger 工具规定
+# FreeCADCmd expected ledger 与 producer trace 工具规定
 
 ## 目标
 
-`cad-core/fixtures/<phase>/expected/*.freecad.json` 是 FreeCADCmd 生成的 native oracle expected。
+`cad-core/fixtures/<phase>/expected/*.freecad.json` 是 FreeCADCmd 生成的 native public oracle。
 
-从现在开始，涉及 `topoNamingState` 的 FreeCADCmd expected 不能只看 `*.freecad.json` 表面内容。每个 expected 应配套同名 sidecar：
+新的 native collector 对能建立原生 Document trace 的 fixture，一次运行写出三份同名产物：
 
 ```text
 foo.freecad.json
 foo.freecad.ledger.json
+foo.freecad.producer-trace.json
 ```
 
 其中：
 
 - `foo.freecad.json` 是对外协议 expected。
 - `foo.freecad.ledger.json` 是 FreeCADCmd 同一次生成过程中写出的账本证明。
+- `foo.freecad.producer-trace.json` 是 ElementMap、StringHasher、mapper、feature producer scope/checkpoint 的只读过程证据。
 - validator 的职责是证明 expected 可以被 ledger 解释，并且输入引用都有结论。
 
-不要手工补 ledger。ledger 必须由 `collect_freecad_expected.py --emit-ledger` 在生成 expected 的同一次 FreeCADCmd 运行里写出。
+三份文件都由 collector 持有，禁止手工补写。`--emit-ledger` 和 `--check-ledger` 只保留为兼容参数，不再控制 sidecar 的生成或比较。
+
+public release gate 仍以 `.freecad.json + .freecad.ledger.json` 裁决公共语义和 provenance。producer trace 不进入请求、response、`topoNamingState` 或 shape 构造，只用于实现定位与 first-divergence 调试。
 
 ## 与 release gate 的分工
 
 ledger validator 只证明 native expected 与其 provenance sidecar 闭包；它不运行 CAD Core，不能单独证明 current binary、checked-in `cad-core-res` 或前端 transport contract。完整 release gate 以 `docs/工具规定/7-10-08-10-FreeCADExpectedReleaseGate工具规定.md` 为准：它消费 fixture-role manifest、调用 strict ledger preflight、运行 live binary、审计精确 divergence registry 并验证 current freshness。
 
-反过来，release gate 也不能替代 ledger：native role 缺同名 sidecar、accepted/rejected outcome 不闭合或 round-trip 证据错误，release 结果必须是 `invalid`。
+反过来，release gate 也不能替代 ledger：native role 缺 ledger、accepted/rejected outcome 不闭合或 round-trip 证据错误，release 结果必须是 `invalid`。
+
+producer trace 有独立闭包边界。trace 缺失或损坏不应改写 public parity verdict，但会使 collector replay / producer 对齐任务 hard fail。
 
 ## 工具入口
 
-生成 expected 与 ledger：
+默认 FreeCADCmd 为：
+
+```text
+/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd
+```
+
+安全地在 `/tmp` 生成三侧产物：
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
-FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
+mkdir -p /tmp/freecad-expected
 python3 cad-core/tools/collect_freecad_expected.py \
-  cad-core/fixtures/c4m6/topo-state-first-recompute-empty.json \
-  --out cad-core/out/topo-state-first-recompute-empty.freecad.json \
-  --emit-ledger \
+  cad-core/fixtures/c4m6/topo-state-body-tip-stable-recovery.json \
+  --out /tmp/freecad-expected/topo-state-body-tip-stable-recovery.freecad.json \
   --validate-ledger
 ```
 
-按 phase 生成：
+验证已入库的单 case public、ledger 与 trace 结构：
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
-FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
 python3 cad-core/tools/collect_freecad_expected.py \
-  --phase c4m6 \
-  --skip-unsupported \
-  --emit-ledger \
+  cad-core/fixtures/c4m6/topo-state-body-tip-stable-recovery.json \
+  --check \
   --validate-ledger
 ```
+
+`--freecadcmd <path>` 可显式覆盖默认二进制。不要再依赖 `FREECADCMD` 环境变量控制本仓库的标准 collector。
+
+`--check` 重新生成并比较 public expected 与 ledger，同时要求磁盘上存在结构闭合的 producer trace。它不做 trace 文本或事件级语义 diff；trace 的 stage 对齐由专门实现审计完成。
 
 单独验证已有 expected/ledger：
 
@@ -95,21 +108,25 @@ cad-core/tests/内部账本完整性验收/test_freecad_expected_ledger_integrit
 
 ## collector 产物
 
-`collect_freecad_expected.py --emit-ledger` 会在 expected 旁边写：
+`collect_freecad_expected.py` 会在 expected 旁边写：
 
 ```text
 cad-core/fixtures/<phase>/expected/<case>.freecad.json
 cad-core/fixtures/<phase>/expected/<case>.freecad.ledger.json
+cad-core/fixtures/<phase>/expected/<case>.freecad.producer-trace.json
 ```
 
-如果使用 `--out`，ledger 会写到同目录同名前缀：
+如果使用 `--out`，两个 sidecar 会写到同目录同名前缀：
 
 ```text
 cad-core/out/<case>.freecad.json
 cad-core/out/<case>.freecad.ledger.json
+cad-core/out/<case>.freecad.producer-trace.json
 ```
 
-`--validate-ledger` 会在写出后立刻调用 validator。validator 失败时，本次 expected/ledger 不能作为权威基线收口。
+`--validate-ledger` 会在写出后立刻调用 ledger validator。trace 在 drain 后先验证 schema、sequence、snapshot 引用和 scope 闭包；任一门失败，本次三侧产物不能收口。
+
+当前 write-mode 的已知边界是 request-level preflight rejection：这类 fixture 在创建 FreeCAD Document 前就返回 rejected public/ledger，因而没有可 drain 的原生 Document trace。collector 会 hard fail，禁止伪造空 trace。该缺口必须由正式 native request/failure trace 边界解决。
 
 ## ledger 类型
 
@@ -155,82 +172,46 @@ ledger 目前有两类 outcome。
 - accepted ledger 的 round-trip 没有 passed
 - rejected ledger 没有 diagnostics / rejection evidence
 
-## 当前已经验证过的情况
+## 当前 corpus 状态
 
-本轮已用真实 FreeCADCmd 重采：
-
-```text
-cad-core/fixtures/c4m6
-```
-
-当前 role manifest 下，`c4m6` 有 10 个 input：9 个 native pair 与 1 个 protocol-only HistoryProbe。phase collection 必须显式报告 protocol-only skipped reason，不能因少发现 case 假绿。
-
-native pair 的当前边界是：
-
-- 4 个 accepted ledger：first recompute、Body/Tip stable recovery、CompoundLink native semantic result、ReferenceShadow。
-- 5 个 rejected ledger：schema、producer、document hash、object hash、foreign top-level object ownership。
-- `validate_freecad_expected_ledger.py --phase c4m6 --strict` 只验证这 9 个 native pair；`topo-state-mapper-history-events.expeted.json` 不得伪装成第十个 ledger case。
-
-## 已暴露并修复的问题
-
-第一次启用 `--emit-ledger --validate-ledger` 重采时，以下 case 被 round-trip 拦下：
+2026-07-12 live tree 有：
 
 ```text
-topo-state-body-tip-stable-recovery
-topo-state-link-compound-child-maps
-topo-state-reference-shadow-brep
+480 个 *.freecad.json
+480 个 *.freecad.ledger.json
+1 个 *.freecad.producer-trace.json
 ```
 
-失败现象：
+480 个 ledger 中 470 个 accepted、10 个 request-level rejected。producer trace 迁移尚未覆盖全部 native case，不能把“public/ledger 已齐全”表述成“三侧产物已全量闭包”。
+
+当前唯一入库 trace 是：
 
 ```text
-roundTrip.status must be passed
+cad-core/fixtures/c4m6/expected/
+  topo-state-body-tip-stable-recovery.freecad.producer-trace.json
 ```
 
-ledger 的 round-trip diagnostic 指出类似问题：
+`c4m6` 仍是 9 个 native、1 个 protocol-only。ledger validator 可验证 9 个 pair；trace closure 目前只能对已迁移的 Body/Tip case 给出结论。
 
-```text
-topoNamingState object Sketch cannot resolve StableSubList g1;SKT;FAC
-topoNamingState object Compound cannot resolve StableSubList Compound/ChildBoxA.#f:1;BOX,F
-```
+2026-07-12 用默认新 FreeCADCmd 对 Body/Tip case 执行 `--check --validate-ledger` 返回 1。canonical ledger 比较唯一差异是 `producer.freecadVersion`：checked-in 为 `1.2.0 revision 20260519`，当前 binary 为 `1.2.0 revision 46970`。
 
-含义是：
-
-第一轮 expected 的 `topoNamingState` 没有保留输入引用恢复必须用到的旧 stable token。第二轮把第一轮 `topoNamingState` 原样回传时，`StableSubList` 无法恢复。
-
-这不是 validator 误报，而是 ledger 工具暴露出的 expected 权威性缺口：expected 看起来有 `topoNamingState`，但它不能证明“前端保存整包再回传后引用还能恢复”。
-
-修复方式：
-
-collector 在生成 response `topoNamingState` 时，不再只发布当前 recompute 新生成的对象状态；对于 fixture 输入引用仍需要的 stable token，会把输入 `topoNamingState` 中对应 object 的 `elementMap` / `childElementMaps` / `mapperHistory` 证据合并回输出 state。
-
-修复后：
-
-```bash
-FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
-python3 cad-core/tools/collect_freecad_expected.py \
-  --phase c4m6 \
-  --skip-unsupported \
-  --emit-ledger \
-  --validate-ledger
-```
-
-通过，且独立 validator 也通过。
+这表示 producer 基线尚未重放闭合，不是 CAD Core parity red。`/tmp/freecad-doc-audit/` 已证明新 binary 可生成三侧产物；正式基线只能由 collector 重生，禁止手改 producer version 放行。
 
 ## 使用原则
 
 不要用“字段存在”证明账本完整。
 
-正确判断顺序是：
+对新三侧采集，正确判断顺序是：
 
-1. FreeCADCmd 生成 expected。
-2. 同一次运行生成 ledger。
+1. FreeCADCmd 生成 public expected。
+2. 同一次运行生成 ledger，并在 Document 关闭前 drain producer trace。
 3. validator 验 expected 与 ledger 是否绑定。
 4. validator 验输入引用是否都有事件结论。
 5. validator 验 projection 是否解释对象裁剪。
 6. accepted ledger 必须 round-trip passed。
+7. trace 必须满足 event、scope、snapshot 和 transaction 闭包。
 
-只有这条链路通过，`*.freecad.json` 才能作为权威 FreeCADCmd expected。
+其中 1、3 至 6 决定 public expected / ledger 是否能作为 release oracle；第 2 步的 trace drain 与第 7 步决定内部 producer 证据是否可用于实现对齐。trace 尚未迁移不撤销既有 ledger 权威，但不能宣称 producer 路径已经闭包。
 
 如果某个 expected 变小了，不能直接认为是正确裁剪。必须看 ledger：
 
@@ -241,8 +222,8 @@ python3 cad-core/tools/collect_freecad_expected.py \
 
 ## 当前工具边界
 
-当前 ledger v1 基于 `collect_freecad_expected.py` 在 FreeCADCmd Python 层能拿到的 DTO 生成，包括 `topoNamingState.objects`、`elementMap`、`childElementMaps`、`mapperHistory`、`elementReferenceUpdates` 和 round-trip 结果。
+ledger v1 基于 collector 在 FreeCADCmd Python 层拿到的 DTO，覆盖 `topoNamingState.objects`、`elementMap`、`childElementMaps`、`mapperHistory`、`elementReferenceUpdates` 和 round-trip。
 
-它已经能阻止“expected 变少但引用不能回传恢复”的问题进入权威基线。
+producer trace 来自修改后的原生 FreeCADCmd C++ recorder，覆盖 ledger/StringHasher/mapper snapshot 与 producer stage；它不是 ledger 的替代物。
 
-它还不是完整 FreeCAD C++ 私有 `NamedShape / ElementMap / MapperHistory` 内部账本导出器。后续如果要证明更深层的 FreeCAD 内部账本完整性，需要在 FreeCADCmd collector 里继续补充更接近 native 内部状态的证据来源。
+ledger 证明 public/provenance 闭包，trace 证明内部生产过程。CAD Core 只对齐 public result，并用 trace 定位实现；两者都不得混入普通请求或 response。

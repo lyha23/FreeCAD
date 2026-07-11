@@ -1,3 +1,5 @@
+> 状态：早期设计背景。当前 public/ledger/producer-trace 职责以 [输入输出约定](../输入输出约定.md) 和 [工具规定](../../工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md) 为准；本文旧路径、命令或仅扫描 public JSON 的建议不是现行入口。
+
 可以实现成一个**专门的 expected artifact validator**，名字建议叫：
 
 ```text

@@ -1,3 +1,5 @@
+> 状态：早期设计背景。root fixture、role manifest、三侧 native artifact 与 release-gate 边界以 [输入输出约定](../输入输出约定.md)、[检查流程](../检查流程.md) 和当前工具规定为准。
+
 对，`fixtures/<phase>/*.json` 应该作为**根输入 fixture**单独设计和验收。它和 `fixtures/<phase>/expected/*.freecad.json` 的职责不一样：
 
 ```text

@@ -1,5 +1,6 @@
 #include "cad_core/sketcher/sketch_edge_identity.h"
 
+#include "cad_core/app/string_hasher.h"
 #include "cad_core/topo/freecad_mapped_name_codec.h"
 
 #include <TopAbs_ShapeEnum.hxx>
@@ -9,6 +10,7 @@
 #include <TopoDS_Vertex.hxx>
 
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <map>
 #include <sstream>
@@ -61,6 +63,31 @@ std::optional<int> indexedOrdinal(const std::string& indexed, const std::string&
     return value > 0 ? std::optional<int> {value} : std::nullopt;
 }
 
+std::optional<int> sketchEndpointOrdinal(const std::string& token)
+{
+    const std::size_t marker = token.rfind('v');
+    if (marker == std::string::npos || marker + 1U == token.size()) {
+        return std::nullopt;
+    }
+    int value = 0;
+    for (std::size_t index = marker + 1U; index < token.size(); ++index) {
+        const unsigned char ch = static_cast<unsigned char>(token.at(index));
+        if (std::isdigit(ch) == 0) {
+            return std::nullopt;
+        }
+        value = value * 10 + static_cast<int>(ch - static_cast<unsigned char>('0'));
+    }
+    return value > 0 ? std::optional<int> {value} : std::nullopt;
+}
+
+bool isGeometryToken(const std::string& token)
+{
+    return token.size() > 1U && token.front() == 'g'
+        && std::all_of(token.begin() + 1, token.end(), [](unsigned char ch) {
+               return std::isdigit(ch) != 0;
+           });
+}
+
 std::string sketchMappedElementType(const std::string& indexed)
 {
     if (indexed.rfind("Edge", 0U) == 0U) {
@@ -72,16 +99,15 @@ std::string sketchMappedElementType(const std::string& indexed)
     return {};
 }
 
-std::string rawSketchMappedName(const std::string& token,
-                                long ownerTag,
-                                const std::string& elementType)
+std::string rawSketchMappedName(const std::string& token, const std::string& elementType)
 {
     if (token.empty() || elementType.empty()) {
         return {};
     }
-    std::ostringstream raw;
-    raw << token << ";SKT;:H" << std::hex << ownerTag << ',' << elementType.front();
-    return raw.str();
+    // SketchObject::buildShape() records g<ID>/g<ID>v<point> with the SKT operation. The
+    // receiving Part maker appends its terminal tag while it calls ElementMap::encodeElementName;
+    // putting that tag on the source ledger would change StringHasher's postfix and ID sequence.
+    return token + ";SKT";
 }
 
 void recordSketchMappedName(part::NamedShape& namedShape,
@@ -107,7 +133,7 @@ void recordSketchMappedName(part::NamedShape& namedShape,
     provenance.masterTag = ownerTag;
     provenance.sourceTag = ownerTag;
     provenance.operationPostfix = ";SKT";
-    provenance.rawMappedName = rawSketchMappedName(token, ownerTag, elementType);
+    provenance.rawMappedName = rawSketchMappedName(token, elementType);
     provenance.canonicalMappedName = topo::canonicalizeFreeCadMappedName(provenance.rawMappedName);
     provenance.status = part::MappedNameProvenanceStatus::SourceBacked;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
@@ -117,6 +143,7 @@ void recordSketchMappedName(part::NamedShape& namedShape,
     provenance.publicationScope = part::MappedNamePublicationScope::ProducerOnly;
     namedShape.elementMap[token] = indexed;
     namedShape.mappedNameProvenance[token] = std::move(provenance);
+    part::recordElementMapEntry(namedShape, token, indexed);
 }
 
 std::string identityStatusForEntry(const RawSketchEdgeIdentity& identity)
@@ -426,25 +453,27 @@ void addInternalEdgeIdentitiesFromInternalElementMap(
 part::NamedShape namedShapeForSketchRawEdgeIdentity(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
-    const RawSketchEdgeIdentityLedger& ledger)
+    const RawSketchEdgeIdentityLedger& ledger,
+    long ownerTag)
 {
     part::NamedShape namedShape = part::indexedNamedShapeForObject(owner, rawShape);
-    const std::optional<long> producerTag = part::requestLocalProducerTagForShape(rawShape);
-    if (!producerTag) {
+    if (ownerTag == 0) {
         return namedShape;
     }
+    // FreeCAD: SketchObject::buildShape() is stored through PropertyPartShape, whose
+    // TopoShape Tag is the owning DocumentObject::getID().  This is document identity, not a
+    // geometry-derived surrogate; downstream makeShapeWithElementMap() uses it in NameKey.
+    namedShape.producerTag = ownerTag;
     TopTools_IndexedMapOfShape rawEdges;
     TopTools_IndexedMapOfShape rawVertices;
     TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
     TopExp::MapShapes(rawShape, TopAbs_VERTEX, rawVertices);
-    std::set<int> mappedVertices;
-
     for (const RawSketchEdgeIdentity& identity : ledger.edges) {
         if (!identity.source.geometryId || namedShape.elements.count(identity.indexed) == 0U) {
             continue;
         }
         const std::string geometryToken = stableSubnameForGeometryId(*identity.source.geometryId);
-        recordSketchMappedName(namedShape, geometryToken, identity.indexed, *producerTag);
+        recordSketchMappedName(namedShape, geometryToken, identity.indexed, ownerTag);
 
         const auto edgeIndex = indexedOrdinal(identity.indexed, "Edge");
         if (!edgeIndex || *edgeIndex > rawEdges.Extent()) {
@@ -458,20 +487,98 @@ part::NamedShape namedShapeForSketchRawEdgeIdentity(
                 return;
             }
             const int vertexIndex = rawVertices.FindIndex(vertex);
-            if (vertexIndex <= 0 || !mappedVertices.insert(vertexIndex).second) {
+            if (vertexIndex <= 0) {
                 return;
             }
             recordSketchMappedName(
                 namedShape,
                 geometryToken + "v" + std::to_string(endpoint),
                 "Vertex" + std::to_string(vertexIndex),
-                *producerTag
+                ownerTag
             );
         };
         recordEndpoint(first, 1);
         recordEndpoint(last, 2);
     }
     return namedShape;
+}
+
+void materializeSketchMappedNameStringIds(
+    part::NamedShape& namedShape,
+    const std::shared_ptr<app::StringHasher>& stringHasher
+)
+{
+    if (!stringHasher || namedShape.shape.IsNull()) {
+        return;
+    }
+    namedShape.stringHasher = stringHasher;
+
+    // FreeCAD TopoShape::mapSubElement() follows Vertex -> Edge -> Face and ElementMap::findAll()
+    // returns aliases in the child map's stored order. Keep that order while internally materializing
+    // the source g<ID>;SKT IDs; the public provenance below remains the raw Sketch ledger.
+    const std::array<std::pair<TopAbs_ShapeEnum, const char*>, 2> kinds {
+        std::pair {TopAbs_VERTEX, "Vertex"},
+        std::pair {TopAbs_EDGE, "Edge"},
+    };
+    for (const auto& [kind, prefix] : kinds) {
+        TopTools_IndexedMapOfShape elements;
+        TopExp::MapShapes(namedShape.shape, kind, elements);
+        for (int index = 1; index <= elements.Extent(); ++index) {
+            const std::string indexed = std::string(prefix) + std::to_string(index);
+            for (const auto& [entryKey, current] : namedShape.elementMap) {
+                if (current != indexed) {
+                    continue;
+                }
+                const auto provenance = namedShape.mappedNameProvenance.find(entryKey);
+                if (provenance == namedShape.mappedNameProvenance.end()
+                    || provenance->second.status != part::MappedNameProvenanceStatus::SourceBacked
+                    || provenance->second.operationPostfix != ";SKT") {
+                    continue;
+                }
+                const std::string& raw = provenance->second.rawMappedName;
+                const std::size_t postfix = raw.find(';');
+                if (postfix == std::string::npos || postfix == 0U) {
+                    continue;
+                }
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/StringHasher.cpp
+                // ::StringHasher::getID() owns a document-wide StringID table, but
+                // ElementMap.cpp::hashElementName() carries ElementIDRefs on the *producer
+                // map*.  Reusing a raw Sketch token in a later Sketch may reuse its StringID
+                // without giving the later ElementMap the first producer's endpoint ref.  The
+                // raw g<ID>;SKT ledger stays identical; only a first materialization creates
+                // the local g<ID>v<point> StringIDRef index.
+                const bool alreadyMaterialized = stringHasher->mappedNameId(raw).has_value();
+                const std::string token = raw.substr(0U, postfix);
+                std::string data = token;
+                int mappedIndex = 0;
+                int displayedIndex = 0;
+                if (isGeometryToken(token)) {
+                    mappedIndex = std::stoi(token.substr(1U));
+                    data = "g";
+                }
+                else if (const auto endpoint = sketchEndpointOrdinal(token)) {
+                    displayedIndex = *endpoint;
+                }
+                app::StringId sid = stringHasher->getMappedNameId(
+                    data,
+                    mappedIndex,
+                    raw.substr(postfix)
+                );
+                if (displayedIndex != 0 && !alreadyMaterialized) {
+                    sid.index = displayedIndex;
+                }
+                app::StringId elementRef = sid;
+                if (displayedIndex != 0) {
+                    elementRef.index = displayedIndex;
+                }
+                // Keep this producer's refs on its own entry. A later Sketch may reuse the
+                // same StringID but must not inherit this endpoint ref from a global raw-name
+                // lookup.
+                provenance->second.elementIdRefs = {elementRef};
+                stringHasher->rememberMappedName(raw, sid, {elementRef});
+            }
+        }
+    }
 }
 
 void publishRawSketchEdgeIdentity(nlohmann::json& mesh,

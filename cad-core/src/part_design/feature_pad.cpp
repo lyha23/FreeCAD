@@ -7,6 +7,7 @@
 
 #include <TopAbs_ShapeEnum.hxx>
 
+
 namespace cad_core::part_design {
 
 namespace {
@@ -172,19 +173,37 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         return;
     }
 
-    std::optional<part::NamedShape> namedShape = extrusion->namedShape;
-    runtime::RefineShapeResult shapeResult{extrusion->toolShape, namedShape, false};
-    if (!runtime::isFeatureGroupedByBody(object, context)) {
-        const auto refined = runtime::applyRefineProperty(object, context, extrusion->toolShape, namedShape);
-        if (!refined) {
-            context.objects[object.name] = {{"status", "error"}};
-            return;
-        }
-        shapeResult = *refined;
+    const auto featureShape = finalizeFeatureExtrusion(object, context, AddSubMode::Additive, *extrusion);
+    if (!featureShape) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
     }
+    std::optional<part::NamedShape> namedShape = featureShape->namedShape;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+    // ::ProfileBased::execute() refines the feature result before `Shape.setValue(...)`.
+    // Body::execute() subsequently reads that already-published Tip Shape; it must not be the
+    // first producer of Pad's refine mapper history.
+    const auto refined = runtime::applyPartDesignFeatureRefineProperty(
+        object,
+        context,
+        featureShape->shape,
+        namedShape
+    );
+    if (!refined) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    runtime::RefineShapeResult shapeResult = *refined;
 
     const TopoDS_Shape solid = shapeResult.shape;
     namedShape = shapeResult.namedShape;
+    if (namedShape) {
+        // FreeCAD: src/Mod/Part/App/PropertyTopoShape.cpp::PropertyPartShape::setValue()
+        // persists the completed Pad Shape and assigns its owning DocumentObject Tag.
+        *namedShape = part::namedShapeForPropertyShapeValue(
+            object.name, solid, *namedShape, static_cast<long>(object.id)
+        );
+    }
     const nlohmann::json mesh = cad_core::part::meshForShape(solid);
     const nlohmann::json subshapeMap = part::subshapeMapForShape(solid);
 
@@ -192,7 +211,12 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         context.namedShapes[object.name] = *namedShape;
     }
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
-    context.addSubShapes[object.name] = runtime::AddSubShape{solid, std::nullopt, namedShape, std::nullopt};
+    context.addSubShapes[object.name] = runtime::AddSubShape{
+        featureShape->addSubShape,
+        std::nullopt,
+        featureShape->addSubNamedShape,
+        std::nullopt,
+    };
     context.mesh[object.name] = mesh;
     context.subshapes[object.name] = subshapeMap;
     nlohmann::json result = {

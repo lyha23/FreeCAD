@@ -721,26 +721,14 @@ std::optional<DressUpBase> resolveDressUpBase(
         namedShape = namedShapeIt->second;
     }
 
-    if (const auto bodyContext = sameBodyEarlierFeatureContext(object, link->object, context)) {
-        if (const auto bodyTopoShape = bodyTopoShapeAtFeature(*bodyContext, context)) {
-            std::optional<part::NamedShape> bodyNamedShape =
-                bodyTopoShape->namedShape
-                    ? bodyTopoShape->namedShape
-                    : std::optional<part::NamedShape> {
-                          part::indexedNamedShapeForObject(bodyContext->body->name, bodyTopoShape->shape)
-                      };
-            app::Link bodyLink = bodyTopoShapeLink(*link, *bodyNamedShape);
-            if (!validateTargetStableSubnames(bodyLink, bodyNamedShape, object, context)) {
-                return std::nullopt;
-            }
-            return DressUpBase {
-                std::move(bodyLink),
-                bodyTopoShape->shape,
-                std::move(bodyNamedShape)
-            };
-        }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::getBaseTopoShape() resolves DressUp::Base to BaseObject and returns that
+    // object's Shape.  Body::execute() later adopts the Tip Shape, but it is not the DressUp
+    // producer input.  Retaining the cumulative Body NamedShape here would retag Pad/Fillet
+    // source aliases through Body child maps before the Chamfer/Fillet maker can consume them.
+    if (!validateTargetStableSubnames(*link, namedShape, object, context)) {
+        return std::nullopt;
     }
-
     return DressUpBase {*link, shapeIt->second.shape, namedShape};
 }
 
@@ -1376,7 +1364,12 @@ bool applyDressUpRefine(
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureFillet.cpp
     // ::Fillet::execute() and FeatureChamfer.cpp::Chamfer::execute(), both store rawShape and
     // then call "shape = refineShapeIfActive(shape)" before publishing Shape.
-    const auto refined = runtime::applyRefineProperty(object, context, result.shape, result.namedShape);
+    const auto refined = runtime::applyPartDesignFeatureRefineProperty(
+        object,
+        context,
+        result.shape,
+        result.namedShape
+    );
     if (!refined) {
         return false;
     }
@@ -1409,7 +1402,12 @@ void publishDressUpResult(
 )
 {
     context.shapes[object.name] = runtime::ShapeValue {runtime::ShapeValue::Kind::Solid, result.shape};
-    context.namedShapes[object.name] = result.namedShape;
+    // FreeCAD: src/Mod/Part/App/PropertyTopoShape.cpp::PropertyPartShape::setValue() is the
+    // persistence boundary after FeatureFillet/FeatureChamfer publish their maker result. Keep
+    // the feature's producer identity here so a later Body Shape.setValue can reTag/copy it.
+    context.namedShapes[object.name] = part::namedShapeForPropertyShapeValue(
+        object.name, result.shape, result.namedShape, static_cast<long>(object.id)
+    );
     context.mesh[object.name] = cad_core::part::meshForShape(result.shape);
     context.subshapes[object.name] = part::subshapeMapForShape(result.shape);
     context.objects[object.name] = {

@@ -1324,50 +1324,6 @@ std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWiresImpl(const std::vect
     return splitOverlappingFaces(faces);
 }
 
-bool hasNestedHoleIslandWires(const std::vector<TopoDS_Wire>& wires)
-{
-    if (wires.size() < 3U) {
-        return false;
-    }
-
-    std::vector<WireInfo> wireInfos;
-    wireInfos.reserve(wires.size());
-    for (const TopoDS_Wire& wire : wires) {
-        const auto area = faceAreaForWire(wire);
-        if (!area) {
-            return false;
-        }
-        wireInfos.push_back(WireInfo {wire, *area, 0U, wireHasBSplineEdge(wire)});
-    }
-    std::stable_sort(wireInfos.begin(), wireInfos.end(), [](const WireInfo& lhs, const WireInfo& rhs) {
-        return lhs.area > rhs.area;
-    });
-
-    const auto plane = planeForWire(wireInfos.front().wire);
-    if (!plane) {
-        return false;
-    }
-    for (std::size_t index = 0; index < wireInfos.size(); ++index) {
-        for (std::size_t parent = 0; parent < wireInfos.size(); ++parent) {
-            if (parent == index || wireInfos[parent].area <= wireInfos[index].area) {
-                continue;
-            }
-            if (wireContainsWire(
-                    *plane,
-                    wireInfos[parent].wire,
-                    wireInfos[index].wire,
-                    wireInfos[index].area
-                )) {
-                ++wireInfos[index].depth;
-            }
-        }
-        if (wireInfos[index].depth >= 2U) {
-            return true;
-        }
-    }
-    return false;
-}
-
 }  // namespace
 
 std::optional<TopoDS_Shape> makeFaceWithHolesFromClosedWires(const std::vector<TopoDS_Wire>& wires)
@@ -1484,38 +1440,26 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
         return {};
     }
 
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
     // ::Build_Essence(), after splitSelfIntersecting()/splitAtIntersections(), feeds every edge to
-    // BOPAlgo_BuilderFace and stores each bounded area directly in "myShapesToReturn". Do not
-    // choose between profile, splitter, and rebuilt topology by face count; FaceMakerBuildFace owns
-    // the InternalShape topology here, while the closed-wire face-with-holes helper remains a
-    // profile-only compatibility shape for PartDesign selection.
+    // BOPAlgo_BuilderFace and stores each bounded area directly in "myShapesToReturn". This is the
+    // shape SketchObject::buildInternals() publishes as InternalShape and the face a PartDesign
+    // Profile consumes. A BRepBuilderAPI_MakeFace-compatible reconstruction has equivalent area,
+    // but a different TShape traversal order and therefore produces different Prism history.
     const std::size_t profileFaceCount = profileFace ? facesForShape(*profileFace).size() : 0U;
-    historySummary.profileResultSource = profileFace
-        ? FaceMakerBuildFaceRuntimeSource::FaceWithHolesProfile
-        : FaceMakerBuildFaceRuntimeSource::BuilderFace;
+    historySummary.profileResultSource = FaceMakerBuildFaceRuntimeSource::BuilderFace;
     historySummary.internalResultSource = FaceMakerBuildFaceRuntimeSource::BuilderFace;
     historySummary.topologySwitchUsed = false;
 
     const bool splitProducedBoundedFaces = producedSplit || boundedFaceCount > profileFaceCount;
-    const bool preserveSingleWireSourceOrder = !producedSplit && splitEdges.empty()
-        && wires.size() == 1U && profileFace && !profileFace->IsNull()
-        && profileFaceCount == boundedFaceCount;
-    const bool normalizeNestedHoleIsland = !producedSplit && splitEdges.empty() && profileFace
-        && !profileFace->IsNull() && hasNestedHoleIslandWires(wires);
-    // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-    // ::getInternalElementMap() exposes InternalEdge/InternalVertex aliases in source wire order
-    // for an unsplit single closed sketch. OCCT BuilderFace can enumerate the equivalent face in
-    // reverse edge order, so cad-core keeps the source-wire face only for this one-to-one no-split
-    // case; split or multi-wire InternalShape topology remains BuilderFace-owned.
-    const std::optional<TopoDS_Shape> internalShape = preserveSingleWireSourceOrder
-            || normalizeNestedHoleIsland
-        ? profileFace
-        : boundedFaces;
+    // The source-wire reconstruction only remains evidence for deciding whether a splitter created
+    // additional regions. It must not replace the BuilderFace result: its traversal order is part
+    // of the producer's ElementMap lifecycle, not a display-only ordering detail.
+    const std::optional<TopoDS_Shape> internalShape = boundedFaces;
     InternalShapeHistoryLedger historyLedger;
     addFaceMakerEvidenceToLedger(historyLedger, historySummary);
     return FaceMakerBuildFaceResult {
-        profileFace && !profileFace->IsNull() ? profileFace : boundedFaces,
+        boundedFaces,
         internalShape,
         boundedFaceCount,
         splitProducedBoundedFaces,

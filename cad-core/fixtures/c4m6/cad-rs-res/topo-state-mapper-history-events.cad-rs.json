@@ -41,7 +41,405 @@
     "elementReferenceUpdates": [],
     "results": [
       {
+        "bbox": {
+          "max": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
         "mesh": {
+          "edgeSegments": [
+            {
+              "id": "HistoryProbe:Edge1",
+              "indexed": "Edge1",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge2",
+              "indexed": "Edge2",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge3",
+              "indexed": "Edge3",
+              "points": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge4",
+              "indexed": "Edge4",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge5",
+              "indexed": "Edge5",
+              "points": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge6",
+              "indexed": "Edge6",
+              "points": [
+                [
+                  1.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge7",
+              "indexed": "Edge7",
+              "points": [
+                [
+                  1.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge8",
+              "indexed": "Edge8",
+              "points": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge9",
+              "indexed": "Edge9",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge10",
+              "indexed": "Edge10",
+              "points": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge11",
+              "indexed": "Edge11",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge12",
+              "indexed": "Edge12",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge13",
+              "indexed": "Edge13",
+              "points": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge14",
+              "indexed": "Edge14",
+              "points": [
+                [
+                  1.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge15",
+              "indexed": "Edge15",
+              "points": [
+                [
+                  0.0,
+                  1.0,
+                  1.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge16",
+              "indexed": "Edge16",
+              "points": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge17",
+              "indexed": "Edge17",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge18",
+              "indexed": "Edge18",
+              "points": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge19",
+              "indexed": "Edge19",
+              "points": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge20",
+              "indexed": "Edge20",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge21",
+              "indexed": "Edge21",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge22",
+              "indexed": "Edge22",
+              "points": [
+                [
+                  0.0,
+                  1.0,
+                  1.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge23",
+              "indexed": "Edge23",
+              "points": [
+                [
+                  1.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              ]
+            },
+            {
+              "id": "HistoryProbe:Edge24",
+              "indexed": "Edge24",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  1.0
+                ]
+              ]
+            }
+          ],
           "faceIds": [
             "face_1",
             "face_1",
@@ -216,10 +614,80 @@
               1.0
             ]
           ],
-          "summary": {
-            "triangle_count": 12,
-            "vertex_count": 8
-          },
+          "vertexPoints": [
+            {
+              "id": "HistoryProbe:Vertex1",
+              "indexed": "Vertex1",
+              "point": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "HistoryProbe:Vertex2",
+              "indexed": "Vertex2",
+              "point": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "id": "HistoryProbe:Vertex3",
+              "indexed": "Vertex3",
+              "point": [
+                0.0,
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "id": "HistoryProbe:Vertex4",
+              "indexed": "Vertex4",
+              "point": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "id": "HistoryProbe:Vertex5",
+              "indexed": "Vertex5",
+              "point": [
+                1.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "id": "HistoryProbe:Vertex6",
+              "indexed": "Vertex6",
+              "point": [
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "id": "HistoryProbe:Vertex7",
+              "indexed": "Vertex7",
+              "point": [
+                1.0,
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "id": "HistoryProbe:Vertex8",
+              "indexed": "Vertex8",
+              "point": [
+                1.0,
+                1.0,
+                0.0
+              ]
+            }
+          ],
           "vertices": [
             [
               0.0,
@@ -343,378 +811,301 @@
             ]
           ]
         },
-        "metadata": {
-          "bbox": {
-            "max": [
-              1.0,
-              1.0,
-              1.0
-            ],
-            "min": [
-              0.0,
-              0.0,
-              0.0
-            ]
-          },
-          "volume": 0.9999999999999998
-        },
-        "namedShapeDebug": {
-          "childElementMapCount": 0,
-          "elementMap": [],
-          "elementResolveStatus": [],
-          "element_history_status": [
-            "history_consumed:generated_modified",
-            "terminal_history:split_deleted",
-            "subname_split_requires_reselect",
-            "history_consumed:merge"
-          ],
-          "element_map_status": "history_partial",
-          "history": [
-            {
-              "element": "",
-              "kind": "deleted",
-              "sources": [
-                "Source.Face2"
-              ]
-            },
-            {
-              "element": "Edge2",
-              "kind": "split",
-              "sources": [
-                "Source.Edge2"
-              ]
-            },
-            {
-              "element": "Edge3",
-              "kind": "split",
-              "sources": [
-                "Source.Edge2"
-              ]
-            }
-          ],
-          "historyLedgers": [],
-          "mapperHistory": [
-            {
-              "diagnostic_status": "",
-              "evidence": {
-                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
-              },
-              "id": "HistoryProbe.mh-generated-face1",
-              "maker_stage": "TopoNamingStateProbe",
-              "recoverability": "resolved",
-              "relation": "generated",
-              "shape_kind": "face",
-              "source": {
-                "object": "Source",
-                "subname": "Face1"
-              },
-              "target": {
-                "object": "HistoryProbe",
-                "subname": "Face1"
-              }
-            },
-            {
-              "diagnostic_status": "",
-              "evidence": {
-                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
-              },
-              "id": "HistoryProbe.mh-modified-edge1",
-              "maker_stage": "TopoNamingStateProbe",
-              "recoverability": "resolved",
-              "relation": "modified",
-              "shape_kind": "edge",
-              "source": {
-                "object": "Source",
-                "subname": "Edge1"
-              },
-              "target": {
-                "object": "HistoryProbe",
-                "subname": "Edge1"
-              }
-            },
-            {
-              "diagnostic_status": "split_stable_subname",
-              "evidence": {
-                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
-              },
-              "id": "HistoryProbe.mh-split-edge2-a",
-              "maker_stage": "TopoNamingStateProbe",
-              "recoverability": "needs_reselect",
-              "relation": "split",
-              "shape_kind": "edge",
-              "source": {
-                "object": "Source",
-                "subname": "Edge2"
-              },
-              "target": {
-                "object": "HistoryProbe",
-                "subname": "Edge2"
-              }
-            },
-            {
-              "diagnostic_status": "split_stable_subname",
-              "evidence": {
-                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
-              },
-              "id": "HistoryProbe.mh-split-edge2-b",
-              "maker_stage": "TopoNamingStateProbe",
-              "recoverability": "needs_reselect",
-              "relation": "split",
-              "shape_kind": "edge",
-              "source": {
-                "object": "Source",
-                "subname": "Edge2"
-              },
-              "target": {
-                "object": "HistoryProbe",
-                "subname": "Edge3"
-              }
-            },
-            {
-              "diagnostic_status": "deleted_stable_subname",
-              "evidence": {
-                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
-              },
-              "id": "HistoryProbe.mh-deleted-face2",
-              "maker_stage": "TopoNamingStateProbe",
-              "recoverability": "deleted",
-              "relation": "deleted",
-              "shape_kind": "face",
-              "source": {
-                "object": "Source",
-                "subname": "Face2"
-              },
-              "target": {
-                "object": "HistoryProbe",
-                "subname": ""
-              }
-            },
-            {
-              "diagnostic_status": "",
-              "evidence": {
-                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
-              },
-              "id": "HistoryProbe.mh-merge-face4",
-              "maker_stage": "TopoNamingStateProbe",
-              "recoverability": "resolved",
-              "relation": "merge",
-              "shape_kind": "face",
-              "source": {
-                "object": "Source",
-                "subname": "Face4"
-              },
-              "target": {
-                "object": "HistoryProbe",
-                "subname": "Face1"
-              }
-            },
-            {
-              "diagnostic_status": "stable_identity_ambiguous",
-              "evidence": {
-                "probeCase": "mapperHistory generated modified split deleted merge ambiguous"
-              },
-              "id": "HistoryProbe.mh-ambiguous-face3",
-              "maker_stage": "TopoNamingStateProbe",
-              "recoverability": "ambiguous",
-              "relation": "ambiguous",
-              "shape_kind": "face",
-              "source": {
-                "object": "Source",
-                "subname": "Face3"
-              },
-              "target": {
-                "object": "HistoryProbe",
-                "subname": ""
-              }
-            }
-          ],
-          "owner": "HistoryProbe"
-        },
         "object": "HistoryProbe",
         "subshapes": [
           {
-            "id": "vertex_1",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex1",
+            "id": "HistoryProbe:Vertex1",
             "identityStatus": "current_only",
             "indexed": "Vertex1",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex1"
           },
           {
-            "id": "vertex_2",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex2",
+            "id": "HistoryProbe:Vertex2",
             "identityStatus": "current_only",
             "indexed": "Vertex2",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex2"
           },
           {
-            "id": "vertex_3",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex3",
+            "id": "HistoryProbe:Vertex3",
             "identityStatus": "current_only",
             "indexed": "Vertex3",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex3"
           },
           {
-            "id": "vertex_4",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex4",
+            "id": "HistoryProbe:Vertex4",
             "identityStatus": "current_only",
             "indexed": "Vertex4",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex4"
           },
           {
-            "id": "vertex_5",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex5",
+            "id": "HistoryProbe:Vertex5",
             "identityStatus": "current_only",
             "indexed": "Vertex5",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex5"
           },
           {
-            "id": "vertex_6",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex6",
+            "id": "HistoryProbe:Vertex6",
             "identityStatus": "current_only",
             "indexed": "Vertex6",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex6"
           },
           {
-            "id": "vertex_7",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex7",
+            "id": "HistoryProbe:Vertex7",
             "identityStatus": "current_only",
             "indexed": "Vertex7",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex7"
           },
           {
-            "id": "vertex_8",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Vertex8",
+            "id": "HistoryProbe:Vertex8",
             "identityStatus": "current_only",
             "indexed": "Vertex8",
             "kind": "Vertex",
+            "stableSubname": "",
             "subname": "Vertex8"
           },
           {
-            "id": "edge_1",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge1",
+            "id": "HistoryProbe:Edge1",
             "identityStatus": "current_only",
             "indexed": "Edge1",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge1"
           },
           {
-            "id": "edge_2",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge2",
+            "id": "HistoryProbe:Edge2",
             "identityStatus": "current_only",
             "indexed": "Edge2",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge2"
           },
           {
-            "id": "edge_3",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge3",
+            "id": "HistoryProbe:Edge3",
             "identityStatus": "current_only",
             "indexed": "Edge3",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge3"
           },
           {
-            "id": "edge_4",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge4",
+            "id": "HistoryProbe:Edge4",
             "identityStatus": "current_only",
             "indexed": "Edge4",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge4"
           },
           {
-            "id": "edge_5",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge5",
+            "id": "HistoryProbe:Edge5",
             "identityStatus": "current_only",
             "indexed": "Edge5",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge5"
           },
           {
-            "id": "edge_6",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge6",
+            "id": "HistoryProbe:Edge6",
             "identityStatus": "current_only",
             "indexed": "Edge6",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge6"
           },
           {
-            "id": "edge_7",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge7",
+            "id": "HistoryProbe:Edge7",
             "identityStatus": "current_only",
             "indexed": "Edge7",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge7"
           },
           {
-            "id": "edge_8",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge8",
+            "id": "HistoryProbe:Edge8",
             "identityStatus": "current_only",
             "indexed": "Edge8",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge8"
           },
           {
-            "id": "edge_9",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge9",
+            "id": "HistoryProbe:Edge9",
             "identityStatus": "current_only",
             "indexed": "Edge9",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge9"
           },
           {
-            "id": "edge_10",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge10",
+            "id": "HistoryProbe:Edge10",
             "identityStatus": "current_only",
             "indexed": "Edge10",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge10"
           },
           {
-            "id": "edge_11",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge11",
+            "id": "HistoryProbe:Edge11",
             "identityStatus": "current_only",
             "indexed": "Edge11",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge11"
           },
           {
-            "id": "edge_12",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Edge12",
+            "id": "HistoryProbe:Edge12",
             "identityStatus": "current_only",
             "indexed": "Edge12",
             "kind": "Edge",
+            "stableSubname": "",
             "subname": "Edge12"
           },
           {
-            "id": "face_1",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Face1",
+            "id": "HistoryProbe:Face1",
             "identityStatus": "current_only",
             "indexed": "Face1",
             "kind": "Face",
+            "stableSubname": "",
             "subname": "Face1"
           },
           {
-            "id": "face_2",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Face2",
+            "id": "HistoryProbe:Face2",
             "identityStatus": "current_only",
             "indexed": "Face2",
             "kind": "Face",
+            "stableSubname": "",
             "subname": "Face2"
           },
           {
-            "id": "face_3",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Face3",
+            "id": "HistoryProbe:Face3",
             "identityStatus": "current_only",
             "indexed": "Face3",
             "kind": "Face",
+            "stableSubname": "",
             "subname": "Face3"
           },
           {
-            "id": "face_4",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Face4",
+            "id": "HistoryProbe:Face4",
             "identityStatus": "current_only",
             "indexed": "Face4",
             "kind": "Face",
+            "stableSubname": "",
             "subname": "Face4"
           },
           {
-            "id": "face_5",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Face5",
+            "id": "HistoryProbe:Face5",
             "identityStatus": "current_only",
             "indexed": "Face5",
             "kind": "Face",
+            "stableSubname": "",
             "subname": "Face5"
           },
           {
-            "id": "face_6",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "HistoryProbe.Face6",
+            "id": "HistoryProbe:Face6",
             "identityStatus": "current_only",
             "indexed": "Face6",
             "kind": "Face",
+            "stableSubname": "",
             "subname": "Face6"
           }
-        ]
+        ],
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "vertices": 8
+        },
+        "volume": 0.9999999999999998
       }
     ],
     "topoNamingState": {
@@ -966,13 +1357,13 @@
     "expectedSourceClass": "protocol_only",
     "fixtureRole": "protocol_only",
     "roleCatalog": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json",
-    "roleCatalogSha256": "64f552a4dd8369d141936e44aa821cd97e885f68eb4008af2b68579493ca7cc9",
+    "roleCatalogSha256": "b2244b130916c56f3adb48f542d06f1886359675bdaddd6a0386ee04e4534c35",
     "fixtureRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-mapper-history-events.json",
     "expectedRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-mapper-history-events.expeted.json",
     "library": "/Users/li/Chili3DProject/opencascade-rs/target/debug/libcad_core_ffi.dylib",
-    "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+    "librarySha256": "9fda08af394e500c2712fd8d7ddbabd83c6a2296c7544c6224c3fcacd3b07094",
     "buildReceipt": "build-receipt.json",
-    "buildReceiptSha256": "7a92fa1a35221f43accec9f02b019b44421669b961bd83d170f8175f86cb6ddb",
+    "buildReceiptSha256": "72e2f6ecab208be2d6ab2a6037e6100b12e9e40a736c5bb3176aeb364b3fc794",
     "ffiInputSha256": "63faf746aeb8ea14665873cbb1c530d89cb1ec8a2fbf786aa26bbe5f5381a7b5"
   }
 }

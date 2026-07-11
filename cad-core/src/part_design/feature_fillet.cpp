@@ -83,7 +83,13 @@ std::optional<DressUpResult> buildFillet(
                 base->shape,
                 base->namedShape ? &*base->namedShape : nullptr
             }},
-            maker
+            maker,
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+            // TopoShapeExpansion.cpp::TopoShape::makeElementFillet() forwards
+            // OpCodes::Fillet ("FLT") to makeShapeWithElementMap().  The Part producer,
+            // rather than the runtime publisher, must retain that maker operation while it
+            // converts Generated/Modified history into source-backed ElementMap aliases.
+            part::MakerHistoryOptions {"FLT", true, false, context.stringHasher, true}
         );
         DressUpResult dressUpResult {
             "fillet",

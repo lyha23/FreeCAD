@@ -28,13 +28,13 @@
     "expectedSourceClass": "freecad_expected",
     "fixtureRole": "native",
     "roleCatalog": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json",
-    "roleCatalogSha256": "64f552a4dd8369d141936e44aa821cd97e885f68eb4008af2b68579493ca7cc9",
+    "roleCatalogSha256": "b2244b130916c56f3adb48f542d06f1886359675bdaddd6a0386ee04e4534c35",
     "fixtureRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-document-hash-mismatch.json",
     "expectedRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-document-hash-mismatch.freecad.json",
     "library": "/Users/li/Chili3DProject/opencascade-rs/target/debug/libcad_core_ffi.dylib",
-    "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+    "librarySha256": "9fda08af394e500c2712fd8d7ddbabd83c6a2296c7544c6224c3fcacd3b07094",
     "buildReceipt": "build-receipt.json",
-    "buildReceiptSha256": "7a92fa1a35221f43accec9f02b019b44421669b961bd83d170f8175f86cb6ddb",
+    "buildReceiptSha256": "72e2f6ecab208be2d6ab2a6037e6100b12e9e40a736c5bb3176aeb364b3fc794",
     "ffiInputSha256": "c0b3a3be9c6b95a4386e1e9bb44056cdb0e503d5cc0c55207ecf77eb73fa18e2"
   }
 }

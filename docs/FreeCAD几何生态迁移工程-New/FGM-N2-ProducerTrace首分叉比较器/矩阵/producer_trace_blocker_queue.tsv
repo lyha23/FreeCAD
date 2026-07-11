@@ -1,0 +1,7 @@
+id	step	blocker	status	close_condition	next_action
+FGMN2-BLK-001	S0	CAD Core trace/publisher or representative native trace incomplete	blocked	FGM-N1 closed and selected native/actual traces independently validate	Do not implement fuzzy comparator before N1 closes
+FGMN2-BLK-101	S1	Trace model and closure validators duplicated/incomplete	pending	collector, actual tests and comparator reuse one complete validator;mutation cases hard fail	Extract deep Python trace module
+FGMN2-BLK-201	S2	No canonical object/Tag/identity/scope projection	pending	bijective mappings and provenance-preserving canonical view pass focused tests	Implement projection.py and mapping tables
+FGMN2-BLK-301	S3	No ordered first-divergence engine	pending	transaction/scope/event/before-decision-fields-after alignment reports deterministic earliest path	Implement compare.py without global LCS masking
+FGMN2-BLK-401	S4	No stable CLI/report or parity diagnostic integration	pending	root script exit codes and JSON/text report stable;public verdict unchanged	Implement CLI/report and attach diagnostic summary only
+FGMN2-BLK-501	S5	Representative producer families not proven	pending	Body Tip/Pad-Pocket/Chamfer/Fillet/Pattern/split-open-wire produce stable align/divergence conclusions	Collect native traces and close family matrix

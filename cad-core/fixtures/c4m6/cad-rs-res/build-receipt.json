@@ -1,8 +1,8 @@
 {
   "schema": "cad-rs.ffi-build-receipt.v1",
-  "createdAt": "2026-07-10T04:24:59.832877+00:00",
+  "createdAt": "2026-07-11T06:02:50.254964+00:00",
   "library": "target/debug/libcad_core_ffi.dylib",
-  "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+  "librarySha256": "9fda08af394e500c2712fd8d7ddbabd83c6a2296c7544c6224c3fcacd3b07094",
   "profile": "debug",
   "cargoFeatures": [],
   "buildCommand": [
@@ -17,7 +17,7 @@
   "cargoLockSha256": "9290430d68e60c82851cc98e4c94d62de0747043816fabedc80034881a609cbf",
   "buildInputs": {
     "algorithm": "sha256",
-    "digest": "08c008ec8497f0c40998023e9ec436721f2dfeca712e7516ac1597106f3475fe",
+    "digest": "f73035653b23ae399adbe1b21b87c6160bba8ac778d4ec833389c8884d0dec82",
     "files": [
       {
         "path": ".cargo/config.toml",
@@ -45,7 +45,7 @@
       },
       {
         "path": "crates/cad-core-ffi/tests/c_api.rs",
-        "sha256": "d32ebca2370db404d892f70ccfa75e40d0de49b8dce437311755b2d05c2ed61e"
+        "sha256": "5420871e4ecc898f9030c70f1ce2ce76086e6464a02aee1fa2ea4ca0feefc0d5"
       },
       {
         "path": "crates/cad-core-ffi/tests/c_api_errors.rs",
@@ -57,7 +57,7 @@
       },
       {
         "path": "crates/cad-core-ffi/tests/c_api_json.rs",
-        "sha256": "f2ca60b32c25db42db4e28b7a8e6a41d5d9c0d8f3ff2c6906253acd2fad0349c"
+        "sha256": "066d64b5cbc5b7eb95f78d131af1cc8ca4b1ff53a32399065ced2bd971c3393a"
       },
       {
         "path": "crates/cad-core-ffi/tests/c_api_lifecycle.rs",
@@ -489,7 +489,7 @@
       },
       {
         "path": "crates/opencascade-sys/include/standard.hxx",
-        "sha256": "4c02f1503ad0c801c05fdf30b3f52ea2f5ae93979ad048dbbfc5f3586ce9e5f7"
+        "sha256": "8b5d590050d7fb2c6b383262a2f361be82204ed8c85cdd47fbbce5001d7b7415"
       },
       {
         "path": "crates/opencascade-sys/include/step_control.hxx",
@@ -685,7 +685,7 @@
       },
       {
         "path": "crates/opencascade-sys/src/standard.rs",
-        "sha256": "6544c03e133607769c78523e9f5dff6437e5033e0d9126651fd434190d32e994"
+        "sha256": "769dcf9569744669a6241f22da78f9f354a03dfb57bbb4bd871b9a4827a64049"
       },
       {
         "path": "crates/opencascade-sys/src/step_control.rs",
@@ -753,7 +753,7 @@
       },
       {
         "path": "crates/opencascade/src/app/geo_feature.rs",
-        "sha256": "e449f177c1962b6ccb2d9ed91bd90265d1202f205f3e0e0a4c7e610b48873d48"
+        "sha256": "13e5d676fb704eae0acaceee3a86b8aff20004975749c65cc84775cba41efeec"
       },
       {
         "path": "crates/opencascade/src/app/group.rs",
@@ -765,7 +765,7 @@
       },
       {
         "path": "crates/opencascade/src/app/link.rs",
-        "sha256": "f28ce29ce796c635763397ffd978418c1ebdac08df97f5391a615558d157cbf5"
+        "sha256": "7826bc50b62d9c9553fa8963426adcc60b96194dfe8638419d1fe3aabf2cea0d"
       },
       {
         "path": "crates/opencascade/src/app/link_tests.rs",
@@ -801,11 +801,11 @@
       },
       {
         "path": "crates/opencascade/src/document_graph/adapter_limits.rs",
-        "sha256": "dd3af1f5b39ec9936014af9daded531fc870ab05985be7249c224c32eece223a"
+        "sha256": "36e875f161a34241fa7636538711142b52b8f576bed096fa4f992f1240d026cf"
       },
       {
         "path": "crates/opencascade/src/document_graph/binary_payload.rs",
-        "sha256": "fa23e1633a04ec51bc704a051133165a6e97b584f6bb539592eff99427a40354"
+        "sha256": "c246d486d85086bc97d6ef311cd8981c01371a1db72ae8db4c8aacae7fa61bca"
       },
       {
         "path": "crates/opencascade/src/document_graph/capabilities.rs",
@@ -813,11 +813,11 @@
       },
       {
         "path": "crates/opencascade/src/document_graph/compute_context.rs",
-        "sha256": "12053d81e33d1d65c0743d850d41a2ee04a06ff4b4c00e72d4001c1776a074f1"
+        "sha256": "6cfda435797244d0b19231f04107d9f124d0c42cbcab1effbf767b7b5afa4143"
       },
       {
         "path": "crates/opencascade/src/document_graph/document_runtime.rs",
-        "sha256": "4341a41f2da2ba1c3b5cb7ef8ad8e2b013821100f5d5614e5d7b771572a37770"
+        "sha256": "ffd9e0d606140ca53a4c00123ad5d7435d9455b0cd7da900db939937f7e3b31c"
       },
       {
         "path": "crates/opencascade/src/document_graph/error.rs",
@@ -825,31 +825,31 @@
       },
       {
         "path": "crates/opencascade/src/document_graph/export.rs",
-        "sha256": "bf16ff8b754581c05fbc08a8a926cf229db31731ac7f9b0b7c1e2c39d49fc768"
+        "sha256": "6a16fc0276c1f1cd271a05747a2c6c6d7bd5cd3c030bbce5bcf265b4f60ff21e"
       },
       {
         "path": "crates/opencascade/src/document_graph/feature_registry.rs",
-        "sha256": "0a4e8fe13016a9553ba8bc17450630f6e217931eca2c82e1c2d9d654350fd484"
+        "sha256": "351526b9baf52e0f07b65235df3c48ceba41e1b6b4d926a8e69ed42a0c981e13"
       },
       {
         "path": "crates/opencascade/src/document_graph/graph_analyzer.rs",
-        "sha256": "f73bb9e55aa64c7bb122c279ae9c3c620766b7bc06332bfceb4bfe8d7d3a0e34"
+        "sha256": "9b6190f502f7b48fae1bb83d70f0d12bb88813b88db3804b25d7112872e3059f"
       },
       {
         "path": "crates/opencascade/src/document_graph/mod.rs",
-        "sha256": "8e6ab869b050eaf0a3ce765c5275b79cbb51e526efea7b278a6517999f711a52"
+        "sha256": "8b45ba8a3729cbb26f5828a7baacbd3a2acb2ef5b710161d765d23c27c824ad5"
       },
       {
         "path": "crates/opencascade/src/document_graph/normalization.rs",
-        "sha256": "7e3af1d93e8967cbd048358411b63e01333b38e89a64e41f7fa0c0b267ab36df"
+        "sha256": "13b3f2dc93d11246b37004c7b724924b11ffb72d0854b873fc09efb8a6c0b96c"
       },
       {
         "path": "crates/opencascade/src/document_graph/recompute.rs",
-        "sha256": "d399762dc779c821e2badfeb8b40c50f87dd1ad927bed56ab726b9cfa0193593"
+        "sha256": "31ddbd3a992892c41ec523d58dd2dea70d9801a02fd3ae85662ede3cbbbc0187"
       },
       {
         "path": "crates/opencascade/src/document_graph/recompute_plan.rs",
-        "sha256": "cdd7618c18d976c4ed594f02fcef6f05c318c99119be7a64524f66e3e7ceaf88"
+        "sha256": "fb893311349d71afd73f3b5faafa2cf19ac61c40081c2da7d9c86a9d999e44f7"
       },
       {
         "path": "crates/opencascade/src/document_graph/request.rs",
@@ -857,7 +857,11 @@
       },
       {
         "path": "crates/opencascade/src/document_graph/response.rs",
-        "sha256": "71eabd6efa2f184f1c78351878a562cd169e5c52c9798fc2dcfd2b5abeaffad7"
+        "sha256": "6c7aeb87abcf1235c81b66a78ad51c324cf25b7f158fa73530110e8a18c7c758"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/response_projection.rs",
+        "sha256": "b7f0e95ab21f12e725cc48311d1b288417b56f714bc27198edd4d11aeabecdd3"
       },
       {
         "path": "crates/opencascade/src/document_graph/tests.rs",
@@ -865,19 +869,27 @@
       },
       {
         "path": "crates/opencascade/src/document_graph/tests/freecad_fixtures.rs",
-        "sha256": "760bdf81f7986d522dadcd95c9091f460b965bcfb06a96b6055f47fa68179b3c"
+        "sha256": "3c2e51a647de96fd74b0c87f1533d66fb7e3198f90544fe1c0e2551274064003"
       },
       {
         "path": "crates/opencascade/src/document_graph/tests/graph.rs",
-        "sha256": "56a82c5a63d03fe4c6061514e458957d5076ec37a3db83e9b8bd3eafc59b1a72"
+        "sha256": "c1ef98b1c23fb172604d99ebbb3daac753f05db483333383df32b8ab22ed8ced"
       },
       {
         "path": "crates/opencascade/src/document_graph/topo_state.rs",
-        "sha256": "01f3a0c016e5367eefbfae4fa9b576985ba9b3471291519d19dbf089e6914609"
+        "sha256": "b88e955d62c4ec1d3fcb3cd5cb4837c0d8edd04716fb9927e982e6099149686d"
       },
       {
         "path": "crates/opencascade/src/document_graph/topo_state_admission.rs",
-        "sha256": "fa8eb28587d4cff4fd8e8254c2084c8044bbbdb44ff0e17cd5a22617018c2ae3"
+        "sha256": "3ae53c0fc08cb8476678e5fe70b4f5caed0f34b409a307520e8fffc068b0e105"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/topo_state_projection.rs",
+        "sha256": "4f3cfd280c75572416329dfef1bffe1da64721e6925eec677961c111a06e8f64"
+      },
+      {
+        "path": "crates/opencascade/src/document_graph/topo_state_reference.rs",
+        "sha256": "29308520d235008e12dc9a012e75d5addcdd7e365fd5eb4dc6071c6e744e10c7"
       },
       {
         "path": "crates/opencascade/src/kicad.rs",
@@ -921,11 +933,11 @@
       },
       {
         "path": "crates/opencascade/src/part/attach_extension.rs",
-        "sha256": "4f8d13ad60c6aa683d7b754233eb1c1fa1361a47c0949dc86d38e0b40f8f4728"
+        "sha256": "f4f196813aeb319aa67db8109282633ef18f4f91c5983adaabfbeec73ce5a92e"
       },
       {
         "path": "crates/opencascade/src/part/attacher.rs",
-        "sha256": "7a0c41790c60d52c28083887deda1d06d5b4cc5e2ad301460c231fab0efbb5e3"
+        "sha256": "5697408434d068c6e13577c6463b3cf6a2080bea02310c87b1b3a939f311b023"
       },
       {
         "path": "crates/opencascade/src/part/body_base.rs",
@@ -933,63 +945,67 @@
       },
       {
         "path": "crates/opencascade/src/part/face_maker.rs",
-        "sha256": "63e4d733ac4a034e3c07d82fd1232bb8864f1f8fdf036b28d4d82a2983b88a20"
+        "sha256": "26ff0c7f6d65310e13a6f7eba15b9ec4bb708b6e7742ca2a58a637d0ff9b543b"
       },
       {
         "path": "crates/opencascade/src/part/face_maker_build_face.rs",
-        "sha256": "bc41705819f0a11703bebdb997bd153657ff0f3086c3c6f53c4f7a84abbda310"
+        "sha256": "a26de8970f4079d86c87ec6026ab5553ccc3701d25383c8abd1a91a2b18ef676"
       },
       {
         "path": "crates/opencascade/src/part/face_maker_bullseye.rs",
-        "sha256": "82cf291baa72b833a9c4f12209a74f42e07c186825261db1409a6d908bd0d7ce"
+        "sha256": "7c414fd082d5a5b3f118d59161d4f46ba4d8821f7774bb00371864866d184e23"
       },
       {
         "path": "crates/opencascade/src/part/general_fuse_result.rs",
-        "sha256": "203c630b0447c6b94e715f59d72c339edd17246cd82dd9edfe844712b5834401"
+        "sha256": "fab994aa8e6ca1d1af6024fa126ec9f9f6978c7e1d596cc8bb037c700b04e858"
       },
       {
         "path": "crates/opencascade/src/part/mod.rs",
-        "sha256": "de260d9cb8976c1df5f7e0cf7ab355599646dbc88af53d651b73285525de948a"
+        "sha256": "831ef6bff122e200946973fac094f94f855c70c1669ea61d4db40bf19ba98d8b"
       },
       {
         "path": "crates/opencascade/src/part/part_feature.rs",
-        "sha256": "55c2aeec056e7e227cd98b5a71452d5a7a4032162bc722815f12c4eb501535e1"
+        "sha256": "7d7c10cf9c997565bd7a18f03f1770a57da5310c00a923f368f45ca8aff2c34b"
       },
       {
         "path": "crates/opencascade/src/part/part_feature_tests.rs",
-        "sha256": "f6bcbcb2b287977bfd3d5df1bfc279f2ec1127b9e1de5c75cd1378509d02430f"
+        "sha256": "fd9993419e247579f3b2c9032f217538f0b7ea217cfc96996b19bf3b390a01f4"
       },
       {
         "path": "crates/opencascade/src/part/property_topo_shape.rs",
         "sha256": "dc157a26b691fda438a7172a46ee273f1d3ee3ef168c59b086fa1f152a65c231"
       },
       {
+        "path": "crates/opencascade/src/part/shape_exporter.rs",
+        "sha256": "d6d54ad98a1f1e1d66adaefc04d6cadca0e8db6f437cd154139b454eb08fe771"
+      },
+      {
         "path": "crates/opencascade/src/part/shape_merge.rs",
-        "sha256": "e9c34304956eac163b0f1659fc666186f67292c9ab76b04f277a3637d749e6b3"
+        "sha256": "18cdf228bb5ed2c17bcb71ec40d74098b23959236d33ef1e1beaf7efa3cbe7bc"
       },
       {
         "path": "crates/opencascade/src/part/topo_shape.rs",
-        "sha256": "fc9c8802eaceefdb383aefb57dcd7e061b27577935a3e01aad2b1af3eea08548"
+        "sha256": "a4ef2056faaab1b43e8012acf9a58bb66a79057adf7d73e43a1ee0d7012896c6"
       },
       {
         "path": "crates/opencascade/src/part/topo_shape_expansion.rs",
-        "sha256": "8f98f0b2c7e1fd2fa8b59643a26d46d6af3d4c0a0cba3d3b4fe0e219f8c69abd"
+        "sha256": "801a0d4a9a8ec08d97215e7795d2522420c752195b774d07f0ccdaa11795b96b"
       },
       {
         "path": "crates/opencascade/src/part/topo_shape_mapper.rs",
-        "sha256": "6e8941b41e3ddbaf0fafb67653bbc39cedb5f675a46360b7e5c42bd82fda93ba"
+        "sha256": "6c1fc412fb223f4e55670478b61447bf146b093cf5162b3960a7c1020350a110"
       },
       {
         "path": "crates/opencascade/src/part/topo_shape_reference.rs",
-        "sha256": "f836c3b38b578e856e2db07537b51cfd23fd33bd697255872349e6e65a54c317"
+        "sha256": "12a33219b860a131ba720f5f261e521d43d9c08d65e36f8d3db085e658ddd6fa"
       },
       {
         "path": "crates/opencascade/src/part/topo_shape_tests.rs",
-        "sha256": "118e0a3d2694d5a5c4549abe4d4e1a1a152ba2ce0be74658894ba4f20edaf4ad"
+        "sha256": "bf6e47ab576e91e2948b1afb0a32843b040138d7288996922e58f93a52759c8e"
       },
       {
         "path": "crates/opencascade/src/part/wire_joiner.rs",
-        "sha256": "28243c01e4f5b5ac18846563d5003aae3708a71fd53cbf0e2822074c1bff7cab"
+        "sha256": "ce5443b71570d12b6c596ca403b6d3590cc3c592b938ad83fef8df2387855414"
       },
       {
         "path": "crates/opencascade/src/part_design/body.rs",
@@ -1057,7 +1073,7 @@
       },
       {
         "path": "crates/opencascade/src/part_design/feature_extrude.rs",
-        "sha256": "061a18d2c3dc1891718d52b3c5b15081c61eb56245eef6c0f5ab42d4d0584015"
+        "sha256": "9fdf5f64dd96e2e1b8e99a80c3b82467b5ae8c1c637926dd0826b6c5f2fdb5b9"
       },
       {
         "path": "crates/opencascade/src/part_design/feature_helix.rs",
@@ -1097,7 +1113,7 @@
       },
       {
         "path": "crates/opencascade/src/part_design/feature_pad_tests.rs",
-        "sha256": "1070dca86a4347bfbde10ce5bb9ee0cbe9a8d4eb337d4ecfd1d0ea6087050467"
+        "sha256": "41ed31d89dd2ae3a7a6773e1a18fddbc12a57410adb6f6a2b22402bd87793d45"
       },
       {
         "path": "crates/opencascade/src/part_design/feature_pipe.rs",
@@ -1141,7 +1157,7 @@
       },
       {
         "path": "crates/opencascade/src/part_design/feature_sketch_based.rs",
-        "sha256": "e8a14df2e7bda02a3ffb604cc0cb2664fcf231cfe7beae8cc9628749708daece"
+        "sha256": "2e3da5d51f19b8bed0394474b27d2522138bac0ebc7a0977208d4bf3357759ed"
       },
       {
         "path": "crates/opencascade/src/part_design/feature_thickness.rs",
@@ -1225,11 +1241,11 @@
       },
       {
         "path": "crates/opencascade/src/sketcher/sketch.rs",
-        "sha256": "65112b0b856e44b5d868147c877a36558f935272fb31fb408f484d2f9708de8a"
+        "sha256": "6cd3b87e2cfb94955ae993c945e9fadebdfce51c2083e872f8b9fe5c078a629f"
       },
       {
         "path": "crates/opencascade/src/sketcher/sketch_object.rs",
-        "sha256": "e463727f81d9a5c49666d1d8269eae4bf1d023d6d47f424a939ba5a405efaa5a"
+        "sha256": "999b772e01f9f48a9125f0a84f7e325e05e1bd3264dd00534247a8204bba00e4"
       },
       {
         "path": "crates/opencascade/src/sketcher/sketch_object_constraints.rs",
@@ -1241,7 +1257,7 @@
       },
       {
         "path": "crates/opencascade/src/sketcher/sketch_object_geometry.rs",
-        "sha256": "5316e4c65931b4167cd06448e3b88aa313645798b2f44b2bf45eaf90cb807076"
+        "sha256": "599d79f332242a8964b926006a5677badf8292c1a75a476dff38480c16ab3296"
       },
       {
         "path": "crates/opencascade/src/sketcher/sketch_object_operations.rs",
@@ -1337,11 +1353,15 @@
       },
       {
         "path": "crates/opencascade/src/topo_naming/element_map.rs",
-        "sha256": "d9e5bad9ea0375d68097521c263683cc9242bfa387631c389dafcf7396b2fe36"
+        "sha256": "d0b394aff11273957269c698ddc9ebccfe8257aa142fb000b170e4c0366b4d40"
       },
       {
         "path": "crates/opencascade/src/topo_naming/element_naming_utils.rs",
         "sha256": "71e35603a5224e39e2598f1ad87b69a91b6d74e307e88c3bae97f4230a9914d5"
+      },
+      {
+        "path": "crates/opencascade/src/topo_naming/evidence_ledger.rs",
+        "sha256": "a08d310043054228b31fbd00a2cb35b6e69e635165a73c72b233e31763c7b78d"
       },
       {
         "path": "crates/opencascade/src/topo_naming/indexed_name.rs",
@@ -1353,7 +1373,7 @@
       },
       {
         "path": "crates/opencascade/src/topo_naming/mapped_name.rs",
-        "sha256": "2c00146f34063337c7f90db658c0a49e9a0876d4d8d2baf85da9ce0d10be5b84"
+        "sha256": "e40aa1cd7476c2c782591ccd4198fb5bcb0e1b3dc9d4b65d54ebd250be81b632"
       },
       {
         "path": "crates/opencascade/src/topo_naming/mapper.rs",
@@ -1361,7 +1381,7 @@
       },
       {
         "path": "crates/opencascade/src/topo_naming/mod.rs",
-        "sha256": "408cb1b745b7a106114caa25aeab4d20a1cb137f94ba35c13c9625ce06fcfd10"
+        "sha256": "3d4e2ac6271db6119ca7eb2b91fc127b684895e1f711742ca8ce222d6eb348df"
       },
       {
         "path": "crates/opencascade/src/topo_naming/named_shape.rs",
@@ -1373,7 +1393,7 @@
       },
       {
         "path": "crates/opencascade/src/topo_naming/string_hasher.rs",
-        "sha256": "8be82528c39cfc2bfe87b5a5fa9c262d26f853ab69f5357724b6265935538e0d"
+        "sha256": "1f047110f65fdbe386c35ec82e334ec0a06ad56eca0866ef10c76a8d915434dc"
       },
       {
         "path": "crates/opencascade/src/topo_naming/subshape_identity.rs",
@@ -1447,10 +1467,10 @@
   },
   "dirtyState": {
     "algorithm": "sha256",
-    "digest": "a25dc16b18b2122efd97aa1ca7ac3cb957fe81e50861bc66e11fb5eb5b4e3711",
-    "buildInputDigest": "08c008ec8497f0c40998023e9ec436721f2dfeca712e7516ac1597106f3475fe",
-    "gitStatusSha256": "67beea65afd27e0396f2bb7bc41fada6dbc3e59d1e48bbdaaac0b4bd251f8461",
-    "gitDiffSha256": "84d3f8fcd60c68439bc268f0fa755744adef878fbcba8e7a44790730b957734a"
+    "digest": "607174c6923ac107e15d871f19a3c602e2e5174d90765cea51ed77e186d9aee1",
+    "buildInputDigest": "f73035653b23ae399adbe1b21b87c6160bba8ac778d4ec833389c8884d0dec82",
+    "gitStatusSha256": "0c11c659dbbbb94537bc8fd5b6e48425e5f4b9b107d65019a1c71e1117bb5106",
+    "gitDiffSha256": "b89659a88633bcf4d3ddf20eb2a376c29c8ef3829a051fadcadc20b5ddd6d73c"
   },
   "toolchain": {
     "rustcVerbose": "rustc 1.96.1 (31fca3adb 2026-06-26) (Homebrew)\nbinary: rustc\ncommit-hash: 31fca3adb283cc9dfd56b49cdee9a96eb9c96ffd\ncommit-date: 2026-06-26\nhost: aarch64-apple-darwin\nrelease: 1.96.1\nLLVM version: 22.1.8",

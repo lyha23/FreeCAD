@@ -171,23 +171,50 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
         return;
     }
 
-    std::optional<part::NamedShape> namedShape = extrusion->namedShape;
-    runtime::RefineShapeResult shapeResult{extrusion->toolShape, namedShape, false};
-    if (!runtime::isFeatureGroupedByBody(object, context)) {
-        const auto refined = runtime::applyRefineProperty(object, context, extrusion->toolShape, namedShape);
-        if (!refined) {
-            context.objects[object.name] = {{"status", "error"}};
-            return;
-        }
-        shapeResult = *refined;
+    const auto featureShape = finalizeFeatureExtrusion(object, context, AddSubMode::Subtractive, *extrusion);
+    if (!featureShape) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
     }
+    std::optional<part::NamedShape> namedShape = featureShape->namedShape;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+    // refines the subtractive feature before publishing its Shape.  Preserve that producer-side
+    // ElementMap/MapperHistory for the Body Tip and any later DressUp consumer.
+    const auto refined = runtime::applyPartDesignFeatureRefineProperty(
+        object,
+        context,
+        featureShape->shape,
+        namedShape
+    );
+    if (!refined) {
+        context.objects[object.name] = {{"status", "error"}};
+        return;
+    }
+    runtime::RefineShapeResult shapeResult = *refined;
 
     const TopoDS_Shape tool = shapeResult.shape;
     namedShape = shapeResult.namedShape;
     if (namedShape) {
+        // The final Pocket Shape, not its local pre-Boolean prism/AddSub cache, crosses the
+        // same PropertyPartShape::setValue() boundary that Body and the next feature consume.
+        *namedShape = part::namedShapeForPropertyShapeValue(
+            object.name, tool, *namedShape, static_cast<long>(object.id)
+        );
+    }
+    if (namedShape) {
         context.namedShapes[object.name] = *namedShape;
     }
-    context.addSubShapes[object.name] = runtime::AddSubShape{std::nullopt, tool, std::nullopt, namedShape};
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+    // ::FeatureExtrude::execute() writes the cumulative Boolean result through
+    // `this->Shape.setValue(getSolid(solRes))`; AddSubShape remains the tool cache only.
+    // Body subsequently copies this feature-owned Shape as its Tip.
+    context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, tool};
+    context.addSubShapes[object.name] = runtime::AddSubShape{
+        std::nullopt,
+        featureShape->addSubShape,
+        std::nullopt,
+        featureShape->addSubNamedShape,
+    };
     context.mesh[object.name] = cad_core::part::meshForShape(tool);
     context.subshapes[object.name] = part::subshapeMapForShape(tool);
     nlohmann::json result = {

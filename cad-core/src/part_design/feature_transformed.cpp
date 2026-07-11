@@ -503,10 +503,15 @@ std::optional<TransformSource> combineBodyPrefixSource(
     // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::execute(),
     // calls "result.makeElementBoolean(maker, {base, prism}, ...)" and stores the final result
     // on the current PartDesign feature Shape before later transformed features use it as BaseFeature.
+    const std::optional<long> supportTag = support.namedShape
+        ? support.namedShape->producerTag
+        : std::optional<long> {};
     const auto build = part::makeElementBooleanFromSources(
         owner,
         {namedShapeSource(support), namedShapeSource(tool)},
-        operation
+        operation,
+        std::nullopt,
+        supportTag
     );
     if (!build.error.empty()) {
         runtime::addDiagnostic(
@@ -704,6 +709,52 @@ std::optional<TransformSource> bodyPrefixSupportSource(
     return current;
 }
 
+std::optional<TransformSource> publishedBodyTipSource(
+    const app::DocumentObject& transformed,
+    runtime::ComputeContext& context,
+    const std::string& stopFeature,
+    bool includeStopFeature
+)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+    // ::Body::setBaseProperty() selects the preceding solid feature as BaseFeature; and
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
+    // ::Transformed::execute() consumes `getBaseObject()->Shape`. The Body boundary inherits the
+    // already-published Tip ElementMap. It must not replay Pad/Pocket AddSubShape booleans to
+    // reconstruct a support ledger: that creates a different producer lifecycle and loses the
+    // terminal Pocket refs before a Pattern can consume them.
+    const auto parentIt = context.parentGroupByObject.find(transformed.name);
+    if (parentIt == context.parentGroupByObject.end()) {
+        return std::nullopt;
+    }
+    const auto bodyIt = context.documentObjects.find(parentIt->second);
+    if (bodyIt == context.documentObjects.end() || bodyIt->second == nullptr
+        || bodyIt->second->typeId != "PartDesign::Body") {
+        return std::nullopt;
+    }
+    const auto groupNames = bodyGroupNames(*bodyIt->second);
+    if (!groupNames) {
+        return std::nullopt;
+    }
+
+    std::optional<TransformSource> tip;
+    bool reachedStop = false;
+    for (const std::string& feature : *groupNames) {
+        if (feature == stopFeature && !includeStopFeature) {
+            reachedStop = true;
+            break;
+        }
+        if (const auto published = solidSource(feature, context)) {
+            tip = published;
+        }
+        if (feature == stopFeature && includeStopFeature) {
+            reachedStop = true;
+            break;
+        }
+    }
+    return reachedStop ? tip : std::nullopt;
+}
+
 std::optional<TransformSource> resolveSupportSource(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
@@ -733,8 +784,8 @@ std::optional<TransformSource> resolveSupportSource(
         if (support) {
             return support;
         }
-        const auto prefixSupport = bodyPrefixSupportSource(object, context, baseFeature->object, true);
-        if (!prefixSupport) {
+        const auto publishedTip = publishedBodyTipSource(object, context, baseFeature->object, true);
+        if (!publishedTip) {
             runtime::addDiagnostic(
                 context.diagnostics,
                 "error",
@@ -747,11 +798,11 @@ std::optional<TransformSource> resolveSupportSource(
             );
             return std::nullopt;
         }
-        return prefixSupport;
+        return publishedTip;
     }
 
-    if (const auto prefixSupport = bodyPrefixSupportSource(object, context, object.name, false)) {
-        return prefixSupport;
+    if (const auto publishedTip = publishedBodyTipSource(object, context, object.name, false)) {
+        return publishedTip;
     }
 
     if (originals.empty()) {
@@ -787,7 +838,8 @@ std::optional<TransformSource> resolveSupportSource(
 part::NamedShape transformedCopyNamedShape(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
-    const TransformSource& source
+    const TransformSource& source,
+    const std::string& postfix
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -796,7 +848,8 @@ part::NamedShape transformedCopyNamedShape(
     return part::namedShapeForTransformedCopy(
         owner,
         resultShape,
-        part::NamedShapeSource {source.owner, source.shape, source.namedShape ? &*source.namedShape : nullptr}
+        part::NamedShapeSource {source.owner, source.shape, source.namedShape ? &*source.namedShape : nullptr},
+        std::optional<std::string> {postfix}
     );
 }
 
@@ -806,25 +859,44 @@ std::optional<TransformSource> transformedCopy(
     const gp_Trsf& transform,
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
-    const std::string& property
+    const std::string& property,
+    const std::string& postfix
 )
 {
     try {
-        BRepBuilderAPI_Transform maker(source.shape, transform, true);
-        maker.Build();
-        if (!maker.IsDone()) {
-            runtime::addDiagnostic(
-                context.diagnostics,
-                "error",
-                "execution_failed",
-                "OCCT could not transform " + source.owner,
-                object.name,
-                property
-            );
-            return std::nullopt;
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+        // TopoShapeExpansion.cpp::TopoShape::makeElementTransform() defaults to CopyType::noCopy
+        // for a non-mirroring rigid transform. It moves the TopoDS location in that path, keeping
+        // partner identity so copyElementMap(tmp, op) can retain the incoming child ledger. An
+        // unconditional BRepBuilderAPI_Transform(..., true) creates new TShapes and changes the
+        // following makeElementFuse/Cut mapSubElement lifecycle.
+        const bool requiresCopy = transform.ScaleFactor() * transform.HVectorialPart().Determinant()
+                < 0.0
+            || std::abs(std::abs(transform.ScaleFactor()) - 1.0) > Precision::Confusion();
+        TopoDS_Shape transformed;
+        if (requiresCopy) {
+            BRepBuilderAPI_Transform maker(source.shape, transform, true);
+            maker.Build();
+            if (!maker.IsDone()) {
+                runtime::addDiagnostic(
+                    context.diagnostics,
+                    "error",
+                    "execution_failed",
+                    "OCCT could not transform " + source.owner,
+                    object.name,
+                    property
+                );
+                return std::nullopt;
+            }
+            transformed = maker.Shape().Moved(gp_Trsf());
         }
-        TopoDS_Shape transformed = maker.Shape();
-        part::NamedShape namedShape = transformedCopyNamedShape(owner, transformed, source);
+        else {
+            transformed = source.shape;
+            gp_Trsf locationTransform(transform);
+            locationTransform.SetScaleFactor(1.0);
+            transformed.Move(locationTransform);
+        }
+        part::NamedShape namedShape = transformedCopyNamedShape(owner, transformed, source, postfix);
         return TransformSource {owner, transformed, namedShape};
     }
     catch (Standard_Failure& failure) {
@@ -849,10 +921,19 @@ std::optional<TransformSource> fuseOrCutTransformedSource(
     const std::string& property
 )
 {
+    // FreeCAD: src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute() copies
+    // `supportTopShape` into `supportShape` and invokes supportShape.makeElementFuse/Cut(...).
+    // The receiver keeps its Tag across intermediate pattern Booleans; only the final
+    // PropertyPartShape::setValue performs the feature-property retag.
+    const std::optional<long> supportTag = support.namedShape
+        ? support.namedShape->producerTag
+        : std::optional<long> {};
     const auto build = part::makeElementBooleanFromSources(
         object.name,
         {namedShapeSource(support), namedShapeSource(tool)},
-        operation
+        operation,
+        std::nullopt,
+        supportTag
     );
     if (!build.error.empty()) {
         runtime::addDiagnostic(
@@ -930,7 +1011,14 @@ std::optional<TransformApplication> applyFeatureTransforms(
             return std::nullopt;
         }
 
-        for (const gp_Trsf& transform : copyTransforms) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+        // FeatureTransformed.cpp::Transformed::execute() first applies the leading
+        // transformation to the AddSubShape itself, then getTransformedCompShape() advances
+        // past that entry and creates copies only for the remaining transforms. Re-fusing the
+        // first (usually identity) entry adds a producer pass that FreeCAD never performs.
+        int copyOrdinal = 1;
+        for (std::size_t transformIndex = 1U; transformIndex < copyTransforms.size(); ++transformIndex) {
+            const gp_Trsf& transform = copyTransforms.at(transformIndex);
             if (addSubIt->second.addShape) {
                 TransformSource originalAdd {
                     original.object,
@@ -947,7 +1035,8 @@ std::optional<TransformApplication> applyFeatureTransforms(
                     transform,
                     object,
                     context,
-                    "Originals"
+                    "Originals",
+                    copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal)
                 );
                 if (!transformedTool) {
                     return std::nullopt;
@@ -982,7 +1071,8 @@ std::optional<TransformApplication> applyFeatureTransforms(
                     transform,
                     object,
                     context,
-                    "Originals"
+                    "Originals",
+                    copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal)
                 );
                 if (!transformedTool) {
                     return std::nullopt;
@@ -1000,6 +1090,7 @@ std::optional<TransformApplication> applyFeatureTransforms(
                 }
                 current = *cut;
             }
+            ++copyOrdinal;
         }
     }
 
@@ -1030,7 +1121,12 @@ std::optional<TransformApplication> applyWholeShapeTransforms(
 
     TransformSource current = *support;
     int transformedIndex = 1;
-    for (const gp_Trsf& transform : copyTransforms) {
+    // FreeCAD: FeatureTransformed.cpp::Transformed::getTransformedCompShape() retains the
+    // untransformed support in slot one and starts transformed copies at the second sequence
+    // entry. Its `Data::indexSuffix(1)` is empty; later copies use `_2`, `_3`, ... .
+    int copyOrdinal = 1;
+    for (std::size_t transformIndex = 1U; transformIndex < copyTransforms.size(); ++transformIndex) {
+        const gp_Trsf& transform = copyTransforms.at(transformIndex);
         // FreeCAD:
         // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
         // ::Transformed::execute(), Mode::WholeShape calls getTransformedCompShape(supportShape,
@@ -1042,7 +1138,8 @@ std::optional<TransformApplication> applyWholeShapeTransforms(
             transform,
             object,
             context,
-            "TransformMode"
+            "TransformMode",
+            copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal)
         );
         if (!transformedTool) {
             return std::nullopt;
@@ -1059,6 +1156,7 @@ std::optional<TransformApplication> applyWholeShapeTransforms(
             return std::nullopt;
         }
         current = *fused;
+        ++copyOrdinal;
     }
 
     part::NamedShape resultNamedShape = current.namedShape
@@ -1475,7 +1573,12 @@ void publishTransformedResult(
 )
 {
     context.shapes[object.name] = runtime::ShapeValue {runtime::ShapeValue::Kind::Solid, result.shape};
-    context.namedShapes[object.name] = result.namedShape;
+    // FreeCAD: src/Mod/Part/App/PropertyTopoShape.cpp::PropertyPartShape::setValue() assigns
+    // the Linear/PolarPattern feature Tag after Transformed has produced its own ElementMap.
+    // Do not let Body infer this producer identity from a display subname.
+    context.namedShapes[object.name] = part::namedShapeForPropertyShapeValue(
+        object.name, result.shape, result.namedShape, static_cast<long>(object.id)
+    );
     context.mesh[object.name] = cad_core::part::meshForShape(result.shape);
     context.subshapes[object.name] = part::subshapeMapForShape(result.shape);
     context.objects[object.name] = {

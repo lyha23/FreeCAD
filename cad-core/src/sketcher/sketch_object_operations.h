@@ -109,9 +109,10 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(const app::DocumentObject
                                                        const std::vector<SketchCircle>& circles,
                                                        const std::vector<SketchEllipse>& ellipses);
 
-ProfileFaceBuild buildOptionalProfileFace(const std::vector<SketchProfileEdge>& edges,
-                                           const std::vector<SketchCircle>& circles,
-                                           const std::vector<SketchEllipse>& ellipses);
+// FreeCAD: src/Mod/Sketcher/App/SketchObject.cpp::buildInternals() passes the already-built
+// Sketch Shape wires into FaceMakerBuildFace. Keeping that same request-local TopoDS graph is
+// required for FaceMaker's mapSubElement() to retain raw g<ID>;SKT source identity.
+ProfileFaceBuild buildOptionalProfileFace(const TopoDS_Shape& rawShape);
 
 std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::string& kind);
 std::string profileShapeLabel(const std::optional<TopoDS_Shape>& profileShape);

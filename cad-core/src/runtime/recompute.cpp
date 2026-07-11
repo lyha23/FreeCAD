@@ -899,7 +899,7 @@ std::optional<ResponseMappedNamePublication> bodyTipMappedNamePublicationFromOwn
             continue;
         }
         if (const auto publication =
-                publicationFromProvenance({}, indexed, provenanceIt->second)) {
+                publicationFromProvenance(ownerPrefix, indexed, provenanceIt->second)) {
             return publication;
         }
     }
@@ -1726,6 +1726,45 @@ void appendProducerPublicResultFields(nlohmann::json& result,
     }
 }
 
+std::vector<std::string> responseTargets(const app::Document& document,
+                                         const ComputeContext& context)
+{
+    std::vector<std::string> targets;
+    std::set<std::string> seen;
+    const auto append = [&](const std::string& name) {
+        if (document.indexByName.count(name) != 0U && seen.insert(name).second) {
+            targets.push_back(name);
+        }
+    };
+
+    for (const std::string& requested : document.targets) {
+        const auto objectIt = document.indexByName.find(requested);
+        if (objectIt == document.indexByName.end()) {
+            continue;
+        }
+        const app::DocumentObject& object = document.objects.at(objectIt->second);
+        if (object.typeId == "PartDesign::Body") {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+            // FeatureDressUp.cpp::DressUp::execute() and FeatureTransformed.cpp::
+            // Transformed::execute() each store their replacement Shape before
+            // Body::execute() copies Tip.Shape into Body.Shape.  The public native response
+            // therefore carries those already-computed replacement producers as well as the
+            // requested Body.  Select only Group members whose own producer declared
+            // body_mode=replace; this does not infer a shape or manufacture any topology.
+            for (const app::Link& member : app::readLinks(object, "Group")) {
+                const auto resultIt = context.objects.find(member.object);
+                if (resultIt == context.objects.end() || !resultIt->second.is_object()
+                    || resultIt->second.value("body_mode", "") != "replace") {
+                    continue;
+                }
+                append(member.object);
+            }
+        }
+        append(requested);
+    }
+    return targets;
+}
+
 }  // namespace
 
 ComputeContext recomputeContext(const app::Document& document,
@@ -1822,7 +1861,7 @@ nlohmann::json recomputeResultJson(const app::Document& document,
     nlohmann::json results = nlohmann::json::array();
     std::map<std::string, nlohmann::json> responseSubshapesByObject;
     std::vector<Diagnostic> diagnostics = context.diagnostics;
-    for (const std::string& target : document.targets) {
+    for (const std::string& target : responseTargets(document, context)) {
         if (document.indexByName.count(target) == 0U) {
             continue;
         }

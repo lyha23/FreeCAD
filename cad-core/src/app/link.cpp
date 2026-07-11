@@ -1771,10 +1771,24 @@ void executeLinkLike(const app::DocumentObject& object,
             );
         }
         else {
-            linkedNamedShape = part::namedShapeForLinkedShape(object.name, shape->shape, source);
+            linkedNamedShape = part::namedShapeForLinkedShape(
+                // FreeCAD: src/App/Link.cpp::LinkBaseExtension::checkGeoElementMap() returns
+                // without reTagElementMap() for a same-document link with no index postfix.
+                // The copied ElementMap remains the linked object's producer ledger.
+                object.name, shape->shape, source
+            );
         }
     }
     publishLinkedShape(object, context, shape->shape, kindValue, metadata, linkedNamedShape);
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Link.cpp
+    // ::LinkBaseExtension::getLinkedObject() resolves the source object before Link publishes
+    // its Shape.  Keep this producer-owned summary beside the retagged NamedShape; runtime only
+    // forwards it into the public result and never infers link ownership from response paths.
+    context.publicResultFields[object.name].objectFields = {
+        {"link", kind},
+        {"linked_object", link->object},
+        {"shape", shapeLabelForShape(shape->shape)},
+    };
 }
 
 TopoDS_Shape compoundOf(const std::vector<TopoDS_Shape>& shapes);
@@ -2914,7 +2928,10 @@ void publishLinkShapeBuild(const app::DocumentObject& object,
             );
         }
         else {
-            linkedNamedShape = part::namedShapeForLinkedShape(object.name, shape->shape, source);
+            linkedNamedShape = part::namedShapeForLinkedShape(
+                // Same-document App::Link without a postfix preserves the source ElementMap.
+                object.name, shape->shape, source
+            );
         }
     }
     publishLinkedShape(object, context, shape->shape, kindValue, metadata, linkedNamedShape);

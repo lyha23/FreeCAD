@@ -164,6 +164,118 @@ std::optional<TopoDS_Shape> previousSolidShape(const runtime::ComputeContext& co
     return std::nullopt;
 }
 
+std::optional<part::NamedShapeSource> baseSolidSource(const app::DocumentObject& object,
+                                                      runtime::ComputeContext& context)
+{
+    const auto sourceForName = [&](const std::string& name) -> std::optional<part::NamedShapeSource> {
+        const auto shapeIt = context.shapes.find(name);
+        if (shapeIt == context.shapes.end() || shapeIt->second.kind != runtime::ShapeValue::Kind::Solid
+            || shapeIt->second.shape.IsNull()) {
+            return std::nullopt;
+        }
+        const auto namedShapeIt = context.namedShapes.find(name);
+        return part::NamedShapeSource {
+            namedShapeIt == context.namedShapes.end() ? name : namedShapeIt->second.owner,
+            shapeIt->second.shape,
+            namedShapeIt == context.namedShapes.end() ? nullptr : &namedShapeIt->second,
+        };
+    };
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+    // ::BodyBase::addObject() and ::Body::setBaseProperty() establish the PartDesign feature
+    // chain from Body.Group. Membership can reroute an older explicit BaseFeature while deleting
+    // an intermediate feature: the current member consumes the preceding in-Body solid, not an
+    // orphaned document object. This must happen before FeatureExtrude's Boolean producer reads
+    // its source ElementMap; repairing Body's published Tip would be too late.
+    if (const auto parentIt = context.parentGroupByObject.find(object.name);
+        parentIt != context.parentGroupByObject.end()) {
+        const auto bodyIt = context.documentObjects.find(parentIt->second);
+        if (bodyIt != context.documentObjects.end() && bodyIt->second != nullptr
+            && bodyIt->second->typeId == "PartDesign::Body") {
+            const std::vector<app::Link> group = app::readLinks(*bodyIt->second, "Group");
+            const auto memberIt = std::find_if(group.begin(), group.end(), [&](const app::Link& link) {
+                return link.object == object.name;
+            });
+            if (memberIt != group.end()) {
+                for (auto candidate = memberIt; candidate != group.begin();) {
+                    --candidate;
+                    if (const auto source = sourceForName(candidate->object)) {
+                        return source;
+                    }
+                }
+                // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+                // ::Body::onChanged(), when BaseFeature changes, creates a
+                // PartDesign::FeatureBase before the first solid. Body::setBaseProperty()
+                // then links that first solid to the FeatureBase. The request graph need not
+                // contain the transient child yet, but its Shape property boundary is part of
+                // the same recompute and must carry a re-tagged ElementMap into Pad/Pocket.
+                const auto bodyBase = app::readLink(*bodyIt->second, "BaseFeature");
+                if (bodyBase && !bodyBase->object.empty()) {
+                    const auto external = sourceForName(bodyBase->object);
+                    if (external && external->namedShape != nullptr) {
+                        std::string featureBaseName = "BaseFeature";
+                        if (context.documentObjects.count(featureBaseName) != 0U
+                            || context.shapes.count(featureBaseName) != 0U) {
+                            featureBaseName = bodyIt->second->name + "_BaseFeature";
+                        }
+                        if (context.shapes.count(featureBaseName) == 0U) {
+                            long long nextObjectId = 0;
+                            for (const auto& [_, documentObject] : context.documentObjects) {
+                                if (documentObject != nullptr) {
+                                    nextObjectId = std::max(nextObjectId, documentObject->id);
+                                }
+                            }
+                            const part::NamedShape featureBaseNamedShape =
+                                part::namedShapeForPropertyShapeValue(
+                                    featureBaseName,
+                                    external->shape,
+                                    *external->namedShape,
+                                    static_cast<long>(nextObjectId + 1)
+                                );
+                            context.shapes[featureBaseName] = runtime::ShapeValue {
+                                runtime::ShapeValue::Kind::Solid,
+                                external->shape,
+                            };
+                            context.namedShapes[featureBaseName] = featureBaseNamedShape;
+                        }
+                        const auto featureBaseShape = context.shapes.find(featureBaseName);
+                        const auto featureBaseNamedShape = context.namedShapes.find(featureBaseName);
+                        if (featureBaseShape != context.shapes.end()
+                            && featureBaseNamedShape != context.namedShapes.end()) {
+                            return part::NamedShapeSource {
+                                featureBaseName,
+                                featureBaseShape->second.shape,
+                                &featureBaseNamedShape->second,
+                            };
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::getBaseTopoShape(bool) resolves the hidden BaseFeature PropertyLink and returns
+    // `BaseObject->Shape.getShape()`. Execution order is not a substitute for that document
+    // link: a Body can contain unrelated solids before this feature, and ElementMap provenance
+    // must follow the linked Shape producer.
+    if (const auto baseFeature = app::readLink(object, "BaseFeature"); baseFeature) {
+        if (baseFeature->object.empty()) {
+            return std::nullopt;
+        }
+        return sourceForName(baseFeature->object);
+    }
+
+    // A standalone Pad/Pocket has no BaseFeature. Its only valid implicit base is the preceding
+    // solid in this request-local recompute plan, matching FeatureExtrude's empty-base branch.
+    for (auto it = context.executionOrder.rbegin(); it != context.executionOrder.rend(); ++it) {
+        if (const auto source = sourceForName(*it)) {
+            return source;
+        }
+    }
+    return std::nullopt;
+}
+
 double throughAllLength(const TopoDS_Shape& base, const TopoDS_Shape& profile)
 {
     // FreeCAD semantic source:
@@ -1494,14 +1606,20 @@ const part::NamedShape* namedShapeForProfileSource(const runtime::ComputeContext
                                                    const app::Link& profileLink,
                                                    const TopoDS_Shape& profile)
 {
-    if (firstFaceOf(profile)) {
-        const auto internalNamedShapeIt = context.namedShapes.find(profileLink.object + ".InternalShape");
-        if (internalNamedShapeIt != context.namedShapes.end()) {
-            return &internalNamedShapeIt->second;
-        }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::buildShape() owns g<ID>/g<ID>v<point> ElementMap entries. The profile resolver retains
+    // that raw producer ledger until the FaceMaker profile ledger proves it has matching geometry.
+    const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object + ".ProfileShape");
+    if (profileNamedShapeIt != context.namedShapes.end()
+        && !profileNamedShapeIt->second.shape.IsNull()) {
+        // ProfileBased::getTopoShapeVerifiedFace() may return a located/copy-on-change TopoShape
+        // rather than the exact TShape retained by Sketch's FaceMaker result. Both are produced
+        // from this Profile link in the same recompute, so use the dedicated producer ledger;
+        // IsPartner would incorrectly discard it solely because of that request-local wrapper.
+        return &profileNamedShapeIt->second;
     }
-    const auto profileNamedShapeIt = context.namedShapes.find(profileLink.object);
-    return profileNamedShapeIt == context.namedShapes.end() ? nullptr : &profileNamedShapeIt->second;
+    const auto rawNamedShapeIt = context.namedShapes.find(profileLink.object);
+    return rawNamedShapeIt == context.namedShapes.end() ? nullptr : &rawNamedShapeIt->second;
 }
 
 std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
@@ -1513,8 +1631,12 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                        const std::string& method,
                                        const std::string& featureName,
                                        const std::string& historyOwner,
-                                       const part::NamedShape* profileNamedShape = nullptr)
+    const part::NamedShape* profileNamedShape = nullptr,
+    bool promoteBareSourceIdForGenerated = false)
 {
+    if (profileNamedShape == nullptr) {
+        profileNamedShape = namedShapeForProfileSource(context, profileLink, profile);
+    }
     if (firstFaceOf(profile)) {
         BRepPrimAPI_MakePrism prism(profile, length * gp_Vec(direction));
         prism.Build();
@@ -1527,13 +1649,21 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
             return std::nullopt;
         }
         std::optional<part::NamedShape> namedShape;
+        part::MakerHistoryOptions historyOptions;
+        historyOptions.producerOperation = "XTR";
+        historyOptions.recordUnmappedSourceDeletions = true;
+        historyOptions.stringHasher = context.stringHasher;
+        // FreeCAD: src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::execute() keeps
+        // an additive prism's ElementMap before its BaseFeature fuse; Pocket's tool does not use
+        // this additive producer lifecycle.
+        historyOptions.promoteBareSourceIdForGenerated = promoteBareSourceIdForGenerated;
         if (profileNamedShape != nullptr) {
             const part::NamedShapeSource profileSource{profileLink.object, profile, profileNamedShape};
             namedShape = part::namedShapeForMakerHistory(historyOwner,
                                                          prism.Shape(),
                                                          std::vector<part::NamedShapeSource>{profileSource},
                                                          prism,
-                                                         part::MakerHistoryOptions {"XTR"});
+                                                         historyOptions);
         }
         else {
             namedShape = part::namedShapeForMakerHistory(historyOwner,
@@ -1541,7 +1671,7 @@ std::optional<SideBuild> makePrismSide(const TopoDS_Shape& profile,
                                                          profileLink.object,
                                                          profile,
                                                          prism,
-                                                         part::MakerHistoryOptions {"XTR"});
+                                                         historyOptions);
         }
         return SideBuild{method, length, prism.Shape(), false, false, std::move(namedShape)};
     }
@@ -1678,7 +1808,8 @@ std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
                                             const std::string& featureName,
                                             const app::Link& profileLink,
                                             const std::string& historyOwner,
-                                            const part::NamedShape* profileNamedShape = nullptr)
+                                            const part::NamedShape* profileNamedShape = nullptr,
+                                            bool promoteBareSourceIdForGenerated = false)
 {
     if (std::abs(taperAngleDegrees) <= Precision::Angular()) {
         return makePrismSide(profile,
@@ -1690,7 +1821,8 @@ std::optional<SideBuild> makeExtrusionShape(const app::DocumentObject& object,
                              method,
                              featureName,
                              historyOwner,
-                             profileNamedShape);
+                             profileNamedShape,
+                             promoteBareSourceIdForGenerated);
     }
 
     std::string error;
@@ -2164,7 +2296,8 @@ std::optional<SideBuild> buildSingleSide(const app::DocumentObject& object,
                               featureName,
                               profileLink,
                               historyOwner,
-                              profileNamedShape);
+                              profileNamedShape,
+                              mode == AddSubMode::Additive);
 }
 
 }  // namespace
@@ -2212,7 +2345,6 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
             bodyParticipation = bodyParticipationForClosedProfile(mode);
         }
     }
-
     const bool reversed = readBoolProperty(object, "Reversed", false);
     auto direction = computeDirection(object, context, profile->link, extrusionProfileShape, mode, profile->normal);
     if (!direction) {
@@ -2328,7 +2460,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              "Two sides",
                                              featureName,
                                              object.name,
-                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
+                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr,
+                                             mode == AddSubMode::Additive);
             if (!prism) {
                 return std::nullopt;
             }
@@ -2418,7 +2551,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                             featureName,
                                             profile->link,
                                             object.name + ".Prism1",
-                                            extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
+                                            extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr,
+                                            mode == AddSubMode::Additive);
             if (!first) {
                 return std::nullopt;
             }
@@ -2433,7 +2567,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              featureName,
                                              profile->link,
                                              object.name + ".Prism2",
-                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
+                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr,
+                                             mode == AddSubMode::Additive);
             if (!second) {
                 return std::nullopt;
             }
@@ -2457,7 +2592,8 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
                                              "Symmetric",
                                              featureName,
                                              object.name,
-                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr);
+                                             extrusionProfileNamedShape ? &*extrusionProfileNamedShape : nullptr,
+                                             mode == AddSubMode::Additive);
             if (!prism) {
                 return std::nullopt;
             }
@@ -2484,7 +2620,12 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     if (!toolShape) {
         return std::nullopt;
     }
-    if (toolShape->namedShape && (!topoNamingKnownGap || !resultNamedShape)) {
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+    // ::FeatureExtrude::generateSingleExtrusionSide() constructs the one-side prism, and
+    // FeatureExtrude::execute() publishes that prism through `rawShape` / `Shape.setValue`.
+    // The one-side XOR transport is not a new producer: replacing the side maker ledger here
+    // drops its `;XTR` ElementMap entries before the Pad/Pocket Boolean consumes them.
+    if (toolShape->namedShape && !resultNamedShape) {
         resultNamedShape = toolShape->namedShape;
     }
 
@@ -2544,6 +2685,98 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
         taperHistory,
         resultNamedShape,
     };
+}
+
+std::optional<FeatureExtrusionShape> finalizeFeatureExtrusion(const app::DocumentObject& object,
+                                                               runtime::ComputeContext& context,
+                                                               AddSubMode mode,
+                                                               const ExtrudeResult& extrusion)
+{
+    FeatureExtrusionShape result {
+        extrusion.toolShape,
+        extrusion.namedShape,
+        extrusion.toolShape,
+        extrusion.namedShape,
+        false,
+    };
+    if (extrusion.bodyParticipation == "display_only") {
+        return result;
+    }
+
+    const auto base = baseSolidSource(object, context);
+    if (!base) {
+        return result;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+    // ::FeatureExtrude::execute() stores rawShape, then calls `prism = refineShapeIfActive(prism)`
+    // and `AddSubShape.setValue(prism)` before assigning `prism.Tag = -this->getID()` for the
+    // BaseFeature Boolean. The pre-Boolean tool therefore has its own mapper lifecycle; refining
+    // only the final result lets OCCT preserve source subshapes that FreeCAD's maker modifies.
+    const auto refinedTool = runtime::applyPartDesignFeatureRefineProperty(
+        object,
+        context,
+        extrusion.toolShape,
+        extrusion.namedShape
+    );
+    if (!refinedTool) {
+        return std::nullopt;
+    }
+    result.shape = refinedTool->shape;
+    result.namedShape = refinedTool->namedShape;
+    result.addSubShape = refinedTool->shape;
+    if (refinedTool->namedShape) {
+        // FreeCAD: src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::execute() invokes
+        // AddSubShape.setValue(prism) before it changes prism.Tag and before the Boolean. Keep
+        // that persisted ElementMap lifecycle separate from the operation-local negative tool.
+        result.addSubNamedShape = part::namedShapeForPropertyShapeValue(
+            object.name,
+            result.addSubShape,
+            *refinedTool->namedShape,
+            static_cast<long>(object.id)
+        );
+    }
+
+    part::NamedShapeSource tool {
+        object.name,
+        result.shape,
+        result.namedShape ? &*result.namedShape : nullptr,
+    };
+    // FreeCAD: src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::execute(),
+    // `prism.Tag = -this->getID()` follows AddSubShape.setValue(prism).  `tool` must therefore
+    // retain refinedTool's pre-property ElementMap while its incoming Tag is negative; the
+    // separately persisted AddSubShape map above is only later cache evidence for Pattern et al.
+    tool.producerTag = -static_cast<long>(object.id);
+    const part::BooleanOperation operation = mode == AddSubMode::Additive
+        ? part::BooleanOperation::Fuse
+        : part::BooleanOperation::Cut;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+    // ::FeatureExtrude::execute() passes `FuzzyTolerance.getValue()` directly to
+    // makeElementBoolean(). The property defaults to 0, which deliberately leaves OCCT's
+    // maker fuzzy value untouched; generic auto-fuzzy can replace result subshapes and alter
+    // the ElementMap preserved/history boundary.
+    const double fuzzyTolerance = app::readNumber(object, "FuzzyTolerance").value_or(0.0);
+    const part::NamedShapeBuild build = part::makeElementBooleanFromSources(
+        object.name,
+        {*base, tool},
+        operation,
+        fuzzyTolerance
+    );
+    if (!build.error.empty() || build.shape.IsNull()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "execution_failed",
+                               std::string(mode == AddSubMode::Additive ? "Pad" : "Pocket")
+                                   + " could not combine its AddSubShape with the BaseFeature"
+                                   + (build.error.empty() ? std::string {} : ": " + build.error),
+                               object.name,
+                               "BaseFeature");
+        return std::nullopt;
+    }
+    result.shape = build.shape;
+    result.namedShape = build.namedShape;
+    result.combinedWithBase = true;
+    return result;
 }
 
 }  // namespace cad_core::part_design

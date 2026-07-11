@@ -4,6 +4,7 @@
 #include "cad_core/runtime/compute_context.h"
 
 #include <BRep_Builder.hxx>
+#include <BRep_Tool.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
@@ -21,7 +22,9 @@
 #include <TColgp_HArray1OfPnt.hxx>
 #include <TColgp_Array1OfPnt.hxx>
 #include <TopAbs_ShapeEnum.hxx>
+#include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopTools_IndexedMapOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
 #include <gp_Ax1.hxx>
@@ -78,9 +81,11 @@ bool addEllipseWire(const SketchEllipse& ellipse, BRepBuilderAPI_MakeWire& wireB
     return wireBuilder.IsDone();
 }
 
-SketchProfileEdge profileEdgeWithIdentity(SketchProfileEdgeKind kind,
-                                          std::size_t geometryIndex,
-                                          std::optional<long> geometryId)
+SketchProfileEdge profileEdgeWithIdentity(
+    SketchProfileEdgeKind kind,
+    std::size_t geometryIndex,
+    std::optional<long> geometryId
+)
 {
     SketchProfileEdge edge;
     edge.kind = kind;
@@ -128,8 +133,11 @@ std::vector<SketchProfileEdge> profileEdges(
 {
     std::vector<SketchProfileEdge> edges;
     for (const auto& segment : segments) {
-        SketchProfileEdge edge =
-            profileEdgeWithIdentity(SketchProfileEdgeKind::Line, segment.geometryIndex, segment.geometryId);
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::Line,
+            segment.geometryIndex,
+            segment.geometryId
+        );
         edge.start = segment.start;
         edge.end = segment.end;
         edges.push_back(std::move(edge));
@@ -138,8 +146,11 @@ std::vector<SketchProfileEdge> profileEdges(
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // SketchArcOfCircle::getPoint() exposes start/end/mid; cad-core keeps the same endpoint
         // semantics for profile connectivity while deferring full solver support.
-        SketchProfileEdge edge =
-            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfCircle, arc.geometryIndex, arc.geometryId);
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::ArcOfCircle,
+            arc.geometryIndex,
+            arc.geometryId
+        );
         edge.start = pointAtAngle(arc.center, arc.radius, arc.startAngle);
         edge.end = pointAtAngle(arc.center, arc.radius, arc.endAngle);
         edge.center = arc.center;
@@ -152,10 +163,20 @@ std::vector<SketchProfileEdge> profileEdges(
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchGeometry.cpp
         // SketchArcOfEllipse::getPoint() exposes start/end/mid with emulateCCW=true.
         // cad-core uses the same start/end parameters for profile connectivity.
-        SketchProfileEdge edge =
-            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfEllipse, arc.geometryIndex, arc.geometryId);
-        edge.start = pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.startAngle);
-        edge.end = pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.endAngle);
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::ArcOfEllipse,
+            arc.geometryIndex,
+            arc.geometryId
+        );
+        edge.start = pointAtEllipseAngle(
+            arc.center,
+            arc.majorRadius,
+            arc.minorRadius,
+            arc.angle,
+            arc.startAngle
+        );
+        edge.end
+            = pointAtEllipseAngle(arc.center, arc.majorRadius, arc.minorRadius, arc.angle, arc.endAngle);
         edge.center = arc.center;
         edge.majorRadius = arc.majorRadius;
         edge.minorRadius = arc.minorRadius;
@@ -169,8 +190,11 @@ std::vector<SketchProfileEdge> profileEdges(
         // /SketchObjectExternal.cpp::processEdge2(), for GeomAbs_Hyperbola builds a
         // Part::GeomArcOfHyperbola from the trimmed curve parameters.
         const gp_Hypr hyperbola(ellipseAxis(arc.center, arc.angle), arc.majorRadius, arc.minorRadius);
-        SketchProfileEdge edge =
-            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfHyperbola, arc.geometryIndex, arc.geometryId);
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::ArcOfHyperbola,
+            arc.geometryIndex,
+            arc.geometryId
+        );
         edge.start = ElCLib::Value(arc.startAngle, hyperbola);
         edge.end = ElCLib::Value(arc.endAngle, hyperbola);
         edge.center = arc.center;
@@ -186,8 +210,11 @@ std::vector<SketchProfileEdge> profileEdges(
         // /SketchObjectExternal.cpp::processEdge2(), for GeomAbs_Parabola builds a
         // Part::GeomArcOfParabola from the trimmed curve parameters.
         const gp_Parab parabola(ellipseAxis(arc.center, arc.angle), arc.focal);
-        SketchProfileEdge edge =
-            profileEdgeWithIdentity(SketchProfileEdgeKind::ArcOfParabola, arc.geometryIndex, arc.geometryId);
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::ArcOfParabola,
+            arc.geometryIndex,
+            arc.geometryId
+        );
         edge.start = ElCLib::Value(arc.startAngle, parabola);
         edge.end = ElCLib::Value(arc.endAngle, parabola);
         edge.center = arc.center;
@@ -204,8 +231,11 @@ std::vector<SketchProfileEdge> profileEdges(
         if (bspline.poles.size() < 2U) {
             continue;
         }
-        SketchProfileEdge edge =
-            profileEdgeWithIdentity(SketchProfileEdgeKind::BSpline, bspline.geometryIndex, bspline.geometryId);
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::BSpline,
+            bspline.geometryIndex,
+            bspline.geometryId
+        );
         edge.start = bspline.poles.front();
         edge.end = bspline.poles.back();
         edge.degree = bspline.degree;
@@ -236,8 +266,11 @@ std::vector<SketchProfileEdge> profileEdges(
         if (bezier.poles.size() < 2U) {
             continue;
         }
-        SketchProfileEdge edge =
-            profileEdgeWithIdentity(SketchProfileEdgeKind::Bezier, bezier.geometryIndex, bezier.geometryId);
+        SketchProfileEdge edge = profileEdgeWithIdentity(
+            SketchProfileEdgeKind::Bezier,
+            bezier.geometryIndex,
+            bezier.geometryId
+        );
         edge.start = bezier.poles.front();
         edge.end = bezier.poles.back();
         edge.degree = static_cast<int>(bezier.poles.size() - 1U);
@@ -287,10 +320,12 @@ std::optional<Handle(Geom_BSplineCurve)> makeBSplineCurve(int degree, const std:
     }
 }
 
-gp_Vec hermiteTangentAt(const std::vector<gp_Pnt>& points,
-                        std::size_t index,
-                        const gp_Vec& startTangent,
-                        const gp_Vec& endTangent)
+gp_Vec hermiteTangentAt(
+    const std::vector<gp_Pnt>& points,
+    std::size_t index,
+    const gp_Vec& startTangent,
+    const gp_Vec& endTangent
+)
 {
     if (index == 0U) {
         return startTangent;
@@ -370,8 +405,8 @@ std::optional<Handle(Geom_BSplineCurve)> makeInterpolatedSplineCurve(
         return makeEndpointHermiteSplineCurve(points, *startTangent, *endTangent);
     }
 
-    Handle(TColgp_HArray1OfPnt) pointArray =
-        new TColgp_HArray1OfPnt(1, static_cast<int>(points.size()));
+    Handle(TColgp_HArray1OfPnt) pointArray
+        = new TColgp_HArray1OfPnt(1, static_cast<int>(points.size()));
     for (int index = 1; index <= static_cast<int>(points.size()); ++index) {
         pointArray->SetValue(index, points[static_cast<std::size_t>(index - 1)]);
     }
@@ -489,12 +524,8 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
             if (!parabolaMaker.IsDone()) {
                 return std::nullopt;
             }
-            GC_MakeArcOfParabola arcMaker(
-                parabolaMaker.Value(),
-                edge.startAngle,
-                edge.endAngle,
-                Standard_True
-            );
+            GC_MakeArcOfParabola
+                arcMaker(parabolaMaker.Value(), edge.startAngle, edge.endAngle, Standard_True);
             if (!arcMaker.IsDone()) {
                 return std::nullopt;
             }
@@ -516,12 +547,8 @@ std::optional<TopoDS_Edge> makeProfileEdge(const SketchProfileEdge& edge, bool r
         edgeBuilder = BRepBuilderAPI_MakeEdge(*curve);
     }
     else if (edge.kind == SketchProfileEdgeKind::InterpolatedSpline) {
-        const auto curve = makeInterpolatedSplineCurve(
-            edge.poles,
-            edge.periodic,
-            edge.startTangent,
-            edge.endTangent
-        );
+        const auto curve
+            = makeInterpolatedSplineCurve(edge.poles, edge.periodic, edge.startTangent, edge.endTangent);
         if (!curve) {
             return std::nullopt;
         }
@@ -622,7 +649,12 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
             return std::nullopt;
         }
         wireBuilder.Add(*firstEdge);
-        builtEdges.push_back(*firstEdge);
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
+        // ::TopoShape::makeElementWires(), after every `mkWire.Add()` assigns
+        // `edges.back().setShape(mkWire.Edge(), false)` before `mapSubElement(edges, op)`.  OCCT can
+        // replace the added edge's vertices while closing a wire; retain that final edge identity so
+        // the Sketch g<ID>;SKT ledger is a real maker input, not a geometry/order fallback.
+        builtEdges.push_back(TopoDS::Edge(wireBuilder.Edge()));
         std::vector<SketchGeometryIdentity> builtIdentities;
         builtIdentities.push_back(edges[startIndex].identity);
         used[startIndex] = true;
@@ -639,7 +671,7 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
                         return std::nullopt;
                     }
                     wireBuilder.Add(*nextEdge);
-                    builtEdges.push_back(*nextEdge);
+                    builtEdges.push_back(TopoDS::Edge(wireBuilder.Edge()));
                     builtIdentities.push_back(edges[index].identity);
                     currentEnd = edges[index].end;
                     used[index] = true;
@@ -652,7 +684,7 @@ std::optional<SketchProfileWires> makeProfileWiresFromEdges(const std::vector<Sk
                         return std::nullopt;
                     }
                     wireBuilder.Add(*nextEdge);
-                    builtEdges.push_back(*nextEdge);
+                    builtEdges.push_back(TopoDS::Edge(wireBuilder.Edge()));
                     builtIdentities.push_back(edges[index].identity);
                     currentEnd = edges[index].start;
                     used[index] = true;
@@ -867,8 +899,8 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
             sketchGeometryIdentity(circle.geometryIndex, circle.geometryId, "Circle")
         );
         for (std::size_t index = edgeOffset; index < sourceEdges.size(); ++index) {
-            sourceEdgeIdentities[index] =
-                sketchGeometryIdentity(circle.geometryIndex, circle.geometryId, "Circle");
+            sourceEdgeIdentities[index]
+                = sketchGeometryIdentity(circle.geometryIndex, circle.geometryId, "Circle");
         }
         shapes.push_back(*wire);
     }
@@ -892,8 +924,8 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
             sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId, "Ellipse")
         );
         for (std::size_t index = edgeOffset; index < sourceEdges.size(); ++index) {
-            sourceEdgeIdentities[index] =
-                sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId, "Ellipse");
+            sourceEdgeIdentities[index]
+                = sketchGeometryIdentity(ellipse.geometryIndex, ellipse.geometryId, "Ellipse");
         }
         shapes.push_back(*wire);
     }
@@ -906,62 +938,43 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
     };
 }
 
-ProfileFaceBuild buildOptionalProfileFace(
-    const std::vector<SketchProfileEdge>& edges,
-    const std::vector<SketchCircle>& circles,
-    const std::vector<SketchEllipse>& ellipses
-)
+ProfileFaceBuild buildOptionalProfileFace(const TopoDS_Shape& rawShape)
 {
+    if (rawShape.IsNull()) {
+        return {};
+    }
     SketchInternalBuildInput input;
-    if (!edges.empty()) {
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
-        // ::SketchObject::buildInternals() passes raw Sketch wires to "Part::FaceMakerBuildFace".
-        // Keep degree-1 BSplines as BSpline edges here; FaceMakerBuildFace::splitSelfIntersecting()
-        // owns the self-intersection split and produces different topology from pre-expanded lines.
-        auto edgeWires = makeProfileWiresFromEdges(edges);
-        if (!edgeWires) {
-            return {};
-        }
-        input.faceWires.insert(
-            input.faceWires.end(),
-            edgeWires->closedWires.begin(),
-            edgeWires->closedWires.end()
-        );
-        input.faceWireSourceEdgeIndices.insert(
-            input.faceWireSourceEdgeIndices.end(),
-            edgeWires->closedWireSourceEdgeIndices.begin(),
-            edgeWires->closedWireSourceEdgeIndices.end()
-        );
-        input.openWires
-            .insert(input.openWires.end(), edgeWires->openWires.begin(), edgeWires->openWires.end());
-        input.openWireSourceEdgeIndices.insert(
-            input.openWireSourceEdgeIndices.end(),
-            edgeWires->openWireSourceEdgeIndices.begin(),
-            edgeWires->openWireSourceEdgeIndices.end()
-        );
-        input.openEdges
-            .insert(input.openEdges.end(), edgeWires->openEdges.begin(), edgeWires->openEdges.end());
-        input.sourceEdges.insert(
-            input.sourceEdges.end(),
-            edgeWires->sourceEdges.begin(),
-            edgeWires->sourceEdges.end()
-        );
+    TopTools_IndexedMapOfShape rawEdges;
+    TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
+    input.sourceEdges.reserve(static_cast<std::size_t>(rawEdges.Extent()));
+    for (int index = 1; index <= rawEdges.Extent(); ++index) {
+        input.sourceEdges.push_back(TopoDS::Edge(rawEdges(index)));
     }
-    for (const auto& circle : circles) {
-        const auto wire = makeWireFromCircle(circle);
-        if (!wire) {
-            return {};
+
+    // FreeCAD: src/Mod/Sketcher/App/SketchObject.cpp::buildInternals(), passes the raw Shape's
+    // TopoShape wires to FaceMakerBuildFace. Do not rebuild equivalent wires from Geometry here:
+    // FaceMaker::postBuild() relies on shared edge identity to map raw g<ID>;SKT names.
+    for (TopExp_Explorer explorer(rawShape, TopAbs_WIRE); explorer.More(); explorer.Next()) {
+        const TopoDS_Wire wire = TopoDS::Wire(explorer.Current());
+        std::vector<std::size_t> sourceIndices;
+        for (TopExp_Explorer edgeExplorer(wire, TopAbs_EDGE); edgeExplorer.More();
+             edgeExplorer.Next()) {
+            const int rawIndex = rawEdges.FindIndex(edgeExplorer.Current());
+            if (rawIndex > 0) {
+                sourceIndices.push_back(static_cast<std::size_t>(rawIndex - 1));
+            }
         }
-        input.faceWires.push_back(*wire);
-        input.faceWireSourceEdgeIndices.push_back(appendSourceEdgesFromWire(input.sourceEdges, *wire));
-    }
-    for (const auto& ellipse : ellipses) {
-        const auto wire = makeWireFromEllipse(ellipse);
-        if (!wire) {
-            return {};
+        if (sourceIndices.empty()) {
+            continue;
         }
-        input.faceWires.push_back(*wire);
-        input.faceWireSourceEdgeIndices.push_back(appendSourceEdgesFromWire(input.sourceEdges, *wire));
+        if (BRep_Tool::IsClosed(wire)) {
+            input.faceWires.push_back(wire);
+            input.faceWireSourceEdgeIndices.push_back(std::move(sourceIndices));
+        }
+        else {
+            input.openWires.push_back(wire);
+            input.openWireSourceEdgeIndices.push_back(std::move(sourceIndices));
+        }
     }
 
     if (input.faceWires.empty() && input.openWires.empty() && input.openEdges.empty()) {
@@ -1004,4 +1017,4 @@ std::string profileShapeLabel(const std::optional<TopoDS_Shape>& profileShape)
 }
 
 
-} // namespace cad_core::sketcher
+}  // namespace cad_core::sketcher

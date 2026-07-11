@@ -128,9 +128,6 @@ std::vector<gp_Trsf> combinedLinearPatternTransforms(
     for (const gp_Vec& firstStep : firstSteps) {
         for (const gp_Vec& secondStep : secondSteps) {
             const gp_Vec step = firstStep + secondStep;
-            if (step.Magnitude() < Precision::Confusion()) {
-                continue;
-            }
             gp_Trsf transform;
             transform.SetTranslation(step);
             transforms.push_back(transform);

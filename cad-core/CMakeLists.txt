@@ -322,6 +322,7 @@ add_library(cad-core-lib STATIC
   src/app/property.cpp
   src/app/property_geo.cpp
   src/app/property_links.cpp
+  src/app/string_hasher.cpp
   src/base/placement.cpp
   src/graph/recompute_plan.cpp
   src/mesh/feature_mesh_import.cpp

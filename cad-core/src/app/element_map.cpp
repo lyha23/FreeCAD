@@ -53,6 +53,15 @@ void addDistinctString(std::vector<std::string>& values, const std::string& valu
 std::optional<int> matchingVertexIndex(const TopTools_IndexedMapOfShape& rawVertices,
                                        const TopoDS_Vertex& internalVertex)
 {
+    // FreeCAD: src/Mod/Part/App/TopoShapeExpansion.cpp::mapSubElement() resolves shared
+    // TopoDS subshapes before any geometric fallback. FaceMaker may preserve a vertex while
+    // changing the face's traversal order, and equal coordinates alone cannot distinguish the
+    // two endpoint identities of a closed profile.
+    for (int index = 1; index <= rawVertices.Extent(); ++index) {
+        if (rawVertices(index).IsSame(internalVertex)) {
+            return index;
+        }
+    }
     const gp_Pnt internalPoint = BRep_Tool::Pnt(internalVertex);
     for (int index = 1; index <= rawVertices.Extent(); ++index) {
         if (samePoint3d(BRep_Tool::Pnt(TopoDS::Vertex(rawVertices(index))), internalPoint)) {
@@ -138,6 +147,13 @@ bool sameEdgeGeometry(const TopoDS_Edge& rawEdge, const TopoDS_Edge& internalEdg
 std::optional<int> matchingEdgeIndex(const TopTools_IndexedMapOfShape& rawEdges,
                                      const TopoDS_Edge& internalEdge)
 {
+    // Prefer the exact source Edge TShape. The geometry path below is only the documented
+    // recovery fallback for a maker that copied/rebuilt an edge.
+    for (int index = 1; index <= rawEdges.Extent(); ++index) {
+        if (rawEdges(index).IsSame(internalEdge)) {
+            return index;
+        }
+    }
     const auto internalEndpoints = edgeEndpoints(internalEdge);
     for (int index = 1; index <= rawEdges.Extent(); ++index) {
         const TopoDS_Edge rawEdge = TopoDS::Edge(rawEdges(index));

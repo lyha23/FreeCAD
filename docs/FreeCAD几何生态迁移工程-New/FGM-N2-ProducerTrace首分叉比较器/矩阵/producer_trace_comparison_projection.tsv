@@ -1,0 +1,28 @@
+id	field_or_structure	join_key	comparison	raw_retained	notes
+FGMN2-PROJ-001	schemaVersion	no	exact supported schema	yes	invalid schema is input failure not semantic divergence
+FGMN2-PROJ-002	producer.name/version/build/path	no	name must identify producer;version/build/path provenance only	yes	do not require FreeCAD version equals CAD Core version
+FGMN2-PROJ-003	document temporary name	no	case/request ordinal projection	yes	never use temp document text as semantic key
+FGMN2-PROJ-004	transactionSequence	no	transaction ordinal/order/count strict	yes	local number only restores own trace
+FGMN2-PROJ-005	transaction targets	yes	mapped object set/order/outcome strict	yes	object mapping must be bijective
+FGMN2-PROJ-006	scopeSequence/parentScopeSequence	no	scope semantic path/order/parent strict	yes	local number only restores own tree
+FGMN2-PROJ-007	object/objectTag	yes via object/type/graph role	mapped relation/sign/role strict	yes	objectTag values can differ only through explicit bijection
+FGMN2-PROJ-008	producer TypeId/C++ class	producerKind/stage	mapped producerKind/stage strict	yes	mapping table is source-backed and fixture-independent
+FGMN2-PROJ-009	event sequence	no	scope-local/global relative order and count strict	yes	report both local sequences
+FGMN2-PROJ-010	slice	yes	exact common vocabulary	yes	missing slice is first divergence
+FGMN2-PROJ-011	source/target IndexedName	yes	exact after object/shape role mapping	yes	never normalize Face/Edge/Vertex indices away
+FGMN2-PROJ-012	candidate ordinal/input ordinal	yes	exact order	yes	prevents set-style comparison hiding sort drift
+FGMN2-PROJ-013	decision/reason	no	exact stable enum	yes	message text belongs in separate detail field
+FGMN2-PROJ-014	snapshot ID/hash	no	validate locally then compare canonical payload	yes	hash is fast path and integrity evidence
+FGMN2-PROJ-015	trace identity hasher/map/shape/mapper	yes via lifecycle	create/copy/share/reset/drop relation strict	yes	never use address or OCCT HashCode
+FGMN2-PROJ-016	inputTag/masterTag/childTag	no	object/shape identity bijection then sign/role/reference strict	yes	do not delete entire H tag segment
+FGMN2-PROJ-017	raw #SID[:index]	no	strict after structural event alignment	yes	SID is evidence not join key
+FGMN2-PROJ-018	raw mapped name	no	strict after mapped Tag projection and structural alignment	yes	canonical name is locator only
+FGMN2-PROJ-019	canonical mapped name	locator/explanation	exact canonical identity	yes	cannot replace raw or refs
+FGMN2-PROJ-020	entry-local elementIdRefs	no	exact values/indices/order after SID allocation alignment	yes	never substitute global raw-name relations
+FGMN2-PROJ-021	StringHasher table/order	no	exact allocation graph/data/postfix/flags/PrefixID/related order	yes	first allocation drift is reportable root cause
+FGMN2-PROJ-022	mapper M/G/D adjacency	no	exact source/target relation and order	yes	raw snapshot must predate naming consumption
+FGMN2-PROJ-023	candidate list/sort fields	no	exact list/order/fields/winner/rejections	yes	K/tuple/parallel/delayed/U/L remain strict
+FGMN2-PROJ-024	child ranges	no	exact typed offset/count/postfix/refs/nested identity	yes	must remain in output inventory bounds
+FGMN2-PROJ-025	exception type/message	no	stable category/reason/outcome/stage/partial-write strict	yes	raw type/message provenance only
+FGMN2-PROJ-026	nondeterministic raw suffix	no	stableComparisonKey only when producer declares exact nondeterminismClass	yes	comparator cannot invent ignore rules
+FGMN2-PROJ-027	JSON object key order	no	ignored	yes	semantic arrays are never reordered

@@ -7,9 +7,15 @@
 #include <nlohmann/json.hpp>
 
 #include <cstddef>
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>
+
+namespace cad_core::app
+{
+class StringHasher;
+}
 
 namespace cad_core::sketcher
 {
@@ -77,7 +83,18 @@ void addInternalEdgeIdentitiesFromInternalElementMap(
 part::NamedShape namedShapeForSketchRawEdgeIdentity(
     const std::string& owner,
     const TopoDS_Shape& rawShape,
-    const RawSketchEdgeIdentityLedger& ledger);
+    const RawSketchEdgeIdentityLedger& ledger,
+    long ownerTag);
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+// ::SketchObject::buildShape() creates its result with getDocument()->getStringHasher(), then
+// makeElementWires(..., Part::OpCodes::Sketch) writes the raw g<ID>;SKT ElementMap before a
+// downstream Pad consumes it. The public source ledger stays raw; this records only the matching
+// request-local StringIDRef sidecar in the shared document table.
+void materializeSketchMappedNameStringIds(
+    part::NamedShape& namedShape,
+    const std::shared_ptr<app::StringHasher>& stringHasher
+);
 
 void publishRawSketchEdgeIdentity(nlohmann::json& mesh,
                                   nlohmann::json& subshapes,

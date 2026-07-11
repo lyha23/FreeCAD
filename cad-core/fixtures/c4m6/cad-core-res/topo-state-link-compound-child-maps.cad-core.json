@@ -167,6 +167,11 @@
         ]
       },
       "object": "CompoundLink",
+      "object_fields": {
+        "link": "app_link",
+        "linked_object": "Compound",
+        "shape": "occt_face"
+      },
       "subshapes": [
         {
           "ReferenceShadow": [],

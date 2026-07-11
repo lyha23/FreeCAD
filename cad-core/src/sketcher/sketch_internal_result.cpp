@@ -101,6 +101,28 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
     result.shapeValue.internalShape = input.internalShape;
     result.shapeValue.profileRequiresSubshapeSelection = input.profileRequiresSubshapeSelection;
 
+    if (input.rawNamedShape) {
+        result.rawNamedShape = *input.rawNamedShape;
+    }
+    else if (!input.rawShape.IsNull()) {
+        result.rawNamedShape = namedShapeForSketchRawEdgeIdentity(
+            input.objectName,
+            input.rawShape,
+            rawEdgeIdentityLedger,
+            input.objectTag
+        );
+    }
+    if (input.profileShape && !input.profileShape->IsNull() && result.rawNamedShape
+        && input.stringHasher) {
+        result.profileNamedShape = part::namedShapeForSketchProfileShape(
+            input.objectName + ".ProfileShape",
+            input.rawShape,
+            *input.profileShape,
+            *result.rawNamedShape,
+            input.stringHasher
+        );
+    }
+
     const bool hasNonEmptyInternalShape = input.internalShape && !input.internalShape->IsNull();
     if (hasNonEmptyInternalShape) {
         nlohmann::json internalElementMap =
@@ -120,7 +142,9 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
             input.rawShape,
             *input.internalShape,
             input.historyLedger,
-            internalEdgeMappedNamesFromLedger(rawEdgeIdentityLedger, internalElementMap)
+            internalEdgeMappedNamesFromLedger(rawEdgeIdentityLedger, internalElementMap),
+            result.rawNamedShape ? &*result.rawNamedShape : nullptr,
+            input.stringHasher
         );
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals(), writes auxiliary "InternalShape"; the web response
@@ -141,14 +165,6 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
         // EdgeN/VertexN display mesh for picking without synthesizing Internal* elements.
         result.mesh = part::meshForShape(input.rawShape);
     }
-    if (!input.rawShape.IsNull()) {
-        result.rawNamedShape = namedShapeForSketchRawEdgeIdentity(
-            input.objectName,
-            input.rawShape,
-            rawEdgeIdentityLedger
-        );
-    }
-
     const nlohmann::json internalSubshapes = hasNonEmptyInternalShape
         ? part::subshapeMapForShape(*input.internalShape, "Internal")
         : nlohmann::json::object();

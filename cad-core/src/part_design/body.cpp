@@ -93,14 +93,6 @@ nlohmann::json linkPropertyJson(const std::string& target)
     };
 }
 
-nlohmann::json nullLinkPropertyJson()
-{
-    return {
-        {"PropertyType", "App::PropertyLink"},
-        {"value", nullptr},
-    };
-}
-
 nlohmann::json groupPropertyJson(const app::DocumentObject& body,
                                  const std::vector<std::string>& groupNames)
 {
@@ -203,25 +195,6 @@ std::optional<std::string> firstBodySolidFeature(const runtime::ComputeContext& 
         }
     }
     return std::nullopt;
-}
-
-bool bodyChainSolidFeature(const runtime::ComputeContext& context,
-                           const std::vector<std::string>& groupNames,
-                           const std::string& name)
-{
-    if (!groupContains(groupNames, name)) {
-        return false;
-    }
-    const app::DocumentObject* object = documentObjectByName(context, name);
-    if (object == nullptr || object->typeId.rfind("PartDesign::", 0U) != 0U
-        || object->typeId == "PartDesign::Body") {
-        return false;
-    }
-    const auto shapeIt = context.shapes.find(name);
-    if (shapeIt != context.shapes.end() && shapeIt->second.kind == runtime::ShapeValue::Kind::Solid) {
-        return true;
-    }
-    return context.addSubShapes.count(name) != 0U;
 }
 
 std::optional<std::string> baseFeatureTarget(const app::DocumentObject& object)
@@ -438,99 +411,6 @@ void appendBodyOriginDatumRelinkUpdates(runtime::ComputeContext& context,
     }
 }
 
-std::optional<std::string> previousSolidFeatureForRemovedTip(const runtime::ComputeContext& context,
-                                                             const std::vector<std::string>& groupNames,
-                                                             const app::DocumentObject& removedFeature)
-{
-    const auto baseTarget = baseFeatureTarget(removedFeature);
-    if (!baseTarget || !bodyChainSolidFeature(context, groupNames, *baseTarget)) {
-        return std::nullopt;
-    }
-    return baseTarget;
-}
-
-std::optional<std::string> nextSolidFeatureForRemovedTip(const runtime::ComputeContext& context,
-                                                         const std::vector<std::string>& groupNames,
-                                                         const std::string& removedFeature)
-{
-    for (const auto& groupName : groupNames) {
-        const app::DocumentObject* object = documentObjectByName(context, groupName);
-        if (object == nullptr || !bodyChainSolidFeature(context, groupNames, groupName)) {
-            continue;
-        }
-        const auto baseTarget = baseFeatureTarget(*object);
-        if (baseTarget && *baseTarget == removedFeature) {
-            return groupName;
-        }
-    }
-    return std::nullopt;
-}
-
-std::optional<std::string> appendBodyRemovedTipRerouteUpdates(runtime::ComputeContext& context,
-                                                             const app::DocumentObject& body,
-                                                             const std::vector<std::string>& groupNames,
-                                                             const std::string& staleTip)
-{
-    const app::DocumentObject* staleTipObject = documentObjectByName(context, staleTip);
-    if (staleTipObject == nullptr || groupContains(groupNames, staleTip)) {
-        return std::nullopt;
-    }
-    const auto staleTipShapeIt = context.shapes.find(staleTip);
-    if (staleTipShapeIt == context.shapes.end()
-        || staleTipShapeIt->second.kind != runtime::ShapeValue::Kind::Solid) {
-        return std::nullopt;
-    }
-
-    const auto previousSolid = previousSolidFeatureForRemovedTip(context, groupNames, *staleTipObject);
-    const auto nextSolid = nextSolidFeatureForRemovedTip(context, groupNames, staleTip);
-    if (!previousSolid && !nextSolid) {
-        return std::nullopt;
-    }
-    const std::string reroutedTip = previousSolid.value_or(*nextSolid);
-
-    // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
-    // ::Body::removeObject(), before erasing the feature from Group, says "Adjust Tip feature
-    // if it is pointing to the deleted object" and sets Tip to prevSolidFeature or nextSolidFeature.
-    context.documentObjectUpdates.push_back({
-        {"action", "update"},
-        {"reason", "body_tip_deleted_feature_reroute"},
-        {"object", body.name},
-        {"objectId", body.id},
-        {"typeId", body.typeId},
-        {"properties",
-         {
-             {"Tip", linkPropertyJson(reroutedTip)},
-         }},
-    });
-
-    if (nextSolid) {
-        const app::DocumentObject* nextObject = documentObjectByName(context, *nextSolid);
-        if (nextObject != nullptr) {
-            const auto nextBase = baseFeatureTarget(*nextObject);
-            if (nextBase && *nextBase == staleTip) {
-                // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/Body.cpp
-                // ::Body::removeObject(), if the next feature points to the deleted feature,
-                // rewrites "nextPD->BaseFeature" to "prevSolidFeature".
-                context.documentObjectUpdates.push_back({
-                    {"action", "update"},
-                    {"reason", "body_feature_basefeature_delete_reroute"},
-                    {"object", nextObject->name},
-                    {"objectId", nextObject->id},
-                    {"typeId", nextObject->typeId},
-                    {"owner", body.name},
-                    {"ownerId", body.id},
-                    {"properties",
-                     {
-                         {"BaseFeature", previousSolid ? linkPropertyJson(*previousSolid) : nullLinkPropertyJson()},
-                     }},
-                });
-            }
-        }
-    }
-
-    return reroutedTip;
-}
-
 void appendBodyBaseFeatureChainUpdates(runtime::ComputeContext& context,
                                        const app::DocumentObject& body,
                                        const std::vector<std::string>& groupNames,
@@ -739,6 +619,10 @@ void addDirectTipChildMaps(part::NamedShape& namedShape,
         childMap.count = count;
         childMap.targetStart = prefix + "1";
         childMap.targetEnd = prefix + std::to_string(count);
+        // FreeCAD: PropertyPartShape::setValue() delegates a Body Tip assignment to
+        // TopoShape::reTagElementMap()/setupChild(); Body retains the Tip ledger and range Tag
+        // rather than replaying the originating Pad/Pocket maker.
+        childMap.tag = tipNamedShape->producerTag.value_or(0L);
         childMap.sourceNamedShape = tipNamedShape;
         childMap.hasSourceElementMap = !tipNamedShape->elementMap.empty();
         childMap.sourceElementMapSize = tipNamedShape->elementMap.size();
@@ -1058,15 +942,10 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
         appendBodyOriginDatumRelinkUpdates(context, body, groupNames, *bodyOriginName);
     }
 
+    const auto bodyTip = app::readLink(body, "Tip");
+    const bool requestedBodyTip = bodyTip && bodyTip->object == featureName;
     std::string resolvedStopFeature = featureName;
-    if (!groupContains(groupNames, resolvedStopFeature) && options.emitDocumentUpdates) {
-        const auto reroutedTip = appendBodyRemovedTipRerouteUpdates(context, body, groupNames, resolvedStopFeature);
-        if (reroutedTip) {
-            resolvedStopFeature = *reroutedTip;
-        }
-    }
-
-    if (!groupContains(groupNames, resolvedStopFeature)) {
+    if (!groupContains(groupNames, resolvedStopFeature) && !requestedBodyTip) {
         const bool finalBodyShape = options.emitDocumentUpdates && options.applyBodyPlacement;
         runtime::addDiagnostic(context.diagnostics,
                                "error",
@@ -1079,6 +958,61 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
                                finalBodyShape ? featureName : resolvedStopFeature);
         return std::nullopt;
     }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+    // ::Body::execute() reads `tipShape = static_cast<Part::Feature*>(tip)->Shape.getShape()`
+    // and calls `Shape.setValue(tipShape)`.  FeatureExtrude has already produced its own
+    // makeElementBoolean result before that point.  A document graph may still contain a Tip
+    // removed from Group while the caller persists the remove-object update; execute inherits
+    // that requested Tip as-is. Body is therefore an inheriting publisher: it must not reroute
+    // Tip or replay Pad/Pocket Booleans to manufacture a second ElementMap lifecycle.
+    const auto tipShapeIt = context.shapes.find(resolvedStopFeature);
+    if (tipShapeIt == context.shapes.end()) {
+        runtime::addDiagnostic(context.diagnostics,
+                               "error",
+                               "missing_link_target",
+                               "Body Tip target " + resolvedStopFeature + " did not produce a Shape",
+                               body.name,
+                               "Tip",
+                               "runtime",
+                               resolvedStopFeature);
+        return std::nullopt;
+    }
+
+    BodyTopoShapeResult directTip;
+    directTip.shape = tipShapeIt->second.shape;
+    directTip.shapeValueKind = tipShapeIt->second.kind;
+    directTip.usesPreciseBoundingBox = tipShapeIt->second.usePreciseBoundingBox;
+    directTip.stopFeature = resolvedStopFeature;
+    directTip.origin = bodyOriginName;
+    directTip.groupNames = groupNames;
+    directTip.directTipSubshapeOwner = resolvedStopFeature;
+    if (const auto tipNamedShapeIt = context.namedShapes.find(resolvedStopFeature);
+        tipNamedShapeIt != context.namedShapes.end()) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+        // ::Body::execute() ends with `Shape.setValue(tipShape)`.  That property boundary keeps
+        // the Tip ElementMap/child maps/MapperHistory intact while
+        // PropertyPartShape::setValue(const TopoShape&) assigns the receiving Body Tag.  Do not
+        // replay Pad/Pocket here: the completed Tip is the sole producer ledger source.
+        directTip.namedShape = part::namedShapeForPropertyShapeValue(
+            body.name,
+            directTip.shape,
+            tipNamedShapeIt->second,
+            static_cast<long>(body.id)
+        );
+        directTip.directTipSubshapeStablePrefix = true;
+    }
+
+    const auto directPlacementIt = context.globalPlacements.find(body.name);
+    if (options.applyBodyPlacement && directPlacementIt != context.globalPlacements.end()
+        && !isIdentityPlacement(directPlacementIt->second)) {
+        directTip.shape = base::transformShape(directTip.shape, directPlacementIt->second);
+        directTip.namedShape = std::nullopt;
+        directTip.usesPreciseBoundingBox = false;
+        directTip.directTipSubshapeOwner = std::nullopt;
+        directTip.directTipSubshapeStablePrefix = false;
+    }
+    return directTip;
 
     std::optional<TopoDS_Shape> bodyShape;
     runtime::ShapeValue::Kind bodyShapeKind = runtime::ShapeValue::Kind::Solid;

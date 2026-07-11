@@ -26,6 +26,7 @@ P6 已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` �
 
 ## 已知缺口
 
+- producer trace 目前只迁移 C4M6 Body/Tip stable recovery。P6 其它 maker、split/open-wire、DressUp/Pattern/Refine 与 request-level rejected case 仍缺原生 transaction/scope/checkpoint 证据；不能把 public/ledger pair 齐全写成 producer 主路径已闭包。
 - 完整 MapperHistory 生命周期仍按 maker 分阶段迁移；FaceMaker / WireJoiner 的 recoverable InternalShape producer 主路径已在 S6 关闭，ShapeFix、DressUp / Refine / transformed 与 taper 已通过 P6 MakerHistory S3-S5 专项复审核定为当前 focused scope supported，后续重点转向未采 native ExternalGeometry 状态 oracle和更复杂引用恢复。
 - split 的完整自动旧引用恢复还不完整；当前只恢复 MapperHistory 能证明同类唯一 target 或 ExternalGeometry collapsed point 的旧 stable 引用；merge 已能记录并跨 Link retag 传播，ShapeFix / transformed / DressUp / taper 相关复杂恢复仍保持 `notCollected`，只有后续 oracle 证明 mismatch 后才进入 backendGap。
 - FaceMaker / WireJoiner 的 recoverable history consumption 已与 P5 geometry 账本联动：concrete producer evidence 先于几何匹配式 internal map 消费，summary / current-member blocked 分支只保留诊断边界。request-local `InternalFaceN` stable selector 只能在本次 recompute 已有 `Sketch.InternalShape` NamedShape / ElementMap 证据时解析；缺证据、同类一对多、deleted 和 producer-missing 情况继续输出结构化诊断。
@@ -45,7 +46,7 @@ P6 已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` �
 | `features/body.*` | Body boolean history 和 AddSubShape slot 级 NamedShape 消费 |
 | `features/transformed.*` | transformed copy source alias 和 AddSubShape slot 级 NamedShape 消费 |
 | `runtime/recompute.*` | ReferenceShadow 校验和 elementReferenceUpdates；普通 Shape LinkSub 与 Sketch internal LinkSub 都必须走当前 ElementMap / shadow evidence |
-| `tools/collect_freecad_expected.py` | FreeCADCmd 原生几何 expected；P6 UpToFace stable-subname 和 Sketch ExternalGeometry source-prefixed stable key 生成 post-resolution 对照 |
+| `tools/collect_freecad_expected.py` | 同次采集 public、ledger 与可用的 producer trace；P6 UpToFace / ExternalGeometry 仍以 public 对齐，trace 用于定位最早 producer 分叉 |
 
 ## FreeCAD 依据
 
@@ -60,6 +61,8 @@ P6 已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` �
 
 ## 验收
 
+- 进入 trace 驱动实现的 case，必须从原生 transaction/scope/checkpoint 找到 first divergence，并在对应 `app` / `part` / `sketcher` / `part_design` seam 修复；不得从 event 序号或最终 stable name 回填结果。
+- trace 缺失、event/snapshot/scope 不闭合或 request-level failure 尚无正式 trace 时，单列为 producer evidence gap；它不改变已有 public/ledger verdict，也不能被描述为 P6 producer parity 已完成。
 - `fixtures/p6` 覆盖 indexed named shape、source-preserved key、Body boolean history、stable subname 恢复、同类唯一 split target 自动恢复、deleted diagnostics，以及 deleted / split terminal history 跨后续 Body boolean 的传播；`element_history_status` 已进入 P5 / P6 / P7 expected fixture 和 C ABI `topo_history` capabilities，约束 generated / modified、terminal split / deleted、merge、Sketch InternalShape FaceMaker 阶段状态，以及 transformed / DressUp 链路的 terminal history 传播状态；P7 / P8 fixture 继续约束 transformed copy、Link retag 后的 terminal history diagnostics，以及 Link retag 后的 merge history 保留。
 - P6 UpToFace stable-subname indexed / Body preserved / Body history 成功几何 expected 来自本机 FreeCADCmd；不再按 `stable_subname_oracle_pending` 跳过；ReferenceShadow 回归约束旧 `SubList` + stable Body face 引用会经 ElementMap 写回当前 `SubList` 和 `ShadowSub`。
 - P6 Sketch ExternalGeometry direct indexed 与 source-prefixed stable-subname 子集成功几何 expected 来自本机 FreeCADCmd；source-prefixed 走 FreeCAD `resolveElement().oldName` 恢复路径，不从 cad-core 当前输出回填；嵌套 Body profile-source 已固定 native projection oldName oracle。

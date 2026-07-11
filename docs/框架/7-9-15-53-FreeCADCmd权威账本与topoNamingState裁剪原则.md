@@ -2,9 +2,9 @@
 
 ## 结论
 
-`fixtures/<phase>/expected/*.freecad.json` 是对外协议 expected；同名 `fixtures/<phase>/expected/*.freecad.ledger.json` 是 FreeCADCmd / native oracle 生成的权威账本 sidecar。
+`fixtures/<phase>/expected/*.freecad.json` 是对外协议 expected；同名 `.freecad.ledger.json` 是 FreeCADCmd 的 provenance sidecar；`.freecad.producer-trace.json` 是原生 ElementMap producer 的只读过程证据。
 
-当前裁剪原则是：不要把完整内部账本塞回 `.freecad.json`，也不要在对外 expected 里新增 `oracleMetadata`、`topologyInventory`、`referenceLedger` 这类厚块；`.freecad.json` 只保留前端协议需要的 public `topoNamingState` 投影，完整证明放在同名 `.freecad.ledger.json`。
+裁剪原则是：不要把 ledger 或 producer trace 塞回 `.freecad.json`。public expected 只保留前端协议需要的投影；ledger 解释 public/provenance 闭包；trace 解释 SID、ElementMap、mapper 和 feature stage 的生产过程。
 
 validator 的职责变成证明两件事：
 
@@ -12,6 +12,8 @@ validator 的职责变成证明两件事：
 - `.freecad.json` 中发布的 `topoNamingState` 可以由 ledger 的对象、事件、投影、覆盖和 round-trip 证据解释。
 
 collector 的数据方向固定为：FreeCADCmd 先产生同次 capture，再分别生成 public expected 与 ledger。capture 明确分为 `rawTopoNamingState`、`publishedTopoNamingState` 和 `resolvedReferenceBindings`：属性写入成功先标为 assigned，recompute 后还必须由 FreeCAD `getSubObject` / `Shape.getElement` 或 raw topo 证据确认 resolved，才允许进入 capture。事件只接受 raw 状态与该成功绑定，公开投影来自 published 状态。accepted ledger 不允许从已经落盘的 expected 反推；capture 与 public `topoNamingState` 不一致时采集直接失败。
+
+producer trace 在原生 Document 关闭前通过 `drainElementMapProducerTrace()` 一次性取出。recorder 是只读旁路；trace 不参与 shape、StringHasher 分配、ElementMap 决策、`topoNamingState` 或 CAD Core 输入。
 
 因此，验收重点是检查 sidecar 权威账本与 public 投影之间不断链：
 
@@ -28,8 +30,11 @@ collector 的数据方向固定为：FreeCADCmd 先产生同次 capture，再分
 - `*.freecad.ledger.json` 的 `coverage`
 - `*.freecad.ledger.json` 的 `roundTrip`
 - `*.freecad.ledger.json` 的 `fixture.expectedPayloadHash` 与 `fixture.topoNamingStateHash`
+- `*.freecad.producer-trace.json` 的 transaction、event sequence、scope parent/closure 与 snapshot 引用
 
 当前 checked-in native expected 要求每个 `*.freecad.json` 都有同名 sidecar；缺少 `*.freecad.ledger.json` 是 hard fail。
+
+producer trace 正在独立迁移。缺 trace 不改变既有 public/ledger release verdict，但 collector replay 与 producer 对齐任务必须报告缺失，不能以空 trace 或从 public output 反推的事件补齐。
 
 ## 验收入口
 
@@ -50,16 +55,16 @@ python3 tools/validate_freecad_expected_ledger.py --all --strict
 
 ```bash
 cd ~/Chili3DProject/FreeCAD
-FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
-  python3 cad-core/tools/collect_freecad_expected.py \
+python3 cad-core/tools/collect_freecad_expected.py \
   --phase c4m6 \
   --check \
-  --check-ledger \
   --validate-ledger \
   --skip-unsupported
 ```
 
-`--check` 比较 regenerated public expected；`--check-ledger` 比较 regenerated ledger 的 producer / objects / events / projection / coverage / round-trip 语义；与 `--check-ledger` 同用时，`--validate-ledger` 验证的是本次内存生成结果，而不是磁盘上的旧 sidecar。不要把 validator 和 collector 复现混成一个入口：前者只验证 checked-in expected 与 sidecar ledger 的闭包，后者才负责重新调用 FreeCADCmd 证明两份 artifact 可复现。
+collector 默认使用 `/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd`。`--check` 比较 regenerated public expected 与 ledger，并要求已入库 producer trace 结构闭合；`--validate-ledger` 验证本次内存结果。
+
+`--emit-ledger` 与 `--check-ledger` 仅为兼容参数。独立 validator 只读 checked-in public/ledger；collector replay 才重新运行 FreeCADCmd。当前 trace 尚未全量迁移，phase replay 会对缺 trace 的已处理 native case fail closed。
 
 ## sidecar 最小结构
 
@@ -116,21 +121,19 @@ FREECADCMD=/Users/li/.cargo/bin/FreeCADCmd \
 
 ## 分层关系
 
-现在保留三个清楚的层次：
+现在保留四个清楚的层次：
 
-- `collect_freecad_expected.py --check`：证明 expected 能由 FreeCADCmd / native collector 复现。
-- `collect_freecad_expected.py --check --check-ledger`：证明 ledger 也能由同次 FreeCADCmd capture 复现，而不是只验证旧 sidecar 自洽；FreeCAD / OCCT producer 版本漂移也是失败。
+- `collect_freecad_expected.py --check`：证明 public 与 ledger 可复现，并验证已有 trace 的结构闭包。
 - `validate_freecad_expected_ledger.py`：证明 checked-in `.freecad.json` 与 `.freecad.ledger.json` 的权威账本闭包成立。
+- producer trace 审计：按 transaction/scope/checkpoint/snapshot 找 CAD Core 与 FreeCAD 的 first divergence，不把 trace 变成 public comparator。
 - 其它 coverage 测试：证明 expected corpus 覆盖了哪些业务形态。
 
-不要把这三件事混成一个更厚的对外协议 schema。当前最小有效目标是：`.freecad.json` 继续保持裁剪后的 public topoNamingState 投影，`.freecad.ledger.json` 承担 FreeCADCmd 权威内部账本证明，validator 把两者绑定成可验证门禁。
+不要把这些证据混成更厚的对外 schema。`.freecad.json` 保持 public 投影，ledger 承担 provenance，producer trace 承担内部生产过程；CAD Core response 只按 public 语义裁决。
 
-静态 validator 不能仅凭 `producer.name=FreeCADCmd` 证明某个外部进程真的运行过；native 来源必须由 live `--check --check-ledger` 门禁补足。ledger v1 的证据边界是 FreeCADCmd Python 与 public DTO 能导出的对象、映射和历史，不应夸大为 FreeCAD C++ 私有 `NamedShape` / `ElementMap` / MapperHistory 的完整导出。
+静态 ledger validator 不能仅凭 `producer.name=FreeCADCmd` 证明外部进程真的运行过；native 来源由 live `--check` 补足。ledger v1 仍是 Python/public DTO 证据，原生私有 producer 过程只由 trace 描述。
 
 输入 fixture 为兼容回放而携带的 `mapperHistory` 可以继续出现在 public `topoNamingState`，但不能被 ledger 重新标记成本次 FreeCADCmd 产生的 native event；native event 只从 `rawTopoNamingState` 提取。
 
-当前验收基线：全库 475 对 `.freecad.json` / `.freecad.ledger.json` 通过 `--all --strict`；c4m6 live gate 为 `processed=9 skipped=1 failed=0`，其中跳过的 `topo-state-mapper-history-events.expeted.json` 是明确的 protocol-only contract，不属于 native ledger discovery。
+2026-07-12 live corpus 有 480 对 `.freecad.json` / `.freecad.ledger.json`：470 accepted、10 rejected；480 个 native fixture 也均已有通过闭包校验的 producer trace。10 个 request-level rejected 用例由原生 documentless checkpoint 记录稳定 reason，并以 cancel transaction 闭合。
 
-本次闭包修复同时清理了 69 个 accepted fixture 的过期输入 `documentHash`，其中 3 个还需要同步 object-level `objectHash`；全部通过 FreeCADCmd 重生，且迁移前后的 accepted/rejected outcome 保持不变。
-
-所有 152 个带 `inputReferences` 的 native sidecar 已按 raw-event / resolved-binding 规则由 FreeCADCmd 重生，并完成第二次 `--check --check-ledger --validate-ledger` replay：`152/152` 通过、outcome 零漂移。无法由 element map 唯一反查的 `subshapeEvidence` 只从 `rawTopoNamingState` 生成，不从 published 投影回抄。
+同日用默认 FreeCAD2 binary replay Body/Tip case，public 与 trace 生成成功，但 ledger check 因 producer revision 从 `20260519` 漂到 `46970` 返回 1。当前只能称 artifact 存在，不能称新 producer 基线已可复现。

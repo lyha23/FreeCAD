@@ -15,6 +15,7 @@ materialize_current(MaterializeRequest) -> GenerationReport
 
 - `fixture_roles.v1.json` 是 native / protocol-only / unsupported 的唯一机器来源。role audit 缺项、重复、orphan、stale 或 artifact 不一致，结果为 `invalid`。
 - native case 必须有 `.freecad.json` + `.freecad.ledger.json`；每个 live evaluation 复用 strict ledger validator 的真实规则。
+- `.freecad.producer-trace.json` 是独立的 producer 实现诊断 oracle，当前不进入 public semantic diff、strict ledger preflight 或 `releaseStatus`。缺 trace 应由 collector replay / trace closure 门报告，不能伪装成 CAD Core public parity red。
 - protocol-only case 只由其 `.expeted.json` focused contract 保护，不进入 native release verdict。
 - live source 必须运行当前 binary；同一 actual payload 同时用于 diff、registry audit 和 freshness。checked-in current 与该 payload 的 comparison-profile normalized digest 不一致，结果为 `invalid`。
 
@@ -67,5 +68,6 @@ Hash / foreign-owner 是 request-integrity hard fail，不能以 registry 把它
 ## 非目标
 
 - 不用 parity module 制造 FreeCAD 业务语义、修剪 runtime 输出或手改 collector artifact。
+- 不把 producer trace 当 CAD Core 建模输入、public response 字段或 release comparator 的隐式新分母。
 - 不把 ledger、`topoNamingState` 或 `ReferenceShadow.brep` 当服务端 session / 建模输入。
 - 不把 S4 的五个 phase family red known gaps 伪装成 release green。

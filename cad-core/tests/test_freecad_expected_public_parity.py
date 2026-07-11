@@ -550,7 +550,6 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
 
     def test_representative_family_snapshot_reports_keep_metadata_without_acceptance(self) -> None:
         expected_known_gap_ids = {
-            "c3m1": "C13M5-S4-KG-TOPO-001",
             "c10m1": "C13M5-S4-KG-SKETCH-001",
             "c12m12": "C13M5-S4-KG-PART-001",
             "c3m5": "C13M5-S4-KG-PD-001",
@@ -566,7 +565,7 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             "close_condition",
             "knownGapId",
         )
-        for phase, known_gap_id in expected_known_gap_ids.items():
+        for phase in ("c3m1", *expected_known_gap_ids):
             with self.subTest(phase=phase):
                 report = evaluate(
                     EvaluationRequest(root=ROOT, phase=phase, source_kind="snapshot")
@@ -574,11 +573,21 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                 self.assertTrue(report["preflight"]["valid"], report["preflight"]["errors"])
                 self.assertGreater(report["summary"]["cases"], 0)
                 self.assertEqual("red", report["exactStatus"])
-                self.assertEqual("red", report["semanticStatus"])
                 self.assertEqual("not_evaluated", report["releaseStatus"])
                 diffs = [diff for item in report["cases"] for diff in item["diffs"]]
                 semantic_diffs = [diff for diff in diffs if diff["comparisonClass"] == "public_semantic"]
                 observations = [diff for diff in diffs if diff["comparisonClass"] != "public_semantic"]
+                if phase == "c3m1":
+                    # The former C13M5 topology known gap is now semantically closed. Keep the
+                    # snapshot in this representative audit, but do not require stale red-gap
+                    # metadata when it has no remaining public-semantic diff to describe.
+                    self.assertEqual("green", report["semanticStatus"])
+                    self.assertEqual([], semantic_diffs)
+                    self.assertTrue(all(diff["accepted"] for diff in observations))
+                    continue
+
+                known_gap_id = expected_known_gap_ids[phase]
+                self.assertEqual("red", report["semanticStatus"])
                 self.assertGreater(len(semantic_diffs), 0)
                 for diff in semantic_diffs:
                     self.assertFalse(diff["accepted"])

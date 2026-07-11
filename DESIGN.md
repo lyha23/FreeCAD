@@ -469,3 +469,7 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 查阅'/Users/li/Chili3DProject/FreeCAD/docs/框架/7-10-15-53-CADCore根输入Fixture到FreeCADCmd输出等价框架方案.md''/Users/li/
   Chili3DProject/FreeCAD/docs/框架/检查流程.md', 排查一下'/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m2' 中 cad-core 的输出是否
   满足要求
+
+---
+
+我能不能 新建一个 比较的  python 脚本 在 /Users/li/Chili3DProject/FreeCAD/cad-core/tools， 用于比较  expected/<case>.freecad.producer-trace.json  与  cad-core 的过程输出， 从而在第一处分叉的位置就报错？

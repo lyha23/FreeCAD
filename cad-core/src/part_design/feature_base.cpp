@@ -51,6 +51,14 @@ void executeFeatureBase(const app::DocumentObject& object, runtime::ComputeConte
     }
 
     context.shapes[object.name] = runtime::ShapeValue{runtime::ShapeValue::Kind::Solid, solid};
+    if (const auto source = context.namedShapes.find(baseLink->object);
+        source != context.namedShapes.end()) {
+        // FreeCAD: src/Mod/Part/App/PropertyTopoShape.cpp::PropertyPartShape::setValue()
+        // persists FeatureBase's linked Shape under the FeatureBase object Tag.
+        context.namedShapes[object.name] = part::namedShapeForPropertyShapeValue(
+            object.name, solid, source->second, static_cast<long>(object.id)
+        );
+    }
     context.mesh[object.name] = cad_core::part::meshForShape(solid);
     context.subshapes[object.name] = part::subshapeMapForShape(solid);
     context.objects[object.name] = {

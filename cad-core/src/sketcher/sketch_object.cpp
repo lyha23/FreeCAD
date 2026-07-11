@@ -591,7 +591,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
 
     std::optional<TopoDS_Shape> profileShape;
     std::optional<TopoDS_Shape> internalShape;
-    const ProfileFaceBuild profileFace = buildOptionalProfileFace(edges, circles, ellipses);
+    const ProfileFaceBuild profileFace = buildOptionalProfileFace(rawShape);
     if (profileFace.faceMakerFailed) {
         // FreeCAD:
         // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
@@ -654,8 +654,19 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         return;
     }
 
+    std::optional<part::NamedShape> rawNamedShape;
+    if (!rawShape.IsNull()) {
+        rawNamedShape = namedShapeForSketchRawEdgeIdentity(
+            object.name,
+            rawShape,
+            rawEdgeIdentityLedger,
+            static_cast<long>(object.id)
+        );
+        materializeSketchMappedNameStringIds(*rawNamedShape, context.stringHasher);
+    }
     const SketchInternalResult internalResult = buildSketchInternalResult({
         object.name,
+        static_cast<long>(object.id),
         rawShape,
         profileShape,
         sketchProfileNormalFromPlacement(hasPlacement ? placement : gp_Trsf {}),
@@ -663,14 +674,21 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         profileFace.requiresSubshapeSelection,
         historyLedger,
         rawEdgeIdentityLedger,
+        std::move(rawNamedShape),
+        context.stringHasher,
     });
     context.shapes[object.name] = internalResult.shapeValue;
     if (internalResult.rawNamedShape) {
-        context.namedShapes[object.name] = *internalResult.rawNamedShape;
+        part::NamedShape rawNamedShape = *internalResult.rawNamedShape;
+        context.namedShapes[object.name] = std::move(rawNamedShape);
+    }
+    if (internalResult.profileNamedShape) {
+        context.namedShapes[object.name + ".ProfileShape"] = *internalResult.profileNamedShape;
     }
     if (internalResult.shapeValue.internalNamedShape) {
+        part::NamedShape internalNamedShape = *internalResult.shapeValue.internalNamedShape;
         context.namedShapes[object.name + ".InternalShape"]
-            = *internalResult.shapeValue.internalNamedShape;
+            = std::move(internalNamedShape);
     }
     if (internalResult.mesh) {
         context.mesh[object.name] = *internalResult.mesh;

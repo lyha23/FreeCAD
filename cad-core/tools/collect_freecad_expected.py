@@ -17,8 +17,9 @@ from typing import Any, Sequence
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_FREECADCMD = "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd"
+DEFAULT_FREECADCMD = "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd"
 SCHEMA_VERSION = "cad-core.freecad-expected.v1"
+PRODUCER_TRACE_SCHEMA = "freecad.element-map-producer-trace.v1"
 TOPO_STATE_SCHEMA_VERSION = "cad-core.topo-state.v1"
 TOPO_STATE_PRODUCER_CAD_CORE_VERSION = "fixture-contract-v1"
 # Keep the FreeCADCmd oracle's request validator aligned with CAD Core runtime
@@ -45,6 +46,7 @@ TOPO_DISPLAY_PATH_STABLE_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*\.(Face|Edge|V
 ACTIVE_TOPO_NAMING_STATE: dict[str, Any] | None = None
 ACTIVE_RESOLVED_REFERENCE_BINDINGS: list[dict[str, str]] = []
 LAST_FREECAD_LEDGER_CAPTURE: dict[str, Any] | None = None
+LAST_FREECAD_PRODUCER_TRACE: dict[str, Any] | None = None
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
     "App::Line",
@@ -204,23 +206,35 @@ def invoked_by_freecad_cli_import() -> bool:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Collect CAD Core fixture expected JSON from native FreeCAD.",
+        description="Collect CAD Core public expected, ledger, and producer-trace sidecars from native FreeCAD.",
     )
     parser.add_argument("fixture", nargs="?", help="Fixture JSON file. Omit when --phase is used.")
     parser.add_argument("--phase", help="Collect every supported fixture in fixtures/<phase>.")
     parser.add_argument("--fixtures-root", default=str(ROOT / "fixtures"), help="Fixture root directory.")
     parser.add_argument("--out", help="Output expected file for a single fixture.")
-    parser.add_argument("--check", action="store_true", help="Compare generated output with existing expected files.")
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Compare regenerated public expected and ledger; require a valid producer-trace sidecar.",
+    )
     parser.add_argument("--pretty", action="store_true", help="Print generated JSON to stdout.")
     parser.add_argument("--skip-unsupported", action="store_true", help="Skip unsupported fixtures in --phase mode.")
-    parser.add_argument("--emit-ledger", action="store_true", help="Write expected sidecar *.freecad.ledger.json files.")
+    parser.add_argument(
+        "--emit-ledger",
+        action="store_true",
+        help="Legacy no-op: collector always writes the ledger and producer-trace sidecars.",
+    )
     parser.add_argument(
         "--check-ledger",
         action="store_true",
-        help="With --check, compare the regenerated ledger with the checked-in sidecar.",
+        help="Legacy no-op with --check: the ledger sidecar is always compared.",
     )
     parser.add_argument("--validate-ledger", action="store_true", help="Validate emitted ledger sidecars before returning success.")
-    parser.add_argument("--freecadcmd", default=os.environ.get("FREECADCMD", DEFAULT_FREECADCMD))
+    parser.add_argument(
+        "--freecadcmd",
+        default=DEFAULT_FREECADCMD,
+        help=f"Native producer-enabled FreeCADCmd (default: {DEFAULT_FREECADCMD})",
+    )
     args = parser.parse_args(script_args(argv))
     if args.check_ledger and not args.check:
         parser.error("--check-ledger requires --check")
@@ -251,6 +265,94 @@ def atomic_write_json(path: Path, payload: dict) -> None:
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     tmp.replace(path)
+
+
+def producer_trace_path_for_expected(expected_path: Path) -> Path:
+    name = expected_path.name
+    if not name.endswith(".freecad.json"):
+        raise ValueError(f"not a FreeCAD expected path: {expected_path}")
+    return expected_path.with_name(f"{name[:-len('.freecad.json')]}.freecad.producer-trace.json")
+
+
+def validate_producer_trace(trace: Any) -> dict[str, Any]:
+    if not isinstance(trace, dict) or trace.get("schemaVersion") != PRODUCER_TRACE_SCHEMA:
+        raise RuntimeError("native ElementMap producer trace has an invalid schema")
+    events = trace.get("events")
+    transactions = trace.get("transactions")
+    if not isinstance(events, list) or not isinstance(transactions, list) or not events:
+        raise RuntimeError("native ElementMap producer trace is empty or malformed")
+
+    snapshot_ids = set(trace.get("ledgerSnapshots", {}))
+    snapshot_ids.update(trace.get("stringTableSnapshots", {}))
+    snapshot_ids.update(trace.get("mapperSnapshots", {}))
+    open_scopes: set[int] = set()
+    for sequence, event in enumerate(events, start=1):
+        if not isinstance(event, dict) or event.get("sequence") != sequence:
+            raise RuntimeError(f"native ElementMap producer trace has a sequence gap at {sequence}")
+        if event.get("beforeSnapshot") not in snapshot_ids or event.get("afterSnapshot") not in snapshot_ids:
+            raise RuntimeError(f"native ElementMap producer trace event {sequence} references a missing snapshot")
+        scope = event.get("scopeSequence", 0)
+        if event.get("slice") == "scope.begin":
+            if not isinstance(scope, int) or scope <= 0 or scope in open_scopes:
+                raise RuntimeError(f"native ElementMap producer trace has an invalid scope begin at {sequence}")
+            open_scopes.add(scope)
+        elif event.get("slice") in {"scope.end", "scope.abort"}:
+            if scope not in open_scopes:
+                raise RuntimeError(f"native ElementMap producer trace has an unpaired scope end at {sequence}")
+            open_scopes.remove(scope)
+    if open_scopes:
+        raise RuntimeError("native ElementMap producer trace has unclosed scopes")
+    return trace
+
+
+def drain_producer_trace(doc: Any) -> dict[str, Any]:
+    drain = getattr(doc, "drainElementMapProducerTrace", None)
+    if not callable(drain):
+        raise RuntimeError(
+            "FreeCADCmd lacks Document.drainElementMapProducerTrace(); "
+            f"use {DEFAULT_FREECADCMD} or a compatible native build"
+        )
+    return validate_producer_trace(drain())
+
+
+def close_document_with_producer_trace(FreeCAD: Any, doc: Any) -> None:
+    global LAST_FREECAD_PRODUCER_TRACE
+    try:
+        trace = drain_producer_trace(doc)
+        if LAST_FREECAD_PRODUCER_TRACE is None or len(trace["events"]) >= len(LAST_FREECAD_PRODUCER_TRACE["events"]):
+            LAST_FREECAD_PRODUCER_TRACE = trace
+    finally:
+        FreeCAD.closeDocument(doc.Name)
+
+
+def publish_documentless_producer_trace(
+    FreeCAD: Any,
+    *,
+    slice_name: str,
+    decision: str,
+    reason: str,
+    target: str,
+) -> None:
+    doc = FreeCAD.newDocument("CadCoreExpectedProducerTrace")
+    try:
+        record = getattr(doc, "recordElementMapProducerTraceCheckpoint", None)
+        if not callable(record):
+            raise RuntimeError(
+                "FreeCADCmd lacks Document.recordElementMapProducerTraceCheckpoint(); "
+                f"use {DEFAULT_FREECADCMD} or a compatible native build"
+            )
+        record(slice_name, decision, reason, target)
+    finally:
+        close_document_with_producer_trace(FreeCAD, doc)
+
+
+def producer_trace_rejection_reason(payload: dict[str, Any], fallback: str) -> str:
+    diagnostics = payload.get("diagnostics")
+    if isinstance(diagnostics, list):
+        for diagnostic in diagnostics:
+            if isinstance(diagnostic, dict) and isinstance(diagnostic.get("code"), str):
+                return diagnostic["code"]
+    return fallback
 
 
 def expected_path_for_fixture(fixtures_root: Path, fixture_path: Path) -> Path:
@@ -3334,7 +3436,7 @@ def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[
             result_payloads=result_payloads,
         )
     finally:
-        FreeCAD.closeDocument(doc.Name)
+        close_document_with_producer_trace(FreeCAD, doc)
 
 
 def topo_state_mapper_history_events(object_name: str, probe_case: str) -> list[dict[str, Any]]:
@@ -5338,7 +5440,7 @@ def collect_part_filled_face_expected(
             payload["diagnostic_codes"] = diagnostic_codes
         return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload, created)
     finally:
-        FreeCAD.closeDocument(doc.Name)
+        close_document_with_producer_trace(FreeCAD, doc)
 
 
 def has_part_geomplate_surface_helper(fixture: dict) -> bool:
@@ -5932,7 +6034,7 @@ def collect_part_geomplate_surface_expected(
             payload["diagnostic_codes"] = diagnostic_codes
         return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload, created)
     finally:
-        FreeCAD.closeDocument(doc.Name)
+        close_document_with_producer_trace(FreeCAD, doc)
 
 
 def property_payload_value(value: Any) -> Any:
@@ -8643,7 +8745,7 @@ def collect_part_sweep_wrapper_expected(
             ]
         return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload, created)
     finally:
-        FreeCAD.closeDocument(doc.Name)
+        close_document_with_producer_trace(FreeCAD, doc)
 
 
 def sweep_payload(obj: Any, fixture: dict | None = None) -> dict:
@@ -9307,13 +9409,21 @@ def distance_type_gap_metadata(payload: dict) -> dict[str, Any] | None:
 def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = None) -> dict:
     import FreeCAD  # type: ignore
 
-    global ACTIVE_TOPO_NAMING_STATE, ACTIVE_RESOLVED_REFERENCE_BINDINGS, LAST_FREECAD_LEDGER_CAPTURE
+    global ACTIVE_TOPO_NAMING_STATE, ACTIVE_RESOLVED_REFERENCE_BINDINGS, LAST_FREECAD_LEDGER_CAPTURE, LAST_FREECAD_PRODUCER_TRACE
     LAST_FREECAD_LEDGER_CAPTURE = None
+    LAST_FREECAD_PRODUCER_TRACE = None
     ACTIVE_RESOLVED_REFERENCE_BINDINGS = []
     fixture = load_fixture(fixture_path)
     topo_state_error = topo_state_request_error_response(fixture)
     if topo_state_error is not None:
         ACTIVE_TOPO_NAMING_STATE = None
+        publish_documentless_producer_trace(
+            FreeCAD,
+            slice_name="collector.topo_state.reject",
+            decision="rejected",
+            reason=producer_trace_rejection_reason(topo_state_error, "topo_state_request_rejected"),
+            target=fixture_path.stem,
+        )
         return topo_state_error
     if isinstance(fixture.get("topoNamingState"), dict):
         input_contract_errors = stable_identity_contract_errors(fixture, "fixture")
@@ -9339,6 +9449,13 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
         return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload)
     if has_part_geometry_curve_object(fixture):
         payload = collect_part_geometry_curve_expected(fixture_path, fixture)
+        publish_documentless_producer_trace(
+            FreeCAD,
+            slice_name="collector.part_geometry_curve.raw_shape",
+            decision="published",
+            reason="documentless_raw_shape_helper",
+            target=fixture_path.stem,
+        )
         return wrap_topo_naming_response_if_needed(fixture, FreeCAD, payload)
     require_native_hole_profile_support(fixture)
     require_native_dressup_body_membership(fixture)
@@ -9424,7 +9541,7 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
     finally:
         if assembly_solve_preferences is not None:
             assembly_solve_preferences.SetBool("SolveOnRecompute", bool(previous_solve_on_recompute))
-        FreeCAD.closeDocument(doc.Name)
+        close_document_with_producer_trace(FreeCAD, doc)
 
 
 def close_enough(left: float, right: float, delta: float) -> bool:
@@ -10124,29 +10241,40 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             failures += 1
             continue
 
-        ledger: dict[str, Any] | None = None
-        if args.emit_ledger or args.check_ledger:
-            try:
-                ledger = collect_expected_ledger(fixture_path, fixture, payload, target_override)
-            except Exception as exc:
-                print(f"failed ledger {fixture_path}: {exc}", file=sys.stderr)
-                print(traceback.format_exc(), file=sys.stderr)
-                failures += 1
-                continue
+        if LAST_FREECAD_PRODUCER_TRACE is None:
+            print(f"failed producer trace {fixture_path}: native collector did not create a document trace", file=sys.stderr)
+            failures += 1
+            continue
+        producer_trace = copy.deepcopy(LAST_FREECAD_PRODUCER_TRACE)
+
+        try:
+            ledger = collect_expected_ledger(fixture_path, fixture, payload, target_override)
+        except Exception as exc:
+            print(f"failed ledger {fixture_path}: {exc}", file=sys.stderr)
+            print(traceback.format_exc(), file=sys.stderr)
+            failures += 1
+            continue
 
         if args.check:
             failures += 0 if compare_json(out_path, payload) else 1
-            if args.check_ledger:
-                assert ledger is not None
-                failures += 0 if compare_ledger_json(ledger_path_for_expected(out_path), ledger) else 1
+            failures += 0 if compare_ledger_json(ledger_path_for_expected(out_path), ledger) else 1
+            trace_path = producer_trace_path_for_expected(out_path)
+            if not trace_path.exists():
+                print(f"missing expected producer trace: {trace_path}", file=sys.stderr)
+                failures += 1
+            else:
+                try:
+                    validate_producer_trace(json.loads(trace_path.read_text(encoding="utf-8")))
+                except Exception as exc:
+                    print(f"invalid expected producer trace {trace_path}: {exc}", file=sys.stderr)
+                    failures += 1
         else:
             atomic_write_json(out_path, payload)
-            if ledger is not None:
-                atomic_write_json(ledger_path_for_expected(out_path), ledger)
+            atomic_write_json(ledger_path_for_expected(out_path), ledger)
+            atomic_write_json(producer_trace_path_for_expected(out_path), producer_trace)
         if args.validate_ledger:
             try:
-                if args.check and args.check_ledger:
-                    assert ledger is not None
+                if args.check:
                     ledger_errors = validate_generated_expected_ledger(
                         fixture_path,
                         fixture,

@@ -23,11 +23,6 @@ std::map<std::string, const app::DocumentObject*> buildDocumentObjectMap(const a
     return objects;
 }
 
-bool isPartDesignPipe(const app::DocumentObject& object)
-{
-    return object.typeId == "PartDesign::AdditivePipe" || object.typeId == "PartDesign::SubtractivePipe";
-}
-
 bool isTransientPartHelper(const app::DocumentObject& object)
 {
     return object.typeId == "Part::FilledFace" || object.typeId == "Part::GeomPlateSurface";
@@ -36,6 +31,87 @@ bool isTransientPartHelper(const app::DocumentObject& object)
 bool isPartDesignBodyFeature(const app::DocumentObject& object)
 {
     return object.typeId.rfind("PartDesign::", 0U) == 0U && object.typeId != "PartDesign::Body";
+}
+
+bool documentOrderLess(const app::Document& document,
+                       const std::string& left,
+                       const std::string& right)
+{
+    const auto leftIt = document.indexByName.find(left);
+    const auto rightIt = document.indexByName.find(right);
+    if (leftIt == document.indexByName.end() || rightIt == document.indexByName.end()) {
+        return left < right;
+    }
+    const app::DocumentObject& leftObject = document.objects.at(leftIt->second);
+    const app::DocumentObject& rightObject = document.objects.at(rightIt->second);
+    if (leftObject.id != rightObject.id) {
+        return leftObject.id < rightObject.id;
+    }
+    return leftIt->second < rightIt->second;
+}
+
+void stabilizePlanOrder(RecomputePlan& plan, const app::Document& document)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp::Document::recompute()
+    // executes the dependency-ready document objects in document order. The document StringHasher
+    // is shared, so a depth-first walk of Body.Group must not let an unrelated PocketSketch consume
+    // StringIDs before an earlier-ID Tip branch that is already dependency-ready.
+    std::set<std::string> included(plan.order.begin(), plan.order.end());
+    std::map<std::string, std::size_t> pendingDependencies;
+    std::map<std::string, std::vector<std::string>> dependents;
+    for (const std::string& name : plan.order) {
+        pendingDependencies[name] = 0U;
+    }
+    for (const auto& [name, dependencies] : plan.dependencies) {
+        if (included.count(name) == 0U) {
+            continue;
+        }
+        for (const std::string& dependency : dependencies) {
+            if (included.count(dependency) == 0U) {
+                continue;
+            }
+            ++pendingDependencies[name];
+            dependents[dependency].push_back(name);
+        }
+    }
+
+    std::vector<std::string> ready;
+    for (const auto& [name, count] : pendingDependencies) {
+        if (count == 0U) {
+            ready.push_back(name);
+        }
+    }
+    std::vector<std::string> ordered;
+    ordered.reserve(plan.order.size());
+    while (!ready.empty()) {
+        const auto next = std::min_element(
+            ready.begin(), ready.end(), [&](const std::string& left, const std::string& right) {
+                return documentOrderLess(document, left, right);
+            }
+        );
+        const std::string name = *next;
+        ready.erase(next);
+        ordered.push_back(name);
+        for (const std::string& dependent : dependents[name]) {
+            auto pending = pendingDependencies.find(dependent);
+            if (pending == pendingDependencies.end() || pending->second == 0U) {
+                continue;
+            }
+            --pending->second;
+            if (pending->second == 0U) {
+                ready.push_back(dependent);
+            }
+        }
+    }
+
+    // visitObject() already reports dependency cycles. Keep their members executable in stable
+    // document order so diagnostics remain deterministic instead of silently dropping them.
+    for (const std::string& name : plan.order) {
+        if (std::find(ordered.begin(), ordered.end(), name) == ordered.end()) {
+            ordered.push_back(name);
+        }
+    }
+    plan.order = std::move(ordered);
 }
 
 std::optional<std::string> previousPartDesignBodyFeature(const std::string& name,
@@ -158,11 +234,12 @@ void visitObject(const std::string& name,
                     visited);
     }
 
-    if (isPartDesignPipe(object)) {
-        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeaturePipe.cpp
-        // ::Pipe::execute(), "getBaseTopoShape()" supplies the same-Body base before
-        // "Part::OpCodes::Fuse/Cut"; cad-core's stateless graph must therefore execute the
-        // previous Body.Group solid feature before publishing the Pipe feature Shape.
+    if (isPartDesignBodyFeature(object)) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureAddSub.cpp
+        // ::FeatureAddSub::getBaseTopoShape() walks the preceding same-Body feature chain before
+        // Pad/Pocket/Pipe/DressUp executes its own producer. A stateless recompute graph must
+        // therefore depend on the preceding Body.Group PartDesign feature for every such
+        // producer; Body::execute() itself only consumes its declared Tip Shape.
         if (const auto previousFeature = previousPartDesignBodyFeature(name, document);
             previousFeature && seenDependencies.count(*previousFeature) == 0U) {
             seenDependencies.insert(*previousFeature);
@@ -248,6 +325,8 @@ RecomputePlan buildPlan(
             }
         }
     }
+
+    stabilizePlanOrder(plan, document);
 
     return plan;
 }

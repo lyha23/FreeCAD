@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cad_core/app/document.h"
+#include "cad_core/app/string_hasher.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/part/topo_shape.h"
 
@@ -10,6 +11,7 @@
 #include <nlohmann/json.hpp>
 
 #include <map>
+#include <memory>
 #include <optional>
 #include <set>
 #include <string>
@@ -129,6 +131,10 @@ struct ComputeContext
     nlohmann::json elementReferenceUpdates = nlohmann::json::array();
     nlohmann::json documentObjectUpdates = nlohmann::json::array();
     std::map<std::string, part::NamedShape> namedShapes;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/private/DocumentP.h owns one
+    // DocumentP::Hasher.  Recompute creates this request-local table once and producers share it
+    // in document execution order; it is never read from a prior response or session.
+    std::shared_ptr<app::StringHasher> stringHasher = std::make_shared<app::StringHasher>();
     std::map<std::string, std::vector<std::string>> dependencies;
     std::map<std::string, const app::DocumentObject*> documentObjects;
     std::map<std::string, std::string> parentGroupByObject;

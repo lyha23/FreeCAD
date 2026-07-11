@@ -44,9 +44,26 @@ struct ExtrudeResult {
     std::optional<part::NamedShape> namedShape;
 };
 
+struct FeatureExtrusionShape {
+    TopoDS_Shape shape;
+    std::optional<part::NamedShape> namedShape;
+    TopoDS_Shape addSubShape;
+    std::optional<part::NamedShape> addSubNamedShape;
+    bool combinedWithBase = false;
+};
+
 std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& object,
                                                    runtime::ComputeContext& context,
                                                    AddSubMode mode,
                                                    const std::string& featureName);
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+// ::FeatureExtrude::execute() stores the prism in AddSubShape, then calls
+// `result.makeElementBoolean(maker, {base, prism}, ...)` and writes that feature-owned result to
+// Shape.  Body::execute() only reads the Tip Shape; it does not become the Boolean producer.
+std::optional<FeatureExtrusionShape> finalizeFeatureExtrusion(const app::DocumentObject& object,
+                                                               runtime::ComputeContext& context,
+                                                               AddSubMode mode,
+                                                               const ExtrudeResult& extrusion);
 
 }  // namespace cad_core::part_design

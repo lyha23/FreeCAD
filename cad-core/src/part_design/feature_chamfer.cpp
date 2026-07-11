@@ -199,7 +199,13 @@ std::optional<DressUpResult> buildChamfer(
                 base->shape,
                 base->namedShape ? &*base->namedShape : nullptr
             }},
-            maker
+            maker,
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+            // TopoShapeExpansion.cpp::TopoShape::makeElementChamfer() forwards
+            // OpCodes::Chamfer ("CHF") to makeShapeWithElementMap().  Preserve that
+            // producer operation in the Part NamedShape ledger so runtime only projects
+            // already-recorded canonical aliases.
+            part::MakerHistoryOptions {"CHF", true, false, context.stringHasher, true}
         );
         DressUpResult dressUpResult {
             "chamfer",

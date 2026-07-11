@@ -74,3 +74,8 @@ tsupdate_stdout.log
 
 .graphify_detect.json
 graphify-out/
+
+# CAD Core native FreeCADCmd oracle artifacts
+/cad-core/fixtures/*/expected/*.freecad.json
+/cad-core/fixtures/*/expected/*.freecad.ledger.json
+/cad-core/fixtures/*/expected/*.freecad.producer-trace.json

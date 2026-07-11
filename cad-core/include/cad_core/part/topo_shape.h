@@ -5,6 +5,7 @@
 #include "cad_core/part/internal_shape_history_ledger.h"
 #include "cad_core/part/topo_shape_mapper.h"
 #include "cad_core/part/property_topo_shape.h"
+#include "cad_core/app/string_hasher.h"
 
 #include <BRepBuilderAPI_MakeShape.hxx>
 #include <TopoDS_Edge.hxx>
@@ -15,6 +16,7 @@
 
 #include <cstddef>
 #include <map>
+#include <memory>
 #include <optional>
 #include <utility>
 #include <string>
@@ -69,15 +71,25 @@ struct NamedShapeChildMap
     std::string sourceOwner;
     std::string kind;
     std::string indexedName;
+    // `indexedName` is the ElementMap::findAll() query range (Vertex1/Edge1/Face1).  A
+    // PropertyPartShape copy can publish the same three typed ranges as one child owner, so
+    // keep that protocol owner/path identity separately instead of overloading the lookup key.
+    std::string protocolPathPrefix;
     int offset = 0;
     int count = 0;
     std::string targetStart;
     std::string targetEnd;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
+    // TopoShapeExpansion.cpp::TopoShape::setupChild() stores the incoming TopoShape Tag on
+    // each MappedChildElements range (or zero when it equals the receiver Tag). It is entry-local
+    // child-map evidence for ElementMap::addChildElements()/hashChildMaps(), not a response tag.
+    long tag = 0;
     std::string postfix;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
     // ::ElementMap::addChildElements() stores the child's "elementMap" beside the mapped child
     // range. cad-core keeps a request-local pointer so runtime topoNamingState publication can
     // read child mapped-name provenance without re-deriving it from fixture output.
+    std::shared_ptr<const NamedShape> sourceLedger;
     const NamedShape* sourceNamedShape = nullptr;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/ElementMap.cpp
     // ::ElementMap::hashChildMaps(), rewrites eligible child map postfixes into encoded
@@ -137,8 +149,23 @@ struct MappedNameProvenance
     // stable token.
     std::string rawMappedName;
     std::string canonicalMappedName;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::findAll() returns a MappedName together with its per-entry
+    // ElementIDRefs. The same raw `#id` in two producer maps may legitimately carry different
+    // refs; this request-local sidecar must not be recovered from the document StringHasher by
+    // raw string alone.
+    std::vector<app::StringId> elementIdRefs;
     MappedNameProvenanceStatus status = MappedNameProvenanceStatus::IndexedOnly;
     MappedNamePublicationScope publicationScope = MappedNamePublicationScope::Public;
+};
+
+// FreeCAD: src/App/ElementMap.h keeps a per-IndexedName list of MappedName references.
+// `elementMap` below remains a request-local lookup index while this ledger records only the
+// encoded names actually written by ElementMap::setElementName(), in write order.
+struct ElementMapEntry
+{
+    std::string mappedName;
+    std::vector<app::StringId> elementIdRefs;
 };
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
@@ -151,9 +178,16 @@ struct NamedShape
 {
     std::string owner;
     TopoDS_Shape shape;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShape.h::TopoShape(long
+    // Tag, ...) stores the PropertyPartShape owner ID, while
+    // PropertyTopoShape.cpp::PropertyPartShape::setValue() retags a completed Feature map to
+    // its DocumentObject ID. This request-local value is the incoming TopoShape Tag used by
+    // TopoShapeExpansion.cpp::NameKey; it is not derived from BRep identity or display names.
+    std::optional<long> producerTag;
     std::map<std::string, NamedElement> elements;
     std::map<std::string, std::string> elementMap;
     std::map<std::string, MappedNameProvenance> mappedNameProvenance;
+    std::map<std::string, std::vector<ElementMapEntry>> elementMapEntries;
     std::vector<NamedShapeChildMap> childElementMaps;
     std::vector<ElementHistory> history;
     std::vector<MapperHistoryEvent> mapperHistory;
@@ -164,7 +198,16 @@ struct NamedShape
     // diagnostics can distinguish an indexed-only map from a partially consumed history ledger.
     std::vector<std::string> elementHistoryStatus;
     std::optional<nlohmann::json> sketchInternalHistoryDiagnostics;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp uses the document's shared
+    // StringHasher for every ElementMap producer.  The pointer is request-local provenance state,
+    // not geometry or a runtime response cache.
+    std::shared_ptr<cad_core::app::StringHasher> stringHasher;
 };
+
+void recordElementMapEntry(NamedShape& namedShape,
+                           const std::string& mappedName,
+                           const std::string& currentElement);
+
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
 // ::ElementMap::addChildElements() keeps direct child ranges and resolves their mapped names
@@ -189,6 +232,10 @@ struct NamedShapeSource
     // FCBRepAlgoAPI_BooleanOperation.cpp::RecursiveCutFusedTools(), "cut argument and compound
     // tool" then "if tool consists of two or more shapes, fuse them together".
     bool fuseCompoundForCut = false;
+    // FeatureExtrude::execute() sets its local `prism.Tag = -this->getID()` immediately before
+    // the final Boolean. An operation-local source may therefore override the property's
+    // completed producerTag without mutating the persisted AddSubShape/Shape ledger.
+    std::optional<long> producerTag;
 };
 
 struct LinkedSubshapeRetag
@@ -233,8 +280,9 @@ struct ElementResolveResult
 NamedShape indexedNamedShapeForObject(const std::string& owner, const TopoDS_Shape& shape);
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShape.h::TopoShape(long Tag, ...)
 // stores the request-local `Tag`; TopoShapeExpansion.cpp::TopoShape::mapSubElement() passes
-// `Tag` and `other.Tag` to ElementMap::encodeElementName(). cad-core derives an equivalent
-// request-local tag from the actual producer shape, never from an object display name.
+// `Tag` and `other.Tag` to ElementMap::encodeElementName(). Only a DocumentObject/property
+// boundary may supply that value. A BRep fingerprint is not a TopoShape Tag and must never
+// become mapped-name evidence.
 std::optional<long> requestLocalProducerTagForShape(const TopoDS_Shape& shape);
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp::getInternalElementMap(),
@@ -247,7 +295,21 @@ NamedShape namedShapeForSketchInternalShape(
     const TopoDS_Shape& rawShape,
     const TopoDS_Shape& internalShape,
     std::optional<InternalShapeHistoryLedger> historyLedger = std::nullopt,
-    std::map<std::string, std::string> internalEdgeMappedNames = {}
+    std::map<std::string, std::string> internalEdgeMappedNames = {},
+    const NamedShape* rawNamedShape = nullptr,
+    std::shared_ptr<cad_core::app::StringHasher> stringHasher = nullptr
+);
+
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+// ::buildInternals() passes the raw Sketch Shape to makeElementFace(), whose bounded face is the
+// closed Pad/Pocket profile. This builds that FaceMaker producer ledger from the raw Sketch
+// ElementMap before PartDesign asks MapperMaker for Pad history.
+NamedShape namedShapeForSketchProfileShape(
+    const std::string& owner,
+    const TopoDS_Shape& rawShape,
+    const TopoDS_Shape& profileShape,
+    const NamedShape& rawNamedShape,
+    std::shared_ptr<cad_core::app::StringHasher> stringHasher
 );
 void applyInternalShapeHistoryPublication(
     NamedShape& namedShape,
@@ -263,6 +325,25 @@ struct MakerHistoryOptions
     std::string producerOperation;
     bool recordUnmappedSourceDeletions = true;
     bool addProducerLocalAliases = false;
+    std::shared_ptr<cad_core::app::StringHasher> stringHasher;
+    // A replacement feature's mapSubElement() starts a new ElementMap owner. It must rehash a
+    // preserved incoming mapped name so a Chamfer/Fillet/Pattern does not publish the prior
+    // Pad producer identity. Profile transport shapes leave this false and retain their source
+    // ledger until the first consuming maker reads it.
+    bool rehashPreservedMappedName = false;
+    // FreeCAD: src/Mod/Part/App/TopoShapeExpansion.cpp::makeShapeWithElementMap() invokes
+    // mapSubElement(shapes) with no op before Boolean M/G collection. Boolean-preserved entries
+    // retain the full input raw mapped name and append only the incoming TopoShape Tag; DressUp
+    // replacement producers use the separate rehash lifecycle above.
+    bool preserveRawMappedName = false;
+    // The result TopoShape Tag. PropertyPartShape::setValue() supplies the completed Feature
+    // object ID; helper-only makers leave this unset rather than inventing a geometry hash.
+    std::optional<long> producerTag;
+    // FreeCAD: src/Mod/PartDesign/App/FeatureExtrude.cpp::FeatureExtrude::execute() creates an
+    // additive prism before it is fused into the BaseFeature. Its first Generated ElementMap
+    // entry may retain a bare source StringID as its index; subtractive tools and generic Part
+    // makers do not opt into that FeatureExtrude-specific lifecycle.
+    bool promoteBareSourceIdForGenerated = false;
 };
 
 // FreeCAD:
@@ -331,6 +412,17 @@ NamedShape namedShapeForPreservedSources(
     const std::vector<NamedShapeSource>& sources,
     const std::string& producerOperation = {}
 );
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PropertyTopoShape.cpp
+// ::PropertyPartShape::setValue(const TopoShape&) assigns a producer map to a document property.
+// ElementMap owns ElementIDRefs per entry, so a reused document StringID cannot make a later
+// property value inherit an earlier producer's endpoint ref merely because both names start
+// with the same `#id`.
+NamedShape namedShapeForPropertyShapeValue(
+    const std::string& owner,
+    const TopoDS_Shape& shape,
+    const NamedShape& source,
+    long propertyTag
+);
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementBoolean(), routes OpCodes::Compound to
 // "return makeElementCompound(shapes, op, SingleShapeCompoundCreationPolicy::returnShape)".
@@ -366,7 +458,8 @@ NamedShapeBuild makeElementShellWithPropagatedSource(
 NamedShape namedShapeForLinkedShape(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
-    const NamedShapeSource& source
+    const NamedShapeSource& source,
+    std::optional<long> propertyTag = std::nullopt
 );
 NamedShape namedShapeForLinkedSubshape(
     const std::string& owner,
@@ -394,7 +487,8 @@ NamedShape namedShapeForLinkedSubshapes(
 NamedShape namedShapeForTransformedCopy(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
-    const NamedShapeSource& source
+    const NamedShapeSource& source,
+    std::optional<std::string> postfix = std::nullopt
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(),
@@ -404,7 +498,8 @@ NamedShapeBuild makeElementBooleanFromSources(
     const std::string& owner,
     const std::vector<NamedShapeSource>& sources,
     BooleanOperation operation,
-    std::optional<double> tolerance = std::nullopt
+    std::optional<double> tolerance = std::nullopt,
+    std::optional<long> producerTag = std::nullopt
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementXor(),

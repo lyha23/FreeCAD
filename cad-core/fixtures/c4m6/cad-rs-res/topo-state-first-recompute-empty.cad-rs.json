@@ -9,7 +9,405 @@
     "elementReferenceUpdates": [],
     "results": [
       {
+        "bbox": {
+          "max": [
+            2.0,
+            3.0,
+            4.0
+          ],
+          "min": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
         "mesh": {
+          "edgeSegments": [
+            {
+              "id": "Box:Edge1",
+              "indexed": "Edge1",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge2",
+              "indexed": "Edge2",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  4.0
+                ],
+                [
+                  0.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge3",
+              "indexed": "Edge3",
+              "points": [
+                [
+                  0.0,
+                  3.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge4",
+              "indexed": "Edge4",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  3.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge5",
+              "indexed": "Edge5",
+              "points": [
+                [
+                  2.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  0.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge6",
+              "indexed": "Edge6",
+              "points": [
+                [
+                  2.0,
+                  0.0,
+                  4.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge7",
+              "indexed": "Edge7",
+              "points": [
+                [
+                  2.0,
+                  3.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge8",
+              "indexed": "Edge8",
+              "points": [
+                [
+                  2.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge9",
+              "indexed": "Edge9",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  0.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge10",
+              "indexed": "Edge10",
+              "points": [
+                [
+                  2.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  0.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge11",
+              "indexed": "Edge11",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  4.0
+                ],
+                [
+                  2.0,
+                  0.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge12",
+              "indexed": "Edge12",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge13",
+              "indexed": "Edge13",
+              "points": [
+                [
+                  0.0,
+                  3.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge14",
+              "indexed": "Edge14",
+              "points": [
+                [
+                  2.0,
+                  3.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge15",
+              "indexed": "Edge15",
+              "points": [
+                [
+                  0.0,
+                  3.0,
+                  4.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge16",
+              "indexed": "Edge16",
+              "points": [
+                [
+                  0.0,
+                  3.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge17",
+              "indexed": "Edge17",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  3.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge18",
+              "indexed": "Edge18",
+              "points": [
+                [
+                  0.0,
+                  3.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge19",
+              "indexed": "Edge19",
+              "points": [
+                [
+                  2.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge20",
+              "indexed": "Edge20",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  2.0,
+                  0.0,
+                  0.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge21",
+              "indexed": "Edge21",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  4.0
+                ],
+                [
+                  0.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge22",
+              "indexed": "Edge22",
+              "points": [
+                [
+                  0.0,
+                  3.0,
+                  4.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge23",
+              "indexed": "Edge23",
+              "points": [
+                [
+                  2.0,
+                  0.0,
+                  4.0
+                ],
+                [
+                  2.0,
+                  3.0,
+                  4.0
+                ]
+              ]
+            },
+            {
+              "id": "Box:Edge24",
+              "indexed": "Edge24",
+              "points": [
+                [
+                  0.0,
+                  0.0,
+                  4.0
+                ],
+                [
+                  2.0,
+                  0.0,
+                  4.0
+                ]
+              ]
+            }
+          ],
           "faceIds": [
             "face_1",
             "face_1",
@@ -184,10 +582,80 @@
               1.0
             ]
           ],
-          "summary": {
-            "triangle_count": 12,
-            "vertex_count": 8
-          },
+          "vertexPoints": [
+            {
+              "id": "Box:Vertex1",
+              "indexed": "Vertex1",
+              "point": [
+                0.0,
+                0.0,
+                4.0
+              ]
+            },
+            {
+              "id": "Box:Vertex2",
+              "indexed": "Vertex2",
+              "point": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "id": "Box:Vertex3",
+              "indexed": "Vertex3",
+              "point": [
+                0.0,
+                3.0,
+                4.0
+              ]
+            },
+            {
+              "id": "Box:Vertex4",
+              "indexed": "Vertex4",
+              "point": [
+                0.0,
+                3.0,
+                0.0
+              ]
+            },
+            {
+              "id": "Box:Vertex5",
+              "indexed": "Vertex5",
+              "point": [
+                2.0,
+                0.0,
+                4.0
+              ]
+            },
+            {
+              "id": "Box:Vertex6",
+              "indexed": "Vertex6",
+              "point": [
+                2.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "id": "Box:Vertex7",
+              "indexed": "Vertex7",
+              "point": [
+                2.0,
+                3.0,
+                4.0
+              ]
+            },
+            {
+              "id": "Box:Vertex8",
+              "indexed": "Vertex8",
+              "point": [
+                2.0,
+                3.0,
+                0.0
+              ]
+            }
+          ],
           "vertices": [
             [
               0.0,
@@ -311,1392 +779,301 @@
             ]
           ]
         },
-        "metadata": {
-          "bbox": {
-            "max": [
-              2.0,
-              3.0,
-              4.0
-            ],
-            "min": [
-              0.0,
-              0.0,
-              0.0
-            ]
-          },
-          "volume": 23.999999999999996
-        },
-        "namedShapeDebug": {
-          "childElementMapCount": 0,
-          "elementMap": [
-            {
-              "indexed": "Vertex1",
-              "mapped": ";Vertex1"
-            },
-            {
-              "indexed": "Vertex2",
-              "mapped": ";Vertex2"
-            },
-            {
-              "indexed": "Vertex3",
-              "mapped": ";Vertex3"
-            },
-            {
-              "indexed": "Vertex4",
-              "mapped": ";Vertex4"
-            },
-            {
-              "indexed": "Vertex5",
-              "mapped": ";Vertex5"
-            },
-            {
-              "indexed": "Vertex6",
-              "mapped": ";Vertex6"
-            },
-            {
-              "indexed": "Vertex7",
-              "mapped": ";Vertex7"
-            },
-            {
-              "indexed": "Vertex8",
-              "mapped": ";Vertex8"
-            },
-            {
-              "indexed": "Edge1",
-              "mapped": ";Edge1"
-            },
-            {
-              "indexed": "Edge2",
-              "mapped": ";Edge2"
-            },
-            {
-              "indexed": "Edge3",
-              "mapped": ";Edge3"
-            },
-            {
-              "indexed": "Edge4",
-              "mapped": ";Edge4"
-            },
-            {
-              "indexed": "Edge5",
-              "mapped": ";Edge5"
-            },
-            {
-              "indexed": "Edge6",
-              "mapped": ";Edge6"
-            },
-            {
-              "indexed": "Edge7",
-              "mapped": ";Edge7"
-            },
-            {
-              "indexed": "Edge8",
-              "mapped": ";Edge8"
-            },
-            {
-              "indexed": "Edge9",
-              "mapped": ";Edge9"
-            },
-            {
-              "indexed": "Edge10",
-              "mapped": ";Edge10"
-            },
-            {
-              "indexed": "Edge11",
-              "mapped": ";Edge11"
-            },
-            {
-              "indexed": "Edge12",
-              "mapped": ";Edge12"
-            },
-            {
-              "indexed": "Face1",
-              "mapped": ";Face1"
-            },
-            {
-              "indexed": "Face2",
-              "mapped": ";Face2"
-            },
-            {
-              "indexed": "Face3",
-              "mapped": ";Face3"
-            },
-            {
-              "indexed": "Face4",
-              "mapped": ";Face4"
-            },
-            {
-              "indexed": "Face5",
-              "mapped": ";Face5"
-            },
-            {
-              "indexed": "Face6",
-              "mapped": ";Face6"
-            }
-          ],
-          "elementResolveStatus": [
-            {
-              "candidates": [
-                "Vertex1"
-              ],
-              "currentIndexed": "Vertex1",
-              "requested": ";Vertex1",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Vertex2"
-              ],
-              "currentIndexed": "Vertex2",
-              "requested": ";Vertex2",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Vertex3"
-              ],
-              "currentIndexed": "Vertex3",
-              "requested": ";Vertex3",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Vertex4"
-              ],
-              "currentIndexed": "Vertex4",
-              "requested": ";Vertex4",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Vertex5"
-              ],
-              "currentIndexed": "Vertex5",
-              "requested": ";Vertex5",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Vertex6"
-              ],
-              "currentIndexed": "Vertex6",
-              "requested": ";Vertex6",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Vertex7"
-              ],
-              "currentIndexed": "Vertex7",
-              "requested": ";Vertex7",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Vertex8"
-              ],
-              "currentIndexed": "Vertex8",
-              "requested": ";Vertex8",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge1"
-              ],
-              "currentIndexed": "Edge1",
-              "requested": ";Edge1",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge2"
-              ],
-              "currentIndexed": "Edge2",
-              "requested": ";Edge2",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge3"
-              ],
-              "currentIndexed": "Edge3",
-              "requested": ";Edge3",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge4"
-              ],
-              "currentIndexed": "Edge4",
-              "requested": ";Edge4",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge5"
-              ],
-              "currentIndexed": "Edge5",
-              "requested": ";Edge5",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge6"
-              ],
-              "currentIndexed": "Edge6",
-              "requested": ";Edge6",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge7"
-              ],
-              "currentIndexed": "Edge7",
-              "requested": ";Edge7",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge8"
-              ],
-              "currentIndexed": "Edge8",
-              "requested": ";Edge8",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge9"
-              ],
-              "currentIndexed": "Edge9",
-              "requested": ";Edge9",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge10"
-              ],
-              "currentIndexed": "Edge10",
-              "requested": ";Edge10",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge11"
-              ],
-              "currentIndexed": "Edge11",
-              "requested": ";Edge11",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Edge12"
-              ],
-              "currentIndexed": "Edge12",
-              "requested": ";Edge12",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Face1"
-              ],
-              "currentIndexed": "Face1",
-              "requested": ";Face1",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Face2"
-              ],
-              "currentIndexed": "Face2",
-              "requested": ";Face2",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Face3"
-              ],
-              "currentIndexed": "Face3",
-              "requested": ";Face3",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Face4"
-              ],
-              "currentIndexed": "Face4",
-              "requested": ";Face4",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Face5"
-              ],
-              "currentIndexed": "Face5",
-              "requested": ";Face5",
-              "status": "resolved"
-            },
-            {
-              "candidates": [
-                "Face6"
-              ],
-              "currentIndexed": "Face6",
-              "requested": ";Face6",
-              "status": "resolved"
-            }
-          ],
-          "element_map": {
-            "Box.Edge1": "Edge1",
-            "Box.Edge10": "Edge10",
-            "Box.Edge11": "Edge11",
-            "Box.Edge12": "Edge12",
-            "Box.Edge2": "Edge2",
-            "Box.Edge3": "Edge3",
-            "Box.Edge4": "Edge4",
-            "Box.Edge5": "Edge5",
-            "Box.Edge6": "Edge6",
-            "Box.Edge7": "Edge7",
-            "Box.Edge8": "Edge8",
-            "Box.Edge9": "Edge9",
-            "Box.Face1": "Face1",
-            "Box.Face2": "Face2",
-            "Box.Face3": "Face3",
-            "Box.Face4": "Face4",
-            "Box.Face5": "Face5",
-            "Box.Face6": "Face6",
-            "Box.Vertex1": "Vertex1",
-            "Box.Vertex2": "Vertex2",
-            "Box.Vertex3": "Vertex3",
-            "Box.Vertex4": "Vertex4",
-            "Box.Vertex5": "Vertex5",
-            "Box.Vertex6": "Vertex6",
-            "Box.Vertex7": "Vertex7",
-            "Box.Vertex8": "Vertex8"
-          },
-          "element_map_status": "history_partial",
-          "history": [
-            {
-              "element": "Edge1",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge1"
-              ]
-            },
-            {
-              "element": "Edge10",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge10"
-              ]
-            },
-            {
-              "element": "Edge11",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge11"
-              ]
-            },
-            {
-              "element": "Edge12",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge12"
-              ]
-            },
-            {
-              "element": "Edge2",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge2"
-              ]
-            },
-            {
-              "element": "Edge3",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge3"
-              ]
-            },
-            {
-              "element": "Edge4",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge4"
-              ]
-            },
-            {
-              "element": "Edge5",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge5"
-              ]
-            },
-            {
-              "element": "Edge6",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge6"
-              ]
-            },
-            {
-              "element": "Edge7",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge7"
-              ]
-            },
-            {
-              "element": "Edge8",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge8"
-              ]
-            },
-            {
-              "element": "Edge9",
-              "kind": "indexed",
-              "sources": [
-                "Box.Edge9"
-              ]
-            },
-            {
-              "element": "Face1",
-              "kind": "indexed",
-              "sources": [
-                "Box.Face1"
-              ]
-            },
-            {
-              "element": "Face2",
-              "kind": "indexed",
-              "sources": [
-                "Box.Face2"
-              ]
-            },
-            {
-              "element": "Face3",
-              "kind": "indexed",
-              "sources": [
-                "Box.Face3"
-              ]
-            },
-            {
-              "element": "Face4",
-              "kind": "indexed",
-              "sources": [
-                "Box.Face4"
-              ]
-            },
-            {
-              "element": "Face5",
-              "kind": "indexed",
-              "sources": [
-                "Box.Face5"
-              ]
-            },
-            {
-              "element": "Face6",
-              "kind": "indexed",
-              "sources": [
-                "Box.Face6"
-              ]
-            },
-            {
-              "element": "Vertex1",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex1"
-              ]
-            },
-            {
-              "element": "Vertex2",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex2"
-              ]
-            },
-            {
-              "element": "Vertex3",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex3"
-              ]
-            },
-            {
-              "element": "Vertex4",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex4"
-              ]
-            },
-            {
-              "element": "Vertex5",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex5"
-              ]
-            },
-            {
-              "element": "Vertex6",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex6"
-              ]
-            },
-            {
-              "element": "Vertex7",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex7"
-              ]
-            },
-            {
-              "element": "Vertex8",
-              "kind": "indexed",
-              "sources": [
-                "Box.Vertex8"
-              ]
-            }
-          ],
-          "historyLedgers": [
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex1",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex1",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex1",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex1.Vertex1",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex1",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex2",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex2",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex2",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex2.Vertex2",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex2",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex3",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex3",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex3",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex3.Vertex3",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex3",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex4",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex4",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex4",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex4.Vertex4",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex4",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex5",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex5",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex5",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex5.Vertex5",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex5",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex6",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex6",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex6",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex6.Vertex6",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex6",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex7",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex7",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex7",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex7.Vertex7",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex7",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Vertex8",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Vertex8",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Vertex8",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Vertex8.Vertex8",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Vertex8",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge1",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge1",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge1",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge1.Edge1",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge1",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge2",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge2",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge2",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge2.Edge2",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge2",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge3",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge3",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge3",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge3.Edge3",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge3",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge4",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge4",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge4",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge4.Edge4",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge4",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge5",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge5",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge5",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge5.Edge5",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge5",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge6",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge6",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge6",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge6.Edge6",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge6",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge7",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge7",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge7",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge7.Edge7",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge7",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge8",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge8",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge8",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge8.Edge8",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge8",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge9",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge9",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge9",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge9.Edge9",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge9",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge10",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge10",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge10",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge10.Edge10",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge10",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge11",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge11",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge11",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge11.Edge11",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge11",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Edge12",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Edge12",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Edge12",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Edge12.Edge12",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Edge12",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Face1",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Face1",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Face1",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Face1.Face1",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Face1",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Face2",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Face2",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Face2",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Face2.Face2",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Face2",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Face3",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Face3",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Face3",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Face3.Face3",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Face3",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Face4",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Face4",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Face4",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Face4.Face4",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Face4",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Face5",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Face5",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Face5",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Face5.Face5",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Face5",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            },
-            {
-              "copied": "unsupported",
-              "currentIndexedHint": "Face6",
-              "deleted": false,
-              "generated": false,
-              "mappedName": ";Face6",
-              "merged": "unsupported",
-              "modified": false,
-              "sourceAlias": ";Face6",
-              "sourceTags": [],
-              "split": "unsupported",
-              "stableName": ";Face6.Face6",
-              "tag": 1,
-              "trace": [
-                {
-                  "deleted": false,
-                  "generated": false,
-                  "masterTag": 1,
-                  "modified": false,
-                  "name": ";Face6",
-                  "tag": 0
-                }
-              ],
-              "transformed": "unsupported"
-            }
-          ],
-          "mapperHistory": [],
-          "owner": "Box"
-        },
         "object": "Box",
         "subshapes": [
           {
-            "id": "vertex_1",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex1",
+            "id": "Box:Vertex1",
             "identityStatus": "current_only",
             "indexed": "Vertex1",
             "kind": "Vertex",
-            "subname": ";Vertex1.Vertex1"
+            "stableSubname": "",
+            "subname": "Vertex1"
           },
           {
-            "id": "vertex_2",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex2",
+            "id": "Box:Vertex2",
             "identityStatus": "current_only",
             "indexed": "Vertex2",
             "kind": "Vertex",
-            "subname": ";Vertex2.Vertex2"
+            "stableSubname": "",
+            "subname": "Vertex2"
           },
           {
-            "id": "vertex_3",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex3",
+            "id": "Box:Vertex3",
             "identityStatus": "current_only",
             "indexed": "Vertex3",
             "kind": "Vertex",
-            "subname": ";Vertex3.Vertex3"
+            "stableSubname": "",
+            "subname": "Vertex3"
           },
           {
-            "id": "vertex_4",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex4",
+            "id": "Box:Vertex4",
             "identityStatus": "current_only",
             "indexed": "Vertex4",
             "kind": "Vertex",
-            "subname": ";Vertex4.Vertex4"
+            "stableSubname": "",
+            "subname": "Vertex4"
           },
           {
-            "id": "vertex_5",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex5",
+            "id": "Box:Vertex5",
             "identityStatus": "current_only",
             "indexed": "Vertex5",
             "kind": "Vertex",
-            "subname": ";Vertex5.Vertex5"
+            "stableSubname": "",
+            "subname": "Vertex5"
           },
           {
-            "id": "vertex_6",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex6",
+            "id": "Box:Vertex6",
             "identityStatus": "current_only",
             "indexed": "Vertex6",
             "kind": "Vertex",
-            "subname": ";Vertex6.Vertex6"
+            "stableSubname": "",
+            "subname": "Vertex6"
           },
           {
-            "id": "vertex_7",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex7",
+            "id": "Box:Vertex7",
             "identityStatus": "current_only",
             "indexed": "Vertex7",
             "kind": "Vertex",
-            "subname": ";Vertex7.Vertex7"
+            "stableSubname": "",
+            "subname": "Vertex7"
           },
           {
-            "id": "vertex_8",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Vertex8",
+            "id": "Box:Vertex8",
             "identityStatus": "current_only",
             "indexed": "Vertex8",
             "kind": "Vertex",
-            "subname": ";Vertex8.Vertex8"
+            "stableSubname": "",
+            "subname": "Vertex8"
           },
           {
-            "id": "edge_1",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge1",
+            "id": "Box:Edge1",
             "identityStatus": "current_only",
             "indexed": "Edge1",
             "kind": "Edge",
-            "subname": ";Edge1.Edge1"
+            "stableSubname": "",
+            "subname": "Edge1"
           },
           {
-            "id": "edge_2",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge2",
+            "id": "Box:Edge2",
             "identityStatus": "current_only",
             "indexed": "Edge2",
             "kind": "Edge",
-            "subname": ";Edge2.Edge2"
+            "stableSubname": "",
+            "subname": "Edge2"
           },
           {
-            "id": "edge_3",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge3",
+            "id": "Box:Edge3",
             "identityStatus": "current_only",
             "indexed": "Edge3",
             "kind": "Edge",
-            "subname": ";Edge3.Edge3"
+            "stableSubname": "",
+            "subname": "Edge3"
           },
           {
-            "id": "edge_4",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge4",
+            "id": "Box:Edge4",
             "identityStatus": "current_only",
             "indexed": "Edge4",
             "kind": "Edge",
-            "subname": ";Edge4.Edge4"
+            "stableSubname": "",
+            "subname": "Edge4"
           },
           {
-            "id": "edge_5",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge5",
+            "id": "Box:Edge5",
             "identityStatus": "current_only",
             "indexed": "Edge5",
             "kind": "Edge",
-            "subname": ";Edge5.Edge5"
+            "stableSubname": "",
+            "subname": "Edge5"
           },
           {
-            "id": "edge_6",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge6",
+            "id": "Box:Edge6",
             "identityStatus": "current_only",
             "indexed": "Edge6",
             "kind": "Edge",
-            "subname": ";Edge6.Edge6"
+            "stableSubname": "",
+            "subname": "Edge6"
           },
           {
-            "id": "edge_7",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge7",
+            "id": "Box:Edge7",
             "identityStatus": "current_only",
             "indexed": "Edge7",
             "kind": "Edge",
-            "subname": ";Edge7.Edge7"
+            "stableSubname": "",
+            "subname": "Edge7"
           },
           {
-            "id": "edge_8",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge8",
+            "id": "Box:Edge8",
             "identityStatus": "current_only",
             "indexed": "Edge8",
             "kind": "Edge",
-            "subname": ";Edge8.Edge8"
+            "stableSubname": "",
+            "subname": "Edge8"
           },
           {
-            "id": "edge_9",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge9",
+            "id": "Box:Edge9",
             "identityStatus": "current_only",
             "indexed": "Edge9",
             "kind": "Edge",
-            "subname": ";Edge9.Edge9"
+            "stableSubname": "",
+            "subname": "Edge9"
           },
           {
-            "id": "edge_10",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge10",
+            "id": "Box:Edge10",
             "identityStatus": "current_only",
             "indexed": "Edge10",
             "kind": "Edge",
-            "subname": ";Edge10.Edge10"
+            "stableSubname": "",
+            "subname": "Edge10"
           },
           {
-            "id": "edge_11",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge11",
+            "id": "Box:Edge11",
             "identityStatus": "current_only",
             "indexed": "Edge11",
             "kind": "Edge",
-            "subname": ";Edge11.Edge11"
+            "stableSubname": "",
+            "subname": "Edge11"
           },
           {
-            "id": "edge_12",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Edge12",
+            "id": "Box:Edge12",
             "identityStatus": "current_only",
             "indexed": "Edge12",
             "kind": "Edge",
-            "subname": ";Edge12.Edge12"
+            "stableSubname": "",
+            "subname": "Edge12"
           },
           {
-            "id": "face_1",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Face1",
+            "id": "Box:Face1",
             "identityStatus": "current_only",
             "indexed": "Face1",
             "kind": "Face",
-            "subname": ";Face1.Face1"
+            "stableSubname": "",
+            "subname": "Face1"
           },
           {
-            "id": "face_2",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Face2",
+            "id": "Box:Face2",
             "identityStatus": "current_only",
             "indexed": "Face2",
             "kind": "Face",
-            "subname": ";Face2.Face2"
+            "stableSubname": "",
+            "subname": "Face2"
           },
           {
-            "id": "face_3",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Face3",
+            "id": "Box:Face3",
             "identityStatus": "current_only",
             "indexed": "Face3",
             "kind": "Face",
-            "subname": ";Face3.Face3"
+            "stableSubname": "",
+            "subname": "Face3"
           },
           {
-            "id": "face_4",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Face4",
+            "id": "Box:Face4",
             "identityStatus": "current_only",
             "indexed": "Face4",
             "kind": "Face",
-            "subname": ";Face4.Face4"
+            "stableSubname": "",
+            "subname": "Face4"
           },
           {
-            "id": "face_5",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Face5",
+            "id": "Box:Face5",
             "identityStatus": "current_only",
             "indexed": "Face5",
             "kind": "Face",
-            "subname": ";Face5.Face5"
+            "stableSubname": "",
+            "subname": "Face5"
           },
           {
-            "id": "face_6",
+            "ReferenceShadow": [],
+            "ShadowSub": [],
+            "fullSubname": "Box.Face6",
+            "id": "Box:Face6",
             "identityStatus": "current_only",
             "indexed": "Face6",
             "kind": "Face",
-            "subname": ";Face6.Face6"
+            "stableSubname": "",
+            "subname": "Face6"
           }
-        ]
+        ],
+        "topology_counts": {
+          "edges": 12,
+          "faces": 6,
+          "vertices": 8
+        },
+        "volume": 23.999999999999996
       }
     ],
     "topoNamingState": {
@@ -1840,13 +1217,13 @@
     "expectedSourceClass": "freecad_expected",
     "fixtureRole": "native",
     "roleCatalog": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json",
-    "roleCatalogSha256": "64f552a4dd8369d141936e44aa821cd97e885f68eb4008af2b68579493ca7cc9",
+    "roleCatalogSha256": "b2244b130916c56f3adb48f542d06f1886359675bdaddd6a0386ee04e4534c35",
     "fixtureRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-first-recompute-empty.json",
     "expectedRelativeToRunnerRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-first-recompute-empty.freecad.json",
     "library": "/Users/li/Chili3DProject/opencascade-rs/target/debug/libcad_core_ffi.dylib",
-    "librarySha256": "1ca88a23bed8e3694339835d4b04a8943df648d79038cce5ed170bdce0c319df",
+    "librarySha256": "9fda08af394e500c2712fd8d7ddbabd83c6a2296c7544c6224c3fcacd3b07094",
     "buildReceipt": "build-receipt.json",
-    "buildReceiptSha256": "7a92fa1a35221f43accec9f02b019b44421669b961bd83d170f8175f86cb6ddb",
+    "buildReceiptSha256": "72e2f6ecab208be2d6ab2a6037e6100b12e9e40a736c5bb3176aeb364b3fc794",
     "ffiInputSha256": "bc4c00f13ae3c662981e1adc030af2575237ff3e86e1cc8c92ea4f51086751d8"
   }
 }
