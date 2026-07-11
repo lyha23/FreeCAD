@@ -1656,14 +1656,18 @@ void appendSketchSummaryResultFields(nlohmann::json& result, const nlohmann::jso
         {"flag_counts", sketchExternalFlagCounts(objectResult)},
         {"flags", emptySketchExternalFlags(objectResult)},
     };
+    const std::string internalShape = objectResult.value("internal_shape", "none");
     result["sketch_internal"] = {
         {"profile_ready", objectResult.value("profile_ready", false)},
         {"raw_edge_count", rawEdgeCount},
-        {"shape", objectResult.value("internal_shape", "none")},
+        {"shape", internalShape},
     };
-    const auto internalCountsIt = objectResult.find("internal_counts");
-    if (internalCountsIt != objectResult.end() && internalCountsIt->is_object()) {
-        result["sketch_internal"]["internal_counts"] = *internalCountsIt;
+    if (internalShape == "occt_internal_shape") {
+        result["sketch_internal"]["internal_counts"] = {
+            {"edges", objectResultInt(objectResult, "internal_edge_count")},
+            {"faces", objectResultInt(objectResult, "internal_face_count")},
+            {"vertices", objectResultInt(objectResult, "internal_vertex_count")},
+        };
     }
 }
 

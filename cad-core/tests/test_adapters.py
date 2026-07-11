@@ -126,6 +126,10 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("Sketch:InternalEdge1", internal_edge_ids)
         internal_vertex_ids = {point["id"] for point in sketch["mesh"]["vertexPoints"]}
         self.assertIn("Sketch:InternalVertex1", internal_vertex_ids)
+        self.assertEqual(
+            sketch["sketch_internal"]["internal_counts"],
+            {"edges": 4, "faces": 1, "vertices": 4},
+        )
         self.assertTrue(any(item["id"] == "Sketch:InternalFace1" for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:InternalEdge1" for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:InternalVertex1" for item in sketch["subshapes"]))
@@ -143,6 +147,7 @@ class CadCoreAdapterTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assert_mesh_edge_segments_reference_subshapes(sketch)
         self.assertFalse(any(item["id"].startswith("Sketch:Internal") for item in sketch["subshapes"]))
         self.assertTrue(any(item["id"] == "Sketch:Edge1" for item in sketch["subshapes"]))
+        self.assertNotIn("internal_counts", sketch["sketch_internal"])
 
     def test_c_api_open_wire_reference_shadow_source_identity_contract(self) -> None:
         payload = {
