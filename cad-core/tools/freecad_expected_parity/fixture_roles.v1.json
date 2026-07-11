@@ -689,11 +689,7 @@
     {
       "phase": "c3m5",
       "case": "body-curved-face-pad-profile-normal",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "native"
     },
     {
       "phase": "c3m5",
@@ -703,29 +699,17 @@
     {
       "phase": "c3m5",
       "case": "body-display-only-support-transform-cache",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "native"
     },
     {
       "phase": "c3m5",
       "case": "body-dressup-cumulative-base",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "native"
     },
     {
       "phase": "c3m5",
       "case": "body-dressup-invalid-stable-subname",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "native"
     },
     {
       "phase": "c3m5",
