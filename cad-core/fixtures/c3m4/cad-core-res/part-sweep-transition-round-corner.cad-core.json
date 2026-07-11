@@ -1036,7 +1036,7 @@
                 "recoverability": "resolved",
                 "shapeKind": "edge",
                 "source": {
-                  "object": "PathWire",
+                  "object": "PathEdgeA",
                   "subname": "Edge1"
                 },
                 "target": {
@@ -1052,8 +1052,8 @@
                 "recoverability": "resolved",
                 "shapeKind": "edge",
                 "source": {
-                  "object": "PathWire",
-                  "subname": "Edge2"
+                  "object": "PathEdgeB",
+                  "subname": "Edge1"
                 },
                 "target": {
                   "object": "PathWire",
@@ -1061,15 +1061,15 @@
                 }
               }
             ],
-            "id": "canonical-collision-391bc9d37e1d07f5",
+            "id": "canonical-collision-75de8adb282e7f5d",
             "mappedName": {
               "canonical": "Edge1;:H*,E",
               "raw": "Edge1;:H481cbc60,E"
             },
-            "message": "Canonical elementMap key Edge1;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "message": "Canonical elementMap key Edge1;:H*,E maps to multiple current targets; Part keeps it out of ElementMap",
             "recoverability": "ambiguous",
             "relation": "ambiguous",
-            "source": "freecad_expected_collector"
+            "source": "part_element_map"
           },
           {
             "candidates": [
@@ -1081,7 +1081,7 @@
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
                 "source": {
-                  "object": "PathWire",
+                  "object": "PathEdgeA",
                   "subname": "Vertex1"
                 },
                 "target": {
@@ -1097,8 +1097,8 @@
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
                 "source": {
-                  "object": "PathWire",
-                  "subname": "Vertex3"
+                  "object": "PathEdgeB",
+                  "subname": "Vertex1"
                 },
                 "target": {
                   "object": "PathWire",
@@ -1106,15 +1106,15 @@
                 }
               }
             ],
-            "id": "canonical-collision-c3564526db797eb7",
+            "id": "canonical-collision-4f4e8e41cb8759df",
             "mappedName": {
               "canonical": "Vertex1;:H*,V",
               "raw": "Vertex1;:H481cbc60,V"
             },
-            "message": "Canonical elementMap key Vertex1;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "message": "Canonical elementMap key Vertex1;:H*,V maps to multiple current targets; Part keeps it out of ElementMap",
             "recoverability": "ambiguous",
             "relation": "ambiguous",
-            "source": "freecad_expected_collector"
+            "source": "part_element_map"
           },
           {
             "candidates": [
@@ -1126,7 +1126,7 @@
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
                 "source": {
-                  "object": "PathWire",
+                  "object": "PathEdgeA",
                   "subname": "Vertex2"
                 },
                 "target": {
@@ -1142,8 +1142,8 @@
                 "recoverability": "resolved",
                 "shapeKind": "vertex",
                 "source": {
-                  "object": "PathWire",
-                  "subname": "Vertex4"
+                  "object": "PathEdgeB",
+                  "subname": "Vertex2"
                 },
                 "target": {
                   "object": "PathWire",
@@ -1151,15 +1151,15 @@
                 }
               }
             ],
-            "id": "canonical-collision-03cca74a3c977a78",
+            "id": "canonical-collision-56efb6836629da9f",
             "mappedName": {
               "canonical": "Vertex2;:H*,V",
               "raw": "Vertex2;:H481cbc60,V"
             },
-            "message": "Canonical elementMap key Vertex2;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "message": "Canonical elementMap key Vertex2;:H*,V maps to multiple current targets; Part keeps it out of ElementMap",
             "recoverability": "ambiguous",
             "relation": "ambiguous",
-            "source": "freecad_expected_collector"
+            "source": "part_element_map"
           }
         ],
         "objectHash": "sha256:52b21085c4e58ce47087058545ee92c6bd89ecb605573466e667700921e2b60d",
