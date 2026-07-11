@@ -15,10 +15,10 @@ struct BrepTextSnapshot {
     std::string data;
 };
 
-// FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeature.cpp
-// ::Feature::onBeforeChange() stores old referenced subshape geometry in ElementCache before
-// shape changes; cad-core serializes only that single subshape as request-carried recovery
-// evidence and verifies the payload before topo matching consumes it.
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeature.cpp
+// ::Feature::onBeforeChange() stores the old referenced subshape in ElementCache::shape before
+// Shape changes. cad-core serializes only that single subshape as request-carried recovery
+// evidence; it is not a modeling input or a topoNamingState geometry payload.
 std::optional<BrepTextSnapshot> brepTextSnapshotForShape(const TopoDS_Shape& shape);
 
 std::optional<TopoDS_Shape> readBrepTextSnapshot(const std::string& brepText,

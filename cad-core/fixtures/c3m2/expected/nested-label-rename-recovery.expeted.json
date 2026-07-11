@@ -1,0 +1,46 @@
+{
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "authority": "src/App/DocumentObject.cpp::DocumentObject::getSubObject; src/App/PropertyLinks.cpp::PropertyLinkBase::updateLabelReference",
+    "reason": "The fixture needs restoration-time traversal through a nested DocumentObjectGroup and a stale label-qualified subname, not a normal standalone public root.",
+    "next_action": "Keep this CAD Core protocol contract until a collector can construct and restore the exact nested group label lifecycle from a public FreeCAD document.",
+    "close_condition": "Replace with a same-run collector-owned .freecad.json and ledger only when an equivalent restored public document graph is available."
+  },
+  "contract": {
+    "diagnostics": [],
+    "resultObjects": [
+      "GroupLink",
+      "NestedPlainGroupFaceLink"
+    ],
+    "documentObjectUpdates": [],
+    "elementReferenceUpdates": [
+      {
+        "object": "NestedPlainGroupFaceLink",
+        "property": "LinkedObject",
+        "value": "GroupLink",
+        "SubList": [
+          "$PrettySub.$PrettyB.Face1"
+        ],
+        "labelReferenceRename": [
+          {
+            "method": "PropertyLinkBase.updateLabelReference",
+            "oldSubname": "$OldPrettySub.$PrettyB.Face1",
+            "newSubname": "$PrettySub.$PrettyB.Face1"
+          }
+        ]
+      }
+    ],
+    "topoNamingState": {
+      "present": true,
+      "objectNames": [
+        "BoxA",
+        "BoxB",
+        "GroupLink",
+        "NestedPlainGroupFaceLink"
+      ],
+      "forbiddenKeys": [
+        "brep"
+      ]
+    }
+  }
+}

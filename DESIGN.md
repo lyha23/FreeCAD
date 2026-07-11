@@ -463,3 +463,9 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 我是希望'/Users/li/Chili3DProject/FreeCAD/cad-core' 针对'/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures' 里面  "`fixtures/<phase>/*.json` 是根输入 fixture。" 的输入 fixture, 能够产生与
   FreeCADCmd 同样的输出(FreeCADCmd 是使用 /Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py 采集的)—— - `fixtures/<phase>/expected/*.freecad.json` 是 FreeCADCmd /
   native oracle 结果。, 你把这个目标给我落方案到'/Users/li/Chili3DProject/FreeCAD/docs/框架
+
+---
+
+查阅'/Users/li/Chili3DProject/FreeCAD/docs/框架/7-10-15-53-CADCore根输入Fixture到FreeCADCmd输出等价框架方案.md''/Users/li/
+  Chili3DProject/FreeCAD/docs/框架/检查流程.md', 排查一下'/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m2' 中 cad-core 的输出是否
+  满足要求

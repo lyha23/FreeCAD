@@ -1,0 +1,44 @@
+{
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "authority": "src/App/DocumentObject.cpp::DocumentObject::onProposedLabelChange; src/App/PropertyLinks.cpp::PropertyLinkBase::restoreLabelReference and updateLabelReference",
+    "reason": "The fixture asserts restoration-time ambiguity of a stale label-qualified FullSubList and its App::Link target has no standalone public Shape oracle.",
+    "next_action": "Keep this diagnostic contract until a public FreeCADCmd restore/export path can recreate duplicate-label reference ambiguity without a synthetic link result.",
+    "close_condition": "Replace with a same-run collector-owned .freecad.json and ledger only when the same persisted label-reference restore state is expressible publicly."
+  },
+  "contract": {
+    "diagnostics": [
+      {
+        "code": "label_reference_ambiguous",
+        "object": "BoxLink",
+        "property": "LinkedObject",
+        "target": "Box",
+        "subname": "$OldPrettyBox.Face1",
+        "stage": "parse"
+      },
+      {
+        "code": "full_subname_not_stable_identity",
+        "object": "BoxLink",
+        "property": "LinkedObject",
+        "target": "Box",
+        "subname": "$OldPrettyBox.Face1",
+        "stage": "runtime"
+      }
+    ],
+    "resultObjects": [
+      "BoxLink"
+    ],
+    "documentObjectUpdates": [],
+    "elementReferenceUpdates": [],
+    "topoNamingState": {
+      "present": true,
+      "objectNames": [
+        "Box",
+        "BoxLink"
+      ],
+      "forbiddenKeys": [
+        "brep"
+      ]
+    }
+  }
+}

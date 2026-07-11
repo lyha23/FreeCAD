@@ -1170,26 +1170,63 @@ class CadCoreP6TopologyTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
                 self.assertEqual(feature["status"], "ok")
                 self.assertEqual(feature["method"], "UpToFace")
 
-    def test_c3m2_source_object_rename_recovery_rewrites_link_target(self) -> None:
-        result = self.run_recompute("source-object-rename-recovery", "c3m2")
+    def test_c3m2_source_object_rename_recovery_round_trips_generated_state(self) -> None:
+        path = ROOT / "fixtures" / "c3m2" / "source-object-rename-recovery.json"
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        payload.pop("topoNamingState")
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(result["objects"]["ProbePad"]["status"], "ok")
-        update = result["elementReferenceUpdates"][0]
-        shadow = update["ReferenceShadow"][0]
+        first = self.run_response_payload(payload)
+        first_update = self.single_reference_update_item(first)
+        first_shadow = first_update["ReferenceShadow"][0]
 
-        self.assertEqual(update["object"], "ProbePad")
-        self.assertEqual(update["property"], "UpToFace")
-        self.assertEqual(update["value"], "RenamedBody")
-        self.assertEqual(update["SubList"], ["Face5"])
-        self.assertEqual(update["StableSubList"], ["Pad.Face6"])
-        self.assertEqual(update["sourceObjectRename"], {
+        self.assertEqual(first["diagnostics"], [])
+        self.assertEqual(first_update["object"], "ProbePad")
+        self.assertEqual(first_update["property"], "UpToFace")
+        self.assertEqual(first_update["value"], "RenamedBody")
+        self.assertEqual(first_update["SubList"], ["Face5"])
+        self.assertEqual(first_update["StableSubList"], ["Pad.Face6"])
+        self.assertEqual(first_update["sourceObjectRename"], {
             "oldName": "Body",
             "newName": "RenamedBody",
             "method": "ReferenceShadow.targetId",
         })
-        self.assertEqual(shadow["target"], "RenamedBody")
-        self.assertEqual(shadow["reference_recovery"], "source_object_rename")
+        self.assertEqual(first_shadow["target"], "RenamedBody")
+        self.assertEqual(first_shadow["reference_recovery"], "source_object_rename")
+        self.assertNotIn("Body", first["topoNamingState"]["objects"])
+        self.assertIn("RenamedBody", first["topoNamingState"]["objects"])
+        self.assertEqual(
+            first["topoNamingState"]["producer"]["cadCoreVersion"],
+            "cad-core-runtime-v1",
+        )
+        request_object_names = {object_spec["Name"] for object_spec in payload["Objects"]}
+        self.assertTrue(
+            set(first["topoNamingState"]["objects"]).issubset(request_object_names),
+            "old ReferenceShadow targets must remain item-local recovery evidence",
+        )
+
+        round_trip_payload = json.loads(json.dumps(payload))
+        round_trip_payload["topoNamingState"] = first["topoNamingState"]
+        second = self.run_response_payload(round_trip_payload)
+        second_update = self.single_reference_update_item(second)
+        second_shadow = second_update["ReferenceShadow"][0]
+
+        self.assertEqual(second["diagnostics"], [])
+        self.assertEqual(second_update["value"], "RenamedBody")
+        self.assertEqual(second_update["StableSubList"], ["Pad.Face6"])
+        self.assertEqual(second_shadow["target"], "RenamedBody")
+        self.assertEqual(second_shadow["reference_recovery"], "source_object_rename")
+
+        hash_mismatch_payload = json.loads(json.dumps(round_trip_payload))
+        hash_mismatch_payload["topoNamingState"]["documentHash"] = "sha256:invalid"
+        rejected = self.run_response_payload(hash_mismatch_payload)
+
+        self.assertEqual(
+            [item["code"] for item in rejected["diagnostics"]],
+            ["topo_state_document_hash_mismatch"],
+        )
+        self.assertEqual(rejected["results"], [])
+        self.assertEqual(rejected["elementReferenceUpdates"], [])
+        self.assertIsNone(rejected.get("topoNamingState"))
 
     def test_p6_external_geometry_link_sub_list_uses_element_map(self) -> None:
         result = self.run_recompute("sketch-external-edge-stable-indexed-opaque-sublist", "p6")

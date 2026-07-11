@@ -184,110 +184,106 @@
     {
       "phase": "c3m2",
       "case": "cross-document-nested-label-rename-recovery",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The contract needs restored external-FCStd DocMap state and nested DocumentObjectGroup label recovery; that lifecycle is not an isolated FreeCADCmd public-root graph.",
+      "authority": "src/App/PropertyLinks.cpp::PropertyLinkBase::updateLabelReference and PropertyXLinkContainer restore chain; src/App/DocumentObject.cpp::DocumentObject::getSubObject",
+      "nextAction": "Keep the source-backed CAD Core contract until a collector can restore the exact external FCStd and nested group lifecycle from a public root.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from an equivalent restored public document graph."
     },
     {
       "phase": "c3m2",
       "case": "label-rename-duplicate-target-label",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The fixture asserts restoration-time ambiguity of a stale label-qualified FullSubList; its target App::Link has no standalone public Shape oracle.",
+      "authority": "src/App/DocumentObject.cpp::DocumentObject::onProposedLabelChange; src/App/PropertyLinks.cpp::PropertyLinkBase::restoreLabelReference and updateLabelReference",
+      "nextAction": "Keep the diagnostic contract until a public FreeCADCmd restore/export path can recreate duplicate-label reference ambiguity without a synthetic link result.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from the same persisted label-reference restore state."
     },
     {
       "phase": "c3m2",
       "case": "nested-label-rename-recovery",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The fixture requires restoration-time traversal through a nested DocumentObjectGroup and stale label-qualified subname, not a normal standalone public root.",
+      "authority": "src/App/DocumentObject.cpp::DocumentObject::getSubObject; src/App/PropertyLinks.cpp::PropertyLinkBase::updateLabelReference",
+      "nextAction": "Keep the source-backed CAD Core contract until a collector can construct and restore the exact nested group label lifecycle from a public FreeCAD document.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from an equivalent restored public document graph."
     },
     {
       "phase": "c3m2",
       "case": "sketch-external-frozen-brep-reuse",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The missing target is intentional and ReferenceShadow.brep is item-local old-subshape recovery evidence, not a FreeCAD public modelling object or topoNamingState payload.",
+      "authority": "src/Mod/Part/App/PartFeature.cpp::Feature::onBeforeChange and ElementCache; src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry",
+      "nextAction": "Keep the source-backed CAD Core recovery contract until a public FreeCAD exporter can preserve the exact deleted-object ElementCache evidence without converting BREP into model input.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from an exact public-root recovery representation."
     },
     {
       "phase": "c3m2",
       "case": "sketch-external-frozen-missing-snapshot",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The diagnostic is defined for an intentionally absent external target with no old-subshape snapshot; no FreeCAD public-root object graph carries that deleted-reference condition.",
+      "authority": "src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry; cad-core/tools/collect_freecad_expected.py::set_sketch_external_geometry",
+      "nextAction": "Keep the source-backed CAD Core diagnostic contract until a public FreeCAD exporter can represent the same deleted external-reference state.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from an exact public-root missing-reference representation."
     },
     {
       "phase": "c3m2",
       "case": "sketch-external-missing-brep-reuse",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The missing target is intentional and the BREP is item-local old-subshape evidence; FreeCAD stores that recovery geometry in ElementCache rather than a public document root.",
+      "authority": "src/Mod/Part/App/PartFeature.cpp::Feature::onBeforeChange and ElementCache; src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry",
+      "nextAction": "Keep the source-backed CAD Core recovery contract until a public FreeCAD exporter preserves the same deleted-object recovery state without synthetic geometry.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from an exact public-root recovery representation."
     },
     {
       "phase": "c3m2",
       "case": "sketch-external-missing-fix",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "CAD Core carries Missing on the LinkSubList DTO, while FreeCAD persists Missing on SketchObject::ExternalGeo facade entries; this input deliberately has no native ExternalGeo history pool.",
+      "authority": "src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry; src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildShape",
+      "nextAction": "Keep the source-backed CAD Core contract until the input is replaced by a public-root ExternalGeo pool with source-provenanced Missing state.",
+      "closeCondition": "Replace this manual contract only after an unchanged semantic input yields a same-run collector-owned .freecad.json and ledger without synthesizing ExternalGeo geometry."
     },
     {
       "phase": "c3m2",
       "case": "sketch-external-missing-missing-snapshot",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The diagnostic is defined for an intentionally deleted Missing external target with neither ExternalGeo nor BREP evidence, which is not a FreeCAD public-root graph.",
+      "authority": "src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry; cad-core/tools/collect_freecad_expected.py::set_sketch_external_geometry",
+      "nextAction": "Keep the source-backed CAD Core diagnostic contract until a public FreeCAD exporter can represent the same deleted external-reference state.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from an exact public-root missing-reference representation."
     },
     {
       "phase": "c3m2",
       "case": "source-object-rename-recovery",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "native"
     },
     {
       "phase": "c3m2",
       "case": "xlink-missing-external-document",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The input models a missing external FCStd lifecycle with no local ExternalBox object; an isolated FreeCADCmd public root cannot recreate that linked-document state.",
+      "authority": "src/App/PropertyLinks.cpp::PropertyXLinkContainer restore and external-link handling",
+      "nextAction": "Keep the source-backed CAD Core diagnostic contract until the collector can restore the actual external document lifecycle from a public FCStd root.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from the same external-document lifecycle."
     },
     {
       "phase": "c3m2",
       "case": "xlink-pending-external-document",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The input models a pending partial external-FCStd reload with no local ExternalBox object; an isolated FreeCADCmd public root cannot recreate that linked-document state.",
+      "authority": "src/App/PropertyLinks.cpp::PropertyXLinkContainer restore and external-link handling",
+      "nextAction": "Keep the source-backed CAD Core diagnostic contract until the collector can restore the actual pending external document lifecycle from a public FCStd root.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from the same external-document lifecycle."
     },
     {
       "phase": "c3m2",
       "case": "xlink-unloaded-external-document",
-      "role": "unsupported",
-      "reason": "No checked-in FreeCADCmd native expected and ledger pair exists for this input fixture.",
-      "authority": "docs/工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md",
-      "nextAction": "Collect a FreeCADCmd native expected and ledger pair, or record a source-backed protocol-only contract before using this fixture in a release gate.",
-      "closeCondition": "The fixture has a native expected/ledger pair and role native, or a documented protocol-only decision replaces it."
+      "role": "protocol_only",
+      "reason": "The input models an unloaded external FCStd with no local ExternalBox object; an isolated FreeCADCmd public root cannot recreate that linked-document state.",
+      "authority": "src/App/PropertyLinks.cpp::PropertyXLinkContainer restore and external-link handling",
+      "nextAction": "Keep the source-backed CAD Core diagnostic contract until the collector can restore the actual unloaded external document lifecycle from a public FCStd root.",
+      "closeCondition": "Replace this manual contract only with a same-run collector-owned .freecad.json and ledger from the same external-document lifecycle."
     },
     {
       "phase": "c3m3",

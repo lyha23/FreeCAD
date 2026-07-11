@@ -15,6 +15,13 @@ ROOT = Path(__file__).resolve().parents[1]
 LEDGER_SCHEMA = "freecad-toponaming-ledger/v1"
 TOPO_STATE_SCHEMA_VERSION = "cad-core.topo-state.v1"
 TOPO_STATE_PRODUCER_CAD_CORE_VERSION = "fixture-contract-v1"
+# Match CAD Core runtime's explicit producer compatibility boundary.  This is
+# not a permissive fallback: any producer outside this finite set remains a
+# diagnostics-only request rejection.
+TOPO_STATE_COMPATIBLE_CAD_CORE_VERSIONS = {
+    TOPO_STATE_PRODUCER_CAD_CORE_VERSION,
+    "cad-core-runtime-v1",
+}
 FREECAD_MAPPED_NAME_HASH_RE = re.compile(r":H(?!\*)-?[0-9A-Fa-f]+(?::[0-9A-Fa-f]+)?")
 FREECAD_MAPPED_NAME_COLON_HASH_RE = re.compile(r":H:(?!\*)-?[0-9A-Fa-f]+")
 FREECAD_MAPPED_NAME_DELETE_RE = re.compile(r";D(?!\*)[0-9A-Fa-f]+")
@@ -215,7 +222,7 @@ def input_topo_state_rejection_code(fixture_payload: dict[str, Any]) -> str | No
     producer = topo_state.get("producer")
     if (
         not isinstance(producer, dict)
-        or producer.get("cadCoreVersion") != TOPO_STATE_PRODUCER_CAD_CORE_VERSION
+        or producer.get("cadCoreVersion") not in TOPO_STATE_COMPATIBLE_CAD_CORE_VERSIONS
     ):
         return "topo_state_producer_incompatible"
 

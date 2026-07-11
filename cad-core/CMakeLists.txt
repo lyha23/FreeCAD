@@ -469,6 +469,12 @@ add_executable(cad-core-c6m3-pipe-interpolation-law-probe
 
 target_link_libraries(cad-core-c6m3-pipe-interpolation-law-probe PRIVATE cad-core-lib)
 
+add_executable(cad-core-brep-snapshot-probe
+  tests/brep_snapshot_probe.cpp
+)
+
+target_link_libraries(cad-core-brep-snapshot-probe PRIVATE cad-core-lib)
+
 if(APPLE)
   set(CAD_CORE_ONDSEL_RPATH "$<TARGET_FILE_DIR:OndselSolver>")
   list(JOIN CAD_CORE_OCCT_LIBRARY_DIRS ";" CAD_CORE_OCCT_RPATH)
@@ -481,6 +487,10 @@ if(APPLE)
     INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
   )
   set_target_properties(cad-core-c6m3-pipe-interpolation-law-probe PROPERTIES
+    BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
+  )
+  set_target_properties(cad-core-brep-snapshot-probe PROPERTIES
     BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
     INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
   )

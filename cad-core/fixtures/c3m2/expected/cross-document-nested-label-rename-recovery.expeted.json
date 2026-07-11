@@ -1,0 +1,54 @@
+{
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "authority": "src/App/PropertyLinks.cpp::PropertyLinkBase::updateLabelReference and PropertyXLinkContainer restore chain; src/App/DocumentObject.cpp::DocumentObject::getSubObject",
+    "reason": "The result depends on restored external-FCStd DocMap state and nested DocumentObjectGroup label recovery, neither of which is an isolated FreeCADCmd public-root graph.",
+    "next_action": "Keep this CAD Core protocol contract until a collector can restore the exact external FCStd and nested group lifecycle from a public root.",
+    "close_condition": "Replace with a same-run collector-owned .freecad.json and ledger only when an equivalent restored public document graph is available."
+  },
+  "contract": {
+    "diagnostics": [],
+    "resultObjects": [
+      "GroupLink",
+      "NestedExternalGroupFaceLink"
+    ],
+    "documentObjectUpdates": [],
+    "elementReferenceUpdates": [
+      {
+        "object": "NestedExternalGroupFaceLink",
+        "property": "LinkedObject",
+        "value": "GroupLink",
+        "SubList": [
+          "$PrettySub.$PrettyB.Face1"
+        ],
+        "FullSubList": [
+          "ExternalDocRestored#$PrettySub.$PrettyB.Face1"
+        ],
+        "documentReference": {
+          "method": "PropertyXLinkContainer.DocMap",
+          "oldName": "ExternalDoc",
+          "newName": "ExternalDocRestored"
+        },
+        "labelReferenceRename": [
+          {
+            "method": "PropertyLinkBase.updateLabelReference",
+            "oldSubname": "$OldPrettySub.$PrettyB.Face1",
+            "newSubname": "$PrettySub.$PrettyB.Face1"
+          }
+        ]
+      }
+    ],
+    "topoNamingState": {
+      "present": true,
+      "objectNames": [
+        "BoxA",
+        "BoxB",
+        "GroupLink",
+        "NestedExternalGroupFaceLink"
+      ],
+      "forbiddenKeys": [
+        "brep"
+      ]
+    }
+  }
+}

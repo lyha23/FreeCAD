@@ -1,0 +1,35 @@
+{
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "authority": "src/App/PropertyLinks.cpp::PropertyXLinkContainer restore and external-link handling",
+    "reason": "The input models a missing external FCStd lifecycle with no local ExternalBox object; an isolated FreeCADCmd public root cannot recreate that linked-document state.",
+    "next_action": "Keep this CAD Core diagnostic contract until the collector can restore the actual external document lifecycle from a public FCStd root.",
+    "close_condition": "Replace with a same-run collector-owned .freecad.json and ledger only when the same external-document lifecycle is publicly reproducible."
+  },
+  "contract": {
+    "diagnostics": [
+      {
+        "code": "missing_external_document",
+        "object": "ExternalFaceLink",
+        "property": "LinkedObject",
+        "target": "ExternalBox",
+        "subname": "Face1",
+        "stage": "graph"
+      }
+    ],
+    "resultObjects": [
+      "ExternalFaceLink"
+    ],
+    "documentObjectUpdates": [],
+    "elementReferenceUpdates": [],
+    "topoNamingState": {
+      "present": true,
+      "objectNames": [
+        "ExternalFaceLink"
+      ],
+      "forbiddenKeys": [
+        "brep"
+      ]
+    }
+  }
+}

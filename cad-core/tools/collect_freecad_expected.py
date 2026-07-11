@@ -21,6 +21,14 @@ DEFAULT_FREECADCMD = "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcm
 SCHEMA_VERSION = "cad-core.freecad-expected.v1"
 TOPO_STATE_SCHEMA_VERSION = "cad-core.topo-state.v1"
 TOPO_STATE_PRODUCER_CAD_CORE_VERSION = "fixture-contract-v1"
+# Keep the FreeCADCmd oracle's request validator aligned with CAD Core runtime
+# `producerIsCompatible()`: a state freshly published without a prior fixture
+# producer carries `cad-core-runtime-v1`, while arbitrary producers remain a
+# request-level hard failure.
+TOPO_STATE_COMPATIBLE_CAD_CORE_VERSIONS = {
+    TOPO_STATE_PRODUCER_CAD_CORE_VERSION,
+    "cad-core-runtime-v1",
+}
 LEDGER_SCHEMA = "freecad-toponaming-ledger/v1"
 LEDGER_SCRIPT_VERSION = "collect_freecad_expected.py:ledger-v1"
 ENV_ARG_MARKER = "__cad_core_expected_args_env__"
@@ -2061,7 +2069,10 @@ def topo_state_request_error_response(fixture: dict) -> dict[str, Any] | None:
 
     producer = topo_state.get("producer")
     cad_core_version = producer.get("cadCoreVersion") if isinstance(producer, dict) else None
-    if not isinstance(producer, dict) or cad_core_version != TOPO_STATE_PRODUCER_CAD_CORE_VERSION:
+    if (
+        not isinstance(producer, dict)
+        or cad_core_version not in TOPO_STATE_COMPATIBLE_CAD_CORE_VERSIONS
+    ):
         return topo_state_request_rejection({
             "code": "topo_state_producer_incompatible",
             "severity": "error",
@@ -2072,6 +2083,9 @@ def topo_state_request_error_response(fixture: dict) -> dict[str, Any] | None:
             ),
             "actualProducer": producer,
             "expectedProducer": {
+                # Preserve the public diagnostics envelope emitted by CAD Core runtime.  The
+                # finite compatibility set above controls validation; this field identifies the
+                # fixture producer expected by the public collector contract.
                 "cadCoreVersion": TOPO_STATE_PRODUCER_CAD_CORE_VERSION,
             },
         })

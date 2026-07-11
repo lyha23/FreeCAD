@@ -1,0 +1,35 @@
+{
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "authority": "src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry; cad-core/tools/collect_freecad_expected.py::set_sketch_external_geometry",
+    "reason": "The diagnostic is defined for an intentionally deleted Missing external target with neither ExternalGeo nor BREP evidence, which is not a FreeCAD public-root graph.",
+    "next_action": "Keep this CAD Core diagnostic contract until a public FreeCAD exporter can represent the same deleted external-reference state.",
+    "close_condition": "Replace with a same-run collector-owned .freecad.json and ledger only when an exact public-root missing-reference representation exists."
+  },
+  "contract": {
+    "diagnostics": [
+      {
+        "code": "missing_external_geometry_snapshot",
+        "object": "Sketch",
+        "property": "ExternalGeometry",
+        "target": "MissingBox",
+        "subname": "Face5",
+        "stage": "graph"
+      }
+    ],
+    "resultObjects": [
+      "Sketch"
+    ],
+    "documentObjectUpdates": [],
+    "elementReferenceUpdates": [],
+    "topoNamingState": {
+      "present": true,
+      "objectNames": [
+        "Sketch"
+      ],
+      "forbiddenKeys": [
+        "brep"
+      ]
+    }
+  }
+}

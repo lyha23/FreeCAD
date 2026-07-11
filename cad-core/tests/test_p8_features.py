@@ -3120,26 +3120,16 @@ class CadCoreP8FeatureTest(ExpectedFixtureAssertions, CadCoreFixtureTestCase):
         self.assertIn("external.FCStd", diagnostic["message"])
         self.assertIn("unloaded or deleted", diagnostic["message"])
 
-    def test_c3m2_xlink_source_object_rename_rewrites_update_target(self) -> None:
+    def test_c3m2_source_object_rename_stale_state_hard_fails(self) -> None:
         result = self.run_recompute("source-object-rename-recovery", "c3m2")
-        update = result["elementReferenceUpdates"][0]
-        shadow = update["ReferenceShadow"][0]
 
-        self.assertEqual(result["diagnostics"], [])
-        self.assertEqual(result["objects"]["ProbePad"]["status"], "ok")
-        self.assertEqual(update["object"], "ProbePad")
-        self.assertEqual(update["property"], "UpToFace")
-        self.assertEqual(update["PropertyType"], "App::PropertyLinkSub")
-        self.assertEqual(update["value"], "RenamedBody")
-        self.assertEqual(update["SubList"], ["Face5"])
-        self.assertEqual(update["StableSubList"], ["Pad.Face6"])
-        self.assertEqual(update["sourceObjectRename"], {
-            "oldName": "Body",
-            "newName": "RenamedBody",
-            "method": "ReferenceShadow.targetId",
-        })
-        self.assertEqual(shadow["target"], "RenamedBody")
-        self.assertEqual(shadow["reference_recovery"], "source_object_rename")
+        self.assertEqual(
+            [item["code"] for item in result["diagnostics"]],
+            ["topo_state_document_hash_mismatch"],
+        )
+        self.assertEqual(result["results"], [])
+        self.assertEqual(result["elementReferenceUpdates"], [])
+        self.assertIsNone(result.get("topoNamingState"))
 
     def test_p8_app_link_element_proxies_linked_shape(self) -> None:
         result = self.run_recompute("app-link-element-box", "p8")

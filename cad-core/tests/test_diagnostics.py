@@ -30,8 +30,13 @@ class CadCoreDiagnosticsTest(CadCoreFixtureTestCase):
             ],
         }
         for (group, fixture), codes in diagnostic_cases.items():
-            with self.subTest(fixture=fixture):
-                self.assertEqual(self.diagnostic_codes(fixture, group), codes)
+            repeats = 2 if (group, fixture) in {
+                ("c3m2", "sketch-external-frozen-brep-reuse"),
+                ("c3m2", "sketch-external-missing-brep-reuse"),
+            } else 1
+            for attempt in range(repeats):
+                with self.subTest(fixture=fixture, attempt=attempt):
+                    self.assertEqual(self.diagnostic_codes(fixture, group), codes)
 
         frozen_native = self.run_recompute("sketch-external-frozen-source-changed", "p5")
         self.assertEqual(frozen_native["diagnostics"], [])

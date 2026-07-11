@@ -1,0 +1,44 @@
+{
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "authority": "src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry; src/Mod/Sketcher/App/SketchObject.cpp::SketchObject::buildShape",
+    "reason": "CAD Core carries Missing on a LinkSubList DTO, while FreeCAD persists Missing on SketchObject::ExternalGeo facade entries; this input deliberately has no native ExternalGeo history pool.",
+    "next_action": "Keep this CAD Core contract until the input is replaced by a public-root ExternalGeo pool with source-provenanced Missing state.",
+    "close_condition": "Replace only after an unchanged semantic input yields a same-run collector-owned .freecad.json and ledger without synthesizing ExternalGeo geometry."
+  },
+  "contract": {
+    "diagnostics": [],
+    "resultObjects": [
+      "Sketch"
+    ],
+    "documentObjectUpdates": [
+      {
+        "object": "Sketch",
+        "reason": "external_geometry_flags_sync",
+        "properties": {
+          "ExternalGeometry": {
+            "SubSet": [
+              {
+                "value": "Box",
+                "SubList": [
+                  "Face5"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "elementReferenceUpdates": [],
+    "topoNamingState": {
+      "present": true,
+      "objectNames": [
+        "Box",
+        "Sketch"
+      ],
+      "forbiddenKeys": [
+        "brep"
+      ]
+    }
+  }
+}

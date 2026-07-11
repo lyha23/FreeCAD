@@ -10,10 +10,16 @@
 #include <array>
 #include <cstdint>
 #include <exception>
+#include <filesystem>
+#include <fstream>
 #include <iomanip>
+#include <limits>
 #include <optional>
+#include <random>
 #include <sstream>
 #include <string>
+#include <system_error>
+#include <utility>
 
 namespace cad_core::part {
 
@@ -136,6 +142,95 @@ std::optional<std::string> decompressZstdBase64Brep(const std::string& data,
     return decompressed;
 }
 
+struct ScopedTemporaryDirectory {
+    explicit ScopedTemporaryDirectory(std::filesystem::path value)
+        : path(std::move(value))
+    {
+    }
+
+    ScopedTemporaryDirectory(const ScopedTemporaryDirectory&) = delete;
+    ScopedTemporaryDirectory& operator=(const ScopedTemporaryDirectory&) = delete;
+
+    ScopedTemporaryDirectory(ScopedTemporaryDirectory&& other) noexcept
+        : path(std::move(other.path))
+    {
+        other.path.clear();
+    }
+
+    ScopedTemporaryDirectory& operator=(ScopedTemporaryDirectory&& other) noexcept
+    {
+        if (this != &other) {
+            std::error_code ignored;
+            std::filesystem::remove_all(path, ignored);
+            path = std::move(other.path);
+            other.path.clear();
+        }
+        return *this;
+    }
+
+    ~ScopedTemporaryDirectory()
+    {
+        std::error_code ignored;
+        std::filesystem::remove_all(path, ignored);
+    }
+
+    std::filesystem::path path;
+};
+
+std::optional<ScopedTemporaryDirectory> makeTemporaryBrepDirectory(std::string& error)
+{
+    std::error_code filesystemError;
+    const std::filesystem::path tempDirectory = std::filesystem::temp_directory_path(filesystemError);
+    if (filesystemError) {
+        error = "ReferenceShadow.brep cannot access the temporary directory: "
+            + filesystemError.message();
+        return std::nullopt;
+    }
+
+    std::random_device device;
+    std::mt19937_64 generator(device());
+    std::uniform_int_distribution<std::uint64_t> distribution;
+    for (int attempt = 0; attempt < 32; ++attempt) {
+        const std::filesystem::path path = tempDirectory
+            / ("cad-core-reference-shadow-brep-" + std::to_string(distribution(generator)));
+        filesystemError.clear();
+        if (std::filesystem::create_directory(path, filesystemError)) {
+            return ScopedTemporaryDirectory(path);
+        }
+        if (filesystemError) {
+            error = "ReferenceShadow.brep cannot create an isolated temporary directory: "
+                + filesystemError.message();
+            return std::nullopt;
+        }
+    }
+
+    error = "ReferenceShadow.brep could not allocate an isolated temporary directory";
+    return std::nullopt;
+}
+
+bool writeBrepSnapshotFile(const std::filesystem::path& path,
+                           const std::string& brepText,
+                           std::string& error)
+{
+    if (brepText.size() > static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max())) {
+        error = "ReferenceShadow.brep is too large for the OCCT reader";
+        return false;
+    }
+
+    std::ofstream output(path, std::ios::binary | std::ios::trunc);
+    if (!output) {
+        error = "ReferenceShadow.brep cannot open its isolated parser input";
+        return false;
+    }
+    output.write(brepText.data(), static_cast<std::streamsize>(brepText.size()));
+    output.close();
+    if (!output) {
+        error = "ReferenceShadow.brep cannot write its isolated parser input";
+        return false;
+    }
+    return true;
+}
+
 }  // namespace
 
 std::string sha256Hex(const std::string& data)
@@ -254,10 +349,27 @@ std::optional<TopoDS_Shape> readBrepTextSnapshot(const std::string& brepText,
     }
 
     try {
+        // FreeCAD's current `PropertyPartShape::loadFromFile()` uses the filename overload.
+        // Passing a cad-core-owned std::istream into the FreeCAD/LibPack OCCT reader crosses a
+        // libc++ locale ownership boundary on macOS. Keep this request-carried evidence as exact
+        // bytes, but let OCCT create and own its parsing stream through the bool-returning file
+        // overload. The temporary file is only a parser transport, never a document model input.
+        auto temporaryDirectory = makeTemporaryBrepDirectory(error);
+        if (!temporaryDirectory) {
+            return std::nullopt;
+        }
+        const std::filesystem::path snapshotPath = temporaryDirectory->path / "snapshot.brep";
+        if (!writeBrepSnapshotFile(snapshotPath, brepText, error)) {
+            return std::nullopt;
+        }
+
         TopoDS_Shape shape;
         BRep_Builder builder;
-        std::istringstream stream(brepText);
-        BRepTools::Read(shape, stream, builder);
+        const std::string nativePath = snapshotPath.string();
+        if (!BRepTools::Read(shape, nativePath.c_str(), builder)) {
+            error = "ReferenceShadow.brep was rejected by the OCCT parser";
+            return std::nullopt;
+        }
         if (shape.IsNull()) {
             error = "ReferenceShadow.brep did not decode to a shape";
             return std::nullopt;
@@ -288,7 +400,7 @@ std::optional<TopoDS_Shape> readBrepSnapshot(const std::string& format,
         if (!decompressed) {
             return std::nullopt;
         }
-        // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/PartFeature.cpp
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeature.cpp
         // ::Feature::onBeforeChange() caches the old subshape geometry, not the transport bytes.
         // The compressed transport therefore validates byteLength/sha256 against the decompressed
         // serialized BREP payload before BRepTools::Read consumes it.

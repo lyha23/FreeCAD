@@ -1,0 +1,27 @@
+{
+  "oracle_evidence": {
+    "freecad_native_parity": false,
+    "authority": "src/Mod/Part/App/PartFeature.cpp::Feature::onBeforeChange and ElementCache; src/Mod/Sketcher/App/SketchObjectExternal.cpp::SketchObject::rebuildExternalGeometry",
+    "reason": "The missing target is intentional and its BREP is item-local old-subshape evidence; FreeCAD keeps that recovery geometry in ElementCache, not a public document root.",
+    "next_action": "Keep this CAD Core recovery contract until a public exporter preserves the same deleted-object recovery state without synthetic geometry.",
+    "close_condition": "Replace with a same-run collector-owned .freecad.json and ledger only when an exact public-root recovery representation exists."
+  },
+  "contract": {
+    "runs": 2,
+    "diagnostics": [],
+    "resultObjects": [
+      "Sketch"
+    ],
+    "documentObjectUpdates": [],
+    "elementReferenceUpdates": [],
+    "topoNamingState": {
+      "present": true,
+      "objectNames": [
+        "Sketch"
+      ],
+      "forbiddenKeys": [
+        "brep"
+      ]
+    }
+  }
+}

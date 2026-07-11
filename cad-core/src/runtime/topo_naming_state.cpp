@@ -490,19 +490,17 @@ void addTopoStateLinkTargets(std::set<std::string>& objectNames,
                              const app::Document& document)
 {
     for (const app::DocumentObject& object : document.objects) {
-        for (const auto& propertyItem : object.properties.items()) {
-            std::vector<app::Link> links;
-            app::collectLinks(propertyItem.value(), links);
-            for (const app::Link& link : links) {
-                for (const app::ReferenceShadow& shadow : link.referenceShadows) {
-                    if (!shadow.target.empty()) {
-                        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/GeoFeature.cpp
-                        // ::updateElementReference(), carries ElementCache/ReferenceShadow for
-                        // old subshape recovery. The old target object remains part of the next
-                        // client-carried topoNamingState snapshot while that recovery evidence is
-                        // still being returned.
-                        objectNames.insert(shadow.target);
-                    }
+        for (const auto& [propertyName, propertyValue] : object.propertyValues) {
+            (void)propertyName;
+            for (const app::Link& link : propertyValue.links) {
+                if (!link.referenceShadows.empty()
+                    && document.indexByName.count(link.object) != 0U) {
+                    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/GeoFeature.cpp
+                    // ::updateElementReference() resolves and rewrites the property-local
+                    // reference to the current DocumentObject. Use that normalized Link rather
+                    // than the raw ReferenceShadow target: the old target is local recovery
+                    // evidence, never a top-level client-carried topoNamingState owner.
+                    objectNames.insert(link.object);
                 }
                 if (link.stableSubnamesSource == "topoNamingState"
                     && linkHasFreeCadMappedStableSubname(link)
