@@ -1,5 +1,8 @@
 #include "cad_core/part/face_maker.h"
 
+#include "cad_core/app/element_map_producer_trace.h"
+#include "cad_core/part/element_map_producer_trace_snapshot.h"
+
 #include "internal_shape_history_ledger_detail.h"
 
 #include <BRepAlgoAPI_Common.hxx>
@@ -1410,10 +1413,49 @@ std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<Topo
 
 FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
     const std::vector<TopoDS_Wire>& wires,
-    const std::vector<TopoDS_Edge>& splitEdges
+    const std::vector<TopoDS_Edge>& splitEdges,
+    app::ElementMapProducerTrace* producerTrace
 )
 {
+    app::ElementMapProducerTrace::Scope traceScope;
+    if (producerTrace != nullptr) {
+        traceScope = producerTrace->scope(
+            {"FaceMaker::postBuild",
+             "",
+             0,
+             "Part::FaceMakerBuildFace",
+             {{"closedWireCount", wires.size()},
+              {"splitEdgeCount", splitEdges.size()},
+              {"requiresFinalCheckpoint", true}}}
+        );
+        producerTrace->record({
+            "face_maker.lifecycle",
+            "begin",
+            "face_maker_inputs_frozen",
+            {{"closedWireCount", wires.size()},
+             {"splitEdgeCount", splitEdges.size()},
+             {"preSplit", !splitEdges.empty()}},
+        });
+    }
     if (wires.empty()) {
+        if (producerTrace != nullptr) {
+            producerTrace->record({
+                "face_maker.lifecycle", "rejected", "no_closed_wires", nlohmann::json::object()
+            });
+            producerTrace->checkpoint(
+                {"state",
+                 {{"producer", "FaceMakerBuildFace"},
+                  {"outcome", "rejected"},
+                  {"reason", "no_closed_wires"},
+                  {"closedWireCount", 0},
+                  {"splitEdgeCount", splitEdges.size()}},
+                 {},
+                 {},
+                 {},
+                 "maker.final_checkpoint"}
+            );
+            traceScope.abort("no_closed_wires");
+        }
         return {};
     }
 
@@ -1423,6 +1465,29 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
         // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/FaceMakerBuildFace.cpp
         // ::Build_Essence(), intersecting BSpline closed profiles can fail before publishing a
         // usable InternalShape; SketchObject::buildInternals() then returns an empty TopoShape.
+        if (producerTrace != nullptr) {
+            producerTrace->record({
+                "face_maker.lifecycle",
+                "failed",
+                "multi_wire_profile_reconstruction_failed",
+                {{"closedWireCount", wires.size()},
+                 {"splitEdgeCount", splitEdges.size()},
+                 {"partialWrite", false}},
+            });
+            producerTrace->checkpoint(
+                {"state",
+                 {{"producer", "FaceMakerBuildFace"},
+                  {"outcome", "failed"},
+                  {"reason", "multi_wire_profile_reconstruction_failed"},
+                  {"closedWireCount", wires.size()},
+                  {"splitEdgeCount", splitEdges.size()}},
+                 {},
+                 {},
+                 {},
+                 "maker.final_checkpoint"}
+            );
+            traceScope.abort("multi_wire_profile_reconstruction_failed");
+        }
         return {};
     }
 
@@ -1437,6 +1502,30 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
         &historySummary
     );
     if (!boundedFaces || boundedFaces->IsNull() || boundedFaceCount == 0U) {
+        if (producerTrace != nullptr) {
+            producerTrace->record({
+                "face_maker.lifecycle",
+                "failed",
+                "builder_face_no_bounded_result",
+                {{"splitterInputCount", faceMakerEdges.Size()},
+                 {"boundedFaceCount", boundedFaceCount},
+                 {"producedSplit", producedSplit}},
+            });
+            producerTrace->checkpoint(
+                {"state",
+                 {{"producer", "FaceMakerBuildFace"},
+                  {"outcome", "failed"},
+                  {"reason", "builder_face_no_bounded_result"},
+                  {"splitterInputCount", faceMakerEdges.Size()},
+                  {"boundedFaceCount", boundedFaceCount},
+                  {"producedSplit", producedSplit}},
+                 {},
+                 {},
+                 {},
+                 "maker.final_checkpoint"}
+            );
+            traceScope.abort("builder_face_no_bounded_result");
+        }
         return {};
     }
 
@@ -1458,6 +1547,62 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
     const std::optional<TopoDS_Shape> internalShape = boundedFaces;
     InternalShapeHistoryLedger historyLedger;
     addFaceMakerEvidenceToLedger(historyLedger, historySummary);
+    if (producerTrace != nullptr) {
+        nlohmann::json namesUsed = nlohmann::json::array();
+        nlohmann::json comboNames = nlohmann::json::array();
+        for (const FaceMakerBoundedFaceHistoryEvidence& face :
+             historySummary.boundedFaceEvidence) {
+            nlohmann::json orderedNames = nlohmann::json::array();
+            nlohmann::json orderedRefs = nlohmann::json::array();
+            std::string comboName;
+            for (const std::size_t sourceEdgeIndex : face.sourceEdgeIndices) {
+                const std::string name = "Edge" + std::to_string(sourceEdgeIndex);
+                orderedNames.push_back(name);
+                orderedRefs.push_back({
+                    {"sourceIndexed", name},
+                    {"sourceEdgeIndex", sourceEdgeIndex},
+                });
+                if (!comboName.empty()) {
+                    comboName += "+";
+                }
+                comboName += name;
+            }
+            namesUsed.push_back({
+                {"boundedFaceIndex", face.boundedFaceIndex},
+                {"orderedNames", orderedNames},
+            });
+            comboNames.push_back({
+                {"boundedFaceIndex", face.boundedFaceIndex},
+                {"rawName", comboName},
+                {"orderedSourceRefs", orderedRefs},
+                {"sidStatus", "not_allocated_in_face_maker_scope"},
+            });
+        }
+        const nlohmann::json finalPayload = {
+            {"producer", "FaceMakerBuildFace"},
+            {"outcome", "success"},
+            {"faceCount", boundedFaceCount},
+            {"namesUsed", namesUsed},
+            {"comboNames", comboNames},
+            {"history", historyLedger.diagnosticsJson()},
+            {"outputInventory", inspectShapeInventory(*boundedFaces)},
+        };
+        producerTrace->record({
+            "face_maker.lifecycle",
+            "success",
+            "bounded_face_history_published",
+            {{"faceCount", boundedFaceCount},
+             {"profileFaceCount", profileFaceCount},
+             {"splitProducedBoundedFaces", splitProducedBoundedFaces},
+             {"namesUsed", namesUsed},
+             {"comboNames", comboNames},
+             {"history", historyLedger.diagnosticsJson()},
+             {"outputInventory", inspectShapeInventory(*boundedFaces)}},
+        });
+        producerTrace->checkpoint(
+            {"state", finalPayload, {}, {}, {}, "maker.final_checkpoint"}
+        );
+    }
     return FaceMakerBuildFaceResult {
         boundedFaces,
         internalShape,
@@ -1472,7 +1617,7 @@ std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(
     const std::vector<TopoDS_Edge>& splitEdges
 )
 {
-    return makeFacesFromClosedWiresAndSplitEdgesDetailed(wires, splitEdges).shape;
+    return makeFacesFromClosedWiresAndSplitEdgesDetailed(wires, splitEdges, nullptr).shape;
 }
 
 }  // namespace cad_core::part

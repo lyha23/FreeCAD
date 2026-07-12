@@ -15,6 +15,19 @@ import traceback
 from pathlib import Path
 from typing import Any, Sequence
 
+try:
+    from element_map_producer_trace import (
+        TraceValidationError,
+        canonical_json_sha256,
+        validate_trace as validate_element_map_producer_trace,
+    )
+except ModuleNotFoundError:
+    from tools.element_map_producer_trace import (
+        TraceValidationError,
+        canonical_json_sha256,
+        validate_trace as validate_element_map_producer_trace,
+    )
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FREECADCMD = "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd"
@@ -274,35 +287,51 @@ def producer_trace_path_for_expected(expected_path: Path) -> Path:
     return expected_path.with_name(f"{name[:-len('.freecad.json')]}.freecad.producer-trace.json")
 
 
-def validate_producer_trace(trace: Any) -> dict[str, Any]:
-    if not isinstance(trace, dict) or trace.get("schemaVersion") != PRODUCER_TRACE_SCHEMA:
-        raise RuntimeError("native ElementMap producer trace has an invalid schema")
-    events = trace.get("events")
-    transactions = trace.get("transactions")
-    if not isinstance(events, list) or not isinstance(transactions, list) or not events:
-        raise RuntimeError("native ElementMap producer trace is empty or malformed")
+def validate_producer_trace(
+    trace: Any,
+    *,
+    input_document: Any | None = None,
+    response_document: Any | None = None,
+) -> dict[str, Any]:
+    try:
+        return validate_element_map_producer_trace(
+            trace,
+            input_document=input_document,
+            response_document=response_document,
+        )
+    except TraceValidationError as exc:
+        raise RuntimeError(f"native ElementMap producer trace closure is invalid: {exc}") from exc
 
-    snapshot_ids = set(trace.get("ledgerSnapshots", {}))
-    snapshot_ids.update(trace.get("stringTableSnapshots", {}))
-    snapshot_ids.update(trace.get("mapperSnapshots", {}))
-    open_scopes: set[int] = set()
-    for sequence, event in enumerate(events, start=1):
-        if not isinstance(event, dict) or event.get("sequence") != sequence:
-            raise RuntimeError(f"native ElementMap producer trace has a sequence gap at {sequence}")
-        if event.get("beforeSnapshot") not in snapshot_ids or event.get("afterSnapshot") not in snapshot_ids:
-            raise RuntimeError(f"native ElementMap producer trace event {sequence} references a missing snapshot")
-        scope = event.get("scopeSequence", 0)
-        if event.get("slice") == "scope.begin":
-            if not isinstance(scope, int) or scope <= 0 or scope in open_scopes:
-                raise RuntimeError(f"native ElementMap producer trace has an invalid scope begin at {sequence}")
-            open_scopes.add(scope)
-        elif event.get("slice") in {"scope.end", "scope.abort"}:
-            if scope not in open_scopes:
-                raise RuntimeError(f"native ElementMap producer trace has an unpaired scope end at {sequence}")
-            open_scopes.remove(scope)
-    if open_scopes:
-        raise RuntimeError("native ElementMap producer trace has unclosed scopes")
-    return trace
+
+def bind_producer_trace_artifacts(
+    trace: dict[str, Any],
+    *,
+    input_document: Any,
+    response_document: Any,
+) -> dict[str, Any]:
+    """Attach post-parse artifact and snapshot hashes before publishing native JSON."""
+
+    producer = trace.setdefault("producer", {})
+    producer["name"] = "FreeCAD"
+    producer["inputSha256"] = canonical_json_sha256(input_document)
+    producer["responseSha256"] = canonical_json_sha256(response_document)
+    producer["snapshotPayloadHashAlgorithm"] = "canonical-json-sha256-v1"
+    for group in ("stringTableSnapshots", "ledgerSnapshots", "mapperSnapshots"):
+        snapshots = trace.get(group)
+        if not isinstance(snapshots, dict):
+            raise RuntimeError(f"native ElementMap producer trace {group} is invalid")
+        for snapshot_id, snapshot in snapshots.items():
+            if not isinstance(snapshot, dict):
+                raise RuntimeError(f"native ElementMap producer trace snapshot {snapshot_id} is invalid")
+            payload = snapshot.get("payload") if "payload" in snapshot else snapshot.get("entries")
+            if payload is None:
+                raise RuntimeError(f"native ElementMap producer trace snapshot {snapshot_id} has no payload")
+            snapshot["canonicalPayloadSha256"] = canonical_json_sha256(payload)
+    return validate_producer_trace(
+        trace,
+        input_document=input_document,
+        response_document=response_document,
+    )
 
 
 def drain_producer_trace(doc: Any) -> dict[str, Any]:
@@ -3385,9 +3414,9 @@ def topo_state_child_element_maps_response(fixture: dict, FreeCAD: Any) -> dict[
     doc = FreeCAD.newDocument("CadCoreTopoStateChildMaps")
     try:
         created = create_objects(FreeCAD, doc, fixture)
-        doc.recompute()
+        recompute_fixture_request(doc, created, fixture)
         native_link_subnames = prepare_native_compound_link_targets(fixture, created)
-        doc.recompute()
+        recompute_fixture_request(doc, created, fixture)
         specs = fixture_object_specs(fixture)
         ledger_payloads = topo_ledger_payloads(fixture, created, {})
         objects = {
@@ -9153,6 +9182,26 @@ def target_names(fixture: dict) -> list[str]:
     return [objects[-1]["Name"]]
 
 
+def recompute_fixture_request(doc: Any, created: dict[str, Any], fixture: dict) -> int:
+    """Run native recompute with the fixture's explicit request targets when present."""
+
+    recompute_names = fixture.get("recompute", {}).get("objs", [])
+    if not recompute_names:
+        return int(doc.recompute())
+    if not isinstance(recompute_names, list):
+        raise UnsupportedFixture("fixture recompute.objs must be a list")
+    recompute_objects = []
+    for name in recompute_names:
+        obj = created.get(str(name))
+        if obj is None:
+            raise UnsupportedFixture(f"recompute target object {name} was not created")
+        recompute_objects.append(obj)
+    # The fixture request is the public recompute contract. Passing its explicit object list
+    # preserves FreeCAD's requested targets while Document::getDependencyList() still records
+    # every dependency that actually executes as an effective target.
+    return int(doc.recompute(recompute_objects))
+
+
 def require_native_hole_profile_support(fixture: dict) -> None:
     specs = {spec.get("Name"): spec for spec in fixture.get("Objects", []) if isinstance(spec, dict)}
     for spec in fixture.get("Objects", []):
@@ -9476,7 +9525,7 @@ def collect_one(fixture_path: Path, requested_targets: Sequence[str] | None = No
             previous_solve_on_recompute = assembly_solve_preferences.GetBool("SolveOnRecompute", True)
             assembly_solve_preferences.SetBool("SolveOnRecompute", False)
         created = create_objects(FreeCAD, doc, fixture)
-        doc.recompute()
+        recompute_fixture_request(doc, created, fixture)
         if assembly_solve_preferences is not None:
             assembly_solve_preferences.SetBool("SolveOnRecompute", previous_solve_on_recompute)
             assembly_solve_preferences = None
@@ -10246,6 +10295,16 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             failures += 1
             continue
         producer_trace = copy.deepcopy(LAST_FREECAD_PRODUCER_TRACE)
+        try:
+            producer_trace = bind_producer_trace_artifacts(
+                producer_trace,
+                input_document=fixture,
+                response_document=payload,
+            )
+        except Exception as exc:
+            print(f"failed producer trace binding {fixture_path}: {exc}", file=sys.stderr)
+            failures += 1
+            continue
 
         try:
             ledger = collect_expected_ledger(fixture_path, fixture, payload, target_override)
@@ -10264,7 +10323,11 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
                 failures += 1
             else:
                 try:
-                    validate_producer_trace(json.loads(trace_path.read_text(encoding="utf-8")))
+                    validate_producer_trace(
+                        json.loads(trace_path.read_text(encoding="utf-8")),
+                        input_document=fixture,
+                        response_document=payload,
+                    )
                 except Exception as exc:
                     print(f"invalid expected producer trace {trace_path}: {exc}", file=sys.stderr)
                     failures += 1

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -7,6 +9,8 @@
 
 namespace cad_core::app
 {
+
+class ElementMapProducerTrace;
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/StringHasher.h and
 // /Users/li/Chili3DProject/FreeCAD/src/App/StringHasher.cpp::StringHasher::getID().  A document
@@ -42,6 +46,9 @@ struct HashedMappedName
 class StringHasher
 {
 public:
+    void attachProducerTrace(ElementMapProducerTrace* trace) noexcept { producerTrace_ = trace; }
+    ElementMapProducerTrace* producerTrace() const noexcept { return producerTrace_; }
+
     StringId getId(const std::string& data);
     StringId getMappedNameId(
         const std::string& data,
@@ -68,11 +75,36 @@ public:
     std::optional<StringId> mappedNameId(const std::string& rawMappedName) const;
     int producerIndexForMappedNameId(StringId id) const;
 
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD2/src/App/StringHasher.cpp
+    // ::StringHasher::inspectProducerTraceState() reads the monotonic allocation table without
+    // calling getID(), marking entries, compacting relations, or changing PrefixID metadata.
+    nlohmann::json inspectProducerTraceState() const;
+
     long lastId() const { return nextId_; }
     void clear();
 
 private:
+    struct ProducerTraceEntry
+    {
+        long value = 0;
+        std::string data;
+        std::string postfix;
+        std::string flags;
+        std::vector<StringId> related;
+        long prefixId = 0;
+        int prefixIdIndex = 0;
+    };
+
     StringId allocate(const std::string& key, int index = 0);
+    void emitMappedNameTrace(const std::string& data,
+                             int index,
+                             const std::string& postfix,
+                             const std::vector<StringId>& relatedIds,
+                             StringId result,
+                             long lastIdBefore,
+                             const std::string& decision,
+                             const std::string& reason) const;
+    void refreshProducerTraceEntry(long value);
 
     long nextId_ = 0;
     std::unordered_map<std::string, long> ids_;
@@ -85,6 +117,8 @@ private:
     std::unordered_map<long, long> prefixSourceIds_;
     std::unordered_map<std::string, std::vector<StringId>> mappedNameRelations_;
     std::unordered_map<std::string, StringId> mappedNameIds_;
+    std::vector<ProducerTraceEntry> producerTraceEntries_;
+    ElementMapProducerTrace* producerTrace_ = nullptr;
 };
 
 std::optional<StringId> parseStringId(const std::string& value);

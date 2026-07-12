@@ -1765,11 +1765,115 @@ std::vector<std::string> responseTargets(const app::Document& document,
     return targets;
 }
 
+std::vector<app::ElementMapProducerTrace::SidRef> traceSidRefs(const nlohmann::json& state)
+{
+    std::vector<app::ElementMapProducerTrace::SidRef> refs;
+    const auto entries = state.find("entries");
+    if (entries == state.end() || !entries->is_array()) {
+        return refs;
+    }
+    for (const auto& entry : *entries) {
+        const auto related = entry.find("related");
+        if (related == entry.end() || !related->is_array()) {
+            continue;
+        }
+        for (const auto& ref : *related) {
+            refs.push_back({ref.value("value", 0L), ref.value("index", 0)});
+        }
+    }
+    return refs;
+}
+
+std::vector<long> traceDefinedSids(const nlohmann::json& state)
+{
+    std::vector<long> values;
+    const auto entries = state.find("entries");
+    if (entries == state.end() || !entries->is_array()) {
+        return values;
+    }
+    for (const auto& entry : *entries) {
+        const long value = entry.value("value", 0L);
+        if (value > 0) {
+            values.push_back(value);
+        }
+    }
+    return values;
+}
+
+std::string checkpointStringTable(ComputeContext& context, const std::string& label)
+{
+    const nlohmann::json state = context.stringHasher->inspectProducerTraceState();
+    return context.producerTrace->checkpoint(
+        {"stringTable", state, traceSidRefs(state), traceDefinedSids(state), {}, label}
+    );
+}
+
+std::vector<app::ElementMapProducerTrace::ObjectInfo> traceObjects(
+    const app::Document& document
+)
+{
+    std::vector<app::ElementMapProducerTrace::ObjectInfo> objects;
+    objects.reserve(document.objects.size());
+    for (const app::DocumentObject& object : document.objects) {
+        objects.push_back(
+            {static_cast<long>(object.id), object.name, object.typeId}
+        );
+    }
+    return objects;
+}
+
+nlohmann::json traceObjectSlots(const ComputeContext& context, const std::string& object)
+{
+    return {
+        {"Shape", context.shapes.count(object) != 0U},
+        {"NamedShape", context.namedShapes.count(object) != 0U},
+        {"AddSubShape", context.addSubShapes.count(object) != 0U},
+        {"mesh", context.mesh.count(object) != 0U},
+        {"subshapes", context.subshapes.count(object) != 0U},
+        {"objectResult", context.objects.count(object) != 0U},
+    };
+}
+
+nlohmann::json traceInputSlots(const ComputeContext& context, const std::string& object)
+{
+    nlohmann::json inputs = nlohmann::json::array();
+    const auto dependencies = context.dependencies.find(object);
+    if (dependencies == context.dependencies.end()) {
+        return inputs;
+    }
+    for (const std::string& dependency : dependencies->second) {
+        inputs.push_back({
+            {"object", dependency},
+            {"slots", traceObjectSlots(context, dependency)},
+        });
+    }
+    return inputs;
+}
+
 }  // namespace
 
-ComputeContext recomputeContext(const app::Document& document,
-                                std::vector<Diagnostic> diagnostics)
+ComputeContext recomputeContext(
+    const app::Document& document,
+    std::vector<Diagnostic> diagnostics,
+    std::shared_ptr<app::ElementMapProducerTrace> producerTrace
+)
 {
+    ComputeContext context(std::move(producerTrace));
+    auto transaction = context.producerTrace->beginTransaction(
+        {document.targets,
+         {{"objectCount", document.objects.size()},
+          {"hasTopoNamingState", document.hasTopoNamingState}}}
+    );
+    context.producerTrace->firstSeenIdentity(
+        "hasher",
+        "request.StringHasher",
+        "create"
+    );
+    auto documentScope = context.producerTrace->scope(
+        {"recompute", "", 0, "runtime::recompute", {{"targets", document.targets}}}
+    );
+    checkpointStringTable(context, "table_checkpoint");
+
     FeatureRegistry registry = buildDefaultRegistry();
     graph::RecomputePlan plan = graph::buildPlan(
         document,
@@ -1777,7 +1881,6 @@ ComputeContext recomputeContext(const app::Document& document,
         registry.producerMissingReferenceAdmissionTypeIds()
     );
 
-    ComputeContext context;
     context.diagnostics = std::move(diagnostics);
     context.dependencies = plan.dependencies;
     context.documentObjects = buildDocumentObjectMap(document);
@@ -1790,11 +1893,49 @@ ComputeContext recomputeContext(const app::Document& document,
     // ::GeoFeature::getGlobalPlacement() returns parent GeoFeatureGroup::globalGroupPlacement()
     // multiplied by the object's own Placement.
     context.globalPlacements = buildGlobalPlacements(document);
+    context.producerTrace->record({
+        "document.recompute.plan",
+        "planned",
+        "dependency_plan_built",
+        {{"order", plan.order},
+         {"blockedObjects", plan.blockedObjects},
+         {"targets", document.targets}},
+    });
+
+    bool transactionFailed = false;
 
     for (const auto& name : plan.order) {
         const auto& object = document.objects.at(document.indexByName.at(name));
+        auto objectScope = context.producerTrace->scope(
+            {"object.execute",
+             object.name,
+             static_cast<long>(object.id),
+             object.typeId,
+             {{"typeId", object.typeId}, {"objectId", object.id}}}
+        );
+        const long lastIdBefore = context.stringHasher->lastId();
+        context.producerTrace->record({
+            "document.object.execute.begin",
+            "begin",
+            "object_execute_started",
+            {{"object", object.name},
+             {"objectId", object.id},
+             {"typeId", object.typeId},
+             {"lastIdBefore", lastIdBefore},
+             {"inputSlots", traceInputSlots(context, object.name)}},
+        });
         if (plan.blockedObjects.count(name) != 0U) {
             context.objects[name] = {{"status", "error"}};
+            context.producerTrace->record({
+                "document.object.execute.end",
+                "blocked",
+                "dependency_plan_blocked_object",
+                {{"lastIdBefore", lastIdBefore},
+                 {"lastIdAfter", context.stringHasher->lastId()},
+                 {"outputSlots", traceObjectSlots(context, object.name)}},
+            });
+            objectScope.abort("dependency_plan_blocked_object");
+            transactionFailed = true;
             continue;
         }
 
@@ -1808,6 +1949,17 @@ ComputeContext recomputeContext(const app::Document& document,
                     {"status", "skipped"},
                     {"reason", "dependency " + *failedIt + " failed"},
                 };
+                context.producerTrace->record({
+                    "document.object.execute.end",
+                    "skipped",
+                    "dependency_failed",
+                    {{"dependency", *failedIt},
+                     {"lastIdBefore", lastIdBefore},
+                     {"lastIdAfter", context.stringHasher->lastId()},
+                     {"outputSlots", traceObjectSlots(context, object.name)}},
+                });
+                objectScope.abort("dependency_failed");
+                transactionFailed = true;
                 continue;
             }
         }
@@ -1817,14 +1969,33 @@ ComputeContext recomputeContext(const app::Document& document,
             context.objects,
             context.documentObjects,
             context.namedShapes,
+            context.producerTrace.get(),
         };
         const ReferenceLifecycleView lifecycleView {context.documentObjects, &document};
         auto referenceValidation = validateObjectReferences(object, referenceView, lifecycleView);
+        context.producerTrace->record({
+            "reference.resolve",
+            referenceValidation.valid ? "resolved" : "rejected",
+            referenceValidation.valid ? "object_references_valid" : "object_reference_invalid",
+            {{"propertyLocal", true},
+             {"updateCount", referenceValidation.elementReferenceUpdates.size()},
+             {"diagnosticCount", referenceValidation.diagnostics.size()}},
+        });
         context.diagnostics.insert(context.diagnostics.end(),
                                    referenceValidation.diagnostics.begin(),
                                    referenceValidation.diagnostics.end());
         if (!referenceValidation.valid) {
             context.objects[object.name] = {{"status", "error"}};
+            context.producerTrace->record({
+                "document.object.execute.end",
+                "rejected",
+                "object_reference_invalid",
+                {{"lastIdBefore", lastIdBefore},
+                 {"lastIdAfter", context.stringHasher->lastId()},
+                 {"outputSlots", traceObjectSlots(context, object.name)}},
+            });
+            objectScope.abort("object_reference_invalid");
+            transactionFailed = true;
             continue;
         }
         for (auto& update : referenceValidation.elementReferenceUpdates) {
@@ -1837,21 +2008,105 @@ ComputeContext recomputeContext(const app::Document& document,
         if (executor == nullptr) {
             addDiagnostic(context.diagnostics, "error", "unsupported_type", "Unsupported TypeId " + object.typeId, object.name);
             context.objects[object.name] = {{"status", "error"}};
+            context.producerTrace->record({
+                "document.object.execute.end",
+                "rejected",
+                "unsupported_type",
+                {{"typeId", object.typeId},
+                 {"lastIdBefore", lastIdBefore},
+                 {"lastIdAfter", context.stringHasher->lastId()},
+                 {"outputSlots", traceObjectSlots(context, object.name)}},
+            });
+            objectScope.abort("unsupported_type");
+            transactionFailed = true;
             continue;
         }
+        bool executorException = false;
         try {
             executor(object, context);
         }
         catch (const Standard_Failure& failure) {
+            executorException = true;
             markOcctExecutionFailure(object, context, standardFailureMessage(failure));
+            context.producerTrace->record({
+                "failure",
+                "exception",
+                "occt_standard_failure",
+                {{"category", standardFailureTypeName(failure)},
+                 {"message", standardFailureMessage(failure)},
+                 {"partialWrite", true}},
+            });
+            objectScope.exception(standardFailureMessage(failure));
+        }
+        catch (const std::exception& failure) {
+            executorException = true;
+            const std::string message = std::string("std::exception: ") + failure.what();
+            markOcctExecutionFailure(object, context, message);
+            context.producerTrace->record({
+                "failure",
+                "exception",
+                "executor_std_exception",
+                {{"category", "std::exception"},
+                 {"message", message},
+                 {"partialWrite", true}},
+            });
+            objectScope.exception(message);
+        }
+        catch (...) {
+            executorException = true;
+            markOcctExecutionFailure(object, context, "unknown executor exception");
+            context.producerTrace->record({
+                "failure",
+                "exception",
+                "executor_unknown_exception",
+                {{"category", "unknown"},
+                 {"message", "unknown executor exception"},
+                 {"partialWrite", true}},
+            });
+            objectScope.exception("unknown executor exception");
         }
         if (hasFailed(context, name)) {
+            context.producerTrace->record({
+                "document.object.execute.end",
+                "failed",
+                "executor_reported_failure",
+                {{"lastIdBefore", lastIdBefore},
+                 {"lastIdAfter", context.stringHasher->lastId()},
+                 {"outputSlots", traceObjectSlots(context, object.name)}},
+            });
+            if (!executorException) {
+                objectScope.abort("executor_reported_failure");
+            }
+            transactionFailed = true;
             continue;
         }
         registerIndexedNamedShape(name, context);
         context.executionOrder.push_back(name);
+        checkpointStringTable(context, "table_checkpoint");
+        context.producerTrace->record({
+            "document.object.execute.end",
+            "success",
+            "object_execute_finished",
+            {{"lastIdBefore", lastIdBefore},
+             {"lastIdAfter", context.stringHasher->lastId()},
+             {"hasNamedShape", context.namedShapes.count(name) != 0U},
+             {"outputSlots", traceObjectSlots(context, object.name)}},
+        });
     }
 
+    checkpointStringTable(context, "maker.final_checkpoint");
+    context.producerTrace->record({
+        "document.recompute.checkpoint",
+        transactionFailed ? "partial" : "complete",
+        transactionFailed ? "request_completed_with_failures" : "request_completed",
+        {{"executionOrder", context.executionOrder},
+         {"diagnosticCount", context.diagnostics.size()},
+         {"partialWrite", transactionFailed}},
+    });
+    if (transactionFailed) {
+        documentScope.abort("request_completed_with_failures");
+        transaction.abort("request_completed_with_failures");
+    }
     return context;
 }
 
@@ -1897,14 +2152,69 @@ nlohmann::json recomputeResultJson(const app::Document& document,
     return payload;
 }
 
+RecomputeArtifacts recomputeArtifacts(const app::Document& document,
+                                      std::vector<Diagnostic> diagnostics,
+                                      RecomputeTraceMetadata metadata)
+{
+    auto recorder = std::make_shared<app::ElementMapProducerTrace>();
+    ComputeContext context(recorder);
+    nlohmann::json response;
+    if (auto failure = topoNamingStateRequestFailureJson(document, diagnostics)) {
+        response = *failure;
+        context.diagnostics = diagnostics;
+        {
+            auto transaction = recorder->beginTransaction(
+                {document.targets,
+                 {{"objectCount", document.objects.size()},
+                  {"hasTopoNamingState", document.hasTopoNamingState},
+                  {"preflightRejected", true}}}
+            );
+            recorder->firstSeenIdentity("hasher", "request.StringHasher", "create");
+            auto scope = recorder->scope(
+                {"topo_state.preflight", "", 0, "runtime::recompute", nlohmann::json::object()}
+            );
+            checkpointStringTable(context, "table_checkpoint");
+            recorder->record({
+                "failure",
+                "rejected",
+                "topo_state_preflight_rejected",
+                {{"stage", "topo_state.preflight"},
+                 {"partialWrite", false},
+                 {"diagnostics", response.value("diagnostics", nlohmann::json::array())}},
+            });
+            recorder->checkpoint(
+                {"state",
+                 {{"stage", "topo_state.preflight"},
+                  {"outcome", "rejected"},
+                  {"partialWrite", false}},
+                 {},
+                 {},
+                 {},
+                 "maker.final_checkpoint"}
+            );
+            scope.abort("topo_state_preflight_rejected");
+            transaction.abort("topo_state_preflight_rejected");
+        }
+    }
+    else {
+        context = recomputeContext(document, std::move(diagnostics), recorder);
+        response = recomputeResultJson(document, context);
+    }
+
+    app::ElementMapProducerTrace::ProducerMetadata producerMetadata;
+    producerMetadata.name = "CADCore";
+    producerMetadata.document = metadata.document;
+    producerMetadata.build = metadata.build;
+    producerMetadata.inputSha256 = metadata.inputSha256;
+    producerMetadata.responseSha256 = app::ElementMapProducerTrace::canonicalSha256(response);
+    nlohmann::json producerTrace = recorder->drain(producerMetadata, traceObjects(document));
+    return {std::move(response), std::move(context), std::move(producerTrace)};
+}
+
 nlohmann::json recompute(const app::Document& document,
                          std::vector<Diagnostic> diagnostics)
 {
-    if (auto failure = topoNamingStateRequestFailureJson(document, diagnostics)) {
-        return *failure;
-    }
-    const ComputeContext context = recomputeContext(document, std::move(diagnostics));
-    return recomputeResultJson(document, context);
+    return recomputeArtifacts(document, std::move(diagnostics)).response;
 }
 
 }  // namespace cad_core::runtime

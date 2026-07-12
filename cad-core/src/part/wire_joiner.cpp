@@ -1,5 +1,7 @@
 #include "cad_core/part/wire_joiner.h"
 
+#include "cad_core/app/element_map_producer_trace.h"
+
 #include "internal_shape_history_ledger_detail.h"
 
 #include <BRepAlgoAPI_Splitter.hxx>
@@ -702,6 +704,7 @@ struct WireJoiner::Impl
 
     bool tightBound_ = false;
     bool mergeEdges_ = false;
+    app::ElementMapProducerTrace* producerTrace_ = nullptr;
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/WireJoiner.cpp
     // ::WireJoinerP::EdgeInfo stores "iteration", "iteration2", "superEdge",
     // "wireInfo" and "wireInfo2" while splitEdges()/findTightBound()/exhaustTightBound()
@@ -10494,6 +10497,11 @@ void WireJoiner::setMergeEdges(bool enabled)
     impl_->setMergeEdges(enabled);
 }
 
+void WireJoiner::attachProducerTrace(app::ElementMapProducerTrace* trace) noexcept
+{
+    impl_->producerTrace_ = trace;
+}
+
 void WireJoiner::addOpenWire(
     const TopoDS_Wire& wire,
     const std::vector<std::size_t>& sourceEdgeIndices
@@ -10535,7 +10543,37 @@ WireJoinerBuildResult WireJoiner::buildResult(
     bool noOriginal
 ) const
 {
-    return impl_->buildResult(historyPrefix, noOriginal);
+    app::ElementMapProducerTrace::Scope traceScope;
+    if (impl_->producerTrace_ != nullptr) {
+        traceScope = impl_->producerTrace_->scope(
+            {"WireJoiner::getOpenWires",
+             "",
+             0,
+             "Part::WireJoiner",
+             {{"historyPrefix", historyPrefix},
+              {"noOriginal", noOriginal},
+              {"tightBound", impl_->tightBound_},
+              {"mergeEdges", impl_->mergeEdges_}}}
+        );
+        impl_->producerTrace_->record({
+            "wire_joiner.lifecycle",
+            "begin",
+            "wire_joiner_ledger_consumption_started",
+            {{"historyPrefix", historyPrefix}, {"noOriginal", noOriginal}},
+        });
+    }
+    WireJoinerBuildResult result = impl_->buildResult(historyPrefix, noOriginal);
+    if (impl_->producerTrace_ != nullptr) {
+        impl_->producerTrace_->record({
+            "wire_joiner.lifecycle",
+            "success",
+            result.hasOpenWires ? "open_wire_history_published" : "no_open_wires_after_filter",
+            {{"hasOpenWires", result.hasOpenWires},
+             {"diagnostics", result.diagnostics},
+             {"historyLedger", result.historyLedger.diagnosticsJson()}},
+        });
+    }
+    return result;
 }
 
 }  // namespace cad_core::part

@@ -2,6 +2,7 @@
 
 #include "cad_core/part_design/body_topo_shape.h"
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/runtime/producer_trace_scope.h"
 #include "cad_core/base/placement.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
@@ -1357,21 +1358,35 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
 
 void executeBody(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
+    runtime::ProducerTraceScope producerTrace(
+        context,
+        object,
+        "partdesign.body_tip",
+        "Body::execute",
+        {{"inheritOnly", true}, {"replayUpstreamProducers", false}}
+    );
+    const auto reject = [&producerTrace](std::string reason, nlohmann::json fields) {
+        producerTrace.event("rejected", reason, std::move(fields));
+        producerTrace.abort(std::move(reason));
+    };
     // FreeCAD semantic sources:
     // src/Mod/PartDesign/App/Body.cpp Body::execute()
     // src/Mod/PartDesign/App/FeatureAddSub.cpp FeatureAddSub::getAddSubShape()
     if (!runtime::rejectUnsupportedProperties(object, context, {"Group", "Tip", "BaseFeature", "Origin", "AllowCompound"})) {
+        reject("unsupported_body_property", {{"guard", "rejectUnsupportedProperties"}});
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
     if (!object.properties.contains("Group")) {
+        reject("body_group_missing", {{"property", "Group"}});
         runtime::addDiagnostic(context.diagnostics, "error", "missing_property", "Body Group must be a list of object links", object.name, "Group");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
     if (!object.properties.contains("Tip")) {
+        reject("body_tip_missing", {{"property", "Tip"}});
         runtime::addDiagnostic(context.diagnostics, "error", "missing_property", "Body Tip must link to the final feature", object.name, "Tip");
         context.objects[object.name] = {{"status", "error"}};
         return;
@@ -1379,13 +1394,27 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
 
     const auto tip = app::readLink(object, "Tip");
     if (!tip) {
+        reject("body_tip_link_invalid", {{"property", "Tip"}});
         runtime::addDiagnostic(context.diagnostics, "error", "missing_property", "Body Tip must link to the final feature", object.name, "Tip");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    producerTrace.event(
+        "inherit",
+        "tip_ledger_selected",
+        {{"tipObject", tip->object},
+         {"tipHasLedger", context.namedShapes.count(tip->object) != 0U},
+         {"replayedProducer", false}}
+    );
 
     const auto bodyTopoShape = getBodyTopoShapeAtFeature(object, context, tip->object);
     if (!bodyTopoShape) {
+        reject(
+            "body_tip_shape_unavailable",
+            {{"tipObject", tip->object},
+             {"tipHasShape", context.shapes.count(tip->object) != 0U},
+             {"tipHasLedger", context.namedShapes.count(tip->object) != 0U}}
+        );
         context.objects[object.name] = {{"status", "error"}};
         return;
     }

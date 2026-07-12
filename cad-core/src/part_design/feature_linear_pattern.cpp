@@ -3,6 +3,7 @@
 #include "feature_transformed_support.h"
 
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/runtime/producer_trace_scope.h"
 
 #include <Precision.hxx>
 #include <gp_Trsf.hxx>
@@ -226,6 +227,15 @@ using transformed_detail::publishTransformedResult;
 
 void executeLinearPattern(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
+    runtime::ProducerTraceScope producerTrace(
+        context,
+        object,
+        "partdesign.pattern",
+        "LinearPattern::execute",
+        {{"occurrences", app::readNumber(object, "Occurrences").value_or(0.0)},
+         {"mode", app::readString(object, "Mode").value_or("")},
+         {"originals", object.properties.value("Originals", nlohmann::json::array())}}
+    );
     // FreeCAD semantic sources:
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute()
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureLinearPattern.cpp::LinearPattern::getTransformations()
@@ -238,23 +248,32 @@ void executeLinearPattern(const app::DocumentObject& object, runtime::ComputeCon
              "Spacings2",     "SpacingPattern2", "Occurrences2", "BaseFeature",    "Refine",
              "FuzzyTolerance"}
         )) {
+        producerTrace.abort("unsupported_property");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     if (isTransformationTemplate(object, context)) {
+        producerTrace.event("template", "multi_transform_child_deferred");
         publishTransformationTemplate(object, context);
         return;
     }
 
     auto result = buildLinearPatternFeatures(object, context);
     if (!result) {
+        producerTrace.abort("pattern_build_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     if (!applyTransformedRefine(object, context, *result)) {
+        producerTrace.abort("pattern_refine_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    producerTrace.event(
+        "publish",
+        "pattern_result_ready",
+        {{"mode", result->mode}, {"originals", result->originals}}
+    );
     publishTransformedResult(object, context, *result, "linear_pattern");
 }
 

@@ -186,6 +186,7 @@ bool applyDressUpRefine(
     runtime::ComputeContext& context,
     DressUpResult& result
 );
+nlohmann::json selectionEvidenceJson(const DressUpSelectionEvidence& evidence);
 void publishDressUpResult(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,

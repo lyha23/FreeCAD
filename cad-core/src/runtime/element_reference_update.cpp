@@ -362,7 +362,8 @@ void appendElementReferenceUpdate(const app::DocumentObject& object,
                                   const app::Link& link,
                                   const std::vector<std::string>& subnames,
                                   const nlohmann::json& referenceShadows,
-                                  nlohmann::json& updates)
+                                  nlohmann::json& updates,
+                                  app::ElementMapProducerTrace* producerTrace)
 {
     if (propertyValue.kind != app::PropertyKind::LinkSub || referenceShadows.empty()) {
         return;
@@ -403,6 +404,21 @@ void appendElementReferenceUpdate(const app::DocumentObject& object,
     if (!shadowSubs.empty()) {
         update["ShadowSub"] = std::move(shadowSubs);
     }
+    if (producerTrace != nullptr) {
+        producerTrace->record({
+            "reference.update",
+            "published",
+            "link_sub_reference_shadow_updated",
+            {{"object", object.name},
+             {"objectTag", object.id},
+             {"property", propertyName},
+             {"target", link.object},
+             {"currentSubnames", link.subnames},
+             {"updatedSubnames", subnames},
+             {"stableSubnames", stableSubnames.value_or(std::vector<std::string> {})},
+             {"referenceShadows", referenceShadows}},
+        });
+    }
     updates.push_back(std::move(update));
 }
 
@@ -411,7 +427,8 @@ void appendElementReferenceSubListUpdate(const app::DocumentObject& object,
                                          const app::PropertyValue& propertyValue,
                                          const std::map<std::size_t, nlohmann::json>& referenceShadowUpdates,
                                          const std::map<std::size_t, std::vector<std::string>>& subnameUpdates,
-                                         nlohmann::json& updates)
+                                         nlohmann::json& updates,
+                                         app::ElementMapProducerTrace* producerTrace)
 {
     if (propertyValue.kind != app::PropertyKind::LinkSubList || referenceShadowUpdates.empty()) {
         return;
@@ -439,6 +456,17 @@ void appendElementReferenceSubListUpdate(const app::DocumentObject& object,
     }
     if (!changed) {
         return;
+    }
+    if (producerTrace != nullptr) {
+        producerTrace->record({
+            "reference.update",
+            "published",
+            "link_sub_list_reference_shadow_updated",
+            {{"object", object.name},
+             {"objectTag", object.id},
+             {"property", propertyName},
+             {"updatedLinkIndexes", nlohmann::json(subnameUpdates)}},
+        });
     }
     updates.push_back({
         {"object", object.name},

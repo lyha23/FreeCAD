@@ -2,6 +2,13 @@
 
 namespace cad_core::runtime {
 
+ComputeContext::ComputeContext(std::shared_ptr<app::ElementMapProducerTrace> trace)
+    : producerTrace(trace ? std::move(trace) : std::make_shared<app::ElementMapProducerTrace>())
+    , stringHasher(std::make_shared<app::StringHasher>())
+{
+    stringHasher->attachProducerTrace(producerTrace.get());
+}
+
 bool hasFailed(const ComputeContext& context, const std::string& object)
 {
     const auto it = context.objects.find(object);
@@ -13,4 +20,3 @@ bool hasFailed(const ComputeContext& context, const std::string& object)
 }
 
 }  // namespace cad_core::runtime
-

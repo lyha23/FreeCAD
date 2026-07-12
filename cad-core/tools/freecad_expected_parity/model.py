@@ -89,6 +89,9 @@ class CaseReport:
     diffs: list[dict[str, Any]] = field(default_factory=list)
     preflight_errors: list[str] = field(default_factory=list)
     source_error: str | None = None
+    trace_status: str = "missing"
+    trace_diagnostic: dict[str, Any] | None = None
+    trace_links: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         categories: dict[str, int] = {}
@@ -113,7 +116,11 @@ class CaseReport:
             "categories": dict(sorted(categories.items())),
             "decisions": dict(sorted(decisions.items())),
             "diffs": self.diffs,
+            "traceStatus": self.trace_status,
+            "traceLinks": self.trace_links,
         }
+        if self.trace_diagnostic is not None:
+            payload["firstDivergence"] = self.trace_diagnostic
         if self.preflight_errors:
             payload["preflightErrors"] = self.preflight_errors
         if self.source_error:

@@ -12,6 +12,10 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .catalog import FixtureCase
+try:
+    from tools.element_map_producer_trace import TraceValidationError, validate_trace
+except ModuleNotFoundError:
+    from element_map_producer_trace import TraceValidationError, validate_trace
 
 
 class CadRsBuffer(ctypes.Structure):
@@ -26,6 +30,15 @@ class CadRsResult(ctypes.Structure):
     _fields_ = [("status", ctypes.c_int32), ("json", CadRsBuffer), ("error", CadRsBuffer)]
 
 
+class CadRsRecomputeArtifactsResult(ctypes.Structure):
+    _fields_ = [
+        ("status", ctypes.c_int32),
+        ("response", CadRsBuffer),
+        ("producer_trace", CadRsBuffer),
+        ("error", CadRsBuffer),
+    ]
+
+
 @dataclass
 class ActualPayload:
     payload: dict[str, Any] | None
@@ -33,6 +46,10 @@ class ActualPayload:
     error: str | None = None
     stdout: str | None = None
     stderr: str | None = None
+    producer_trace: dict[str, Any] | None = None
+    producer_trace_raw: bytes | None = None
+    producer_trace_error: str | None = None
+    producer_trace_path: str | None = None
 
 
 def parse_payload(raw: bytes, *, label: str) -> ActualPayload:
@@ -59,7 +76,29 @@ class SnapshotActualSource:
             raw = item.current_path.read_bytes()
         except OSError as exc:
             return ActualPayload(None, None, f"cannot read current artifact {item.current_path}: {exc}")
-        return parse_payload(raw, label=str(item.current_path))
+        parsed = parse_payload(raw, label=str(item.current_path))
+        if parsed.error or parsed.payload is None:
+            return parsed
+        trace_path = item.current_trace_path()
+        parsed.producer_trace_path = str(trace_path)
+        if not trace_path.exists():
+            parsed.producer_trace_error = f"missing producer trace: {trace_path}"
+            return parsed
+        try:
+            trace_raw = trace_path.read_bytes()
+            trace_payload = json.loads(trace_raw)
+            request_payload = json.loads(item.input_path.read_text(encoding="utf-8"))
+            validate_trace(
+                trace_payload,
+                input_document=request_payload,
+                response_document=parsed.payload,
+            )
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError, TraceValidationError) as exc:
+            parsed.producer_trace_error = f"invalid producer trace {trace_path}: {exc}"
+            return parsed
+        parsed.producer_trace = trace_payload
+        parsed.producer_trace_raw = trace_raw
+        return parsed
 
 
 class InMemoryActualSource:
@@ -102,6 +141,9 @@ class LiveCadCoreSource:
             return ActualPayload(None, None, f"missing cad-core binary: {self.binary}")
         with tempfile.TemporaryDirectory(prefix="freecad-expected-live-") as directory:
             output = Path(directory) / f"{item.case}.cad-core.json"
+            producer_trace = output.with_name(
+                output.name[: -len(".json")] + ".producer-trace.json"
+            )
             command = [str(self.binary), "recompute", str(item.input_path), "--output", str(output)]
             env = os.environ.copy()
             env.pop("CAD_CORE_TEST_LEGACY_OUTPUT", None)
@@ -141,11 +183,35 @@ class LiveCadCoreSource:
             parsed = parse_payload(raw, label=f"live output {item.label()}")
             parsed.stdout = completed.stdout
             parsed.stderr = completed.stderr
+            if parsed.error or parsed.payload is None:
+                return parsed
+            if not producer_trace.exists():
+                parsed.producer_trace_error = (
+                    f"cad-core runner produced no producer trace for {item.label()}"
+                )
+                return parsed
+            try:
+                trace_raw = producer_trace.read_bytes()
+                trace_payload = json.loads(trace_raw)
+                request_payload = json.loads(item.input_path.read_text(encoding="utf-8"))
+                validate_trace(
+                    trace_payload,
+                    input_document=request_payload,
+                    response_document=parsed.payload,
+                )
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError, TraceValidationError) as exc:
+                parsed.producer_trace_error = (
+                    f"invalid cad-core producer trace for {item.label()}: {exc}"
+                )
+                return parsed
+            parsed.producer_trace = trace_payload
+            parsed.producer_trace_raw = trace_raw
+            parsed.producer_trace_path = "live:in-memory"
             return parsed
 
 
 class RustFfiActualSource:
-    """Obtain one live actual response from ``cad_rs_recompute_json`` per fixture.
+    """Obtain one response and diagnostic trace from one Rust artifacts FFI call.
 
     This adapter deliberately has no comparison policy: the FFI's successful
     JSON response is passed straight to the existing expected-parity engine.
@@ -172,11 +238,11 @@ class RustFfiActualSource:
             return None
         try:
             library = ctypes.CDLL(str(self.library_path))
-            recompute = library.cad_rs_recompute_json
+            recompute = library.cad_rs_recompute_artifacts_json
             recompute.argtypes = [ctypes.c_char_p, ctypes.c_size_t]
-            recompute.restype = CadRsResult
-            free_result = library.cad_rs_free_result
-            free_result.argtypes = [ctypes.POINTER(CadRsResult)]
+            recompute.restype = CadRsRecomputeArtifactsResult
+            free_result = library.cad_rs_free_recompute_artifacts_result
+            free_result.argtypes = [ctypes.POINTER(CadRsRecomputeArtifactsResult)]
             free_result.restype = None
         except (AttributeError, OSError) as exc:
             self._load_error = f"cannot load Rust FFI library {self.library_path}: {exc}"
@@ -203,11 +269,12 @@ class RustFfiActualSource:
         except OSError as exc:
             return ActualPayload(None, None, f"cannot read fixture input {item.input_path}: {exc}")
         try:
-            result = library.cad_rs_recompute_json(request, len(request))
+            result = library.cad_rs_recompute_artifacts_json(request, len(request))
         except (OSError, ValueError, TypeError) as exc:
             return ActualPayload(None, None, f"Rust FFI recompute failed for {item.label()}: {exc}")
         try:
-            payload_raw = self._buffer_bytes(result.json)
+            payload_raw = self._buffer_bytes(result.response)
+            trace_raw = self._buffer_bytes(result.producer_trace)
             error_raw = self._buffer_bytes(result.error)
             if result.status != 0:
                 detail = self._error_text(error_raw)
@@ -215,15 +282,33 @@ class RustFfiActualSource:
                 return ActualPayload(
                     None,
                     payload_raw or None,
-                    f"Rust FFI cad_rs_recompute_json returned status {result.status} for {item.label()}{suffix}",
+                    f"Rust FFI cad_rs_recompute_artifacts_json returned status {result.status} for {item.label()}{suffix}",
                     stderr=detail or None,
                 )
             parsed = parse_payload(payload_raw, label=f"Rust FFI output {item.label()}")
+            if parsed.error or parsed.payload is None:
+                return parsed
+            try:
+                trace_payload = json.loads(trace_raw)
+                validate_trace(
+                    trace_payload,
+                    input_bytes=request,
+                    response_bytes=payload_raw,
+                )
+            except (UnicodeDecodeError, json.JSONDecodeError, TraceValidationError) as exc:
+                return ActualPayload(
+                    None,
+                    payload_raw,
+                    f"invalid Rust FFI producer trace for {item.label()}: {exc}",
+                )
+            parsed.producer_trace = trace_payload
+            parsed.producer_trace_raw = trace_raw
+            parsed.producer_trace_path = "rust-ffi:in-memory"
             if error_raw:
                 parsed.stderr = self._error_text(error_raw)
             return parsed
         finally:
-            library.cad_rs_free_result(ctypes.byref(result))
+            library.cad_rs_free_recompute_artifacts_result(ctypes.byref(result))
 
 
 def make_actual_source(
@@ -249,15 +334,64 @@ def make_actual_source(
 def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
     """Replace a current artifact only after a complete JSON payload is available."""
 
+    atomic_write_json_group([(path, payload)])
+
+
+def _json_artifact_bytes(payload: dict[str, Any]) -> bytes:
+    return (
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True).encode("utf-8")
+        + b"\n"
+    )
+
+
+def _stage_bytes(path: Path, value: bytes) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(
         "wb", prefix=f".{path.name}.", suffix=".tmp", dir=path.parent, delete=False
     ) as handle:
         temporary = Path(handle.name)
-        handle.write(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True).encode("utf-8"))
-        handle.write(b"\n")
+        handle.write(value)
+        handle.flush()
+        os.fsync(handle.fileno())
+    return temporary
+
+
+def atomic_write_json_group(artifacts: list[tuple[Path, dict[str, Any]]]) -> None:
+    """Publish a response/trace set as one rollback-safe materialization unit."""
+
+    if len({path for path, _payload in artifacts}) != len(artifacts):
+        raise ValueError("duplicate path in atomic JSON artifact group")
+
+    staged: dict[Path, Path] = {}
+    originals: dict[Path, bytes | None] = {}
+    published: list[Path] = []
     try:
-        temporary.replace(path)
+        for path, payload in artifacts:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if path.exists() and not path.is_file():
+                raise OSError(f"artifact target is not a regular file: {path}")
+            originals[path] = path.read_bytes() if path.exists() else None
+            staged[path] = _stage_bytes(path, _json_artifact_bytes(payload))
+
+        for path, _payload in artifacts:
+            staged[path].replace(path)
+            published.append(path)
+    except Exception as exc:
+        rollback_errors: list[str] = []
+        for path in reversed(published):
+            try:
+                original = originals[path]
+                if original is None:
+                    path.unlink(missing_ok=True)
+                else:
+                    _stage_bytes(path, original).replace(path)
+            except OSError as rollback_exc:
+                rollback_errors.append(f"{path}: {rollback_exc}")
+        if rollback_errors:
+            raise RuntimeError(
+                f"atomic JSON group failed: {exc}; rollback failed: {'; '.join(rollback_errors)}"
+            ) from exc
+        raise
     finally:
-        if temporary.exists():
-            temporary.unlink()
+        for temporary in staged.values():
+            temporary.unlink(missing_ok=True)

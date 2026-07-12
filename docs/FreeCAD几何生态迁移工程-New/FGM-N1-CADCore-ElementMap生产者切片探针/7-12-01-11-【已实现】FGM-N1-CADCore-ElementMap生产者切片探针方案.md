@@ -383,6 +383,8 @@ c4m3/sketch-external-internal-split-dangling-mixed
 
 ## 完成判定
 
+> 实施回执（2026-07-12）：S0-S7 已关闭，focused probe、51 项 N1 Python 测试、5 项共享 validator/N2 projection 兼容测试、11 条 `/tmp` actual trace、增强 mutation、逐字节确定性和独立 HEAD 基线无副作用对照均通过。完整证据见同目录 `README.md` 与 `矩阵/*.tsv`。两项运行时语义按源码证据明确为 not-applicable：CAD Core 无 plane/parallel/coplanar 判别分支，且当前 runtime 无真实 cancel source；均未伪造事件。N2 状态为 ready，但本文件未实现 comparator。
+
 N1 只有同时满足以下条件才可重命名为 `【已实现】`：
 
 1. recorder 不是骨架，`producer_trace_slice_matrix.tsv` 全部 required 行已接线或以权威证据证明 not-applicable；

@@ -3,6 +3,7 @@
 #include "feature_transformed_support.h"
 
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/runtime/producer_trace_scope.h"
 
 #include <BRepGProp.hxx>
 #include <GProp_GProps.hxx>
@@ -359,6 +360,14 @@ using transformed_detail::publishTransformedResult;
 
 void executeMultiTransform(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
+    runtime::ProducerTraceScope producerTrace(
+        context,
+        object,
+        "partdesign.transform",
+        "MultiTransform::execute",
+        {{"kind", "multi_transform"},
+         {"transformations", app::readLinks(object, "Transformations").size()}}
+    );
     // FreeCAD semantic sources:
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute()
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureMultiTransform.cpp::MultiTransform::getTransformations()
@@ -367,18 +376,26 @@ void executeMultiTransform(const app::DocumentObject& object, runtime::ComputeCo
             context,
             {"Originals", "TransformMode", "Transformations", "BaseFeature", "Refine", "FuzzyTolerance"}
         )) {
+        producerTrace.abort("unsupported_property");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     auto result = buildMultiTransformFeatures(object, context);
     if (!result) {
+        producerTrace.abort("transform_build_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     if (!applyTransformedRefine(object, context, *result)) {
+        producerTrace.abort("transform_refine_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    producerTrace.event(
+        "publish",
+        "transform_result_ready",
+        {{"mode", result->mode}, {"originals", result->originals}}
+    );
     publishTransformedResult(object, context, *result, "multi_transform");
 }
 

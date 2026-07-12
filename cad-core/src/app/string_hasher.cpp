@@ -1,5 +1,7 @@
 #include "cad_core/app/string_hasher.h"
 
+#include "cad_core/app/element_map_producer_trace.h"
+
 #include <algorithm>
 #include <charconv>
 #include <cctype>
@@ -35,6 +37,29 @@ bool containsId(const std::vector<StringId>& values, const StringId& value)
     return std::any_of(values.begin(), values.end(), [&value](const StringId& candidate) {
         return sameId(candidate, value);
     });
+}
+
+nlohmann::json stringIdsJson(const std::vector<StringId>& values)
+{
+    nlohmann::json result = nlohmann::json::array();
+    for (const StringId& value : values) {
+        result.push_back({{"value", value.value}, {"index", value.index}});
+    }
+    return result;
+}
+
+std::pair<std::string, std::string> producerTraceKeyParts(const std::string& key)
+{
+    if (key.rfind("data:", 0) == 0U) {
+        return {key.substr(5U), {}};
+    }
+    if (key.rfind("mapped:", 0) == 0U) {
+        const std::size_t separator = key.find('\x1f', 7U);
+        return {key.substr(7U, separator == std::string::npos ? std::string::npos
+                                                              : separator - 7U),
+                separator == std::string::npos ? std::string {} : key.substr(separator + 1U)};
+    }
+    return {key, {}};
 }
 
 std::optional<StringId> encodedPrefixId(const std::string& data)
@@ -98,12 +123,47 @@ std::string StringId::toString() const
 
 StringId StringHasher::allocate(const std::string& key, int index)
 {
+    const long lastIdBefore = nextId_;
     const auto found = ids_.find(key);
     if (found != ids_.end()) {
+        if (producerTrace_ != nullptr) {
+            const auto parts = producerTraceKeyParts(key);
+            producerTrace_->record({"hasher.insert",
+                                    "hit",
+                                    "string_id_lookup_hit",
+                                    {{"lastIdBefore", lastIdBefore},
+                                     {"lastIdAfter", nextId_},
+                                     {"data", parts.first},
+                                     {"postfix", parts.second},
+                                     {"flags", key.rfind("mapped:", 0) == 0U ? "mapped" : "data"},
+                                     {"result", {{"value", found->second}, {"index", index}}}}});
+        }
         return {found->second, index};
     }
     const long id = ++nextId_;
     ids_.emplace(key, id);
+    const auto parts = producerTraceKeyParts(key);
+    producerTraceEntries_.push_back(
+        {id,
+         parts.first,
+         parts.second,
+         key.rfind("mapped:", 0) == 0U ? "mapped" : "data",
+         {},
+         0,
+         0}
+    );
+    if (producerTrace_ != nullptr) {
+        producerTrace_->record({"hasher.insert",
+                                "allocation",
+                                "string_id_allocated",
+                                {{"lastIdBefore", lastIdBefore},
+                                 {"lastIdAfter", nextId_},
+                                 {"data", parts.first},
+                                 {"postfix", parts.second},
+                                 {"flags", producerTraceEntries_.back().flags},
+                                 {"related", nlohmann::json::array()},
+                                 {"result", {{"value", id}, {"index", index}}}}});
+    }
     return {id, index};
 }
 
@@ -119,6 +179,7 @@ StringId StringHasher::getMappedNameId(
     const std::vector<StringId>& relatedIds
 )
 {
+    const long lastIdBefore = nextId_;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/StringHasher.cpp
     // ::StringHasher::getID(const Data::MappedName&, const QVector<StringIDRef>&).  A lookup is
     // performed before PrefixIDIndex handling; only a newly produced StringID can turn a leading
@@ -127,6 +188,21 @@ StringId StringHasher::getMappedNameId(
     const std::string encoded = encodedPostfix(postfix, *this);
     const std::string uncollapsedKey = "mapped:" + data + "\x1f" + encoded;
     const std::optional<StringId> prefixId = encodedPrefixId(data);
+    if (producerTrace_ != nullptr) {
+        producerTrace_->record({
+            "mapped_name.parse",
+            prefixId || data.empty() || data.front() != '#' ? "parsed" : "rejected",
+            prefixId ? "prefix_id_parsed"
+                : data.empty() || data.front() != '#' ? "plain_mapped_name_data"
+                                                      : "invalid_prefix_id",
+            {{"rawData", data},
+             {"rawPostfix", postfix},
+             {"purpose", "StringHasher::getMappedNameId"},
+             {"prefixId", prefixId ? prefixId->value : 0L},
+             {"prefixIdIndex", prefixId ? prefixId->index : 0},
+             {"failurePosition", prefixId || data.empty() || data.front() != '#' ? -1 : 0}},
+        });
+    }
     // A producer receives `getMappedName(..., &sids)` as an entry-local pair.  For a leading
     // `#id`, the matching StringIDRef can carry the rendered index even though the compact
     // `MappedName` data itself remains `#id`.  This is a prefix reference, not an IndexedName
@@ -140,7 +216,18 @@ StringId StringHasher::getMappedNameId(
     }
     const auto uncollapsed = ids_.find(uncollapsedKey);
     if (uncollapsed != ids_.end()) {
-        return {uncollapsed->second, returnedIndex};
+        const StringId result {uncollapsed->second, returnedIndex};
+        emitMappedNameTrace(
+            data,
+            index,
+            postfix,
+            relatedIds,
+            result,
+            lastIdBefore,
+            "hit",
+            "uncollapsed_mapped_name_hit"
+        );
+        return result;
     }
 
     std::string storedData = data;
@@ -163,7 +250,18 @@ StringId StringHasher::getMappedNameId(
     if (existing != ids_.end()) {
         // A prior PrefixIDIndex insertion has the compact stored key.  Like StringHasher::insert,
         // preserve that existing entry's related SID list and return the caller's index only.
-        return {existing->second, returnedIndex};
+        const StringId result {existing->second, returnedIndex};
+        emitMappedNameTrace(
+            data,
+            index,
+            postfix,
+            relatedIds,
+            result,
+            lastIdBefore,
+            "hit",
+            "collapsed_mapped_name_hit"
+        );
+        return result;
     }
     StringId result = allocate(key, returnedIndex);
     std::vector<StringId> newRelated;
@@ -213,7 +311,64 @@ StringId StringHasher::getMappedNameId(
         );
     }
     relatedIds_[result.value] = std::move(newRelated);
+    refreshProducerTraceEntry(result.value);
+    emitMappedNameTrace(
+        data,
+        index,
+        postfix,
+        relatedIds,
+        result,
+        lastIdBefore,
+        "allocation",
+        "mapped_name_allocated"
+    );
     return result;
+}
+
+void StringHasher::emitMappedNameTrace(const std::string& data,
+                                       int index,
+                                       const std::string& postfix,
+                                       const std::vector<StringId>& relatedIds,
+                                       StringId result,
+                                       long lastIdBefore,
+                                       const std::string& decision,
+                                       const std::string& reason) const
+{
+    if (producerTrace_ == nullptr) {
+        return;
+    }
+    const std::optional<StringId> prefix = encodedPrefixId(data);
+    const auto storedRelated = relatedIds_.find(result.value);
+    producerTrace_->record({
+        "hasher.mapped_name",
+        decision,
+        reason,
+        {{"lastIdBefore", lastIdBefore},
+         {"lastIdAfter", nextId_},
+         {"data", data},
+         {"postfix", postfix},
+         {"index", index},
+         {"inputRelated", stringIdsJson(relatedIds)},
+         {"orderedRelated",
+          storedRelated == relatedIds_.end() ? nlohmann::json::array()
+                                             : stringIdsJson(storedRelated->second)},
+         {"prefixId", prefix ? prefix->value : 0},
+         {"prefixIdIndex", prefix ? prefix->index : 0},
+         {"result", {{"value", result.value}, {"index", result.index}}}},
+    });
+}
+
+void StringHasher::refreshProducerTraceEntry(long value)
+{
+    if (value <= 0 || static_cast<std::size_t>(value) > producerTraceEntries_.size()) {
+        return;
+    }
+    ProducerTraceEntry& entry = producerTraceEntries_.at(static_cast<std::size_t>(value - 1));
+    const auto related = relatedIds_.find(value);
+    entry.related = related == relatedIds_.end() ? std::vector<StringId> {} : related->second;
+    const auto prefix = prefixSourceIds_.find(value);
+    entry.prefixId = prefix == prefixSourceIds_.end() ? 0 : prefix->second;
+    entry.prefixIdIndex = entry.prefixId == 0 ? 0 : producerIndexForMappedNameId({value, 0});
 }
 
 HashedMappedName StringHasher::hashMappedName(
@@ -338,6 +493,51 @@ int StringHasher::producerIndexForMappedNameId(StringId id) const
     return static_cast<int>(root);
 }
 
+nlohmann::json StringHasher::inspectProducerTraceState() const
+{
+    nlohmann::json entries = nlohmann::json::array();
+    std::map<long, std::vector<std::string>> lookupKeys;
+    for (const auto& item : ids_) {
+        lookupKeys[item.second].push_back(item.first);
+    }
+    for (auto& item : lookupKeys) {
+        std::sort(item.second.begin(), item.second.end());
+    }
+    for (const ProducerTraceEntry& entry : producerTraceEntries_) {
+        entries.push_back({
+            {"value", entry.value},
+            {"data", entry.data},
+            {"postfix", entry.postfix},
+            {"flags", entry.flags},
+            {"related", stringIdsJson(entry.related)},
+            {"prefixId", entry.prefixId},
+            {"prefixIdIndex", entry.prefixIdIndex},
+            {"lookupKeys", lookupKeys[entry.value]},
+        });
+    }
+
+    nlohmann::json mappedLookups = nlohmann::json::array();
+    std::vector<std::string> rawNames;
+    rawNames.reserve(mappedNameRelations_.size());
+    for (const auto& item : mappedNameRelations_) {
+        rawNames.push_back(item.first);
+    }
+    std::sort(rawNames.begin(), rawNames.end());
+    for (const std::string& rawName : rawNames) {
+        const auto primary = mappedNameIds_.find(rawName);
+        mappedLookups.push_back({
+            {"rawMappedName", rawName},
+            {"primaryId",
+             primary == mappedNameIds_.end()
+                 ? nlohmann::json(nullptr)
+                 : nlohmann::json{{"value", primary->second.value},
+                                  {"index", primary->second.index}}},
+            {"orderedRelated", stringIdsJson(mappedNameRelations_.at(rawName))},
+        });
+    }
+    return {{"lastId", nextId_}, {"entries", entries}, {"mappedNameLookup", mappedLookups}};
+}
+
 void StringHasher::clear()
 {
     nextId_ = 0;
@@ -346,6 +546,7 @@ void StringHasher::clear()
     prefixSourceIds_.clear();
     mappedNameRelations_.clear();
     mappedNameIds_.clear();
+    producerTraceEntries_.clear();
 }
 
 std::optional<StringId> parseStringId(const std::string& value)

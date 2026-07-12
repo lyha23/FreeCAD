@@ -1,6 +1,7 @@
 #include "cad_core/sketcher/sketch_object.h"
 
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/runtime/producer_trace_scope.h"
 #include "cad_core/base/placement.h"
 #include "cad_core/sketcher/sketch_internal_result.h"
 #include "cad_core/part/property_topo_shape.h"
@@ -369,6 +370,20 @@ gp_Dir sketchProfileNormalFromPlacement(const gp_Trsf& placement)
 
 void executeSketchObject(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
+    runtime::ProducerTraceScope producerTrace(
+        context,
+        object,
+        "sketch.producer",
+        "SketchObject::buildShape/buildInternals",
+        {{"geometryCount",
+          object.properties.contains("Geometry") && object.properties.at("Geometry").is_array()
+              ? object.properties.at("Geometry").size()
+              : 0U}}
+    );
+    const auto reject = [&producerTrace](std::string reason, nlohmann::json fields) {
+        producerTrace.event("rejected", reason, std::move(fields));
+        producerTrace.abort(std::move(reason));
+    };
     // FreeCAD semantic source: src/Mod/Sketcher/App/SketchObject.cpp
     if (!runtime::rejectUnsupportedProperties(
             object,
@@ -383,11 +398,13 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
              "ExternalTypes",
              "SketchPlaneFrame"}
         )) {
+        reject("unsupported_sketch_property", {{"guard", "rejectUnsupportedProperties"}});
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
 
     if (!object.properties.contains("Geometry") || !object.properties.at("Geometry").is_array()) {
+        reject("sketch_geometry_missing_or_not_array", {{"property", "Geometry"}});
         runtime::addDiagnostic(
             context.diagnostics,
             "error",
@@ -403,6 +420,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const auto& geometry = object.properties.at("Geometry");
     SketchGeometrySet parsed;
     if (!parseSketchGeometry(geometry, object, context, parsed)) {
+        reject("sketch_geometry_parse_failed", {{"geometryCount", geometry.size()}});
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -425,10 +443,12 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         parsed.bsplines
     );
     if (!appliedConstraints) {
+        reject("sketch_constraints_invalid", {{"property", "Constraints"}});
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     if (solverStateBlocksProfile(appliedConstraints->solver.state)) {
+        reject("sketch_solver_state_blocks_profile", {{"property", "Constraints"}});
         context.objects[object.name] = sketchSolverFailureObject(*appliedConstraints);
         return;
     }
@@ -442,6 +462,10 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     // Support/AttachmentSupport, while App::PropertyPlacement remains a local transform
     // composed after that frame, matching the existing support * local placement order.
     if (hasSketchPlaneFrame && hasSupportProperty) {
+        reject(
+            "sketch_plane_frame_support_conflict",
+            {{"hasSketchPlaneFrame", true}, {"hasSupportProperty", true}}
+        );
         runtime::addDiagnostic(
             context.diagnostics,
             "error",
@@ -458,6 +482,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     if (hasSketchPlaneFrame) {
         const auto framePlacement = readSketchPlaneFramePlacement(object, context);
         if (!framePlacement) {
+            reject("sketch_plane_frame_invalid", {{"property", "SketchPlaneFrame"}});
             context.objects[object.name] = {{"status", "error"}};
             return;
         }
@@ -475,6 +500,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     if (app::propertyValue(object, "Placement") != nullptr) {
         const auto localPlacement = app::readPlacement(object, "Placement");
         if (!localPlacement) {
+            reject("sketch_placement_invalid", {{"property", "Placement"}});
             runtime::addDiagnostic(
                 context.diagnostics,
                 "error",
@@ -496,6 +522,7 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const auto externalGeometry
         = rebuildExternalGeometry(object, context, hasPlacement ? placement : gp_Trsf {});
     if (!externalGeometry) {
+        reject("sketch_external_geometry_rebuild_failed", {{"property", "ExternalGeometry"}});
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -584,6 +611,13 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     const std::vector<SketchEllipse> ellipses = profileEllipses(resolvedEllipses);
     auto rawShapeBuild = buildRawSketchShape(object, context, edges, points, circles, ellipses);
     if (!rawShapeBuild) {
+        reject(
+            "sketch_raw_shape_build_failed",
+            {{"edgeCount", edges.size()},
+             {"pointCount", points.size()},
+             {"circleCount", circles.size()},
+             {"ellipseCount", ellipses.size()}}
+        );
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -591,7 +625,10 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
 
     std::optional<TopoDS_Shape> profileShape;
     std::optional<TopoDS_Shape> internalShape;
-    const ProfileFaceBuild profileFace = buildOptionalProfileFace(rawShape);
+    const ProfileFaceBuild profileFace = buildOptionalProfileFace(
+        rawShape,
+        context.producerTrace.get()
+    );
     if (profileFace.faceMakerFailed) {
         // FreeCAD:
         // /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
@@ -642,6 +679,11 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         }
     );
     if (rawEdgeIdentityLedger.unresolvedCount > 0U && allRawSourcesHaveGeometryId) {
+        reject(
+            "sketch_raw_edge_identity_unresolved",
+            {{"unresolvedCount", rawEdgeIdentityLedger.unresolvedCount},
+             {"sourceEdgeCount", rawShapeBuild->sourceEdgeIdentities.size()}}
+        );
         runtime::addDiagnostic(
             context.diagnostics,
             "error",
@@ -677,6 +719,14 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         std::move(rawNamedShape),
         context.stringHasher,
     });
+    producerTrace.event(
+        "geometry",
+        "ordered_geometry_identity_published",
+        {{"rawEdgeCount", rawEdgeIdentityLedger.edges.size()},
+         {"unresolvedCount", rawEdgeIdentityLedger.unresolvedCount},
+         {"sourceOrderMatchesPublishedShape", rawShapeBuild->sourceOrderMatchesPublishedShape},
+         {"identity", rawSketchEdgeIdentityObject(rawEdgeIdentityLedger)}}
+    );
     context.shapes[object.name] = internalResult.shapeValue;
     if (internalResult.rawNamedShape) {
         part::NamedShape rawNamedShape = *internalResult.rawNamedShape;
@@ -690,6 +740,19 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         context.namedShapes[object.name + ".InternalShape"]
             = std::move(internalNamedShape);
     }
+    context.producerTrace->record({
+        "shape_slot.assign",
+        "assigned",
+        "sketch_shape_slots_published",
+        {{"owner", object.name},
+         {"property", "Shape/ProfileShape/InternalShape"},
+         {"sourceScope", "SketchObject::buildShape/buildInternals"},
+         {"hasShape", !rawShape.IsNull()},
+         {"hasProfileShape", static_cast<bool>(profileShape)},
+         {"hasInternalShape", internalShape && !internalShape->IsNull()},
+         {"internalShapeDecision",
+          internalShape && !internalShape->IsNull() ? "published" : "empty"}},
+    });
     if (internalResult.mesh) {
         context.mesh[object.name] = *internalResult.mesh;
     }

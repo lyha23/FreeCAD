@@ -1,22 +1,22 @@
 id	layer	assertion	mechanism	failure_mode	step	status
-FGMN1-VAL-001	recorder	event sequence contiguous;transaction ranges exact and non-overlapping	C++ probe + validator mutation test	hard fail	S1	pending
-FGMN1-VAL-002	recorder	nested scope parent tree LIFO and exception/cancel/abort closed	C++ RAII probe	hard fail	S1	pending
-FGMN1-VAL-003	recorder	objectTag index and objects.slices uniquely resolve events	C++ closure test + Python validator	hard fail	S1-S6	pending
-FGMN1-VAL-004	snapshot	before/after/nested refs exist and content SHA matches canonical payload	C++ snapshot test + Python validator	hard fail	S1-S6	pending
-FGMN1-VAL-005	StringHasher	all SID refs exist at event time;allocation order and ordered related refs preserved	focused StringHasher trace test	hard fail	S2	pending
-FGMN1-VAL-006	ledger	findAll ordered entries and entry-local refs remain distinct	focused NamedShape/ElementMap test	hard fail	S2	pending
-FGMN1-VAL-007	child map	offset/count/typed range/nested snapshot valid	focused child-map snapshot test	hard fail	S2-S3	pending
-FGMN1-VAL-008	mapper	raw M/G/D snapshot precedes naming consumption and targets exist	maker probe + event-order assertion	hard fail	S3	pending
-FGMN1-VAL-009	maker	all guards/reject/select/K/tuple/U/L/final checkpoint are explicit	representative maker tests and slice coverage audit	hard fail or documented not-applicable with source evidence	S3	pending
-FGMN1-VAL-010	feature	Sketch/FaceMaker/WireJoiner/Extrude/DressUp/Pattern/Body parent scopes and slot handoff closed	fixture CLI integration tests	hard fail	S4-S5	pending
-FGMN1-VAL-011	Body Tip	Body inherits Tip ledger and contains no nested replay of Tip producer	Body fixture trace assertion	hard fail	S5	pending
-FGMN1-VAL-012	publisher	parsed recompute always emits non-empty sidecar;validation/write failure non-zero and stale file removed	CLI temporary-directory test	hard fail	S6	pending
-FGMN1-VAL-013	drain	first drain returns all transactions;second drain empty;memory released	C++ probe	hard fail	S1-S7	pending
-FGMN1-VAL-014	multi transaction	second empty recompute does not erase first producer transaction	C++ integration probe	hard fail	S7	pending
-FGMN1-VAL-015	mutation	delete event/SID/snapshot/checkpoint/scope end	Python mutation tests	hard fail	S6-S7	pending
-FGMN1-VAL-016	determinism	same case twice has identical canonical transaction/scope/event/checkpoint/decision view	two-run /tmp comparison	hard fail outside declared nondeterminism class	S7	pending
-FGMN1-VAL-017	no side effect	trace instrumentation does not change public response/SID allocation/NamedShape/ElementMap/mapper order	paired baseline test at recorder interface	hard fail	S7	pending
-FGMN1-VAL-018	public isolation	trace absent from response/topoNamingState/Shape/BREP/input/C ABI old JSON	public schema regression tests	hard fail	S6-S7	pending
-FGMN1-VAL-019	failure	preflight rejection/dependency skip/executor exception/OCCT failure has stable reason and closed last checkpoint	failure fixture/probe tests	hard fail	S2-S7	pending
-FGMN1-VAL-020	cancel	recorder supports explicit cancel and closes partial-write state;runtime emits it only when a real cancellation source exists	C++ RAII test + runtime capability audit	no fabricated cancel coverage	S1-S7	pending
-FGMN1-VAL-021	artifact binding	trace inputSha256/responseSha256 match the parsed request and public output from the same run	CLI artifact validation test	hard fail	S6-S7	pending
+FGMN1-VAL-001	recorder	event sequence contiguous;transaction ranges exact and non-overlapping	C++ probe + validator mutation test	hard fail	S1	validated
+FGMN1-VAL-002	recorder	nested scope parent tree LIFO and exception/cancel/abort closed;every marked producer scope has a final checkpoint	C++ RAII probe + producer-scope checkpoint mutation test	hard fail	S1	validated
+FGMN1-VAL-003	recorder	objectTag index and objects.slices uniquely resolve events	C++ closure test + Python validator	hard fail	S1-S6	validated
+FGMN1-VAL-004	snapshot	before/after/nested refs exist and content SHA matches canonical payload	C++ snapshot test + Python validator	hard fail	S1-S6	validated
+FGMN1-VAL-005	StringHasher	all SID refs exist at event time including element_map.write refs;allocation order and ordered related refs preserved;namespace restarts per transaction	focused StringHasher attach/detach/multi-transaction probe + event-time SID mutation test	hard fail	S2	validated
+FGMN1-VAL-006	ledger	findAll ordered entries and entry-local refs remain distinct	focused NamedShape/ElementMap test	hard fail	S2	validated
+FGMN1-VAL-007	child map	offset/count/typed range/nested source ledger snapshot/collision inventory valid and bounded by output inventory	focused child-map snapshot + overflow/missing-nested mutation test	hard fail	S2-S3	validated
+FGMN1-VAL-008	mapper	raw M/G/D snapshot precedes naming consumption;source belongs to input ordinal inventory;targets belong to output inventory	maker probe + event-order/source-input mutation assertion	hard fail	S3	validated
+FGMN1-VAL-009	maker	all guards/reject/select/K/tuple/U/L/final checkpoint are explicit including U/L seam duplicate suppression with separate kept/suppressed parent/child/ordinal/entry-local refs	representative maker tests + shared production/probe duplicate publisher seam + slice coverage audit	hard fail or documented not-applicable with source evidence	S3	validated
+FGMN1-VAL-010	feature	Sketch/FaceMaker/WireJoiner/Extrude/DressUp/Pattern/Body parent scopes and slot handoff closed	fixture CLI integration tests	hard fail	S4-S5	validated
+FGMN1-VAL-011	Body Tip	Body inherits Tip ledger and contains no nested replay of Tip producer	Body fixture trace assertion	hard fail	S5	validated
+FGMN1-VAL-012	publisher	parsed recompute always emits non-empty sidecar;validation/write failure non-zero and stale file removed;runner response+trace selection publishes or rolls back as one group	CLI temporary-directory + injected second-artifact publish failure test	hard fail	S6	validated
+FGMN1-VAL-013	drain	first drain returns all transactions;second drain empty;memory released	C++ probe	hard fail	S1-S7	validated
+FGMN1-VAL-014	multi transaction	second empty recompute does not erase first producer transaction	C++ integration probe	hard fail	S7	validated
+FGMN1-VAL-015	mutation	delete event/SID/snapshot/final checkpoint/scope end;remove producer-scope final checkpoint;replace transaction final with table checkpoint;overflow child range;remove nested ledger/mapper input	Python mutation tests	hard fail	S6-S7	validated
+FGMN1-VAL-016	determinism	same case twice has identical canonical transaction/scope/event/checkpoint/decision view	two-run /tmp comparison	hard fail outside declared nondeterminism class	S7	validated
+FGMN1-VAL-017	no side effect	trace instrumentation does not change public response/SID allocation/NamedShape/ElementMap/mapper order	paired baseline test at recorder interface	hard fail	S7	validated
+FGMN1-VAL-018	public isolation	trace absent from response/topoNamingState/Shape/BREP/input/C ABI old JSON	public schema regression tests	hard fail	S6-S7	validated
+FGMN1-VAL-019	failure	preflight rejection/dependency skip/executor std/unknown exception/OCCT failure has stable reason and closed last checkpoint	preflight/dressup/dependency fixtures plus Standard_Failure/std::exception/catch-all source audit	hard fail	S2-S7	validated_source_path_and_failure_fixtures
+FGMN1-VAL-020	cancel	recorder supports explicit cancel and closes partial-write state;runtime emits it only when a real cancellation source exists	C++ RAII test + runtime capability audit	no fabricated cancel coverage	S1-S7	validated_recorder_runtime_not_applicable
+FGMN1-VAL-021	artifact binding	trace inputSha256/responseSha256 match the parsed request and public output from the same run	CLI artifact validation test	hard fail	S6-S7	validated

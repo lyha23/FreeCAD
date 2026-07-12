@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cad_core/app/document.h"
+#include "cad_core/app/element_map_producer_trace.h"
 #include "cad_core/app/string_hasher.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/part/topo_shape.h"
@@ -121,6 +122,11 @@ struct PublicResultFields
 
 struct ComputeContext
 {
+    explicit ComputeContext(
+        std::shared_ptr<app::ElementMapProducerTrace> trace =
+            std::make_shared<app::ElementMapProducerTrace>()
+    );
+
     std::vector<Diagnostic> diagnostics;
     std::map<std::string, ShapeValue> shapes;
     std::map<std::string, AddSubShape> addSubShapes;
@@ -134,7 +140,8 @@ struct ComputeContext
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/private/DocumentP.h owns one
     // DocumentP::Hasher.  Recompute creates this request-local table once and producers share it
     // in document execution order; it is never read from a prior response or session.
-    std::shared_ptr<app::StringHasher> stringHasher = std::make_shared<app::StringHasher>();
+    std::shared_ptr<app::ElementMapProducerTrace> producerTrace;
+    std::shared_ptr<app::StringHasher> stringHasher;
     std::map<std::string, std::vector<std::string>> dependencies;
     std::map<std::string, const app::DocumentObject*> documentObjects;
     std::map<std::string, std::string> parentGroupByObject;

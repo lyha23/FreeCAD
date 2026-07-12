@@ -15,6 +15,11 @@
 #include <string>
 #include <vector>
 
+namespace cad_core::app
+{
+class ElementMapProducerTrace;
+}
+
 namespace cad_core::part
 {
 
@@ -51,6 +56,7 @@ public:
     // ::WireJoiner::setMergeEdges(), SketchObject::buildInternals() enables merge before
     // getOpenWires().
     void setMergeEdges(bool enabled);
+    void attachProducerTrace(app::ElementMapProducerTrace* trace) noexcept;
     void addOpenWire(
         const TopoDS_Wire& wire,
         const std::vector<std::size_t>& sourceEdgeIndices = {}

@@ -308,3 +308,23 @@ python3 tools/compare_element_map_producer_trace.py \
 只有代表链路都能报告稳定、可操作的最早 scope/checkpoint/field path，且没有通过宽松 canonicalization 隐藏 raw 证据，N2 才可标记 `【已实现】`。
 
 本阶段不自动修 CAD Core、不改 expected、不接受差异、不把 trace 升格为 release oracle、不按最终 FaceN 或 fixture 名决定 owner，也不把后续全部 diff 展开成噪音列表。
+
+## Live 实施审计（2026-07-12，未收口）
+
+- live HEAD 为 `05f14b6b0c`；本轮保护了开始时全部用户修改、删除项、N1 文档改名和 trace/expected，没有 reset、restore、clean、暂存、提交或写入 checked-in fixture artifact。
+- shared validator、document-graph/object/Tag/SID/shape/map/hasher/mapper identity projection、transaction/scope/event first-divergence engine、CAD Core 默认 CLI、JSON/text report 和 public parity observation 已实现。scope/event 对齐保持 root/nested event 原始交错顺序，只做 `LOOK_AHEAD=3` 的顺序前瞻；未知 producer 名不会按子串宽松归一化。
+- 用户指定的 validator/projection/comparator focused 共 43 项通过；加 native collector binding 回归共 48 项通过；N1 actual publisher/CLI 共享 validator 26 项通过。`traceStatus=aligned|different|missing` 的 2 项定向测试证明 trace 观察不改变 `exactStatus`、`semanticStatus`、`releaseStatus` 或 `releaseGatePassed`。
+- collector 对新采 native trace 写入 `snapshotPayloadHashAlgorithm=canonical-json-sha256-v1`，并给每个已解析 snapshot 写 `canonicalPayloadSha256` 后再调用共享 validator。8 个 `/tmp` 代表 native trace 的 2029/2029 个 snapshot 均通过该校验；checked-in artifact 未改写。
+- 8 个 N1 代表 family 均用同次 `/tmp` request-bound native response/trace 与重新运行的 CAD Core response/trace 配对，双方 schema、request/response hash、transaction/scope/event/SID/checkpoint 闭包先独立通过，再稳定 exit 1：Body Tip、Pad/Pocket、Chamfer、Fillet、open wire、self-intersection、inter-edge split 为 `scope_missing_or_extra`，LinearPattern 为 `target_inventory_mismatch`。报告 owner 由静态 producer/slice 表给出；其中 open wire 首处分叉 owner 为 `part/face_maker`，Body Tip 为 `part/topo_shape`。
+- Body Tip 两次 stdout 与 JSON 报告均逐字节一致；JSON SHA-256 为 `70306ccfd3e8a93ee664467a7cc453b336d1508bd0568a9f028371f97a22e9fd`。real actual trace 的 event、SID、checkpoint、scope、decision 五类 `/tmp` mutation 均 exit 2；checkpoint 稳定分类为 `final_checkpoint_missing`，其余为 `invalid_actual_trace`。合法 decision、scope、event、snapshot、ordered-ref/mapper/child-range 变异的 exit 1 分类由 focused tests 覆盖。
+- 默认 `--phase c4m6 --case topo-state-body-tip-stable-recovery` 薄 CLI 正确推导 `cad-core-res` actual，因 actual sidecar 缺失返回 exit 2 / `missing_actual_trace`；显式路径比较等价。主要报告位于 `/tmp/body-tip.first-divergence.json`、`/tmp/fgmn2-*.first-divergence.json`、`/tmp/body-tip.determinism-{a,b}.first-divergence.json` 与 `/tmp/fgmn2-body-tip.mutation-*.report.json`。
+- 完整 `tests.test_freecad_expected_public_parity` 当前 21/22；本轮引入的 fake-runner 深 validator 回归已修复，唯一剩余失败仍是既有 `c3m1` snapshot 的 `topoNamingState.producer.freecadVersion` public semantic drift。
+
+方案仍不得重命名为 `【已实现】`，原因有四项：
+
+1. fixture tree 的 480 个 native trace 都已有 request/response hash binding，但没有 `snapshotPayloadHashAlgorithm` 或 `canonicalPayloadSha256`；C++ 原始 `sha256` 绑定的是 drain 前原始 JSON bytes，collector 解析并重排后无法从现有文件重算。因此它们只能按 legacy closure 读取，不能满足本方案要求的独立 snapshot content-hash 证明；
+2. fixture tree 没有任何 `cad-core-res/*.cad-core.producer-trace.json`，所以纯 `--phase/--case` 没有正式 actual pair；
+3. FreeCAD2 当前 native mapper snapshot 只有 `counts/isNull/ledger/shapeType/tag`，没有 raw M/G/D source-target adjacency；native `childMaps` 只有 `indexed/tag/offset/count/postfix/elementIdRefs`，没有 parent output inventory 或 nested snapshot reference。共享 validator 不能凭空验证或比较这些缺失关系，故 S1 的“两侧 child/mapper 同强度闭包”仍未满足；
+4. 完整 public parity 模块的既有 `c3m1` snapshot 仍把 `topoNamingState.producer.freecadVersion`（expected `revision 46970`、current `revision 20260519`）判为未接受 public semantic diff；该失败与 trace observation 字段无关。
+
+关闭上述门禁需要先扩展 FreeCAD2 probe snapshot contract，使 mapper/child 数据足以自证 inventory、nested linkage 与 raw M/G/D，再单独授权 artifact 更新：用已修正 collector 成对重采 native expected/ledger/trace，并由 N1 publisher 原子物化同 run CAD Core response/trace。随后重跑纯 phase/case、8 个代表 family、确定性、mutation 与完整 public parity。完成前 blocker queue 保持 S0/S1/S5 blocked，S2-S4 closed。

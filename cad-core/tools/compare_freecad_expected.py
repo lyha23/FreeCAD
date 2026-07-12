@@ -106,7 +106,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--actual-source",
         choices=("snapshot", "live", "rust-ffi"),
-        help="Actual-payload adapter; rust-ffi calls cad_rs_recompute_json once per fixture.",
+        help="Actual-payload adapter; rust-ffi calls cad_rs_recompute_artifacts_json once per fixture and keeps the public verdict trace-independent.",
     )
     parser.add_argument("--release-gate", action="store_true", help="Run the live release gate and fail on non-passing verdicts.")
     parser.add_argument("--run-contract-tests", action="store_true", help="Run registry-selected dotted unittest ids.")

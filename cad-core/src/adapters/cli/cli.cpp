@@ -36,6 +36,57 @@ struct RecomputeOptions {
     std::optional<ExportRequest> exportRequest;
 };
 
+std::filesystem::path producerTracePathForOutput(const std::filesystem::path& outputPath)
+{
+    const std::string filename = outputPath.filename().string();
+    constexpr const char* cadCoreSuffix = ".cad-core.json";
+    std::string sidecar;
+    if (filename.size() >= std::char_traits<char>::length(cadCoreSuffix)
+        && filename.compare(
+               filename.size() - std::char_traits<char>::length(cadCoreSuffix),
+               std::char_traits<char>::length(cadCoreSuffix),
+               cadCoreSuffix
+           ) == 0) {
+        sidecar = filename.substr(0, filename.size() - 5U) + ".producer-trace.json";
+    }
+    else {
+        const std::string stem = outputPath.stem().string();
+        sidecar = stem + ".cad-core.producer-trace.json";
+    }
+    return outputPath.parent_path() / sidecar;
+}
+
+void clearProducerTraceArtifact(const std::filesystem::path& path) noexcept
+{
+    std::error_code ignored;
+    std::filesystem::remove(path, ignored);
+    std::filesystem::path temporary = path;
+    temporary += ".tmp";
+    std::filesystem::remove(temporary, ignored);
+}
+
+void validateProducerTraceArtifact(const nlohmann::json& trace,
+                                   const nlohmann::json& input,
+                                   const nlohmann::json& response)
+{
+    if (!trace.is_object()
+        || trace.value("schemaVersion", "") != "freecad.element-map-producer-trace.v1"
+        || !trace.contains("events") || !trace.at("events").is_array()
+        || trace.at("events").empty()
+        || !trace.contains("transactions") || !trace.at("transactions").is_array()
+        || trace.at("transactions").empty()
+        || !trace.contains("producer") || !trace.at("producer").is_object()) {
+        throw std::runtime_error("CAD Core producer trace is missing required closed content");
+    }
+    const auto& producer = trace.at("producer");
+    if (producer.value("inputSha256", "")
+            != app::ElementMapProducerTrace::canonicalSha256(input)
+        || producer.value("responseSha256", "")
+            != app::ElementMapProducerTrace::canonicalSha256(response)) {
+        throw std::runtime_error("CAD Core producer trace request/response binding mismatch");
+    }
+}
+
 bool useLegacyTestOutput()
 {
     const char* value = std::getenv("CAD_CORE_TEST_LEGACY_OUTPUT");
@@ -181,14 +232,21 @@ int runRecompute(const RecomputeOptions& options)
     }
 
     auto [document, diagnostics] = app::parseDocument(raw);
-    if (auto failure = runtime::topoNamingStateRequestFailureJson(document, diagnostics)) {
-        runtime::writeJsonFile(options.outputPath, *failure);
-        return 0;
-    }
-    const runtime::ComputeContext context = runtime::recomputeContext(document, std::move(diagnostics));
+    const std::filesystem::path producerTracePath = producerTracePathForOutput(options.outputPath);
+    clearProducerTraceArtifact(producerTracePath);
+    runtime::RecomputeTraceMetadata traceMetadata;
+    traceMetadata.document = options.inputPath.filename().string();
+    traceMetadata.build = "cad-core-cli-0.1.0";
+    traceMetadata.inputSha256 = app::ElementMapProducerTrace::canonicalSha256(raw);
+    runtime::RecomputeArtifacts artifacts = runtime::recomputeArtifacts(
+        document,
+        std::move(diagnostics),
+        std::move(traceMetadata)
+    );
+    const runtime::ComputeContext& context = artifacts.context;
     nlohmann::json result = useLegacyTestOutput()
         ? legacyTestResultJson(document, context)
-        : runtime::recomputeResultJson(document, context);
+        : std::move(artifacts.response);
 
     if (options.exportRequest.has_value()) {
         const auto& request = *options.exportRequest;
@@ -206,7 +264,17 @@ int runRecompute(const RecomputeOptions& options)
         });
     }
 
-    runtime::writeJsonFile(options.outputPath, result);
+    artifacts.producerTrace["producer"]["responseSha256"] =
+        app::ElementMapProducerTrace::canonicalSha256(result);
+    try {
+        validateProducerTraceArtifact(artifacts.producerTrace, raw, result);
+        runtime::writeJsonFileAtomically(options.outputPath, result);
+        runtime::writeJsonFileAtomically(producerTracePath, artifacts.producerTrace);
+    }
+    catch (...) {
+        clearProducerTraceArtifact(producerTracePath);
+        throw;
+    }
     return 0;
 }
 

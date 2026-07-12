@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import stat
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 try:
     from .fixture_runner import ROOT
@@ -26,6 +28,83 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
     def write_json(self, path: Path, payload: object) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    def producer_trace(self, request: object, response: object) -> dict:
+        def digest(value: object) -> str:
+            encoded = json.dumps(
+                value,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            ).encode("utf-8")
+            return hashlib.sha256(encoded).hexdigest()
+
+        initial_hash = digest({})
+        initial = f"state:sha256:{initial_hash}"
+        common = {
+            "transactionSequence": 1,
+            "scopeSequence": 0,
+            "parentScopeSequence": 0,
+            "objectTag": 0,
+            "beforeSnapshot": initial,
+            "afterSnapshot": initial,
+            "fields": {},
+        }
+        return {
+            "schemaVersion": "freecad.element-map-producer-trace.v1",
+            "producer": {
+                "name": "CADCore",
+                "document": "case-a",
+                "build": "test",
+                "inputSha256": digest(request),
+                "responseSha256": digest(response),
+            },
+            "events": [
+                {**common, "sequence": 1, "slice": "document.recompute.begin", "decision": "begin", "reason": "test"},
+                {**common, "sequence": 2, "slice": "maker.final_checkpoint", "decision": "checkpoint", "reason": "test"},
+                {
+                    **common,
+                    "sequence": 3,
+                    "slice": "document.recompute.end",
+                    "decision": "success",
+                    "reason": "test",
+                    "fields": {"partialWrite": False},
+                },
+            ],
+            "transactions": [
+                {
+                    "sequence": 1,
+                    "eventRange": [1, 3],
+                    "outcome": "success",
+                    "detail": "test",
+                    "targets": ["case-a"],
+                    "fields": {},
+                }
+            ],
+            "scopes": [],
+            "objectTagIndex": {
+                "1": {"object": "case-a", "typeId": "App::Feature"}
+            },
+            "objects": {
+                "case-a": {"tag": 1, "typeId": "App::Feature", "slices": []}
+            },
+            "stringTableSnapshots": {},
+            "ledgerSnapshots": {
+                initial: {
+                    "kind": "state",
+                    "payload": {},
+                    "sha256": initial_hash,
+                    "sidRefs": [],
+                    "definedSids": [],
+                    "nestedSnapshotRefs": [],
+                    "label": "initial",
+                    "publishedEvent": 0,
+                }
+            },
+            "mapperSnapshots": {},
+            "firstSeenIdentities": {},
+        }
 
     def bootstrap(self, root: Path, *, expected: dict | None = None, current: dict | None = None) -> tuple[Path, Path]:
         expected = {"diagnostics": [], "results": []} if expected is None else expected
@@ -609,11 +688,14 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
             roles, registry = self.bootstrap(root, current={"before": True})
             binary = root / "build" / "cad-core"
             binary.parent.mkdir(parents=True)
+            trace = self.producer_trace({"request": "demo"}, {"after": True})
             binary.write_text(
                 "#!/usr/bin/env python3\n"
                 "import json, pathlib, sys\n"
                 "out = pathlib.Path(sys.argv[sys.argv.index('--output') + 1])\n"
-                "out.write_text(json.dumps({'after': True}))\n",
+                "out.write_text(json.dumps({'after': True}))\n"
+                "trace = out.with_name(out.name[:-5] + '.producer-trace.json')\n"
+                f"trace.write_text({json.dumps(json.dumps(trace))})\n",
                 encoding="utf-8",
             )
             binary.chmod(binary.stat().st_mode | stat.S_IXUSR)
@@ -627,8 +709,51 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
                 MaterializeRequest(root=root, phase="demo", binary=binary, roles_path=roles, validate_ledger=False)
             ).to_dict()
             current_path = root / "fixtures" / "demo" / "cad-core-res" / "case-a.cad-core.json"
+            current_trace_path = (
+                root
+                / "fixtures"
+                / "demo"
+                / "cad-core-res"
+                / "case-a.cad-core.producer-trace.json"
+            )
             self.assertEqual("ok", generated["status"])
             self.assertEqual({"after": True}, json.loads(current_path.read_text(encoding="utf-8")))
+            self.assertEqual(trace, json.loads(current_trace_path.read_text(encoding="utf-8")))
+
+            next_trace = self.producer_trace({"request": "demo"}, {"after": 2})
+            binary.write_text(
+                "#!/usr/bin/env python3\n"
+                "import json, pathlib, sys\n"
+                "out = pathlib.Path(sys.argv[sys.argv.index('--output') + 1])\n"
+                "out.write_text(json.dumps({'after': 2}))\n"
+                "trace = out.with_name(out.name[:-5] + '.producer-trace.json')\n"
+                f"trace.write_text({json.dumps(json.dumps(next_trace))})\n",
+                encoding="utf-8",
+            )
+            binary.chmod(binary.stat().st_mode | stat.S_IXUSR)
+            original_replace = Path.replace
+            failed = False
+
+            def fail_trace_publish(path: Path, target: Path) -> Path:
+                nonlocal failed
+                if Path(target).resolve() == current_trace_path.resolve() and not failed:
+                    failed = True
+                    raise OSError("injected trace publish failure")
+                return original_replace(path, target)
+
+            with mock.patch.object(Path, "replace", new=fail_trace_publish):
+                rollback = materialize_current(
+                    MaterializeRequest(
+                        root=root,
+                        phase="demo",
+                        binary=binary,
+                        roles_path=roles,
+                        validate_ledger=False,
+                    )
+                ).to_dict()
+            self.assertEqual("invalid", rollback["status"])
+            self.assertEqual({"after": True}, json.loads(current_path.read_text(encoding="utf-8")))
+            self.assertEqual(trace, json.loads(current_trace_path.read_text(encoding="utf-8")))
 
             binary.write_text(
                 "#!/usr/bin/env python3\n"
@@ -644,6 +769,101 @@ class FreecadExpectedPublicParityTest(unittest.TestCase):
 
             self.assertEqual("invalid", rejected["status"])
             self.assertEqual({"after": True}, json.loads(current_path.read_text(encoding="utf-8")))
+            self.assertEqual(trace, json.loads(current_trace_path.read_text(encoding="utf-8")))
+
+    def test_live_missing_trace_is_observation_only_for_parity_but_blocks_materialization(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            response = {"diagnostics": [], "results": []}
+            roles, registry = self.bootstrap(root, expected=response, current=response)
+            binary = root / "build" / "cad-core"
+            binary.parent.mkdir(parents=True)
+            binary.write_text(
+                "#!/usr/bin/env python3\n"
+                "import json, pathlib, sys\n"
+                "out = pathlib.Path(sys.argv[sys.argv.index('--output') + 1])\n"
+                f"out.write_text({json.dumps(json.dumps(response))})\n",
+                encoding="utf-8",
+            )
+            binary.chmod(binary.stat().st_mode | stat.S_IXUSR)
+
+            parity = evaluate(
+                self.request(root, roles, registry, source_kind="live", binary=binary)
+            ).to_dict()
+            generated = materialize_current(
+                MaterializeRequest(
+                    root=root,
+                    phase="demo",
+                    binary=binary,
+                    roles_path=roles,
+                    validate_ledger=False,
+                )
+            ).to_dict()
+
+        self.assertEqual("green", parity["exactStatus"])
+        self.assertEqual("green", parity["semanticStatus"])
+        self.assertEqual("green", parity["releaseStatus"])
+        self.assertTrue(parity["releaseGatePassed"])
+        self.assertEqual("missing", parity["cases"][0]["traceStatus"])
+        self.assertEqual("invalid", generated["status"])
+        self.assertTrue(
+            any("no producer trace" in error for error in generated["preflight"]["errors"])
+        )
+
+    def test_trace_alignment_and_divergence_never_change_public_verdict(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            response = {"diagnostics": [], "results": []}
+            request = {"request": "demo"}
+            roles, registry = self.bootstrap(root, expected=response, current=response)
+            expected_trace = self.producer_trace(request, response)
+            expected_trace["transactions"][0]["targets"] = []
+            self.write_json(
+                root
+                / "fixtures"
+                / "demo"
+                / "expected"
+                / "case-a.freecad.producer-trace.json",
+                expected_trace,
+            )
+            binary = root / "build" / "cad-core"
+            binary.parent.mkdir(parents=True)
+
+            def write_binary(trace: dict) -> None:
+                binary.write_text(
+                    "#!/usr/bin/env python3\n"
+                    "import json, pathlib, sys\n"
+                    "out = pathlib.Path(sys.argv[sys.argv.index('--output') + 1])\n"
+                    f"out.write_text({json.dumps(json.dumps(response))})\n"
+                    "trace = out.with_name(out.name[:-5] + '.producer-trace.json')\n"
+                    f"trace.write_text({json.dumps(json.dumps(trace))})\n",
+                    encoding="utf-8",
+                )
+                binary.chmod(binary.stat().st_mode | stat.S_IXUSR)
+
+            write_binary(expected_trace)
+            aligned = evaluate(
+                self.request(root, roles, registry, source_kind="live", binary=binary)
+            ).to_dict()
+
+            divergent_trace = json.loads(json.dumps(expected_trace))
+            divergent_trace["events"][1]["decision"] = "changed"
+            write_binary(divergent_trace)
+            divergent = evaluate(
+                self.request(root, roles, registry, source_kind="live", binary=binary)
+            ).to_dict()
+
+        for report in (aligned, divergent):
+            self.assertEqual("green", report["exactStatus"])
+            self.assertEqual("green", report["semanticStatus"])
+            self.assertEqual("green", report["releaseStatus"])
+            self.assertTrue(report["releaseGatePassed"])
+        self.assertEqual("aligned", aligned["cases"][0]["traceStatus"])
+        self.assertEqual("different", divergent["cases"][0]["traceStatus"])
+        self.assertEqual(
+            "decision_mismatch",
+            divergent["cases"][0]["firstDivergence"]["classification"],
+        )
 
 
 if __name__ == "__main__":

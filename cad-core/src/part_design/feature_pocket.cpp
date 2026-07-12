@@ -1,6 +1,7 @@
 #include "cad_core/part_design/feature_pocket.h"
 
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/runtime/producer_trace_scope.h"
 #include "cad_core/part_design/feature_extrude.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/property_topo_shape.h"
@@ -105,6 +106,15 @@ void appendProfileResolveFields(nlohmann::json& result, const ExtrudeResult& ext
 
 void executePocket(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
+    runtime::ProducerTraceScope producerTrace(
+        context,
+        object,
+        "partdesign.extrude",
+        "FeaturePocket::execute",
+        {{"mode", "subtractive"},
+         {"reversed", app::readBool(object, "Reversed").value_or(false)},
+         {"type", app::readString(object, "Type").value_or("Length")}}
+    );
     // FreeCAD semantic sources:
     // src/Mod/PartDesign/App/FeaturePocket.cpp Pocket::execute()
     // src/Mod/PartDesign/App/FeatureAddSub.cpp FeatureAddSub::getAddSubShape()
@@ -141,6 +151,12 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
         return;
     }
     auto extrusion = buildFeatureExtrusion(object, context, AddSubMode::Subtractive, "Pocket");
+    producerTrace.event(
+        extrusion ? "built" : "rejected",
+        extrusion ? "raw_prism_and_profile_resolved" : "feature_extrusion_failed",
+        {{"profile", extrusion ? extrusion->profileOwner : std::string {}},
+         {"hasRawShape", extrusion.has_value()}}
+    );
     if (!extrusion) {
         context.objects[object.name] = {{"status", "error"}};
         return;

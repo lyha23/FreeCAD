@@ -318,6 +318,7 @@ add_library(cad-core-lib STATIC
   src/app/document.cpp
   src/app/document_object.cpp
   src/app/element_map.cpp
+  src/app/element_map_producer_trace.cpp
   src/app/link.cpp
   src/app/property.cpp
   src/app/property_geo.cpp
@@ -328,6 +329,7 @@ add_library(cad-core-lib STATIC
   src/mesh/feature_mesh_import.cpp
   src/part/brep_snapshot.cpp
   src/part/edge_axis.cpp
+  src/part/element_map_producer_trace_snapshot.cpp
   src/part/extrusion_helper.cpp
   src/part/face_maker.cpp
   src/part/internal_shape_history_ledger.cpp
@@ -394,6 +396,7 @@ add_library(cad-core-lib STATIC
   src/runtime/feature_executor.cpp
   src/runtime/feature_registry.cpp
   src/runtime/io.cpp
+  src/runtime/producer_trace_scope.cpp
   src/runtime/reference_lifecycle.cpp
   src/runtime/reference_resolution.cpp
   src/runtime/recompute.cpp
@@ -476,6 +479,13 @@ add_executable(cad-core-brep-snapshot-probe
 
 target_link_libraries(cad-core-brep-snapshot-probe PRIVATE cad-core-lib)
 
+add_executable(cad-core-element-map-producer-trace-probe
+  tests/element_map_producer_trace_probe.cpp
+)
+
+target_link_libraries(cad-core-element-map-producer-trace-probe PRIVATE cad-core-lib)
+target_include_directories(cad-core-element-map-producer-trace-probe PRIVATE src/part)
+
 if(APPLE)
   set(CAD_CORE_ONDSEL_RPATH "$<TARGET_FILE_DIR:OndselSolver>")
   list(JOIN CAD_CORE_OCCT_LIBRARY_DIRS ";" CAD_CORE_OCCT_RPATH)
@@ -492,6 +502,10 @@ if(APPLE)
     INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
   )
   set_target_properties(cad-core-brep-snapshot-probe PROPERTIES
+    BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
+    INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
+  )
+  set_target_properties(cad-core-element-map-producer-trace-probe PROPERTIES
     BUILD_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
     INSTALL_RPATH "${CAD_CORE_OCCT_RPATH};${CAD_CORE_ONDSEL_RPATH}"
   )

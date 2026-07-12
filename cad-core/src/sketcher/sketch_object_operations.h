@@ -20,6 +20,11 @@
 
 namespace cad_core::app
 {
+class ElementMapProducerTrace;
+}
+
+namespace cad_core::app
+{
 struct DocumentObject;
 }
 
@@ -112,7 +117,10 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(const app::DocumentObject
 // FreeCAD: src/Mod/Sketcher/App/SketchObject.cpp::buildInternals() passes the already-built
 // Sketch Shape wires into FaceMakerBuildFace. Keeping that same request-local TopoDS graph is
 // required for FaceMaker's mapSubElement() to retain raw g<ID>;SKT source identity.
-ProfileFaceBuild buildOptionalProfileFace(const TopoDS_Shape& rawShape);
+ProfileFaceBuild buildOptionalProfileFace(
+    const TopoDS_Shape& rawShape,
+    app::ElementMapProducerTrace* producerTrace = nullptr
+);
 
 std::size_t countSubshapesOfKind(const nlohmann::json& subshapes, const std::string& kind);
 std::string profileShapeLabel(const std::optional<TopoDS_Shape>& profileShape);

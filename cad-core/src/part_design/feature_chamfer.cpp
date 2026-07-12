@@ -3,6 +3,7 @@
 #include "feature_dress_up_support.h"
 
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/runtime/producer_trace_scope.h"
 
 #include <BRepFilletAPI_MakeChamfer.hxx>
 #include <BRep_Tool.hxx>
@@ -246,6 +247,15 @@ std::optional<DressUpResult> buildChamfer(
 
 void executeChamfer(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
+    runtime::ProducerTraceScope producerTrace(
+        context,
+        object,
+        "partdesign.dressup",
+        "Chamfer::execute",
+        {{"maker", "CHF"},
+         {"useAllEdges", app::readBool(object, "UseAllEdges").value_or(false)},
+         {"size", app::readNumber(object, "Size").value_or(0.0)}}
+    );
     // FreeCAD semantic sources:
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp::DressUp::getContinuousEdges()
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureChamfer.cpp::Chamfer::execute()
@@ -267,19 +277,45 @@ void executeChamfer(const app::DocumentObject& object, runtime::ComputeContext& 
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    const std::size_t diagnosticStart = context.diagnostics.size();
     auto result = buildChamfer(object, context);
     if (!result) {
+        const std::string reason = context.diagnostics.size() > diagnosticStart
+            ? context.diagnostics.back().code
+            : "dressup_build_failed";
+        producerTrace.event(
+            "reject",
+            reason,
+            {{"guard", "build_chamfer"},
+             {"diagnostic",
+              context.diagnostics.size() > diagnosticStart
+                  ? context.diagnostics.back().message
+                  : "no_result"}}
+        );
+        producerTrace.abort(reason);
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    producerTrace.event(
+        "selection",
+        "ordered_dressup_selection_resolved",
+        detail::selectionEvidenceJson(result->selection)
+    );
     if (!applyDressUpRefine(object, context, *result)) {
+        producerTrace.abort("dressup_refine_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     if (!cacheDressUpAddSubShape(object, context, *result)) {
+        producerTrace.abort("add_sub_shape_cache_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    producerTrace.event(
+        "publish",
+        "dressup_result_ready",
+        {{"maker", "CHF"}, {"parameters", result->parameters}}
+    );
     publishDressUpResult(object, context, *result);
 }
 

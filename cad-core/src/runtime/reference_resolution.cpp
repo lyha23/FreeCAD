@@ -306,6 +306,27 @@ bool isSuccess(ReferenceResolutionStatus status)
     return status == ReferenceResolutionStatus::Resolved || status == ReferenceResolutionStatus::Recovered;
 }
 
+std::string resolutionStatusName(ReferenceResolutionStatus status)
+{
+    switch (status) {
+        case ReferenceResolutionStatus::Resolved:
+            return "resolved";
+        case ReferenceResolutionStatus::Recovered:
+            return "recovered";
+        case ReferenceResolutionStatus::Ambiguous:
+            return "ambiguous";
+        case ReferenceResolutionStatus::Split:
+            return "split";
+        case ReferenceResolutionStatus::Deleted:
+            return "deleted";
+        case ReferenceResolutionStatus::SemanticDrift:
+            return "semantic_drift";
+        case ReferenceResolutionStatus::Missing:
+            return "missing";
+    }
+    return "missing";
+}
+
 bool topoNamingStatePlaceholderShadow(const app::Link& link, const app::ReferenceShadow& shadow)
 {
     return link.stableSubnamesSource == "topoNamingState"
@@ -766,6 +787,28 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
                 }
 
                 const auto resolution = resolveReferenceShadow(link, index, shadow, propertyName, view);
+                if (view.producerTrace != nullptr) {
+                    const std::string status = resolutionStatusName(resolution.status);
+                    view.producerTrace->record({
+                        "reference.resolve",
+                        isSuccess(resolution.status) ? status : "rejected",
+                        isSuccess(resolution.status)
+                            ? "property_local_reference_resolved"
+                            : (resolution.diagnosticCode.empty() ? status : resolution.diagnosticCode),
+                        {{"object", object.name},
+                         {"objectTag", object.id},
+                         {"property", propertyName},
+                         {"linkIndex", linkIndex},
+                         {"referenceIndex", index},
+                         {"owner", link.object},
+                         {"requestedSubname", resolution.requestedSubname},
+                         {"requestedStableSubname", resolution.requestedStableSubname},
+                         {"resolvedSubname", resolution.resolvedSubname},
+                         {"status", status},
+                         {"recoveryMethod", resolution.recoveryMethod},
+                         {"recoveryReason", resolution.recoveryReason}},
+                    });
+                }
                 if (!isSuccess(resolution.status)) {
                     if (resolution.diagnosticCode.empty()) {
                         continue;
@@ -809,7 +852,8 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
                                              link,
                                              updatedSubnames,
                                              updatedReferenceShadows,
-                                             pendingReferenceUpdates);
+                                             pendingReferenceUpdates,
+                                             view.producerTrace);
                 if (propertyValue.kind == app::PropertyKind::LinkSubList) {
                     subListReferenceUpdates[linkIndex] = updatedReferenceShadows;
                     subListSubnameUpdates[linkIndex] = updatedSubnames;
@@ -821,7 +865,8 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
                                             propertyValue,
                                             subListReferenceUpdates,
                                             subListSubnameUpdates,
-                                            pendingReferenceUpdates);
+                                            pendingReferenceUpdates,
+                                            view.producerTrace);
     }
     if (validation.valid) {
         validation.elementReferenceUpdates = std::move(pendingReferenceUpdates);

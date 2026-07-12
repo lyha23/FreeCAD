@@ -5,6 +5,9 @@
 #include "cad_core/part/extrusion_helper.h"
 #include "cad_core/part/brep_snapshot.h"
 #include "cad_core/part/face_maker.h"
+#include "cad_core/part/element_map_producer_trace_snapshot.h"
+#include "element_map_producer_trace_snapshot_internal.h"
+#include "topo_shape_producer_trace_internal.h"
 #include "cad_core/part/refine_model.h"
 #include "cad_core/part/shape_fix.h"
 #include "cad_core/app/element_map.h"
@@ -105,12 +108,59 @@ void recordElementMapEntry(NamedShape& namedShape,
         entries.end(),
         [&](const ElementMapEntry& entry) { return entry.mappedName == mappedName; }
     );
-    if (existing == entries.end()) {
+    const bool appended = existing == entries.end();
+    if (appended) {
         entries.push_back(ElementMapEntry {mappedName, std::move(refs)});
     }
     else {
         existing->elementIdRefs = std::move(refs);
     }
+    if (namedShape.stringHasher && namedShape.stringHasher->producerTrace() != nullptr) {
+        const ElementMapEntry& written = appended ? entries.back() : *existing;
+        nlohmann::json entryRefs = nlohmann::json::array();
+        for (const app::StringId& ref : written.elementIdRefs) {
+            entryRefs.push_back({{"value", ref.value}, {"index", ref.index}});
+        }
+        namedShape.stringHasher->producerTrace()->record({
+            "element_map.write",
+            appended ? "append" : "update",
+            appended ? "new_entry_local_ref" : "existing_entry_refs_refreshed",
+            {{"owner", namedShape.owner},
+             {"target", currentElement},
+             {"rawMappedName", mappedName},
+             {"elementIdRefs", std::move(entryRefs)},
+             {"entryOrdinal", static_cast<int>(std::distance(entries.begin(), appended ? entries.end() - 1 : existing))}},
+        });
+    }
+}
+
+void producer_trace_detail::publishDuplicateCandidateSuppressed(
+    app::ElementMapProducerTrace& trace,
+    const std::string& slice,
+    const std::string& reason,
+    const DuplicateCandidateEvidence& evidence
+)
+{
+    const auto candidateJson = [](const DuplicateCandidateValue& candidate) {
+        nlohmann::json refs = nlohmann::json::array();
+        for (const app::StringId& ref : candidate.entryLocalRefs) {
+            refs.push_back({{"value", ref.value}, {"index", ref.index}});
+        }
+        return nlohmann::json {
+            {"parent", candidate.parent},
+            {"child", candidate.child},
+            {"ordinal", candidate.ordinal},
+            {"entryLocalRefs", std::move(refs)},
+        };
+    };
+    trace.record({
+        slice,
+        "rejected",
+        reason,
+        {{"rawMappedName", evidence.rawMappedName},
+         {"keptCandidate", candidateJson(evidence.kept)},
+         {"suppressedCandidate", candidateJson(evidence.suppressed)}},
+    });
 }
 
 namespace
@@ -2983,6 +3033,54 @@ std::vector<std::string> sourceElementNames(
     SourceElementMapLookup lookup = SourceElementMapLookup::All
 )
 {
+    app::ElementMapProducerTrace* trace = source.namedShape != nullptr
+            && source.namedShape->stringHasher
+        ? source.namedShape->stringHasher->producerTrace()
+        : nullptr;
+    const auto recordLookup = [&](const std::vector<std::string>& values,
+                                  const std::string& reason,
+                                  bool childFallback) {
+        if (trace == nullptr) {
+            return;
+        }
+        nlohmann::json orderedEntries = nlohmann::json::array();
+        if (source.namedShape != nullptr) {
+            const auto found = source.namedShape->elementMapEntries.find(localElementName);
+            if (found != source.namedShape->elementMapEntries.end()) {
+                for (const ElementMapEntry& entry : found->second) {
+                    nlohmann::json refs = nlohmann::json::array();
+                    for (const app::StringId& ref : entry.elementIdRefs) {
+                        refs.push_back({{"value", ref.value}, {"index", ref.index}});
+                    }
+                    orderedEntries.push_back(
+                        {{"rawMappedName", entry.mappedName}, {"elementIdRefs", std::move(refs)}}
+                    );
+                }
+            }
+        }
+        trace->record({
+            lookup == SourceElementMapLookup::First ? "element_map.find" : "element_map.find_all",
+            values.empty() ? "miss" : "resolved",
+            reason,
+            {{"owner", source.owner},
+             {"indexedName", localElementName},
+             {"mode", lookup == SourceElementMapLookup::First ? "first" : "all"},
+             {"orderedEntries", std::move(orderedEntries)},
+             {"resolvedNames", values},
+             {"childFallback", childFallback}},
+        });
+        if (!values.empty()) {
+            trace->record({
+                "element_map.history",
+                "consumed",
+                "ordered_mapped_name_history_chain",
+                {{"owner", source.owner},
+                 {"indexedName", localElementName},
+                 {"historyChain", values},
+                 {"terminalCondition", "source_backed_or_indexed_fallback"}},
+            });
+        }
+    };
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
     // ::TopoShape::makeElementShape() and mapSubElement(shapes) carry existing element names
     // through chained makers. When a source already has an ElementMap, cad-core treats those
@@ -2995,6 +3093,7 @@ std::vector<std::string> sourceElementNames(
                 addDistinctString(names, aliasOwner + "." + localElementName);
             }
         }
+        recordLookup(names, "indexed_owner_fallback", false);
         return names;
     }
 
@@ -3178,6 +3277,11 @@ std::vector<std::string> sourceElementNames(
             }
         }
     }
+    recordLookup(
+        names,
+        mappedNames.empty() ? "indexed_owner_fallback" : "ordered_entry_chain",
+        entries == source.namedShape->elementMapEntries.end() && !source.namedShape->childElementMaps.empty()
+    );
     return names;
 }
 
@@ -4140,6 +4244,10 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
                                  bool recordUnmappedSourceDeletions,
                                  bool promoteBareSourceIdForGenerated = false)
 {
+    app::ElementMapProducerTrace* trace = namedShape.stringHasher
+        ? namedShape.stringHasher->producerTrace()
+        : nullptr;
+    bool multiSourceTupleObserved = false;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
     // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap() accumulates all
     // MapperMaker candidates per result IndexedName in `newNames`, then selects one NameKey in
@@ -4185,6 +4293,14 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
     std::map<std::string, std::vector<Candidate>> candidatesByTarget;
     const auto consider = [&](Candidate candidate) {
         if (candidate.target.empty() || namedShape.elements.count(candidate.target) == 0U) {
+            if (trace != nullptr) {
+                trace->record({
+                    "maker.candidate.reject",
+                    "rejected",
+                    candidate.target.empty() ? "target_empty" : "target_not_in_output",
+                    {{"source", candidate.sourceName}, {"target", candidate.target}},
+                });
+            }
             return;
         }
         if (!candidate.preserved
@@ -4192,6 +4308,14 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
             // mapSubElement(shapes) has already consumed this terminal target. FreeCAD's later
             // generated/modified scan has the same `getMappedName(element)` guard, so it must
             // not replace a preserved source alias with a maker relation.
+            if (trace != nullptr) {
+                trace->record({
+                    "maker.candidate.reject",
+                    "rejected",
+                    "target_already_named_by_preserve",
+                    {{"source", candidate.sourceName}, {"target", candidate.target}},
+                });
+            }
             return;
         }
         auto& candidates = candidatesByTarget[candidate.target];
@@ -4201,10 +4325,73 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
             [&](const Candidate& existing) { return existing.sourceName == candidate.sourceName; }
         );
         if (sameSource == candidates.end()) {
+            if (trace != nullptr) {
+                const auto relation = candidate.targets->historyKinds.find(candidate.target);
+                const bool generated = relation != candidate.targets->historyKinds.end()
+                    && relation->second == ElementHistoryKind::Generated;
+                const auto ordinal = candidate.targets->historyOrdinals.find(candidate.target);
+                nlohmann::json refs = nlohmann::json::array();
+                if (candidate.targets->inheritedMappedName) {
+                    for (const app::StringId& ref : candidate.targets->inheritedMappedName->elementIdRefs) {
+                        refs.push_back({{"value", ref.value}, {"index", ref.index}});
+                    }
+                }
+                trace->record({
+                    generated ? "maker.generated" : "maker.modified",
+                    "candidate_collected",
+                    generated ? "mapper_generated_target_in_output"
+                              : "mapper_modified_target_in_output",
+                    {{"source", candidate.sourceName},
+                     {"target", candidate.target},
+                     {"operationPostfix", candidate.operationPostfix},
+                     {"incomingRawMappedName",
+                      candidate.targets->inheritedMappedName
+                          ? candidate.targets->inheritedMappedName->rawMappedName
+                          : std::string {}},
+                     {"entryLocalRefs", std::move(refs)},
+                     {"nameKeyTag", candidate.targets->nameKeyTag.value_or(0L)},
+                     {"sourceShapeType",
+                      candidate.targets->sourceKind
+                          ? subshapeKindName(*candidate.targets->sourceKind)
+                          : std::string {}}},
+                });
+                if (generated && ordinal != candidate.targets->historyOrdinals.end()
+                    && ordinal->second == 0) {
+                    trace->record({
+                        "maker.parallel_coplanar",
+                        "not_applicable",
+                        "cad_core_mapper_has_no_planar_parallel_disambiguation_branch",
+                        {{"source", candidate.sourceName},
+                         {"target", candidate.target},
+                         {"ordinal", 0},
+                         {"shapeOffset", 3},
+                         {"indexSentinel", "INT_MIN"},
+                         {"planeTestPerformed", false},
+                         {"parallelTestPerformed", false},
+                         {"coplanarTestPerformed", false}},
+                    });
+                }
+            }
             candidates.push_back(std::move(candidate));
         }
         else if (candidateLess(candidate, *sameSource)) {
+            if (trace != nullptr) {
+                trace->record({
+                    "maker.candidate.reject",
+                    "replaced",
+                    "better_duplicate_source_candidate",
+                    {{"source", candidate.sourceName}, {"target", candidate.target}},
+                });
+            }
             *sameSource = std::move(candidate);
+        }
+        else if (trace != nullptr) {
+            trace->record({
+                "maker.candidate.reject",
+                "rejected",
+                "duplicate_source_candidate",
+                {{"source", candidate.sourceName}, {"target", candidate.target}},
+            });
         }
     };
 
@@ -4248,6 +4435,18 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
             if (relation != targets.historyKinds.end()
                 && relation->second == ElementHistoryKind::Modified && targets.sourceKind
                 && elementKindFromName(target) != *targets.sourceKind) {
+                if (trace != nullptr) {
+                    trace->record({
+                        "maker.candidate.reject",
+                        "rejected",
+                        "modified_source_target_type_mismatch",
+                        {{"source", sourceName},
+                         {"target", target},
+                         {"reportedType",
+                          subshapeKindName(elementKindFromName(target).value_or(TopAbs_SHAPE))},
+                         {"effectiveSourceType", subshapeKindName(*targets.sourceKind)}},
+                    });
+                }
                 continue;
             }
             const auto ordinal = targets.historyOrdinals.find(target);
@@ -4275,6 +4474,18 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
         std::string postfix = selected.operationPostfix;
         if (candidates.size() <= 1U || !namedShape.stringHasher) {
             return postfix;
+        }
+
+        if (trace != nullptr) {
+            multiSourceTupleObserved = true;
+            trace->record({
+                "maker.multi_source",
+                "begin",
+                "name_key_tuple_required",
+                {{"target", selected.target},
+                 {"candidateCount", candidates.size()},
+                 {"postfix", postfix}},
+            });
         }
 
         // `sids` in makeShapeWithElementMap starts with the selected NameInfo's refs. Before
@@ -4413,6 +4624,18 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
         else {
             postfix.insert(suffix, tupleId.toString());
         }
+        if (trace != nullptr) {
+            trace->record({
+                "maker.multi_source",
+                "encoded",
+                "k_tuple_sid_allocated",
+                {{"target", selected.target},
+                 {"tuple", tuple},
+                 {"tupleId", {{"value", tupleId.value}, {"index", tupleId.index}}},
+                 {"combinedPostfix", postfix},
+                 {"variant", candidates.size() > 2U ? "K00" : "K0"}},
+            });
+        }
         return postfix;
     };
 
@@ -4456,6 +4679,20 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
                 [&](const Candidate& candidate) { return !isHighLevelGenerated(candidate); }
             );
             if (hasDirectCandidate) {
+                if (trace != nullptr) {
+                    for (const Candidate& candidate : candidates) {
+                        if (isHighLevelGenerated(candidate)) {
+                            trace->record({
+                                "maker.candidate.reject",
+                                "delayed",
+                                "precise_lower_level_candidate_present",
+                                {{"source", candidate.sourceName},
+                                 {"target", candidate.target},
+                                 {"pass", "delayed_second_round"}},
+                            });
+                        }
+                    }
+                }
                 candidates.erase(
                     std::remove_if(candidates.begin(), candidates.end(), isHighLevelGenerated),
                     candidates.end()
@@ -4466,6 +4703,28 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
             }
             std::sort(candidates.begin(), candidates.end(), candidateLess);
             const Candidate& candidate = candidates.front();
+            if (trace != nullptr) {
+                nlohmann::json ordered = nlohmann::json::array();
+                for (const Candidate& value : candidates) {
+                    ordered.push_back({
+                        {"source", value.sourceName},
+                        {"target", value.target},
+                        {"preserved", value.preserved},
+                        {"nameKeyTag", value.targets->nameKeyTag.value_or(0L)},
+                        {"sourceKindOrder", makerSourceKindOrder(value.targets->sourceKind)},
+                        {"rawMappedName", sourceMappedName(value)},
+                        {"operationPostfix", value.operationPostfix},
+                    });
+                }
+                trace->record({
+                    "maker.select",
+                    "selected",
+                    "name_key_order_winner",
+                    {{"target", target},
+                     {"orderedCandidates", std::move(ordered)},
+                     {"winner", candidate.sourceName}},
+                });
+            }
             std::vector<cad_core::app::StringId> relatedRefs;
             const std::string postfix = combinedPostfix(candidate, candidates, relatedRefs);
         if (!recordProducerMappedNameProvenance(
@@ -4487,8 +4746,39 @@ void applyMakerHistoryElementMap(NamedShape& namedShape,
                 postfix
             );
             namedShape.elementMap[candidate.sourceName] = target;
+            if (trace != nullptr) {
+                trace->record({
+                    "element_map.encode",
+                    "fallback",
+                    "producer_encoding_unavailable",
+                    {{"source", candidate.sourceName},
+                     {"target", target},
+                     {"postfix", postfix}},
+                });
+            }
+        }
+        else if (trace != nullptr) {
+            trace->record({
+                "element_map.encode",
+                "encoded",
+                "producer_mapped_name_written",
+                {{"source", candidate.sourceName},
+                 {"target", target},
+                 {"postfix", postfix},
+                 {"candidateCount", candidates.size()}},
+            });
         }
         }
+    }
+    if (trace != nullptr && !multiSourceTupleObserved) {
+        trace->record({
+            "maker.multi_source",
+            "not_applicable",
+            "no_target_has_multiple_effective_name_key_candidates",
+            {{"ledgerOwner", namedShape.owner},
+             {"candidateTargetCount", candidatesByTarget.size()},
+             {"tupleVariant", "none"}},
+        });
     }
 }
 
@@ -4500,6 +4790,9 @@ void applyMakerPreservedElementMap(
     bool preserveRawMappedName = false
 )
 {
+    app::ElementMapProducerTrace* trace = namedShape.stringHasher
+        ? namedShape.stringHasher->producerTrace()
+        : nullptr;
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
     // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap() calls `mapSubElement(shapes)`
     // before it asks Mapper::modified()/generated(). This phase has no maker operation postfix:
@@ -4531,9 +4824,30 @@ void applyMakerPreservedElementMap(
     for (const auto& [sourceNameRef, targetsRef] : orderedSources) {
         const std::string& sourceName = *sourceNameRef;
         const SourceTargets& targets = *targetsRef;
+        if (trace != nullptr) {
+            trace->record({
+                "toposhape.copy_map",
+                targets.preserved.empty() ? "miss" : "candidate",
+                targets.preserved.empty() ? "no_partner_or_ancestry_target"
+                                          : "ordered_find_all_preserve_candidate",
+                {{"source", sourceName},
+                 {"preservedTargets", targets.preserved},
+                 {"historyTargets", targets.history},
+                 {"partnerShape", targets.partnerShape},
+                 {"mapSubElementOrder", targets.mapSubElementOrder}},
+            });
+        }
         if (targets.preserved.size() == 1U) {
             const std::string& target = *targets.preserved.begin();
             if (namedShape.elements.count(target) == 0U) {
+                if (trace != nullptr) {
+                    trace->record({
+                        "maker.candidate.reject",
+                        "rejected",
+                        "preserved_target_not_in_output",
+                        {{"source", sourceName}, {"target", target}},
+                    });
+                }
                 continue;
             }
             bool recorded = false;
@@ -4583,9 +4897,28 @@ void applyMakerPreservedElementMap(
                 // guard observes the same terminal mapping and does not replace it.
                 namedShape.elementMap[sourceName] = target;
             }
+            if (trace != nullptr) {
+                trace->record({
+                    "toposhape.map_sub_element",
+                    recorded ? "written" : "fallback",
+                    recorded ? "preserved_entry_written" : "preserved_alias_fallback",
+                    {{"source", sourceName},
+                     {"target", target},
+                     {"directMapSubElementName", directMapSubElementName},
+                     {"preserveRawMappedName", preserveRawMappedName}},
+                });
+            }
             continue;
         }
         if (targets.preserved.size() > 1U) {
+            if (trace != nullptr) {
+                trace->record({
+                    "toposhape.map_sub_element",
+                    "split",
+                    "preserve_one_to_many",
+                    {{"source", sourceName}, {"targets", targets.preserved}},
+                });
+            }
             for (const std::string& target : targets.preserved) {
                 const auto element = namedShape.elements.find(target);
                 if (element == namedShape.elements.end()) {
@@ -4720,7 +5053,16 @@ void addDerivedMakerAlias(NamedShape& namedShape,
 
 void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerOperation)
 {
+    app::ElementMapProducerTrace* trace = namedShape.stringHasher
+        ? namedShape.stringHasher->producerTrace()
+        : nullptr;
+    const auto rejectUpper = [trace](std::string reason, nlohmann::json fields) {
+        if (trace != nullptr) {
+            trace->record({"maker.upper", "rejected", std::move(reason), std::move(fields)});
+        }
+    };
     if (producerOperation.empty()) {
+        rejectUpper("upper_producer_operation_missing", nlohmann::json::object());
         return;
     }
     const auto addReverse = [&](TopAbs_ShapeEnum parentKind, TopAbs_ShapeEnum childKind) {
@@ -4728,6 +5070,8 @@ void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerO
         {
             const MappedNameProvenance* source = nullptr;
             int ordinal = 1;
+            std::string parent;
+            std::string child;
         };
         // ShapeInfo in FreeCAD walks IndexedName 1..count, not the lexical key order of an
         // ElementMap.  Keep candidate collection in that topology order: `Edge10` must not be
@@ -4739,20 +5083,37 @@ void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerO
         for (int parentIndex = 1; parentIndex <= parents.Extent(); ++parentIndex) {
             const auto parentName = logicalElementForShape(namedShape, parents(parentIndex), parentKind);
             if (!parentName) {
+                rejectUpper(
+                    "upper_parent_has_no_indexed_name",
+                    {{"parentKind", subshapeKindName(parentKind)},
+                     {"parentIndex", parentIndex},
+                     {"childKind", subshapeKindName(childKind)}}
+                );
                 continue;
             }
             const auto parentIt = namedShape.elements.find(*parentName);
             if (parentIt == namedShape.elements.end()) {
+                rejectUpper(
+                    "upper_parent_missing_from_element_ledger",
+                    {{"parent", *parentName}, {"childKind", subshapeKindName(childKind)}}
+                );
                 continue;
             }
-            const auto& parent = parentIt->second;
             const MappedNameProvenance* source =
                 selectedSourceBackedMappedNameProvenance(namedShape, *parentName);
             if (source == nullptr) {
+                rejectUpper(
+                    "upper_parent_has_no_source_backed_name",
+                    {{"parent", *parentName}, {"childKind", subshapeKindName(childKind)}}
+                );
                 continue;
             }
             const auto parentShape = subshapeByName(namedShape, *parentName);
             if (!parentShape) {
+                rejectUpper(
+                    "upper_parent_shape_lookup_failed",
+                    {{"parent", *parentName}, {"childKind", subshapeKindName(childKind)}}
+                );
                 continue;
             }
             TopTools_IndexedMapOfShape children;
@@ -4760,11 +5121,30 @@ void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerO
             int unnamedChildOrdinal = 1;
             for (int index = 1; index <= children.Extent(); ++index) {
                 const auto childName = logicalElementForShape(namedShape, children(index), childKind);
-                if (!childName || hasSourceBackedMapForElement(namedShape, *childName)) {
+                if (!childName) {
+                    rejectUpper(
+                        "upper_child_has_no_indexed_name",
+                        {{"parent", *parentName},
+                         {"childKind", subshapeKindName(childKind)},
+                         {"childIndex", index}}
+                    );
+                    continue;
+                }
+                if (hasSourceBackedMapForElement(namedShape, *childName)) {
+                    rejectUpper(
+                        "upper_child_already_named",
+                        {{"parent", *parentName}, {"child", *childName}}
+                    );
                     continue;
                 }
                 const auto parsedChild = parseSubshapeName(*childName);
                 if (!parsedChild || parsedChild->kind != childKind) {
+                    rejectUpper(
+                        "upper_child_indexed_name_kind_mismatch",
+                        {{"parent", *parentName},
+                         {"child", *childName},
+                         {"expectedKind", subshapeKindName(childKind)}}
+                    );
                     continue;
                 }
                 // FreeCAD makeShapeWithElementMap() gathers every parent candidate first in
@@ -4775,10 +5155,27 @@ void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerO
                 if (childCandidates.first.empty()) {
                     childCandidates.first = *childName;
                 }
-                childCandidates.second.try_emplace(
+                const int candidateOrdinal = unnamedChildOrdinal++;
+                const auto [candidateIt, inserted] = childCandidates.second.try_emplace(
                     source->rawMappedName,
-                    Candidate {source, unnamedChildOrdinal++}
+                    Candidate {source, candidateOrdinal, *parentName, *childName}
                 );
+                if (!inserted && trace != nullptr) {
+                    producer_trace_detail::publishDuplicateCandidateSuppressed(
+                        *trace,
+                        "maker.upper",
+                        "upper_duplicate_candidate_suppressed",
+                        {source->rawMappedName,
+                         {candidateIt->second.parent,
+                          candidateIt->second.child,
+                          static_cast<std::size_t>(candidateIt->second.ordinal),
+                          candidateIt->second.source->elementIdRefs},
+                         {*parentName,
+                          *childName,
+                          static_cast<std::size_t>(candidateOrdinal),
+                          source->elementIdRefs}}
+                    );
+                }
             }
         }
         for (const auto& [childIndex, childCandidateEntry] : candidatesByChild) {
@@ -4786,10 +5183,22 @@ void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerO
             const std::string& childName = childCandidateEntry.first;
             const auto& candidates = childCandidateEntry.second;
             if (candidates.empty()) {
+                rejectUpper(
+                    "upper_child_has_no_candidates",
+                    {{"child", childName}, {"childIndex", childIndex}}
+                );
                 continue;
             }
             const Candidate& candidate = candidates.begin()->second;
             if (candidate.source == nullptr) {
+                if (trace != nullptr) {
+                    trace->record({
+                        "maker.upper",
+                        "rejected",
+                        "upper_candidate_has_no_source_provenance",
+                        {{"child", childName}},
+                    });
+                }
                 continue;
             }
             // FreeCAD: TopoShapeExpansion.cpp::makeShapeWithElementMap() writes
@@ -4802,6 +5211,31 @@ void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerO
                 postfix += std::to_string(candidate.ordinal);
             }
             postfix += normalizedProducerOperation(producerOperation);
+            if (trace != nullptr) {
+                nlohmann::json ordered = nlohmann::json::array();
+                for (const auto& [rawName, value] : candidates) {
+                    nlohmann::json refs = nlohmann::json::array();
+                    if (value.source != nullptr) {
+                        for (const app::StringId& ref : value.source->elementIdRefs) {
+                            refs.push_back({{"value", ref.value}, {"index", ref.index}});
+                        }
+                    }
+                    ordered.push_back({
+                        {"rawMappedName", rawName},
+                        {"ordinal", value.ordinal},
+                        {"entryLocalRefs", std::move(refs)},
+                    });
+                }
+                trace->record({
+                    "maker.upper",
+                    "selected",
+                    "upper_name_key_winner",
+                    {{"child", childName},
+                     {"orderedCandidates", std::move(ordered)},
+                     {"winner", candidate.source->rawMappedName},
+                     {"postfix", postfix}},
+                });
+            }
             addDerivedMakerAlias(namedShape, childName, *candidate.source, postfix);
         }
     };
@@ -4812,6 +5246,9 @@ void addMakerReverseAliases(NamedShape& namedShape, const std::string& producerO
 
 void addMakerForwardAliases(NamedShape& namedShape, const std::string& producerOperation)
 {
+    app::ElementMapProducerTrace* trace = namedShape.stringHasher
+        ? namedShape.stringHasher->producerTrace()
+        : nullptr;
     const auto addForward = [&](TopAbs_ShapeEnum parentKind, TopAbs_ShapeEnum childKind) {
         for (const auto& [parentName, parent] : namedShape.elements) {
             if (parent.subshape.kind != parentKind || hasSourceBackedMapForElement(namedShape, parentName)) {
@@ -4831,6 +5268,14 @@ void addMakerForwardAliases(NamedShape& namedShape, const std::string& producerO
                         ? selectedSourceBackedMappedNameProvenance(namedShape, *childName)
                         : nullptr;
                     if (child == nullptr) {
+                        if (trace != nullptr) {
+                            trace->record({
+                                "maker.lower",
+                                "rejected",
+                                "outer_wire_child_has_no_source_backed_name",
+                                {{"parent", parentName}},
+                            });
+                        }
                         childNames.clear();
                         break;
                     }
@@ -4845,6 +5290,14 @@ void addMakerForwardAliases(NamedShape& namedShape, const std::string& producerO
                         ? selectedSourceBackedMappedNameProvenance(namedShape, *childName)
                         : nullptr;
                     if (child == nullptr) {
+                        if (trace != nullptr) {
+                            trace->record({
+                                "maker.lower",
+                                "rejected",
+                                "lower_child_has_no_source_backed_name",
+                                {{"parent", parentName}},
+                            });
+                        }
                         childNames.clear();
                         break;
                     }
@@ -4869,6 +5322,28 @@ void addMakerForwardAliases(NamedShape& namedShape, const std::string& producerO
                         < 0;
                 }
             );
+            if (trace != nullptr) {
+                for (std::size_t index = 1; index < childNames.size(); ++index) {
+                    if (childNames[index - 1U]->rawMappedName
+                        != childNames[index]->rawMappedName) {
+                        continue;
+                    }
+                    producer_trace_detail::publishDuplicateCandidateSuppressed(
+                        *trace,
+                        "maker.lower",
+                        "lower_duplicate_candidate_suppressed",
+                        {childNames[index]->rawMappedName,
+                         {parentName,
+                          childNames[index - 1U]->currentElement,
+                          index - 1U,
+                          childNames[index - 1U]->elementIdRefs},
+                         {parentName,
+                          childNames[index]->currentElement,
+                          index,
+                          childNames[index]->elementIdRefs}}
+                    );
+                }
+            }
             childNames.erase(
                 std::unique(
                     childNames.begin(),
@@ -4893,6 +5368,28 @@ void addMakerForwardAliases(NamedShape& namedShape, const std::string& producerO
                 postfix += namedShape.stringHasher->getId(related).toString();
             }
             postfix += normalizedProducerOperation(producerOperation);
+            if (trace != nullptr) {
+                nlohmann::json ordered = nlohmann::json::array();
+                for (const MappedNameProvenance* child : childNames) {
+                    nlohmann::json refs = nlohmann::json::array();
+                    for (const app::StringId& ref : child->elementIdRefs) {
+                        refs.push_back({{"value", ref.value}, {"index", ref.index}});
+                    }
+                    ordered.push_back({
+                        {"rawMappedName", child->rawMappedName},
+                        {"entryLocalRefs", std::move(refs)},
+                    });
+                }
+                trace->record({
+                    "maker.lower",
+                    "selected",
+                    "lower_name_key_winner",
+                    {{"parent", parentName},
+                     {"orderedCandidates", std::move(ordered)},
+                     {"winner", childNames.front()->rawMappedName},
+                     {"postfix", postfix}},
+                });
+            }
             addDerivedMakerAlias(namedShape, parentName, *childNames.front(), postfix);
         }
     };
@@ -5879,6 +6376,32 @@ NamedShape namedShapeForSketchInternalShape(
                 std::move(internalEdgeMappedNames),
             });
         applyInternalShapeHistoryPublication(namedShape, publication);
+        if (namedShape.stringHasher && namedShape.stringHasher->producerTrace()) {
+            nlohmann::json publishedHistory = nlohmann::json::array();
+            for (const auto& event : publication.elementHistory) {
+                publishedHistory.push_back({
+                    {"relation", internalShapeHistoryRelationName(event.relation)},
+                    {"element", event.element},
+                    {"orderedSources", event.sources},
+                });
+            }
+            const std::string ledgerSnapshot = checkpointNamedShapeLedger(
+                namedShape,
+                owner + ".InternalShape",
+                "maker.final_checkpoint"
+            );
+            namedShape.stringHasher->producerTrace()->record({
+                "face_maker.lifecycle",
+                "handoff",
+                "published_internal_shape_history",
+                {{"elementMapAliases", publication.elementMapAliases},
+                 {"orderedElementHistory", publishedHistory},
+                 {"mapperHistory", mapperHistoryToJson(publication.mapperHistory)},
+                 {"elementHistoryStatus", publication.elementHistoryStatus},
+                 {"diagnostics", publication.diagnostics},
+                 {"ledgerSnapshot", ledgerSnapshot}},
+            });
+        }
     }
     else {
         consumeSketchInternalGeneratedFacesFromElementMap(namedShape, internalShape, internalMap);
@@ -6079,6 +6602,109 @@ NamedShape namedShapeForMakerHistory(
             }
         }
     }
+    app::ElementMapProducerTrace* trace = namedShape.stringHasher
+        ? namedShape.stringHasher->producerTrace()
+        : nullptr;
+    app::ElementMapProducerTrace::Scope makerScope;
+    std::string rawMapperSnapshot;
+    if (trace != nullptr) {
+        makerScope = trace->scope(
+            {"makeShapeWithElementMap",
+             owner,
+             0,
+             options.producerOperation.empty() ? "Part::TopoShape" : options.producerOperation,
+             {{"operation", options.producerOperation},
+              {"inputCount", sources.size()},
+              {"policy", "map"},
+              {"requiresFinalCheckpoint", true}}}
+        );
+        trace->record({
+            "maker.begin",
+            "begin",
+            "maker_history_consumption_started",
+            {{"owner", owner},
+             {"outputTag", options.producerTag.value_or(0L)},
+             {"operation", options.producerOperation},
+             {"inputCount", sources.size()},
+             {"outputInventory", inspectShapeInventory(resultShape)}},
+        });
+    }
+    const RawMakerHistoryCapture rawMakerHistory =
+        captureRawMakerHistory(sources, resultShape, maker);
+    if (trace != nullptr) {
+        try {
+            const nlohmann::json rawMapper = inspectRawMakerMapper(rawMakerHistory);
+            const std::string mapperIdentity = trace->firstSeenIdentity(
+                "mapper",
+                owner + ":" + options.producerOperation
+            );
+            rawMapperSnapshot = trace->checkpoint(
+                {"mapper",
+                 {{"identity", mapperIdentity}, {"raw", rawMapper}},
+                 {},
+                 {},
+                 {},
+                 "mapper.snapshot"}
+            );
+            trace->record({
+                "mapper.populate",
+                "captured",
+                "raw_mgd_before_naming_consumption",
+                {{"snapshot", rawMapperSnapshot}, {"sourceCount", sources.size()}},
+            });
+            std::set<std::string> insertedMapperRelations;
+            for (const auto& sourceRow : rawMapper.value("sources", nlohmann::json::array())) {
+                for (const char* relation : {"modified", "generated"}) {
+                    std::size_t targetOrdinal = 0;
+                    for (const auto& target : sourceRow.value(relation, nlohmann::json::array())) {
+                        const std::string indexed = target.value("indexed", "");
+                        const std::string relationKey =
+                            std::to_string(sourceRow.value("sourceOrdinal", 0U)) + "|"
+                            + sourceRow.value("sourceIndexed", "") + "|" + relation + "|"
+                            + indexed;
+                        const bool targetExists = !indexed.empty();
+                        const bool duplicate = targetExists
+                            && !insertedMapperRelations.insert(relationKey).second;
+                        trace->record({
+                            "mapper.insert",
+                            !targetExists ? "excluded" : duplicate ? "duplicate" : "inserted",
+                            !targetExists ? "mapper_target_absent_from_output_inventory"
+                                : duplicate ? "duplicate_raw_mapper_adjacency"
+                                            : "raw_mapper_adjacency_recorded",
+                            {{"sourceOrdinal", sourceRow.value("sourceOrdinal", 0U)},
+                             {"sourceOwner", sourceRow.value("sourceOwner", "")},
+                             {"sourceIndexed", sourceRow.value("sourceIndexed", "")},
+                             {"relation", relation},
+                             {"targetOrdinal", targetOrdinal++},
+                             {"target", target}},
+                        });
+                    }
+                }
+                if (sourceRow.value("deleted", false)) {
+                    trace->record({
+                        "mapper.insert",
+                        "inserted",
+                        "raw_mapper_deleted_adjacency_recorded",
+                        {{"sourceOrdinal", sourceRow.value("sourceOrdinal", 0U)},
+                         {"sourceOwner", sourceRow.value("sourceOwner", "")},
+                         {"sourceIndexed", sourceRow.value("sourceIndexed", "")},
+                         {"relation", "deleted"}},
+                    });
+                }
+            }
+        }
+        catch (const Standard_Failure& failure) {
+            trace->record({
+                "mapper.snapshot",
+                "exception",
+                "raw_mapper_inspection_failed",
+                {{"message", failure.GetMessageString() != nullptr
+                                  ? failure.GetMessageString()
+                                  : "Standard_Failure"}},
+            });
+            makerScope.exception("raw_mapper_inspection_failed");
+        }
+    }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
     // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap() starts with
     // mapSubElement(shapes).  It consumes an incoming ElementMap entry's own StringIDRefs only
@@ -6095,6 +6721,23 @@ NamedShape namedShapeForMakerHistory(
     // because ElementMap::setElementName() also fixes the producer StringIDRef relationship.
     for (const auto& source : sources) {
         const bool sourceIsPartner = namedShape.shape.IsPartner(source.shape);
+        if (trace != nullptr) {
+            trace->record({
+                "toposhape.can_map",
+                source.shape.IsNull() || resultShape.IsNull() ? "rejected" : "allowed",
+                source.shape.IsNull() ? "source_shape_null"
+                    : resultShape.IsNull() ? "result_shape_null"
+                                           : "shape_and_hasher_available",
+                {{"sourceOwner", source.owner},
+                 {"sourceTag", source.producerTag.value_or(
+                                      source.namedShape && source.namedShape->producerTag
+                                          ? *source.namedShape->producerTag
+                                          : 0L)},
+                 {"resultTag", options.producerTag.value_or(0L)},
+                 {"partnerShape", sourceIsPartner},
+                 {"sourceInventory", inspectShapeInventory(source.shape)}},
+            });
+        }
         for (const TopAbs_ShapeEnum kind : makerMappedKinds()) {
             const std::string prefix = prefixForKind(kind);
             if (prefix.empty()) {
@@ -6120,6 +6763,20 @@ NamedShape namedShapeForMakerHistory(
                         sourceName
                     );
                     collectSourceElementMap(namedShape, sourceName, sourceElement, kind, sourceTargets);
+                    if (trace != nullptr) {
+                        trace->record({
+                            "toposhape.map_sub_element",
+                            "candidate_collected",
+                            sourceIsPartner ? "partner_shape_preserve_candidate"
+                                            : "ancestry_map_candidate",
+                            {{"sourceOwner", source.owner},
+                             {"sourceIndexed", localElementName},
+                             {"sourceName", sourceName},
+                             {"shapeType", subshapeKindName(kind)},
+                             {"findAllOrdinal", mapSubElementOrder - 1U},
+                             {"partnerShape", sourceIsPartner}},
+                        });
+                    }
                     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
                     // TopoShapeExpansion.cpp::TopoShape::mapSubElement(const TopoShape&, ...)
                     // takes `copyElementMap(other, op)` only when the *receiver Shape* is a
@@ -6142,6 +6799,13 @@ NamedShape namedShapeForMakerHistory(
             options.rehashPreservedMappedName,
             options.preserveRawMappedName
         );
+        if (trace != nullptr) {
+            checkpointNamedShapeLedger(
+                namedShape,
+                owner + ":preserve",
+                "maker.preserve.checkpoint"
+            );
+        }
     }
 
     // Second phase: FreeCAD gathers OCCT Modified and Generated candidates only after the
@@ -6149,7 +6813,8 @@ NamedShape namedShapeForMakerHistory(
     // Face order and, for each kind, visits every incoming TopoShape. Do not invert these loops:
     // a two-input Boolean uses this order to decide NameKey winners and StringIDRef lifetimes.
     for (const TopAbs_ShapeEnum kind : makerMappedKinds()) {
-        for (const auto& source : sources) {
+        for (std::size_t sourceOrdinal = 0; sourceOrdinal < sources.size(); ++sourceOrdinal) {
+            const auto& source = sources[sourceOrdinal];
             const std::string prefix = prefixForKind(kind);
             if (prefix.empty()) {
                 continue;
@@ -6163,6 +6828,40 @@ NamedShape namedShapeForMakerHistory(
                          source, localElementName, SourceElementMapLookup::First
                      )) {
                     try {
+                        const RawMakerHistoryEntry* rawHistory = findRawMakerHistoryEntry(
+                            rawMakerHistory,
+                            sourceOrdinal,
+                            kind,
+                            index
+                        );
+                        if (rawHistory == nullptr || !rawHistory->modifiedError.empty()) {
+                            if (trace != nullptr) {
+                                trace->record({
+                                    "mapper.query",
+                                    "exception",
+                                    rawHistory == nullptr ? "raw_mapper_entry_missing"
+                                                          : "occt_mapper_query_failed",
+                                    {{"sourceOwner", source.owner},
+                                     {"sourceIndexed", localElementName},
+                                     {"message", rawHistory == nullptr
+                                                     ? "capture entry missing"
+                                                     : rawHistory->modifiedError}},
+                                });
+                            }
+                            continue;
+                        }
+                        if (trace != nullptr) {
+                            trace->record({
+                                "mapper.query",
+                                "query",
+                                "modified_before_generated",
+                                {{"sourceOwner", source.owner},
+                                 {"sourceIndexed", localElementName},
+                                 {"sourceName", sourceName},
+                                 {"shapeType", subshapeKindName(kind)},
+                                 {"mapperSnapshot", rawMapperSnapshot}},
+                            });
+                        }
                         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/
                         // TopoShapeExpansion.cpp::TopoShape::makeShapeWithElementMap() consumes
                         // Mapper::modified() before Mapper::generated().  When OCCT reports the
@@ -6171,19 +6870,42 @@ NamedShape namedShapeForMakerHistory(
                         applyHistoryList(
                             namedShape,
                             sourceName,
-                            maker.Modified(sourceElement),
+                            rawHistory->modified,
                             ElementHistoryKind::Modified,
                             sourceTargets
                         );
+                        if (!rawHistory->generatedError.empty()) {
+                            if (trace != nullptr) {
+                                trace->record({
+                                    "mapper.query",
+                                    "exception",
+                                    "occt_mapper_query_failed",
+                                    {{"sourceOwner", source.owner},
+                                     {"sourceIndexed", localElementName},
+                                     {"relation", "generated"},
+                                     {"message", rawHistory->generatedError}},
+                                });
+                            }
+                            continue;
+                        }
                         applyHistoryList(
                             namedShape,
                             sourceName,
-                            maker.Generated(sourceElement),
+                            rawHistory->generated,
                             ElementHistoryKind::Generated,
                             sourceTargets
                         );
                     }
                     catch (const Standard_Failure&) {
+                        if (trace != nullptr) {
+                            trace->record({
+                                "mapper.query",
+                                "exception",
+                                "occt_mapper_query_failed",
+                                {{"sourceOwner", source.owner},
+                                 {"sourceIndexed", localElementName}},
+                            });
+                        }
                         continue;
                     }
                 }
@@ -6206,8 +6928,38 @@ NamedShape namedShapeForMakerHistory(
             options.recordUnmappedSourceDeletions,
             options.promoteBareSourceIdForGenerated
         );
+        if (trace != nullptr) {
+            trace->record({
+                "maker.upper",
+                "begin",
+                "upper_alias_pass",
+                {{"traversal", {"Face", "Edge", "Vertex"}}},
+            });
+        }
         addMakerReverseAliases(namedShape, producerOperation);
+        if (trace != nullptr) {
+            trace->record({
+                "maker.upper",
+                "complete",
+                "upper_alias_pass_complete",
+                {{"ledgerEntries", namedShape.elementMapEntries.size()}},
+            });
+            trace->record({
+                "maker.lower",
+                "begin",
+                "lower_alias_pass",
+                {{"traversal", {"Vertex", "Edge", "Face"}}},
+            });
+        }
         addMakerForwardAliases(namedShape, producerOperation);
+        if (trace != nullptr) {
+            trace->record({
+                "maker.lower",
+                "complete",
+                "lower_alias_pass_complete",
+                {{"ledgerEntries", namedShape.elementMapEntries.size()}},
+            });
+        }
     }
     if (options.addProducerLocalAliases) {
         addUnambiguousProducerLocalHistoryAliases(
@@ -6219,6 +6971,27 @@ NamedShape namedShapeForMakerHistory(
     propagateNestedSourceHistory(namedShape, sources);
     addMergeHistory(namedShape);
     appendPartCanonicalCollisionHistory(namedShape, sources);
+
+    if (trace != nullptr) {
+        const std::string ledgerSnapshot = checkpointNamedShapeLedger(
+            namedShape,
+            owner + ":final",
+            "maker.final_checkpoint"
+        );
+        trace->record({
+            "maker.end",
+            "success",
+            "maker_history_consumption_finished",
+            {{"owner", owner},
+             {"operation", producerOperation},
+             {"mapperSnapshot", rawMapperSnapshot},
+             {"ledgerSnapshot", ledgerSnapshot},
+             {"unnamedCount",
+              inspectNamedShapeLedger(namedShape, owner + ":final")
+                  .value("unnamedIndexedNames", nlohmann::json::array())
+                  .size()}},
+        });
+    }
 
     return namedShape;
 }
@@ -6409,7 +7182,7 @@ NamedShape namedShapeForRefineHistory(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const NamedShapeSource& source,
-    part::BRepBuilderAPI_RefineModel& maker
+    const RawMakerHistoryCapture& rawMakerHistory
 )
 {
     // FreeCAD: /Users/admin/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -6474,12 +7247,21 @@ NamedShape namedShapeForRefineHistory(
             const std::string localElementName = prefix + std::to_string(index);
             for (const std::string& sourceName : sourceElementNames(
                      source, localElementName, SourceElementMapLookup::First
-                 )) {
+                )) {
                 try {
+                    const RawMakerHistoryEntry* rawHistory = findRawMakerHistoryEntry(
+                        rawMakerHistory,
+                        0U,
+                        kind,
+                        index
+                    );
+                    if (rawHistory == nullptr || !rawHistory->modifiedError.empty()) {
+                        continue;
+                    }
                     applyHistoryList(
                         namedShape,
                         sourceName,
-                        maker.Modified(sourceElement),
+                        rawHistory->modified,
                         ElementHistoryKind::Modified,
                         sourceTargets
                     );
@@ -6489,7 +7271,8 @@ NamedShape namedShapeForRefineHistory(
                     // TopoShapeExpansion.cpp::makeElementRefine() routes that mapper into
                     // makeShapeWithElementMap(), so refined-away source elements remain terminal
                     // deleted history for later updateElementReference().
-                    if (maker.IsDeleted(sourceElement) && sourceTargets[sourceName].preserved.empty()
+                    if (rawHistory->deletedError.empty() && rawHistory->deleted
+                        && sourceTargets[sourceName].preserved.empty()
                         && sourceTargets[sourceName].history.empty()) {
                         addTerminalHistory(
                             namedShape,
@@ -6723,6 +7506,55 @@ NamedShape namedShapeForPropertyShapeValue(
     NamedShape stored = source;
     stored.owner = owner;
     stored.shape = shape;
+    app::ElementMapProducerTrace* trace = stored.stringHasher
+        ? stored.stringHasher->producerTrace()
+        : nullptr;
+    app::ElementMapProducerTrace::Scope propertyScope;
+    std::string beforeSnapshot;
+    std::string beforeIdentity;
+    const bool retagging = source.producerTag && *source.producerTag != 0L
+        && *source.producerTag != propertyTag;
+    if (trace != nullptr) {
+        propertyScope = trace->scope(
+            {"PropertyPartShape::setValue",
+             owner,
+             propertyTag,
+             "Part::PropertyPartShape",
+             {{"sourceOwner", source.owner},
+              {"sourceTag", source.producerTag.value_or(0L)},
+              {"propertyTag", propertyTag},
+              {"requiresFinalCheckpoint", true}}}
+        );
+        const std::string sourceIdentity = trace->firstSeenIdentity(
+            "ledger",
+            source.owner + ":producer",
+            "create"
+        );
+        beforeIdentity = trace->firstSeenIdentity(
+            "ledger",
+            owner + ":property-before",
+            "copy",
+            sourceIdentity
+        );
+        beforeSnapshot = checkpointNamedShapeLedger(
+            stored,
+            owner + ":property-before",
+            "property_shape.before_checkpoint",
+            "copy",
+            sourceIdentity
+        );
+        trace->record({
+            "property_shape.set_value",
+            "begin",
+            "property_shape_handoff_started",
+            {{"sourceOwner", source.owner},
+             {"inputTag", source.producerTag.value_or(0L)},
+             {"outputTag", propertyTag},
+             {"elementMapSize", source.elementMapEntries.size()}},
+            beforeSnapshot,
+            beforeSnapshot,
+        });
+    }
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PropertyTopoShape.cpp
     // ::PropertyPartShape::setValue(), when `_Shape.Tag && tag != _Shape.Tag`, calls
     // `reTagElementMap(tag, hasher)`. TopoShapeExpansion.cpp::TopoShape::reTagElementMap()
@@ -6730,8 +7562,7 @@ NamedShape namedShapeForPropertyShapeValue(
     // MappedChildElements range per Vertex/Edge/Face kind. This is a property copy, not another
     // maker pass: raw MappedName values and their entry-local StringIDRefs remain owned by the
     // incoming Shape and are reached through the new child ranges.
-    if (source.producerTag && *source.producerTag != 0L
-        && *source.producerTag != propertyTag) {
+    if (retagging) {
         // reTagElementMap() starts with resetElementMap(), then copyElementMap(tmp). The
         // receiver must not retain direct raw entries beside its child ranges: ElementMap::findAll
         // would choose those direct refs and skip the child postfix/tag lifecycle.
@@ -6739,6 +7570,30 @@ NamedShape namedShapeForPropertyShapeValue(
         stored.mappedNameProvenance.clear();
         stored.elementMapEntries.clear();
         stored.childElementMaps.clear();
+        if (trace != nullptr) {
+            trace->record({
+                "element_map.reset",
+                "reset",
+                "property_retag_resets_direct_entries",
+                {{"sourceTag", *source.producerTag},
+                 {"propertyTag", propertyTag},
+                 {"removedEntryGroups", source.elementMapEntries.size()},
+                 {"removedChildMaps", source.childElementMaps.size()}},
+            });
+            trace->record({
+                "element_map.erase",
+                "erased",
+                "retag_reset_removed_previous_map",
+                {{"removedEntryGroups", source.elementMapEntries.size()},
+                 {"removedChildMaps", source.childElementMaps.size()}},
+            });
+            trace->record({
+                "property_shape.retag",
+                "retag",
+                "source_tag_differs_from_property_tag",
+                {{"sourceTag", *source.producerTag}, {"propertyTag", propertyTag}},
+            });
+        }
         for (const TopAbs_ShapeEnum kind : childMapKinds()) {
             const int sourceCount = subshapeCount(source.shape, kind);
             const int targetCount = subshapeCount(shape, kind);
@@ -6783,12 +7638,66 @@ NamedShape namedShapeForPropertyShapeValue(
                 childMap.encodedChildMapKey = encodedChildMapKey(childMap);
             }
             stored.childElementMaps.push_back(std::move(childMap));
+            if (trace != nullptr) {
+                const NamedShapeChildMap& published = stored.childElementMaps.back();
+                trace->record({
+                    "child_map",
+                    "write",
+                    published.encodedChildMapKey.empty() ? "direct_typed_range"
+                                                         : "encoded_typed_range",
+                    {{"sourceOwner", published.sourceOwner},
+                     {"kind", published.kind},
+                     {"indexedName", published.indexedName},
+                     {"offset", published.offset},
+                     {"count", published.count},
+                     {"targetStart", published.targetStart},
+                     {"targetEnd", published.targetEnd},
+                     {"tag", published.tag},
+                     {"postfix", published.postfix},
+                     {"encodedChildMapKey", published.encodedChildMapKey}},
+                });
+            }
         }
         addDistinctString(stored.elementHistoryStatus, "element_map_property:retag_copy");
     }
     // The `else` arm in setValue assigns only `_Shape.Tag = obj->getID()`. In particular, a
     // Tag==0 maker result must not be needlessly copied or rehashed while it is first persisted.
     stored.producerTag = propertyTag;
+    if (trace != nullptr) {
+        const std::string afterSnapshot = checkpointNamedShapeLedger(
+            stored,
+            owner + ":property-after",
+            "property_shape.after_checkpoint",
+            retagging ? "reset" : "share",
+            beforeIdentity
+        );
+        trace->record({
+            "property_shape.set_value",
+            "success",
+            source.producerTag && *source.producerTag != 0L && *source.producerTag != propertyTag
+                ? "retag_child_ranges_published"
+                : "tag_assigned_without_retag",
+            {{"inputTag", source.producerTag.value_or(0L)},
+             {"outputTag", propertyTag},
+             {"childMapCount", stored.childElementMaps.size()}},
+            beforeSnapshot,
+            afterSnapshot,
+        });
+        trace->record({
+            "toposhape.set_shape",
+            "assigned",
+            "property_shape_value_installed",
+            {{"shapeRole", owner + ".Shape"},
+             {"tag", propertyTag},
+             {"resetElementMap",
+              source.producerTag && *source.producerTag != 0L
+                  && *source.producerTag != propertyTag},
+             {"beforeSnapshot", beforeSnapshot},
+             {"afterSnapshot", afterSnapshot}},
+            beforeSnapshot,
+            afterSnapshot,
+        });
+    }
     return stored;
 }
 
@@ -7264,11 +8173,68 @@ NamedShapeBuild makeElementBooleanFromSources(
     std::optional<long> producerTag
 )
 {
+    app::ElementMapProducerTrace* trace = nullptr;
+    long traceTag = producerTag.value_or(0L);
+    for (const NamedShapeSource& source : sources) {
+        if (source.namedShape != nullptr && source.namedShape->stringHasher
+            && source.namedShape->stringHasher->producerTrace() != nullptr) {
+            trace = source.namedShape->stringHasher->producerTrace();
+            break;
+        }
+    }
+    app::ElementMapProducerTrace::Scope booleanScope;
+    if (trace != nullptr) {
+        nlohmann::json orderedInputs = nlohmann::json::array();
+        for (std::size_t index = 0; index < sources.size(); ++index) {
+            orderedInputs.push_back({
+                {"ordinal", index},
+                {"owner", sources[index].owner},
+                {"role", index == 0U ? "argument" : "tool"},
+                {"producerTag", sources[index].producerTag.value_or(
+                                    sources[index].namedShape
+                                            && sources[index].namedShape->producerTag
+                                        ? *sources[index].namedShape->producerTag
+                                        : 0L)},
+            });
+        }
+        booleanScope = trace->scope(
+            {"makeElementBoolean",
+             owner,
+             0,
+             "Part::Boolean",
+             {{"operation", booleanOperationName(operation)},
+              {"outputTag", traceTag},
+              {"requiresFinalCheckpoint", true}}}
+        );
+        trace->record({
+            "boolean.lifecycle",
+            "begin",
+            "boolean_inputs_frozen",
+            {{"operation", booleanOperationName(operation)},
+             {"orderedInputs", std::move(orderedInputs)},
+             {"fuzzy", tolerance ? nlohmann::json(*tolerance) : nlohmann::json("auto")},
+             {"runParallel", true},
+             {"nonDestructive", true}},
+        });
+    }
     if (sources.empty()) {
+        if (trace != nullptr) {
+            trace->record({"boolean.lifecycle", "rejected", "no_sources", nlohmann::json::object()});
+            booleanScope.abort("no_sources");
+        }
         return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null shape"};
     }
     for (const auto& source : sources) {
         if (source.shape.IsNull()) {
+            if (trace != nullptr) {
+                trace->record({
+                    "boolean.lifecycle",
+                    "rejected",
+                    "null_input_shape",
+                    {{"sourceOwner", source.owner}},
+                });
+                booleanScope.abort("null_input_shape");
+            }
             return NamedShapeBuild {
                 TopoDS_Shape {},
                 std::nullopt,
@@ -7282,6 +8248,14 @@ NamedShapeBuild makeElementBooleanFromSources(
             : indexedNamedShapeForObject(owner, sources.front().shape);
         namedShape.owner = owner;
         namedShape.shape = sources.front().shape;
+        if (trace != nullptr) {
+            trace->record({
+                "boolean.lifecycle",
+                "fallback",
+                "single_source_preserved",
+                {{"sourceOwner", sources.front().owner}},
+            });
+        }
         return NamedShapeBuild {sources.front().shape, std::move(namedShape), {}};
     }
 
@@ -7363,6 +8337,15 @@ NamedShapeBuild makeElementBooleanFromSources(
     }
     maker->Build();
     if (!maker->IsDone()) {
+        if (trace != nullptr) {
+            trace->record({
+                "boolean.lifecycle",
+                "failed",
+                "occt_boolean_build_failed",
+                {{"operation", booleanOperationName(operation)}, {"partialWrite", false}},
+            });
+            booleanScope.abort("occt_boolean_build_failed");
+        }
         return NamedShapeBuild {
             TopoDS_Shape {},
             std::nullopt,
@@ -7392,11 +8375,29 @@ NamedShapeBuild makeElementBooleanFromSources(
     // Preserve that explicit Tag=0 in the request-local ledger so a subsequent Refine compares
     // all aliases through the same NameKey Tag; terminal mapped-name tags remain separate.
     options.producerTag = producerTag ? producerTag : std::optional<long> {0L};
-    return NamedShapeBuild {
+    NamedShape mapped = namedShapeForMakerHistory(
+        owner,
         resultShape,
-        namedShapeForMakerHistory(owner, resultShape, booleanSources, *maker, std::move(options)),
-        {}
-    };
+        booleanSources,
+        *maker,
+        std::move(options)
+    );
+    if (trace != nullptr) {
+        const std::string snapshot = checkpointNamedShapeLedger(
+            mapped,
+            owner + ":boolean-final",
+            "maker.final_checkpoint"
+        );
+        trace->record({
+            "boolean.lifecycle",
+            "success",
+            "boolean_maker_handoff_complete",
+            {{"operation", booleanOperationName(operation)},
+             {"outputInventory", inspectShapeInventory(resultShape)},
+             {"ledgerSnapshot", snapshot}},
+        });
+    }
+    return NamedShapeBuild {resultShape, std::move(mapped), {}};
 }
 
 NamedShapeBuild makeElementXorFromSources(
@@ -7953,7 +8954,37 @@ NamedShapeBuild makeElementGeneralFuseFromSources(
 
 NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const NamedShapeSource& source)
 {
+    app::ElementMapProducerTrace* trace = source.namedShape != nullptr
+            && source.namedShape->stringHasher
+        ? source.namedShape->stringHasher->producerTrace()
+        : nullptr;
+    app::ElementMapProducerTrace::Scope refineScope;
+    if (trace != nullptr) {
+        refineScope = trace->scope(
+            {"makeElementRefine",
+             owner,
+             0,
+             "Part::Refine",
+             {{"sourceOwner", source.owner},
+              {"outputTag",
+               source.producerTag.value_or(source.namedShape && source.namedShape->producerTag
+                                               ? *source.namedShape->producerTag
+                                               : 0L)},
+              {"requiresFinalCheckpoint", true}}}
+        );
+        trace->record({
+            "refine.lifecycle",
+            "begin",
+            "refine_input_frozen",
+            {{"sourceOwner", source.owner},
+             {"inputInventory", inspectShapeInventory(source.shape)}},
+        });
+    }
     if (source.shape.IsNull()) {
+        if (trace != nullptr) {
+            trace->record({"refine.lifecycle", "rejected", "null_input_shape", nlohmann::json::object()});
+            refineScope.abort("null_input_shape");
+        }
         return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Null input shape for refine operation"};
     }
 
@@ -7961,15 +8992,72 @@ NamedShapeBuild makeElementRefineFromSource(const std::string& owner, const Name
         part::BRepBuilderAPI_RefineModel maker(source.shape);
         const TopoDS_Shape resultShape = maker.Shape();
         if (resultShape.IsNull()) {
+            if (trace != nullptr) {
+                trace->record({
+                    "refine.lifecycle",
+                    "failed",
+                    "refine_result_null",
+                    {{"partialWrite", false}},
+                });
+                refineScope.abort("refine_result_null");
+            }
             return NamedShapeBuild {TopoDS_Shape {}, std::nullopt, "Refine produced a null shape"};
         }
-        return NamedShapeBuild {
+        const RawMakerHistoryCapture rawMakerHistory =
+            captureRawMakerHistory({source}, resultShape, maker);
+        if (trace != nullptr) {
+            const nlohmann::json rawMapper = inspectRawMakerMapper(rawMakerHistory);
+            const std::string mapperIdentity = trace->firstSeenIdentity("mapper", owner + ":RFI");
+            const std::string mapperSnapshot = trace->checkpoint(
+                {"mapper",
+                 {{"identity", mapperIdentity}, {"raw", rawMapper}},
+                 {},
+                 {},
+                 {},
+                 "mapper.snapshot"}
+            );
+            trace->record({
+                "mapper.populate",
+                "captured",
+                "refine_raw_mgd_before_consumption",
+                {{"snapshot", mapperSnapshot}},
+            });
+        }
+        NamedShape mapped = namedShapeForRefineHistory(
+            owner,
             resultShape,
-            namedShapeForRefineHistory(owner, resultShape, source, maker),
-            {},
-        };
+            source,
+            rawMakerHistory
+        );
+        if (trace != nullptr) {
+            const std::string snapshot = checkpointNamedShapeLedger(
+                mapped,
+                owner + ":refine-final",
+                "maker.final_checkpoint"
+            );
+            trace->record({
+                "refine.lifecycle",
+                "success",
+                "refine_history_handoff_complete",
+                {{"outputInventory", inspectShapeInventory(resultShape)},
+                 {"ledgerSnapshot", snapshot}},
+            });
+        }
+        return NamedShapeBuild {resultShape, std::move(mapped), {}};
     }
     catch (const Standard_Failure& failure) {
+        if (trace != nullptr) {
+            trace->record({
+                "refine.lifecycle",
+                "exception",
+                "occt_refine_failure",
+                {{"message", failure.GetMessageString() != nullptr
+                                  ? failure.GetMessageString()
+                                  : "Refine operation failed"},
+                 {"partialWrite", false}},
+            });
+            refineScope.exception("occt_refine_failure");
+        }
         return NamedShapeBuild {
             TopoDS_Shape {},
             std::nullopt,
@@ -8028,6 +9116,51 @@ NamedShape namedShapeForElementMapPolicyDrop(
 )
 {
     NamedShape namedShape = indexedNamedShapeForObject(owner, resultShape);
+    for (const NamedShapeSource& source : sources) {
+        if (source.namedShape != nullptr && source.namedShape->stringHasher) {
+            namedShape.stringHasher = source.namedShape->stringHasher;
+            break;
+        }
+    }
+    app::ElementMapProducerTrace* trace = namedShape.stringHasher
+        ? namedShape.stringHasher->producerTrace()
+        : nullptr;
+    if (trace != nullptr) {
+        std::string relatedIdentity;
+        if (!sources.empty()) {
+            relatedIdentity = trace->firstSeenIdentity(
+                "elementMap",
+                sources.front().owner + ":producer",
+                "create"
+            );
+        }
+        trace->firstSeenIdentity(
+            "elementMap",
+            owner + ":drop",
+            "drop",
+            relatedIdentity
+        );
+        trace->firstSeenIdentity(
+            "ledger",
+            owner + ":drop",
+            "drop",
+            relatedIdentity
+        );
+        trace->firstSeenIdentity(
+            "shapeRole",
+            owner + ":drop",
+            "drop",
+            relatedIdentity
+        );
+        trace->record({
+            "element_map.drop",
+            "drop",
+            "element_map_policy_drop",
+            {{"owner", owner},
+             {"sourceCount", sources.size()},
+             {"outputInventory", inspectShapeInventory(resultShape)}},
+        });
+    }
 
     for (const NamedShapeSource& source : sources) {
         if (source.shape.IsNull()) {
@@ -8063,6 +9196,13 @@ NamedShape namedShapeForElementMapPolicyDrop(
     }
 
     addDistinctString(namedShape.elementHistoryStatus, "element_map_policy:drop");
+    if (trace != nullptr) {
+        checkpointNamedShapeLedger(
+            namedShape,
+            owner + ":drop",
+            "maker.final_checkpoint"
+        );
+    }
     return namedShape;
 }
 

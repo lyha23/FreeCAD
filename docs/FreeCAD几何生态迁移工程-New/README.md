@@ -4,10 +4,11 @@
 
 ## 当前基线
 
-- live baseline：2026-07-12，`/Users/li/Chili3DProject/FreeCAD` HEAD `697acf77cc`。
+- live baseline：2026-07-12，`/Users/li/Chili3DProject/FreeCAD` HEAD `05f14b6b0c`。
 - 当前 worktree 已有大量用户改动，包括 `cad-core` 的 StringHasher、ElementMap、TopoShape、Sketch、PartDesign 与 C4M6 产物；本工程实施时必须先重新记录 live status，只复用和增量修改，不得回退或覆盖。
-- `cad-core` 已有 request-local `StringHasher`、`NamedShape`、entry-local refs、child maps 与 `MapperHistory` 等业务账本，但没有完整 producer trace recorder、默认 CAD Core trace sidecar 或 first-divergence comparator。
+- FGM-N1 已完成 request-local recorder、默认 CAD Core trace sidecar、required slices 与共享闭包 validator；FGM-N2 comparator/CLI/report/parity 观察性集成已通过 focused 和 `/tmp` 代表验证。
 - native corpus 当前有 480 对 public expected/ledger。方案编写期间 live worktree 新出现了全部 480 个 native `*.freecad.producer-trace.json`，目前均未被 Git 跟踪；这说明三侧批量采集已经发生，但在逐文件 closure/确定性验证和正式纳入前，不能直接宣称“480 个 producer 路径已权威闭包”。
+- N2 尚未标记 `【已实现】`：默认 fixture tree 没有 CAD Core actual trace；现有 480 个 native trace 虽都有 request/response binding，但没有可重算的 canonical snapshot hash，且 native mapper/child snapshot 尚未发布 raw M/G/D 与 parent inventory/nested linkage。8 个代表 family 已用 `/tmp` 新采的 canonical-bound native trace 验证；probe contract 与正式 artifact 更新需另行授权。
 
 ## 权威顺序
 

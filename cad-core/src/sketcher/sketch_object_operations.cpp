@@ -938,12 +938,16 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
     };
 }
 
-ProfileFaceBuild buildOptionalProfileFace(const TopoDS_Shape& rawShape)
+ProfileFaceBuild buildOptionalProfileFace(
+    const TopoDS_Shape& rawShape,
+    app::ElementMapProducerTrace* producerTrace
+)
 {
     if (rawShape.IsNull()) {
         return {};
     }
     SketchInternalBuildInput input;
+    input.producerTrace = producerTrace;
     TopTools_IndexedMapOfShape rawEdges;
     TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
     input.sourceEdges.reserve(static_cast<std::size_t>(rawEdges.Extent()));

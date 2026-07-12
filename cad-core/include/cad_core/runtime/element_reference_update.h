@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cad_core/app/document.h"
+#include "cad_core/app/element_map_producer_trace.h"
 #include "cad_core/runtime/diagnostics.h"
 #include "cad_core/runtime/reference_lifecycle.h"
 
@@ -39,14 +40,16 @@ void appendElementReferenceUpdate(const app::DocumentObject& object,
                                   const app::Link& link,
                                   const std::vector<std::string>& subnames,
                                   const nlohmann::json& referenceShadows,
-                                  nlohmann::json& updates);
+                                  nlohmann::json& updates,
+                                  app::ElementMapProducerTrace* producerTrace = nullptr);
 
 void appendElementReferenceSubListUpdate(const app::DocumentObject& object,
                                          const std::string& propertyName,
                                          const app::PropertyValue& propertyValue,
                                          const std::map<std::size_t, nlohmann::json>& referenceShadowUpdates,
                                          const std::map<std::size_t, std::vector<std::string>>& subnameUpdates,
-                                         nlohmann::json& updates);
+                                         nlohmann::json& updates,
+                                         app::ElementMapProducerTrace* producerTrace = nullptr);
 
 void appendReferenceMetadataUpdates(const app::DocumentObject& object,
                                     const ReferenceLifecycleView& lifecycleView,

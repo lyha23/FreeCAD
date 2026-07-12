@@ -1,5 +1,6 @@
 #include "cad_core/sketcher/sketch_internal_builder.h"
 
+#include "cad_core/app/element_map_producer_trace.h"
 #include "cad_core/part/face_maker.h"
 #include "cad_core/part/wire_joiner.h"
 
@@ -31,6 +32,24 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     SketchInternalBuildResult result;
     if (input.faceWires.empty()) {
         if (!input.openWires.empty() || !input.openEdges.empty()) {
+            if (input.producerTrace != nullptr) {
+                input.producerTrace->record({
+                    "face_maker.lifecycle",
+                    "rejected",
+                    "no_closed_face_wire",
+                    {{"closedWireCount", 0},
+                     {"openWireCount", input.openWires.size()},
+                     {"openEdgeCount", input.openEdges.size()}},
+                });
+                input.producerTrace->record({
+                    "wire_joiner.lifecycle",
+                    "skipped",
+                    "face_maker_null_internal_shape",
+                    {{"openWireCount", input.openWires.size()},
+                     {"openEdgeCount", input.openEdges.size()},
+                     {"result", "InternalShape.empty"}},
+                });
+            }
             // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
             // ::SketchObject::buildInternals(), catches "Part::FaceMaker: result shape is null."
             // for open-only sketches and returns an empty TopoShape as InternalShape.
@@ -40,8 +59,21 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
     }
 
     const part::FaceMakerBuildFaceResult faceResult =
-        part::makeFacesFromClosedWiresAndSplitEdgesDetailed(input.faceWires, input.openEdges);
+        part::makeFacesFromClosedWiresAndSplitEdgesDetailed(
+            input.faceWires,
+            input.openEdges,
+            input.producerTrace
+        );
     if (!faceResult.shape || faceResult.shape->IsNull()) {
+        if (input.producerTrace != nullptr) {
+            input.producerTrace->record({
+                "wire_joiner.lifecycle",
+                "skipped",
+                "face_maker_failed_before_open_wire_handoff",
+                {{"openWireCount", input.openWires.size()},
+                 {"openEdgeCount", input.openEdges.size()}},
+            });
+        }
         // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
         // ::SketchObject::buildInternals(), catches FaceMakerBuildFace failures and leaves
         // InternalShape as an empty TopoShape while the raw Sketch Shape remains available.
@@ -67,6 +99,7 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         // ::SketchObject::buildInternals(), "Append open wires (edges not part of any closed face)"
         // after FaceMakerBuildFace. The profile face used by Pad remains the bounded face result.
         part::WireJoiner joiner;
+        joiner.attachProducerTrace(input.producerTrace);
         joiner.setTightBound(true);
         joiner.setMergeEdges(true);
         for (const TopoDS_Edge& edge : input.sourceEdges) {

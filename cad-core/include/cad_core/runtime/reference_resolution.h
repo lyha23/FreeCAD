@@ -24,6 +24,7 @@ struct ReferenceResolutionView
     const std::map<std::string, nlohmann::json>& objects;
     const std::map<std::string, const app::DocumentObject*>& documentObjects;
     std::map<std::string, part::NamedShape>& namedShapes;
+    app::ElementMapProducerTrace* producerTrace = nullptr;
 };
 
 enum class ReferenceResolutionStatus

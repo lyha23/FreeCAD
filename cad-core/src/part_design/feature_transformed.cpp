@@ -897,6 +897,16 @@ std::optional<TransformSource> transformedCopy(
             transformed.Move(locationTransform);
         }
         part::NamedShape namedShape = transformedCopyNamedShape(owner, transformed, source, postfix);
+        context.producerTrace->record({
+            "partdesign.pattern",
+            "instance",
+            "transform_copy_produced",
+            {{"source", source.owner},
+             {"instanceOwner", owner},
+             {"postfix", postfix},
+             {"copyMode", requiresCopy ? "deep_copy" : "location_move"},
+             {"scaleFactor", transform.ScaleFactor()}},
+        });
         return TransformSource {owner, transformed, namedShape};
     }
     catch (Standard_Failure& failure) {
@@ -928,6 +938,15 @@ std::optional<TransformSource> fuseOrCutTransformedSource(
     const std::optional<long> supportTag = support.namedShape
         ? support.namedShape->producerTag
         : std::optional<long> {};
+    context.producerTrace->record({
+        "partdesign.pattern",
+        "boolean",
+        operation == part::BooleanOperation::Fuse ? "additive_instance" : "subtractive_instance",
+        {{"argument", support.owner},
+         {"tool", tool.owner},
+         {"operation", operation == part::BooleanOperation::Fuse ? "FUS" : "CUT"},
+         {"property", property}},
+    });
     const auto build = part::makeElementBooleanFromSources(
         object.name,
         {namedShapeSource(support), namedShapeSource(tool)},
@@ -965,6 +984,20 @@ std::optional<TransformApplication> applyFeatureTransforms(
     if (!support) {
         return std::nullopt;
     }
+
+    nlohmann::json orderedOriginals = nlohmann::json::array();
+    for (const auto& original : originals) {
+        orderedOriginals.push_back(original.object);
+    }
+    context.producerTrace->record({
+        "partdesign.pattern",
+        "begin",
+        "features_mode_application",
+        {{"mode", "Features"},
+         {"originals", orderedOriginals},
+         {"transformCount", copyTransforms.size()},
+         {"support", support->owner}},
+    });
 
     TransformSource current = *support;
     std::vector<std::string> originalNames;
@@ -1010,6 +1043,15 @@ std::optional<TransformApplication> applyFeatureTransforms(
             );
             return std::nullopt;
         }
+        context.producerTrace->record({
+            "partdesign.pattern",
+            "original",
+            "ordered_original_consumed",
+            {{"ordinal", originalNames.size()},
+             {"original", original.object},
+             {"hasAddShape", static_cast<bool>(addSubIt->second.addShape)},
+             {"hasSubShape", static_cast<bool>(addSubIt->second.subShape)}},
+        });
 
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
         // FeatureTransformed.cpp::Transformed::execute() first applies the leading
@@ -1104,6 +1146,12 @@ std::optional<TransformApplication> applyFeatureTransforms(
             {namedShapeSource(current)}
         );
     }
+    context.producerTrace->record({
+        "partdesign.pattern",
+        "end",
+        "features_mode_application_complete",
+        {{"originals", originalNames}, {"resultOwner", object.name}},
+    });
     return TransformApplication {current.shape, resultNamedShape, originalNames, support->refinedFeatures};
 }
 
@@ -1118,6 +1166,15 @@ std::optional<TransformApplication> applyWholeShapeTransforms(
     if (!support) {
         return std::nullopt;
     }
+
+    context.producerTrace->record({
+        "partdesign.pattern",
+        "begin",
+        "whole_shape_application",
+        {{"mode", "Whole shape"},
+         {"support", support->owner},
+         {"transformCount", copyTransforms.size()}},
+    });
 
     TransformSource current = *support;
     int transformedIndex = 1;
@@ -1176,6 +1233,12 @@ std::optional<TransformApplication> applyWholeShapeTransforms(
     // prefix from getBaseObject(), so report the resolved support owner instead of the hidden
     // Originals property.
     std::vector<std::string> supportNames {support->owner};
+    context.producerTrace->record({
+        "partdesign.pattern",
+        "end",
+        "whole_shape_application_complete",
+        {{"support", support->owner}, {"resultOwner", object.name}},
+    });
     return TransformApplication {current.shape, resultNamedShape, supportNames, support->refinedFeatures};
 }
 

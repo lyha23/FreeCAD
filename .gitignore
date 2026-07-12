@@ -79,3 +79,6 @@ graphify-out/
 /cad-core/fixtures/*/expected/*.freecad.json
 /cad-core/fixtures/*/expected/*.freecad.ledger.json
 /cad-core/fixtures/*/expected/*.freecad.producer-trace.json
+
+# CAD Core Rust comparison outputs
+/cad-core/fixtures/*/cad-rs-res/

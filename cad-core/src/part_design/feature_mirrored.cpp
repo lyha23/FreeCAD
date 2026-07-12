@@ -4,6 +4,7 @@
 #include "feature_transformed_support.h"
 
 #include "cad_core/runtime/feature_executor.h"
+#include "cad_core/runtime/producer_trace_scope.h"
 
 #include <BRepAdaptor_Surface.hxx>
 #include <GeomAbs_SurfaceType.hxx>
@@ -183,6 +184,13 @@ using transformed_detail::publishTransformedResult;
 
 void executeMirrored(const app::DocumentObject& object, runtime::ComputeContext& context)
 {
+    runtime::ProducerTraceScope producerTrace(
+        context,
+        object,
+        "partdesign.transform",
+        "Mirrored::execute",
+        {{"kind", "mirrored"}}
+    );
     // FreeCAD semantic sources:
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp::Transformed::execute()
     // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/PartDesign/App/FeatureMirrored.cpp::Mirrored::getTransformations()
@@ -191,23 +199,32 @@ void executeMirrored(const app::DocumentObject& object, runtime::ComputeContext&
             context,
             {"Originals", "TransformMode", "MirrorPlane", "BaseFeature", "Refine", "FuzzyTolerance"}
         )) {
+        producerTrace.abort("unsupported_property");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     if (isTransformationTemplate(object, context)) {
+        producerTrace.event("template", "multi_transform_child_deferred");
         publishTransformationTemplate(object, context);
         return;
     }
 
     auto result = buildMirroredFeatures(object, context);
     if (!result) {
+        producerTrace.abort("transform_build_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
     if (!applyTransformedRefine(object, context, *result)) {
+        producerTrace.abort("transform_refine_failed");
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    producerTrace.event(
+        "publish",
+        "transform_result_ready",
+        {{"mode", result->mode}, {"originals", result->originals}}
+    );
     publishTransformedResult(object, context, *result, "mirrored");
 }
 

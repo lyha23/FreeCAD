@@ -26,6 +26,22 @@ class FixtureCase:
     def label(self) -> str:
         return f"{self.phase}/{self.case}"
 
+    def current_trace_path(self) -> Path:
+        suffix = ".cad-core.json"
+        if not self.current_path.name.endswith(suffix):
+            raise ValueError(f"not a CAD Core current path: {self.current_path}")
+        return self.current_path.with_name(
+            self.current_path.name[: -len(".json")] + ".producer-trace.json"
+        )
+
+    def expected_trace_path(self) -> Path:
+        suffix = ".freecad.json"
+        if not self.expected_path.name.endswith(suffix):
+            raise ValueError(f"not a FreeCAD expected path: {self.expected_path}")
+        return self.expected_path.with_name(
+            self.expected_path.name[: -len(".json")] + ".producer-trace.json"
+        )
+
 
 @dataclass
 class CatalogResult:

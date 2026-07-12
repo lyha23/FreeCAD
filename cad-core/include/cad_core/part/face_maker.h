@@ -12,6 +12,11 @@
 #include <optional>
 #include <vector>
 
+namespace cad_core::app
+{
+class ElementMapProducerTrace;
+}
+
 namespace cad_core::part
 {
 
@@ -47,7 +52,8 @@ std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<Topo
 // closed profile wires plus on-face open splitter edges.
 FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
     const std::vector<TopoDS_Wire>& wires,
-    const std::vector<TopoDS_Edge>& splitEdges
+    const std::vector<TopoDS_Edge>& splitEdges,
+    app::ElementMapProducerTrace* producerTrace = nullptr
 );
 std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(
     const std::vector<TopoDS_Wire>& wires,

@@ -10,11 +10,17 @@
 #include <optional>
 #include <vector>
 
+namespace cad_core::app
+{
+class ElementMapProducerTrace;
+}
+
 namespace cad_core::sketcher
 {
 
 struct SketchInternalBuildInput
 {
+    app::ElementMapProducerTrace* producerTrace = nullptr;
     std::vector<TopoDS_Wire> faceWires;
     std::vector<TopoDS_Wire> openWires;
     std::vector<TopoDS_Edge> openEdges;

@@ -20,7 +20,11 @@ from .model import (
 )
 from .registry import Registry, apply_registry, load_registry
 from .public_semantics import compare_public_semantics
-from .sources import ActualPayload, atomic_write_json, make_actual_source, parse_payload
+from .sources import ActualPayload, atomic_write_json_group, make_actual_source, parse_payload
+try:
+    from tools.element_map_producer_trace import TraceValidationError, compare_traces, validate_trace
+except ModuleNotFoundError:
+    from element_map_producer_trace import TraceValidationError, compare_traces, validate_trace
 
 
 REPORT_SCHEMA = "cad-core.freecad-expected-parity.v2"
@@ -38,6 +42,64 @@ REPORT_CATEGORIES = (
     "geometry.numeric",
     "json",
 )
+
+
+def _trace_observation(
+    item: FixtureCase,
+    root: Path,
+    expected_response: dict[str, Any] | None,
+    actual: ActualPayload,
+) -> tuple[str, dict[str, Any] | None, dict[str, str]]:
+    expected_trace_path = item.expected_trace_path()
+    links = {
+        "comparator": "tools/compare_element_map_producer_trace.py",
+        "expected": relative(expected_trace_path, root),
+        "actual": actual.producer_trace_path or relative(item.current_trace_path(), root),
+    }
+    if not expected_trace_path.exists():
+        return "missing", {"detail": f"missing expected producer trace: {links['expected']}"}, links
+    if expected_response is None:
+        return "invalid", {"detail": "native response unavailable for trace binding"}, links
+    try:
+        expected_trace = json.loads(expected_trace_path.read_text(encoding="utf-8"))
+        request_payload = json.loads(item.input_path.read_text(encoding="utf-8"))
+        validate_trace(
+            expected_trace,
+            input_document=request_payload,
+            response_document=expected_response,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, TraceValidationError) as exc:
+        return "invalid", {"detail": f"invalid expected producer trace: {exc}"}, links
+    if actual.producer_trace_error or actual.producer_trace is None:
+        detail = actual.producer_trace_error or "missing actual producer trace"
+        status = "missing" if "missing" in detail or "no producer trace" in detail else "invalid"
+        return status, {"detail": detail}, links
+    result = compare_traces(
+        expected_trace,
+        actual.producer_trace,
+        document_graph=(
+            request_payload
+            if isinstance(request_payload.get("Objects"), list)
+            else None
+        ),
+    )
+    diagnostic = {
+        "classification": result.classification,
+        "semanticScopePath": list(result.semantic_scope_path),
+        "eventIdentity": {
+            "expected": list(result.expected_event_identity) if result.expected_event_identity else None,
+            "actual": list(result.actual_event_identity) if result.actual_event_identity else None,
+        },
+        "firstJsonPointer": result.json_pointer,
+        "expectedValue": result.expected_value,
+        "actualValue": result.actual_value,
+        "beforeAlignment": result.before_alignment,
+        "afterAlignment": result.after_alignment,
+        "downstreamDriftCount": result.downstream_drift_count,
+        "owner": result.owner,
+        "detail": result.detail,
+    }
+    return ("aligned" if result.status == "equal" else result.status), diagnostic, links
 IGNORED_ACTUAL_TOP_LEVEL_KEYS = {"binaryPayloads", "documentObjectUpdates"}
 RAW_MAPPED_NAME_FIELDS = {"rawFreecadMappedName", "raw_mapped_name"}
 GEOMETRY_NUMERIC_FIELDS = {
@@ -389,6 +451,13 @@ def _case_report(
     if evidence.actual_normalized_sha256 is not None and evidence.current_normalized_sha256 is not None:
         evidence.current_fresh = evidence.actual_normalized_sha256 == evidence.current_normalized_sha256
 
+    report.trace_status, report.trace_diagnostic, report.trace_links = _trace_observation(
+        item,
+        root,
+        expected.payload,
+        actual,
+    )
+
     if report.preflight_errors or expected.payload is None or actual.payload is None:
         report.preflight_errors = list(dict.fromkeys(report.preflight_errors))
         return report
@@ -613,6 +682,7 @@ def materialize_current(request: MaterializeRequest) -> GenerationReport:
             "input": relative(item.input_path, root),
             "expected": relative(item.expected_path, root),
             "current": relative(item.current_path, root),
+            "currentProducerTrace": relative(item.current_trace_path(), root),
             "status": "invalid",
         }
         if request.validate_ledger:
@@ -628,8 +698,23 @@ def materialize_current(request: MaterializeRequest) -> GenerationReport:
             errors.extend(record["errors"])
             records.append(record)
             continue
+        if (
+            actual.producer_trace_error
+            or actual.producer_trace is None
+            or actual.producer_trace_raw is None
+        ):
+            record["errors"] = [
+                actual.producer_trace_error
+                or f"missing validated producer trace for {item.label()}"
+            ]
+            errors.extend(record["errors"])
+            records.append(record)
+            continue
         record["status"] = "staged"
         record["actualRawSha256"] = sha256_bytes(actual.raw_bytes) if actual.raw_bytes else None
+        record["actualProducerTraceSha256"] = (
+            sha256_bytes(actual.producer_trace_raw) if actual.producer_trace_raw else None
+        )
         records.append(record)
         staged.append((item, actual.payload, actual, record))
     if errors:
@@ -641,8 +726,34 @@ def materialize_current(request: MaterializeRequest) -> GenerationReport:
             cases=records,
             preflight={"valid": False, "errors": sorted(dict.fromkeys(errors))},
         )
-    for item, payload, _actual, record in staged:
-        atomic_write_json(item.current_path, payload)
+    artifacts: list[tuple[Path, dict[str, Any]]] = []
+    for item, payload, actual, _record in staged:
+        assert actual.producer_trace is not None
+        artifacts.extend(
+            [
+                (item.current_path, payload),
+                (item.current_trace_path(), actual.producer_trace),
+            ]
+        )
+    try:
+        atomic_write_json_group(artifacts)
+    except (OSError, RuntimeError, ValueError) as exc:
+        message = f"atomic response/producer-trace materialization failed: {exc}"
+        errors.append(message)
+        for _item, _payload, _actual, record in staged:
+            record["status"] = "invalid"
+            record["errors"] = [message]
+
+    if errors:
+        return GenerationReport(
+            schema_version=GENERATION_SCHEMA,
+            status="invalid",
+            selection={"phase": request.phase, "case": request.case, "sourceKind": "live"},
+            summary={"cases": len(records), "written": 0, "failed": len(errors)},
+            cases=records,
+            preflight={"valid": False, "errors": sorted(dict.fromkeys(errors))},
+        )
+    for _item, _payload, _actual, record in staged:
         record["status"] = "written"
     return GenerationReport(
         schema_version=GENERATION_SCHEMA,
