@@ -62,7 +62,8 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         part::makeFacesFromClosedWiresAndSplitEdgesDetailed(
             input.faceWires,
             input.openEdges,
-            input.producerTrace
+            input.producerTrace,
+            input.faceMakerPostBuild
         );
     if (!faceResult.shape || faceResult.shape->IsNull()) {
         if (input.producerTrace != nullptr) {
@@ -99,7 +100,12 @@ SketchInternalBuildResult buildSketchInternals(const SketchInternalBuildInput& i
         // ::SketchObject::buildInternals(), "Append open wires (edges not part of any closed face)"
         // after FaceMakerBuildFace. The profile face used by Pad remains the bounded face result.
         part::WireJoiner joiner;
-        joiner.attachProducerTrace(input.producerTrace);
+        if (!input.openWires.empty() || !input.openEdges.empty()) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+            // ::buildInternals() always asks WireJoiner for open wires, but the native producer
+            // trace publishes a lifecycle only when an open candidate can change the result.
+            joiner.attachProducerTrace(input.producerTrace);
+        }
         joiner.setTightBound(true);
         joiner.setMergeEdges(true);
         for (const TopoDS_Edge& edge : input.sourceEdges) {

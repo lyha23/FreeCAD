@@ -5,6 +5,7 @@
 #include "cad_core/part_design/feature_scaled.h"
 
 #include "datum_plane_reference.h"
+#include "feature_dress_up_support.h"
 #include "feature_transformed_support.h"
 
 #include "cad_core/part/edge_axis.h"
@@ -839,7 +840,8 @@ part::NamedShape transformedCopyNamedShape(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const TransformSource& source,
-    const std::string& postfix
+    const std::string& postfix,
+    bool emitDirectMapLifecycle
 )
 {
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
@@ -849,7 +851,8 @@ part::NamedShape transformedCopyNamedShape(
         owner,
         resultShape,
         part::NamedShapeSource {source.owner, source.shape, source.namedShape ? &*source.namedShape : nullptr},
-        std::optional<std::string> {postfix}
+        std::optional<std::string> {postfix},
+        emitDirectMapLifecycle
     );
 }
 
@@ -860,7 +863,8 @@ std::optional<TransformSource> transformedCopy(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const std::string& property,
-    const std::string& postfix
+    const std::string& postfix,
+    bool emitDirectMapLifecycle
 )
 {
     try {
@@ -896,7 +900,9 @@ std::optional<TransformSource> transformedCopy(
             locationTransform.SetScaleFactor(1.0);
             transformed.Move(locationTransform);
         }
-        part::NamedShape namedShape = transformedCopyNamedShape(owner, transformed, source, postfix);
+        part::NamedShape namedShape = transformedCopyNamedShape(
+            owner, transformed, source, postfix, emitDirectMapLifecycle
+        );
         context.producerTrace->record({
             "partdesign.pattern",
             "instance",
@@ -926,7 +932,7 @@ std::optional<TransformSource> fuseOrCutTransformedSource(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
     const TransformSource& support,
-    const TransformSource& tool,
+    const std::vector<TransformSource>& tools,
     part::BooleanOperation operation,
     const std::string& property
 )
@@ -938,18 +944,27 @@ std::optional<TransformSource> fuseOrCutTransformedSource(
     const std::optional<long> supportTag = support.namedShape
         ? support.namedShape->producerTag
         : std::optional<long> {};
+    if (tools.empty()) {
+        return support;
+    }
     context.producerTrace->record({
         "partdesign.pattern",
         "boolean",
-        operation == part::BooleanOperation::Fuse ? "additive_instance" : "subtractive_instance",
+        operation == part::BooleanOperation::Fuse ? "additive_instances" : "subtractive_instances",
         {{"argument", support.owner},
-         {"tool", tool.owner},
+         {"toolCount", tools.size()},
          {"operation", operation == part::BooleanOperation::Fuse ? "FUS" : "CUT"},
          {"property", property}},
     });
+    std::vector<part::NamedShapeSource> sources;
+    sources.reserve(tools.size() + 1U);
+    sources.push_back(namedShapeSource(support));
+    for (const TransformSource& tool : tools) {
+        sources.push_back(namedShapeSource(tool));
+    }
     const auto build = part::makeElementBooleanFromSources(
         object.name,
-        {namedShapeSource(support), namedShapeSource(tool)},
+        sources,
         operation,
         std::nullopt,
         supportTag
@@ -1004,6 +1019,20 @@ std::optional<TransformApplication> applyFeatureTransforms(
     int transformedIndex = 1;
     for (const app::Link& original : originals) {
         originalNames.push_back(original.object);
+        if (!detail::ensureDressUpAddSubShape(original.object, context)) {
+            runtime::addDiagnostic(
+                context.diagnostics,
+                "error",
+                "execution_failed",
+                "Transformed Features mode could not build AddSubShape cache from "
+                    + original.object,
+                object.name,
+                "Originals",
+                "runtime",
+                original.object
+            );
+            return std::nullopt;
+        }
         const auto addSubIt = context.addSubShapes.find(original.object);
         if (addSubIt == context.addSubShapes.end()) {
             const auto objectResultIt = context.objects.find(original.object);
@@ -1043,6 +1072,12 @@ std::optional<TransformApplication> applyFeatureTransforms(
             );
             return std::nullopt;
         }
+        const auto originalObjectIt = context.documentObjects.find(original.object);
+        const bool originalIsDressUp = originalObjectIt != context.documentObjects.end()
+            && (originalObjectIt->second->typeId == "PartDesign::Fillet"
+                || originalObjectIt->second->typeId == "PartDesign::Chamfer"
+                || originalObjectIt->second->typeId == "PartDesign::Draft"
+                || originalObjectIt->second->typeId == "PartDesign::Thickness");
         context.producerTrace->record({
             "partdesign.pattern",
             "original",
@@ -1059,6 +1094,8 @@ std::optional<TransformApplication> applyFeatureTransforms(
         // past that entry and creates copies only for the remaining transforms. Re-fusing the
         // first (usually identity) entry adds a producer pass that FreeCAD never performs.
         int copyOrdinal = 1;
+        std::vector<TransformSource> additiveTools;
+        std::vector<TransformSource> subtractiveTools;
         for (std::size_t transformIndex = 1U; transformIndex < copyTransforms.size(); ++transformIndex) {
             const gp_Trsf& transform = copyTransforms.at(transformIndex);
             if (addSubIt->second.addShape) {
@@ -1078,23 +1115,13 @@ std::optional<TransformApplication> applyFeatureTransforms(
                     object,
                     context,
                     "Originals",
-                    copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal)
+                    copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal),
+                    originalIsDressUp
                 );
                 if (!transformedTool) {
                     return std::nullopt;
                 }
-                auto fused = fuseOrCutTransformedSource(
-                    object,
-                    context,
-                    current,
-                    *transformedTool,
-                    part::BooleanOperation::Fuse,
-                    "Originals"
-                );
-                if (!fused) {
-                    return std::nullopt;
-                }
-                current = *fused;
+                additiveTools.push_back(*transformedTool);
             }
 
             if (addSubIt->second.subShape) {
@@ -1114,25 +1141,47 @@ std::optional<TransformApplication> applyFeatureTransforms(
                     object,
                     context,
                     "Originals",
-                    copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal)
+                    copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal),
+                    originalIsDressUp
                 );
                 if (!transformedTool) {
                     return std::nullopt;
                 }
-                auto cut = fuseOrCutTransformedSource(
-                    object,
-                    context,
-                    current,
-                    *transformedTool,
-                    part::BooleanOperation::Cut,
-                    "Originals"
-                );
-                if (!cut) {
-                    return std::nullopt;
-                }
-                current = *cut;
+                subtractiveTools.push_back(*transformedTool);
             }
             ++copyOrdinal;
+        }
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+        // FeatureTransformed.cpp::Transformed::execute() has getTransformedCompShape() return
+        // `{supportShape, transformed copy 1, ...}` and calls makeElementFuse/Cut once for the
+        // whole vector. Preserve that single multi-source maker/history lifecycle.
+        if (!additiveTools.empty()) {
+            auto fused = fuseOrCutTransformedSource(
+                object,
+                context,
+                current,
+                additiveTools,
+                part::BooleanOperation::Fuse,
+                "Originals"
+            );
+            if (!fused) {
+                return std::nullopt;
+            }
+            current = *fused;
+        }
+        if (!subtractiveTools.empty()) {
+            auto cut = fuseOrCutTransformedSource(
+                object,
+                context,
+                current,
+                subtractiveTools,
+                part::BooleanOperation::Cut,
+                "Originals"
+            );
+            if (!cut) {
+                return std::nullopt;
+            }
+            current = *cut;
         }
     }
 
@@ -1196,7 +1245,8 @@ std::optional<TransformApplication> applyWholeShapeTransforms(
             object,
             context,
             "TransformMode",
-            copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal)
+            copyOrdinal < 2 ? std::string {} : "_" + std::to_string(copyOrdinal),
+            false
         );
         if (!transformedTool) {
             return std::nullopt;
@@ -1205,7 +1255,7 @@ std::optional<TransformApplication> applyWholeShapeTransforms(
             object,
             context,
             current,
-            *transformedTool,
+            std::vector<TransformSource> {*transformedTool},
             part::BooleanOperation::Fuse,
             "TransformMode"
         );

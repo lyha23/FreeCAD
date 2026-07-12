@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <map>
 #include <set>
 #include <utility>
@@ -27,6 +28,23 @@ constexpr std::array<TopAbs_ShapeEnum, 3> kKinds {
     TopAbs_EDGE,
     TopAbs_FACE,
 };
+
+std::string traceShapeKindName(TopAbs_ShapeEnum kind)
+{
+    switch (kind) {
+        case TopAbs_COMPOUND: return "Compound";
+        case TopAbs_COMPSOLID: return "CompSolid";
+        case TopAbs_SOLID: return "Solid";
+        case TopAbs_SHELL: return "Shell";
+        case TopAbs_WIRE: return "Wire";
+        default: break;
+    }
+    std::string name = subshapeKindName(kind);
+    if (!name.empty()) {
+        name.front() = static_cast<char>(std::toupper(static_cast<unsigned char>(name.front())));
+    }
+    return name;
+}
 
 nlohmann::json stringIdJson(const app::StringId& id)
 {
@@ -102,7 +120,7 @@ std::string indexedNameForShape(const TopoDS_Shape& shape,
     TopExp::MapShapes(shape, kind, indexed);
     for (int index = 1; index <= indexed.Extent(); ++index) {
         if (indexed(index).IsSame(candidate)) {
-            return subshapeKindName(kind) + std::to_string(index);
+            return traceShapeKindName(kind) + std::to_string(index);
         }
     }
     return {};
@@ -115,11 +133,32 @@ nlohmann::json mapperTargets(const TopTools_ListOfShape& values,
     nlohmann::json targets = nlohmann::json::array();
     for (TopTools_ListIteratorOfListOfShape iterator(values); iterator.More(); iterator.Next()) {
         const TopoDS_Shape& target = iterator.Value();
+        const std::string indexed = indexedNameForShape(output, target, target.ShapeType());
+        nlohmann::json outputMembers = nlohmann::json::array();
+        if (indexed.empty() && !target.IsNull()) {
+            for (const TopAbs_ShapeEnum memberKind : kKinds) {
+                TopTools_IndexedMapOfShape outputShapes;
+                TopTools_IndexedMapOfShape targetShapes;
+                TopExp::MapShapes(output, memberKind, outputShapes);
+                TopExp::MapShapes(target, memberKind, targetShapes);
+                for (int member = 1; member <= outputShapes.Extent(); ++member) {
+                    if (targetShapes.FindIndex(outputShapes(member)) <= 0) {
+                        continue;
+                    }
+                    outputMembers.push_back({
+                        {"indexed", traceShapeKindName(memberKind) + std::to_string(member)},
+                        {"shapeType", traceShapeKindName(memberKind)},
+                    });
+                }
+            }
+        }
         targets.push_back({
-            {"indexed", indexedNameForShape(output, target, target.ShapeType())},
-            {"shapeType", subshapeKindName(target.ShapeType())},
+            {"indexed", indexed},
+            {"shapeType", traceShapeKindName(target.ShapeType())},
             {"orientation", static_cast<int>(target.Orientation())},
-            {"requestedSourceKind", subshapeKindName(kind)},
+            {"requestedSourceKind", traceShapeKindName(kind)},
+            {"relationStatus", indexed.empty() ? "expanded_to_output" : "resolved"},
+            {"outputMembers", std::move(outputMembers)},
         });
     }
     return targets;
@@ -131,7 +170,7 @@ nlohmann::json inspectShapeInventory(const TopoDS_Shape& shape)
 {
     nlohmann::json inventory = {
         {"isNull", shape.IsNull()},
-        {"shapeType", shape.IsNull() ? "Null" : subshapeKindName(shape.ShapeType())},
+        {"shapeType", shape.IsNull() ? "Null" : traceShapeKindName(shape.ShapeType())},
         {"orientation", shape.IsNull() ? 0 : static_cast<int>(shape.Orientation())},
         {"indexed", nlohmann::json::object()},
     };
@@ -139,16 +178,17 @@ nlohmann::json inspectShapeInventory(const TopoDS_Shape& shape)
         return inventory;
     }
     for (const TopAbs_ShapeEnum kind : kKinds) {
+        const std::string kindName = traceShapeKindName(kind);
         TopTools_IndexedMapOfShape values;
         TopExp::MapShapes(shape, kind, values);
         nlohmann::json entries = nlohmann::json::array();
         for (int index = 1; index <= values.Extent(); ++index) {
             entries.push_back({
-                {"indexed", subshapeKindName(kind) + std::to_string(index)},
+                {"indexed", kindName + std::to_string(index)},
                 {"orientation", static_cast<int>(values(index).Orientation())},
             });
         }
-        inventory["indexed"][subshapeKindName(kind)] = std::move(entries);
+        inventory["indexed"][kindName] = std::move(entries);
     }
     return inventory;
 }
@@ -164,8 +204,12 @@ nlohmann::json inspectNamedShapeLedger(const NamedShape& namedShape, const std::
     for (const auto& item : namedShape.elementMapEntries) {
         nlohmann::json values = nlohmann::json::array();
         for (const ElementMapEntry& entry : item.second) {
+            const auto provenance = namedShape.mappedNameProvenance.find(entry.mappedName);
             values.push_back({
-                {"rawMappedName", entry.mappedName},
+                {"rawMappedName",
+                 provenance != namedShape.mappedNameProvenance.end()
+                     ? provenance->second.rawMappedName
+                     : entry.mappedName},
                 {"elementIdRefs", stringIdsJson(entry.elementIdRefs)},
             });
         }
@@ -276,7 +320,12 @@ RawMakerHistoryCapture captureRawMakerHistory(const std::vector<NamedShapeSource
     for (std::size_t sourceOrdinal = 0; sourceOrdinal < sources.size(); ++sourceOrdinal) {
         capture.inputs.push_back({
             {"sourceOrdinal", sourceOrdinal},
-            {"sourceOwner", sources[sourceOrdinal].owner},
+            {"sourceTag",
+             sources[sourceOrdinal].producerTag.value_or(
+                 sources[sourceOrdinal].namedShape != nullptr
+                     ? sources[sourceOrdinal].namedShape->producerTag.value_or(0L)
+                     : 0L
+             )},
             {"inventory", inspectShapeInventory(sources[sourceOrdinal].shape)},
         });
     }
@@ -290,7 +339,12 @@ RawMakerHistoryCapture captureRawMakerHistory(const std::vector<NamedShapeSource
                 RawMakerHistoryEntry entry;
                 entry.sourceOrdinal = sourceOrdinal;
                 entry.sourceOwner = source.owner;
-                entry.sourceIndexed = subshapeKindName(kind) + std::to_string(index);
+                entry.sourceTag = source.producerTag.value_or(
+                    source.namedShape != nullptr
+                        ? source.namedShape->producerTag.value_or(0L)
+                        : 0L
+                );
+                entry.sourceIndexed = traceShapeKindName(kind) + std::to_string(index);
                 entry.sourceKind = kind;
                 entry.sourceShape = sourceElement;
                 const auto message = [](const Standard_Failure& failure) {
@@ -330,7 +384,7 @@ const RawMakerHistoryEntry* findRawMakerHistoryEntry(const RawMakerHistoryCaptur
                                                      TopAbs_ShapeEnum sourceKind,
                                                      int sourceIndex) noexcept
 {
-    const std::string indexed = subshapeKindName(sourceKind) + std::to_string(sourceIndex);
+    const std::string indexed = traceShapeKindName(sourceKind) + std::to_string(sourceIndex);
     const auto found = std::find_if(
         capture.entries.begin(),
         capture.entries.end(),
@@ -348,9 +402,9 @@ nlohmann::json inspectRawMakerMapper(const RawMakerHistoryCapture& capture)
     for (const RawMakerHistoryEntry& entry : capture.entries) {
         sourceRows.push_back({
             {"sourceOrdinal", entry.sourceOrdinal},
-            {"sourceOwner", entry.sourceOwner},
+            {"sourceTag", entry.sourceTag},
             {"sourceIndexed", entry.sourceIndexed},
-            {"sourceShapeType", subshapeKindName(entry.sourceKind)},
+            {"sourceShapeType", traceShapeKindName(entry.sourceKind)},
             {"modified", mapperTargets(entry.modified, capture.output, entry.sourceKind)},
             {"generated", mapperTargets(entry.generated, capture.output, entry.sourceKind)},
             {"deleted", entry.deleted},
@@ -412,6 +466,38 @@ std::string checkpointNamedShapeLedgerRecursive(
         relatedIdentity
     );
     nlohmann::json ledger = inspectNamedShapeLedger(namedShape, role);
+    if (label == "element_map.write_checkpoint") {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::setElementName() checkpoints the ElementMap value being grown. Its
+        // indexed inventory extends through the written IndexedName; it is not the owning
+        // TopoShape's complete BRep inventory at this intermediate boundary.
+        std::map<std::string, int> maximum {{"Vertex", 0}, {"Edge", 0}, {"Face", 0}};
+        for (const auto& item : namedShape.elementMapEntries) {
+            for (auto& [kind, ordinal] : maximum) {
+                if (item.first.rfind(kind, 0U) != 0U) {
+                    continue;
+                }
+                try {
+                    ordinal = std::max(ordinal, std::stoi(item.first.substr(kind.size())));
+                }
+                catch (const std::exception&) {
+                }
+            }
+        }
+        nlohmann::json indexed = nlohmann::json::object();
+        for (const auto& [kind, maximumOrdinal] : maximum) {
+            indexed[kind] = nlohmann::json::array();
+            for (int ordinal = 1; ordinal <= maximumOrdinal; ++ordinal) {
+                indexed[kind].push_back(
+                    {{"indexed", kind + std::to_string(ordinal)}, {"orientation", 0}}
+                );
+            }
+        }
+        ledger["shape"] = {{"isNull", false},
+                           {"shapeType", "ElementMap"},
+                           {"orientation", 0},
+                           {"indexed", std::move(indexed)}};
+    }
     ledger["identity"] = identity;
     ledger["elementMapIdentity"] = mapIdentity;
     ledger["shapeRoleIdentity"] = shapeIdentity;
@@ -422,6 +508,7 @@ std::string checkpointNamedShapeLedgerRecursive(
         active.insert(&namedShape);
     }
     auto& childRanges = ledger["childRanges"];
+    std::map<const NamedShape*, std::string> publishedChildLedgers;
     for (std::size_t index = 0; index < namedShape.childElementMaps.size(); ++index) {
         const NamedShapeChildMap& child = namedShape.childElementMaps[index];
         const NamedShape* source = child.sourceLedger ? child.sourceLedger.get()
@@ -439,18 +526,27 @@ std::string checkpointNamedShapeLedgerRecursive(
             childPayload["nestedSnapshotStatus"] = "cycle_truncated";
             continue;
         }
-        const std::string nestedRole = role + "/child:" + child.sourceOwner + ":"
-            + child.kind + ":" + std::to_string(index + 1U);
-        const std::string nestedId = checkpointNamedShapeLedgerRecursive(
-            *source,
-            nestedRole,
-            "child_map.nested_checkpoint",
-            "share",
-            identity,
-            trace,
-            hasher,
-            active
-        );
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::addChildElements() stores `child.elementMap` by shared pointer. Vertex,
+        // Edge and Face ranges from the same child therefore reference one nested ElementMap,
+        // rather than publishing three independent ledger instances.
+        auto nested = publishedChildLedgers.find(source);
+        if (nested == publishedChildLedgers.end()) {
+            const std::string nestedRole = role + "/child:" + child.sourceOwner + ":"
+                + child.kind + ":" + std::to_string(index + 1U);
+            const std::string nestedId = checkpointNamedShapeLedgerRecursive(
+                *source,
+                nestedRole,
+                "child_map.nested_checkpoint",
+                "share",
+                identity,
+                trace,
+                hasher,
+                active
+            );
+            nested = publishedChildLedgers.emplace(source, nestedId).first;
+        }
+        const std::string& nestedId = nested->second;
         childPayload["nestedSnapshot"] = nestedId;
         childPayload["nestedSnapshotStatus"] = "published";
         nestedSnapshotRefs.push_back(nestedId);

@@ -25,6 +25,7 @@ namespace {
 
 constexpr const char* topoStateSchemaVersion = "cad-core.topo-state.v1";
 constexpr const char* elementMapVersion = "cad-core.element-map.v1";
+constexpr const char* freeCadAuthorityVersion = "1.2.0 revision 46970";
 
 std::string sha256Json(const nlohmann::json& value)
 {
@@ -45,6 +46,11 @@ nlohmann::json producerJson(const app::Document& document)
         const auto producerIt = document.topoNamingState.find("producer");
         if (producerIt != document.topoNamingState.end() && producerIt->is_object()) {
             nlohmann::json producer = *producerIt;
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Application.cpp
+            // ::Application::Config() publishes "BuildVersionMajor/Minor" and "BuildRevision"
+            // for the process producing the new state. The request producer describes the old
+            // client snapshot; a stateless recompute stamps the current authority build.
+            producer["freecadVersion"] = freeCadAuthorityVersion;
             if (producer.value("occtVersion", "") == "fixture-occt-unspecified") {
                 std::string kernelVersion = part::kernelVersion();
                 constexpr const char* prefix = "OCCT ";
@@ -62,7 +68,7 @@ nlohmann::json producerJson(const app::Document& document)
     }
     return {
         {"cadCoreVersion", "cad-core-runtime-v1"},
-        {"freecadVersion", "cad-core-runtime"},
+        {"freecadVersion", freeCadAuthorityVersion},
         {"occtVersion", part::kernelVersion()},
     };
 }

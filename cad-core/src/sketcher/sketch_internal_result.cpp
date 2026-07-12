@@ -112,7 +112,10 @@ SketchInternalResult buildSketchInternalResult(const SketchInternalResultInput& 
             input.objectTag
         );
     }
-    if (input.profileShape && !input.profileShape->IsNull() && result.rawNamedShape
+    if (input.profileNamedShape) {
+        result.profileNamedShape = *input.profileNamedShape;
+    }
+    else if (input.profileShape && !input.profileShape->IsNull() && result.rawNamedShape
         && input.stringHasher) {
         result.profileNamedShape = part::namedShapeForSketchProfileShape(
             input.objectName + ".ProfileShape",

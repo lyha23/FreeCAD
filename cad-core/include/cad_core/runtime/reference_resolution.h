@@ -123,4 +123,11 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
                                                    ReferenceResolutionView& view,
                                                    const ReferenceLifecycleView& lifecycleView);
 
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/GeoFeature.cpp
+// ::GeoFeature::updateElementReferences() walks downstream LinkSub properties when Shape changes.
+std::vector<std::string> downstreamElementReferenceSubnames(
+    const std::string& producer,
+    const ComputeContext& context
+);
+
 }  // namespace cad_core::runtime

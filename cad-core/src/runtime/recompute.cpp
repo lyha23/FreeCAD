@@ -1859,10 +1859,17 @@ ComputeContext recomputeContext(
 )
 {
     ComputeContext context(std::move(producerTrace));
+    FeatureRegistry registry = buildDefaultRegistry();
+    graph::RecomputePlan plan = graph::buildPlan(
+        document,
+        diagnostics,
+        registry.producerMissingReferenceAdmissionTypeIds()
+    );
     auto transaction = context.producerTrace->beginTransaction(
         {document.targets,
          {{"objectCount", document.objects.size()},
-          {"hasTopoNamingState", document.hasTopoNamingState}}}
+          {"hasTopoNamingState", document.hasTopoNamingState}},
+         plan.order}
     );
     context.producerTrace->firstSeenIdentity(
         "hasher",
@@ -1873,12 +1880,11 @@ ComputeContext recomputeContext(
         {"recompute", "", 0, "runtime::recompute", {{"targets", document.targets}}}
     );
     checkpointStringTable(context, "table_checkpoint");
-
-    FeatureRegistry registry = buildDefaultRegistry();
-    graph::RecomputePlan plan = graph::buildPlan(
-        document,
-        diagnostics,
-        registry.producerMissingReferenceAdmissionTypeIds()
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp::recompute()
+    // starts the transaction with an empty document-state checkpoint before the first object's
+    // producer begins; later producers naturally inherit the preceding ledger checkpoint.
+    context.producerTrace->checkpoint(
+        {"state", nlohmann::json::object(), {}, {}, {}, "transaction.initial_state"}
     );
 
     context.diagnostics = std::move(diagnostics);

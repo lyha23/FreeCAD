@@ -1414,7 +1414,8 @@ std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<Topo
 FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
     const std::vector<TopoDS_Wire>& wires,
     const std::vector<TopoDS_Edge>& splitEdges,
-    app::ElementMapProducerTrace* producerTrace
+    app::ElementMapProducerTrace* producerTrace,
+    const std::function<void(const FaceMakerBuildFaceResult&)>& postBuild
 )
 {
     app::ElementMapProducerTrace::Scope traceScope;
@@ -1431,10 +1432,8 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
         producerTrace->record({
             "face_maker.lifecycle",
             "begin",
-            "face_maker_inputs_frozen",
-            {{"closedWireCount", wires.size()},
-             {"splitEdgeCount", splitEdges.size()},
-             {"preSplit", !splitEdges.empty()}},
+            "post_build",
+            {{"operation", ""}, {"sourceCount", std::to_string(wires.size())}},
         });
     }
     if (wires.empty()) {
@@ -1547,6 +1546,20 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
     const std::optional<TopoDS_Shape> internalShape = boundedFaces;
     InternalShapeHistoryLedger historyLedger;
     addFaceMakerEvidenceToLedger(historyLedger, historySummary);
+    FaceMakerBuildFaceResult result {
+        boundedFaces,
+        internalShape,
+        boundedFaceCount,
+        splitProducedBoundedFaces,
+        historyLedger,
+    };
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+    // ::FaceMaker::Build(), calls "postBuild();" after Build_Essence() and before returning to
+    // SketchObject::buildInternals(), where WireJoiner starts. Let the owning TopoShape layer
+    // consume the finished BREP while this FaceMaker scope is still active.
+    if (postBuild) {
+        postBuild(result);
+    }
     if (producerTrace != nullptr) {
         nlohmann::json namesUsed = nlohmann::json::array();
         nlohmann::json comboNames = nlohmann::json::array();
@@ -1590,26 +1603,11 @@ FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
         producerTrace->record({
             "face_maker.lifecycle",
             "success",
-            "bounded_face_history_published",
-            {{"faceCount", boundedFaceCount},
-             {"profileFaceCount", profileFaceCount},
-             {"splitProducedBoundedFaces", splitProducedBoundedFaces},
-             {"namesUsed", namesUsed},
-             {"comboNames", comboNames},
-             {"history", historyLedger.diagnosticsJson()},
-             {"outputInventory", inspectShapeInventory(*boundedFaces)}},
+            "post_build_complete",
+            nlohmann::json::object(),
         });
-        producerTrace->checkpoint(
-            {"state", finalPayload, {}, {}, {}, "maker.final_checkpoint"}
-        );
     }
-    return FaceMakerBuildFaceResult {
-        boundedFaces,
-        internalShape,
-        boundedFaceCount,
-        splitProducedBoundedFaces,
-        historyLedger,
-    };
+    return result;
 }
 
 std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(

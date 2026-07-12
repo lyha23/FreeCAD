@@ -32,6 +32,7 @@ struct SketchInternalResultInput
     // InternalShape builder so Pad consumes the FaceMaker map rather than reconstructing names
     // from indexed display subshapes.
     std::optional<part::NamedShape> rawNamedShape;
+    std::optional<part::NamedShape> profileNamedShape;
     std::shared_ptr<app::StringHasher> stringHasher;
 };
 

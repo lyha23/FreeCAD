@@ -3,6 +3,7 @@
 #include "cad_core/runtime/reference_lifecycle.h"
 
 #include <algorithm>
+#include <deque>
 #include <map>
 #include <optional>
 #include <sstream>
@@ -28,84 +29,108 @@ bool isTransientPartHelper(const app::DocumentObject& object)
     return object.typeId == "Part::FilledFace" || object.typeId == "Part::GeomPlateSurface";
 }
 
-bool isPartDesignBodyFeature(const app::DocumentObject& object)
+bool isPartDesignBodyResultFeature(const app::DocumentObject& object)
 {
-    return object.typeId.rfind("PartDesign::", 0U) == 0U && object.typeId != "PartDesign::Body";
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::Feature() says "ADD_PROPERTY(BaseFeature, (nullptr))", and
+    // ::Feature::getBaseObject() reads "BaseFeature.getValue()" for the preceding result shape.
+    // The complete PartDesign datum provider family instead declares
+    // "PROPERTY_SOURCE(..., Part::Datum)" in the following absolute source authorities:
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumLine.cpp::Line,
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPlane.cpp::Plane,
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumPoint.cpp::Point, and
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/DatumCS.cpp::CoordinateSystem.
+    // They are reference providers, not members of the BaseFeature solid-result chain.
+    if (object.typeId.rfind("PartDesign::", 0U) != 0U || object.typeId == "PartDesign::Body") {
+        return false;
+    }
+    return object.typeId != "PartDesign::Line" && object.typeId != "PartDesign::Plane"
+        && object.typeId != "PartDesign::Point"
+        && object.typeId != "PartDesign::CoordinateSystem";
 }
 
-bool documentOrderLess(const app::Document& document,
-                       const std::string& left,
-                       const std::string& right)
+void applyFreeCadTopologicalOrder(RecomputePlan& plan, const app::Document& document)
 {
-    const auto leftIt = document.indexByName.find(left);
-    const auto rightIt = document.indexByName.find(right);
-    if (leftIt == document.indexByName.end() || rightIt == document.indexByName.end()) {
-        return left < right;
-    }
-    const app::DocumentObject& leftObject = document.objects.at(leftIt->second);
-    const app::DocumentObject& rightObject = document.objects.at(rightIt->second);
-    if (leftObject.id != rightObject.id) {
-        return leftObject.id < rightObject.id;
-    }
-    return leftIt->second < rightIt->second;
-}
-
-void stabilizePlanOrder(RecomputePlan& plan, const app::Document& document)
-{
-    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp::Document::recompute()
-    // executes the dependency-ready document objects in document order. The document StringHasher
-    // is shared, so a depth-first walk of Body.Group must not let an unrelated PocketSketch consume
-    // StringIDs before an earlier-ID Tip branch that is already dependency-ready.
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp
+    // ::buildDependencyList() pushes each requested root, drains a deque, appends every OutList in
+    // its existing order, and adds edges as "add_edge(objectMap[key], objectMap[obj], depList)".
+    // ::Document::getDependencyList(..., DepSort) then calls
+    // "boost::topological_sort(depList, std::front_inserter(make_order))" and publishes the reverse
+    // iteration "make_order.rbegin()". The observable result is Boost DFS finish order: dependency
+    // before dependent, with dependency-ready peers ordered by graph traversal rather than Object.ID.
     std::set<std::string> included(plan.order.begin(), plan.order.end());
-    std::map<std::string, std::size_t> pendingDependencies;
-    std::map<std::string, std::vector<std::string>> dependents;
-    for (const std::string& name : plan.order) {
-        pendingDependencies[name] = 0U;
+    std::vector<std::string> vertices;
+    std::map<std::string, std::size_t> vertexByName;
+    std::deque<std::string> pending;
+    const auto appendRoot = [&](const std::string& root) {
+        pending.push_back(root);
+        while (!pending.empty()) {
+            std::string name = std::move(pending.front());
+            pending.pop_front();
+            if (included.count(name) == 0U || vertexByName.count(name) != 0U) {
+                continue;
+            }
+            vertexByName[name] = vertices.size();
+            vertices.push_back(name);
+            const auto dependencies = plan.dependencies.find(name);
+            if (dependencies != plan.dependencies.end()) {
+                pending.insert(pending.end(), dependencies->second.begin(), dependencies->second.end());
+            }
+        }
+    };
+
+    for (const std::string& target : document.targets) {
+        appendRoot(target);
     }
-    for (const auto& [name, dependencies] : plan.dependencies) {
-        if (included.count(name) == 0U) {
+    // Transient helper plans can deliberately admit additional document objects after the request
+    // targets. FreeCAD's full-document objectArray is in document order, so use that same root
+    // order for any admitted object not reached from an explicit target.
+    for (const app::DocumentObject& object : document.objects) {
+        appendRoot(object.name);
+    }
+    for (const std::string& name : plan.order) {
+        appendRoot(name);
+    }
+
+    std::vector<std::vector<std::size_t>> outEdges(vertices.size());
+    for (std::size_t vertex = 0; vertex < vertices.size(); ++vertex) {
+        const auto dependencies = plan.dependencies.find(vertices[vertex]);
+        if (dependencies == plan.dependencies.end()) {
             continue;
         }
-        for (const std::string& dependency : dependencies) {
-            if (included.count(dependency) == 0U) {
-                continue;
+        for (const std::string& dependency : dependencies->second) {
+            const auto target = vertexByName.find(dependency);
+            if (target != vertexByName.end()) {
+                outEdges[vertex].push_back(target->second);
             }
-            ++pendingDependencies[name];
-            dependents[dependency].push_back(name);
         }
     }
 
-    std::vector<std::string> ready;
-    for (const auto& [name, count] : pendingDependencies) {
-        if (count == 0U) {
-            ready.push_back(name);
-        }
-    }
+    std::vector<unsigned char> colors(vertices.size(), 0U);
     std::vector<std::string> ordered;
     ordered.reserve(plan.order.size());
-    while (!ready.empty()) {
-        const auto next = std::min_element(
-            ready.begin(), ready.end(), [&](const std::string& left, const std::string& right) {
-                return documentOrderLess(document, left, right);
-            }
-        );
-        const std::string name = *next;
-        ready.erase(next);
-        ordered.push_back(name);
-        for (const std::string& dependent : dependents[name]) {
-            auto pending = pendingDependencies.find(dependent);
-            if (pending == pendingDependencies.end() || pending->second == 0U) {
-                continue;
-            }
-            --pending->second;
-            if (pending->second == 0U) {
-                ready.push_back(dependent);
-            }
+    const auto finish = [&](const auto& self, std::size_t vertex) -> void {
+        if (colors[vertex] == 2U) {
+            return;
         }
+        if (colors[vertex] == 1U) {
+            // visitObject() already owns cycle diagnostics and blocked-object admission. Avoid
+            // changing that contract here; finish the remaining vertices deterministically.
+            return;
+        }
+        colors[vertex] = 1U;
+        for (const std::size_t dependency : outEdges[vertex]) {
+            self(self, dependency);
+        }
+        colors[vertex] = 2U;
+        ordered.push_back(vertices[vertex]);
+    };
+    for (std::size_t vertex = 0; vertex < vertices.size(); ++vertex) {
+        finish(finish, vertex);
     }
 
-    // visitObject() already reports dependency cycles. Keep their members executable in stable
-    // document order so diagnostics remain deterministic instead of silently dropping them.
+    // A back-edge can finish a member before the original recursive frame. Keep every admitted
+    // object exactly once, preserving the existing visit order as the cycle-only fallback.
     for (const std::string& name : plan.order) {
         if (std::find(ordered.begin(), ordered.end(), name) == ordered.end()) {
             ordered.push_back(name);
@@ -143,9 +168,17 @@ std::optional<std::string> previousPartDesignBodyFeature(const std::string& name
             continue;
         }
         const app::DocumentObject& candidate = document.objects.at(objectIt->second);
-        if (isPartDesignBodyFeature(candidate)) {
+        if (isPartDesignBodyResultFeature(candidate)) {
             return candidate.name;
         }
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::getBaseObject() reads "BaseFeature.getValue()". For the first result feature in a
+    // Body.Group, the stateless request carries that predecessor on Body.BaseFeature rather than on
+    // the feature object itself, so it is the previous-feature dependency after the Group scan.
+    if (const auto baseFeature = app::readLink(body, "BaseFeature");
+        baseFeature && document.indexByName.count(baseFeature->object) != 0U) {
+        return baseFeature->object;
     }
     return std::nullopt;
 }
@@ -193,7 +226,8 @@ void visitObject(const std::string& name,
     // FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/PropertyLinks.h::PropertyLinkBase
     // is the dependency-bearing property base for PropertyLink, PropertyLinkList, PropertyLinkSub
     // and PropertyLinkSubList. cad-core graph consumes document-normalized links only.
-    for (const auto& link : object.dependencyLinks) {
+    for (const app::Link* linkPtr : app::dependencyLinksInFreeCadOrder(object)) {
+        const app::Link& link = *linkPtr;
         if (seenDependencies.count(link.object) != 0U) {
             continue;
         }
@@ -234,7 +268,7 @@ void visitObject(const std::string& name,
                     visited);
     }
 
-    if (isPartDesignBodyFeature(object)) {
+    if (isPartDesignBodyResultFeature(object)) {
         // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureAddSub.cpp
         // ::FeatureAddSub::getBaseTopoShape() walks the preceding same-Body feature chain before
         // Pad/Pocket/Pipe/DressUp executes its own producer. A stateless recompute graph must
@@ -326,7 +360,7 @@ RecomputePlan buildPlan(
         }
     }
 
-    stabilizePlanOrder(plan, document);
+    applyFreeCadTopologicalOrder(plan, document);
 
     return plan;
 }

@@ -20,6 +20,7 @@ struct RawMakerHistoryEntry
 {
     std::size_t sourceOrdinal = 0;
     std::string sourceOwner;
+    long sourceTag = 0;
     std::string sourceIndexed;
     TopAbs_ShapeEnum sourceKind = TopAbs_SHAPE;
     TopoDS_Shape sourceShape;

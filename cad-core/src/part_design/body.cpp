@@ -5,6 +5,7 @@
 #include "cad_core/runtime/producer_trace_scope.h"
 #include "cad_core/base/placement.h"
 #include "cad_core/part/shape_exporter.h"
+#include "cad_core/part/element_map_producer_trace_snapshot.h"
 #include "cad_core/part/topo_shape.h"
 #include "cad_core/part/property_topo_shape.h"
 
@@ -999,7 +1000,9 @@ std::optional<BodyTopoShapeResult> getBodyTopoShapeAtFeature(const app::Document
             body.name,
             directTip.shape,
             tipNamedShapeIt->second,
-            static_cast<long>(body.id)
+            static_cast<long>(body.id),
+            true,
+            true
         );
         directTip.directTipSubshapeStablePrefix = true;
     }
@@ -1363,7 +1366,10 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         object,
         "partdesign.body_tip",
         "Body::execute",
-        {{"inheritOnly", true}, {"replayUpstreamProducers", false}}
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Body.cpp
+        // ::PartDesign::Body::execute() begins the Body Tip handoff without an independent
+        // "inherit only" or upstream replay mode; those are CAD Core scheduling details.
+        nlohmann::json::object()
     );
     const auto reject = [&producerTrace](std::string reason, nlohmann::json fields) {
         producerTrace.event("rejected", reason, std::move(fields));
@@ -1399,12 +1405,22 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
+    context.producerTrace->record({
+        "reference.update", "begin", "geometry_property_changed", {{"object", object.name}},
+    });
+    context.producerTrace->record({
+        "reference.update", "updated", "element_map_version", {{"reset", "false"}},
+    });
+    const auto tipLedger = context.namedShapes.find(tip->object);
     producerTrace.event(
         "inherit",
-        "tip_ledger_selected",
-        {{"tipObject", tip->object},
-         {"tipHasLedger", context.namedShapes.count(tip->object) != 0U},
-         {"replayedProducer", false}}
+        "tip_ledger_only",
+        {{"tip", tip->object},
+         {"tipTag", std::to_string(
+             tipLedger != context.namedShapes.end()
+                 ? tipLedger->second.producerTag.value_or(0L)
+                 : 0L
+         )}}
     );
 
     const auto bodyTopoShape = getBodyTopoShapeAtFeature(object, context, tip->object);
@@ -1491,6 +1507,18 @@ void executeBody(const app::DocumentObject& object, runtime::ComputeContext& con
         result["direct_tip_subshape_stable_prefix"] = true;
     }
     context.objects[object.name] = result;
+    context.producerTrace->record({
+        "shape_slot.assign", "assigned", "body_tip_inherited_shape", {{"property", "Shape"}},
+    });
+    if (const auto bodyLedger = context.namedShapes.find(object.name);
+        bodyLedger != context.namedShapes.end()) {
+        (void)part::checkpointNamedShapeLedger(
+            bodyLedger->second,
+            object.name + ":body-tip",
+            "partdesign.body_tip.checkpoint"
+        );
+    }
+    producerTrace.event("success", "tip_inherited_without_replay", nlohmann::json::object());
 }
 
 }  // namespace cad_core::part_design

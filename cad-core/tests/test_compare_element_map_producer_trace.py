@@ -19,6 +19,14 @@ from tests.producer_trace_fixture import (
 )
 from tools.compare_element_map_producer_trace import paths_from_args
 from tools.element_map_producer_trace import compare_traces
+from tools.element_map_producer_trace.compare import _Mappings, _project_pair
+from tools.element_map_producer_trace.projection import _canonical_ordered_entries
+from tools.collect_freecad_expected import canonical_json_sha256
+from tests.test_collect_freecad_expected_producer_trace import (
+    access_audit_trace,
+    rehash_access_set,
+    trace_with_access_summary,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -183,6 +191,202 @@ def _wrapped_trace() -> dict:
 
 
 class CompareProducerTraceTests(unittest.TestCase):
+    def test_access_summary_identity_is_projected_after_raw_summary_ref_changes(self) -> None:
+        expected = trace_with_access_summary()
+        actual = retag(trace_with_access_summary(), 99)
+        summary = next(iter(actual["accessSummaries"].values()))
+        summary["ownerObjectTag"] = 99
+        summary["ownerIdentity"] = "object:99"
+        summary["propertyIdentity"] = "property:object:99:Shape"
+        for identity in actual["accessSets"].values():
+            for field in ("propertyReads", "propertyWrites"):
+                identity[field] = [value.replace("object:2", "object:99") for value in identity[field]]
+            for field in ("objectReads", "objectWrites"):
+                identity[field] = [value.replace("object:2", "object:99") for value in identity[field]]
+        for metadata in actual["traceIdentities"].values():
+            metadata["ownerIdentity"] = metadata["ownerIdentity"].replace("object:2", "object:99")
+            if "propertyIdentity" in metadata:
+                metadata["propertyIdentity"] = metadata["propertyIdentity"].replace("object:2", "object:99")
+        renamed_identities = {
+            key.replace("object:2", "object:99"): value
+            for key, value in actual["traceIdentities"].items()
+        }
+        actual["traceIdentities"] = renamed_identities
+        summary["elementMapReads"] = [value.replace("object:2", "object:99") for value in summary["elementMapReads"]]
+        summary["elementMapWrites"] = [value.replace("object:2", "object:99") for value in summary["elementMapWrites"]]
+        rehash_access_set(actual)
+
+        result = compare_traces(expected, actual)
+
+        self.assertEqual("equal", result.status, f"{result.classification}: {result.detail}")
+        self.assertEqual("projected", result.equivalence)
+        self.assertIn(
+            "derived_access_summary_identity",
+            {record.reason_code for record in result.normalizations},
+        )
+
+    def test_dangling_summary_ref_is_invalid_before_projection(self) -> None:
+        expected = trace_with_access_summary()
+        actual = trace_with_access_summary()
+        actual["events"][4]["fields"]["summaryRef"] = "accessSummary:sha256:missing"
+
+        result = compare_traces(expected, actual)
+
+        self.assertEqual("invalid", result.status)
+        self.assertEqual("invalid_actual_trace", result.classification)
+
+    def test_tampered_summary_hash_is_invalid_before_projection(self) -> None:
+        expected = trace_with_access_summary()
+        actual = trace_with_access_summary()
+        next(iter(actual["accessSummaries"].values()))["propertyName"] = "Other"
+
+        result = compare_traces(expected, actual)
+
+        self.assertEqual("invalid", result.status)
+        self.assertEqual("invalid_actual_trace", result.classification)
+
+    def test_independent_owner_summary_blocks_may_reorder(self) -> None:
+        def two_owner_trace() -> dict:
+            value = trace_with_access_summary()
+            value["objects"]["Pad"]["typeId"] = "PartDesign::Point"
+            value["objectTagIndex"]["2"] = {"object": "Point", "typeId": "PartDesign::Point"}
+            value["objects"]["Point"] = value["objects"].pop("Pad")
+            value["transactions"][0]["targets"] = ["Point"]
+            for item in value["events"]:
+                if item.get("object") == "Pad":
+                    item["object"] = "Point"
+            value["objects"]["Line"] = {"tag": 3, "typeId": "PartDesign::Line", "slices": []}
+            value["objectTagIndex"]["3"] = {"object": "Line", "typeId": "PartDesign::Line"}
+            summary_ref, summary = next(iter(value["accessSummaries"].items()))
+            summary.update(
+                owner="Point",
+                ownerIdentity="object:2",
+                ownerTypeId="PartDesign::Point",
+                ownerGraphRole="PartDesign::Point",
+                propertyIdentity="property:object:2:Shape",
+                touchesDocumentState=False,
+                stringHasherReads=[],
+            )
+            access_ref = summary["accessSet"]
+            access_set = value["accessSets"][access_ref]
+            access_set["documentReads"] = []
+            access_set["documentWrites"] = []
+            access_ref = "accessSet:sha256:" + canonical_json_sha256(
+                {key: access_set[key] for key in access_set if key != "canonicalHash"}
+            )
+            access_set["canonicalHash"] = access_ref.rsplit(":", 1)[-1]
+            value["accessSets"] = {access_ref: access_set}
+            summary["accessSet"] = access_ref
+
+            line_access = copy.deepcopy(access_set)
+            for field in ("propertyReads", "propertyWrites", "objectReads", "objectWrites"):
+                line_access[field] = [item.replace("object:2", "object:3") for item in line_access[field]]
+            line_access_ref = "accessSet:sha256:" + canonical_json_sha256(
+                {key: line_access[key] for key in line_access if key != "canonicalHash"}
+            )
+            line_access["canonicalHash"] = line_access_ref.rsplit(":", 1)[-1]
+            value["accessSets"][line_access_ref] = line_access
+            value["traceIdentities"]["element-map:property:object:3:Shape"] = {
+                "kind": "elementMap",
+                "ownerIdentity": "object:3",
+                "propertyIdentity": "property:object:3:Shape",
+            }
+            line_summary = copy.deepcopy(summary)
+            line_summary.update(
+                owner="Line",
+                ownerIdentity="object:3",
+                ownerObjectTag=3,
+                ownerTypeId="PartDesign::Line",
+                ownerGraphRole="PartDesign::Line",
+                propertyIdentity="property:object:3:Shape",
+                accessSet=line_access_ref,
+                elementMapReads=["element-map:property:object:3:Shape"],
+                elementMapWrites=["element-map:property:object:3:Shape"],
+            )
+            summary_ref = "accessSummary:sha256:" + canonical_json_sha256(
+                {key: summary[key] for key in summary if key != "canonicalHash"}
+            )
+            summary["canonicalHash"] = summary_ref.rsplit(":", 1)[-1]
+            line_summary_ref = "accessSummary:sha256:" + canonical_json_sha256(
+                {key: line_summary[key] for key in line_summary if key != "canonicalHash"}
+            )
+            line_summary["canonicalHash"] = line_summary_ref.rsplit(":", 1)[-1]
+            value["accessSummaries"] = {summary_ref: summary, line_summary_ref: line_summary}
+            summary_event = next(item for item in value["events"] if item["slice"] == "property_shape.access_summary")
+            summary_event["fields"]["summaryRef"] = summary_ref
+            line_event = copy.deepcopy(summary_event)
+            line_event["fields"]["summaryRef"] = line_summary_ref
+            value["events"].insert(5, line_event)
+            resequence(value)
+            return value
+
+        expected = two_owner_trace()
+        actual = two_owner_trace()
+        summary_positions = [index for index, item in enumerate(actual["events"]) if item["slice"] == "property_shape.access_summary"]
+        actual["events"][summary_positions[0]], actual["events"][summary_positions[1]] = (
+            actual["events"][summary_positions[1]], actual["events"][summary_positions[0]]
+        )
+        resequence(actual)
+
+        result = compare_traces(expected, actual)
+
+        self.assertEqual("equal", result.status, f"{result.classification}: {result.detail}")
+        self.assertEqual("projected", result.equivalence)
+        self.assertIn(
+            "independent_owner_block_reorder",
+            {record.reason_code for record in result.normalizations},
+            f"{result.equivalence} {result.normalizations}",
+        )
+
+    def test_comparison_result_distinguishes_raw_and_projected_equivalence(self) -> None:
+        raw = compare_traces(producer_trace(), producer_trace())
+        self.assertEqual("equal", raw.status)
+        self.assertEqual("raw", raw.equivalence)
+        self.assertEqual(0, raw.raw_difference_count)
+        self.assertEqual(0, raw.semantic_difference_count)
+        self.assertEqual((), raw.normalizations)
+
+        expected = producer_trace()
+        actual = retag(producer_trace(), 0x5A)
+        projected = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual("equal", projected.status)
+        self.assertEqual("projected", projected.equivalence)
+        self.assertGreater(projected.raw_difference_count, 0)
+        self.assertEqual(0, projected.semantic_difference_count)
+        self.assertIn(
+            "runtime_tag_bijection",
+            {record.reason_code for record in projected.normalizations},
+        )
+
+    def test_boolean_string_table_flags_never_enter_sid_bijection(self) -> None:
+        mappings = _Mappings()
+        self.assertIsNone(mappings.sids.bind(1, 1))
+        expected, actual, error = _project_pair(
+            True,
+            True,
+            path=("entries", "12", "prefixIDIndex"),
+            slice_name="table_checkpoint",
+            mappings=mappings,
+        )
+        self.assertIsNone(error)
+        self.assertIs(expected, True)
+        self.assertIs(actual, True)
+
+    def test_ordered_entries_resolve_and_collapse_only_equivalent_transport_aliases(self) -> None:
+        table = {
+            8: {"data": "g3v2", "postfix": ";SKT", "mapped": True},
+            9: {"data": "g4v1", "postfix": ";SKT", "mapped": True},
+        }
+        native = (
+            "#8:2;:H9f,V[#8:2]|g4v1;SKT;:H9f,V[]|"
+            "g3v2;SKT;:H9f,V[]|#9:1;:H9f,V[#9:1]"
+        )
+        actual = "#8:2;:H9f,V[#8:2]|#9:1;:H9f,V[#9:1]"
+        self.assertEqual(
+            _canonical_ordered_entries(native, table),
+            _canonical_ordered_entries(actual, table),
+        )
+
     def test_equal_and_first_field_pointer(self) -> None:
         self.assertEqual(compare_traces(producer_trace(), producer_trace()).status, "equal")
         different = producer_trace(field_value="different")
@@ -243,6 +447,91 @@ class CompareProducerTraceTests(unittest.TestCase):
         result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
         self.assertEqual("sid_allocation_mismatch", result.classification)
         self.assertEqual("/fields/data", result.json_pointer)
+
+    def test_native_and_cad_rs_hasher_insert_envelopes_share_one_semantic_event(self) -> None:
+        expected = producer_trace()
+        expected["producer"] = {"name": "FreeCAD", "document": "Native"}
+        native = event(
+            0,
+            _scope_id(expected),
+            0,
+            "hasher.insert",
+            "allocated",
+            "table_insert",
+            _snapshot_id(expected),
+            fields={"data": "Face", "id": "1", "postfix": ";OP"},
+        )
+        native["objectTag"] = _object_tag(expected)
+
+        actual = producer_trace()
+        cad_rs = _allocation(actual, 1)
+        cad_rs["fields"].update({"data": "Face", "postfix": ";OP"})
+        insert_events(expected, 2, [native])
+        insert_events(actual, 2, [cad_rs])
+
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.expected_value!r} {result.actual_value!r}",
+        )
+
+    def test_preserved_encode_expands_validated_cad_rs_sid_and_drops_transport_fields(self) -> None:
+        expected = retag(producer_trace(), 159)
+        expected["producer"] = {"name": "FreeCAD", "document": "Native"}
+        native = _normal_event(
+            expected,
+            "element_map.encode",
+            before="g1;SKT;:H9f,V",
+        )
+        native["decision"] = "preserved"
+        native["reason"] = "same_or_empty_tag"
+
+        actual = producer_trace()
+        table_id = add_snapshot(
+            actual,
+            {
+                "entries": [
+                    {
+                        "token": "#2",
+                        "data": "g",
+                        "postfix": ";SKT",
+                        "mapped": True,
+                        "related": [],
+                    }
+                ]
+            },
+            kind="stringTable",
+            label="table_checkpoint",
+        )
+        actual["stringTableSnapshots"][table_id]["definedSids"] = [2]
+        cad_rs = event(
+            0,
+            _scope_id(actual),
+            0,
+            "element_map.encode",
+            "preserved",
+            "same_or_empty_tag",
+            _snapshot_id(actual),
+            fields={
+                "before": "#2:1;:H2,V",
+                "after": "#2:1;:H2,V",
+                "elementType": "V",
+                "masterTag": "0",
+                "inputTag": "0",
+                "entryLocalRefs": [],
+            },
+        )
+        cad_rs["objectTag"] = _object_tag(actual)
+        insert_events(expected, 2, [native])
+        insert_events(actual, 2, [cad_rs])
+
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.expected_value!r} {result.actual_value!r}",
+        )
 
     def test_document_object_wrapper_scopes_are_transparent(self) -> None:
         result = compare_traces(_wrapped_trace(), producer_trace(scope_sequence=19))
@@ -453,6 +742,222 @@ class CompareProducerTraceTests(unittest.TestCase):
         result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
         self.assertEqual("field_mismatch", result.classification)
         self.assertEqual("/fields/rawMappedName", result.json_pointer)
+
+    def test_event_identity_projects_tag_before_alignment_but_keeps_source_strict(self) -> None:
+        expected = producer_trace()
+        actual = retag(producer_trace(), 0x5A)
+        insert_events(
+            expected,
+            2,
+            [
+                _normal_event(
+                    expected,
+                    "maker.generated",
+                    source="#8;:H2,V",
+                    sourceTag=2,
+                    target="Edge1",
+                )
+            ],
+        )
+        insert_events(
+            actual,
+            2,
+            [
+                _normal_event(
+                    actual,
+                    "maker.generated",
+                    source="#8;:H5a,V",
+                    sourceTag=0x5A,
+                    target="Edge1",
+                )
+            ],
+        )
+
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.detail}",
+        )
+
+        actual_generated = next(
+            item for item in actual["events"] if item["slice"] == "maker.generated"
+        )
+        actual_generated["fields"]["source"] = "#8;:H5a:2,V"
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual("different", result.status)
+
+    def test_event_fields_bind_explicit_tag_before_embedded_mapped_name(self) -> None:
+        expected = producer_trace()
+        actual = producer_trace()
+        insert_events(
+            expected,
+            2,
+            [
+                _normal_event(
+                    expected,
+                    "maker.generated",
+                    source="#8;:H-64,V",
+                    sourceTag=-100,
+                    target="Edge1",
+                )
+            ],
+        )
+        insert_events(
+            actual,
+            2,
+            [
+                _normal_event(
+                    actual,
+                    "maker.generated",
+                    source="#8;:H-384,V",
+                    sourceTag=-900,
+                    target="Edge1",
+                )
+            ],
+        )
+
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.detail}",
+        )
+
+        actual_generated = next(
+            item for item in actual["events"] if item["slice"] == "maker.generated"
+        )
+        actual_generated["fields"]["source"] = "#8;:H-384:2,V"
+        self.assertEqual(
+            "different",
+            compare_traces(expected, actual, document_graph=PAD_GRAPH).status,
+        )
+
+    def test_snapshot_derived_hash_does_not_override_projected_payload(self) -> None:
+        expected = producer_trace()
+        actual = retag(producer_trace(), 0x5A)
+        expected_snapshot = add_snapshot(
+            expected,
+            {
+                "value": "same",
+                "canonicalPayloadSha256": "a" * 64,
+            },
+        )
+        actual_snapshot = add_snapshot(
+            actual,
+            {
+                "value": "same",
+                "canonicalPayloadSha256": "b" * 64,
+            },
+        )
+        expected["events"][2]["fields"] = {"snapshot": expected_snapshot}
+        actual["events"][2]["fields"] = {"snapshot": actual_snapshot}
+
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.detail}",
+        )
+
+        different_snapshot = add_snapshot(
+            actual,
+            {
+                "value": "different",
+                "canonicalPayloadSha256": "b" * 64,
+            },
+        )
+        actual["events"][2]["fields"] = {"snapshot": different_snapshot}
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual("different", result.status)
+        self.assertIn("value", result.json_pointer or "")
+
+    def test_deleted_tag_in_mapped_name_uses_the_object_tag_bijection(self) -> None:
+        expected = producer_trace()
+        actual = retag(producer_trace(), 0x5A)
+        expected["events"][2]["fields"] = {
+            "rawMappedName": "Edge1;D2;:H2:5,E"
+        }
+        actual["events"][2]["fields"] = {
+            "rawMappedName": "Edge1;D5a;:H5a:5,E"
+        }
+
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.detail}",
+        )
+
+        actual["events"][2]["fields"]["rawMappedName"] = "Edge1;D5a;:H5a:6,E"
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual("field_mismatch", result.classification)
+
+    def test_embedded_unknown_tags_bind_only_when_string_structure_matches(self) -> None:
+        expected = producer_trace()
+        actual = producer_trace()
+        expected["events"][2]["fields"] = {
+            "rawMappedName": "Vertex1;Db44;:H:5,V"
+        }
+        actual["events"][2]["fields"] = {
+            "rawMappedName": "Vertex1;D574;:H:5,V"
+        }
+
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.detail}",
+        )
+
+        actual["events"][2]["fields"]["rawMappedName"] = "Vertex1;D575;:H:6,V"
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual("field_mismatch", result.classification)
+
+        expected = producer_trace()
+        actual = producer_trace()
+        expected["events"][2]["fields"] = {"owner": "OwnerHabc"}
+        actual["events"][2]["fields"] = {"owner": "OwnerHdef"}
+        result = compare_traces(expected, actual, document_graph=PAD_GRAPH)
+        self.assertEqual("field_mismatch", result.classification)
+
+    def test_transient_owner_uses_first_seen_semantics_not_random_tag_name(self) -> None:
+        def add_transient(trace: dict, name: str, tag: int, producer: str) -> None:
+            trace["objects"][name] = {
+                "tag": tag,
+                "typeId": "Part::TopoShape",
+                "slices": [],
+            }
+            trace["objectTagIndex"][str(tag)] = {
+                "object": name,
+                "typeId": "Part::TopoShape",
+            }
+            observed = _normal_event(
+                trace,
+                "refine.lifecycle",
+                stage="makeElementRefine",
+            )
+            observed["object"] = name
+            observed["objectTag"] = tag
+            observed["producer"] = producer
+            insert_events(trace, 2, [observed])
+
+        expected = producer_trace()
+        actual = producer_trace()
+        add_transient(expected, "@transient:-100", -100, "Part::TopoShape")
+        add_transient(actual, "@transient:-900", -900, "Part::TopoShape")
+
+        result = compare_traces(expected, actual)
+        self.assertEqual(
+            "equal",
+            result.status,
+            f"{result.classification} {result.json_pointer} {result.detail}",
+        )
+
+        changed = producer_trace()
+        add_transient(changed, "@transient:-901", -901, "Part::FaceMaker")
+        result = compare_traces(expected, changed)
+        self.assertEqual("target_inventory_mismatch", result.classification)
 
     def test_identity_one_to_many_is_invalid_actual(self) -> None:
         actual = producer_trace()

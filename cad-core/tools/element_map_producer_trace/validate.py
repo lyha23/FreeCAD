@@ -249,7 +249,11 @@ def _validate_scopes(events: list[Mapping[str, Any]]) -> None:
         elif sequence:
             _require(sequence in parents, f"event references unknown scope {sequence}")
             _require(parent == parents[sequence], f"event scope {sequence} parent drift")
-            if event.get("slice") == "maker.final_checkpoint":
+            if (
+                isinstance(event.get("slice"), str)
+                and "checkpoint" in event["slice"]
+                and event.get("decision") == "published"
+            ):
                 checkpointed.add(sequence)
     _require(not stack, f"unclosed scopes {stack}")
     _require(set(parents) == closed, "scope begin/end sets differ")
@@ -420,8 +424,11 @@ def _validate_event_sid_timeline(events: list[Mapping[str, Any]]) -> None:
         if event.get("slice") == "hasher.insert":
             result = fields.get("result")
             value = result.get("value") if isinstance(result, Mapping) else None
+            if value is None:
+                raw_id = fields.get("id")
+                value = int(raw_id) if isinstance(raw_id, str) and raw_id.isdigit() else None
             _require(isinstance(value, int) and value > 0, f"event {event.get('sequence')} has invalid SID result")
-            if event.get("decision") == "allocation":
+            if event.get("decision") in {"allocation", "allocated"}:
                 _require(value not in known_sids, f"event {event.get('sequence')} reallocates SID {value}")
                 known_sids.add(value)
             elif event.get("decision") == "hit":
@@ -450,8 +457,6 @@ def _native_event_sid_refs(value: Any) -> list[int]:
 def _validate_native_event_sid_timeline(events: list[Mapping[str, Any]]) -> None:
     known_sids: set[int] = set()
     for event in events:
-        if event.get("slice") == "document.recompute.begin":
-            known_sids.clear()
         fields = event.get("fields")
         _require(isinstance(fields, Mapping), f"event {event.get('sequence')} fields must be an object")
         for value in _native_event_sid_refs(fields):
@@ -625,7 +630,16 @@ def _validate_child_ranges_and_mapper(
                 for relation in ("modified", "generated"):
                     for target in source.get(relation, []):
                         indexed = str(target.get("indexed", "")).lower()
-                        _require(not indexed or indexed in output_names, f"mapper target {indexed} is absent")
+                        if indexed:
+                            _require(indexed in output_names, f"mapper target {indexed} is absent")
+                            continue
+                        status = target.get("relationStatus")
+                        members = target.get("outputMembers")
+                        _require(
+                            (status == "not_in_output" and isinstance(members, list) and not members)
+                            or (status == "expanded_to_output" and isinstance(members, list) and members),
+                            "unknown mapper relation",
+                        )
             continue
         _require(isinstance(inputs, list), f"mapper snapshot {snapshot_id} inputs missing")
         input_inventories: dict[int, dict[str, set[str]]] = {}
@@ -644,7 +658,21 @@ def _validate_child_ranges_and_mapper(
             for relation in ("modified", "generated"):
                 for target in source.get(relation, []):
                     indexed = str(target.get("indexed", "")).lower()
-                    _require(not indexed or indexed in output_names, f"mapper target {indexed} is absent")
+                    if indexed:
+                        _require(indexed in output_names, f"mapper target {indexed} is absent")
+                        _require(target.get("relationStatus") == "resolved", f"mapper target {indexed} is unresolved")
+                        continue
+                    status = target.get("relationStatus")
+                    members = target.get("outputMembers")
+                    if status == "not_in_output":
+                        _require(isinstance(members, list) and not members, "mapper not_in_output relation has members")
+                        continue
+                    _require(status == "expanded_to_output", "unknown mapper relation")
+                    _require(isinstance(members, list) and members, "mapper expanded relation has no members")
+                    for member in members:
+                        _require(isinstance(member, Mapping), "mapper output member is invalid")
+                        member_indexed = str(member.get("indexed", "")).lower()
+                        _require(member_indexed in output_names, f"mapper output member {member_indexed} is absent")
 
 
 def validate_trace(

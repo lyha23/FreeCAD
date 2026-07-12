@@ -874,4 +874,30 @@ ReferenceValidationResult validateObjectReferences(const app::DocumentObject& ob
     return validation;
 }
 
+std::vector<std::string> downstreamElementReferenceSubnames(
+    const std::string& producer,
+    const ComputeContext& context
+)
+{
+    std::vector<std::string> result;
+    for (const auto& [name, object] : context.documentObjects) {
+        (void)name;
+        for (const auto& [propertyName, property] : object->propertyValues) {
+            (void)propertyName;
+            for (const app::Link& link : property.links) {
+                if (link.object != producer) {
+                    continue;
+                }
+                for (const std::string& subname : link.subnames) {
+                    if (!subname.empty()
+                        && std::find(result.begin(), result.end(), subname) == result.end()) {
+                        result.push_back(subname);
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+
 }  // namespace cad_core::runtime

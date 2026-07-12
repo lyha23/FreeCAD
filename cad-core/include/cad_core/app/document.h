@@ -20,6 +20,11 @@ const PropertyValue* propertyValue(const DocumentObject& object, const std::stri
 bool hasPropertyType(const DocumentObject& object, const std::string& property, const std::string& propertyType);
 std::vector<Link> readLinks(const DocumentObject& object, const std::string& property);
 std::optional<Link> readLink(const DocumentObject& object, const std::string& property);
+// FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/DocumentObject.cpp
+// ::DocumentObject::getOutList() calls getPropertyList() and then "link->getLinks(res, noHidden)"
+// for each property. This App-layer interface restores that declaration order for the normalized
+// stateless request model; graph callers must not infer property semantics themselves.
+std::vector<const Link*> dependencyLinksInFreeCadOrder(const DocumentObject& object);
 std::optional<bool> readBool(const DocumentObject& object, const std::string& property);
 std::optional<double> readNumber(const DocumentObject& object, const std::string& property);
 std::optional<std::string> readString(const DocumentObject& object, const std::string& property);

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cad_core/part/face_maker.h"
 #include "cad_core/part/internal_shape_history_ledger.h"
 
 #include <TopoDS_Edge.hxx>
@@ -7,6 +8,7 @@
 #include <TopoDS_Wire.hxx>
 
 #include <cstddef>
+#include <functional>
 #include <optional>
 #include <vector>
 
@@ -21,6 +23,7 @@ namespace cad_core::sketcher
 struct SketchInternalBuildInput
 {
     app::ElementMapProducerTrace* producerTrace = nullptr;
+    std::function<void(const part::FaceMakerBuildFaceResult&)> faceMakerPostBuild;
     std::vector<TopoDS_Wire> faceWires;
     std::vector<TopoDS_Wire> openWires;
     std::vector<TopoDS_Edge> openEdges;

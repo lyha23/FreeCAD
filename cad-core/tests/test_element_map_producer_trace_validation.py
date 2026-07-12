@@ -10,6 +10,7 @@ from tools.element_map_producer_trace import (
     canonical_json_sha256,
     validate_trace,
 )
+from tools.element_map_producer_trace.validate import _validate_child_ranges_and_mapper
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -110,6 +111,76 @@ class ProducerTraceValidationTests(unittest.TestCase):
         trace["events"][3]["fields"]["entryLocalRefs"] = "#2:1"
         with self.assertRaisesRegex(TraceValidationError, "unknown native SID 2"):
             validate_trace(trace, input_document=request, response_document=response)
+
+    def test_bound_native_event_sid_persists_across_recompute_boundary(self) -> None:
+        request = {"request": True}
+        response = {"response": True}
+        trace = producer_trace()
+        trace["producer"] = {
+            "name": "FreeCAD",
+            "document": "Native",
+            "inputSha256": canonical_json_sha256(request),
+            "responseSha256": canonical_json_sha256(response),
+            "snapshotPayloadHashAlgorithm": "canonical-json-sha256-v1",
+        }
+        for group in ("stringTableSnapshots", "ledgerSnapshots", "mapperSnapshots"):
+            for snapshot in trace[group].values():
+                payload = snapshot.get("payload") if "payload" in snapshot else snapshot.get("entries")
+                snapshot["canonicalPayloadSha256"] = canonical_json_sha256(payload)
+        allocation = event(
+            0,
+            0,
+            0,
+            "hasher.insert",
+            "allocated",
+            "fixture_setup",
+            trace["events"][0]["afterSnapshot"],
+            fields={"id": "1", "data": "Face1", "postfix": ""},
+        )
+        insert_events(trace, 1, [allocation])
+        trace["events"][3]["fields"]["entryLocalRefs"] = "#1:1"
+        validate_trace(trace, input_document=request, response_document=response)
+
+    def test_mapper_not_in_output_is_closed_without_fabricated_target(self) -> None:
+        snapshots = {
+            "mapper:fixture": {
+                "payload": {
+                    "raw": {
+                        "inputs": [
+                            {
+                                "sourceOrdinal": 0,
+                                "inventory": {
+                                    "indexed": {"Edge": [{"indexed": "Edge1"}]}
+                                },
+                            }
+                        ],
+                        "output": {"indexed": {"Edge": []}},
+                        "sources": [
+                            {
+                                "sourceOrdinal": 0,
+                                "sourceShapeType": "Edge",
+                                "sourceIndexed": "Edge1",
+                                "modified": [
+                                    {
+                                        "indexed": "",
+                                        "relationStatus": "not_in_output",
+                                        "outputMembers": [],
+                                    }
+                                ],
+                                "generated": [],
+                            }
+                        ],
+                    }
+                }
+            }
+        }
+        _validate_child_ranges_and_mapper(snapshots, strict_actual=True)
+
+        snapshots["mapper:fixture"]["payload"]["raw"]["sources"][0]["modified"][0][
+            "outputMembers"
+        ] = [{"indexed": "Edge1"}]
+        with self.assertRaisesRegex(TraceValidationError, "not_in_output relation has members"):
+            _validate_child_ranges_and_mapper(snapshots, strict_actual=True)
 
     def test_native_allows_closed_empty_recompute_after_projection_gap(self) -> None:
         trace = producer_trace()

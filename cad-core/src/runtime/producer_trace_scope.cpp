@@ -8,11 +8,33 @@
 namespace cad_core::runtime
 {
 
+namespace
+{
+
+std::string nativeBeginReason(const std::string& slice)
+{
+    // FreeCAD producer trace authority: SketchObject::execute(), FeatureExtrude::execute(), and
+    // Body::execute() publish their concrete operation name at the feature-scope entry.
+    if (slice == "sketch.producer") {
+        return "sketch_execute";
+    }
+    if (slice == "partdesign.extrude") {
+        return "build_extrusion";
+    }
+    if (slice == "partdesign.body_tip") {
+        return "body_execute";
+    }
+    return "producer_started";
+}
+
+} // namespace
+
 ProducerTraceScope::ProducerTraceScope(ComputeContext& context,
                                        const app::DocumentObject& object,
                                        std::string slice,
                                        std::string stage,
-                                       nlohmann::json fields)
+                                       nlohmann::json fields,
+                                       nlohmann::json beginFields)
     : context_(&context)
     , object_(&object)
     , slice_(std::move(slice))
@@ -28,8 +50,11 @@ ProducerTraceScope::ProducerTraceScope(ComputeContext& context,
             {"requiresFinalCheckpoint", true}}}
       ))
 {
+    if (beginFields.is_null()) {
+        beginFields = fields;
+    }
     context_->producerTrace->record(
-        {slice_, "begin", "producer_started", std::move(fields)}
+        {slice_, "begin", nativeBeginReason(slice_), std::move(beginFields)}
     );
 }
 
@@ -47,6 +72,19 @@ ProducerTraceScope::~ProducerTraceScope()
         if (failed && outcome_ == "success") {
             outcome_ = "abort";
             reason_ = "producer_reported_failure";
+        }
+        // SketchObject publishes its two PropertyPartShape assignments and
+        // sketch.internal_checkpoint inside buildShape()/buildInternals(). Native has no generic
+        // maker.final_checkpoint or producer_shape_handoff after that concrete sequence.
+        if (slice_ == "sketch.producer" || slice_ == "partdesign.extrude"
+            || slice_ == "partdesign.body_tip") {
+            if (outcome_ == "abort") {
+                scope_.abort(reason_);
+            }
+            else if (outcome_ == "exception") {
+                scope_.exception(reason_);
+            }
+            return;
         }
         const auto namedShape = context_->namedShapes.find(object_->name);
         std::string ledgerSnapshot;

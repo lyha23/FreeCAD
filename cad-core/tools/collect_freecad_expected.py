@@ -12,19 +12,22 @@ import subprocess
 import sys
 import tempfile
 import traceback
+from collections import Counter
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, NamedTuple, Sequence
 
 try:
     from element_map_producer_trace import (
         TraceValidationError,
         canonical_json_sha256,
+        compare_traces,
         validate_trace as validate_element_map_producer_trace,
     )
 except ModuleNotFoundError:
     from tools.element_map_producer_trace import (
         TraceValidationError,
         canonical_json_sha256,
+        compare_traces,
         validate_trace as validate_element_map_producer_trace,
     )
 
@@ -186,6 +189,44 @@ class UnsupportedFixture(RuntimeError):
     pass
 
 
+class NativeExpectedCase(NamedTuple):
+    phase: str
+    case: str
+    fixture_path: Path
+    expected_path: Path
+    ledger_path: Path
+    producer_trace_path: Path
+
+
+def native_expected_manifest(fixtures_root: Path) -> list[NativeExpectedCase]:
+    """Discover native public authority cases and require all regression artifacts."""
+
+    manifest: list[NativeExpectedCase] = []
+    errors: list[str] = []
+    for expected_path in sorted(fixtures_root.glob("*/expected/*.freecad.json")):
+        phase = expected_path.parent.parent.name
+        case = expected_path.name.removesuffix(".freecad.json")
+        fixture_path = fixtures_root / phase / f"{case}.json"
+        ledger_path = ledger_path_for_expected(expected_path)
+        trace_path = producer_trace_path_for_expected(expected_path)
+        for required_path in (fixture_path, ledger_path, trace_path):
+            if not required_path.is_file():
+                errors.append(f"missing native fixture artifact: {required_path}")
+        manifest.append(
+            NativeExpectedCase(
+                phase=phase,
+                case=case,
+                fixture_path=fixture_path,
+                expected_path=expected_path,
+                ledger_path=ledger_path,
+                producer_trace_path=trace_path,
+            )
+        )
+    if errors:
+        raise ValueError("; ".join(errors))
+    return manifest
+
+
 def script_args(argv: list[str]) -> list[str]:
     # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Application.cpp::parseProgramOptions(),
     # registers "--pass" as the option that passes remaining arguments through to a script.
@@ -221,14 +262,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Collect CAD Core public expected, ledger, and producer-trace sidecars from native FreeCAD.",
     )
-    parser.add_argument("fixture", nargs="?", help="Fixture JSON file. Omit when --phase is used.")
+    parser.add_argument("fixture", nargs="?", help="Fixture JSON file. Omit with --phase or --all-native.")
     parser.add_argument("--phase", help="Collect every supported fixture in fixtures/<phase>.")
+    parser.add_argument(
+        "--all-native",
+        action="store_true",
+        help="Check every native public-authority fixture with complete regression artifacts.",
+    )
     parser.add_argument("--fixtures-root", default=str(ROOT / "fixtures"), help="Fixture root directory.")
     parser.add_argument("--out", help="Output expected file for a single fixture.")
     parser.add_argument(
         "--check",
         action="store_true",
-        help="Compare regenerated public expected and ledger; require a valid producer-trace sidecar.",
+        help="Compare regenerated output with checked-in public/ledger authority and trace oracle.",
     )
     parser.add_argument("--pretty", action="store_true", help="Print generated JSON to stdout.")
     parser.add_argument("--skip-unsupported", action="store_true", help="Skip unsupported fixtures in --phase mode.")
@@ -243,6 +289,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="Legacy no-op with --check: the ledger sidecar is always compared.",
     )
     parser.add_argument("--validate-ledger", action="store_true", help="Validate emitted ledger sidecars before returning success.")
+    parser.add_argument("--repeat", type=int, default=1, help="Run a read-only check independently N times.")
+    parser.add_argument(
+        "--candidate-root",
+        help="Write regenerated check artifacts below this directory without changing checked-in expected files.",
+    )
+    parser.add_argument("--report", help="Write a machine-readable regression report.")
     parser.add_argument(
         "--freecadcmd",
         default=DEFAULT_FREECADCMD,
@@ -251,6 +303,20 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     args = parser.parse_args(script_args(argv))
     if args.check_ledger and not args.check:
         parser.error("--check-ledger requires --check")
+    if args.all_native and (args.phase or args.fixture):
+        parser.error("--all-native, --phase, and fixture path are mutually exclusive")
+    if args.all_native and not args.check:
+        parser.error("--all-native requires --check so checked-in authority is never overwritten")
+    if args.repeat < 1:
+        parser.error("--repeat must be at least 1")
+    if args.repeat > 1 and not args.check:
+        parser.error("--repeat greater than 1 requires --check")
+    if args.repeat > 1 and not args.candidate_root:
+        parser.error("--repeat greater than 1 requires --candidate-root")
+    if args.repeat > 1 and not args.all_native:
+        parser.error("--repeat greater than 1 currently requires --all-native")
+    if args.candidate_root and not args.check:
+        parser.error("--candidate-root requires --check")
     return args
 
 
@@ -271,6 +337,14 @@ def load_fixture(path: Path) -> dict:
 def semantic_hash(value: Any) -> str:
     canonical = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def atomic_write_json(path: Path, payload: dict) -> None:
@@ -294,13 +368,479 @@ def validate_producer_trace(
     response_document: Any | None = None,
 ) -> dict[str, Any]:
     try:
-        return validate_element_map_producer_trace(
+        validated = validate_element_map_producer_trace(
             trace,
             input_document=input_document,
             response_document=response_document,
         )
+        validate_property_shape_access_summaries(validated)
+        return validated
     except TraceValidationError as exc:
         raise RuntimeError(f"native ElementMap producer trace closure is invalid: {exc}") from exc
+
+
+def _require_access_summary(condition: bool, message: str) -> None:
+    if not condition:
+        raise TraceValidationError(f"property_shape access summary: {message}")
+
+
+def validate_property_shape_access_summaries(trace: dict[str, Any]) -> None:
+    """Validate the immutable, content-addressed property access extension."""
+
+    events = trace.get("events", [])
+    summary_events = [
+        event for event in events if event.get("slice") == "property_shape.access_summary"
+    ]
+    summaries = trace.get("accessSummaries")
+    access_sets = trace.get("accessSets")
+    identities = trace.get("traceIdentities")
+    allocation_nodes = trace.get("allocationNodes")
+    if not summary_events and summaries is None and access_sets is None and identities is None:
+        return
+    _require_access_summary(isinstance(summaries, dict), "accessSummaries must be an object")
+    _require_access_summary(isinstance(access_sets, dict), "accessSets must be an object")
+    _require_access_summary(isinstance(identities, dict), "traceIdentities must be an object")
+    if allocation_nodes is not None:
+        _require_access_summary(
+            isinstance(allocation_nodes, dict) and bool(allocation_nodes),
+            "allocationNodes must be a non-empty object when published",
+        )
+
+    for identity, metadata in identities.items():
+        _require_access_summary(isinstance(identity, str) and identity, "identity key is invalid")
+        _require_access_summary(isinstance(metadata, dict), f"identity {identity} is malformed")
+        _require_access_summary(
+            metadata.get("kind") in {"elementMap", "stringHasher"},
+            f"identity {identity} kind is invalid",
+        )
+
+    access_fields = (
+        "propertyReads",
+        "objectReads",
+        "documentReads",
+        "propertyWrites",
+        "objectWrites",
+        "documentWrites",
+    )
+    for access_ref, access_set in access_sets.items():
+        _require_access_summary(isinstance(access_set, dict), f"accessSet {access_ref} is malformed")
+        canonical = {field: access_set.get(field) for field in access_fields}
+        for field, values in canonical.items():
+            _require_access_summary(
+                isinstance(values, list)
+                and all(isinstance(value, str) and value for value in values)
+                and values == sorted(set(values)),
+                f"accessSet {access_ref} {field} must be a sorted unique string array",
+            )
+        digest = canonical_json_sha256(canonical)
+        _require_access_summary(access_set.get("canonicalHash") == digest, f"accessSet {access_ref} hash mismatch")
+        _require_access_summary(access_ref == f"accessSet:sha256:{digest}", f"accessSet {access_ref} id mismatch")
+
+    snapshot_groups = {
+        "stringTable": trace.get("stringTableSnapshots", {}),
+        "ledger": trace.get("ledgerSnapshots", {}),
+        "mapper": trace.get("mapperSnapshots", {}),
+    }
+    snapshots = {snapshot_id for group in snapshot_groups.values() for snapshot_id in group}
+    for node_ref, node in (allocation_nodes or {}).items():
+        _require_access_summary(isinstance(node, dict), f"allocation node {node_ref} is malformed")
+        canonical = {key: value for key, value in node.items() if key != "canonicalHash"}
+        digest = canonical_json_sha256(canonical)
+        _require_access_summary(node.get("canonicalHash") == digest, f"allocation node {node_ref} hash mismatch")
+        _require_access_summary(node_ref == f"allocation:sha256:{digest}", f"allocation node {node_ref} id mismatch")
+        if node.get("kind") == "sid":
+            value = node.get("value")
+            index = node.get("index")
+            table_ref = node.get("stringTableSnapshot")
+            table = snapshot_groups["stringTable"].get(table_ref)
+            entries = table.get("entries") if isinstance(table, dict) else None
+            if entries is None and isinstance(table, dict):
+                entries = table.get("payload")
+            _require_access_summary(
+                isinstance(value, int)
+                and value > 0
+                and isinstance(index, int)
+                and isinstance(entries, dict)
+                and str(value) in entries,
+                f"allocation node {node_ref} SID reference is unresolved",
+            )
+        else:
+            _require_access_summary(
+                node.get("kind") == "opaque"
+                and isinstance(node.get("scopeSequence"), int)
+                and isinstance(node.get("ordinal"), int),
+                f"allocation node {node_ref} opaque reference is malformed",
+            )
+    object_index = trace.get("objectTagIndex", {})
+    known_object_identities = {
+        f"object:{tag}" for tag in object_index
+    } if isinstance(object_index, dict) else set()
+    for access_ref, access_set in access_sets.items():
+        for identity in (*access_set["objectReads"], *access_set["objectWrites"]):
+            _require_access_summary(
+                identity in known_object_identities,
+                f"accessSet {access_ref} object identity {identity!r} is unresolved",
+            )
+        for identity in (*access_set["propertyReads"], *access_set["propertyWrites"]):
+            match = re.fullmatch(r"property:(object:-?\d+):([^:]+)", identity)
+            _require_access_summary(
+                bool(match) and match.group(1) in known_object_identities,
+                f"accessSet {access_ref} property identity {identity!r} is unresolved",
+            )
+        for identity in (*access_set["documentReads"], *access_set["documentWrites"]):
+            _require_access_summary(
+                identity == "document",
+                f"accessSet {access_ref} Document identity {identity!r} is unresolved",
+            )
+    for identity, metadata in identities.items():
+        owner_identity = metadata.get("ownerIdentity")
+        _require_access_summary(
+            owner_identity in known_object_identities
+            or owner_identity in {"document", "value:unowned"},
+            f"identity {identity} ownerIdentity is unresolved",
+        )
+        property_identity = metadata.get("propertyIdentity")
+        if property_identity is not None:
+            match = re.fullmatch(r"property:(object:-?\d+):([^:]+)", property_identity)
+            _require_access_summary(
+                bool(match) and match.group(1) in known_object_identities,
+                f"identity {identity} propertyIdentity is unresolved",
+            )
+    published: dict[str, dict[str, Any]] = {}
+    for event in summary_events:
+        fields = event.get("fields")
+        summary_ref = fields.get("summaryRef") if isinstance(fields, dict) else None
+        _require_access_summary(
+            isinstance(summary_ref, str) and summary_ref in summaries,
+            "published summaryRef is missing",
+        )
+        _require_access_summary(summary_ref not in published, f"summary {summary_ref} is published twice")
+        published[summary_ref] = event
+
+    required_strings = (
+        "producer",
+        "stage",
+        "ownerIdentity",
+        "owner",
+        "ownerTypeId",
+        "ownerGraphRole",
+        "propertyName",
+        "propertyIdentity",
+        "accessSet",
+        "beforeLedgerSnapshot",
+        "afterLedgerSnapshot",
+        "outcome",
+    )
+    identity_lists = (
+        ("elementMapReads", "elementMap"),
+        ("elementMapWrites", "elementMap"),
+        ("stringHasherReads", "stringHasher"),
+        ("stringHasherWrites", "stringHasher"),
+    )
+    scope_events: dict[int, list[dict[str, Any]]] = {}
+    for event in events:
+        scope = event.get("scopeSequence")
+        if isinstance(scope, int) and scope:
+            scope_events.setdefault(scope, []).append(event)
+
+    for summary_ref, summary in summaries.items():
+        _require_access_summary(isinstance(summary, dict), f"summary {summary_ref} is malformed")
+        for field in required_strings:
+            _require_access_summary(
+                isinstance(summary.get(field), str) and bool(summary[field]),
+                f"summary {summary_ref} {field} is missing or invalid",
+            )
+        for field in ("scopeSequence", "transactionSequence", "ownerObjectTag", "sidAllocationDelta"):
+            _require_access_summary(
+                isinstance(summary.get(field), int) and not isinstance(summary[field], bool),
+                f"summary {summary_ref} {field} is missing or invalid",
+            )
+        for field in ("touchesDocumentState", "touchesSharedMutableState"):
+            _require_access_summary(
+                isinstance(summary.get(field), bool),
+                f"summary {summary_ref} {field} is missing or invalid",
+            )
+        access_ref = summary["accessSet"]
+        _require_access_summary(access_ref in access_sets, f"summary {summary_ref} accessSet is missing")
+        access_set = access_sets[access_ref]
+        for field, kind in identity_lists:
+            values = summary.get(field)
+            _require_access_summary(
+                isinstance(values, list) and values == sorted(set(values)),
+                f"summary {summary_ref} {field} must be a sorted unique array",
+            )
+            for identity in values:
+                _require_access_summary(
+                    isinstance(identity, str)
+                    and identity in identities
+                    and identities[identity].get("kind") == kind,
+                    f"summary {summary_ref} {field} identity {identity!r} is unresolved",
+                )
+        before = summary["beforeLedgerSnapshot"]
+        after = summary["afterLedgerSnapshot"]
+        _require_access_summary(before in snapshots and after in snapshots, f"summary {summary_ref} snapshot is missing")
+        tag = summary["ownerObjectTag"]
+        indexed = object_index.get(str(tag)) if isinstance(object_index, dict) else None
+        _require_access_summary(
+            isinstance(indexed, dict)
+            and indexed.get("object") == summary["owner"]
+            and indexed.get("typeId") == summary["ownerTypeId"],
+            f"summary {summary_ref} owner identity is unresolved",
+        )
+        _require_access_summary(summary["ownerIdentity"] == f"object:{tag}", f"summary {summary_ref} ownerIdentity mismatch")
+        _require_access_summary(
+            summary["propertyIdentity"]
+            == f"property:{summary['ownerIdentity']}:{summary['propertyName']}",
+            f"summary {summary_ref} propertyIdentity mismatch",
+        )
+        cross_owner_write = any(
+            identity != summary["ownerIdentity"]
+            for identity in access_set["objectWrites"]
+        ) or any(
+            not identity.startswith(f"property:{summary['ownerIdentity']}:")
+            for identity in access_set["propertyWrites"]
+        )
+        cross_owner_element_map_write = any(
+            identities[identity].get("ownerIdentity")
+            not in {summary["ownerIdentity"], summary["propertyIdentity"]}
+            for identity in summary["elementMapWrites"]
+        )
+        expected_document_state = bool(
+            access_set["documentReads"]
+            or access_set["documentWrites"]
+            or summary["stringHasherReads"]
+            or summary["stringHasherWrites"]
+        )
+        expected_shared_mutable = bool(
+            access_set["documentWrites"]
+            or summary["stringHasherWrites"]
+            or cross_owner_write
+            or cross_owner_element_map_write
+        )
+        _require_access_summary(
+            summary["touchesDocumentState"] == expected_document_state,
+            f"summary {summary_ref} Document state flag contradicts access set",
+        )
+        _require_access_summary(
+            summary["touchesSharedMutableState"] == expected_shared_mutable,
+            f"summary {summary_ref} shared mutable state flag contradicts access set",
+        )
+        scope = summary["scopeSequence"]
+        timeline = scope_events.get(scope, [])
+        event = published.get(summary_ref)
+        _require_access_summary(event is not None, f"summary {summary_ref} was not published")
+        _require_access_summary(
+            event.get("scopeSequence") == scope
+            and event.get("transactionSequence") == summary["transactionSequence"],
+            f"summary {summary_ref} scope/transaction mismatch",
+        )
+        event_position = event.get("sequence", 0)
+        before_positions = [
+            item["sequence"]
+            for item in timeline
+            if before in {item.get("beforeSnapshot"), item.get("afterSnapshot")}
+        ]
+        after_positions = [
+            item["sequence"]
+            for item in timeline
+            if after in {item.get("beforeSnapshot"), item.get("afterSnapshot")}
+        ]
+        _require_access_summary(
+            before_positions
+            and after_positions
+            and min(before_positions) <= min(after_positions) <= event_position,
+            f"summary {summary_ref} snapshot timeline is invalid",
+        )
+        closing = [
+            item for item in timeline if item.get("slice") in {"scope.end", "scope.abort"}
+        ]
+        _require_access_summary(bool(closing), f"summary {summary_ref} scope outcome is missing")
+        complete_scope = closing[-1].get("slice") == "scope.end" and closing[-1].get("decision") == "success"
+        _require_access_summary(
+            (summary["outcome"] == "complete") == complete_scope,
+            f"summary {summary_ref} outcome contradicts scope closure",
+        )
+        _require_access_summary(summary["sidAllocationDelta"] >= 0, f"summary {summary_ref} SID delta is invalid")
+        if summary["sidAllocationDelta"] == 0:
+            _require_access_summary(
+                "relatedAllocationRefs" not in summary,
+                f"summary {summary_ref} emits an empty SID allocation table",
+            )
+        else:
+            refs = summary.get("relatedAllocationRefs")
+            _require_access_summary(
+                isinstance(refs, list) and refs,
+                f"summary {summary_ref} SID allocation refs are missing",
+            )
+            _require_access_summary(
+                isinstance(allocation_nodes, dict)
+                and all(isinstance(ref, str) and ref in allocation_nodes for ref in refs),
+                f"summary {summary_ref} allocation reference is unresolved",
+            )
+        canonical = {key: value for key, value in summary.items() if key != "canonicalHash"}
+        digest = canonical_json_sha256(canonical)
+        _require_access_summary(summary.get("canonicalHash") == digest, f"summary {summary_ref} canonical hash mismatch")
+        _require_access_summary(summary_ref == f"accessSummary:sha256:{digest}", f"summary {summary_ref} id/hash mismatch")
+
+
+def audit_property_shape_owner_blocks(
+    trace: dict[str, Any],
+    *,
+    parent_scope_sequence: int | None = None,
+) -> dict[str, Any]:
+    """Report whether property-shape owner blocks are reorder-independent."""
+
+    summaries = trace.get("accessSummaries", {})
+    access_sets = trace.get("accessSets", {})
+    selected_events = [
+        event
+        for event in trace.get("events", [])
+        if event.get("slice") == "property_shape.access_summary"
+        and (
+            parent_scope_sequence is None
+            or event.get("parentScopeSequence") == parent_scope_sequence
+        )
+    ]
+    ordered_refs = [event.get("fields", {}).get("summaryRef") for event in selected_events]
+    ordered_refs = [ref for ref in ordered_refs if isinstance(ref, str) and ref in summaries]
+    blocks: list[dict[str, Any]] = []
+    for summary_ref in ordered_refs:
+        summary = summaries[summary_ref]
+        access_set = access_sets[summary["accessSet"]]
+        reads = {
+            *(f"property:{value}" for value in access_set["propertyReads"]),
+            *(f"object:{value}" for value in access_set["objectReads"]),
+            *(f"document:{value}" for value in access_set["documentReads"]),
+            *(f"elementMap:{value}" for value in summary["elementMapReads"]),
+            *(f"stringHasher:{value}" for value in summary["stringHasherReads"]),
+        }
+        writes = {
+            *(f"property:{value}" for value in access_set["propertyWrites"]),
+            *(f"object:{value}" for value in access_set["objectWrites"]),
+            *(f"document:{value}" for value in access_set["documentWrites"]),
+            *(f"elementMap:{value}" for value in summary["elementMapWrites"]),
+            *(f"stringHasher:{value}" for value in summary["stringHasherWrites"]),
+        }
+        blocks.append(
+            {
+                "summaryRef": summary_ref,
+                "owner": summary["owner"],
+                "ownerIdentity": summary["ownerIdentity"],
+                "ownerTypeId": summary["ownerTypeId"],
+                "ownerGraphRole": summary["ownerGraphRole"],
+                "propertyName": summary["propertyName"],
+                "propertyIdentity": summary["propertyIdentity"],
+                "reads": sorted(reads),
+                "writes": sorted(writes),
+                "elementMapReads": list(summary["elementMapReads"]),
+                "elementMapWrites": list(summary["elementMapWrites"]),
+                "stringHasherReads": list(summary["stringHasherReads"]),
+                "stringHasherWrites": list(summary["stringHasherWrites"]),
+                "sidAllocationDelta": summary["sidAllocationDelta"],
+                "relatedAllocationRefs": list(summary.get("relatedAllocationRefs", [])),
+                "touchesDocumentState": summary["touchesDocumentState"],
+                "touchesSharedMutableState": summary["touchesSharedMutableState"],
+                "beforeLedgerSnapshot": summary["beforeLedgerSnapshot"],
+                "afterLedgerSnapshot": summary["afterLedgerSnapshot"],
+            }
+        )
+
+    conflicts: list[dict[str, Any]] = []
+    dependencies: list[dict[str, Any]] = []
+    for index, left in enumerate(blocks):
+        left_writes = set(left["writes"])
+        for right in blocks[index + 1 :]:
+            if left["ownerIdentity"] == right["ownerIdentity"]:
+                continue
+            right_writes = set(right["writes"])
+            shared_writes = sorted(left_writes & right_writes)
+            if shared_writes:
+                conflicts.append(
+                    {"owners": [left["owner"], right["owner"]], "sharedWrites": shared_writes}
+                )
+            forward = sorted(left_writes & set(right["reads"]))
+            backward = sorted(right_writes & set(left["reads"]))
+            if forward:
+                dependencies.append(
+                    {"writer": left["owner"], "reader": right["owner"], "identities": forward}
+                )
+            if backward:
+                dependencies.append(
+                    {"writer": right["owner"], "reader": left["owner"], "identities": backward}
+                )
+        foreign_prefix = f"property:property:{left['ownerIdentity']}:"
+        for identity in left["writes"]:
+            if identity.startswith("property:property:object:") and not identity.startswith(foreign_prefix):
+                dependencies.append(
+                    {"writer": left["owner"], "reader": None, "identities": [identity], "kind": "cross_owner_write"}
+                )
+
+    shared_state = [block["owner"] for block in blocks if block["touchesSharedMutableState"]]
+    allocation_changes = [
+        {"owner": block["owner"], "sidAllocationDelta": block["sidAllocationDelta"],
+         "relatedAllocationRefs": block["relatedAllocationRefs"]}
+        for block in blocks
+        if block["sidAllocationDelta"] or block["relatedAllocationRefs"]
+    ]
+    independent = bool(blocks) and not conflicts and not dependencies and not shared_state and not allocation_changes
+    last_summary_sequence = max(
+        (event.get("sequence", 0) for event in selected_events),
+        default=0,
+    )
+    downstream = next(
+        (
+            {"sequence": event.get("sequence"), "slice": event.get("slice"), "object": event.get("object")}
+            for event in trace.get("events", [])
+            if event.get("sequence", 0) > last_summary_sequence
+            and event.get("slice") not in {"scope.end", "scope.abort"}
+        ),
+        None,
+    )
+    return {
+        "verdict": "independent_owner_block_reorder" if independent else "shared_state_blocker",
+        "parentScopeSequence": parent_scope_sequence,
+        "rawOrder": [block["owner"] for block in blocks],
+        "ownerMultiset": dict(Counter(block["owner"] for block in blocks)),
+        "perOwner": blocks,
+        "writeConflicts": conflicts,
+        "crossOwnerDependencies": dependencies,
+        "sharedMutableStateOwners": shared_state,
+        "allocationChanges": allocation_changes,
+        "batchBefore": blocks[0]["beforeLedgerSnapshot"] if blocks else None,
+        "batchAfter": blocks[-1]["afterLedgerSnapshot"] if blocks else None,
+        "firstDownstreamObservation": downstream,
+    }
+
+
+def compare_native_producer_traces(
+    expected_trace: Any,
+    actual_trace: Any,
+    *,
+    fixture: dict[str, Any],
+    expected_response: dict[str, Any],
+    actual_response: dict[str, Any],
+) -> Any:
+    """Validate each trace against its own artifacts, then compare native semantics."""
+
+    validated_expected = validate_producer_trace(
+        expected_trace,
+        input_document=fixture,
+        response_document=expected_response,
+    )
+    validated_actual = validate_producer_trace(
+        actual_trace,
+        input_document=fixture,
+        response_document=actual_response,
+    )
+    # Do not pass the full fixture document graph to compare_traces(). Producer
+    # traces intentionally omit some helper/diagnostic objects; requiring a
+    # document-wide object bijection would reject valid self-comparisons. Each
+    # trace is already closure-validated against its own request and response,
+    # while compare_traces still checks every object and scope that was traced.
+    return compare_traces(
+        validated_expected,
+        validated_actual,
+    )
 
 
 def bind_producer_trace_artifacts(
@@ -396,8 +936,464 @@ def ledger_path_for_expected(expected_path: Path) -> Path:
     return expected_path.with_name(f"{name[:-len('.freecad.json')]}.freecad.ledger.json")
 
 
+def candidate_expected_path(
+    candidate_root: Path,
+    *,
+    fixtures_root: Path,
+    expected_path: Path,
+) -> Path:
+    try:
+        relative_path = expected_path.resolve().relative_to(fixtures_root.resolve())
+    except ValueError as exc:
+        raise ValueError(f"expected path is outside fixtures root: {expected_path}") from exc
+    return candidate_root / relative_path
+
+
+def validate_regression_output_path(
+    path: Path,
+    *,
+    fixtures_root: Path,
+    label: str,
+) -> None:
+    resolved_path = path.resolve()
+    resolved_fixtures = fixtures_root.resolve()
+    try:
+        resolved_path.relative_to(resolved_fixtures)
+    except ValueError:
+        return
+    raise ValueError(f"{label} must be outside checked-in fixtures: {path}")
+
+
+def write_candidate_artifacts(
+    candidate_root: Path,
+    *,
+    fixtures_root: Path,
+    expected_path: Path,
+    public_expected: dict[str, Any],
+    ledger: dict[str, Any],
+    producer_trace: dict[str, Any],
+) -> Path:
+    validate_regression_output_path(
+        candidate_root,
+        fixtures_root=fixtures_root,
+        label="candidate root",
+    )
+    candidate_path = candidate_expected_path(
+        candidate_root,
+        fixtures_root=fixtures_root,
+        expected_path=expected_path,
+    )
+    atomic_write_json(candidate_path, public_expected)
+    atomic_write_json(ledger_path_for_expected(candidate_path), ledger)
+    atomic_write_json(producer_trace_path_for_expected(candidate_path), producer_trace)
+    return candidate_path
+
+
+def compare_candidate_runs(
+    manifest: Sequence[NativeExpectedCase],
+    run_roots: Sequence[Path],
+    *,
+    fixtures_root: Path,
+    variations: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    """Compare every later candidate run with the first using authority comparators."""
+
+    errors: list[dict[str, Any]] = []
+    if len(run_roots) < 2:
+        return errors
+    baseline_root = run_roots[0]
+    for run_index, actual_root in enumerate(run_roots[1:], 2):
+        for entry in manifest:
+            baseline_path = candidate_expected_path(
+                baseline_root,
+                fixtures_root=fixtures_root,
+                expected_path=entry.expected_path,
+            )
+            actual_path = candidate_expected_path(
+                actual_root,
+                fixtures_root=fixtures_root,
+                expected_path=entry.expected_path,
+            )
+            required = (
+                baseline_path,
+                ledger_path_for_expected(baseline_path),
+                producer_trace_path_for_expected(baseline_path),
+                actual_path,
+                ledger_path_for_expected(actual_path),
+                producer_trace_path_for_expected(actual_path),
+            )
+            missing = [str(path) for path in required if not path.is_file()]
+            if missing:
+                errors.append(
+                    {
+                        "phase": entry.phase,
+                        "case": entry.case,
+                        "run": run_index,
+                        "artifact": "missing",
+                        "detail": missing,
+                    }
+                )
+                continue
+            baseline_response = json.loads(baseline_path.read_text(encoding="utf-8"))
+            actual_response = json.loads(actual_path.read_text(encoding="utf-8"))
+            if not compare_json(baseline_path, actual_response):
+                errors.append(
+                    {
+                        "phase": entry.phase,
+                        "case": entry.case,
+                        "run": run_index,
+                        "artifact": "public",
+                        "detail": "candidate public expected differs from run 1",
+                    }
+                )
+            if not compare_ledger_json(
+                ledger_path_for_expected(baseline_path),
+                json.loads(ledger_path_for_expected(actual_path).read_text(encoding="utf-8")),
+            ):
+                errors.append(
+                    {
+                        "phase": entry.phase,
+                        "case": entry.case,
+                        "run": run_index,
+                        "artifact": "ledger",
+                        "detail": "candidate ledger differs from run 1",
+                    }
+                )
+            try:
+                trace_result = compare_native_producer_traces(
+                    json.loads(producer_trace_path_for_expected(baseline_path).read_text(encoding="utf-8")),
+                    json.loads(producer_trace_path_for_expected(actual_path).read_text(encoding="utf-8")),
+                    fixture=load_fixture(entry.fixture_path),
+                    expected_response=baseline_response,
+                    actual_response=actual_response,
+                )
+            except Exception as exc:
+                errors.append(
+                    {
+                        "phase": entry.phase,
+                        "case": entry.case,
+                        "run": run_index,
+                        "artifact": "producer-trace",
+                        "detail": str(exc),
+                    }
+                )
+            else:
+                if trace_result.status != "equal":
+                    errors.append(
+                        {
+                            "phase": entry.phase,
+                            "case": entry.case,
+                            "run": run_index,
+                            "artifact": "producer-trace",
+                            "classification": trace_result.classification,
+                            "jsonPointer": trace_result.json_pointer,
+                            "detail": trace_result.detail,
+                        }
+                    )
+                elif trace_result.equivalence == "projected":
+                    if variations is not None:
+                        variations.append(
+                            {
+                                "phase": entry.phase,
+                                "case": entry.case,
+                                "run": run_index,
+                                "artifact": "producer-trace",
+                                "status": "equivalent_after_projection",
+                                "rawDifferenceCount": trace_result.raw_difference_count,
+                                "normalizationSummary": dict(
+                                    Counter(
+                                        record.reason_code
+                                        for record in trace_result.normalizations
+                                    )
+                                ),
+                            }
+                        )
+    return errors
+
+
+def native_manifest_report(manifest: Sequence[NativeExpectedCase]) -> dict[str, Any]:
+    entries = [
+        {
+            "phase": entry.phase,
+            "case": entry.case,
+            "fixtureSha256": file_sha256(entry.fixture_path),
+            "publicSha256": file_sha256(entry.expected_path),
+            "ledgerSha256": file_sha256(entry.ledger_path),
+            "producerTraceSha256": file_sha256(entry.producer_trace_path),
+        }
+        for entry in manifest
+    ]
+    return {
+        "phases": len({entry.phase for entry in manifest}),
+        "cases": len(manifest),
+        "sha256": canonical_json_sha256(entries),
+        "entries": entries,
+    }
+
+
+def cmake_cache_values(path: Path) -> dict[str, str]:
+    if not path.is_file():
+        return {}
+    values: dict[str, str] = {}
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line or line.startswith(("#", "//")) or "=" not in line or ":" not in line:
+            continue
+        key_and_type, value = line.split("=", 1)
+        key, _value_type = key_and_type.split(":", 1)
+        values[key] = value
+    return values
+
+
+def git_capture(root: Path, *git_args: str) -> str | None:
+    try:
+        completed = subprocess.run(
+            ["git", "-C", str(root), *git_args],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        )
+    except OSError:
+        return None
+    if completed.returncode != 0:
+        return None
+    return completed.stdout.rstrip("\n")
+
+
+def candidate_provenance(freecadcmd: Path) -> dict[str, Any]:
+    """Capture enough binary, source, and CMake state to reproduce a gate run."""
+
+    resolved = freecadcmd.resolve()
+    build_dir = resolved.parent.parent if resolved.parent.name == "bin" else resolved.parent
+    cache_path = build_dir / "CMakeCache.txt"
+    cache = cmake_cache_values(cache_path)
+    source_value = cache.get("CMAKE_HOME_DIRECTORY")
+    source_root = Path(source_value).resolve() if source_value else None
+    if source_root is None:
+        for parent in (resolved.parent, *resolved.parents):
+            if (parent / ".git").exists():
+                source_root = parent
+                break
+
+    commit = git_capture(source_root, "rev-parse", "HEAD") if source_root else None
+    dirty_status = git_capture(source_root, "status", "--short") if source_root else None
+    dirty_lines = dirty_status.splitlines() if dirty_status else []
+    return {
+        "path": str(resolved),
+        "exists": resolved.is_file(),
+        "sha256": file_sha256(resolved) if resolved.is_file() else None,
+        "sourceRoot": str(source_root) if source_root else None,
+        "commit": commit,
+        "dirty": bool(dirty_lines) if dirty_status is not None else None,
+        "dirtyEntries": len(dirty_lines) if dirty_status is not None else None,
+        "dirtyStatusSha256": semantic_hash(dirty_lines) if dirty_status is not None else None,
+        "build": {
+            "directory": str(build_dir),
+            "cmakeCache": str(cache_path) if cache_path.is_file() else None,
+            "cmakeCacheSha256": file_sha256(cache_path) if cache_path.is_file() else None,
+            "homeDirectory": source_value,
+            "buildType": cache.get("CMAKE_BUILD_TYPE"),
+            "generator": cache.get("CMAKE_GENERATOR"),
+            "cCompiler": cache.get("CMAKE_C_COMPILER"),
+            "cxxCompiler": cache.get("CMAKE_CXX_COMPILER"),
+        },
+    }
+
+
+def write_regression_failure_report(
+    args: argparse.Namespace,
+    *,
+    stage: str,
+    detail: str,
+) -> None:
+    """Best-effort failure receipt for preflight and orchestration failures."""
+
+    if not args.report:
+        return
+    fixtures_root = Path(args.fixtures_root)
+    report_path = Path(args.report)
+    validate_regression_output_path(
+        report_path,
+        fixtures_root=fixtures_root,
+        label="report path",
+    )
+    atomic_write_json(
+        report_path,
+        {
+            "schema": "freecad-fixture-regression-report/v1",
+            "mode": "repeated-native-check" if args.repeat > 1 else "collection",
+            "status": "failed",
+            "stage": stage,
+            "detail": detail,
+            "fixturesRoot": str(fixtures_root.resolve()),
+            "candidateRoot": str(Path(args.candidate_root).resolve()) if args.candidate_root else None,
+            "candidate": candidate_provenance(Path(args.freecadcmd)),
+        },
+    )
+
+
+def regression_child_argv(
+    args: argparse.Namespace,
+    *,
+    candidate_root: Path,
+    report: Path,
+) -> list[str]:
+    child = [
+        "--all-native",
+        "--check",
+        "--validate-ledger",
+        "--repeat",
+        "1",
+        "--candidate-root",
+        str(candidate_root),
+        "--report",
+        str(report),
+        "--fixtures-root",
+        args.fixtures_root,
+        "--freecadcmd",
+        args.freecadcmd,
+    ]
+    return child
+
+
+def run_label(index: int) -> str:
+    if index < 26:
+        return f"run-{chr(ord('a') + index)}"
+    return f"run-{index + 1}"
+
+
+def run_repeated_checks(args: argparse.Namespace) -> int:
+    """Run the same native regression check independently and compare candidates."""
+
+    fixtures_root = Path(args.fixtures_root)
+    manifest = native_expected_manifest(fixtures_root)
+    if not manifest:
+        raise ValueError(f"no checked-in native expected fixtures found under {fixtures_root}")
+    candidate_root = Path(args.candidate_root)
+    validate_regression_output_path(
+        candidate_root,
+        fixtures_root=fixtures_root,
+        label="candidate root",
+    )
+    if args.report:
+        validate_regression_output_path(
+            Path(args.report),
+            fixtures_root=fixtures_root,
+            label="report path",
+        )
+    candidate_root.mkdir(parents=True, exist_ok=True)
+    run_roots: list[Path] = []
+    run_results: list[dict[str, Any]] = []
+    for run_index in range(args.repeat):
+        label = run_label(run_index)
+        run_root = candidate_root / label
+        if run_root.exists() and any(run_root.iterdir()):
+            raise ValueError(f"candidate run directory is not empty: {run_root}")
+        run_report = candidate_root / f"{label}.report.json"
+        child_argv = regression_child_argv(
+            args,
+            candidate_root=run_root,
+            report=run_report,
+        )
+        child_args = parse_args(child_argv)
+        returncode = run_via_freecadcmd(child_argv, child_args)
+        report_payload: dict[str, Any] = {}
+        if run_report.is_file():
+            report_payload = json.loads(run_report.read_text(encoding="utf-8"))
+        run_results.append(
+            {
+                "label": label,
+                "root": str(run_root.resolve()),
+                "returncode": returncode,
+                "report": report_payload,
+            }
+        )
+        run_roots.append(run_root)
+
+    variations: list[dict[str, Any]] = []
+    differences = compare_candidate_runs(
+        manifest,
+        run_roots,
+        fixtures_root=fixtures_root,
+        variations=variations,
+    )
+    run_failures = [
+        run
+        for run in run_results
+        if run["returncode"] != 0
+        or run["report"].get("status") != "passed"
+        or run["report"].get("discovered") != len(manifest)
+        or run["report"].get("processed") != len(manifest)
+        or run["report"].get("skipped") != 0
+        or run["report"].get("failed") != 0
+    ]
+    status = "passed" if not run_failures and not differences else "failed"
+    first_failure: dict[str, Any] | None = None
+    for run in run_results:
+        run_first_failure = run["report"].get("firstFailure")
+        if run_first_failure:
+            first_failure = {
+                "run": run["label"],
+                "kind": "checked-in-regression",
+                "caseResult": run_first_failure,
+            }
+            break
+        if run["returncode"] != 0 or run["report"].get("status") != "passed":
+            first_failure = {
+                "run": run["label"],
+                "kind": "run-failure",
+                "returncode": run["returncode"],
+                "reportStatus": run["report"].get("status"),
+            }
+            break
+    if first_failure is None and differences:
+        first_failure = {
+            "kind": "candidate-determinism",
+            **differences[0],
+        }
+    final_report = {
+        "schema": "freecad-fixture-regression-report/v1",
+        "mode": "repeated-native-check",
+        "status": status,
+        "fixturesRoot": str(fixtures_root.resolve()),
+        "candidateRoot": str(candidate_root.resolve()),
+        "candidate": candidate_provenance(Path(args.freecadcmd)),
+        "manifest": native_manifest_report(manifest),
+        "runs": run_results,
+        "candidateRunDifferences": differences,
+        "candidateRunVariations": variations,
+        "summary": {
+            "rawDifferentCases": len(variations) + len(differences),
+            "projectedEquivalentCases": len(variations),
+            "semanticDifferentCases": sum(
+                item.get("artifact") == "producer-trace" for item in differences
+            ),
+            "invalidCases": sum(
+                item.get("artifact") == "producer-trace"
+                and str(item.get("classification", "")).startswith("invalid")
+                for item in differences
+            ),
+        },
+        "firstFailure": first_failure,
+    }
+    report_path = Path(args.report) if args.report else candidate_root / "report.json"
+    atomic_write_json(report_path, final_report)
+    print(
+        f"native fixture regression: status={status} phases={final_report['manifest']['phases']} "
+        f"cases={len(manifest)} repeats={args.repeat} differences={len(differences)}",
+        file=sys.stderr,
+    )
+    return 0 if status == "passed" else 1
+
+
 def fixture_paths(args: argparse.Namespace) -> list[Path]:
     fixtures_root = Path(args.fixtures_root)
+    if args.all_native:
+        manifest = native_expected_manifest(fixtures_root)
+        if not manifest:
+            raise ValueError(f"no checked-in native expected fixtures found under {fixtures_root}")
+        args._native_expected_manifest = manifest
+        return [entry.fixture_path for entry in manifest]
     if args.phase:
         if args.fixture:
             raise ValueError("--phase and fixture path are mutually exclusive")
@@ -10231,9 +11227,22 @@ def expected_has_diagnostic_only_payload(path: Path) -> bool:
 
 def run_inside_freecad(args: argparse.Namespace) -> int:
     fixtures_root = Path(args.fixtures_root)
+    if args.candidate_root:
+        validate_regression_output_path(
+            Path(args.candidate_root),
+            fixtures_root=fixtures_root,
+            label="candidate root",
+        )
+    if args.report:
+        validate_regression_output_path(
+            Path(args.report),
+            fixtures_root=fixtures_root,
+            label="report path",
+        )
     failures = 0
     skipped = 0
     processed = 0
+    case_results: list[dict[str, Any]] = []
     paths = fixture_paths(args)
     if args.phase:
         for entry in fixture_role_catalog(args).skipped:
@@ -10254,23 +11263,53 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
     for fixture_path in paths:
         failures_before_fixture = failures
         out_path = Path(args.out) if args.out else expected_path_for_fixture(fixtures_root, fixture_path)
+        case_result: dict[str, Any] = {
+            "phase": fixture_path.parent.name,
+            "case": fixture_path.stem,
+            "fixture": str(fixture_path.resolve()),
+            "expected": str(out_path.resolve()),
+            "status": "failed",
+            "artifacts": {
+                "publicAuthority": {"status": "not-run"},
+                "ledgerAuthority": {"status": "not-run"},
+                "producerTraceDiagnostic": {"status": "not-run"},
+                "ledgerValidation": {"status": "not-run"},
+                "candidateWrite": {"status": "not-requested"},
+            },
+            "errors": [],
+        }
+
+        def record_case_error(stage: str, detail: str) -> None:
+            case_result["errors"].append({"stage": stage, "detail": detail})
+
         fixture = load_fixture(fixture_path)
         target_override: list[str] | None = None
         if args.check:
             if args.phase and args.skip_unsupported and not out_path.exists():
                 skipped += 1
                 print(f"skip missing expected {fixture_path}", file=sys.stderr)
+                case_result["status"] = "skipped"
+                record_case_error("precheck", "missing checked-in expected")
+                case_results.append(case_result)
                 continue
             if out_path.exists() and not expected_has_native_geometry_payload(out_path):
                 if expected_has_diagnostic_only_payload(out_path):
                     print(f"diagnostic-only expected has no native geometry check: {out_path}", file=sys.stderr)
+                    case_result["status"] = "skipped"
+                    record_case_error("precheck", "diagnostic-only expected has no native geometry payload")
+                    case_results.append(case_result)
                     continue
                 if args.phase and args.skip_unsupported:
                     skipped += 1
                     print(f"skip non-geometry expected {fixture_path}", file=sys.stderr)
+                    case_result["status"] = "skipped"
+                    record_case_error("precheck", "checked-in expected has no native geometry payload")
+                    case_results.append(case_result)
                     continue
                 print(f"unsupported expected for native geometry check: {out_path}", file=sys.stderr)
                 failures += 1
+                record_case_error("precheck", "checked-in expected has no native geometry payload")
+                case_results.append(case_result)
                 continue
             target_override = expected_target_names(out_path)
 
@@ -10280,19 +11319,28 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             if args.phase and args.skip_unsupported:
                 skipped += 1
                 print(f"skip unsupported {fixture_path}: {exc}", file=sys.stderr)
+                case_result["status"] = "skipped"
+                record_case_error("collection", str(exc))
+                case_results.append(case_result)
                 continue
             print(f"unsupported {fixture_path}: {exc}", file=sys.stderr)
             failures += 1
+            record_case_error("collection", str(exc))
+            case_results.append(case_result)
             continue
         except Exception as exc:
             print(f"failed {fixture_path}: {exc}", file=sys.stderr)
             print(traceback.format_exc(), file=sys.stderr)
             failures += 1
+            record_case_error("collection", str(exc))
+            case_results.append(case_result)
             continue
 
         if LAST_FREECAD_PRODUCER_TRACE is None:
             print(f"failed producer trace {fixture_path}: native collector did not create a document trace", file=sys.stderr)
             failures += 1
+            record_case_error("producer-trace-collection", "native collector did not create a document trace")
+            case_results.append(case_result)
             continue
         producer_trace = copy.deepcopy(LAST_FREECAD_PRODUCER_TRACE)
         try:
@@ -10304,7 +11352,14 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
         except Exception as exc:
             print(f"failed producer trace binding {fixture_path}: {exc}", file=sys.stderr)
             failures += 1
+            case_result["artifacts"]["producerTraceDiagnostic"] = {
+                "status": "invalid",
+                "detail": str(exc),
+            }
+            record_case_error("producer-trace-binding", str(exc))
+            case_results.append(case_result)
             continue
+        case_result["artifacts"]["producerTraceDiagnostic"] = {"status": "generated"}
 
         try:
             ledger = collect_expected_ledger(fixture_path, fixture, payload, target_override)
@@ -10312,29 +11367,89 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             print(f"failed ledger {fixture_path}: {exc}", file=sys.stderr)
             print(traceback.format_exc(), file=sys.stderr)
             failures += 1
+            record_case_error("ledger-collection", str(exc))
+            case_results.append(case_result)
             continue
 
         if args.check:
-            failures += 0 if compare_json(out_path, payload) else 1
-            failures += 0 if compare_ledger_json(ledger_path_for_expected(out_path), ledger) else 1
+            if args.candidate_root:
+                candidate_path = write_candidate_artifacts(
+                    Path(args.candidate_root),
+                    fixtures_root=fixtures_root,
+                    expected_path=out_path,
+                    public_expected=payload,
+                    ledger=ledger,
+                    producer_trace=producer_trace,
+                )
+                case_result["artifacts"]["candidateWrite"] = {
+                    "status": "written",
+                    "path": str(candidate_path.resolve()),
+                }
+            public_equal = compare_json(out_path, payload)
+            case_result["artifacts"]["publicAuthority"] = {
+                "status": "equal" if public_equal else "different",
+            }
+            if not public_equal:
+                failures += 1
+                record_case_error("public-authority", "candidate public expected differs")
+            ledger_equal = compare_ledger_json(ledger_path_for_expected(out_path), ledger)
+            case_result["artifacts"]["ledgerAuthority"] = {
+                "status": "equal" if ledger_equal else "different",
+            }
+            if not ledger_equal:
+                failures += 1
+                record_case_error("ledger-authority", "candidate ledger differs")
             trace_path = producer_trace_path_for_expected(out_path)
             if not trace_path.exists():
                 print(f"missing expected producer trace: {trace_path}", file=sys.stderr)
                 failures += 1
+                case_result["artifacts"]["producerTraceDiagnostic"] = {
+                    "status": "missing",
+                    "path": str(trace_path.resolve()),
+                }
+                record_case_error("producer-trace-diagnostic", "checked-in producer trace is missing")
             else:
                 try:
-                    validate_producer_trace(
+                    trace_comparison = compare_native_producer_traces(
                         json.loads(trace_path.read_text(encoding="utf-8")),
-                        input_document=fixture,
-                        response_document=payload,
+                        producer_trace,
+                        fixture=fixture,
+                        expected_response=json.loads(out_path.read_text(encoding="utf-8")),
+                        actual_response=payload,
                     )
+                    case_result["artifacts"]["producerTraceDiagnostic"] = {
+                        "status": trace_comparison.status,
+                        "classification": trace_comparison.classification,
+                        "jsonPointer": trace_comparison.json_pointer,
+                        "detail": trace_comparison.detail,
+                    }
+                    if trace_comparison.status != "equal":
+                        print(
+                            "expected producer trace differs: "
+                            f"{trace_path}: {trace_comparison.classification} "
+                            f"{trace_comparison.json_pointer or ''}",
+                            file=sys.stderr,
+                        )
+                        failures += 1
+                        record_case_error(
+                            "producer-trace-diagnostic",
+                            f"{trace_comparison.classification}: {trace_comparison.detail}",
+                        )
                 except Exception as exc:
-                    print(f"invalid expected producer trace {trace_path}: {exc}", file=sys.stderr)
+                    print(f"invalid producer trace comparison {trace_path}: {exc}", file=sys.stderr)
                     failures += 1
+                    case_result["artifacts"]["producerTraceDiagnostic"] = {
+                        "status": "invalid",
+                        "detail": str(exc),
+                    }
+                    record_case_error("producer-trace-diagnostic", str(exc))
         else:
             atomic_write_json(out_path, payload)
             atomic_write_json(ledger_path_for_expected(out_path), ledger)
             atomic_write_json(producer_trace_path_for_expected(out_path), producer_trace)
+            case_result["artifacts"]["publicAuthority"] = {"status": "written"}
+            case_result["artifacts"]["ledgerAuthority"] = {"status": "written"}
+            case_result["artifacts"]["producerTraceDiagnostic"] = {"status": "written"}
         if args.validate_ledger:
             try:
                 if args.check:
@@ -10355,12 +11470,42 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
                 for error in ledger_errors:
                     print(f"  - {error}", file=sys.stderr)
                 failures += 1
-        if args.pretty or (not args.out and not args.phase):
+                case_result["artifacts"]["ledgerValidation"] = {
+                    "status": "invalid",
+                    "errors": ledger_errors,
+                }
+                for error in ledger_errors:
+                    record_case_error("ledger-validation", error)
+            else:
+                case_result["artifacts"]["ledgerValidation"] = {"status": "valid"}
+        if args.pretty or (not args.out and not args.phase and not args.all_native):
             print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
         if failures == failures_before_fixture:
             processed += 1
+            case_result["status"] = "passed"
+        case_results.append(case_result)
 
-    if args.phase:
+    if args.report:
+        first_failure = next((case for case in case_results if case["status"] == "failed"), None)
+        atomic_write_json(
+            Path(args.report),
+            {
+                "schema": "freecad-fixture-regression-report/v1",
+                "mode": "collection",
+                "fixturesRoot": str(fixtures_root.resolve()),
+                "freecadcmd": str(Path(args.freecadcmd).resolve()),
+                "candidate": candidate_provenance(Path(args.freecadcmd)),
+                "candidateRoot": str(Path(args.candidate_root).resolve()) if args.candidate_root else None,
+                "discovered": len(paths),
+                "processed": processed,
+                "skipped": skipped,
+                "failed": failures,
+                "status": "passed" if failures == 0 and processed == len(paths) else "failed",
+                "cases": case_results,
+                "firstFailure": first_failure,
+            },
+        )
+    if args.phase or args.all_native:
         print(f"processed={processed} skipped={skipped} failed={failures}", file=sys.stderr)
     return 1 if failures else 0
 
@@ -10377,6 +11522,22 @@ def run_via_freecadcmd(argv: list[str], args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     raw_argv = list(sys.argv[1:] if argv is None else argv)
     args = parse_args(raw_argv)
+    if args.repeat > 1:
+        try:
+            return run_repeated_checks(args)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"native fixture regression failed: {exc}", file=sys.stderr)
+            if isinstance(exc, json.JSONDecodeError):
+                stage = "orchestration"
+            elif isinstance(exc, OSError):
+                stage = "execution"
+            else:
+                stage = "preflight"
+            try:
+                write_regression_failure_report(args, stage=stage, detail=str(exc))
+            except (OSError, ValueError) as report_exc:
+                print(f"failed to write native fixture regression report: {report_exc}", file=sys.stderr)
+            return 1
     try:
         import FreeCAD  # type: ignore # noqa: F401
     except ImportError:

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cad_core/sketcher/sketch_internal_builder.h"
+#include "cad_core/part/topo_shape.h"
 
 #include "cad_core/sketcher/sketch_edge_identity.h"
 
@@ -15,6 +16,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -96,6 +98,7 @@ struct ProfileFaceBuild
     bool faceMakerFailed = false;
     bool requiresSubshapeSelection = false;
     std::optional<part::InternalShapeHistoryLedger> historyLedger;
+    std::optional<part::NamedShape> profileNamedShape;
 };
 
 std::vector<SketchProfileEdge> profileEdges(const std::vector<SketchSegment>& segments,
@@ -119,6 +122,9 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(const app::DocumentObject
 // required for FaceMaker's mapSubElement() to retain raw g<ID>;SKT source identity.
 ProfileFaceBuild buildOptionalProfileFace(
     const TopoDS_Shape& rawShape,
+    part::NamedShape* rawNamedShape,
+    const std::shared_ptr<app::StringHasher>& stringHasher,
+    const std::string& owner,
     app::ElementMapProducerTrace* producerTrace = nullptr
 );
 

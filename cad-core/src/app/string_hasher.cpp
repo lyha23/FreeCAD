@@ -126,18 +126,6 @@ StringId StringHasher::allocate(const std::string& key, int index)
     const long lastIdBefore = nextId_;
     const auto found = ids_.find(key);
     if (found != ids_.end()) {
-        if (producerTrace_ != nullptr) {
-            const auto parts = producerTraceKeyParts(key);
-            producerTrace_->record({"hasher.insert",
-                                    "hit",
-                                    "string_id_lookup_hit",
-                                    {{"lastIdBefore", lastIdBefore},
-                                     {"lastIdAfter", nextId_},
-                                     {"data", parts.first},
-                                     {"postfix", parts.second},
-                                     {"flags", key.rfind("mapped:", 0) == 0U ? "mapped" : "data"},
-                                     {"result", {{"value", found->second}, {"index", index}}}}});
-        }
         return {found->second, index};
     }
     const long id = ++nextId_;
@@ -153,16 +141,39 @@ StringId StringHasher::allocate(const std::string& key, int index)
          0}
     );
     if (producerTrace_ != nullptr) {
+        const auto definedSids = [&]() {
+            std::vector<long> values;
+            values.reserve(static_cast<std::size_t>(nextId_));
+            for (long value = 1; value <= nextId_; ++value) {
+                values.push_back(value);
+            }
+            return values;
+        };
+        std::string tracePostfix = parts.second;
+        if (key.rfind("mapped:", 0) == 0U && !tracePostfix.empty()
+            && tracePostfix.front() == '#') {
+            try {
+                const long postfixId = std::stol(tracePostfix.substr(1), nullptr, 16);
+                if (postfixId > 0
+                    && static_cast<std::size_t>(postfixId) <= producerTraceEntries_.size()) {
+                    tracePostfix = producerTraceEntries_[static_cast<std::size_t>(postfixId - 1)].data;
+                }
+            }
+            catch (const std::exception&) {
+            }
+        }
+        producerTraceEntries_.back().postfix = tracePostfix;
         producerTrace_->record({"hasher.insert",
-                                "allocation",
-                                "string_id_allocated",
-                                {{"lastIdBefore", lastIdBefore},
-                                 {"lastIdAfter", nextId_},
-                                 {"data", parts.first},
-                                 {"postfix", parts.second},
-                                 {"flags", producerTraceEntries_.back().flags},
-                                 {"related", nlohmann::json::array()},
-                                 {"result", {{"value", id}, {"index", index}}}}});
+                                "allocated",
+                                "table_insert",
+                                {{"data", parts.first},
+                                 {"postfix", tracePostfix},
+                                 {"id", std::to_string(id)}}});
+        if (key.rfind("mapped:", 0) != 0U) {
+            producerTrace_->checkpoint(
+                {"stringTable", inspectProducerTraceState(), {}, definedSids(), {}, "table_checkpoint"}
+            );
+        }
     }
     return {id, index};
 }
@@ -188,21 +199,39 @@ StringId StringHasher::getMappedNameId(
     const std::string encoded = encodedPostfix(postfix, *this);
     const std::string uncollapsedKey = "mapped:" + data + "\x1f" + encoded;
     const std::optional<StringId> prefixId = encodedPrefixId(data);
-    if (producerTrace_ != nullptr) {
-        producerTrace_->record({
+    const auto emitParseTrace = [&]() {
+        if (producerTrace_ != nullptr) {
+            std::string indexed = data;
+            std::string raw = data + postfix;
+            const std::size_t vertexMarker = data.rfind('v');
+            if (vertexMarker != std::string::npos && vertexMarker + 1U < data.size()
+                && std::all_of(
+                    data.begin() + static_cast<std::ptrdiff_t>(vertexMarker + 1U),
+                    data.end(),
+                    [](unsigned char value) { return std::isdigit(value) != 0; }
+                )) {
+                indexed = data.substr(vertexMarker + 1U);
+            }
+            else if (index != 0 && !prefixId) {
+                indexed += std::to_string(index);
+                raw = indexed + postfix;
+            }
+            else if (index != 0 && prefixId) {
+                indexed = std::to_string(prefixId->index != 0 ? prefixId->index : index);
+                raw = data + (prefixId->index == 0 && !data.empty() && data.back() == ':'
+                                  ? std::to_string(index)
+                                  : std::string {})
+                    + postfix;
+            }
+            producerTrace_->record({
             "mapped_name.parse",
             prefixId || data.empty() || data.front() != '#' ? "parsed" : "rejected",
-            prefixId ? "prefix_id_parsed"
-                : data.empty() || data.front() != '#' ? "plain_mapped_name_data"
-                                                      : "invalid_prefix_id",
-            {{"rawData", data},
-             {"rawPostfix", postfix},
-             {"purpose", "StringHasher::getMappedNameId"},
-             {"prefixId", prefixId ? prefixId->value : 0L},
-             {"prefixIdIndex", prefixId ? prefixId->index : 0},
-             {"failurePosition", prefixId || data.empty() || data.front() != '#' ? -1 : 0}},
-        });
-    }
+            prefixId || data.empty() || data.front() != '#' ? "mapped_name_input"
+                                                            : "invalid_prefix_id",
+            {{"indexed", indexed}, {"raw", raw}},
+            });
+        }
+    };
     // A producer receives `getMappedName(..., &sids)` as an entry-local pair.  For a leading
     // `#id`, the matching StringIDRef can carry the rendered index even though the compact
     // `MappedName` data itself remains `#id`.  This is a prefix reference, not an IndexedName
@@ -215,7 +244,7 @@ StringId StringHasher::getMappedNameId(
         }
     }
     const auto uncollapsed = ids_.find(uncollapsedKey);
-    if (uncollapsed != ids_.end()) {
+    if ((!prefixId || prefixId->index == 0) && uncollapsed != ids_.end()) {
         const StringId result {uncollapsed->second, returnedIndex};
         emitMappedNameTrace(
             data,
@@ -238,7 +267,7 @@ StringId StringHasher::getMappedNameId(
         storedData = data.substr(0U, data.find(':') + 1U);
         returnedIndex = prefixId->index;
     }
-    if (index != 0 && !indexedPrefixRef) {
+    if (index != 0 && !indexedPrefixRef && data.find('v') == std::string::npos) {
         // StringHasher::getID(Data::MappedName, ...) has already split an IndexedName into its
         // alphabetic data part before it creates the StringIDRef.  It always interns that data
         // part as the index relation; looking for a digit here skipped the relation when callers
@@ -251,6 +280,48 @@ StringId StringHasher::getMappedNameId(
         // A prior PrefixIDIndex insertion has the compact stored key.  Like StringHasher::insert,
         // preserve that existing entry's related SID list and return the caller's index only.
         const StringId result {existing->second, returnedIndex};
+        if (producerTrace_ != nullptr && prefixId && prefixId->index != 0) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/StringHasher.cpp
+            // ::StringHasher::getID(const Data::MappedName&, const QVector<StringIDRef>&) calls
+            // `insert(name, sids, &id)` after replacing PrefixIDIndex data with the compact
+            // `#<id>:` form.  StringHasher::insert still observes and reports an existing table
+            // entry; returning directly from the uncollapsed lookup loses that producer event.
+            const auto parts = producerTraceKeyParts(key);
+            std::string tracePostfix = parts.second;
+            if (!tracePostfix.empty() && tracePostfix.front() == '#') {
+                try {
+                    const long postfixId = std::stol(tracePostfix.substr(1), nullptr, 16);
+                    if (postfixId > 0
+                        && static_cast<std::size_t>(postfixId) <= producerTraceEntries_.size()) {
+                        tracePostfix =
+                            producerTraceEntries_[static_cast<std::size_t>(postfixId - 1)].data;
+                    }
+                }
+                catch (const std::exception&) {
+                }
+            }
+            producerTrace_->record({"hasher.insert",
+                                    "existing",
+                                    "duplicate_insert",
+                                    {{"data", parts.first},
+                                     {"postfix", tracePostfix},
+                                     {"id", std::to_string(existing->second)}}});
+            std::vector<long> definedSids;
+            definedSids.reserve(static_cast<std::size_t>(nextId_));
+            for (long value = 1; value <= nextId_; ++value) {
+                definedSids.push_back(value);
+            }
+            producerTrace_->checkpoint(
+                {"stringTable",
+                 inspectProducerTraceState(),
+                 {},
+                 std::move(definedSids),
+                 {},
+                 "table_checkpoint",
+                 true}
+            );
+        }
+        emitParseTrace();
         emitMappedNameTrace(
             data,
             index,
@@ -258,8 +329,9 @@ StringId StringHasher::getMappedNameId(
             relatedIds,
             result,
             lastIdBefore,
-            "hit",
-            "collapsed_mapped_name_hit"
+            prefixId && prefixId->index != 0 ? "allocation" : "hit",
+            prefixId && prefixId->index != 0 ? "mapped_name_allocated"
+                                             : "collapsed_mapped_name_hit"
         );
         return result;
     }
@@ -268,7 +340,7 @@ StringId StringHasher::getMappedNameId(
     if (!postfix.empty() && postfix.find('#') == std::string::npos) {
         newRelated.push_back(getId(postfix));
     }
-    if (index != 0 && !indexedPrefixRef) {
+    if (index != 0 && !indexedPrefixRef && data.find('v') == std::string::npos) {
         newRelated.push_back(getId(storedData));
     }
     for (const StringId& related : relatedIds) {
@@ -312,6 +384,22 @@ StringId StringHasher::getMappedNameId(
     }
     relatedIds_[result.value] = std::move(newRelated);
     refreshProducerTraceEntry(result.value);
+    if (producerTrace_ != nullptr) {
+        std::vector<long> definedSids;
+        definedSids.reserve(static_cast<std::size_t>(nextId_));
+        for (long value = 1; value <= nextId_; ++value) {
+            definedSids.push_back(value);
+        }
+        producerTrace_->checkpoint(
+            {"stringTable",
+             inspectProducerTraceState(),
+             {},
+             std::move(definedSids),
+             {},
+             "table_checkpoint"}
+        );
+    }
+    emitParseTrace();
     emitMappedNameTrace(
         data,
         index,
@@ -339,22 +427,34 @@ void StringHasher::emitMappedNameTrace(const std::string& data,
     }
     const std::optional<StringId> prefix = encodedPrefixId(data);
     const auto storedRelated = relatedIds_.find(result.value);
+    const bool allocated = decision == "allocation";
+    std::string indexed = std::to_string(index);
+    std::string raw = data + postfix;
+    const std::size_t vertexMarker = data.rfind('v');
+    if (vertexMarker != std::string::npos && vertexMarker + 1U < data.size()) {
+        indexed = data.substr(vertexMarker + 1U);
+    }
+    else if (index == 0 && prefix) {
+        indexed = hexadecimal(prefix->value);
+    }
+    else if (index != 0 && !prefix) {
+        indexed = data + std::to_string(index);
+        raw = indexed + postfix;
+    }
+    else if (index != 0 && prefix) {
+        indexed = std::to_string(prefix->index != 0 ? prefix->index : index);
+        raw = data + (prefix->index == 0 && !data.empty() && data.back() == ':'
+                          ? std::to_string(index)
+                          : std::string {})
+            + postfix;
+    }
     producerTrace_->record({
         "hasher.mapped_name",
-        decision,
-        reason,
-        {{"lastIdBefore", lastIdBefore},
-         {"lastIdAfter", nextId_},
-         {"data", data},
-         {"postfix", postfix},
-         {"index", index},
-         {"inputRelated", stringIdsJson(relatedIds)},
-         {"orderedRelated",
-          storedRelated == relatedIds_.end() ? nlohmann::json::array()
-                                             : stringIdsJson(storedRelated->second)},
-         {"prefixId", prefix ? prefix->value : 0},
-         {"prefixIdIndex", prefix ? prefix->index : 0},
-         {"result", {{"value", result.value}, {"index", result.index}}}},
+        allocated ? "allocated" : "existing",
+        allocated ? "table_miss" : "table_hit",
+        {{"indexed", indexed},
+         {"raw", raw},
+         {"result", result.toString()}},
     });
 }
 
@@ -394,6 +494,14 @@ HashedMappedName StringHasher::hashMappedName(
                 elementRefs.push_back(input);
             }
         }
+    }
+    if (const auto prefix = encodedPrefixId(data); prefix && prefix->index != 0
+        && elementRefs.size() > 1U) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+        // ::ElementMap::hashElementName() stores the PrefixIDIndex source references before the
+        // newly returned StringID in ElementIDRefs. The rendered mapped name still begins with
+        // the returned ID; ledger relation order and display order are intentionally distinct.
+        std::rotate(elementRefs.begin(), std::next(elementRefs.begin()), elementRefs.end());
     }
     return HashedMappedName {id, std::move(elementRefs)};
 }
@@ -504,38 +612,54 @@ nlohmann::json StringHasher::inspectProducerTraceState() const
         std::sort(item.second.begin(), item.second.end());
     }
     for (const ProducerTraceEntry& entry : producerTraceEntries_) {
+        nlohmann::json related = nlohmann::json::array();
+        for (const StringId& reference : entry.related) {
+            related.push_back({
+                {"token", StringId {reference.value, 0}.toString()},
+                {"index", reference.index},
+            });
+        }
+        const bool postfixed = !entry.postfix.empty();
+        const bool prefixIdIndex = entry.prefixId != 0 && !entry.data.empty()
+            && entry.data.back() == ':';
+        const bool prefixId = entry.prefixId != 0 && !prefixIdIndex;
+        bool indexed = false;
+        if (entry.flags == "mapped" && postfixed) {
+            for (const StringId& reference : entry.related) {
+                if (reference.value <= 0
+                    || static_cast<std::size_t>(reference.value) > producerTraceEntries_.size()) {
+                    continue;
+                }
+                if (producerTraceEntries_.at(static_cast<std::size_t>(reference.value - 1U)).data
+                    == entry.data) {
+                    indexed = true;
+                    break;
+                }
+            }
+        }
+        const std::string flags = "binary=0;hashed=0;postfixed="
+            + std::to_string(postfixed ? 1 : 0) + ";postfixEncoded="
+            + std::to_string(postfixed ? 1 : 0) + ";indexed="
+            + std::to_string(indexed ? 1 : 0) + ";prefixID="
+            + std::to_string(prefixId ? 1 : 0) + ";prefixIDIndex="
+            + std::to_string(prefixIdIndex ? 1 : 0);
         entries.push_back({
             {"value", entry.value},
+            {"token", StringId {entry.value, 0}.toString()},
             {"data", entry.data},
             {"postfix", entry.postfix},
-            {"flags", entry.flags},
-            {"related", stringIdsJson(entry.related)},
-            {"prefixId", entry.prefixId},
-            {"prefixIdIndex", entry.prefixIdIndex},
-            {"lookupKeys", lookupKeys[entry.value]},
+            {"mapped", entry.flags == "mapped"},
+            {"flags", flags},
+            {"related", std::move(related)},
         });
     }
 
-    nlohmann::json mappedLookups = nlohmann::json::array();
-    std::vector<std::string> rawNames;
-    rawNames.reserve(mappedNameRelations_.size());
-    for (const auto& item : mappedNameRelations_) {
-        rawNames.push_back(item.first);
-    }
-    std::sort(rawNames.begin(), rawNames.end());
-    for (const std::string& rawName : rawNames) {
-        const auto primary = mappedNameIds_.find(rawName);
-        mappedLookups.push_back({
-            {"rawMappedName", rawName},
-            {"primaryId",
-             primary == mappedNameIds_.end()
-                 ? nlohmann::json(nullptr)
-                 : nlohmann::json{{"value", primary->second.value},
-                                  {"index", primary->second.index}}},
-            {"orderedRelated", stringIdsJson(mappedNameRelations_.at(rawName))},
-        });
-    }
-    return {{"lastId", nextId_}, {"entries", entries}, {"mappedNameLookup", mappedLookups}};
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/StringHasher.cpp
+    // ::StringHasher::getID() mutates the allocation table, while ElementMap's remembered
+    // MappedName-to-ID association is ledger-local lookup state. Producer-trace table snapshots
+    // therefore contain only monotonic StringHasher entries; recording a remembered name must
+    // not manufacture an extra table checkpoint between setElementName() and its ledger publish.
+    return {{"lastId", nextId_}, {"entries", entries}};
 }
 
 void StringHasher::clear()

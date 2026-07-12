@@ -940,6 +940,9 @@ std::optional<RawSketchShapeBuild> buildRawSketchShape(
 
 ProfileFaceBuild buildOptionalProfileFace(
     const TopoDS_Shape& rawShape,
+    part::NamedShape* rawNamedShape,
+    const std::shared_ptr<app::StringHasher>& stringHasher,
+    const std::string& owner,
     app::ElementMapProducerTrace* producerTrace
 )
 {
@@ -948,6 +951,27 @@ ProfileFaceBuild buildOptionalProfileFace(
     }
     SketchInternalBuildInput input;
     input.producerTrace = producerTrace;
+    std::optional<part::NamedShape> profileNamedShape;
+    if (rawNamedShape != nullptr && stringHasher) {
+        input.faceMakerPostBuild = [&](const part::FaceMakerBuildFaceResult& faceResult) {
+            if (!faceResult.shape || faceResult.shape->IsNull()) {
+                return;
+            }
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/FaceMaker.cpp
+            // ::FaceMaker::postBuild(), "myTopoShape.mapSubElement(this->mySourceShapes)"
+            // runs inside FaceMaker::Build() before SketchObject starts WireJoiner.
+            profileNamedShape = part::namedShapeForSketchProfileShape(
+                owner + ".ProfileShape",
+                rawShape,
+                *faceResult.shape,
+                *rawNamedShape,
+                stringHasher,
+                [&](const std::string& entryKey) {
+                    materializeSketchMappedNameStringId(*rawNamedShape, entryKey, stringHasher);
+                }
+            );
+        };
+    }
     TopTools_IndexedMapOfShape rawEdges;
     TopExp::MapShapes(rawShape, TopAbs_EDGE, rawEdges);
     input.sourceEdges.reserve(static_cast<std::size_t>(rawEdges.Extent()));
@@ -991,6 +1015,7 @@ ProfileFaceBuild buildOptionalProfileFace(
         result.faceMakerFailed,
         result.requiresSubshapeSelection,
         result.historyLedger,
+        std::move(profileNamedShape),
     };
 }
 

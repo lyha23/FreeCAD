@@ -15,6 +15,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstddef>
+#include <functional>
 #include <map>
 #include <memory>
 #include <optional>
@@ -138,6 +139,11 @@ struct MappedNameProvenance
     std::string entryKey;
     std::string currentElement;
     std::string sourceElement;
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
+    // ::ElementMap::encodeElementName(), hashes the incoming `name` before appending the
+    // producer tag. Preserve that request-local input separately from sourceElement, which may
+    // already be its compact StringID, and from rawMappedName, which is the encoded result.
+    std::string encodeInputMappedName;
     std::string elementType;
     std::optional<long> producerTag;
     std::optional<long> masterTag;
@@ -155,6 +161,10 @@ struct MappedNameProvenance
     // refs; this request-local sidecar must not be recovered from the document StringHasher by
     // raw string alone.
     std::vector<app::StringId> elementIdRefs;
+    // FreeCAD TopoShapeExpansion.cpp keeps shapeOffset=3 candidates in `newNames` during the
+    // first reverse pass. Their mapped name may already be encoded, but it must not parent U
+    // aliases until the delayed pass.
+    bool delayedHighLevel = false;
     MappedNameProvenanceStatus status = MappedNameProvenanceStatus::IndexedOnly;
     MappedNamePublicationScope publicationScope = MappedNamePublicationScope::Public;
 };
@@ -206,7 +216,8 @@ struct NamedShape
 
 void recordElementMapEntry(NamedShape& namedShape,
                            const std::string& mappedName,
-                           const std::string& currentElement);
+                           const std::string& currentElement,
+                           bool preserveEncoding = false);
 
 
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/ElementMap.cpp
@@ -309,7 +320,8 @@ NamedShape namedShapeForSketchProfileShape(
     const TopoDS_Shape& rawShape,
     const TopoDS_Shape& profileShape,
     const NamedShape& rawNamedShape,
-    std::shared_ptr<cad_core::app::StringHasher> stringHasher
+    std::shared_ptr<cad_core::app::StringHasher> stringHasher,
+    std::function<void(const std::string&)> beforeSourceEntry = {}
 );
 void applyInternalShapeHistoryPublication(
     NamedShape& namedShape,
@@ -344,6 +356,9 @@ struct MakerHistoryOptions
     // entry may retain a bare source StringID as its index; subtractive tools and generic Part
     // makers do not opt into that FeatureExtrude-specific lifecycle.
     bool promoteBareSourceIdForGenerated = false;
+    // FreeCAD Chamfer/Fillet execute their OCCT dress-up maker directly in the feature
+    // recompute scope; their later Refine owns the observable nested maker lifecycle.
+    bool emitMakerScopes = true;
 };
 
 // FreeCAD:
@@ -421,7 +436,10 @@ NamedShape namedShapeForPropertyShapeValue(
     const std::string& owner,
     const TopoDS_Shape& shape,
     const NamedShape& source,
-    long propertyTag
+    long propertyTag,
+    bool emitReferenceUpdate = false,
+    bool emitBodyTipLifecycle = false,
+    const std::vector<std::string>& referencedSubnames = {}
 );
 // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp
 // ::TopoShape::makeElementBoolean(), routes OpCodes::Compound to
@@ -488,7 +506,8 @@ NamedShape namedShapeForTransformedCopy(
     const std::string& owner,
     const TopoDS_Shape& resultShape,
     const NamedShapeSource& source,
-    std::optional<std::string> postfix = std::nullopt
+    std::optional<std::string> postfix = std::nullopt,
+    bool emitDirectMapLifecycle = true
 );
 // FreeCAD:
 // /Users/li/Chili3DProject/重构Chili/FreeCAD/src/Mod/Part/App/TopoShapeExpansion.cpp::TopoShape::makeElementBoolean(),

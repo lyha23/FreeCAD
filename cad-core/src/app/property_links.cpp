@@ -541,6 +541,52 @@ void rebuildDependencyLinks(DocumentObject& object)
     }
 }
 
+int freeCadDependencyPropertyLayer(const DocumentObject& object, const std::string& property)
+{
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/PropertyContainer.cpp
+    // ::PropertyData::Impl defines "a sequence, to preserve creation order". Its merge() appends
+    // parent PropertyData after derived properties. Unknown link properties therefore stay in the
+    // current/derived layer; only source-declared base and extension layers need metadata here.
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureTransformed.cpp
+    // ::Transformed::Transformed() says "ADD_PROPERTY(Originals, (nullptr))", so subclasses such as
+    // LinearPattern publish their own Direction links before this inherited link.
+    static const std::set<std::string> transformedTypes = {
+        "PartDesign::Transformed",
+        "PartDesign::LinearPattern",
+        "PartDesign::Mirrored",
+        "PartDesign::MultiTransform",
+        "PartDesign::PolarPattern",
+        "PartDesign::Scaled",
+    };
+    if (property == "Originals" && transformedTypes.count(object.typeId) != 0U) {
+        return 1;
+    }
+    // /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/Feature.cpp
+    // ::Feature::Feature() says "ADD_PROPERTY(BaseFeature, (nullptr))". It is the common
+    // PartDesign::Feature base layer and follows every more-derived feature input.
+    const bool partDesignFeature = object.typeId.rfind("PartDesign::", 0U) == 0U
+        && object.typeId != "PartDesign::Line" && object.typeId != "PartDesign::Plane"
+        && object.typeId != "PartDesign::Point"
+        && object.typeId != "PartDesign::CoordinateSystem";
+    if (property == "BaseFeature" && partDesignFeature) {
+        return 2;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/BodyBase.cpp
+    // ::BodyBase::BodyBase() calls "ADD_PROPERTY(Tip, ...)" and "ADD_PROPERTY(BaseFeature, ...)"
+    // before "OriginGroupExtension::initExtension(this)".
+    // /Users/li/Chili3DProject/FreeCAD/src/App/ExtensionContainer.cpp
+    // ::ExtensionContainer::getPropertyList() first calls PropertyContainer::getPropertyList(),
+    // then appends each extension's property list, giving Origin and Group the final layers.
+    const bool originGroupBody = object.typeId == "PartDesign::Body";
+    if (property == "Origin" && originGroupBody) {
+        return 3;
+    }
+    if (property == "Group" && originGroupBody) {
+        return 4;
+    }
+    return 0;
+}
+
 std::string objectLabelOrName(const DocumentObject& object)
 {
     const auto label = readString(object, "Label");
@@ -1388,6 +1434,20 @@ std::vector<Link> readLinks(const nlohmann::json& value)
         return readLinkSubList(value);
     }
 
+    return links;
+}
+
+std::vector<const Link*> dependencyLinksInFreeCadOrder(const DocumentObject& object)
+{
+    std::vector<const Link*> links;
+    links.reserve(object.dependencyLinks.size());
+    for (const Link& link : object.dependencyLinks) {
+        links.push_back(&link);
+    }
+    std::stable_sort(links.begin(), links.end(), [&](const Link* left, const Link* right) {
+        return freeCadDependencyPropertyLayer(object, left->property)
+            < freeCadDependencyPropertyLayer(object, right->property);
+    });
     return links;
 }
 

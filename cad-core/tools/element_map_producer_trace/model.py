@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Mapping
 
 
@@ -53,6 +53,23 @@ class ValidatedTrace:
     object_keys: Mapping[str, tuple[str, str, str]]
     object_tags: Mapping[str, int]
     executed_objects_by_transaction: Mapping[int, frozenset[str]]
+    projected_snapshot_cache: dict[str, Any] = field(
+        default_factory=dict, compare=False, repr=False
+    )
+    projected_summary_cache: dict[str, Any] = field(
+        default_factory=dict, compare=False, repr=False
+    )
+
+
+@dataclass(frozen=True)
+class NormalizationRecord:
+    reason_code: str
+    semantic_scope_path: tuple[str, ...] = ()
+    expected_json_pointer: str | None = None
+    actual_json_pointer: str | None = None
+    expected_raw: Any = None
+    actual_raw: Any = None
+    semantic_key: Any = None
 
 
 @dataclass(frozen=True)
@@ -73,3 +90,7 @@ class ComparisonResult:
     after_alignment: str = "not_compared"
     owner: str = "unknown"
     detail: str = ""
+    equivalence: str = "none"
+    normalizations: tuple[NormalizationRecord, ...] = ()
+    raw_difference_count: int = 0
+    semantic_difference_count: int = 0

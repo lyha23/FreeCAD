@@ -11,6 +11,10 @@
 namespace cad_core::graph {
 
 struct RecomputePlan {
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp
+    // ::Document::recompute() iterates getDependencyList(..., DepSort | options). `order` preserves
+    // that dependency-first Boost DFS finish order and is the request's auditable effective target
+    // sequence; callers must not re-sort it by Object.ID or object name.
     std::vector<std::string> order;
     std::map<std::string, std::vector<std::string>> dependencies;
     std::set<std::string> blockedObjects;

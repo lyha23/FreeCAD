@@ -3,8 +3,10 @@
 #include "cad_core/part_design/feature_extrude.h"
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/runtime/producer_trace_scope.h"
+#include "cad_core/runtime/reference_resolution.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/property_topo_shape.h"
+#include "cad_core/part/element_map_producer_trace_snapshot.h"
 
 #include <TopAbs_ShapeEnum.hxx>
 
@@ -114,7 +116,8 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         "FeaturePad::execute",
         {{"mode", "additive"},
          {"reversed", app::readBool(object, "Reversed").value_or(false)},
-         {"type", app::readString(object, "Type").value_or("Length")}}
+         {"type", app::readString(object, "Type").value_or("Length")}},
+        {{"options", "3"}}
     );
     // FreeCAD semantic sources:
     // src/Mod/PartDesign/App/FeaturePad.cpp Pad::execute()
@@ -153,13 +156,38 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         return;
     }
     auto extrusion = buildFeatureExtrusion(object, context, AddSubMode::Additive, "Pad");
-    producerTrace.event(
-        extrusion ? "built" : "rejected",
-        extrusion ? "raw_prism_and_profile_resolved" : "feature_extrusion_failed",
-        {{"profile", extrusion ? extrusion->profileOwner : std::string {}},
-         {"hasRawShape", extrusion.has_value()}}
-    );
+    if (extrusion && context.producerTrace) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+        // FeatureExtrude.cpp::FeatureExtrude::execute() assigns `rawShape = prism` after
+        // buildExtrusion(). TopoShape::setShape(prism, false) publishes the shape-only value
+        // before makeElementRefine() consumes the producer-mapped prism.
+        part::NamedShape rawShape;
+        rawShape.owner = object.name + ".rawShape";
+        rawShape.shape = extrusion->toolShape;
+        rawShape.producerTag = 0;
+        rawShape.stringHasher = context.stringHasher;
+        context.producerTrace->record({
+            "toposhape.set_shape",
+            "begin",
+            "reset_requested",
+            {{"incomingNull", extrusion->toolShape.IsNull() ? "true" : "false"},
+             {"resetElementMap", "true"},
+             {"tag", "0"}},
+        });
+        part::checkpointNamedShapeLedger(
+            rawShape, object.name + ":raw-prism", "toposhape.set_shape_checkpoint"
+        );
+        context.producerTrace->record({
+            "shape_slot.assign",
+            "assigned",
+            "extrude_raw_prism",
+            {{"property", "rawShape"}},
+        });
+    }
     if (!extrusion) {
+        producerTrace.event(
+            "rejected", "feature_extrusion_failed", {{"profile", ""}, {"hasRawShape", false}}
+        );
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -199,6 +227,24 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
     // ::ProfileBased::execute() refines the feature result before `Shape.setValue(...)`.
     // Body::execute() subsequently reads that already-published Tip Shape; it must not be the
     // first producer of Pad's refine mapper history.
+    if (context.producerTrace) {
+        part::NamedShape rawShape;
+        rawShape.owner = object.name + ".Shape.raw";
+        rawShape.shape = featureShape->shape;
+        rawShape.producerTag = 0L;
+        rawShape.stringHasher = context.stringHasher;
+        context.producerTrace->record({
+            "toposhape.set_shape",
+            "begin",
+            "reset_requested",
+            {{"incomingNull", featureShape->shape.IsNull() ? "true" : "false"},
+             {"resetElementMap", "true"},
+             {"tag", "0"}},
+        });
+        part::checkpointNamedShapeLedger(
+            rawShape, object.name + ":shape-raw", "toposhape.set_shape_checkpoint"
+        );
+    }
     const auto refined = runtime::applyPartDesignFeatureRefineProperty(
         object,
         context,
@@ -214,10 +260,35 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
     const TopoDS_Shape solid = shapeResult.shape;
     namedShape = shapeResult.namedShape;
     if (namedShape) {
+        if (!featureShape->combinedWithBase && context.producerTrace) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+            // ::FeatureExtrude::execute(), the no-base branch performs the final
+            // `refineShapeIfActive(prism)` handoff before `this->Shape.setValue(...)`. A Boolean
+            // result already received that setShape handoff when its post-CUT Refine completed.
+            part::NamedShape reset;
+            reset.owner = object.name + ".Shape.result";
+            reset.shape = solid;
+            reset.producerTag = 0L;
+            reset.stringHasher = context.stringHasher;
+            context.producerTrace->record({
+                "toposhape.set_shape", "begin", "reset_requested",
+                {{"incomingNull", solid.IsNull() ? "true" : "false"},
+                 {"resetElementMap", "true"}, {"tag", "0"}},
+            });
+            part::checkpointNamedShapeLedger(
+                reset, object.name + ":shape-result", "toposhape.set_shape_checkpoint"
+            );
+        }
         // FreeCAD: src/Mod/Part/App/PropertyTopoShape.cpp::PropertyPartShape::setValue()
         // persists the completed Pad Shape and assigns its owning DocumentObject Tag.
         *namedShape = part::namedShapeForPropertyShapeValue(
-            object.name, solid, *namedShape, static_cast<long>(object.id)
+            object.name,
+            solid,
+            *namedShape,
+            static_cast<long>(object.id),
+            true,
+            false,
+            runtime::downstreamElementReferenceSubnames(object.name, context)
         );
     }
     const nlohmann::json mesh = cad_core::part::meshForShape(solid);
@@ -260,6 +331,23 @@ void executePad(const app::DocumentObject& object, runtime::ComputeContext& cont
         result["refine"] = "applied";
     }
     context.objects[object.name] = result;
+    if (context.producerTrace) {
+        context.producerTrace->record({
+            "shape_slot.assign",
+            "assigned",
+            featureShape->combinedWithBase ? "extrude_boolean_result" : "extrude_prism_result",
+            {{"property", "Shape"}},
+        });
+        const std::string snapshot = context.producerTrace->currentSnapshotId();
+        context.producerTrace->record({
+            "partdesign.extrude.final_checkpoint",
+            "published",
+            "",
+            {{"snapshot", snapshot}},
+            snapshot,
+            snapshot,
+        });
+    }
 }
 
 }  // namespace cad_core::part_design

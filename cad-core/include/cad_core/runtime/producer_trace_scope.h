@@ -26,7 +26,8 @@ public:
                        const app::DocumentObject& object,
                        std::string slice,
                        std::string stage,
-                       nlohmann::json fields = nlohmann::json::object());
+                       nlohmann::json fields = nlohmann::json::object(),
+                       nlohmann::json beginFields = nullptr);
     ProducerTraceScope(const ProducerTraceScope&) = delete;
     ProducerTraceScope& operator=(const ProducerTraceScope&) = delete;
     ~ProducerTraceScope();

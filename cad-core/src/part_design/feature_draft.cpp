@@ -549,10 +549,6 @@ void executeDraft(const app::DocumentObject& object, runtime::ComputeContext& co
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
-    if (!cacheDressUpAddSubShape(object, context, *result)) {
-        context.objects[object.name] = {{"status", "error"}};
-        return;
-    }
     publishDressUpResult(object, context, *result);
 }
 

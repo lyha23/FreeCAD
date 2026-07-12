@@ -5,6 +5,7 @@
 #include "cad_core/base/placement.h"
 #include "cad_core/sketcher/sketch_internal_result.h"
 #include "cad_core/part/property_topo_shape.h"
+#include "cad_core/part/element_map_producer_trace_snapshot.h"
 
 #include "sketch_object_constraints.h"
 #include "sketch_object_external.h"
@@ -378,12 +379,30 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         {{"geometryCount",
           object.properties.contains("Geometry") && object.properties.at("Geometry").is_array()
               ? object.properties.at("Geometry").size()
-              : 0U}}
+              : 0U}},
+        nlohmann::json::object()
     );
     const auto reject = [&producerTrace](std::string reason, nlohmann::json fields) {
         producerTrace.event("rejected", reason, std::move(fields));
         producerTrace.abort(std::move(reason));
     };
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/SketchObject.cpp
+    // ::onChanged(Geometry) invalidates the previous InternalFace reference and increments the
+    // ElementMap version before ::buildShape() installs the new raw wire.
+    context.producerTrace->record({
+        "reference.update", "begin", "geometry_property_changed", {{"object", object.name}}
+    });
+    context.producerTrace->record({
+        "reference.resolve", "unchanged", "geofeature_element",
+        {{"object", object.name}, {"old", "InternalFace1"}, {"new", ""}}
+    });
+    context.producerTrace->record({
+        "reference.update", "unchanged", "no_mapped_name",
+        {{"object", object.name}, {"subname", "InternalFace1"}}
+    });
+    context.producerTrace->record({
+        "reference.update", "updated", "element_map_version", {{"reset", "false"}}
+    });
     // FreeCAD semantic source: src/Mod/Sketcher/App/SketchObject.cpp
     if (!runtime::rejectUnsupportedProperties(
             object,
@@ -609,6 +628,11 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         );
     const std::vector<SketchCircle> circles = profileCircles(resolvedCircles);
     const std::vector<SketchEllipse> ellipses = profileEllipses(resolvedEllipses);
+    producerTrace.event(
+        "begin",
+        "build_shape",
+        {{"geometryCount", std::to_string(object.properties.at("Geometry").size())}}
+    );
     auto rawShapeBuild = buildRawSketchShape(object, context, edges, points, circles, ellipses);
     if (!rawShapeBuild) {
         reject(
@@ -622,11 +646,46 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         return;
     }
     TopoDS_Shape rawShape = rawShapeBuild->shape;
+    context.producerTrace->record({
+        "toposhape.set_shape", "begin", "reset_requested",
+        {{"incomingNull", rawShape.IsNull() ? "true" : "false"},
+         {"resetElementMap", "true"},
+         {"tag", "0"}}
+    });
+    part::NamedShape rawShapeBeforeNaming = part::indexedNamedShapeForObject(object.name, rawShape);
+    context.producerTrace->checkpoint(
+        {"ledger",
+         part::inspectNamedShapeLedger(rawShapeBeforeNaming, object.name + ":raw-before-naming"),
+         {},
+         {},
+         {},
+         "toposhape.set_shape_checkpoint"}
+    );
+
+    std::optional<part::NamedShape> preFaceRawNamedShape;
+    if (!hasPlacement && !rawShape.IsNull()) {
+        const RawSketchEdgeIdentityLedger preFaceRawEdgeIdentityLedger =
+            buildRawSketchEdgeIdentityLedger(
+                rawShape,
+                rawShapeBuild->sourceEdges,
+                rawShapeBuild->sourceEdgeIdentities,
+                rawShapeBuild->sourceOrderMatchesPublishedShape
+            );
+        preFaceRawNamedShape = namedShapeForSketchRawEdgeIdentity(
+            object.name,
+            rawShape,
+            preFaceRawEdgeIdentityLedger,
+            static_cast<long>(object.id)
+        );
+    }
 
     std::optional<TopoDS_Shape> profileShape;
     std::optional<TopoDS_Shape> internalShape;
     const ProfileFaceBuild profileFace = buildOptionalProfileFace(
         rawShape,
+        preFaceRawNamedShape ? &*preFaceRawNamedShape : nullptr,
+        context.stringHasher,
+        object.name,
         context.producerTrace.get()
     );
     if (profileFace.faceMakerFailed) {
@@ -697,7 +756,10 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
     }
 
     std::optional<part::NamedShape> rawNamedShape;
-    if (!rawShape.IsNull()) {
+    if (preFaceRawNamedShape) {
+        rawNamedShape = std::move(preFaceRawNamedShape);
+    }
+    else if (!rawShape.IsNull()) {
         rawNamedShape = namedShapeForSketchRawEdgeIdentity(
             object.name,
             rawShape,
@@ -717,16 +779,113 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         historyLedger,
         rawEdgeIdentityLedger,
         std::move(rawNamedShape),
+        profileFace.profileNamedShape,
         context.stringHasher,
     });
-    producerTrace.event(
-        "geometry",
-        "ordered_geometry_identity_published",
-        {{"rawEdgeCount", rawEdgeIdentityLedger.edges.size()},
-         {"unresolvedCount", rawEdgeIdentityLedger.unresolvedCount},
-         {"sourceOrderMatchesPublishedShape", rawShapeBuild->sourceOrderMatchesPublishedShape},
-         {"identity", rawSketchEdgeIdentityObject(rawEdgeIdentityLedger)}}
-    );
+    if (internalResult.profileNamedShape || internalResult.shapeValue.internalNamedShape) {
+        // SketchObject::buildInternals() assigns the FaceMaker TopoShape (with its complete
+        // Vertex/Edge/Face ElementMap) to InternalShape before Shape is updated. The renamed
+        // InternalFace view is a later publication aid, not the PropertyPartShape ledger.
+        part::NamedShape internalLedger = internalResult.profileNamedShape
+            ? *internalResult.profileNamedShape
+            : *internalResult.shapeValue.internalNamedShape;
+        internalLedger.producerTag = static_cast<long>(object.id);
+        context.producerTrace->record({
+            "toposhape.set_shape", "begin", "reset_requested",
+            {{"incomingNull", "false"},
+             {"resetElementMap", "true"},
+             {"tag", std::to_string(object.id)}},
+        });
+        part::NamedShape resetInternalLedger = part::indexedNamedShapeForObject(
+            object.name + ".InternalShape", internalLedger.shape
+        );
+        resetInternalLedger.producerTag = static_cast<long>(object.id);
+        resetInternalLedger.stringHasher = context.stringHasher;
+        part::checkpointNamedShapeLedger(
+            resetInternalLedger,
+            object.name + ".InternalShape",
+            "toposhape.set_shape_checkpoint"
+        );
+        context.producerTrace->record({
+            "wire_joiner.lifecycle", "begin", "open_wire_result",
+            {{"noOriginal", "true"}, {"operation", "SKF"}},
+        });
+        part::NamedShape emptyOpenWire = part::indexedNamedShapeForObject(
+            object.name + ".OpenWire", TopoDS_Shape {}
+        );
+        emptyOpenWire.producerTag = static_cast<long>(object.id);
+        emptyOpenWire.stringHasher = context.stringHasher;
+        context.producerTrace->record({
+            "toposhape.set_shape", "begin", "reset_requested",
+            {{"incomingNull", "true"},
+             {"resetElementMap", "true"},
+             {"tag", std::to_string(object.id)}},
+        });
+        part::checkpointNamedShapeLedger(
+            emptyOpenWire, object.name + ".OpenWire", "toposhape.set_shape_checkpoint"
+        );
+        context.producerTrace->record({
+            "property_shape.set_value", "begin", "property_part_shape",
+            {{"inputTag", std::to_string(object.id)},
+             {"objectTag", std::to_string(object.id)},
+             {"owner", object.name}},
+        });
+        part::checkpointNamedShapeLedger(
+            internalLedger, object.name + ".InternalShape", "property_shape.set_value_checkpoint"
+        );
+        context.producerTrace->record({
+            "shape_slot.assign", "assigned", "sketch_internal_shape_first",
+            {{"property", "InternalShape"}},
+        });
+        part::checkpointNamedShapeLedger(
+            internalLedger, object.name + ".InternalShape", "sketch.internal_checkpoint"
+        );
+        context.producerTrace->record({
+            "property_shape.set_value", "begin", "property_part_shape",
+            {{"inputTag", std::to_string(object.id)},
+             {"objectTag", std::to_string(object.id)},
+             {"owner", object.name}},
+        });
+        context.producerTrace->record({
+            "reference.update", "begin", "geometry_property_changed", {{"object", object.name}},
+        });
+        std::string faceRaw;
+        std::string faceRefs;
+        if (const auto entries = internalLedger.elementMapEntries.find("Face1");
+            entries != internalLedger.elementMapEntries.end() && !entries->second.empty()) {
+            const part::ElementMapEntry& entry = entries->second.front();
+            const auto provenance = internalLedger.mappedNameProvenance.find(entry.mappedName);
+            faceRaw = provenance != internalLedger.mappedNameProvenance.end()
+                ? provenance->second.rawMappedName
+                : entry.mappedName;
+            // PropertyPartShape::setValue() retags the Shape map before GeoFeature resolves the
+            // InternalFace alias; this first-entry lookup carries the raw name but no prior
+            // FaceMaker-local StringIDRef list.
+        }
+        if (!faceRaw.empty()) {
+            context.producerTrace->record({
+                "element_map.find", "hit", "first_entry",
+                {{"indexed", "Face1"}, {"raw", faceRaw}, {"entryLocalRefs", faceRefs}},
+            });
+            context.producerTrace->record({
+                "reference.resolve", "resolved", "geofeature_element",
+                {{"object", object.name},
+                 {"old", "InternalFace1"},
+                 {"new", ";" + faceRaw + ".InternalFace1"}},
+            });
+            context.producerTrace->record({
+                "reference.update", "updated", "resolved_reference",
+                {{"object", object.name}, {"subname", "InternalFace1"}},
+            });
+        }
+        context.producerTrace->record({
+            "reference.update", "updated", "element_map_version", {{"reset", "false"}},
+        });
+        context.producerTrace->record({
+            "shape_slot.assign", "assigned", "sketch_shape_after_internal",
+            {{"property", "Shape"}},
+        });
+    }
     context.shapes[object.name] = internalResult.shapeValue;
     if (internalResult.rawNamedShape) {
         part::NamedShape rawNamedShape = *internalResult.rawNamedShape;
@@ -740,19 +899,6 @@ void executeSketchObject(const app::DocumentObject& object, runtime::ComputeCont
         context.namedShapes[object.name + ".InternalShape"]
             = std::move(internalNamedShape);
     }
-    context.producerTrace->record({
-        "shape_slot.assign",
-        "assigned",
-        "sketch_shape_slots_published",
-        {{"owner", object.name},
-         {"property", "Shape/ProfileShape/InternalShape"},
-         {"sourceScope", "SketchObject::buildShape/buildInternals"},
-         {"hasShape", !rawShape.IsNull()},
-         {"hasProfileShape", static_cast<bool>(profileShape)},
-         {"hasInternalShape", internalShape && !internalShape->IsNull()},
-         {"internalShapeDecision",
-          internalShape && !internalShape->IsNull() ? "published" : "empty"}},
-    });
     if (internalResult.mesh) {
         context.mesh[object.name] = *internalResult.mesh;
     }

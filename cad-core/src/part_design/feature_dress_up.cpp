@@ -1355,6 +1355,71 @@ bool cacheDressUpAddSubShape(
     return true;
 }
 
+bool ensureDressUpAddSubShape(
+    const std::string& featureName,
+    runtime::ComputeContext& context
+)
+{
+    const auto documentIt = context.documentObjects.find(featureName);
+    if (documentIt == context.documentObjects.end()
+        || !isDressUpType(documentIt->second->typeId)) {
+        return true;
+    }
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD2/src/Mod/PartDesign/App/FeatureDressUp.cpp
+    // ::DressUp::getAddSubShape() is entered by FeatureTransformed even when AddSubShape already
+    // holds a cached compound; the trace therefore nests this lifecycle under the consumer.
+    auto traceScope = context.producerTrace->scope(
+        {"partdesign.dressup",
+         featureName,
+         static_cast<long>(documentIt->second->id),
+         documentIt->second->typeId,
+         nlohmann::json::object()}
+    );
+    context.producerTrace->record(
+        {"partdesign.dressup", "begin", "get_add_sub_shape", nlohmann::json::object()}
+    );
+    const auto succeed = [&]() {
+        context.producerTrace->record(
+            {"partdesign.dressup", "success", "add_sub_shape_resolved", nlohmann::json::object()}
+        );
+        return true;
+    };
+    if (context.addSubShapes.find(featureName) != context.addSubShapes.end()) {
+        return succeed();
+    }
+    const auto shapeIt = context.shapes.find(featureName);
+    const auto namedShapeIt = context.namedShapes.find(featureName);
+    if (shapeIt == context.shapes.end() || namedShapeIt == context.namedShapes.end()) {
+        return false;
+    }
+    auto base = resolveDressUpBase(*documentIt->second, context);
+    if (!base) {
+        return false;
+    }
+
+    // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureDressUp.cpp
+    // ::DressUp::onChanged() says AddSubShape is a cache and "Other features (currently only
+    // feature Transformed) shall call getAddSubShape() to rebuild the cache". Reconstruct the
+    // request-local cache from the already-published Shape only at that consumer boundary.
+    DressUpResult result;
+    result.sourceBase = base->link.object;
+    result.base = *base;
+    result.shape = shapeIt->second.shape;
+    result.namedShape = namedShapeIt->second;
+    result.supportTransform = readBoolProperty(*documentIt->second, "SupportTransform", false);
+    if (!cacheDressUpAddSubShape(*documentIt->second, context, result)) {
+        return false;
+    }
+    const auto objectResultIt = context.objects.find(featureName);
+    if (objectResultIt != context.objects.end()) {
+        objectResultIt->second["add_sub_cache"] = result.addSubCacheStatus;
+        if (!result.addSubCacheWarning.empty()) {
+            objectResultIt->second["add_sub_cache_warning"] = result.addSubCacheWarning;
+        }
+    }
+    return succeed();
+}
+
 bool applyDressUpRefine(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,

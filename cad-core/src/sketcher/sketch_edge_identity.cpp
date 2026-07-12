@@ -503,6 +503,58 @@ part::NamedShape namedShapeForSketchRawEdgeIdentity(
     return namedShape;
 }
 
+void materializeSketchMappedNameStringId(
+    part::NamedShape& namedShape,
+    const std::string& entryKey,
+    const std::shared_ptr<app::StringHasher>& stringHasher
+)
+{
+    if (!stringHasher) {
+        return;
+    }
+    namedShape.stringHasher = stringHasher;
+    auto provenance = namedShape.mappedNameProvenance.find(entryKey);
+    if (provenance == namedShape.mappedNameProvenance.end()
+        || provenance->second.status != part::MappedNameProvenanceStatus::SourceBacked
+        || provenance->second.operationPostfix != ";SKT"
+        || !provenance->second.elementIdRefs.empty()) {
+        return;
+    }
+    const std::string& raw = provenance->second.rawMappedName;
+    const std::size_t postfix = raw.find(';');
+    if (postfix == std::string::npos || postfix == 0U) {
+        return;
+    }
+    const bool alreadyMaterialized = stringHasher->mappedNameId(raw).has_value();
+    const std::string token = raw.substr(0U, postfix);
+    std::string data = token;
+    int mappedIndex = 0;
+    int displayedIndex = 0;
+    if (isGeometryToken(token)) {
+        mappedIndex = std::stoi(token.substr(1U));
+        data = "g";
+    }
+    else if (const auto endpoint = sketchEndpointOrdinal(token)) {
+        displayedIndex = *endpoint;
+    }
+    app::StringId sid = stringHasher->getMappedNameId(
+        data,
+        displayedIndex != 0 && alreadyMaterialized
+            ? 0
+            : (displayedIndex != 0 ? displayedIndex : mappedIndex),
+        raw.substr(postfix)
+    );
+    if (displayedIndex != 0 && !alreadyMaterialized) {
+        sid.index = displayedIndex;
+    }
+    app::StringId elementRef = sid;
+    if (displayedIndex != 0 && !alreadyMaterialized) {
+        elementRef.index = displayedIndex;
+    }
+    provenance->second.elementIdRefs = {elementRef};
+    stringHasher->rememberMappedName(raw, sid, {elementRef});
+}
+
 void materializeSketchMappedNameStringIds(
     part::NamedShape& namedShape,
     const std::shared_ptr<app::StringHasher>& stringHasher
@@ -561,7 +613,7 @@ void materializeSketchMappedNameStringIds(
                 }
                 app::StringId sid = stringHasher->getMappedNameId(
                     data,
-                    mappedIndex,
+                    displayedIndex != 0 ? displayedIndex : mappedIndex,
                     raw.substr(postfix)
                 );
                 if (displayedIndex != 0 && !alreadyMaterialized) {

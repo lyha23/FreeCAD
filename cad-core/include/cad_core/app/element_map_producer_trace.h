@@ -6,6 +6,7 @@
 #include <exception>
 #include <map>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -32,6 +33,11 @@ public:
     {
         std::vector<std::string> targets;
         nlohmann::json fields = nlohmann::json::object();
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Document.cpp
+        // ::Document::recompute() executes the list returned by
+        // "getDependencyList(..., DepSort | options)". Publish that complete planned list so a
+        // consumer can audit execution scope without reconstructing it from producer scopes.
+        std::optional<std::vector<std::string>> effectiveTargets;
     };
 
     struct ScopeDescriptor
@@ -63,6 +69,7 @@ public:
         std::vector<long> definedSids;
         std::vector<std::string> nestedSnapshotRefs;
         std::string label = "checkpoint";
+        bool republish = false;
     };
 
     struct ProducerMetadata
@@ -160,6 +167,7 @@ public:
     nlohmann::json drain(const ProducerMetadata& metadata,
                          const std::vector<ObjectInfo>& objects = {});
     bool empty() const;
+    const std::string& currentSnapshotId() const noexcept;
     static std::string canonicalSha256(const nlohmann::json& value);
 
 private:

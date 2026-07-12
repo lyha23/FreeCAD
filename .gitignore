@@ -82,3 +82,4 @@ graphify-out/
 
 # CAD Core Rust comparison outputs
 /cad-core/fixtures/*/cad-rs-res/
+/cad-core/fixtures/*/cad-core-res/

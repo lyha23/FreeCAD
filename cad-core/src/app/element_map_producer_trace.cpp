@@ -150,6 +150,7 @@ struct ElementMapProducerTrace::TransactionState
 {
     std::uint64_t sequence = 0;
     std::vector<std::string> targets;
+    std::optional<std::vector<std::string>> effectiveTargets;
     nlohmann::json fields = nlohmann::json::object();
     std::uint64_t beginEvent = 0;
     std::uint64_t endEvent = 0;
@@ -350,6 +351,7 @@ ElementMapProducerTrace::Transaction ElementMapProducerTrace::beginTransaction(
     TransactionState state;
     state.sequence = sequence;
     state.targets = std::move(descriptor.targets);
+    state.effectiveTargets = std::move(descriptor.effectiveTargets);
     state.fields = std::move(descriptor.fields);
     transactions_.emplace(sequence, std::move(state));
     appendEvent({"document.recompute.begin",
@@ -428,7 +430,8 @@ void ElementMapProducerTrace::endScope(std::uint64_t sequence,
                 events_.end(),
                 [sequence, &found](const EventState& event) {
                     return event.sequence > found->second.beginEvent
-                        && event.scope == sequence && event.slice == "maker.final_checkpoint";
+                        && event.scope == sequence && event.decision == "published"
+                        && event.slice.find("checkpoint") != std::string::npos;
                 }
             );
             if (!hasFinalCheckpoint) {
@@ -565,11 +568,20 @@ std::string ElementMapProducerTrace::checkpoint(SnapshotValue value)
         snapshot.nestedSnapshotRefs = std::move(value.nestedSnapshotRefs);
         snapshot.label = value.label;
     }
+    // A content-addressed snapshot that was already published remains available as a nested
+    // ledger reference. FreeCAD does not republish the same StringHasher table merely because
+    // the current event cursor has since advanced to an ElementMap ledger snapshot.
+    if (!value.republish && snapshot.publishedEvent != 0 && snapshot.kind == "stringTable") {
+        return id;
+    }
     const std::string before = currentSnapshot_;
+    if (!value.republish && before == id && snapshot.kind == "stringTable") {
+        return id;
+    }
     currentSnapshot_ = id;
     appendEvent({value.label.empty() ? "checkpoint" : value.label,
                  "published",
-                 "snapshot_complete",
+                 "",
                  {{"snapshot", id}},
                  before,
                  id});
@@ -592,13 +604,11 @@ std::string ElementMapProducerTrace::firstSeenIdentity(const std::string& kind,
     }
     const std::string identity = kind + ":" + std::to_string(++nextIdentity_);
     identities_.emplace(key, identity);
-    record({"trace.identity",
-            relation.empty() ? "create" : relation,
-            "first_seen_value_identity",
-            {{"kind", kind},
-             {"role", role},
-             {"identity", identity},
-             {"relatedIdentity", relatedIdentity}}});
+    // Native Producer Trace carries first-seen value identities in snapshot payloads, not as
+    // semantic lifecycle events. Emitting a synthetic trace.identity event here inserts an
+    // observable step between ElementMap::setElementName() and its ledger checkpoint.
+    (void)relation;
+    (void)relatedIdentity;
     return identity;
 }
 
@@ -641,7 +651,10 @@ ElementMapProducerTrace::ValidationResult ElementMapProducerTrace::validate() co
         if (event.scope != 0 && scopes_.at(event.scope).transaction != event.transaction) {
             fail("scope_transaction_mismatch:" + std::to_string(event.sequence));
         }
-        if (event.slice.empty() || event.decision.empty() || event.reason.empty()) {
+        const bool nativeShapeCheckpoint = event.decision == "published" && event.reason.empty()
+            && !event.afterSnapshot.empty();
+        if (event.slice.empty() || event.decision.empty()
+            || (event.reason.empty() && !nativeShapeCheckpoint)) {
             fail("incomplete_event_decision:" + std::to_string(event.sequence));
         }
         if (!event.fields.is_object()) {
@@ -679,15 +692,26 @@ ElementMapProducerTrace::ValidationResult ElementMapProducerTrace::validate() co
         }
         if (event.slice == "hasher.insert") {
             const auto sidResult = event.fields.find("result");
-            if (sidResult == event.fields.end() || !sidResult->is_object()
-                || !sidResult->contains("value")
-                || !sidResult->at("value").is_number_integer()
-                || sidResult->at("value").get<long>() <= 0) {
+            const auto nativeId = event.fields.find("id");
+            long sid = 0;
+            if (nativeId != event.fields.end() && nativeId->is_string()) {
+                try {
+                    sid = std::stol(nativeId->get<std::string>());
+                }
+                catch (const std::exception&) {
+                    sid = 0;
+                }
+            }
+            else if (sidResult != event.fields.end() && sidResult->is_object()
+                     && sidResult->contains("value")
+                     && sidResult->at("value").is_number_integer()) {
+                sid = sidResult->at("value").get<long>();
+            }
+            if (sid <= 0) {
                 fail("invalid_hasher_result:" + std::to_string(event.sequence));
             }
             else {
-                const long sid = sidResult->at("value").get<long>();
-                if (event.decision == "allocation") {
+                if (event.decision == "allocation" || event.decision == "allocated") {
                     if (eventKnownSids.count(sid) != 0U) {
                         fail("reallocated_event_sid:" + std::to_string(event.sequence) + ":"
                              + std::to_string(sid));
@@ -800,7 +824,8 @@ ElementMapProducerTrace::ValidationResult ElementMapProducerTrace::validate() co
                  ++eventSequence) {
                 const EventState& event =
                     events_.at(static_cast<std::size_t>(eventSequence - 1));
-                if (event.scope == sequence && event.slice == "maker.final_checkpoint") {
+                if (event.scope == sequence && event.decision == "published"
+                    && event.slice.find("checkpoint") != std::string::npos) {
                     hasFinalCheckpoint = true;
                     break;
                 }
@@ -1080,14 +1105,18 @@ nlohmann::json ElementMapProducerTrace::document(
 
     for (const auto& item : transactions_) {
         const TransactionState& transaction = item.second;
-        trace["transactions"].push_back({
+        nlohmann::json transactionValue = {
             {"sequence", transaction.sequence},
             {"targets", transaction.targets},
             {"outcome", transaction.outcome},
             {"detail", transaction.detail},
             {"eventRange", {transaction.beginEvent, transaction.endEvent}},
             {"fields", transaction.fields},
-        });
+        };
+        if (transaction.effectiveTargets) {
+            transactionValue["effectiveTargets"] = *transaction.effectiveTargets;
+        }
+        trace["transactions"].push_back(std::move(transactionValue));
     }
 
     std::map<long, ObjectInfo> objectByTag;
@@ -1204,6 +1233,11 @@ bool ElementMapProducerTrace::empty() const
 {
     std::lock_guard<std::recursive_mutex> lock(mutex_);
     return events_.empty() && transactions_.empty() && scopes_.empty();
+}
+
+const std::string& ElementMapProducerTrace::currentSnapshotId() const noexcept
+{
+    return currentSnapshot_;
 }
 
 std::string ElementMapProducerTrace::canonicalSha256(const nlohmann::json& value)

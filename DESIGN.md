@@ -473,3 +473,7 @@ Chili/FreeCAD/docs/CADCore方案/细化方案', 要把每一个步骤干什么�
 ---
 
 我能不能 新建一个 比较的  python 脚本 在 /Users/li/Chili3DProject/FreeCAD/cad-core/tools， 用于比较  expected/<case>.freecad.producer-trace.json  与  cad-core 的过程输出， 从而在第一处分叉的位置就报错？
+
+---
+查阅/Users/li/Chili3DProject/FreeCAD/docs/框架/CADCore建模可用性与ProducerTrace门禁边界.md  和 /Users/li/Chili3DProject/FreeCAD/docs/框架/7-12-00-46-FreeCADCmd-ElementMap生产者Trace驱动CADCore实现指南.md ， 排查一下  /Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5 有哪些缺口？
+那么对比一下  cad-core 与 expected 的输出， 查询第一个缺口是什么

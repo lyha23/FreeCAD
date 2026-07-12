@@ -4,6 +4,7 @@
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/part/edge_axis.h"
 #include "cad_core/part/extrusion_helper.h"
+#include "cad_core/part/element_map_producer_trace_snapshot.h"
 #include "cad_core/part/part_extrusion.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/topo_shape.h"
@@ -2318,6 +2319,70 @@ std::optional<ExtrudeResult> buildFeatureExtrusion(const app::DocumentObject& ob
     if (!profile) {
         return std::nullopt;
     }
+    const part::NamedShape* tracedProfile = namedShapeForProfileSource(
+        context, profile->link, profile->shape
+    );
+    if (tracedProfile != nullptr && context.producerTrace != nullptr) {
+        long profileTag = tracedProfile->producerTag.value_or(0L);
+        if (profileTag == 0L) {
+            const auto rawProfile = context.namedShapes.find(profile->link.object);
+            if (rawProfile != context.namedShapes.end()) {
+                profileTag = rawProfile->second.producerTag.value_or(0L);
+            }
+        }
+        const auto firstEntry = [&](const std::string& indexed, bool clearRefs) {
+            const auto entries = tracedProfile->elementMapEntries.find(indexed);
+            if (entries == tracedProfile->elementMapEntries.end() || entries->second.empty()) {
+                return;
+            }
+            const part::ElementMapEntry& entry = entries->second.front();
+            const auto provenance = tracedProfile->mappedNameProvenance.find(entry.mappedName);
+            const std::string raw = provenance != tracedProfile->mappedNameProvenance.end()
+                ? provenance->second.rawMappedName
+                : entry.mappedName;
+            std::string refs;
+            if (!clearRefs) {
+                for (const app::StringId& ref : entry.elementIdRefs) {
+                    if (!refs.empty()) {
+                        refs += ',';
+                    }
+                    refs += ref.toString();
+                }
+            }
+            context.producerTrace->record({
+                "element_map.find", "hit", "first_entry",
+                {{"indexed", indexed}, {"raw", raw}, {"entryLocalRefs", refs}},
+            });
+        };
+        firstEntry("Face1", true);
+        part::NamedShape resetProfile = part::indexedNamedShapeForObject(
+            profile->link.object + ".ExtrusionProfile", profile->shape
+        );
+        resetProfile.producerTag = profileTag;
+        resetProfile.stringHasher = context.stringHasher;
+        for (int copy = 0; copy < 2; ++copy) {
+            context.producerTrace->record({
+                "toposhape.set_shape", "begin", "reset_requested",
+                {{"incomingNull", "false"},
+                 {"resetElementMap", "true"},
+                 {"tag", std::to_string(profileTag)}},
+            });
+            part::checkpointNamedShapeLedger(
+                resetProfile,
+                profile->link.object + ".ExtrusionProfile",
+                "toposhape.set_shape_checkpoint"
+            );
+        }
+        for (const char* prefix : {"Vertex", "Edge", "Face"}) {
+            for (int index = 1;; ++index) {
+                const std::string indexed = std::string(prefix) + std::to_string(index);
+                if (tracedProfile->elements.count(indexed) == 0U) {
+                    break;
+                }
+                firstEntry(indexed, false);
+            }
+        }
+    }
     const bool openProfile = isOpenProfileKind(profile->kind);
     std::optional<OpenProfileMode> resolvedOpenProfileMode;
     std::string bodyParticipation = bodyParticipationForClosedProfile(mode);
@@ -2703,11 +2768,6 @@ std::optional<FeatureExtrusionShape> finalizeFeatureExtrusion(const app::Documen
         return result;
     }
 
-    const auto base = baseSolidSource(object, context);
-    if (!base) {
-        return result;
-    }
-
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
     // ::FeatureExtrude::execute() stores rawShape, then calls `prism = refineShapeIfActive(prism)`
     // and `AddSubShape.setValue(prism)` before assigning `prism.Tag = -this->getID()` for the
@@ -2735,6 +2795,32 @@ std::optional<FeatureExtrusionShape> finalizeFeatureExtrusion(const app::Documen
             *refinedTool->namedShape,
             static_cast<long>(object.id)
         );
+        if (context.producerTrace) {
+            context.producerTrace->record({
+                "shape_slot.assign",
+                "assigned",
+                "extrude_prism_handoff",
+                {{"property", "AddSubShape"}},
+            });
+            const std::string snapshot = context.producerTrace->currentSnapshotId();
+            context.producerTrace->record({
+                "partdesign.extrude.addsub_checkpoint",
+                "published",
+                "",
+                {{"snapshot", snapshot}},
+                snapshot,
+                snapshot,
+            });
+        }
+    }
+
+    const auto base = baseSolidSource(object, context);
+    if (!base) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+        // ::execute(), refines `prism` before AddSubShape.setValue() even without a base, then
+        // the solid/no-base branch refines the publishable Shape again. Do not return the raw
+        // extrusion before this first producer lifecycle.
+        return result;
     }
 
     part::NamedShapeSource tool {

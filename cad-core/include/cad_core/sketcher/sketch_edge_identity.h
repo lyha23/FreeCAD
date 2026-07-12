@@ -95,6 +95,11 @@ void materializeSketchMappedNameStringIds(
     part::NamedShape& namedShape,
     const std::shared_ptr<app::StringHasher>& stringHasher
 );
+void materializeSketchMappedNameStringId(
+    part::NamedShape& namedShape,
+    const std::string& entryKey,
+    const std::shared_ptr<app::StringHasher>& stringHasher
+);
 
 void publishRawSketchEdgeIdentity(nlohmann::json& mesh,
                                   nlohmann::json& subshapes,

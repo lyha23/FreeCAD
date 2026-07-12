@@ -9,6 +9,7 @@
 #include <TopoDS_Wire.hxx>
 
 #include <cstddef>
+#include <functional>
 #include <optional>
 #include <vector>
 
@@ -53,7 +54,8 @@ std::optional<TopoDS_Shape> makeCheeseFaceFromClosedWires(const std::vector<Topo
 FaceMakerBuildFaceResult makeFacesFromClosedWiresAndSplitEdgesDetailed(
     const std::vector<TopoDS_Wire>& wires,
     const std::vector<TopoDS_Edge>& splitEdges,
-    app::ElementMapProducerTrace* producerTrace = nullptr
+    app::ElementMapProducerTrace* producerTrace = nullptr,
+    const std::function<void(const FaceMakerBuildFaceResult&)>& postBuild = {}
 );
 std::optional<TopoDS_Shape> makeFacesFromClosedWiresAndSplitEdges(
     const std::vector<TopoDS_Wire>& wires,

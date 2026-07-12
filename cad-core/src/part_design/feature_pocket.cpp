@@ -2,9 +2,11 @@
 
 #include "cad_core/runtime/feature_executor.h"
 #include "cad_core/runtime/producer_trace_scope.h"
+#include "cad_core/runtime/reference_resolution.h"
 #include "cad_core/part_design/feature_extrude.h"
 #include "cad_core/part/shape_exporter.h"
 #include "cad_core/part/property_topo_shape.h"
+#include "cad_core/part/element_map_producer_trace_snapshot.h"
 
 #include <TopAbs_ShapeEnum.hxx>
 
@@ -113,7 +115,8 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
         "FeaturePocket::execute",
         {{"mode", "subtractive"},
          {"reversed", app::readBool(object, "Reversed").value_or(false)},
-         {"type", app::readString(object, "Type").value_or("Length")}}
+         {"type", app::readString(object, "Type").value_or("Length")}},
+        {{"options", "11"}}
     );
     // FreeCAD semantic sources:
     // src/Mod/PartDesign/App/FeaturePocket.cpp Pocket::execute()
@@ -151,13 +154,37 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
         return;
     }
     auto extrusion = buildFeatureExtrusion(object, context, AddSubMode::Subtractive, "Pocket");
-    producerTrace.event(
-        extrusion ? "built" : "rejected",
-        extrusion ? "raw_prism_and_profile_resolved" : "feature_extrusion_failed",
-        {{"profile", extrusion ? extrusion->profileOwner : std::string {}},
-         {"hasRawShape", extrusion.has_value()}}
-    );
+    if (extrusion && context.producerTrace) {
+        // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/
+        // FeatureExtrude.cpp::FeatureExtrude::execute() assigns `rawShape = prism` after
+        // buildExtrusion(), before makeElementRefine() consumes the mapped tool.
+        part::NamedShape rawShape;
+        rawShape.owner = object.name + ".rawShape";
+        rawShape.shape = extrusion->toolShape;
+        rawShape.producerTag = 0;
+        rawShape.stringHasher = context.stringHasher;
+        context.producerTrace->record({
+            "toposhape.set_shape",
+            "begin",
+            "reset_requested",
+            {{"incomingNull", extrusion->toolShape.IsNull() ? "true" : "false"},
+             {"resetElementMap", "true"},
+             {"tag", "0"}},
+        });
+        part::checkpointNamedShapeLedger(
+            rawShape, object.name + ":raw-prism", "toposhape.set_shape_checkpoint"
+        );
+        context.producerTrace->record({
+            "shape_slot.assign",
+            "assigned",
+            "extrude_raw_prism",
+            {{"property", "rawShape"}},
+        });
+    }
     if (!extrusion) {
+        producerTrace.event(
+            "rejected", "feature_extrusion_failed", {{"profile", ""}, {"hasRawShape", false}}
+        );
         context.objects[object.name] = {{"status", "error"}};
         return;
     }
@@ -196,6 +223,24 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
     // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
     // refines the subtractive feature before publishing its Shape.  Preserve that producer-side
     // ElementMap/MapperHistory for the Body Tip and any later DressUp consumer.
+    if (context.producerTrace) {
+        part::NamedShape rawShape;
+        rawShape.owner = object.name + ".Shape.raw";
+        rawShape.shape = featureShape->shape;
+        rawShape.producerTag = 0L;
+        rawShape.stringHasher = context.stringHasher;
+        context.producerTrace->record({
+            "toposhape.set_shape",
+            "begin",
+            "reset_requested",
+            {{"incomingNull", featureShape->shape.IsNull() ? "true" : "false"},
+             {"resetElementMap", "true"},
+             {"tag", "0"}},
+        });
+        part::checkpointNamedShapeLedger(
+            rawShape, object.name + ":shape-raw", "toposhape.set_shape_checkpoint"
+        );
+    }
     const auto refined = runtime::applyPartDesignFeatureRefineProperty(
         object,
         context,
@@ -211,10 +256,35 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
     const TopoDS_Shape tool = shapeResult.shape;
     namedShape = shapeResult.namedShape;
     if (namedShape) {
+        if (!featureShape->combinedWithBase && context.producerTrace) {
+            // FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/FeatureExtrude.cpp
+            // ::FeatureExtrude::execute(), the no-base Shape handoff follows the final Refine;
+            // combined CUT results already received that setShape handoff in the post-Boolean
+            // Refine and must not publish it twice before PropertyPartShape::setValue().
+            part::NamedShape reset;
+            reset.owner = object.name + ".Shape.result";
+            reset.shape = tool;
+            reset.producerTag = 0L;
+            reset.stringHasher = context.stringHasher;
+            context.producerTrace->record({
+                "toposhape.set_shape", "begin", "reset_requested",
+                {{"incomingNull", tool.IsNull() ? "true" : "false"},
+                 {"resetElementMap", "true"}, {"tag", "0"}},
+            });
+            part::checkpointNamedShapeLedger(
+                reset, object.name + ":shape-result", "toposhape.set_shape_checkpoint"
+            );
+        }
         // The final Pocket Shape, not its local pre-Boolean prism/AddSub cache, crosses the
         // same PropertyPartShape::setValue() boundary that Body and the next feature consume.
         *namedShape = part::namedShapeForPropertyShapeValue(
-            object.name, tool, *namedShape, static_cast<long>(object.id)
+            object.name,
+            tool,
+            *namedShape,
+            static_cast<long>(object.id),
+            true,
+            false,
+            runtime::downstreamElementReferenceSubnames(object.name, context)
         );
     }
     if (namedShape) {
@@ -258,6 +328,23 @@ void executePocket(const app::DocumentObject& object, runtime::ComputeContext& c
         result["refine"] = "applied";
     }
     context.objects[object.name] = result;
+    if (context.producerTrace) {
+        context.producerTrace->record({
+            "shape_slot.assign",
+            "assigned",
+            featureShape->combinedWithBase ? "extrude_boolean_result" : "extrude_prism_result",
+            {{"property", "Shape"}},
+        });
+        const std::string snapshot = context.producerTrace->currentSnapshotId();
+        context.producerTrace->record({
+            "partdesign.extrude.final_checkpoint",
+            "published",
+            "",
+            {{"snapshot", snapshot}},
+            snapshot,
+            snapshot,
+        });
+    }
 }
 
 }  // namespace cad_core::part_design

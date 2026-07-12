@@ -181,6 +181,10 @@ bool cacheDressUpAddSubShape(
     runtime::ComputeContext& context,
     DressUpResult& result
 );
+bool ensureDressUpAddSubShape(
+    const std::string& featureName,
+    runtime::ComputeContext& context
+);
 bool applyDressUpRefine(
     const app::DocumentObject& object,
     runtime::ComputeContext& context,
