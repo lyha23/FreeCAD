@@ -2,9 +2,9 @@
 
 基线刷新：2026-07-12（按工作树根输入、`fixture_roles.v1.json` 和现有 sidecar 实测）。
 
-本文说明 `cad-core/fixtures/` 的 phase 阅读顺序、根输入边界，以及 native oracle 的三侧产物契约。它不是发布状态快照：请以当前文件系统和角色 manifest 为准。
+本文说明 `cad-core/fixtures/` 的 phase 阅读顺序、根输入边界，以及 native public/ledger oracle 契约。producer trace 只是按需参考的诊断 sidecar，不构成第三个一致性权威。本文不是发布状态快照：请以当前文件系统和角色 manifest 为准。
 
-当前共有 51 个 phase、775 个根输入 fixture。角色 manifest 覆盖全部根输入，其中 480 个 `native`、14 个 `protocol_only`、281 个 `unsupported`。现有 `expected/` 中有 480 个 public expected、480 个 ledger 和 480 个通过闭包校验的 producer trace，全部 `native` 用例均已完成三侧产物收集。
+当前共有 51 个 phase、775 个根输入 fixture。角色 manifest 覆盖全部根输入，其中 480 个 `native`、14 个 `protocol_only`、281 个 `unsupported`。现有 `expected/` 中有 480 个 public expected、480 个 ledger；另有 480 个通过闭包校验的 producer trace 诊断 sidecar。native 一致性合同由前两者构成，不以 trace 是否存在或 equal 为条件。
 
 ## 核心结论
 
@@ -16,17 +16,17 @@
 - `cad-core/tools/freecad_expected_parity/fixture_roles.v1.json` 是输入角色的唯一目录：禁止按是否已有 expected 文件猜测 `native`、`protocol_only` 或 `unsupported`。
 - `topoNamingState` 是请求随附的客户端状态，不是 FreeCAD/CAD Core 的跨请求缓存，也不是几何建模输入。
 
-## native oracle 三侧产物
+## native public/ledger oracle 与可选 trace 证据
 
 对角色为 `native` 的用例，`collect_freecad_expected.py` 以原生 FreeCADCmd 采集同一份 fixture 的三个同名 sidecar：
 
 | 文件 | 定位 | CAD Core 是否可直接作为协议 oracle 使用 |
 | --- | --- | --- |
 | `expected/<case>.freecad.json` | 对外 public result / topo-state 合同 | 是 |
-| `expected/<case>.freecad.ledger.json` | provenance、对象/元素解析等辅助证据 | 仅作辅助诊断 |
-| `expected/<case>.freecad.producer-trace.json` | FreeCAD ElementMap 生产过程、切片、checkpoint、scope 和 snapshot 闭包证据 | 否；它是驱动实现和定位差异的只读诊断 oracle |
+| `expected/<case>.freecad.ledger.json` | provenance、对象/元素解析及 public 闭包证据 | 是；与 public expected 共同构成一致性权威 |
+| `expected/<case>.freecad.producer-trace.json` | FreeCAD ElementMap 生产过程、切片、checkpoint、scope 和 snapshot 闭包证据 | 否；仅在 public/ledger 无法对齐时按需参考 |
 
-trace 不得被写入 `topoNamingState`、普通 CAD Core response 或 fixture 输入。它的作用是回答“哪个原生生产切片造成了这一元素映射/稳定名”，而不是替代 public result。
+trace 不得被写入 `topoNamingState`、普通 CAD Core response 或 fixture 输入。默认一致性评价不读取 trace；只有 public/ledger 差异需要定位时，它才回答“哪个原生生产切片造成了这一元素映射/稳定名”。
 
 收集器默认使用本轮 producer-enabled 原生二进制：
 
@@ -34,11 +34,11 @@ trace 不得被写入 `topoNamingState`、普通 CAD Core response 或 fixture �
 /Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd
 ```
 
-可以用 `--freecadcmd <path>` 显式替换；不要再依赖 `FREECADCMD` 环境变量。收集失败、无法 drain trace、trace schema/sequence/snapshot/scope 闭包不合法，都会 hard fail，不能悄悄缺少第三个 sidecar。
+可以用 `--freecadcmd <path>` 显式替换；不要再依赖 `FREECADCMD` 环境变量。public/ledger 收集失败会 hard fail 一致性采集。无法 drain trace、trace schema/sequence/snapshot/scope 闭包不合法，只在显式 trace 诊断采集时 hard fail；不得把这种失败写成 public/ledger 不一致。
 
-当前 request-level preflight rejection 在创建 FreeCAD Document 前结束，没有可 drain trace。write-mode 会 hard fail，不能伪造空 trace。trace 全量迁移前，不要用 phase write-mode 批量覆盖正式 expected；它可能先写成功 case，再在 rejection/缺口处失败。
+当前 request-level preflight rejection 在创建 FreeCAD Document 前结束时可能没有可 drain trace，不能伪造空 trace；这不影响其 public rejection 与 ledger 闭包作为一致性权威。显式 trace write-mode 可以 hard fail，但不能因此覆盖 public/ledger verdict。
 
-`--check` 会比较重新生成的 public expected 和 ledger，并校验已存在 producer trace 的结构与闭包。trace 仍是诊断证据，当前不以文本 diff 作为 release comparator；需要判断生产路径差异时，直接按 event 的 `slice`、checkpoint、`beforeSnapshot` / `afterSnapshot` 与 scope 链路定位。
+`--check` 默认比较重新生成的 public expected 和 ledger。只有 public/ledger 无法对齐且需要定位原因，或任务明确要求内部审计时，才校验已有 producer trace 的结构与闭包，并按 event 的 `slice`、checkpoint、`beforeSnapshot` / `afterSnapshot` 与 scope 链路定位；trace semantic differences 不进入 release comparator。
 
 ## 推荐 phase 顺序与角色覆盖
 
@@ -158,7 +158,7 @@ python3 cad-core/tools/collect_freecad_expected.py \
 /tmp/freecad-expected/topo-state-body-tip-stable-recovery.freecad.producer-trace.json
 ```
 
-对已完成 trace 迁移的 phase 检查 public / ledger 与 trace 闭包：
+检查 phase 的 public / ledger；只有需要定位差异时才另查 trace：
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
@@ -169,9 +169,9 @@ python3 cad-core/tools/collect_freecad_expected.py \
   --validate-ledger
 ```
 
-当前只有 Body/Tip case 已入库 trace，因此 `--phase c4m6 --check` 会对其余已处理 native case 的缺 trace fail closed。这是 migration 未完成的真实结果，不应通过跳过或空文件绕过。
+当前 fixture tree 有 480 份 trace 诊断 sidecar，但 `--phase ... --check` 的 public/ledger verdict 不依赖它们。显式 trace 诊断遇到缺失或 invalid 时可以 fail closed；不得用空文件绕过，也不得把该失败写成 public/ledger red。
 
-收集产生的 expected、ledger、trace 都是 native 工具的输出；不要手改 fixture 以“补齐”任一 sidecar。先用 `/tmp` 验证，只有明确要刷新该 native oracle 时才写回 `expected/`。
+收集产生的 expected、ledger、trace 都是 native 工具的输出；不要手改 fixture 以“补齐”任一 sidecar。先用 `/tmp` 验证，只有明确要刷新 public/ledger oracle 或专项 trace 证据时才写回 `expected/`。
 
 运行通用 public expected fixture 回归：
 

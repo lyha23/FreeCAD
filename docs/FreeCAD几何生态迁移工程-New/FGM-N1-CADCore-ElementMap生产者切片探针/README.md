@@ -1,5 +1,7 @@
 # FGM-N1 CAD Core ElementMap 生产者切片探针
 
+> 本回执只证明按需 trace 诊断设施的实现状态，不证明或否定 public/ledger 一致性。public/ledger green 时无需读取这些 sidecar；trace 缺失、invalid 或 different 只影响内部诊断。
+
 状态：`【已实现】`（2026-07-12）
 
 ## 实施基线
@@ -46,7 +48,7 @@
 
 - `maker.parallel_coplanar`：CAD Core 当前 mapper 有 high-level ordinal/`shapeOffset`/`INT_MIN` 证据，但没有 FreeCAD 的 plane/parallel/coplanar 几何判别分支；trace 显式发布 `not_applicable`，不伪造测试结果。
 - runtime cancel：recorder 的真实 cancel RAII 路径已验证，但 CAD Core runtime 当前没有取消源；按规格不伪造 runtime cancel。
-- `dressup-failure-diagnostics` native role：native trace 缺失且 role 为 `unsupported`；CAD Core actual failure/partial-write/last-checkpoint 已验证，native parity 留给权威变化后的后续阶段。
+- `dressup-failure-diagnostics` role 为 `unsupported` 且 native trace 缺失；这只表示该专项 trace 诊断不可用，不构成 public/ledger parity 结论。CAD Core actual failure/partial-write/last-checkpoint 已作为内部测试验证。
 - `topo_shape_expansion.cpp` 没有独立于 `namedShapeForMakerHistory`/Boolean/Refine 的 ElementMap producer；对应切片在 `part/topo_shape.cpp` 的正式生产 seam 接入，避免重复事件。
 
 ## 矩阵状态

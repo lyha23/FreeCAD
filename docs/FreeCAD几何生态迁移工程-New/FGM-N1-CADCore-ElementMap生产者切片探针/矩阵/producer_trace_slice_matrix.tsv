@@ -1,4 +1,4 @@
-id	slice	freecad_authority	cad_core_landing	required_evidence	step	status
+id	slice	freecad_reference_source	cad_core_landing	required_diagnostic_evidence	step	status
 FGMN1-SLICE-001	document.recompute.begin/document.recompute.end	src/App/Document.cpp::recompute()	cad-core/src/runtime/recompute.cpp::recomputeContext/recomputeArtifacts	targets;dirty/blocked set;plan order;outcome;exact eventRange	S2	implemented_validated
 FGMN1-SLICE-002	document.object.execute.begin/document.object.execute.end	src/App/DocumentObject.cpp::recompute()	cad-core/src/runtime/recompute.cpp object loop	object/id/type;hasher lastId before/after;input/output slots;exception	S2	implemented_validated
 FGMN1-SLICE-003	reference.resolve/reference.update	src/App/PropertyLinks.cpp;src/App/GeoFeature.cpp::updateElementReference()	cad-core/src/runtime/reference_resolution.cpp;src/runtime/element_reference_update.cpp	property-local requested/current/stable names;owner;resolved/deleted/split/ambiguous decision	S2	implemented_validated

@@ -21,7 +21,7 @@ foo.freecad.producer-trace.json
 
 三份文件都由 collector 持有，禁止手工补写。`--emit-ledger` 和 `--check-ledger` 只保留为兼容参数，不再控制 sidecar 的生成或比较。
 
-public release gate 仍以 `.freecad.json + .freecad.ledger.json` 裁决公共语义和 provenance。producer trace 不进入请求、response、`topoNamingState` 或 shape 构造，只用于实现定位与 first-divergence 调试。
+public release gate 仍以 `.freecad.json + .freecad.ledger.json` 裁决公共语义和 provenance。producer trace 不进入请求、response、`topoNamingState` 或 shape 构造；只有 public/ledger 无法解释或无法对齐时，才用它定位 first divergence。
 
 ## 与 release gate 的分工
 
@@ -29,7 +29,7 @@ ledger validator 只证明 native expected 与其 provenance sidecar 闭包；�
 
 反过来，release gate 也不能替代 ledger：native role 缺 ledger、accepted/rejected outcome 不闭合或 round-trip 证据错误，release 结果必须是 `invalid`。
 
-producer trace 有独立闭包边界。trace 缺失或损坏不应改写 public parity verdict，但会使 collector replay / producer 对齐任务 hard fail。
+producer trace 有独立闭包边界。trace 缺失或损坏不应改写 public parity verdict；只有显式 producer 对齐/诊断任务才因此 hard fail。普通 public/ledger collector replay 不以 trace 为必要条件。
 
 ## 工具入口
 
@@ -50,7 +50,7 @@ python3 cad-core/tools/collect_freecad_expected.py \
   --validate-ledger
 ```
 
-验证已入库的单 case public、ledger 与 trace 结构：
+验证已入库的单 case public 与 ledger：
 
 ```bash
 cd /Users/li/Chili3DProject/FreeCAD
@@ -62,7 +62,7 @@ python3 cad-core/tools/collect_freecad_expected.py \
 
 `--freecadcmd <path>` 可显式覆盖默认二进制。不要再依赖 `FREECADCMD` 环境变量控制本仓库的标准 collector。
 
-`--check` 重新生成并比较 public expected 与 ledger，同时要求磁盘上存在结构闭合的 producer trace。它不做 trace 文本或事件级语义 diff；trace 的 stage 对齐由专门实现审计完成。
+`--check` 重新生成并比较 public expected 与 ledger。普通一致性检查不要求磁盘上存在 producer trace，也不做 trace 文本或事件级语义 diff；只有 public/ledger 差异需要定位或任务明确要求 producer 审计时，才单独验证和比较 trace。
 
 单独验证已有 expected/ledger：
 
@@ -124,7 +124,7 @@ cad-core/out/<case>.freecad.ledger.json
 cad-core/out/<case>.freecad.producer-trace.json
 ```
 
-`--validate-ledger` 会在写出后立刻调用 ledger validator。trace 在 drain 后先验证 schema、sequence、snapshot 引用和 scope 闭包；任一门失败，本次三侧产物不能收口。
+`--validate-ledger` 会在写出后立刻调用 ledger validator；其失败会阻止 public/ledger 收口。若本次明确采集 trace，trace 在 drain 后另行验证 schema、sequence、snapshot 引用和 scope 闭包；该失败只阻止诊断 sidecar 收口，不撤销已独立通过的 public/ledger verdict。
 
 当前 write-mode 的已知边界是 request-level preflight rejection：这类 fixture 在创建 FreeCAD Document 前就返回 rejected public/ledger，因而没有可 drain 的原生 Document trace。collector 会 hard fail，禁止伪造空 trace。该缺口必须由正式 native request/failure trace 边界解决。
 
@@ -179,19 +179,10 @@ ledger 目前有两类 outcome。
 ```text
 480 个 *.freecad.json
 480 个 *.freecad.ledger.json
-1 个 *.freecad.producer-trace.json
+480 个 *.freecad.producer-trace.json（按需诊断 sidecar）
 ```
 
-480 个 ledger 中 470 个 accepted、10 个 request-level rejected。producer trace 迁移尚未覆盖全部 native case，不能把“public/ledger 已齐全”表述成“三侧产物已全量闭包”。
-
-当前唯一入库 trace 是：
-
-```text
-cad-core/fixtures/c4m6/expected/
-  topo-state-body-tip-stable-recovery.freecad.producer-trace.json
-```
-
-`c4m6` 仍是 9 个 native、1 个 protocol-only。ledger validator 可验证 9 个 pair；trace closure 目前只能对已迁移的 Body/Tip case 给出结论。
+480 个 ledger 中 470 个 accepted、10 个 request-level rejected。当前另有 480 份 trace，但这只说明诊断 sidecar 存在，不能把 public/ledger 一致性改写成“三侧权威”或要求 trace equal。
 
 2026-07-12 用默认新 FreeCADCmd 对 Body/Tip case 执行 `--check --validate-ledger` 返回 1。canonical ledger 比较唯一差异是 `producer.freecadVersion`：checked-in 为 `1.2.0 revision 20260519`，当前 binary 为 `1.2.0 revision 46970`。
 
@@ -201,17 +192,17 @@ cad-core/fixtures/c4m6/expected/
 
 不要用“字段存在”证明账本完整。
 
-对新三侧采集，正确判断顺序是：
+正确判断顺序是：
 
 1. FreeCADCmd 生成 public expected。
-2. 同一次运行生成 ledger，并在 Document 关闭前 drain producer trace。
+2. 同一次运行生成 ledger。
 3. validator 验 expected 与 ledger 是否绑定。
 4. validator 验输入引用是否都有事件结论。
 5. validator 验 projection 是否解释对象裁剪。
 6. accepted ledger 必须 round-trip passed。
-7. trace 必须满足 event、scope、snapshot 和 transaction 闭包。
+7. 只有 public/ledger 无法对齐、决定参考 trace 时，才 drain 并验证其 event、scope、snapshot 和 transaction 闭包。
 
-其中 1、3 至 6 决定 public expected / ledger 是否能作为 release oracle；第 2 步的 trace drain 与第 7 步决定内部 producer 证据是否可用于实现对齐。trace 尚未迁移不撤销既有 ledger 权威，但不能宣称 producer 路径已经闭包。
+其中 1 至 6 决定 public expected / ledger 是否能作为 release oracle；第 7 步只决定内部 producer 参考证据能否用于定位，不影响前述 verdict。
 
 如果某个 expected 变小了，不能直接认为是正确裁剪。必须看 ledger：
 

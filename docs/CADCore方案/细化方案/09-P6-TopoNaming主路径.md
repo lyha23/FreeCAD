@@ -26,7 +26,7 @@ P6 已按 `13-【已实现】ExternalGeometry-TopoNaming下一阶段主线.md` �
 
 ## 已知缺口
 
-- producer trace 目前只迁移 C4M6 Body/Tip stable recovery。P6 其它 maker、split/open-wire、DressUp/Pattern/Refine 与 request-level rejected case 仍缺原生 transaction/scope/checkpoint 证据；不能把 public/ledger pair 齐全写成 producer 主路径已闭包。
+- producer trace 目前只迁移 C4M6 Body/Tip stable recovery。P6 其它 maker、split/open-wire、DressUp/Pattern/Refine 与 request-level rejected case 仍缺原生 transaction/scope/checkpoint 参考证据；这不影响已通过 public/ledger 的一致性结论。只有 public/ledger 无法对齐、需要定位 producer 分叉时，才把相应 trace 缺口列为诊断阻塞。
 - 完整 MapperHistory 生命周期仍按 maker 分阶段迁移；FaceMaker / WireJoiner 的 recoverable InternalShape producer 主路径已在 S6 关闭，ShapeFix、DressUp / Refine / transformed 与 taper 已通过 P6 MakerHistory S3-S5 专项复审核定为当前 focused scope supported，后续重点转向未采 native ExternalGeometry 状态 oracle和更复杂引用恢复。
 - split 的完整自动旧引用恢复还不完整；当前只恢复 MapperHistory 能证明同类唯一 target 或 ExternalGeometry collapsed point 的旧 stable 引用；merge 已能记录并跨 Link retag 传播，ShapeFix / transformed / DressUp / taper 相关复杂恢复仍保持 `notCollected`，只有后续 oracle 证明 mismatch 后才进入 backendGap。
 - FaceMaker / WireJoiner 的 recoverable history consumption 已与 P5 geometry 账本联动：concrete producer evidence 先于几何匹配式 internal map 消费，summary / current-member blocked 分支只保留诊断边界。request-local `InternalFaceN` stable selector 只能在本次 recompute 已有 `Sketch.InternalShape` NamedShape / ElementMap 证据时解析；缺证据、同类一对多、deleted 和 producer-missing 情况继续输出结构化诊断。

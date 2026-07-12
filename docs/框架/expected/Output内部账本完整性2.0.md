@@ -1,4 +1,4 @@
-> 状态：早期设计背景。当前 collector 默认写 public、ledger 与可用的 producer trace，`--emit-ledger` 已是兼容 no-op。现行契约以 [工具规定](../../工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md) 为准。
+> 状态：早期设计背景。当前一致性权威只有 public/ledger；producer trace 即使被 collector 一并写出，也仅在 public/ledger 无法对齐时按需参考，不是通过条件。`--emit-ledger` 已是兼容 no-op；现行契约以 [工具规定](../../工具规定/7-9-16-55-FreeCADCmdExpectedLedger工具规定.md) 为准。
 
 可以实现成一个**专门的 fixture oracle validator**。它的入口还是：
 

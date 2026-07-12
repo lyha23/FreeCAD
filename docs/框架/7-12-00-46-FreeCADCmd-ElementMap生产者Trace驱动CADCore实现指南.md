@@ -4,6 +4,8 @@
 
 `expected/<case>.freecad.producer-trace.json` 不是 CAD Core 的输入、也不是最终 public response。它是同一次原生 FreeCADCmd recompute 产生的**生产过程证据**：用来回答“某个 stable name、SID、ElementMap entry、mapper relation 是在哪个 producer stage 首次产生或改变的”。
 
+本指南的最终目标是对齐 public response，并由 ledger 证明这份 public oracle 可信。producer trace 只是定位问题时参考的内部过程证据，不是常规一致性评价的并列输入。只有 public/ledger 行为出现无法解释或无法对齐的差异，需要追查最早 producer 分叉时，才进入 trace 分析；public/ledger 已一致时，不需要再用 trace 证明一致。即使 trace 仍有 semantic differences，也不得据此把 public/ledger 一致性改判为失败。
+
 实现 CAD Core 时，不要拿最终 `Shape`、`topoNamingState` 或 `.freecad.json` 的一个差异直接在 `runtime/`、adapter 或 fixture 分支补丁。应从 producer trace 找到**最早不同的 transaction / scope / checkpoint**，再把缺失语义放回与 FreeCAD 同构的 `app/`、`sketcher/`、`part/` 或 `part_design/`。
 
 本文件以 C4M6 的真实 native case 为例：
@@ -21,9 +23,11 @@ expected/topo-state-body-tip-stable-recovery.freecad.producer-trace.json
 | --- | --- | --- | --- |
 | `*.freecad.json` | 当前 fixture 的 public response 是什么 | 否；它是 oracle | parity 的 public semantic comparison |
 | `*.freecad.ledger.json` | public response、输入 state、引用恢复和同次 FreeCADCmd capture 是否闭合 | 否；它是 provenance | expected/ledger strict validator 与 native replay |
-| `*.freecad.producer-trace.json` | 每一个内部 ElementMap / SID / mapper producer 在何时读、写、选择、拒绝、继承 | 否；它是只读诊断 oracle | CAD Core 实现定位、producer 对齐与 first-divergence 调试 |
+| `*.freecad.producer-trace.json` | 每一个内部 ElementMap / SID / mapper producer 在何时读、写、选择、拒绝、继承 | 否；它是按需参考的诊断证据 | 仅在 public/ledger 无法对齐时定位 first divergence |
 
 三者都不进入 `DocumentObject graph`，不进入 `topoNamingState`，不参与 shape 构造。`topoNamingState` 仍是客户端携带的旧引用证据；DocumentObject graph 才是建模事实。
+
+三份 sidecar 可以同时采集，但 public/ledger consistency 才是默认 verdict，回答“公开答案是否一致且可信”。producer trace diagnostic 只在 public/ledger 差异需要定位或任务明确要求内部过程审计时启用，回答“最早从哪里分叉”；它是参考性证据，不能覆盖前一个 verdict。
 
 `cad-core/tools/collect_freecad_expected.py` 现在默认运行：
 
@@ -39,9 +43,9 @@ expected/<case>.freecad.ledger.json
 expected/<case>.freecad.producer-trace.json
 ```
 
-trace 会在 native document 关闭前一次性 drain；若当前 FreeCADCmd 不提供 `Document.drainElementMapProducerTrace()`、trace 的 event/scope/snapshot 闭包无效，采集必须失败。`--emit-ledger` 和 `--check-ledger` 保留为兼容参数，但不再控制是否生成或比较 sidecar。
+trace 会在 native document 关闭前一次性 drain；若当前 FreeCADCmd 不提供 `Document.drainElementMapProducerTrace()`、trace 的 event/scope/snapshot 闭包无效，本次 trace 诊断采集必须失败，但不得改写同次 public/ledger 结果。`--emit-ledger` 和 `--check-ledger` 保留为兼容参数，但不再控制是否生成或比较 sidecar。
 
-2026-07-12 live corpus 的 480 个 native fixture 均已有 public、ledger 和通过闭包校验的 producer trace，三侧迁移已完成。
+2026-07-12 live corpus 的 480 个 native fixture 均已有 public、ledger；另外也存在通过闭包校验的 producer trace 诊断 sidecar。后者的存在不构成一致性迁移或 release gate 条件。
 
 request-level preflight rejection 由原生 Document recorder 的 documentless checkpoint 发布稳定 reason，并以 cancel transaction 闭合；raw `Part::GeometryCurve` helper 发布对应的 raw-shape checkpoint。禁止从 rejected public/ledger 反推事件或写空 trace。
 
@@ -301,7 +305,9 @@ python3 tools/compare_freecad_expected.py \
 python3 tools/validate_freecad_expected_ledger.py --phase c4m6 --strict
 ```
 
-producer trace 的 validator 与 public expected ledger validator 是两套门禁：前者验证 event/scope/transaction/snapshot/SID 闭包，后者验证 fixture、public response、reference recovery 与 provenance 闭包。两者都通过，才说明“内部 producer 证据”与“对外 topoNamingState”没有断链。
+producer trace 的 validator 与 public expected ledger validator 是两套独立门禁：前者验证 event/scope/transaction/snapshot/SID 闭包，后者验证 fixture、public response、reference recovery 与 provenance 闭包。public/ledger 一致性只由 public comparator 和 ledger validator 裁决；trace `different` 只表示内部过程尚未对齐，trace `missing/invalid` 只表示该诊断 lane 无法成立。两者都通过时，才可以进一步宣称“内部 producer 证据”与“对外 topoNamingState”也没有断链。
+
+报告路由同样必须分开：producer semantic differences 不进入 public/ledger `differences`，不得成为 public/ledger `firstFailure`，也不得令已经一致的 public/ledger verdict 变红；它们进入独立的 producer trace diagnostics/variations，并保留 classification、首差和 snapshot 证据。
 
 ## 不该做的事
 
@@ -310,7 +316,7 @@ producer trace 的 validator 与 public expected ledger validator 是两套门�
 - 不把 raw mapped name 的运行期 hash 差异直接认定为 geometry semantics 差异，也不因此忽略 SID refs、child ranges 或 mapper relations。
 - 不为了让最后 `topoNamingState` 相等，在 runtime/adapter 伪造 ElementMap、mapperHistory 或 Body Tip 结果。
 - 不用 Body 重放 Pad/Pocket/DressUp producer；Body 是 Tip ledger 的继承者。
-- 不手改 `.freecad.json`、`.freecad.ledger.json` 或 `.freecad.producer-trace.json` 来让测试变绿；oracle 只能由相应 native collector 重生。
+- 不手改 `.freecad.json`、`.freecad.ledger.json` 或 `.freecad.producer-trace.json` 来让测试变绿；public/ledger oracle 与 trace 诊断证据都只能由相应 native collector 重生。
 
 ## 完成一个 trace 驱动实现项的定义
 
@@ -321,7 +327,9 @@ producer trace 的 validator 与 public expected ledger validator 是两套门�
 3. 第一处分叉已在正确低层修复，而不是由 runtime/adapter 盖住；
 4. ElementMap 的 entry-local SID refs、child maps、mapper history 与 rejection reason 没有被丢弃或降级猜测；
 5. Body / Pattern / DressUp 等高层 scope 不重放已经完成的上游 producer；
-6. focused test、C4M6 public parity、ledger strict validator 和相关 producer-trace closure 验证都通过；
+6. focused test、C4M6 public parity 和 ledger strict validator 通过；相关 producer-trace closure 验证单独记录其 verdict；
 7. 未修改 native expected 来追随 CAD Core 当前输出。
+
+如果第 6 项中的 producer trace 仍为 `different`，只能说明这个“内部过程完全对齐”的实现项尚未关闭，不能反向否定已经通过的 public/ledger 一致性评价。
 
 这套方法的目标是把“最终 Face 名不同”的大问题收敛成可验证的小问题：**哪一个 producer scope 的哪一个 checkpoint 首次不同，以及该语义应落在 CAD Core 的哪个同构模块。**

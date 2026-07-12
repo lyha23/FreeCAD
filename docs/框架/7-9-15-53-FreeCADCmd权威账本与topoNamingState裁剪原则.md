@@ -15,7 +15,7 @@ collector 的数据方向固定为：FreeCADCmd 先产生同次 capture，再分
 
 producer trace 在原生 Document 关闭前通过 `drainElementMapProducerTrace()` 一次性取出。recorder 是只读旁路；trace 不参与 shape、StringHasher 分配、ElementMap 决策、`topoNamingState` 或 CAD Core 输入。
 
-因此，验收重点是检查 sidecar 权威账本与 public 投影之间不断链：
+因此，public/ledger 验收重点是检查权威账本与 public 投影之间不断链：
 
 - `topoNamingState.objects[*].subshapes`
 - `topoNamingState.objects[*].elementMap.entries`
@@ -30,11 +30,10 @@ producer trace 在原生 Document 关闭前通过 `drainElementMapProducerTrace(
 - `*.freecad.ledger.json` 的 `coverage`
 - `*.freecad.ledger.json` 的 `roundTrip`
 - `*.freecad.ledger.json` 的 `fixture.expectedPayloadHash` 与 `fixture.topoNamingStateHash`
-- `*.freecad.producer-trace.json` 的 transaction、event sequence、scope parent/closure 与 snapshot 引用
 
 当前 checked-in native expected 要求每个 `*.freecad.json` 都有同名 sidecar；缺少 `*.freecad.ledger.json` 是 hard fail。
 
-producer trace 正在独立迁移。缺 trace 不改变既有 public/ledger release verdict，但 collector replay 与 producer 对齐任务必须报告缺失，不能以空 trace 或从 public output 反推的事件补齐。
+producer trace 是按需参考的独立诊断 sidecar。只有 public/ledger 无法对齐且需要定位原因，或任务明确要求 producer 审计时，才检查其 transaction/scope/checkpoint；缺 trace 不改变 public/ledger release verdict，不能以空 trace 或从 public output 反推的事件补齐。
 
 ## 验收入口
 
@@ -62,9 +61,9 @@ python3 cad-core/tools/collect_freecad_expected.py \
   --skip-unsupported
 ```
 
-collector 默认使用 `/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd`。`--check` 比较 regenerated public expected 与 ledger，并要求已入库 producer trace 结构闭合；`--validate-ledger` 验证本次内存结果。
+collector 默认使用 `/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd`。`--check` 默认比较 regenerated public expected 与 ledger；`--validate-ledger` 验证本次内存结果。trace 仅在 public/ledger 差异定位或显式 producer 审计中单独验证，不是普通 replay 的通过条件。
 
-`--emit-ledger` 与 `--check-ledger` 仅为兼容参数。独立 validator 只读 checked-in public/ledger；collector replay 才重新运行 FreeCADCmd。当前 trace 尚未全量迁移，phase replay 会对缺 trace 的已处理 native case fail closed。
+`--emit-ledger` 与 `--check-ledger` 仅为兼容参数。独立 validator 只读 checked-in public/ledger；collector replay 才重新运行 FreeCADCmd。普通 phase replay 不因 trace 缺失而 fail closed。
 
 ## sidecar 最小结构
 

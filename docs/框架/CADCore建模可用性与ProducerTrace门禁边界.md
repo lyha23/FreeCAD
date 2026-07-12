@@ -15,7 +15,22 @@
 | “用户能否用 CAD Core 建模？” | 当前 binary 的 public semantic parity、focused feature tests、reference recovery 与 release gate | 回答几何、拓扑、引用和诊断的对外行为是否可用 |
 | “CAD Core 内部是否与 FreeCAD 同过程？” | producer trace 的 transaction/scope/StringHasher/ElementMap/mapper/child closure 和 first divergence | 回答内部生产顺序是否可证明、差异出现在哪一步 |
 
-public result 门禁是产品可用性门禁。producer trace 是实现对齐、回归取证和调试门禁。后者不能替代前者，也不应在前者已通过时反向宣称“CAD Core 不可用”。
+public result 门禁是产品可用性门禁。producer trace 是按需使用的实现定位、回归取证和调试工具，不是第二道产品门禁。后者不能替代前者，也不应在前者已通过时反向宣称“CAD Core 不可用”。
+
+默认流程只看 public/ledger。只有 public/ledger 行为无法对齐、差异原因无法从公开输出判断，或者任务明确要求内部过程审计时，才查 producer trace。trace 是解释“为什么没对齐”的参考证据，不是证明“已经对齐”的必要条件。
+
+## 固定双 verdict 与报告路由
+
+需要启用 trace 诊断时，同一次检查保留两个互不覆盖的结论；未触发 trace 诊断时，只给出 public/ledger consistency，并把 producer trace 标为 `not_evaluated`：
+
+| verdict | 输入 | 可以否决什么 |
+| --- | --- | --- |
+| public/ledger consistency | public expected、当前 CAD Core public projection、strict ledger、reference/release evidence | 可以否决公开行为一致性和建模可用性 |
+| producer trace diagnostic | transaction、scope、event、SID、mapper、before/after snapshot、first divergence | 只能否决“内部过程已严格对齐/可完整解释” |
+
+因此，只要 public/ledger consistency 为 green，就不需要为了放行一致性继续比较 trace。若 trace 因专项审计已经产生 `semantic different`，它必须进入独立的 trace diagnostics 或 variation 清单，不能进入 public/ledger `differences`，不能成为 public/ledger `firstFailure`，也不能把 consistency/release verdict 改成 red。trace `missing/invalid` 可以令 producer diagnostic lane 失败，但同样不能伪造 public 行为差异。
+
+反过来也成立：producer trace equal 并不能放行 public red。产品一致性始终由 public/ledger 行为证据裁决。
 
 ## 什么才能证明“可以用于建模”
 
@@ -77,7 +92,8 @@ public result 门禁是产品可用性门禁。producer trace 是实现对齐、
 3. public 语义 green 则回答“该范围可用”，并单独列出 trace/debug 缺口。
 4. public 语义 red 或 invalid 则回答“不可宣称可用”，并按 geometry/topology/reference/diagnostic/freshness 分类。
 5. trace 缺口只在 producer 对齐、first-divergence 或调试任务中 hard fail，不改写 public/release verdict。
+6. 报告 producer semantic differences 时同时给出 trace verdict，但 public/ledger consistency 和它的 `firstFailure` 保持独立。
 
 一句话归纳：
 
-> public/release gate 决定“产品能不能用”；producer trace 决定“内部过程能不能严格解释和对齐”。
+> public/release gate 决定“产品能不能用”；只有 public/ledger 无法对齐时，producer trace 才帮助解释“内部从哪里开始不同”。

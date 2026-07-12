@@ -1,5 +1,7 @@
 # FGM-N1 CAD Core ElementMap 生产者切片探针方案
 
+> 定位：本探针是 public/ledger 无法对齐时按需使用的内部诊断设施，不是 public/ledger 一致性权威、release gate 前置条件或普通 recompute 的产品输出合同。即使实现选择默认记录 sidecar，是否读取和比较它仍由诊断任务决定。
+
 ## 目标
 
 在 `/Users/li/Chili3DProject/FreeCAD/cad-core` 内实现与 FreeCADCmd producer trace 同构的 request-local 探针。修改后的普通 `cad-core recompute` 无需环境变量、日志等级、编译开关、fixture 名或对象特判，就必须记录全部有用切片、完整 checkpoint、异常/取消与闭包证据，并默认在 public output 旁发布独立 sidecar：
@@ -371,7 +373,7 @@ c4m3/sketch-external-internal-self-intersection-bowtie
 c4m3/sketch-external-internal-split-dangling-mixed
 ```
 
-检查非空 sidecar、关键 slice/checkpoint、父子 scope、稳定 reason 和 closure。上列 native case 的 trace 当前已出现在 live worktree，可用于 N1 跨 producer smoke；但它们尚未被 Git 跟踪，必须先逐案验证 closure、同次 artifact 绑定和确定性，不能只因文件存在就升级为正式比较权威。
+检查非空 sidecar、关键 slice/checkpoint、父子 scope、稳定 reason 和 closure。上列 native case 的 trace 当前已出现在 live worktree，可用于 N1 跨 producer smoke；但它们无论是否被 Git 跟踪或通过 closure，都只能成为按需诊断证据，不能升级为 public/ledger 比较权威。
 
 ### 重型收口
 
@@ -397,7 +399,7 @@ N1 只有同时满足以下条件才可重命名为 `【已实现】`：
 
 ## 风险与非目标
 
-- live worktree 当前出现了 480 个未跟踪 native trace，但批量文件存在不等于全部 producer family 已验证；N1 先证明 CAD Core trace 完整，N2 再逐 family 验证/准入 native oracle。
+- live worktree 当前出现了 480 个未跟踪 native trace，但批量文件存在不等于全部 producer family 已验证；N1/N2 只能验证其是否可用于专项诊断，不存在“准入 native oracle”的步骤。
 - 当前 StringHasher/TopoShape live 改动较多，probe insertion 很容易意外改变分配顺序；必须先做 const inspection 与无副作用对照。
 - trace 可能很大；只允许内容哈希去重和 drain 释放，不允许丢 event、裁 snapshot 字段或采样。
 - 本阶段不实现 public parity 修复、不自动接受差异、不修改 release verdict、不实现 CAD Core 侧 trace writer 以外的几何语义迁移。

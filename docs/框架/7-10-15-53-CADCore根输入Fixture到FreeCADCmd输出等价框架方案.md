@@ -2,7 +2,7 @@
 
 ## 结论
 
-本仓库的长期目标固定为：对同一根输入分别运行 FreeCADCmd collector 和当前 CAD Core binary。public expected 与 ledger 决定公开结果权威；producer trace 解释原生内部生产过程；CAD Core 必须与 FreeCADCmd 的**公共语义投影一致**。
+本仓库的长期目标固定为：对同一根输入分别运行 FreeCADCmd collector 和当前 CAD Core binary。public expected 与 ledger 决定公开结果权威；CAD Core 必须与 FreeCADCmd 的**公共语义投影一致**。producer trace 只在 public/ledger 无法对齐、需要定位内部原因时作为参考证据。
 
 CAD Core 额外发布的 `mesh`、传输元数据、`binaryPayloads`、`documentObjectUpdates` 等字段不要求在 FreeCAD expected 中逐项出现，但必须由独立产品合同验证。
 
@@ -15,7 +15,6 @@ CAD Core(f)   -> actual(f)
 目标完成 =
   expected/ledger 来源可复现
   + fixture/expected/ledger 哈希与语义闭包有效
-  + 对已进入 producer 对齐 lane 的 case，producerTrace 闭包有效
   + semanticCompare(
       expectedProjection(expected(f)),
       actualProjection(actual(f)),
@@ -54,7 +53,7 @@ FreeCAD2 recorder 只观察原生对象，不注册 `CadCore::...Probe`。collec
 
 480 个 native expected 与 ledger 一一配对，其中 470 accepted、10 request-level rejected。rejected fixture 仍是 native public oracle；它必须返回匹配 diagnostics 和 rejected ledger，不能归为 unsupported。
 
-480 个 native fixture 已形成 public/ledger/producer-trace 三侧闭包。snapshot exact/red/diff 数量仍必须从 live comparator 报告读取，本文件不冻结历史统计。
+480 个 native fixture 已形成 public/ledger 权威闭包；另有 480 份 producer trace 诊断 sidecar。trace 数量与闭包状态不构成 public/ledger 一致性的第三个条件。snapshot exact/red/diff 数量仍必须从 live comparator 报告读取，本文件不冻结历史统计。
 
 默认 FreeCAD2 binary 对当前 Body/Tip case replay 时，canonical ledger 只在 `producer.freecadVersion` 上漂移：checked-in revision `20260519`，current revision `46970`。因此新 producer 基线当前不是 replay green，不能把文件数量当可复现性结论。
 
@@ -69,7 +68,7 @@ FreeCAD2 recorder 只观察原生对象，不注册 `CadCore::...Probe`。collec
 | `fixtures/<phase>/<case>.json` | 单次无状态 recompute 的根输入：DocumentObject graph、target、参数和可选旧 `topoNamingState` | 输入事实 | 同一文件必须分别喂给 FreeCADCmd 与 CAD Core |
 | `expected/<case>.freecad.json` | FreeCADCmd collector 生成的 public response oracle | native 结果权威 | collector-owned，不手改 |
 | `expected/<case>.freecad.ledger.json` | 同次 capture 的 producer、hash、对象、事件、projection、coverage、round-trip 证明 | native provenance 权威 | 缺失或不闭合即 hard fail |
-| `expected/<case>.freecad.producer-trace.json` | 原生 transaction、scope、checkpoint、SID/ElementMap/mapper snapshot | 只读实现诊断 oracle | 不进入 public response、建模输入或 release semantic diff |
+| `expected/<case>.freecad.producer-trace.json` | 原生 transaction、scope、checkpoint、SID/ElementMap/mapper snapshot | 按需参考的实现诊断证据 | 仅在 public/ledger 无法对齐时使用；不进入 public response、建模输入或 release semantic diff |
 | `expected/<case>.expeted.json` | 人工 CAD Core 协议/诊断合同 | 仅 protocol-only 合同 | 不得冒充 FreeCADCmd 输出，不进入 native parity verdict |
 | `cad-core-res/<case>.cad-core.json` | 当前 CAD Core 输出快照 | 否 | 只能由 live binary 生成并逐文件原子替换；现行 gate 只生成/审计 native current，不能反推 expected |
 | `cad-core/tests/*probe` 及其 probe fixture | 抽取语义的内部回归证据 | 永久不是 native oracle | 由专用 probe binary、focused tests 和 FreeCAD 源码依据验收；不要求三侧 native artifact |
@@ -77,7 +76,7 @@ FreeCAD2 recorder 只观察原生对象，不注册 `CadCore::...Probe`。collec
 | `fixture_roles.v1.json` | native / protocol-only / unsupported 唯一机器角色来源 | corpus 分类权威 | 禁止再从文件后缀、`fixtureCategory` 或启发式建立第二套角色系统 |
 | `protocol_divergences.v1.json` | 当前工具精确批准的表现/产品协议差异 | 过渡性受控例外登记 | 当前 schema 必须带 exact selector、actual contract、consumer test 和删除条件；永久产品字段后续迁入独立产品合同 |
 
-FreeCAD `src/` 是业务语义和调用链权威；通过 replay/ledger 门禁的 public/ledger pair 是公开结果验收权威；producer trace 是内部实现证据。三者不能由 CAD Core 输出或人工 fixture 反推。
+FreeCAD `src/` 是业务语义和调用链权威；通过 replay/ledger 门禁的 public/ledger pair 是公开结果验收权威。producer trace 只是 public/ledger 差异定位时的内部参考证据，不能与前两者并列为一致性权威，也不能由 CAD Core 输出或人工 fixture 反推。
 
 ## 禁止的数据反向流
 
@@ -342,7 +341,7 @@ native parity 必须同时约束：
 ### S5：全库 release gate
 
 - 全 native expected/ledger strict 闭包。
-- producer-trace migration 单独报告 collected/missing/invalid；已进入 trace 驱动实现的 case 必须 closure green。
+- producer-trace migration 仅在显式诊断 lane 中单独报告 `not_evaluated/collected/missing/invalid`；不进入全库 public release gate。
 - touched phase 通过 live FreeCADCmd replay；正式收口按所有含 native role 的 phase 重放。
 - 全 native case 由当前 binary live 执行，current snapshot freshness 一致，`semanticStatus=green` 且 release gate 通过。
 - 全部 product/consumer contract tests 通过，命名等价 matcher 无 unresolved/ambiguous case，protocol-only 单独报告。
@@ -404,7 +403,7 @@ python3 tools/compare_freecad_expected.py \
 
 当 parity 仍是 semantic red 时，`--run-contract-tests` 会 fail closed 为 `not_run_unaccepted_parity`；这是预期行为，不是命令错误。
 
-全库 FreeCADCmd replay 应按 role manifest 实时发现含 native role 的 phase，逐 phase 运行 collector `--check --validate-ledger --skip-unsupported`。当前 trace 只迁移 1 个 case，因此全量 replay 会对缺 trace 的已处理 case fail closed；先按迁移清单补齐，不维护固定 phase 列表。
+全库 FreeCADCmd replay 应按 role manifest 实时发现含 native role 的 phase，逐 phase运行 collector `--check --validate-ledger --skip-unsupported`。普通 public/ledger replay 不因 trace 缺失而 fail closed；只有 public/ledger red 需要定位或任务明确要求内部审计时，才按 trace 迁移清单启用诊断。
 
 ## 完成条件
 
@@ -412,7 +411,7 @@ python3 tools/compare_freecad_expected.py \
 
 - 根输入 role 与 artifacts 合法。
 - FreeCADCmd public/ledger pair 可复现且 strict 闭包。
-- 若本批使用 producer trace 驱动实现，相关 trace 的 transaction/scope/checkpoint/snapshot 闭包通过。
+- 若 public/ledger 差异无法解释而显式使用 producer trace 定位，相关 trace 的闭包结果作为诊断证据记录；它不构成本批 public 语义关闭条件。
 - 当前 CAD Core binary 对本批所有 native case live 执行成功。
 - 公共语义 required fields、几何、拓扑、引用、diagnostics 与 `mappedName.canonical` 一致，`semanticStatus=green`。
 - `productContractStatus=green | not_applicable`；当前工具尚未发布该字段时，所有产品扩展必须由 registry actual contract 和 `--run-contract-tests` 过渡证明。

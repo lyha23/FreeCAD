@@ -1,5 +1,7 @@
 # FGM-N2 Producer Trace 首处分叉比较器方案
 
+> 使用边界：N2 只在 public/ledger 行为无法对齐且需要定位内部原因，或任务明确要求 producer 审计时运行。它的退出码和 `different/invalid` 只属于 trace diagnostic lane，不进入 public/ledger differences、firstFailure、semanticStatus 或 releaseStatus。
+
 ## 目标
 
 新增用户所需入口：
@@ -16,7 +18,7 @@ expected/<case>.freecad.producer-trace.json
 cad-core-res/<case>.cad-core.producer-trace.json
 ```
 
-两侧完全对齐返回 0；发现第一处分叉立即形成一个结构化结论并返回 1；输入缺失、schema/闭包无效或没有可比较切片返回 2。它不修改 fixture、expected、ledger、CAD Core response、release verdict 或任何 trace。
+两侧完全对齐返回 0；发现第一处分叉立即形成一个结构化诊断并返回 1；输入缺失、schema/闭包无效或没有可比较切片返回 2。这些退出码不代表 public/ledger parity。比较器不修改 fixture、expected、ledger、CAD Core response、release verdict 或任何 trace。
 
 N2 的前置条件是 FGM-N1 已完成 recorder、全部 required slices、默认 publisher 和闭包验证。比较器不能用来掩盖 CAD Core trace 缺切片。
 
@@ -42,7 +44,7 @@ validate_trace(payload) -> ValidatedTrace
 compare_traces(expected, actual) -> ComparisonResult
 ```
 
-现有 `collect_freecad_expected.py::validate_producer_trace()` 应迁入并扩展到这个模块，collector、CAD Core actual publisher tests 与 comparator 共同消费同一闭包规则，避免三套 validator 漂移。collector 仍负责 native 三侧产物，比较器没有写 expected 的权限。
+现有 `collect_freecad_expected.py::validate_producer_trace()` 应迁入并扩展到这个模块，collector、CAD Core actual publisher tests 与 comparator 共同消费同一闭包规则，避免三套 validator 漂移。collector 负责 public/ledger authority，也可以附带生成 trace 诊断 sidecar；比较器没有写 expected 的权限。
 
 ## CLI
 
