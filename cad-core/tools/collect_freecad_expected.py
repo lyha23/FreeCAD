@@ -11507,7 +11507,10 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
                 "mode": "collection",
                 "fixturesRoot": str(fixtures_root.resolve()),
                 "freecadcmd": str(Path(args.freecadcmd).resolve()),
-                "candidate": candidate_provenance(Path(args.freecadcmd)),
+                "candidate": candidate_provenance(
+                    Path(args.freecadcmd),
+                    capture_source_control=not getattr(args, "embedded_backend", False),
+                ),
                 "candidateRoot": str(Path(args.candidate_root).resolve()) if args.candidate_root else None,
                 "discovered": len(paths),
                 "processed": processed,
@@ -11836,6 +11839,7 @@ def run_embedded(
     if "--freecadcmd" in raw_argv:
         raise ValueError("embedded backend does not accept --freecadcmd")
     args = parse_args(raw_argv)
+    args.embedded_backend = True
     _validate_embedded_request(args)
     FreeCAD, candidate_path, binding_artifact, binding_mode = _validate_embedded_runtime(
         runtime_receipt
