@@ -170,6 +170,7 @@ class EmbeddedBackendContractTests(unittest.TestCase):
                 mock.patch.object(collector.sys, "executable", str(candidate_binary)),
                 mock.patch.object(collector, "run_inside_freecad", side_effect=fake_run_inside) as run_inside,
                 mock.patch.object(collector, "run_via_freecadcmd") as run_via_freecadcmd,
+                mock.patch.object(collector.subprocess, "run") as subprocess_run,
             ):
                 result = collector.run_embedded(
                     [
@@ -189,6 +190,7 @@ class EmbeddedBackendContractTests(unittest.TestCase):
             self.assertEqual(0, result)
             run_inside.assert_called_once()
             run_via_freecadcmd.assert_not_called()
+            subprocess_run.assert_not_called()
             payload = json.loads(report.read_text(encoding="utf-8"))
             self.assertEqual("embedded", payload["executionBackend"])
             self.assertEqual("passed", payload["status"])

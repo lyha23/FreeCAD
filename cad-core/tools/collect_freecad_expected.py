@@ -1161,7 +1161,11 @@ def git_capture(root: Path, *git_args: str) -> str | None:
     return completed.stdout.rstrip("\n")
 
 
-def candidate_provenance(freecadcmd: Path) -> dict[str, Any]:
+def candidate_provenance(
+    freecadcmd: Path,
+    *,
+    capture_source_control: bool = True,
+) -> dict[str, Any]:
     """Capture enough binary, source, and CMake state to reproduce a gate run."""
 
     resolved = freecadcmd.resolve()
@@ -1176,8 +1180,16 @@ def candidate_provenance(freecadcmd: Path) -> dict[str, Any]:
                 source_root = parent
                 break
 
-    commit = git_capture(source_root, "rev-parse", "HEAD") if source_root else None
-    dirty_status = git_capture(source_root, "status", "--short") if source_root else None
+    commit = (
+        git_capture(source_root, "rev-parse", "HEAD")
+        if source_root and capture_source_control
+        else None
+    )
+    dirty_status = (
+        git_capture(source_root, "status", "--short")
+        if source_root and capture_source_control
+        else None
+    )
     dirty_lines = dirty_status.splitlines() if dirty_status else []
     return {
         "path": str(resolved),
@@ -11603,7 +11615,10 @@ def _validate_embedded_runtime(
     process_executable = Path(sys.executable).resolve()
     if candidate_binary != process_executable:
         raise RuntimeError("embedded candidate binary is not the current process executable")
-    host_provenance = candidate_provenance(candidate_binary)
+    host_provenance = candidate_provenance(
+        candidate_binary,
+        capture_source_control=False,
+    )
     build_directory = host_provenance.get("build", {}).get("directory")
     if not build_directory or not binding_artifact.is_relative_to(Path(build_directory).resolve()):
         raise RuntimeError("embedded FreeCAD binding artifact is outside the candidate host build directory")
@@ -11736,7 +11751,10 @@ def _annotate_embedded_report(
     }
     report["executionBackend"] = "embedded"
     report["freecadcmd"] = None
-    host_provenance = candidate_provenance(candidate_binary)
+    host_provenance = candidate_provenance(
+        candidate_binary,
+        capture_source_control=False,
+    )
     report["candidate"] = {
         **host_provenance,
         "path": str(binding_artifact),
