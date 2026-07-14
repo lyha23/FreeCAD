@@ -11547,14 +11547,15 @@ def _validate_embedded_request(args: argparse.Namespace) -> None:
             raise ValueError("embedded phase must be a direct child of the fixtures root")
 
 
-def _validate_embedded_runtime(runtime_receipt: Mapping[str, Any]) -> tuple[Any, Path, Path]:
+def _validate_embedded_runtime(
+    runtime_receipt: Mapping[str, Any],
+) -> tuple[Any, Path, Path, str]:
     required = {
         "runtimeId",
         "processId",
         "ownerThreadNativeId",
         "applicationAddress",
         "candidateBinary",
-        "freecadModule",
     }
     missing = sorted(required - runtime_receipt.keys())
     if missing:
@@ -11574,13 +11575,28 @@ def _validate_embedded_runtime(runtime_receipt: Mapping[str, Any]) -> tuple[Any,
     owner_native_id = runtime_receipt["ownerThreadNativeId"]
     if not isinstance(owner_native_id, int) or owner_native_id != threading.get_native_id():
         raise RuntimeError("embedded collector must run on the recorded owner thread")
-    module_value = getattr(FreeCAD, "__file__", None)
-    if not module_value:
-        raise RuntimeError("embedded FreeCAD module has no filesystem identity")
-    actual_module = Path(module_value).resolve()
-    receipt_module = Path(str(runtime_receipt["freecadModule"])).resolve()
-    if actual_module != receipt_module or not actual_module.is_file():
-        raise RuntimeError("embedded FreeCAD module does not match the runtime receipt")
+    binding_mode = runtime_receipt.get("freecadBindingMode", "extension")
+    if binding_mode == "extension":
+        if "freecadModule" not in runtime_receipt:
+            raise ValueError("embedded runtime receipt is missing: freecadModule")
+        module_value = getattr(FreeCAD, "__file__", None)
+        if not module_value:
+            raise RuntimeError("embedded FreeCAD module has no filesystem identity")
+        binding_artifact = Path(module_value).resolve()
+        receipt_artifact = Path(str(runtime_receipt["freecadModule"])).resolve()
+        if binding_artifact != receipt_artifact or not binding_artifact.is_file():
+            raise RuntimeError("embedded FreeCAD module does not match the runtime receipt")
+    elif binding_mode == "inittab":
+        if "freecadBindingArtifact" not in runtime_receipt:
+            raise ValueError("embedded runtime receipt is missing: freecadBindingArtifact")
+        module_spec = getattr(FreeCAD, "__spec__", None)
+        if getattr(module_spec, "origin", None) != "built-in":
+            raise RuntimeError("embedded inittab FreeCAD module origin is not built-in")
+        binding_artifact = Path(str(runtime_receipt["freecadBindingArtifact"])).resolve()
+        if not binding_artifact.is_file():
+            raise RuntimeError("embedded FreeCAD binding artifact does not exist")
+    else:
+        raise ValueError(f"unsupported embedded FreeCAD binding mode: {binding_mode}")
     candidate_binary = Path(str(runtime_receipt["candidateBinary"])).resolve()
     if not candidate_binary.is_file():
         raise ValueError(f"embedded candidate binary does not exist: {candidate_binary}")
@@ -11589,28 +11605,35 @@ def _validate_embedded_runtime(runtime_receipt: Mapping[str, Any]) -> tuple[Any,
         raise RuntimeError("embedded candidate binary is not the current process executable")
     host_provenance = candidate_provenance(candidate_binary)
     build_directory = host_provenance.get("build", {}).get("directory")
-    if not build_directory or not actual_module.is_relative_to(Path(build_directory).resolve()):
-        raise RuntimeError("embedded FreeCAD module is outside the candidate host build directory")
+    if not build_directory or not binding_artifact.is_relative_to(Path(build_directory).resolve()):
+        raise RuntimeError("embedded FreeCAD binding artifact is outside the candidate host build directory")
     if not callable(getattr(FreeCAD, "listDocuments", None)):
         raise RuntimeError("embedded FreeCAD runtime cannot report its Document registry")
-    return FreeCAD, candidate_binary, actual_module
+    return FreeCAD, candidate_binary, binding_artifact, binding_mode
 
 
 def _embedded_runtime_metadata(
     FreeCAD: Any,
     runtime_receipt: Mapping[str, Any],
+    binding_artifact: Path,
+    binding_mode: str,
     *,
     documents_before: list[str],
     documents_after: list[str],
 ) -> dict[str, Any]:
     module_value = getattr(FreeCAD, "__file__", None)
     module_path = Path(module_value).resolve() if module_value else None
+    module_spec = getattr(FreeCAD, "__spec__", None)
     return {
         "freecadVersion": freecad_version(FreeCAD),
         "freecadModule": str(module_path) if module_path else None,
         "freecadModuleSha256": (
             file_sha256(module_path) if module_path is not None and module_path.is_file() else None
         ),
+        "freecadBindingMode": binding_mode,
+        "freecadBindingOrigin": getattr(module_spec, "origin", None),
+        "freecadBindingArtifact": str(binding_artifact),
+        "freecadBindingArtifactSha256": file_sha256(binding_artifact),
         "pythonExecutable": str(Path(sys.executable).resolve()),
         "pythonVersion": sys.version.split()[0],
         "processId": runtime_receipt["processId"],
@@ -11628,7 +11651,8 @@ def _annotate_embedded_report(
     args: argparse.Namespace,
     *,
     candidate_binary: Path,
-    freecad_module: Path,
+    binding_artifact: Path,
+    binding_mode: str,
     FreeCAD: Any,
     runtime_receipt: Mapping[str, Any],
     documents_before: list[str],
@@ -11715,9 +11739,13 @@ def _annotate_embedded_report(
     host_provenance = candidate_provenance(candidate_binary)
     report["candidate"] = {
         **host_provenance,
-        "path": str(freecad_module),
-        "sha256": file_sha256(freecad_module),
-        "artifactRole": "FreeCAD Python execution module",
+        "path": str(binding_artifact),
+        "sha256": file_sha256(binding_artifact),
+        "artifactRole": (
+            "FreeCAD Python execution module"
+            if binding_mode == "extension"
+            else "FreeCADApp inittab binding artifact"
+        ),
         "hostBinary": {
             "path": str(candidate_binary),
             "sha256": file_sha256(candidate_binary),
@@ -11726,6 +11754,8 @@ def _annotate_embedded_report(
     report["embeddedRuntime"] = _embedded_runtime_metadata(
         FreeCAD,
         runtime_receipt,
+        binding_artifact,
+        binding_mode,
         documents_before=documents_before,
         documents_after=documents_after,
     )
@@ -11789,7 +11819,9 @@ def run_embedded(
         raise ValueError("embedded backend does not accept --freecadcmd")
     args = parse_args(raw_argv)
     _validate_embedded_request(args)
-    FreeCAD, candidate_path, freecad_module = _validate_embedded_runtime(runtime_receipt)
+    FreeCAD, candidate_path, binding_artifact, binding_mode = _validate_embedded_runtime(
+        runtime_receipt
+    )
     documents_before = sorted(str(name) for name in FreeCAD.listDocuments())
     if documents_before:
         raise RuntimeError("embedded collector requires an empty Document registry at entry")
@@ -11798,7 +11830,8 @@ def run_embedded(
     report = _annotate_embedded_report(
         args,
         candidate_binary=candidate_path,
-        freecad_module=freecad_module,
+        binding_artifact=binding_artifact,
+        binding_mode=binding_mode,
         FreeCAD=FreeCAD,
         runtime_receipt=runtime_receipt,
         documents_before=documents_before,

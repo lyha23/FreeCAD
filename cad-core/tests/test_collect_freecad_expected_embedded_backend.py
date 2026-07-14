@@ -49,6 +49,21 @@ class EmbeddedBackendContractTests(unittest.TestCase):
             "freecadModule": str(freecad_module),
         }
 
+    def inittab_runtime_receipt(
+        self,
+        candidate_binary: Path,
+        binding_artifact: Path,
+    ) -> dict[str, object]:
+        return {
+            "runtimeId": "test-runtime",
+            "processId": __import__("os").getpid(),
+            "ownerThreadNativeId": threading.get_native_id(),
+            "applicationAddress": 0x1234,
+            "candidateBinary": str(candidate_binary),
+            "freecadBindingMode": "inittab",
+            "freecadBindingArtifact": str(binding_artifact),
+        }
+
     def test_requires_read_only_check_with_candidate_and_report_receipts(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             fixtures, fixture, candidate_root, report, candidate_binary = self.embedded_paths(
@@ -188,6 +203,39 @@ class EmbeddedBackendContractTests(unittest.TestCase):
             )
             self.assertEqual(str(freecad_module.resolve()), payload["embeddedRuntime"]["freecadModule"])
             self.assertEqual("1.2.3 revision 456", payload["embeddedRuntime"]["freecadVersion"])
+
+    def test_accepts_inittab_runtime_with_built_in_origin_and_real_binding_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            build = root / "build"
+            candidate_binary = build / "bin/F0AEmbeddedKernelHarness"
+            binding_artifact = build / "lib/libFreeCADApp.dylib"
+            candidate_binary.parent.mkdir(parents=True)
+            binding_artifact.parent.mkdir(parents=True)
+            candidate_binary.write_bytes(b"embedded-candidate")
+            binding_artifact.write_bytes(b"freecad-app")
+            (build / "CMakeCache.txt").write_text(
+                f"CMAKE_HOME_DIRECTORY:INTERNAL={root}\n",
+                encoding="utf-8",
+            )
+            fake_freecad = types.SimpleNamespace(
+                __spec__=types.SimpleNamespace(origin="built-in"),
+                Version=lambda: (1, 2, 3, "456 build"),
+                listDocuments=lambda: {},
+            )
+
+            with (
+                mock.patch.dict(sys.modules, {"FreeCAD": fake_freecad}),
+                mock.patch.object(collector.sys, "executable", str(candidate_binary)),
+            ):
+                FreeCAD, actual_binary, artifact, binding_mode = collector._validate_embedded_runtime(
+                    self.inittab_runtime_receipt(candidate_binary, binding_artifact)
+                )
+
+            self.assertIs(fake_freecad, FreeCAD)
+            self.assertEqual(candidate_binary.resolve(), actual_binary)
+            self.assertEqual(binding_artifact.resolve(), artifact)
+            self.assertEqual("inittab", binding_mode)
 
     def test_missing_embedded_freecad_module_never_falls_back_to_subprocess(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -519,7 +567,8 @@ class EmbeddedBackendContractTests(unittest.TestCase):
                     payload = collector._annotate_embedded_report(
                         args,
                         candidate_binary=candidate_binary,
-                        freecad_module=freecad_module,
+                        binding_artifact=freecad_module,
+                        binding_mode="extension",
                         FreeCAD=fake_freecad,
                         runtime_receipt=receipt,
                         documents_before=[],
