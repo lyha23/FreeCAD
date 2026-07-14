@@ -11,10 +11,11 @@ import re
 import subprocess
 import sys
 import tempfile
+import threading
 import traceback
 from collections import Counter
 from pathlib import Path
-from typing import Any, NamedTuple, Sequence
+from typing import Any, Mapping, NamedTuple, Sequence
 
 try:
     from element_map_producer_trace import (
@@ -11508,6 +11509,304 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
     if args.phase or args.all_native:
         print(f"processed={processed} skipped={skipped} failed={failures}", file=sys.stderr)
     return 1 if failures else 0
+
+
+def _validate_embedded_request(args: argparse.Namespace) -> None:
+    """Keep the in-process entry point read-only and bound to fixture authority."""
+
+    fixtures_root = Path(args.fixtures_root).resolve()
+    if not args.check:
+        raise ValueError("embedded backend requires --check")
+    if not args.candidate_root:
+        raise ValueError("embedded backend requires --candidate-root")
+    if not args.report:
+        raise ValueError("embedded backend requires --report")
+    if not args.validate_ledger:
+        raise ValueError("embedded backend requires --validate-ledger")
+    if args.out:
+        raise ValueError("embedded backend does not accept --out")
+    if args.repeat != 1:
+        raise ValueError("embedded backend requires --repeat 1; the owner runtime controls repetition")
+    if not (args.all_native or args.phase or args.fixture):
+        raise ValueError("embedded backend requires --all-native, --phase, or one fixture")
+    if args.fixture:
+        fixture_path = Path(args.fixture).resolve()
+        if not fixture_path.is_relative_to(fixtures_root):
+            raise ValueError("embedded fixture must remain below the fixtures root")
+        if fixture_path.parent.parent != fixtures_root:
+            raise ValueError("embedded fixture must be a direct fixtures/<phase>/<case>.json input")
+        authority_path = expected_path_for_fixture(fixtures_root, fixture_path)
+        ledger_path = ledger_path_for_expected(authority_path)
+        if not authority_path.is_file() or not ledger_path.is_file():
+            raise ValueError(
+                "embedded fixture requires checked-in public and ledger authority companions"
+            )
+    if args.phase:
+        phase_path = (fixtures_root / args.phase).resolve()
+        if not phase_path.is_relative_to(fixtures_root) or phase_path.parent != fixtures_root:
+            raise ValueError("embedded phase must be a direct child of the fixtures root")
+
+
+def _validate_embedded_runtime(runtime_receipt: Mapping[str, Any]) -> tuple[Any, Path, Path]:
+    required = {
+        "runtimeId",
+        "processId",
+        "ownerThreadNativeId",
+        "applicationAddress",
+        "candidateBinary",
+        "freecadModule",
+    }
+    missing = sorted(required - runtime_receipt.keys())
+    if missing:
+        raise ValueError(f"embedded runtime receipt is missing: {', '.join(missing)}")
+    FreeCAD = sys.modules.get("FreeCAD")
+    if FreeCAD is None:
+        raise RuntimeError("embedded backend requires an already initialized FreeCAD Python runtime")
+    runtime_id = runtime_receipt["runtimeId"]
+    application_address = runtime_receipt["applicationAddress"]
+    if not isinstance(runtime_id, str) or not runtime_id:
+        raise ValueError("embedded runtimeId must be a non-empty string")
+    if not isinstance(application_address, int) or application_address <= 0:
+        raise ValueError("embedded applicationAddress must be a positive integer")
+    process_id = runtime_receipt["processId"]
+    if not isinstance(process_id, int) or process_id != os.getpid():
+        raise RuntimeError("embedded runtime receipt does not belong to the current process")
+    owner_native_id = runtime_receipt["ownerThreadNativeId"]
+    if not isinstance(owner_native_id, int) or owner_native_id != threading.get_native_id():
+        raise RuntimeError("embedded collector must run on the recorded owner thread")
+    module_value = getattr(FreeCAD, "__file__", None)
+    if not module_value:
+        raise RuntimeError("embedded FreeCAD module has no filesystem identity")
+    actual_module = Path(module_value).resolve()
+    receipt_module = Path(str(runtime_receipt["freecadModule"])).resolve()
+    if actual_module != receipt_module or not actual_module.is_file():
+        raise RuntimeError("embedded FreeCAD module does not match the runtime receipt")
+    candidate_binary = Path(str(runtime_receipt["candidateBinary"])).resolve()
+    if not candidate_binary.is_file():
+        raise ValueError(f"embedded candidate binary does not exist: {candidate_binary}")
+    process_executable = Path(sys.executable).resolve()
+    if candidate_binary != process_executable:
+        raise RuntimeError("embedded candidate binary is not the current process executable")
+    host_provenance = candidate_provenance(candidate_binary)
+    build_directory = host_provenance.get("build", {}).get("directory")
+    if not build_directory or not actual_module.is_relative_to(Path(build_directory).resolve()):
+        raise RuntimeError("embedded FreeCAD module is outside the candidate host build directory")
+    if not callable(getattr(FreeCAD, "listDocuments", None)):
+        raise RuntimeError("embedded FreeCAD runtime cannot report its Document registry")
+    return FreeCAD, candidate_binary, actual_module
+
+
+def _embedded_runtime_metadata(
+    FreeCAD: Any,
+    runtime_receipt: Mapping[str, Any],
+    *,
+    documents_before: list[str],
+    documents_after: list[str],
+) -> dict[str, Any]:
+    module_value = getattr(FreeCAD, "__file__", None)
+    module_path = Path(module_value).resolve() if module_value else None
+    return {
+        "freecadVersion": freecad_version(FreeCAD),
+        "freecadModule": str(module_path) if module_path else None,
+        "freecadModuleSha256": (
+            file_sha256(module_path) if module_path is not None and module_path.is_file() else None
+        ),
+        "pythonExecutable": str(Path(sys.executable).resolve()),
+        "pythonVersion": sys.version.split()[0],
+        "processId": runtime_receipt["processId"],
+        "runtimeId": runtime_receipt["runtimeId"],
+        "ownerThreadNativeId": runtime_receipt["ownerThreadNativeId"],
+        "applicationAddress": runtime_receipt["applicationAddress"],
+        "documentsBefore": documents_before,
+        "documentsAfter": documents_after,
+        "collector": str(Path(__file__).resolve()),
+        "requestMode": "read-only-authority-check",
+    }
+
+
+def _annotate_embedded_report(
+    args: argparse.Namespace,
+    *,
+    candidate_binary: Path,
+    freecad_module: Path,
+    FreeCAD: Any,
+    runtime_receipt: Mapping[str, Any],
+    documents_before: list[str],
+    documents_after: list[str],
+) -> dict[str, Any] | None:
+    report_path = Path(args.report)
+    if not report_path.is_file():
+        return None
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    cases = report.get("cases", [])
+    discovered = int(report.get("discovered", len(cases)))
+    aggregate_failed = int(report.get("failed", 0))
+    aggregate_skipped = int(report.get("skipped", 0))
+    public_differences = sum(
+        case.get("artifacts", {}).get("publicAuthority", {}).get("status") == "different"
+        for case in cases
+    )
+    ledger_authority_differences = sum(
+        case.get("artifacts", {}).get("ledgerAuthority", {}).get("status") == "different"
+        for case in cases
+    )
+    ledger_invalid = sum(
+        case.get("artifacts", {}).get("ledgerValidation", {}).get("status") == "invalid"
+        for case in cases
+    )
+    unexplained_failures = max(
+        0,
+        aggregate_failed
+        - public_differences
+        - ledger_authority_differences
+        - ledger_invalid,
+    )
+    complete_selection = (
+        bool(cases)
+        and len(cases) == discovered
+        and aggregate_skipped == 0
+        and unexplained_failures == 0
+        and not documents_before
+        and not documents_after
+    )
+    public_passed = complete_selection and all(
+        case.get("artifacts", {}).get("publicAuthority", {}).get("status") == "equal"
+        for case in cases
+    )
+    ledger_validation_passed = complete_selection and all(
+        case.get("artifacts", {}).get("ledgerValidation", {}).get("status") == "valid"
+        for case in cases
+    )
+    ledger_authority_statuses = [
+        case.get("artifacts", {}).get("ledgerAuthority", {}).get("status")
+        for case in cases
+    ]
+    if ledger_authority_statuses and all(status == "equal" for status in ledger_authority_statuses):
+        ledger_authority_status = "equal"
+    elif ledger_authority_statuses and all(
+        status in {"equal", "different"} for status in ledger_authority_statuses
+    ):
+        ledger_authority_status = "different"
+    else:
+        ledger_authority_status = "incomplete"
+    cad_failed = 0
+    gate_failed = 0
+    for case in cases:
+        public_status = case.get("artifacts", {}).get("publicAuthority", {}).get("status")
+        ledger_status = case.get("artifacts", {}).get("ledgerValidation", {}).get("status")
+        case["collectorStatus"] = case.get("status")
+        case["cadFinalResultStatus"] = "passed" if public_status == "equal" else "failed"
+        case["ledgerValidationStatus"] = "passed" if ledger_status == "valid" else "failed"
+        case["ledgerAuthorityStatus"] = case.get("artifacts", {}).get(
+            "ledgerAuthority", {}
+        ).get("status")
+        case["status"] = (
+            "passed" if public_status == "equal" and ledger_status == "valid" else "failed"
+        )
+        cad_failed += public_status != "equal"
+        gate_failed += case["status"] == "failed"
+    embedded_status = "passed" if public_passed and ledger_validation_passed else "failed"
+    report["collectorAggregate"] = {
+        key: report.get(key)
+        for key in ("status", "processed", "skipped", "failed", "publicLedgerConsistency")
+    }
+    report["executionBackend"] = "embedded"
+    report["freecadcmd"] = None
+    host_provenance = candidate_provenance(candidate_binary)
+    report["candidate"] = {
+        **host_provenance,
+        "path": str(freecad_module),
+        "sha256": file_sha256(freecad_module),
+        "artifactRole": "FreeCAD Python execution module",
+        "hostBinary": {
+            "path": str(candidate_binary),
+            "sha256": file_sha256(candidate_binary),
+        },
+    }
+    report["embeddedRuntime"] = _embedded_runtime_metadata(
+        FreeCAD,
+        runtime_receipt,
+        documents_before=documents_before,
+        documents_after=documents_after,
+    )
+    fixtures_root = Path(args.fixtures_root).resolve()
+    authority_fixtures_root = (ROOT / "fixtures").resolve()
+    authority_root_matched = fixtures_root == authority_fixtures_root
+    selection_scope = "all-native" if args.all_native else ("phase" if args.phase else "single")
+    report["selectionScope"] = selection_scope
+    report["authorityFixturesRoot"] = str(authority_fixtures_root)
+    report["authorityRootMatched"] = authority_root_matched
+    report["completeNativeManifest"] = bool(
+        args.all_native and authority_root_matched and complete_selection
+    )
+    report["releaseGatePassed"] = bool(
+        args.all_native
+        and authority_root_matched
+        and public_passed
+        and ledger_validation_passed
+    )
+    report["cadFinalResultStatus"] = (
+        "passed" if args.all_native and authority_root_matched and public_passed
+        else "scoped_passed" if public_passed
+        else "failed"
+    )
+    report["ledgerValidationStatus"] = (
+        "passed" if args.all_native and authority_root_matched and ledger_validation_passed
+        else "scoped_passed" if ledger_validation_passed
+        else "failed"
+    )
+    report["ledgerAuthorityStatus"] = ledger_authority_status
+    report["ledgerInvalid"] = ledger_invalid
+    report["ledgerAuthorityDifferent"] = ledger_authority_differences
+    report["unexplainedCollectorFailures"] = unexplained_failures
+    report["status"] = embedded_status
+    report["publicLedgerConsistency"] = embedded_status
+    report["processed"] = len(cases)
+    report["cadFailed"] = cad_failed
+    report["failed"] = gate_failed + unexplained_failures
+    report["firstFailure"] = next(
+        (case for case in cases if case.get("status") == "failed"),
+        None,
+    )
+    atomic_write_json(report_path, report)
+    return report
+
+
+def run_embedded(
+    argv: Sequence[str],
+    *,
+    runtime_receipt: Mapping[str, Any],
+) -> int:
+    """Run the collector in an already initialized FreeCAD/Python process.
+
+    This entry point never starts FreeCADCmd.  It is intentionally check-only so
+    an embedding host can replay authority fixtures without mutating checked-in
+    expected artifacts or accepting a caller-provided Python program.
+    """
+
+    raw_argv = list(argv)
+    if "--freecadcmd" in raw_argv:
+        raise ValueError("embedded backend does not accept --freecadcmd")
+    args = parse_args(raw_argv)
+    _validate_embedded_request(args)
+    FreeCAD, candidate_path, freecad_module = _validate_embedded_runtime(runtime_receipt)
+    documents_before = sorted(str(name) for name in FreeCAD.listDocuments())
+    if documents_before:
+        raise RuntimeError("embedded collector requires an empty Document registry at entry")
+    result = run_inside_freecad(args)
+    documents_after = sorted(str(name) for name in FreeCAD.listDocuments())
+    report = _annotate_embedded_report(
+        args,
+        candidate_binary=candidate_path,
+        freecad_module=freecad_module,
+        FreeCAD=FreeCAD,
+        runtime_receipt=runtime_receipt,
+        documents_before=documents_before,
+        documents_after=documents_after,
+    )
+    if report is not None:
+        return 0 if report.get("status") == "passed" else 1
+    raise RuntimeError("embedded collector did not produce the required report")
 
 
 def run_via_freecadcmd(argv: list[str], args: argparse.Namespace) -> int:
