@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ctypes
+import hashlib
 import json
 import os
 import subprocess
@@ -36,6 +37,28 @@ class CadRsRecomputeArtifactsResult(ctypes.Structure):
         ("response", CadRsBuffer),
         ("producer_trace", CadRsBuffer),
         ("error", CadRsBuffer),
+    ]
+
+
+class CadKernelV2Buffer(ctypes.Structure):
+    """Byte buffer owned by ``freecad_kernel_ffi_v2``."""
+
+    _fields_ = [("ptr", ctypes.c_void_p), ("len", ctypes.c_size_t)]
+
+
+class CadKernelV2Result(ctypes.Structure):
+    _fields_ = [
+        ("status", ctypes.c_int32),
+        ("json", CadKernelV2Buffer),
+        ("error", CadKernelV2Buffer),
+    ]
+
+
+class CadKernelV2CreateResult(ctypes.Structure):
+    _fields_ = [
+        ("status", ctypes.c_int32),
+        ("handle", ctypes.c_void_p),
+        ("error", CadKernelV2Buffer),
     ]
 
 
@@ -311,6 +334,192 @@ class RustFfiActualSource:
             library.cad_rs_free_recompute_artifacts_result(ctypes.byref(result))
 
 
+class FreeCadKernelV2ActualSource:
+    """Call the native v2 handle ABI once per selected fixture.
+
+    The adapter owns no comparison policy and never reads a current/snapshot
+    response.  It records enough call-level evidence for a report to prove the
+    response came from the selected dylib and that all library-owned buffers
+    and the handle crossed their paired release operations.
+    """
+
+    kind = "freecad-kernel-v2"
+
+    def __init__(self, library: Path | None, timeout_seconds: float | None = None) -> None:
+        self.library_path = library.resolve() if library is not None else None
+        self.timeout_seconds = timeout_seconds
+        self._calls: list[dict[str, Any]] = []
+        self._create_count = 0
+        self._destroy_count = 0
+        self._adapter_version = "freecad-expected-parity.freecad-kernel-v2.v1"
+        self._source_receipt = self._source_authority()
+
+    @staticmethod
+    def _sha256(raw: bytes) -> str:
+        return "sha256:" + hashlib.sha256(raw).hexdigest()
+
+    def _resource_root(self) -> Path | None:
+        if self.library_path is None:
+            return None
+        parent = self.library_path.parent
+        return parent.parent if parent.name == "lib" else parent
+
+    def _source_authority(self) -> dict[str, Any]:
+        resource_root = self._resource_root()
+        if resource_root is None or len(resource_root.parents) < 2:
+            return {"status": "unavailable", "reason": "cannot derive source repository"}
+        repository = resource_root.parents[1]
+        if not (repository / ".git").exists():
+            return {"status": "unavailable", "repository": str(repository)}
+
+        def git(*arguments: str) -> subprocess.CompletedProcess[str]:
+            return subprocess.run(
+                ["git", *arguments],
+                cwd=repository,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+
+        head = git("rev-parse", "HEAD")
+        status = git("status", "--short")
+        if head.returncode != 0 or status.returncode != 0:
+            return {
+                "status": "unavailable",
+                "repository": str(repository),
+                "error": (head.stderr + status.stderr).strip(),
+            }
+        snapshot = repository / "freecad-kernel/provenance/source-snapshot.json"
+        return {
+            "status": "recorded",
+            "repository": str(repository),
+            "head": head.stdout.strip(),
+            "dirtyPaths": status.stdout.splitlines(),
+            "sourceSnapshot": {
+                "path": str(snapshot),
+                "sha256": self._sha256(snapshot.read_bytes()) if snapshot.is_file() else None,
+            },
+        }
+
+    def load(self, item: FixtureCase) -> ActualPayload:
+        if not item.input_path.is_file():
+            return ActualPayload(None, None, f"missing fixture input: {item.input_path}")
+        if self.library_path is None:
+            return ActualPayload(None, None, "missing v2 FFI library (--ffi-lib is required)")
+        if not self.library_path.is_file():
+            return ActualPayload(None, None, f"missing v2 FFI library: {self.library_path}")
+        resource_root = self._resource_root()
+        if resource_root is None:
+            return ActualPayload(None, None, "cannot derive v2 resource root")
+        runner = resource_root / "bin" / "FreeCADKernelV2ActualRunner"
+        if not runner.is_file():
+            return ActualPayload(None, None, f"missing v2 actual runner: {runner}")
+        try:
+            request = item.input_path.read_bytes()
+        except OSError as exc:
+            return ActualPayload(None, None, f"cannot read fixture input {item.input_path}: {exc}")
+        with tempfile.TemporaryDirectory(prefix="freecad-kernel-v2-actual-") as directory:
+            response_path = Path(directory) / "response.json"
+            evidence_path = Path(directory) / "evidence.json"
+            command = [
+                str(runner),
+                str(self.library_path),
+                str(resource_root),
+                str(item.input_path),
+                str(response_path),
+                str(evidence_path),
+            ]
+            try:
+                completed = subprocess.run(
+                    command,
+                    cwd=resource_root,
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    timeout=self.timeout_seconds,
+                    check=False,
+                )
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                return ActualPayload(
+                    None, None, f"v2 actual runner failed for {item.label()}: {exc}"
+                )
+            try:
+                call = json.loads(evidence_path.read_text(encoding="utf-8"))
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+                return ActualPayload(
+                    None,
+                    None,
+                    f"v2 actual runner produced no valid evidence for {item.label()}: {exc}",
+                    completed.stdout,
+                    completed.stderr,
+                )
+            call["case"] = item.label()
+            self._calls.append(call)
+            self._create_count += int(call.get("createCount", 0))
+            self._destroy_count += int(call.get("destroyCount", 0))
+            if completed.returncode != 0:
+                return ActualPayload(
+                    None,
+                    None,
+                    f"v2 actual runner returned {completed.returncode} for {item.label()}: {completed.stderr.strip()}",
+                    completed.stdout,
+                    completed.stderr,
+                )
+            try:
+                payload_raw = response_path.read_bytes()
+            except OSError as exc:
+                return ActualPayload(None, None, f"v2 actual runner produced no response: {exc}")
+            expected_evidence = {
+                "libraryPath": str(self.library_path),
+                "librarySha256": self._sha256(self.library_path.read_bytes()),
+                "requestSha256": self._sha256(request),
+                "rawResponseSha256": self._sha256(payload_raw),
+                "createCount": 1,
+                "destroyCount": 1,
+                "handleCreated": True,
+                "handleDestroyed": True,
+                "createResultFreed": True,
+                "versionResultFreed": True,
+                "recomputeResultFreed": True,
+            }
+            mismatches = {
+                key: {"expected": expected, "actual": call.get(key)}
+                for key, expected in expected_evidence.items()
+                if call.get(key) != expected
+            }
+            if mismatches:
+                return ActualPayload(
+                    None,
+                    payload_raw,
+                    "v2 actual runner evidence mismatch: " + json.dumps(mismatches, sort_keys=True),
+                    completed.stdout,
+                    completed.stderr,
+                )
+            parsed = parse_payload(payload_raw, label=f"freecad-kernel-v2 output {item.label()}")
+            parsed.stdout = completed.stdout
+            parsed.stderr = completed.stderr
+            return parsed
+
+    def evidence(self) -> dict[str, Any]:
+        library_sha = None
+        if self.library_path is not None and self.library_path.is_file():
+            library_sha = self._sha256(self.library_path.read_bytes())
+        return {
+            "adapterVersion": self._adapter_version,
+            "library": str(self.library_path) if self.library_path is not None else None,
+            "librarySha256": library_sha,
+            "resourceRoot": (
+                str(self._resource_root()) if self._resource_root() is not None else None
+            ),
+            "execution": "isolated-helper-process",
+            "sourceAuthority": self._source_receipt,
+            "createCount": self._create_count,
+            "destroyCount": self._destroy_count,
+            "calls": self._calls,
+        }
+
+
 def make_actual_source(
     kind: str,
     *,
@@ -319,7 +528,14 @@ def make_actual_source(
     ffi_library: Path | None,
     in_memory_actuals: Mapping[object, object] | None,
     timeout_seconds: float | None,
-) -> SnapshotActualSource | InMemoryActualSource | LiveCadCoreSource | RustFfiActualSource | None:
+) -> (
+    SnapshotActualSource
+    | InMemoryActualSource
+    | LiveCadCoreSource
+    | RustFfiActualSource
+    | FreeCadKernelV2ActualSource
+    | None
+):
     if kind == "snapshot":
         return SnapshotActualSource()
     if kind == "in_memory":
@@ -328,6 +544,8 @@ def make_actual_source(
         return LiveCadCoreSource(root, binary, timeout_seconds)
     if kind == "rust-ffi":
         return RustFfiActualSource(ffi_library)
+    if kind == "freecad-kernel-v2":
+        return FreeCadKernelV2ActualSource(ffi_library, timeout_seconds)
     return None
 
 

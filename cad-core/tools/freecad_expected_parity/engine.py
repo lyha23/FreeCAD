@@ -529,7 +529,7 @@ def _release_status(
 ) -> tuple[str, bool]:
     if invalid:
         return "invalid", False
-    if source_kind not in {"live", "rust-ffi"}:
+    if source_kind not in {"live", "rust-ffi", "freecad-kernel-v2"}:
         return "not_evaluated", False
     if source_kind == "live" and any(item.artifact_evidence.current_fresh is not True for item in cases):
         return "invalid", False
@@ -607,6 +607,11 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
             cases=cases,
         )
     summary = _summary(cases)
+    actual_source_evidence = (
+        source.evidence()
+        if source is not None and callable(getattr(source, "evidence", None))
+        else None
+    )
     for item in cases:
         item.diffs = [_visible_diff(diff) for diff in item.diffs]
     return ParityReport(
@@ -618,8 +623,9 @@ def evaluate(request: EvaluationRequest) -> ParityReport:
             if request.source_kind == "live"
             else None,
             "ffiLibrarySha256": _binary_sha256(_request_path(request.ffi_library, root), root)
-            if request.source_kind == "rust-ffi"
+            if request.source_kind in {"rust-ffi", "freecad-kernel-v2"}
             else None,
+            "actualSource": actual_source_evidence,
             "comparisonProfile": COMPARISON_PROFILE,
             "comparisonProfileSha256": _profile_sha256(),
             "registrySha256": registry.sha256,

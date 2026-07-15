@@ -105,13 +105,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--live", action="store_true", help="Evaluate one fresh live CAD Core result per case.")
     parser.add_argument(
         "--actual-source",
-        choices=("snapshot", "live", "rust-ffi"),
-        help="Actual-payload adapter; rust-ffi calls cad_rs_recompute_artifacts_json once per fixture and keeps the public verdict trace-independent.",
+        choices=("snapshot", "live", "rust-ffi", "freecad-kernel-v2"),
+        help="Actual-payload adapter; FFI sources call the selected library once per fixture and keep the public verdict trace-independent.",
     )
     parser.add_argument("--release-gate", action="store_true", help="Run the live release gate and fail on non-passing verdicts.")
     parser.add_argument("--run-contract-tests", action="store_true", help="Run registry-selected dotted unittest ids.")
     parser.add_argument("--bin", type=Path, help="CAD Core binary for live/materialization modes.")
-    parser.add_argument("--ffi-lib", type=Path, help="Rust cad-core-ffi cdylib for --actual-source rust-ffi.")
+    parser.add_argument("--ffi-lib", type=Path, help="FFI library for rust-ffi or freecad-kernel-v2.")
     parser.add_argument("--roles", type=Path, help="Fixture-role manifest path.")
     parser.add_argument("--registry", type=Path, help="Protocol-divergence registry path.")
     parser.add_argument("--output", type=Path, help="Parity report output path.")
@@ -152,8 +152,8 @@ def _run_contract_tests(report: dict[str, Any], root: Path) -> tuple[dict[str, A
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    if args.actual_source == "rust-ffi" and args.ffi_lib is None:
-        raise SystemExit("--ffi-lib is required for --actual-source rust-ffi")
+    if args.actual_source in {"rust-ffi", "freecad-kernel-v2"} and args.ffi_lib is None:
+        raise SystemExit(f"--ffi-lib is required for --actual-source {args.actual_source}")
     root = ROOT
     payloads: list[dict[str, Any]] = []
     exit_code = 0
