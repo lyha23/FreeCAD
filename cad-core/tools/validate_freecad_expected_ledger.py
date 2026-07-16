@@ -69,6 +69,26 @@ def sha256_json(value: Any) -> str:
     return "sha256:" + hashlib.sha256(canonical_json(value)).hexdigest()
 
 
+def file_sha256(path: Path) -> str | None:
+    if not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(path)
+
+
 def canonical_freecad_mapped_name(mapped_name: str) -> str:
     def replace_hash(match: re.Match[str]) -> str:
         return ":H*:*" if match.group(0).count(":") > 1 else ":H*"
@@ -1083,6 +1103,52 @@ def default_phase_pattern(phase: str) -> str:
     return str(ROOT / "fixtures" / phase / "expected" / "*.freecad.json")
 
 
+def validation_report(
+    paths: list[Path],
+    failures: dict[Path, list[str]],
+    *,
+    strict: bool,
+) -> dict[str, Any]:
+    cases = []
+    for path in paths:
+        ledger_path = ledger_path_for_expected(path)
+        errors = failures.get(path, [])
+        cases.append(
+            {
+                "expected": str(path.resolve()),
+                "ledger": str(ledger_path.resolve()),
+                "publicSha256": file_sha256(path),
+                "ledgerSha256": file_sha256(ledger_path),
+                "status": "failed" if errors else "passed",
+                "errors": errors,
+            }
+        )
+    first_failure = next((item for item in cases if item["status"] == "failed"), None)
+    return {
+        "schema": "freecad-ledger-validation-report/v1",
+        "status": "failed" if failures or not paths else "passed",
+        "strict": strict,
+        "validator": {
+            "path": str(Path(__file__).resolve()),
+            "sha256": file_sha256(Path(__file__).resolve()),
+        },
+        "selected": len(paths),
+        "validated": len(paths),
+        "failed": len(failures),
+        "errorCount": sum(len(value) for value in failures.values()),
+        "cases": cases,
+        "firstFailure": first_failure,
+    }
+
+
+def validate_report_path(path: Path) -> None:
+    try:
+        path.resolve().relative_to((ROOT / "fixtures").resolve())
+    except ValueError:
+        return
+    raise ValueError(f"report path must be outside checked-in fixtures: {path}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Validate *.freecad.json expected files against FreeCADCmd sidecar ledgers."
@@ -1091,7 +1157,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--phase", help="Validate cad-core/fixtures/<phase>/expected/*.freecad.json.")
     parser.add_argument("--all", action="store_true", help="Validate every cad-core/fixtures/*/expected/*.freecad.json.")
     parser.add_argument("--strict", action="store_true", help="Require all v1 authority fields and hashes.")
+    parser.add_argument("--report", help="Write a machine-readable validation report outside fixtures/.")
     args = parser.parse_args(argv)
+
+    report_path = Path(args.report) if args.report else None
+    if report_path is not None:
+        try:
+            validate_report_path(report_path)
+        except ValueError as exc:
+            parser.error(str(exc))
 
     patterns = list(args.patterns)
     if args.phase:
@@ -1104,6 +1178,11 @@ def main(argv: list[str] | None = None) -> int:
     paths = expected_paths_from_patterns(patterns)
     if not paths:
         print("No expected *.freecad.json files found.", file=sys.stderr)
+        if report_path is not None:
+            payload = validation_report([], {}, strict=args.strict)
+            payload["stage"] = "selection"
+            payload["detail"] = "No expected *.freecad.json files found."
+            atomic_write_json(report_path, payload)
         return 2
 
     failures: dict[Path, list[str]] = {}
@@ -1119,9 +1198,19 @@ def main(argv: list[str] | None = None) -> int:
 
     if failures:
         print(f"\nvalidated={len(paths)} failed={len(failures)} errors={sum(len(v) for v in failures.values())}", file=sys.stderr)
+        if report_path is not None:
+            atomic_write_json(
+                report_path,
+                validation_report(paths, failures, strict=args.strict),
+            )
         return 1
 
     print(f"\nValidated {len(paths)} expected fixture(s).")
+    if report_path is not None:
+        atomic_write_json(
+            report_path,
+            validation_report(paths, failures, strict=args.strict),
+        )
     return 0
 
 

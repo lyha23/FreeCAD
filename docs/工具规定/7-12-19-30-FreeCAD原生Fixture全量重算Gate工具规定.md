@@ -38,21 +38,22 @@ fixtures/<phase>/expected/<case>.freecad.ledger.json
 cd /Users/li/Chili3DProject/FreeCAD
 python3 cad-core/tools/collect_freecad_expected.py \
   --fixtures-root /Users/li/Chili3DProject/FreeCAD/cad-core/fixtures \
-  --freecadcmd /Users/li/Chili3DProject/FreeCAD2/build/headless-std/bin/FreeCADCmd \
+  --freecadcmd /Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd \
   --all-native \
   --check \
   --repeat 2 \
-  --candidate-root /Users/li/Chili3DProject/FreeCAD2/build/headless-std/fixture-gate \
+  --candidate-root /tmp/freecad-fixture-gate \
   --validate-ledger \
-  --report /Users/li/Chili3DProject/FreeCAD2/build/headless-std/fixture-regression.json
+  --report /tmp/freecad-fixture-regression.json
 ```
 
 约束：
 
 - `--all-native` 必须与 `--check` 同用，保证不覆盖 checked-in expected。
-- `--repeat N` 的 `N > 1` 当前要求 `--all-native --check --candidate-root`。
+- `--repeat N` 的 `N > 1` 支持 single-case、`--phase` 和 `--all-native`，并要求 `--check --candidate-root`。
 - candidate root 和 report 必须位于 checked-in fixture 树之外。
-- 每个重复运行使用一个全新的 `run-a`、`run-b` 等目录；非空旧目录直接失败，避免混入历史产物。
+- 每个重复运行使用一个全新的 `run-a`、`run-b` 等目录；非空旧目录或遗留的 `run-a.report.json` / `run-b.report.json` 直接失败，避免混入历史产物。
+- single-case 和 phase 显式选择必须命中至少一个已登记 native authority；zero-case、缺 public expected、缺 ledger 都在采集前失败。
 
 ## 5. 比较合同
 
@@ -70,12 +71,11 @@ trace comparison 不强制完整输入 document graph 的对象双射。合法 t
 
 最终报告 schema 为 `freecad-fixture-regression-report/v1`，至少记录：
 
-- 候选 FreeCADCmd 绝对路径和 SHA-256。
-- 候选源码根、commit、dirty 状态摘要。
-- build 目录、CMakeCache SHA-256、build type、generator 和编译器路径。
+- 最低 producer 身份：FreeCADCmd 绝对路径、FreeCAD/OCCT 版本和 collector SHA-256。
+- 可选 provenance：FreeCADCmd SHA-256、候选源码根/commit/dirty 状态摘要、build 目录、CMakeCache SHA-256、build type、generator、编译器路径和完整调用参数。缺失只进入 `provenanceWarnings`，不改变 public/ledger/repeat verdict。
 - live manifest 的 phase/case 数、逐 artifact SHA-256 和 manifest hash。
 - 每次运行的 discovered、processed、skipped、failed 和逐 case artifact 状态。
-- public authority、ledger authority 的 Gate 结果；若启用 trace，再附独立的 producer trace diagnostic。
+- `publicExpectedStatus`、`ledgerValidationStatus`、`ledgerDriftStatus` 和 `producerTraceStatus` 四个独立 verdict；若启用 trace，再附独立的 producer trace diagnostic。
 - run-a/run-b 差异和第一处失败。
 
 满足以下任一条件时 Gate 失败并返回非零：
@@ -90,3 +90,30 @@ trace comparison 不强制完整输入 document graph 的对象双射。合法 t
 producer trace 的 `different/missing/invalid` 只使 trace diagnostic lane 失败或不可用，不进入 public/ledger `differences`、`firstFailure` 或 Gate status。public/ledger 已一致时，默认不运行 trace comparator，也不需要 trace equal 作为放行证明。
 
 终端退出码只是一项证据；删减验收必须读取最终 JSON 的 `status`、计数、`cases` 和 `firstFailure`。
+
+## 7. Inventory、分类和 checked-in 收据
+
+fixture 库存和非 native 分类统一由以下只读命令重建：
+
+```bash
+cd /Users/li/Chili3DProject/FreeCAD/cad-core
+python3 tools/audit_freecad_fixture_authority.py \
+  --report tools/freecad_expected_parity/reports/fixture_authority_inventory.v1.json
+```
+
+报告逐项覆盖所有 input，审计 role、public expected、ledger、protocol expected、orphan/duplicate，并把每个 `unsupported` 归入：`collector_general_gap`、`freecad_native_not_expressible`、`non_native_fixture` 或 `not_investigated`。静态分类和 staging probe 都不能自动提升 role；promotion 仍要求 input、public expected、ledger、role 与 producer receipt 同批闭合。
+
+strict ledger 的独立机器收据使用：
+
+```bash
+python3 cad-core/tools/validate_freecad_expected_ledger.py \
+  --all \
+  --strict \
+  --report cad-core/tools/freecad_expected_parity/reports/all-native-ledger-validation.v1.json
+```
+
+当前 checked-in 报告、重建命令和 verdict 解释见：
+
+```text
+cad-core/tools/freecad_expected_parity/reports/README.md
+```

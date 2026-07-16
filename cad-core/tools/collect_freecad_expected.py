@@ -1456,6 +1456,7 @@ def provenance_warnings(report: Mapping[str, Any]) -> list[str]:
     runtime = report.get("runtime")
     collector = report.get("collector")
     invocation = report.get("collectorInvocation")
+    build = candidate.get("build") if isinstance(candidate, Mapping) else None
     checks = {
         "FreeCADCmd path": candidate.get("path") if isinstance(candidate, Mapping) else None,
         "FreeCADCmd SHA256": candidate.get("sha256") if isinstance(candidate, Mapping) else None,
@@ -1464,6 +1465,10 @@ def provenance_warnings(report: Mapping[str, Any]) -> list[str]:
         "collector SHA256": collector.get("sha256") if isinstance(collector, Mapping) else None,
         "source commit": candidate.get("commit") if isinstance(candidate, Mapping) else None,
         "dirty summary": candidate.get("dirty") if isinstance(candidate, Mapping) else None,
+        "build directory": build.get("directory") if isinstance(build, Mapping) else None,
+        "CMake cache SHA256": build.get("cmakeCacheSha256") if isinstance(build, Mapping) else None,
+        "build type": build.get("buildType") if isinstance(build, Mapping) else None,
+        "build generator": build.get("generator") if isinstance(build, Mapping) else None,
         "collector invocation": invocation.get("argv") if isinstance(invocation, Mapping) else None,
     }
     for label, value in checks.items():
@@ -1543,6 +1548,8 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
         if run_root.exists() and any(run_root.iterdir()):
             raise ValueError(f"candidate run directory is not empty: {run_root}")
         run_report = candidate_root / f"{label}.report.json"
+        if run_report.exists():
+            raise ValueError(f"candidate run report already exists: {run_report}")
         child_argv = regression_child_argv(
             args,
             candidate_root=run_root,
@@ -1630,15 +1637,17 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
         )
         else "failed"
     )
-    ledger_drift_status = (
-        "drifted"
-        if any(
-            run["report"].get("ledgerDriftStatus") == "drifted"
-            for run in run_results
-        )
-        or ledger_drifts
-        else "unchanged"
-    )
+    run_ledger_drift_statuses = [
+        run["report"].get("ledgerDriftStatus") for run in run_results
+    ]
+    if any(status == "drifted" for status in run_ledger_drift_statuses) or ledger_drifts:
+        ledger_drift_status = "drifted"
+    elif run_ledger_drift_statuses and all(
+        status == "unchanged" for status in run_ledger_drift_statuses
+    ):
+        ledger_drift_status = "unchanged"
+    else:
+        ledger_drift_status = "not_evaluated"
     producer_status = producer_trace_status(producer_diagnostics)
     final_report = {
         "schema": "freecad-fixture-regression-report/v1",
@@ -1677,6 +1686,12 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
             producer_diagnostics[0] if producer_diagnostics else None
         ),
     }
+    final_report["provenanceWarnings"] = sorted({
+        warning
+        for run in run_results
+        for warning in run.get("report", {}).get("provenanceWarnings", [])
+        if isinstance(warning, str)
+    })
     report_path = Path(args.report) if args.report else candidate_root / "report.json"
     atomic_write_json(report_path, final_report)
     print(
@@ -11600,6 +11615,23 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
         fixture = load_fixture(fixture_path)
         target_override: list[str] | None = None
         if args.check:
+            ledger_path = ledger_path_for_expected(out_path)
+            missing_authority = []
+            if not out_path.is_file():
+                missing_authority.append(("publicAuthority", out_path))
+            if not ledger_path.is_file():
+                missing_authority.append(("ledgerAuthority", ledger_path))
+            if missing_authority:
+                failures += 1
+                for artifact, missing_path in missing_authority:
+                    case_result["artifacts"][artifact] = {
+                        "status": "missing",
+                        "path": str(missing_path.resolve()),
+                    }
+                    record_case_error("precheck", f"missing checked-in authority: {missing_path}")
+                    print(f"missing checked-in authority: {missing_path}", file=sys.stderr)
+                case_results.append(case_result)
+                continue
             if args.phase and args.skip_unsupported and not out_path.exists():
                 skipped += 1
                 print(f"skip missing expected {fixture_path}", file=sys.stderr)
@@ -11689,6 +11721,7 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             record_case_error("ledger-collection", str(exc))
             case_results.append(case_result)
             continue
+        case_result["ledgerOutcome"] = ledger.get("outcome", "accepted")
 
         if args.check:
             if args.candidate_root:
@@ -11851,15 +11884,21 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             )
         else:
             ledger_validation_status = "not_evaluated"
-        ledger_drift_status = (
-            "drifted"
-            if args.check
-            and any(
-                case.get("artifacts", {}).get("ledgerAuthority", {}).get("status") == "different"
-                for case in case_results
-            )
-            else "unchanged" if args.check else "not_evaluated"
-        )
+        ledger_authority_statuses = [
+            case.get("artifacts", {}).get("ledgerAuthority", {}).get("status")
+            for case in case_results
+            if case.get("status") != "skipped"
+        ]
+        if not args.check:
+            ledger_drift_status = "not_evaluated"
+        elif any(status == "different" for status in ledger_authority_statuses):
+            ledger_drift_status = "drifted"
+        elif ledger_authority_statuses and all(
+            status == "equal" for status in ledger_authority_statuses
+        ):
+            ledger_drift_status = "unchanged"
+        else:
+            ledger_drift_status = "not_evaluated"
         producer_status = producer_trace_status(producer_diagnostics)
         report_payload = {
                 "schema": "freecad-fixture-regression-report/v1",
@@ -12274,7 +12313,16 @@ def main(argv: list[str] | None = None) -> int:
         import FreeCAD  # type: ignore # noqa: F401
     except ImportError:
         return run_via_freecadcmd(raw_argv, args)
-    return run_inside_freecad(args)
+    try:
+        return run_inside_freecad(args)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"native fixture collection failed: {exc}", file=sys.stderr)
+        stage = "execution" if isinstance(exc, OSError) else "preflight"
+        try:
+            write_regression_failure_report(args, stage=stage, detail=str(exc))
+        except (OSError, ValueError) as report_exc:
+            print(f"failed to write native fixture collection report: {report_exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__" or invoked_by_freecad_cli_import():

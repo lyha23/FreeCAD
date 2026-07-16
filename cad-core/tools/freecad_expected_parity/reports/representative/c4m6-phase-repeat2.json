@@ -1,0 +1,863 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": "RelWithDebInfo",
+      "cCompiler": "/usr/bin/cc",
+      "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+      "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+      "cxxCompiler": "/usr/bin/c++",
+      "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+      "generator": "Ninja",
+      "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+    },
+    "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+    "dirty": true,
+    "dirtyEntries": 135,
+    "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+    "exists": true,
+    "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+    "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+    "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+  },
+  "candidateRoot": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "3c28a4d063362b8226a5b30cb94f999e90e70e61b69f599901d910ac99959c89"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "drifted",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 9,
+    "entries": [
+      {
+        "case": "topo-state-body-tip-stable-recovery",
+        "fixtureSha256": "b0298d19bcb5ad387945a10bac7e32da222bf933a7205308202d7cfd6ece083f",
+        "ledgerSha256": "5f60b713d32eb0a4208c0281d52f8e4c3fd7c774143a8451038e7d06f1b3fcc8",
+        "phase": "c4m6",
+        "producerTraceSha256": "6390c06fd4dd2f5f6896b71c6ee5380d8d5b3f7661da7310642ab1f025fdd6ef",
+        "publicSha256": "19f5ad91d3de0b7e845f1b71804d70662c78bcaf36a5957501df7f86817ad1c3"
+      },
+      {
+        "case": "topo-state-document-hash-mismatch",
+        "fixtureSha256": "c0b3a3be9c6b95a4386e1e9bb44056cdb0e503d5cc0c55207ecf77eb73fa18e2",
+        "ledgerSha256": "6422bacbeda2752245683802e4ce77575f0f08a0b2100344059c02702029ae26",
+        "phase": "c4m6",
+        "producerTraceSha256": "a1641f96d966eab44b7f0c51493a372ad75940fac85554975858e32b70d8c7ff",
+        "publicSha256": "73eb8b1738872ead6c5765e5262a42eb45f02f60988e1e425d7697903bc725ed"
+      },
+      {
+        "case": "topo-state-first-recompute-empty",
+        "fixtureSha256": "bc4c00f13ae3c662981e1adc030af2575237ff3e86e1cc8c92ea4f51086751d8",
+        "ledgerSha256": "be116fad88ab25eb74d7ff4f59b630ca63bdbc7612907e7e10860a96ca546c3e",
+        "phase": "c4m6",
+        "producerTraceSha256": "4ea28e9f3b7bcf5105dc9b9098e79547217dd7ac13206e785c54216e994a6380",
+        "publicSha256": "c7c87fa164d66d8d709adfd0276903e3aa5210a96080161d72a9750f9ec871a4"
+      },
+      {
+        "case": "topo-state-foreign-object-owner",
+        "fixtureSha256": "675f6c33800fe4bf9e7a5831b12ed0a2733ea548114997637fe1a657fdeaa520",
+        "ledgerSha256": "216e81799c6915ce57746fe6de1bfb7c6e8f0e695b1134cec223279a7154683c",
+        "phase": "c4m6",
+        "producerTraceSha256": "2606d36fba027cf4870d3d20d65ec5d3dc2d671b787af4b14eb6562d36c5da8a",
+        "publicSha256": "983160a124bfbc10385e8070e39ea42f605be12bcca080a72d783d102571c303"
+      },
+      {
+        "case": "topo-state-link-compound-child-maps",
+        "fixtureSha256": "d99e86dd0a3f8dcafbab672498912133f67d62c9e7086ed5e5b1c8b85ff2d2ae",
+        "ledgerSha256": "da4c7aa720f26d9bd0c73282f4acc44292faae72484ffabde7b15fc3164e081b",
+        "phase": "c4m6",
+        "producerTraceSha256": "516b8f8e45fd06a0554a25285fc184b4e2c01c6a572e43d31eacfd044768ed01",
+        "publicSha256": "4dfbaffb9bb343c00d419d608ba4a91e89ac86feb767a8d89b9dc46920b7ad92"
+      },
+      {
+        "case": "topo-state-object-hash-mismatch",
+        "fixtureSha256": "ff55e593acbb95e76915be569a5073fd969aa4445df8c15e8661fbf26e5a9064",
+        "ledgerSha256": "dfcdc2ad71e416a6d5186dac5e98a4f630b84ddf0aba376cc954a857a3ae3f70",
+        "phase": "c4m6",
+        "producerTraceSha256": "25aede11ba5a0a62cea72934807d49a0a81b03f6fba855731d60775ad68dcf52",
+        "publicSha256": "fdadfd104135b63760d6028b356eb622e1419be9b37d6b92323be56ddbdd9370"
+      },
+      {
+        "case": "topo-state-producer-incompatible",
+        "fixtureSha256": "3cd407c158cefee549575e0e1436a63ecc03c019ce877534e383a3084e219bb2",
+        "ledgerSha256": "b345f6348bbaf671fb01c7ccf0632c1e4cabce122afaaea6f366e7792e0c3717",
+        "phase": "c4m6",
+        "producerTraceSha256": "156316ba9292f65b59a61dafac8844a6e4197e3aa87da96c0daa8d2db5c5dca9",
+        "publicSha256": "0ac06f51309c7b441e18ae4b5360ca879fae1e39035965713faa25d881ff97b1"
+      },
+      {
+        "case": "topo-state-reference-shadow-brep",
+        "fixtureSha256": "de98d949eb18d7e0c7f8bbf11a67591c3894ca36ba95415646abe478b32ee7e6",
+        "ledgerSha256": "e25ce4ffe48ff3c84e1f0c80764407345515375fe2755e4684ebe356843e0155",
+        "phase": "c4m6",
+        "producerTraceSha256": "bfd98ddd318af3721c84237e8e90a0e33d11ba9cf10838167678a10822d9413a",
+        "publicSha256": "9952810a72bf43baa4fdea040662c684dca76122d9cd2958f129cbf960fb30a1"
+      },
+      {
+        "case": "topo-state-schema-incompatible",
+        "fixtureSha256": "702d2d56e1df7cff8dc37bb15702390e571abf2cf1b4d971179a910db3e21733",
+        "ledgerSha256": "d3d1fc7641ed865f3ad81f869e24d5efab01ba28776b191e9aae453406e50c23",
+        "phase": "c4m6",
+        "producerTraceSha256": "51dc314ddce31cb49e89e85841e3ee019181f6a4b9d3b8082e7cd0d1db3ac407",
+        "publicSha256": "947b4f2e7e21a12d628dcf586721c466712415be89a95fda57b94596c43543c9"
+      }
+    ],
+    "phases": 1,
+    "sha256": "64a97b5c7810f05be107f61778f88ebd3c4d699d2e1d3533452334781daf8d1e"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"c4m6\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a\", \"--report\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": "RelWithDebInfo",
+            "cCompiler": "/usr/bin/cc",
+            "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+            "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+            "cxxCompiler": "/usr/bin/c++",
+            "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+            "generator": "Ninja",
+            "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+          },
+          "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+          "dirty": true,
+          "dirtyEntries": 135,
+          "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+          "exists": true,
+          "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+          "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+        },
+        "candidateRoot": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "599e992fe2c248bdee6fcb2891e9bc2ec57baf9df293be2715925d0dd4195b7e",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-body-tip-stable-recovery.freecad.json",
+                "publicSha256": "4444c8eecd377b3bfc693f256065f2fd7a3d56c6ea9038696f71e44f5f30a285",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-body-tip-stable-recovery",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-body-tip-stable-recovery.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-body-tip-stable-recovery.json",
+            "fixtureSha256": "b0298d19bcb5ad387945a10bac7e32da222bf933a7205308202d7cfd6ece083f",
+            "ledgerSha256": "5f60b713d32eb0a4208c0281d52f8e4c3fd7c774143a8451038e7d06f1b3fcc8",
+            "phase": "c4m6",
+            "publicExpectedSha256": "19f5ad91d3de0b7e845f1b71804d70662c78bcaf36a5957501df7f86817ad1c3",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2675f0095c4dcc8dbf6c09d1e4fac34cdd5045ef676ac23dbaef494371e5ef33",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-document-hash-mismatch.freecad.json",
+                "publicSha256": "73eb8b1738872ead6c5765e5262a42eb45f02f60988e1e425d7697903bc725ed",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-document-hash-mismatch",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-document-hash-mismatch.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-document-hash-mismatch.json",
+            "fixtureSha256": "c0b3a3be9c6b95a4386e1e9bb44056cdb0e503d5cc0c55207ecf77eb73fa18e2",
+            "ledgerSha256": "6422bacbeda2752245683802e4ce77575f0f08a0b2100344059c02702029ae26",
+            "phase": "c4m6",
+            "publicExpectedSha256": "73eb8b1738872ead6c5765e5262a42eb45f02f60988e1e425d7697903bc725ed",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "35d7fbcb1102d06f3b257360bc6b337ac2b6207a0204c9e12485f4cb2ab2cb6b",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-first-recompute-empty.freecad.json",
+                "publicSha256": "ddb837570de0c097300372774d13fa0ae03ad4b869fa47428da2bb5b73245187",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-first-recompute-empty",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-first-recompute-empty.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-first-recompute-empty.json",
+            "fixtureSha256": "bc4c00f13ae3c662981e1adc030af2575237ff3e86e1cc8c92ea4f51086751d8",
+            "ledgerSha256": "be116fad88ab25eb74d7ff4f59b630ca63bdbc7612907e7e10860a96ca546c3e",
+            "phase": "c4m6",
+            "publicExpectedSha256": "c7c87fa164d66d8d709adfd0276903e3aa5210a96080161d72a9750f9ec871a4",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "cd66df47beec19a26addcf08bbdc24c69abe3a3a8aedeae6a04d4abf31590d8a",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-foreign-object-owner.freecad.json",
+                "publicSha256": "983160a124bfbc10385e8070e39ea42f605be12bcca080a72d783d102571c303",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-foreign-object-owner",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-foreign-object-owner.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-foreign-object-owner.json",
+            "fixtureSha256": "675f6c33800fe4bf9e7a5831b12ed0a2733ea548114997637fe1a657fdeaa520",
+            "ledgerSha256": "216e81799c6915ce57746fe6de1bfb7c6e8f0e695b1134cec223279a7154683c",
+            "phase": "c4m6",
+            "publicExpectedSha256": "983160a124bfbc10385e8070e39ea42f605be12bcca080a72d783d102571c303",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "f755c9c34ec9affa1e583077dd6f757a907888496d4ada48c862895543384b41",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-link-compound-child-maps.freecad.json",
+                "publicSha256": "db26b39c139a445cbbb45bda270429a44a4014c5ba80eb39d454c1f30183a8f5",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-link-compound-child-maps",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-link-compound-child-maps.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-link-compound-child-maps.json",
+            "fixtureSha256": "d99e86dd0a3f8dcafbab672498912133f67d62c9e7086ed5e5b1c8b85ff2d2ae",
+            "ledgerSha256": "da4c7aa720f26d9bd0c73282f4acc44292faae72484ffabde7b15fc3164e081b",
+            "phase": "c4m6",
+            "publicExpectedSha256": "4dfbaffb9bb343c00d419d608ba4a91e89ac86feb767a8d89b9dc46920b7ad92",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "3f11a1c36476f08a9b3c1b4d3b0a05be29423b00dfeb02ca66fc0d197af2d7b9",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-object-hash-mismatch.freecad.json",
+                "publicSha256": "fdadfd104135b63760d6028b356eb622e1419be9b37d6b92323be56ddbdd9370",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-object-hash-mismatch",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-object-hash-mismatch.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-object-hash-mismatch.json",
+            "fixtureSha256": "ff55e593acbb95e76915be569a5073fd969aa4445df8c15e8661fbf26e5a9064",
+            "ledgerSha256": "dfcdc2ad71e416a6d5186dac5e98a4f630b84ddf0aba376cc954a857a3ae3f70",
+            "phase": "c4m6",
+            "publicExpectedSha256": "fdadfd104135b63760d6028b356eb622e1419be9b37d6b92323be56ddbdd9370",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "0e4841bb69ce951a336c1a39852474cb14e1198b1d6907179b43d746b4ba4124",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-producer-incompatible.freecad.json",
+                "publicSha256": "0ac06f51309c7b441e18ae4b5360ca879fae1e39035965713faa25d881ff97b1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-producer-incompatible",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-producer-incompatible.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-producer-incompatible.json",
+            "fixtureSha256": "3cd407c158cefee549575e0e1436a63ecc03c019ce877534e383a3084e219bb2",
+            "ledgerSha256": "b345f6348bbaf671fb01c7ccf0632c1e4cabce122afaaea6f366e7792e0c3717",
+            "phase": "c4m6",
+            "publicExpectedSha256": "0ac06f51309c7b441e18ae4b5360ca879fae1e39035965713faa25d881ff97b1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "98617114aaf15448e48f4f251454a4613e8150962bffa1da3cf64b3f8504b803",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-reference-shadow-brep.freecad.json",
+                "publicSha256": "8062d0516aeee30aeeb1fbbf826d0f5ad3af6b61caa7617da1ff387b78b9bfc1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-reference-shadow-brep",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-reference-shadow-brep.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-reference-shadow-brep.json",
+            "fixtureSha256": "de98d949eb18d7e0c7f8bbf11a67591c3894ca36ba95415646abe478b32ee7e6",
+            "ledgerSha256": "e25ce4ffe48ff3c84e1f0c80764407345515375fe2755e4684ebe356843e0155",
+            "phase": "c4m6",
+            "publicExpectedSha256": "9952810a72bf43baa4fdea040662c684dca76122d9cd2958f129cbf960fb30a1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "6edc3a6c0f6fe48f8b0be1c9d13e017c93675ad528b341363db1a89de77d7e35",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a/c4m6/expected/topo-state-schema-incompatible.freecad.json",
+                "publicSha256": "947b4f2e7e21a12d628dcf586721c466712415be89a95fda57b94596c43543c9",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-schema-incompatible",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-schema-incompatible.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-schema-incompatible.json",
+            "fixtureSha256": "702d2d56e1df7cff8dc37bb15702390e571abf2cf1b4d971179a910db3e21733",
+            "ledgerSha256": "d3d1fc7641ed865f3ad81f869e24d5efab01ba28776b191e9aae453406e50c23",
+            "phase": "c4m6",
+            "publicExpectedSha256": "947b4f2e7e21a12d628dcf586721c466712415be89a95fda57b94596c43543c9",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "3c28a4d063362b8226a5b30cb94f999e90e70e61b69f599901d910ac99959c89"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"c4m6\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a\", \"--report\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 9,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+        "ledgerDriftStatus": "drifted",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 9,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 47063",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"c4m6\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b\", \"--report\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": "RelWithDebInfo",
+            "cCompiler": "/usr/bin/cc",
+            "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+            "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+            "cxxCompiler": "/usr/bin/c++",
+            "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+            "generator": "Ninja",
+            "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+          },
+          "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+          "dirty": true,
+          "dirtyEntries": 135,
+          "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+          "exists": true,
+          "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+          "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+        },
+        "candidateRoot": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "0e9da5b0b952dae45a83ca95de2bdee58b8235380e6caea87b1824aa240b0a99",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-body-tip-stable-recovery.freecad.json",
+                "publicSha256": "1717f6655734d1759ab6d087ebd4abb7e1ebfcca5ba193e56bc9a954fd54c4e5",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-body-tip-stable-recovery",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-body-tip-stable-recovery.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-body-tip-stable-recovery.json",
+            "fixtureSha256": "b0298d19bcb5ad387945a10bac7e32da222bf933a7205308202d7cfd6ece083f",
+            "ledgerSha256": "5f60b713d32eb0a4208c0281d52f8e4c3fd7c774143a8451038e7d06f1b3fcc8",
+            "phase": "c4m6",
+            "publicExpectedSha256": "19f5ad91d3de0b7e845f1b71804d70662c78bcaf36a5957501df7f86817ad1c3",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "2675f0095c4dcc8dbf6c09d1e4fac34cdd5045ef676ac23dbaef494371e5ef33",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-document-hash-mismatch.freecad.json",
+                "publicSha256": "73eb8b1738872ead6c5765e5262a42eb45f02f60988e1e425d7697903bc725ed",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-document-hash-mismatch",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-document-hash-mismatch.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-document-hash-mismatch.json",
+            "fixtureSha256": "c0b3a3be9c6b95a4386e1e9bb44056cdb0e503d5cc0c55207ecf77eb73fa18e2",
+            "ledgerSha256": "6422bacbeda2752245683802e4ce77575f0f08a0b2100344059c02702029ae26",
+            "phase": "c4m6",
+            "publicExpectedSha256": "73eb8b1738872ead6c5765e5262a42eb45f02f60988e1e425d7697903bc725ed",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "35d7fbcb1102d06f3b257360bc6b337ac2b6207a0204c9e12485f4cb2ab2cb6b",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-first-recompute-empty.freecad.json",
+                "publicSha256": "ddb837570de0c097300372774d13fa0ae03ad4b869fa47428da2bb5b73245187",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-first-recompute-empty",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-first-recompute-empty.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-first-recompute-empty.json",
+            "fixtureSha256": "bc4c00f13ae3c662981e1adc030af2575237ff3e86e1cc8c92ea4f51086751d8",
+            "ledgerSha256": "be116fad88ab25eb74d7ff4f59b630ca63bdbc7612907e7e10860a96ca546c3e",
+            "phase": "c4m6",
+            "publicExpectedSha256": "c7c87fa164d66d8d709adfd0276903e3aa5210a96080161d72a9750f9ec871a4",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "cd66df47beec19a26addcf08bbdc24c69abe3a3a8aedeae6a04d4abf31590d8a",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-foreign-object-owner.freecad.json",
+                "publicSha256": "983160a124bfbc10385e8070e39ea42f605be12bcca080a72d783d102571c303",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-foreign-object-owner",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-foreign-object-owner.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-foreign-object-owner.json",
+            "fixtureSha256": "675f6c33800fe4bf9e7a5831b12ed0a2733ea548114997637fe1a657fdeaa520",
+            "ledgerSha256": "216e81799c6915ce57746fe6de1bfb7c6e8f0e695b1134cec223279a7154683c",
+            "phase": "c4m6",
+            "publicExpectedSha256": "983160a124bfbc10385e8070e39ea42f605be12bcca080a72d783d102571c303",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "379ea75c71ccdb0a743cc230a9608fa6617f2eaa7dcdffc25a502a671be9067e",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-link-compound-child-maps.freecad.json",
+                "publicSha256": "7ccc935fedce3a4899159438e737e31b5647d6c89d2c6b02dae4dacfa8779da1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-link-compound-child-maps",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-link-compound-child-maps.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-link-compound-child-maps.json",
+            "fixtureSha256": "d99e86dd0a3f8dcafbab672498912133f67d62c9e7086ed5e5b1c8b85ff2d2ae",
+            "ledgerSha256": "da4c7aa720f26d9bd0c73282f4acc44292faae72484ffabde7b15fc3164e081b",
+            "phase": "c4m6",
+            "publicExpectedSha256": "4dfbaffb9bb343c00d419d608ba4a91e89ac86feb767a8d89b9dc46920b7ad92",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "3f11a1c36476f08a9b3c1b4d3b0a05be29423b00dfeb02ca66fc0d197af2d7b9",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-object-hash-mismatch.freecad.json",
+                "publicSha256": "fdadfd104135b63760d6028b356eb622e1419be9b37d6b92323be56ddbdd9370",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-object-hash-mismatch",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-object-hash-mismatch.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-object-hash-mismatch.json",
+            "fixtureSha256": "ff55e593acbb95e76915be569a5073fd969aa4445df8c15e8661fbf26e5a9064",
+            "ledgerSha256": "dfcdc2ad71e416a6d5186dac5e98a4f630b84ddf0aba376cc954a857a3ae3f70",
+            "phase": "c4m6",
+            "publicExpectedSha256": "fdadfd104135b63760d6028b356eb622e1419be9b37d6b92323be56ddbdd9370",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "0e4841bb69ce951a336c1a39852474cb14e1198b1d6907179b43d746b4ba4124",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-producer-incompatible.freecad.json",
+                "publicSha256": "0ac06f51309c7b441e18ae4b5360ca879fae1e39035965713faa25d881ff97b1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-producer-incompatible",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-producer-incompatible.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-producer-incompatible.json",
+            "fixtureSha256": "3cd407c158cefee549575e0e1436a63ecc03c019ce877534e383a3084e219bb2",
+            "ledgerSha256": "b345f6348bbaf671fb01c7ccf0632c1e4cabce122afaaea6f366e7792e0c3717",
+            "phase": "c4m6",
+            "publicExpectedSha256": "0ac06f51309c7b441e18ae4b5360ca879fae1e39035965713faa25d881ff97b1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d5937c68f5d3943f4161367ed46ba34ce6e193a83584a03fc1715fbe50f915f8",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-reference-shadow-brep.freecad.json",
+                "publicSha256": "8894f9038a24a5ecb6a1b6168da5fb682267b2fce55a1938b790f8b003cfdf69",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-reference-shadow-brep",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-reference-shadow-brep.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-reference-shadow-brep.json",
+            "fixtureSha256": "de98d949eb18d7e0c7f8bbf11a67591c3894ca36ba95415646abe478b32ee7e6",
+            "ledgerSha256": "e25ce4ffe48ff3c84e1f0c80764407345515375fe2755e4684ebe356843e0155",
+            "phase": "c4m6",
+            "publicExpectedSha256": "9952810a72bf43baa4fdea040662c684dca76122d9cd2958f129cbf960fb30a1",
+            "status": "passed"
+          },
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "6edc3a6c0f6fe48f8b0be1c9d13e017c93675ad528b341363db1a89de77d7e35",
+                "path": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b/c4m6/expected/topo-state-schema-incompatible.freecad.json",
+                "publicSha256": "947b4f2e7e21a12d628dcf586721c466712415be89a95fda57b94596c43543c9",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "topo-state-schema-incompatible",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/expected/topo-state-schema-incompatible.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c4m6/topo-state-schema-incompatible.json",
+            "fixtureSha256": "702d2d56e1df7cff8dc37bb15702390e571abf2cf1b4d971179a910db3e21733",
+            "ledgerSha256": "d3d1fc7641ed865f3ad81f869e24d5efab01ba28776b191e9aae453406e50c23",
+            "phase": "c4m6",
+            "publicExpectedSha256": "947b4f2e7e21a12d628dcf586721c466712415be89a95fda57b94596c43543c9",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "3c28a4d063362b8226a5b30cb94f999e90e70e61b69f599901d910ac99959c89"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"--phase\", \"c4m6\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b\", \"--report\", \"/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 9,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+        "ledgerDriftStatus": "drifted",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 9,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 47063",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-fixture-c4m6-phase.vZoU2x/candidates/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

@@ -6,6 +6,7 @@ import contextlib
 import importlib.util
 import io
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -868,6 +869,136 @@ class RepeatedRegressionGateTests(unittest.TestCase):
 
 
 class CollectionReportTests(unittest.TestCase):
+    def test_single_case_missing_expected_fails_before_collection(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            fixtures = root / "fixtures"
+            fixture_path = fixtures / "p1" / "case.json"
+            fixture_path.parent.mkdir(parents=True)
+            fixture_path.write_text('{"Objects": []}\n', encoding="utf-8")
+            report = root / "report.json"
+            args = collector.parse_args(
+                [
+                    str(fixture_path),
+                    "--fixtures-root",
+                    str(fixtures),
+                    "--check",
+                    "--validate-ledger",
+                    "--report",
+                    str(report),
+                ]
+            )
+
+            with mock.patch.object(collector, "collect_one") as collect_one:
+                result = collector.run_inside_freecad(args)
+
+            payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(1, result)
+            self.assertEqual("failed", payload["status"])
+            self.assertEqual("failed", payload["publicExpectedStatus"])
+            self.assertEqual("failed", payload["ledgerValidationStatus"])
+            self.assertEqual("not_evaluated", payload["ledgerDriftStatus"])
+            self.assertEqual("missing", payload["cases"][0]["artifacts"]["publicAuthority"]["status"])
+            collect_one.assert_not_called()
+
+    def test_single_case_missing_ledger_fails_before_collection(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            fixtures = root / "fixtures"
+            fixture_path = fixtures / "p1" / "case.json"
+            expected = fixtures / "p1" / "expected" / "case.freecad.json"
+            expected.parent.mkdir(parents=True)
+            fixture_path.write_text('{"Objects": []}\n', encoding="utf-8")
+            collector.atomic_write_json(expected, {"object": "Case"})
+            report = root / "report.json"
+            args = collector.parse_args(
+                [
+                    str(fixture_path),
+                    "--fixtures-root",
+                    str(fixtures),
+                    "--check",
+                    "--validate-ledger",
+                    "--report",
+                    str(report),
+                ]
+            )
+
+            with mock.patch.object(collector, "collect_one") as collect_one:
+                result = collector.run_inside_freecad(args)
+
+            payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(1, result)
+            self.assertEqual("failed", payload["status"])
+            self.assertEqual("missing", payload["cases"][0]["artifacts"]["ledgerAuthority"]["status"])
+            self.assertEqual("not_evaluated", payload["ledgerDriftStatus"])
+            collect_one.assert_not_called()
+
+    def test_collection_exception_is_machine_readable_and_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            fixtures = root / "fixtures"
+            fixture_path = fixtures / "p1" / "case.json"
+            expected = fixtures / "p1" / "expected" / "case.freecad.json"
+            expected.parent.mkdir(parents=True)
+            fixture_path.write_text('{"Objects": []}\n', encoding="utf-8")
+            collector.atomic_write_json(expected, {"object": "Case"})
+            collector.atomic_write_json(collector.ledger_path_for_expected(expected), {})
+            report = root / "report.json"
+            args = collector.parse_args(
+                [
+                    str(fixture_path),
+                    "--fixtures-root",
+                    str(fixtures),
+                    "--check",
+                    "--validate-ledger",
+                    "--report",
+                    str(report),
+                ]
+            )
+
+            with (
+                mock.patch.object(collector, "collect_one", side_effect=RuntimeError("collection exploded")),
+                contextlib.redirect_stderr(io.StringIO()),
+            ):
+                result = collector.run_inside_freecad(args)
+
+            payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(1, result)
+            self.assertEqual("failed", payload["status"])
+            self.assertEqual("collection", payload["firstFailure"]["errors"][0]["stage"])
+            self.assertIn("collection exploded", payload["firstFailure"]["errors"][0]["detail"])
+
+    def test_zero_case_phase_writes_preflight_failure_report(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            fixtures = root / "fixtures"
+            fixtures.mkdir()
+            report = root / "report.json"
+            catalog = SimpleNamespace(cases=[], skipped=[], errors=[])
+
+            with (
+                mock.patch.dict(sys.modules, {"FreeCAD": SimpleNamespace()}),
+                mock.patch.object(collector, "fixture_role_catalog", return_value=catalog),
+                contextlib.redirect_stderr(io.StringIO()),
+            ):
+                result = collector.main(
+                    [
+                        "--phase",
+                        "empty",
+                        "--check",
+                        "--fixtures-root",
+                        str(fixtures),
+                        "--report",
+                        str(report),
+                    ]
+                )
+
+            payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(1, result)
+            self.assertEqual("failed", payload["status"])
+            self.assertEqual("preflight", payload["stage"])
+            self.assertIn("no native authority selected", payload["detail"])
+
     def test_write_mode_does_not_claim_public_semantic_equality(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -903,6 +1034,7 @@ class CollectionReportTests(unittest.TestCase):
             self.assertEqual("not_evaluated", payload["ledgerValidationStatus"])
             self.assertEqual("not_evaluated", payload["ledgerDriftStatus"])
             self.assertEqual("not_evaluated", payload["producerTraceStatus"])
+            self.assertEqual("accepted", payload["cases"][0]["ledgerOutcome"])
 
     def test_reports_each_authority_artifact_and_first_failure(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

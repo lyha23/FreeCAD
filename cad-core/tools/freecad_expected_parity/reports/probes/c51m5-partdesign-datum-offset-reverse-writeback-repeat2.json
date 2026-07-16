@@ -1,0 +1,289 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": "RelWithDebInfo",
+      "cCompiler": "/usr/bin/cc",
+      "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+      "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+      "cxxCompiler": "/usr/bin/c++",
+      "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+      "generator": "Ninja",
+      "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+    },
+    "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+    "dirty": true,
+    "dirtyEntries": 135,
+    "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+    "exists": true,
+    "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+    "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+    "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+  },
+  "candidateRoot": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "7464e0dbcc6668cdfc1a595a88d7e8f507a3477045851098c7ec58bbbe834d3b"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "partdesign-datum-offset-reverse-writeback",
+        "fixtureSha256": "d3d314f43659b803cbd8b045dc16e083c938c32f1d89711eb69dcda4abaa52be",
+        "ledgerSha256": "0fb126dd03eb112bf346e69e0e965a68648bd0aa44b070b9a7d0de1397a2692f",
+        "phase": "c51m5",
+        "producerTraceSha256": null,
+        "publicSha256": "6fdbb7c114e49f180e337b21e507df8c5134ebc1d4d7270449c112d7f25e7c45"
+      }
+    ],
+    "phases": 1,
+    "sha256": "363b3d4b4c936c2ccdbc624445bca951a01503c1b872d5e0b093ae7ff89edb55"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/partdesign-datum-offset-reverse-writeback.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-a\", \"--report\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-a.report.json\", \"--fixtures-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": "RelWithDebInfo",
+            "cCompiler": "/usr/bin/cc",
+            "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+            "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+            "cxxCompiler": "/usr/bin/c++",
+            "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+            "generator": "Ninja",
+            "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+          },
+          "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+          "dirty": true,
+          "dirtyEntries": 135,
+          "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+          "exists": true,
+          "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+          "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+        },
+        "candidateRoot": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "0fb126dd03eb112bf346e69e0e965a68648bd0aa44b070b9a7d0de1397a2692f",
+                "path": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-a/c51m5/expected/partdesign-datum-offset-reverse-writeback.freecad.json",
+                "publicSha256": "6fdbb7c114e49f180e337b21e507df8c5134ebc1d4d7270449c112d7f25e7c45",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "partdesign-datum-offset-reverse-writeback",
+            "errors": [],
+            "expected": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/expected/partdesign-datum-offset-reverse-writeback.freecad.json",
+            "fixture": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/partdesign-datum-offset-reverse-writeback.json",
+            "fixtureSha256": "d3d314f43659b803cbd8b045dc16e083c938c32f1d89711eb69dcda4abaa52be",
+            "ledgerOutcome": "rejected",
+            "ledgerSha256": "0fb126dd03eb112bf346e69e0e965a68648bd0aa44b070b9a7d0de1397a2692f",
+            "phase": "c51m5",
+            "publicExpectedSha256": "6fdbb7c114e49f180e337b21e507df8c5134ebc1d4d7270449c112d7f25e7c45",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "7464e0dbcc6668cdfc1a595a88d7e8f507a3477045851098c7ec58bbbe834d3b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/partdesign-datum-offset-reverse-writeback.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-a\", \"--report\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-a.report.json\", \"--fixtures-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures",
+        "freecadcmd": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 47063",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/partdesign-datum-offset-reverse-writeback.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-b\", \"--report\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-b.report.json\", \"--fixtures-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": "RelWithDebInfo",
+            "cCompiler": "/usr/bin/cc",
+            "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+            "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+            "cxxCompiler": "/usr/bin/c++",
+            "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+            "generator": "Ninja",
+            "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+          },
+          "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+          "dirty": true,
+          "dirtyEntries": 135,
+          "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+          "exists": true,
+          "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+          "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+        },
+        "candidateRoot": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "0fb126dd03eb112bf346e69e0e965a68648bd0aa44b070b9a7d0de1397a2692f",
+                "path": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-b/c51m5/expected/partdesign-datum-offset-reverse-writeback.freecad.json",
+                "publicSha256": "6fdbb7c114e49f180e337b21e507df8c5134ebc1d4d7270449c112d7f25e7c45",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "partdesign-datum-offset-reverse-writeback",
+            "errors": [],
+            "expected": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/expected/partdesign-datum-offset-reverse-writeback.freecad.json",
+            "fixture": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/partdesign-datum-offset-reverse-writeback.json",
+            "fixtureSha256": "d3d314f43659b803cbd8b045dc16e083c938c32f1d89711eb69dcda4abaa52be",
+            "ledgerOutcome": "rejected",
+            "ledgerSha256": "0fb126dd03eb112bf346e69e0e965a68648bd0aa44b070b9a7d0de1397a2692f",
+            "phase": "c51m5",
+            "publicExpectedSha256": "6fdbb7c114e49f180e337b21e507df8c5134ebc1d4d7270449c112d7f25e7c45",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "7464e0dbcc6668cdfc1a595a88d7e8f507a3477045851098c7ec58bbbe834d3b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures/c51m5/partdesign-datum-offset-reverse-writeback.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-b\", \"--report\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-b.report.json\", \"--fixtures-root\", \"/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/fixtures",
+        "freecadcmd": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 47063",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-probe-c51m5-partdesign-datum-offset-reverse-writeback.Wx0eGU/repeat/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

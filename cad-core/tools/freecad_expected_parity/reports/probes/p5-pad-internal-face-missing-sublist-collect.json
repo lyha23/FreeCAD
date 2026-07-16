@@ -1,0 +1,130 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": "RelWithDebInfo",
+      "cCompiler": "/usr/bin/cc",
+      "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+      "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+      "cxxCompiler": "/usr/bin/c++",
+      "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+      "generator": "Ninja",
+      "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+    },
+    "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+    "dirty": true,
+    "dirtyEntries": 135,
+    "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+    "exists": true,
+    "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+    "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+    "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+  },
+  "candidateRoot": null,
+  "cases": [
+    {
+      "artifacts": {
+        "candidateWrite": {
+          "status": "not-requested"
+        },
+        "ledgerAuthority": {
+          "status": "not-run"
+        },
+        "ledgerValidation": {
+          "status": "not-run"
+        },
+        "producerTraceDiagnostic": {
+          "status": "not-run"
+        },
+        "publicAuthority": {
+          "status": "not-run"
+        }
+      },
+      "case": "pad-internal-face-missing-sublist",
+      "errors": [
+        {
+          "detail": "target object Pad has no shape",
+          "stage": "collection"
+        }
+      ],
+      "expected": "/private/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures/p5/expected/pad-internal-face-missing-sublist.freecad.json",
+      "fixture": "/private/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures/p5/pad-internal-face-missing-sublist.json",
+      "fixtureSha256": "c06a46f4862ffc46331e19535d20d2faa5fafc3e9447c22f8eaed4e038b12b6f",
+      "ledgerSha256": null,
+      "phase": "p5",
+      "publicExpectedSha256": null,
+      "status": "failed"
+    }
+  ],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "f71b8008bb7187e2b25fc4ac95b749fa62dbeee9725fe816a434e6bb29d4137a"
+  },
+  "collectorInvocation": {
+    "argv": [
+      "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+      "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "--pass",
+      "__cad_core_expected_args_env__"
+    ],
+    "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+    "environment": {
+      "CAD_CORE_EXPECTED_ARGS_JSON": "[\"/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures/p5/pad-internal-face-missing-sublist.json\", \"--fixtures-root\", \"/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures\", \"--out\", \"/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures/p5/expected/pad-internal-face-missing-sublist.freecad.json\", \"--validate-ledger\", \"--report\", \"/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-pad-internal-face-missing-sublist-collect.json\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+    }
+  },
+  "discovered": 1,
+  "failed": 1,
+  "firstFailure": {
+    "artifacts": {
+      "candidateWrite": {
+        "status": "not-requested"
+      },
+      "ledgerAuthority": {
+        "status": "not-run"
+      },
+      "ledgerValidation": {
+        "status": "not-run"
+      },
+      "producerTraceDiagnostic": {
+        "status": "not-run"
+      },
+      "publicAuthority": {
+        "status": "not-run"
+      }
+    },
+    "case": "pad-internal-face-missing-sublist",
+    "errors": [
+      {
+        "detail": "target object Pad has no shape",
+        "stage": "collection"
+      }
+    ],
+    "expected": "/private/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures/p5/expected/pad-internal-face-missing-sublist.freecad.json",
+    "fixture": "/private/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures/p5/pad-internal-face-missing-sublist.json",
+    "fixtureSha256": "c06a46f4862ffc46331e19535d20d2faa5fafc3e9447c22f8eaed4e038b12b6f",
+    "ledgerSha256": null,
+    "phase": "p5",
+    "publicExpectedSha256": null,
+    "status": "failed"
+  },
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/private/tmp/freecad-native-candidate-audit-final.Ce7q1g/p5-pad-internal-face-missing-sublist/fixtures",
+  "freecadcmd": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+  "ledgerDriftStatus": "not_evaluated",
+  "ledgerValidationStatus": "failed",
+  "mode": "collection",
+  "processed": 0,
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: cases[0].publicExpectedSha256",
+    "missing provenance: cases[0].ledgerSha256"
+  ],
+  "publicExpectedStatus": "not_evaluated",
+  "runtime": {
+    "freecadVersion": "1.2.0 revision 47063",
+    "occtVersion": "7.8.1"
+  },
+  "schema": "freecad-fixture-regression-report/v1",
+  "skipped": 0,
+  "status": "failed"
+}

@@ -1,0 +1,287 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": "RelWithDebInfo",
+      "cCompiler": "/usr/bin/cc",
+      "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+      "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+      "cxxCompiler": "/usr/bin/c++",
+      "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+      "generator": "Ninja",
+      "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+    },
+    "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+    "dirty": true,
+    "dirtyEntries": 135,
+    "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+    "exists": true,
+    "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+    "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+    "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+  },
+  "candidateRoot": "/private/tmp/freecad-fixture-sketch.AVdeQB/candidates",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "3c28a4d063362b8226a5b30cb94f999e90e70e61b69f599901d910ac99959c89"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "drifted",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "sketch-underconstrained-no-constraints",
+        "fixtureSha256": "cc5878b9ce8e0cf5a194ef97d9a894b1a12370262df1d0c533a4c5b0a7e5d744",
+        "ledgerSha256": "a430e032f27e3d21e1be92e32e80f63a39dce4aeed1006b5fc4cd18cf86066a3",
+        "phase": "c3m3",
+        "producerTraceSha256": "14e55dc458a4557484cdd03e4d7a9eb6a4c34e844613b0c31ea88b112ae46c9f",
+        "publicSha256": "aa5ad1508cdef1a922d735ab815f278cb02135e456784993881250e210272c4d"
+      }
+    ],
+    "phases": 1,
+    "sha256": "dc229fd27b0b9574ccf95e34dd16fa87b89e87b815f48d7fe52668b96256ae53"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"cad-core/fixtures/c3m3/sketch-underconstrained-no-constraints.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-a\", \"--report\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-a.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": "RelWithDebInfo",
+            "cCompiler": "/usr/bin/cc",
+            "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+            "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+            "cxxCompiler": "/usr/bin/c++",
+            "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+            "generator": "Ninja",
+            "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+          },
+          "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+          "dirty": true,
+          "dirtyEntries": 135,
+          "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+          "exists": true,
+          "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+          "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+        },
+        "candidateRoot": "/private/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "300bcb783e4cfd9a12e4af53377f4f6c0ef9de77bbbe000b480e52abf1a87bd5",
+                "path": "/private/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-a/c3m3/expected/sketch-underconstrained-no-constraints.freecad.json",
+                "publicSha256": "e82bef939384e18b3d68cdc24d936afa2861e5cfee8bb23d32ffbf797e3dbcb6",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-underconstrained-no-constraints",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-underconstrained-no-constraints.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-underconstrained-no-constraints.json",
+            "fixtureSha256": "cc5878b9ce8e0cf5a194ef97d9a894b1a12370262df1d0c533a4c5b0a7e5d744",
+            "ledgerSha256": "a430e032f27e3d21e1be92e32e80f63a39dce4aeed1006b5fc4cd18cf86066a3",
+            "phase": "c3m3",
+            "publicExpectedSha256": "aa5ad1508cdef1a922d735ab815f278cb02135e456784993881250e210272c4d",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "3c28a4d063362b8226a5b30cb94f999e90e70e61b69f599901d910ac99959c89"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"cad-core/fixtures/c3m3/sketch-underconstrained-no-constraints.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-a\", \"--report\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-a.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+        "ledgerDriftStatus": "drifted",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 47063",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"cad-core/fixtures/c3m3/sketch-underconstrained-no-constraints.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-b\", \"--report\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-b.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": "RelWithDebInfo",
+            "cCompiler": "/usr/bin/cc",
+            "cmakeCache": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/CMakeCache.txt",
+            "cmakeCacheSha256": "f71cd3223e222748f1f1e85d83b06b7a57d14dacbe71e08826cfd4cb5769523c",
+            "cxxCompiler": "/usr/bin/c++",
+            "directory": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo",
+            "generator": "Ninja",
+            "homeDirectory": "/Users/li/Chili3DProject/FreeCAD2"
+          },
+          "commit": "240894df7635d82c5fdd8f94f03a724c8bcbae52",
+          "dirty": true,
+          "dirtyEntries": 135,
+          "dirtyStatusSha256": "sha256:72cfc3199c643b616830a0b507b3af4ed1ee1ca06d35934d6766904d9a4d0861",
+          "exists": true,
+          "path": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+          "sha256": "51a6fb775b1f2a4edff5cee1b90a4395674f988748f75d01deb0ce5add0ca674",
+          "sourceRoot": "/Users/li/Chili3DProject/FreeCAD2"
+        },
+        "candidateRoot": "/private/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "300bcb783e4cfd9a12e4af53377f4f6c0ef9de77bbbe000b480e52abf1a87bd5",
+                "path": "/private/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-b/c3m3/expected/sketch-underconstrained-no-constraints.freecad.json",
+                "publicSha256": "e82bef939384e18b3d68cdc24d936afa2861e5cfee8bb23d32ffbf797e3dbcb6",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "sketch-underconstrained-no-constraints",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-underconstrained-no-constraints.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-underconstrained-no-constraints.json",
+            "fixtureSha256": "cc5878b9ce8e0cf5a194ef97d9a894b1a12370262df1d0c533a4c5b0a7e5d744",
+            "ledgerSha256": "a430e032f27e3d21e1be92e32e80f63a39dce4aeed1006b5fc4cd18cf86066a3",
+            "phase": "c3m3",
+            "publicExpectedSha256": "aa5ad1508cdef1a922d735ab815f278cb02135e456784993881250e210272c4d",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "3c28a4d063362b8226a5b30cb94f999e90e70e61b69f599901d910ac99959c89"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"cad-core/fixtures/c3m3/sketch-underconstrained-no-constraints.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-b\", \"--report\", \"/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-b.report.json\", \"--fixtures-root\", \"cad-core/fixtures\", \"--freecadcmd\", \"/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Users/li/Chili3DProject/FreeCAD2/build/relwithdebinfo/bin/FreeCADCmd",
+        "ledgerDriftStatus": "drifted",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 47063",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-fixture-sketch.AVdeQB/candidates/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}
