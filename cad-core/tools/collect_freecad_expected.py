@@ -64,6 +64,7 @@ ACTIVE_TOPO_NAMING_STATE: dict[str, Any] | None = None
 ACTIVE_RESOLVED_REFERENCE_BINDINGS: list[dict[str, str]] = []
 LAST_FREECAD_LEDGER_CAPTURE: dict[str, Any] | None = None
 LAST_FREECAD_PRODUCER_TRACE: dict[str, Any] | None = None
+COLLECT_PRODUCER_TRACE = False
 SUPPORTED_NATIVE_TYPES = {
     "App::FeaturePython",
     "App::Line",
@@ -196,11 +197,46 @@ class NativeExpectedCase(NamedTuple):
     fixture_path: Path
     expected_path: Path
     ledger_path: Path
-    producer_trace_path: Path
+    producer_trace_path: Path | None
+
+
+def is_authority_fixtures_root(fixtures_root: Path) -> bool:
+    return fixtures_root.resolve() == (ROOT / "fixtures").resolve()
+
+
+def load_native_role_catalog(fixtures_root: Path) -> Any:
+    try:
+        try:
+            from freecad_expected_parity.catalog import load_catalog  # type: ignore
+        except ImportError:
+            from tools.freecad_expected_parity.catalog import load_catalog  # type: ignore
+    except ImportError as exc:
+        raise ValueError(f"cannot load fixture role catalog: {exc}") from exc
+    return load_catalog(fixtures_root.parent)
 
 
 def native_expected_manifest(fixtures_root: Path) -> list[NativeExpectedCase]:
-    """Discover native public authority cases and require all regression artifacts."""
+    """Discover native public/ledger authority cases with optional trace diagnostics."""
+
+    if is_authority_fixtures_root(fixtures_root):
+        catalog = load_native_role_catalog(fixtures_root)
+        if catalog.errors:
+            raise ValueError("invalid fixture role catalog: " + "; ".join(catalog.errors))
+        return [
+            NativeExpectedCase(
+                phase=entry.phase,
+                case=entry.case,
+                fixture_path=entry.input_path,
+                expected_path=entry.expected_path,
+                ledger_path=entry.ledger_path,
+                producer_trace_path=(
+                    producer_trace_path_for_expected(entry.expected_path)
+                    if producer_trace_path_for_expected(entry.expected_path).is_file()
+                    else None
+                ),
+            )
+            for entry in catalog.cases
+        ]
 
     manifest: list[NativeExpectedCase] = []
     errors: list[str] = []
@@ -210,7 +246,7 @@ def native_expected_manifest(fixtures_root: Path) -> list[NativeExpectedCase]:
         fixture_path = fixtures_root / phase / f"{case}.json"
         ledger_path = ledger_path_for_expected(expected_path)
         trace_path = producer_trace_path_for_expected(expected_path)
-        for required_path in (fixture_path, ledger_path, trace_path):
+        for required_path in (fixture_path, ledger_path):
             if not required_path.is_file():
                 errors.append(f"missing native fixture artifact: {required_path}")
         manifest.append(
@@ -220,12 +256,37 @@ def native_expected_manifest(fixtures_root: Path) -> list[NativeExpectedCase]:
                 fixture_path=fixture_path,
                 expected_path=expected_path,
                 ledger_path=ledger_path,
-                producer_trace_path=trace_path,
+                producer_trace_path=trace_path if trace_path.is_file() else None,
             )
         )
     if errors:
         raise ValueError("; ".join(errors))
     return manifest
+
+
+def selected_native_expected_manifest(
+    args: argparse.Namespace,
+    fixtures_root: Path,
+) -> list[NativeExpectedCase]:
+    """Select the checked-in native authorities exercised by one repeat campaign."""
+
+    manifest = native_expected_manifest(fixtures_root)
+    if args.all_native:
+        selected = manifest
+    elif args.phase:
+        selected = [entry for entry in manifest if entry.phase == args.phase]
+    elif args.fixture:
+        fixture_path = Path(args.fixture).resolve()
+        selected = [entry for entry in manifest if entry.fixture_path.resolve() == fixture_path]
+    else:
+        selected = []
+    if not selected:
+        selection = args.phase or args.fixture or "all-native"
+        raise ValueError(
+            f"no checked-in native public/ledger authority selected for {selection} "
+            f"under {fixtures_root}"
+        )
+    return selected
 
 
 def script_args(argv: list[str]) -> list[str]:
@@ -261,28 +322,33 @@ def invoked_by_freecad_cli_import() -> bool:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Collect CAD Core public expected, ledger, and producer-trace sidecars from native FreeCAD.",
+        description="Collect native public/ledger authority with optional producer-trace diagnostics.",
     )
     parser.add_argument("fixture", nargs="?", help="Fixture JSON file. Omit with --phase or --all-native.")
     parser.add_argument("--phase", help="Collect every supported fixture in fixtures/<phase>.")
     parser.add_argument(
         "--all-native",
         action="store_true",
-        help="Check every native public-authority fixture with complete regression artifacts.",
+        help="Check every native fixture with complete public/ledger authority artifacts.",
     )
     parser.add_argument("--fixtures-root", default=str(ROOT / "fixtures"), help="Fixture root directory.")
     parser.add_argument("--out", help="Output expected file for a single fixture.")
     parser.add_argument(
         "--check",
         action="store_true",
-        help="Compare regenerated output with checked-in public/ledger authority and trace oracle.",
+        help="Compare regenerated public/ledger authority; use traces only to diagnose mismatches.",
+    )
+    parser.add_argument(
+        "--producer-trace",
+        action="store_true",
+        help="Collect, validate, compare, and write producer-trace diagnostics.",
     )
     parser.add_argument("--pretty", action="store_true", help="Print generated JSON to stdout.")
     parser.add_argument("--skip-unsupported", action="store_true", help="Skip unsupported fixtures in --phase mode.")
     parser.add_argument(
         "--emit-ledger",
         action="store_true",
-        help="Legacy no-op: collector always writes the ledger and producer-trace sidecars.",
+        help="Legacy no-op: collector always writes the ledger sidecar.",
     )
     parser.add_argument(
         "--check-ledger",
@@ -301,7 +367,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=DEFAULT_FREECADCMD,
         help=f"Native producer-enabled FreeCADCmd (default: {DEFAULT_FREECADCMD})",
     )
-    args = parser.parse_args(script_args(argv))
+    collector_argv = script_args(argv)
+    args = parser.parse_args(collector_argv)
+    args._collector_argv = collector_argv
     if args.check_ledger and not args.check:
         parser.error("--check-ledger requires --check")
     if args.all_native and (args.phase or args.fixture):
@@ -314,8 +382,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         parser.error("--repeat greater than 1 requires --check")
     if args.repeat > 1 and not args.candidate_root:
         parser.error("--repeat greater than 1 requires --candidate-root")
-    if args.repeat > 1 and not args.all_native:
-        parser.error("--repeat greater than 1 currently requires --all-native")
+    if args.repeat > 1 and not (args.all_native or args.phase or args.fixture):
+        parser.error("--repeat greater than 1 requires --all-native, --phase, or one fixture")
     if args.candidate_root and not args.check:
         parser.error("--candidate-root requires --check")
     return args
@@ -887,6 +955,9 @@ def drain_producer_trace(doc: Any) -> dict[str, Any]:
 
 def close_document_with_producer_trace(FreeCAD: Any, doc: Any) -> None:
     global LAST_FREECAD_PRODUCER_TRACE
+    if not COLLECT_PRODUCER_TRACE:
+        FreeCAD.closeDocument(doc.Name)
+        return
     try:
         trace = drain_producer_trace(doc)
         if LAST_FREECAD_PRODUCER_TRACE is None or len(trace["events"]) >= len(LAST_FREECAD_PRODUCER_TRACE["events"]):
@@ -903,6 +974,8 @@ def publish_documentless_producer_trace(
     reason: str,
     target: str,
 ) -> None:
+    if not COLLECT_PRODUCER_TRACE:
+        return
     doc = FreeCAD.newDocument("CadCoreExpectedProducerTrace")
     try:
         record = getattr(doc, "recordElementMapProducerTraceCheckpoint", None)
@@ -972,7 +1045,7 @@ def write_candidate_artifacts(
     expected_path: Path,
     public_expected: dict[str, Any],
     ledger: dict[str, Any],
-    producer_trace: dict[str, Any],
+    producer_trace: dict[str, Any] | None,
 ) -> Path:
     validate_regression_output_path(
         candidate_root,
@@ -986,7 +1059,8 @@ def write_candidate_artifacts(
     )
     atomic_write_json(candidate_path, public_expected)
     atomic_write_json(ledger_path_for_expected(candidate_path), ledger)
-    atomic_write_json(producer_trace_path_for_expected(candidate_path), producer_trace)
+    if producer_trace is not None:
+        atomic_write_json(producer_trace_path_for_expected(candidate_path), producer_trace)
     return candidate_path
 
 
@@ -996,8 +1070,10 @@ def compare_candidate_runs(
     *,
     fixtures_root: Path,
     variations: list[dict[str, Any]] | None = None,
+    producer_diagnostics: list[dict[str, Any]] | None = None,
+    ledger_drifts: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
-    """Compare every later candidate run with the first using authority comparators."""
+    """Compare public/ledger authority; use traces only to diagnose mismatches."""
 
     errors: list[dict[str, Any]] = []
     if len(run_roots) < 2:
@@ -1018,10 +1094,8 @@ def compare_candidate_runs(
             required = (
                 baseline_path,
                 ledger_path_for_expected(baseline_path),
-                producer_trace_path_for_expected(baseline_path),
                 actual_path,
                 ledger_path_for_expected(actual_path),
-                producer_trace_path_for_expected(actual_path),
             )
             missing = [str(path) for path in required if not path.is_file()]
             if missing:
@@ -1037,7 +1111,8 @@ def compare_candidate_runs(
                 continue
             baseline_response = json.loads(baseline_path.read_text(encoding="utf-8"))
             actual_response = json.loads(actual_path.read_text(encoding="utf-8"))
-            if not compare_json(baseline_path, actual_response):
+            public_equal = compare_json(baseline_path, actual_response)
+            if not public_equal:
                 errors.append(
                     {
                         "phase": entry.phase,
@@ -1047,51 +1122,80 @@ def compare_candidate_runs(
                         "detail": "candidate public expected differs from run 1",
                     }
                 )
-            if not compare_ledger_json(
+            ledger_equal = compare_ledger_json(
                 ledger_path_for_expected(baseline_path),
                 json.loads(ledger_path_for_expected(actual_path).read_text(encoding="utf-8")),
-            ):
-                errors.append(
+            )
+            if not ledger_equal and ledger_drifts is not None:
+                ledger_drifts.append(
                     {
                         "phase": entry.phase,
                         "case": entry.case,
                         "run": run_index,
                         "artifact": "ledger",
+                        "status": "drifted",
                         "detail": "candidate ledger differs from run 1",
                     }
                 )
-            try:
-                trace_result = compare_native_producer_traces(
-                    json.loads(producer_trace_path_for_expected(baseline_path).read_text(encoding="utf-8")),
-                    json.loads(producer_trace_path_for_expected(actual_path).read_text(encoding="utf-8")),
-                    fixture=load_fixture(entry.fixture_path),
-                    expected_response=baseline_response,
-                    actual_response=actual_response,
-                )
-            except Exception as exc:
-                errors.append(
-                    {
-                        "phase": entry.phase,
-                        "case": entry.case,
-                        "run": run_index,
-                        "artifact": "producer-trace",
-                        "detail": str(exc),
-                    }
-                )
-            else:
-                if trace_result.status != "equal":
-                    errors.append(
+            if public_equal and ledger_equal:
+                continue
+            baseline_trace_path = producer_trace_path_for_expected(baseline_path)
+            actual_trace_path = producer_trace_path_for_expected(actual_path)
+            missing_traces = [
+                str(path)
+                for path in (baseline_trace_path, actual_trace_path)
+                if not path.is_file()
+            ]
+            if missing_traces:
+                if producer_diagnostics is not None:
+                    producer_diagnostics.append(
                         {
                             "phase": entry.phase,
                             "case": entry.case,
                             "run": run_index,
                             "artifact": "producer-trace",
+                            "status": "unavailable",
+                            "detail": missing_traces,
+                        }
+                    )
+                continue
+            try:
+                trace_result = compare_native_producer_traces(
+                    json.loads(baseline_trace_path.read_text(encoding="utf-8")),
+                    json.loads(actual_trace_path.read_text(encoding="utf-8")),
+                    fixture=load_fixture(entry.fixture_path),
+                    expected_response=baseline_response,
+                    actual_response=actual_response,
+                )
+            except Exception as exc:
+                if producer_diagnostics is not None:
+                    producer_diagnostics.append(
+                        {
+                            "phase": entry.phase,
+                            "case": entry.case,
+                            "run": run_index,
+                            "artifact": "producer-trace",
+                            "status": "invalid",
+                            "detail": str(exc),
+                        }
+                    )
+            else:
+                if producer_diagnostics is not None:
+                    producer_diagnostics.append(
+                        {
+                            "phase": entry.phase,
+                            "case": entry.case,
+                            "run": run_index,
+                            "artifact": "producer-trace",
+                            "status": trace_result.status,
+                            "equivalence": trace_result.equivalence,
                             "classification": trace_result.classification,
                             "jsonPointer": trace_result.json_pointer,
                             "detail": trace_result.detail,
+                            "rawDifferenceCount": trace_result.raw_difference_count,
                         }
                     )
-                elif trace_result.equivalence == "projected":
+                if trace_result.status == "equal" and trace_result.equivalence == "projected":
                     if variations is not None:
                         variations.append(
                             {
@@ -1112,6 +1216,21 @@ def compare_candidate_runs(
     return errors
 
 
+def producer_trace_status(diagnostics: Sequence[Mapping[str, Any]]) -> str:
+    """Summarize the optional trace lane without affecting public authority."""
+
+    statuses = {item.get("status") for item in diagnostics}
+    if not diagnostics or statuses <= {"not_evaluated"}:
+        return "not_evaluated"
+    if "different" in statuses:
+        return "failed"
+    if "invalid" in statuses:
+        return "invalid"
+    if "unavailable" in statuses:
+        return "unavailable"
+    return "passed"
+
+
 def native_manifest_report(manifest: Sequence[NativeExpectedCase]) -> dict[str, Any]:
     entries = [
         {
@@ -1120,14 +1239,25 @@ def native_manifest_report(manifest: Sequence[NativeExpectedCase]) -> dict[str, 
             "fixtureSha256": file_sha256(entry.fixture_path),
             "publicSha256": file_sha256(entry.expected_path),
             "ledgerSha256": file_sha256(entry.ledger_path),
-            "producerTraceSha256": file_sha256(entry.producer_trace_path),
+            "producerTraceSha256": (
+                file_sha256(entry.producer_trace_path)
+                if entry.producer_trace_path is not None
+                else None
+            ),
         }
         for entry in manifest
+    ]
+    authority_entries = [
+        {
+            key: entry[key]
+            for key in ("phase", "case", "fixtureSha256", "publicSha256", "ledgerSha256")
+        }
+        for entry in entries
     ]
     return {
         "phases": len({entry.phase for entry in manifest}),
         "cases": len(manifest),
-        "sha256": canonical_json_sha256(entries),
+        "sha256": canonical_json_sha256(authority_entries),
         "entries": entries,
     }
 
@@ -1236,11 +1366,16 @@ def write_regression_failure_report(
             "schema": "freecad-fixture-regression-report/v1",
             "mode": "repeated-native-check" if args.repeat > 1 else "collection",
             "status": "failed",
+            "publicExpectedStatus": "not_evaluated",
+            "ledgerValidationStatus": "not_evaluated",
+            "ledgerDriftStatus": "not_evaluated",
+            "producerTraceStatus": "not_evaluated",
             "stage": stage,
             "detail": detail,
             "fixturesRoot": str(fixtures_root.resolve()),
             "candidateRoot": str(Path(args.candidate_root).resolve()) if args.candidate_root else None,
             "candidate": candidate_provenance(Path(args.freecadcmd)),
+            "collector": collector_receipt(),
         },
     )
 
@@ -1251,8 +1386,16 @@ def regression_child_argv(
     candidate_root: Path,
     report: Path,
 ) -> list[str]:
+    if args.all_native:
+        selection = ["--all-native"]
+    elif args.phase:
+        selection = ["--phase", args.phase]
+    elif args.fixture:
+        selection = [args.fixture]
+    else:  # parse_args() rejects this for repeated checks; keep the helper fail-closed.
+        raise ValueError("repeated check has no fixture selection")
     child = [
-        "--all-native",
+        *selection,
         "--check",
         "--validate-ledger",
         "--repeat",
@@ -1266,7 +1409,73 @@ def regression_child_argv(
         "--freecadcmd",
         args.freecadcmd,
     ]
+    if args.skip_unsupported:
+        child.append("--skip-unsupported")
+    if args.producer_trace:
+        child.append("--producer-trace")
     return child
+
+
+def collector_receipt() -> dict[str, Any]:
+    script = Path(__file__).resolve()
+    return {
+        "path": str(script),
+        "sha256": file_sha256(script),
+    }
+
+
+def freecadcmd_invocation(argv: list[str], args: argparse.Namespace) -> dict[str, Any]:
+    """Describe the exact wrapper command and argument transport used for one run."""
+
+    return {
+        "argv": [args.freecadcmd, str(Path(__file__).resolve()), "--pass", ENV_ARG_MARKER],
+        "cwd": str(Path.cwd().resolve()),
+        "environment": {
+            ENV_ARG_NAME: json.dumps(script_args(argv), ensure_ascii=False),
+        },
+    }
+
+
+def freecad_runtime_receipt() -> dict[str, str | None]:
+    """Record native runtime versions when executing inside FreeCADCmd."""
+
+    FreeCAD = sys.modules.get("FreeCAD")
+    if FreeCAD is None:
+        return {"freecadVersion": None, "occtVersion": None}
+    return {
+        "freecadVersion": freecad_version(FreeCAD),
+        "occtVersion": occt_version_from_runtime("unavailable"),
+    }
+
+
+def provenance_warnings(report: Mapping[str, Any]) -> list[str]:
+    """Report missing traceability details without changing collection verdicts."""
+
+    warnings: list[str] = []
+    candidate = report.get("candidate")
+    runtime = report.get("runtime")
+    collector = report.get("collector")
+    invocation = report.get("collectorInvocation")
+    checks = {
+        "FreeCADCmd path": candidate.get("path") if isinstance(candidate, Mapping) else None,
+        "FreeCADCmd SHA256": candidate.get("sha256") if isinstance(candidate, Mapping) else None,
+        "FreeCAD version": runtime.get("freecadVersion") if isinstance(runtime, Mapping) else None,
+        "OCCT version": runtime.get("occtVersion") if isinstance(runtime, Mapping) else None,
+        "collector SHA256": collector.get("sha256") if isinstance(collector, Mapping) else None,
+        "source commit": candidate.get("commit") if isinstance(candidate, Mapping) else None,
+        "dirty summary": candidate.get("dirty") if isinstance(candidate, Mapping) else None,
+        "collector invocation": invocation.get("argv") if isinstance(invocation, Mapping) else None,
+    }
+    for label, value in checks.items():
+        if value is None or value == "" or value == "unavailable":
+            warnings.append(f"missing provenance: {label}")
+    for index, case in enumerate(report.get("cases", [])):
+        if not isinstance(case, Mapping):
+            continue
+        for key in ("fixtureSha256", "publicExpectedSha256", "ledgerSha256"):
+            if not case.get(key):
+                warnings.append(f"missing provenance: cases[{index}].{key}")
+    return warnings
 
 
 def run_label(index: int) -> str:
@@ -1275,13 +1484,44 @@ def run_label(index: int) -> str:
     return f"run-{index + 1}"
 
 
+def repeated_run_passed(
+    run: Mapping[str, Any],
+    *,
+    expected_cases: int,
+    producer_trace_requested: bool,
+) -> bool:
+    report = run.get("report", {})
+    if not isinstance(report, Mapping):
+        return False
+    if (
+        run.get("returncode") != 0
+        or report.get("status") != "passed"
+        or report.get("publicExpectedStatus") != "passed"
+        or report.get("ledgerValidationStatus") != "passed"
+        or report.get("ledgerDriftStatus") not in {"unchanged", "drifted"}
+        or report.get("discovered") != expected_cases
+        or report.get("processed") != expected_cases
+        or report.get("skipped") != 0
+        or report.get("failed") != 0
+    ):
+        return False
+    producer_status = report.get("producerTraceStatus")
+    if producer_trace_requested:
+        return producer_status in {
+            "not_evaluated",
+            "passed",
+            "failed",
+            "invalid",
+            "unavailable",
+        }
+    return producer_status == "not_evaluated"
+
+
 def run_repeated_checks(args: argparse.Namespace) -> int:
     """Run the same native regression check independently and compare candidates."""
 
     fixtures_root = Path(args.fixtures_root)
-    manifest = native_expected_manifest(fixtures_root)
-    if not manifest:
-        raise ValueError(f"no checked-in native expected fixtures found under {fixtures_root}")
+    manifest = selected_native_expected_manifest(args, fixtures_root)
     candidate_root = Path(args.candidate_root)
     validate_regression_output_path(
         candidate_root,
@@ -1309,6 +1549,7 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
             report=run_report,
         )
         child_args = parse_args(child_argv)
+        invocation = freecadcmd_invocation(child_argv, child_args)
         returncode = run_via_freecadcmd(child_argv, child_args)
         report_payload: dict[str, Any] = {}
         if run_report.is_file():
@@ -1318,27 +1559,31 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
                 "label": label,
                 "root": str(run_root.resolve()),
                 "returncode": returncode,
+                "collectorInvocation": invocation,
                 "report": report_payload,
             }
         )
         run_roots.append(run_root)
 
     variations: list[dict[str, Any]] = []
+    producer_diagnostics: list[dict[str, Any]] = []
+    ledger_drifts: list[dict[str, Any]] = []
     differences = compare_candidate_runs(
         manifest,
         run_roots,
         fixtures_root=fixtures_root,
         variations=variations,
+        producer_diagnostics=producer_diagnostics if args.producer_trace else None,
+        ledger_drifts=ledger_drifts,
     )
     run_failures = [
         run
         for run in run_results
-        if run["returncode"] != 0
-        or run["report"].get("status") != "passed"
-        or run["report"].get("discovered") != len(manifest)
-        or run["report"].get("processed") != len(manifest)
-        or run["report"].get("skipped") != 0
-        or run["report"].get("failed") != 0
+        if not repeated_run_passed(
+            run,
+            expected_cases=len(manifest),
+            producer_trace_requested=args.producer_trace,
+        )
     ]
     status = "passed" if not run_failures and not differences else "failed"
     first_failure: dict[str, Any] | None = None
@@ -1351,10 +1596,14 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
                 "caseResult": run_first_failure,
             }
             break
-        if run["returncode"] != 0 or run["report"].get("status") != "passed":
+        if not repeated_run_passed(
+            run,
+            expected_cases=len(manifest),
+            producer_trace_requested=args.producer_trace,
+        ):
             first_failure = {
                 "run": run["label"],
-                "kind": "run-failure",
+                "kind": "run-or-report-failure",
                 "returncode": run["returncode"],
                 "reportStatus": run["report"].get("status"),
             }
@@ -1364,30 +1613,69 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
             "kind": "candidate-determinism",
             **differences[0],
         }
+    public_expected_status = (
+        "passed"
+        if not any(
+            run["report"].get("publicExpectedStatus") != "passed"
+            for run in run_results
+        )
+        and not any(item.get("artifact") == "public" for item in differences)
+        else "failed"
+    )
+    ledger_validation_status = (
+        "passed"
+        if not any(
+            run["report"].get("ledgerValidationStatus") != "passed"
+            for run in run_results
+        )
+        else "failed"
+    )
+    ledger_drift_status = (
+        "drifted"
+        if any(
+            run["report"].get("ledgerDriftStatus") == "drifted"
+            for run in run_results
+        )
+        or ledger_drifts
+        else "unchanged"
+    )
+    producer_status = producer_trace_status(producer_diagnostics)
     final_report = {
         "schema": "freecad-fixture-regression-report/v1",
         "mode": "repeated-native-check",
         "status": status,
+        "publicExpectedStatus": public_expected_status,
+        "ledgerValidationStatus": ledger_validation_status,
+        "ledgerDriftStatus": ledger_drift_status,
+        "producerTraceStatus": producer_status,
         "fixturesRoot": str(fixtures_root.resolve()),
         "candidateRoot": str(candidate_root.resolve()),
         "candidate": candidate_provenance(Path(args.freecadcmd)),
+        "collector": collector_receipt(),
         "manifest": native_manifest_report(manifest),
         "runs": run_results,
         "candidateRunDifferences": differences,
+        "candidateRunLedgerDrifts": ledger_drifts,
         "candidateRunVariations": variations,
+        "producerTraceDiagnostics": producer_diagnostics,
         "summary": {
-            "rawDifferentCases": len(variations) + len(differences),
+            "rawDifferentCases": sum(
+                item.get("status") != "equal"
+                or item.get("equivalence") == "projected"
+                for item in producer_diagnostics
+            ),
             "projectedEquivalentCases": len(variations),
             "semanticDifferentCases": sum(
-                item.get("artifact") == "producer-trace" for item in differences
+                item.get("status") == "different" for item in producer_diagnostics
             ),
             "invalidCases": sum(
-                item.get("artifact") == "producer-trace"
-                and str(item.get("classification", "")).startswith("invalid")
-                for item in differences
+                item.get("status") == "invalid" for item in producer_diagnostics
             ),
         },
         "firstFailure": first_failure,
+        "firstProducerTraceDiagnostic": (
+            producer_diagnostics[0] if producer_diagnostics else None
+        ),
     }
     report_path = Path(args.report) if args.report else candidate_root / "report.json"
     atomic_write_json(report_path, final_report)
@@ -1411,6 +1699,8 @@ def fixture_paths(args: argparse.Namespace) -> list[Path]:
         if args.fixture:
             raise ValueError("--phase and fixture path are mutually exclusive")
         catalog = fixture_role_catalog(args)
+        if not catalog.cases:
+            raise ValueError(f"no native authority selected for phase {args.phase}")
         return [item.input_path for item in catalog.cases]
     if not args.fixture:
         raise ValueError("fixture path or --phase is required")
@@ -11239,6 +11529,8 @@ def expected_has_diagnostic_only_payload(path: Path) -> bool:
 
 
 def run_inside_freecad(args: argparse.Namespace) -> int:
+    global COLLECT_PRODUCER_TRACE
+    COLLECT_PRODUCER_TRACE = args.producer_trace
     fixtures_root = Path(args.fixtures_root)
     if args.candidate_root:
         validate_regression_output_path(
@@ -11257,7 +11549,10 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
     processed = 0
     case_results: list[dict[str, Any]] = []
     paths = fixture_paths(args)
-    if args.phase:
+    # A repeat/check candidate root is an explicit native-authority campaign.
+    # Non-native roles remain in the catalogue report, but they are outside this
+    # execution selection and must not manufacture skipped cases for the gate.
+    if args.phase and not (args.check and args.candidate_root):
         for entry in fixture_role_catalog(args).skipped:
             role = entry["role"]
             reason = entry["reason"]
@@ -11281,6 +11576,13 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             "case": fixture_path.stem,
             "fixture": str(fixture_path.resolve()),
             "expected": str(out_path.resolve()),
+            "fixtureSha256": file_sha256(fixture_path),
+            "publicExpectedSha256": file_sha256(out_path) if out_path.is_file() else None,
+            "ledgerSha256": (
+                file_sha256(ledger_path_for_expected(out_path))
+                if ledger_path_for_expected(out_path).is_file()
+                else None
+            ),
             "status": "failed",
             "artifacts": {
                 "publicAuthority": {"status": "not-run"},
@@ -11349,30 +11651,34 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             case_results.append(case_result)
             continue
 
-        if LAST_FREECAD_PRODUCER_TRACE is None:
-            print(f"failed producer trace {fixture_path}: native collector did not create a document trace", file=sys.stderr)
-            failures += 1
-            record_case_error("producer-trace-collection", "native collector did not create a document trace")
-            case_results.append(case_result)
-            continue
-        producer_trace = copy.deepcopy(LAST_FREECAD_PRODUCER_TRACE)
-        try:
-            producer_trace = bind_producer_trace_artifacts(
-                producer_trace,
-                input_document=fixture,
-                response_document=payload,
-            )
-        except Exception as exc:
-            print(f"failed producer trace binding {fixture_path}: {exc}", file=sys.stderr)
-            failures += 1
+        producer_trace: dict[str, Any] | None = None
+        if not args.producer_trace:
             case_result["artifacts"]["producerTraceDiagnostic"] = {
-                "status": "invalid",
-                "detail": str(exc),
+                "status": "not_evaluated",
+                "reason": "disabled-by-request",
             }
-            record_case_error("producer-trace-binding", str(exc))
-            case_results.append(case_result)
-            continue
-        case_result["artifacts"]["producerTraceDiagnostic"] = {"status": "generated"}
+        elif LAST_FREECAD_PRODUCER_TRACE is None:
+            case_result["artifacts"]["producerTraceDiagnostic"] = {
+                "status": "unavailable",
+                "detail": "native collector did not create a document trace",
+            }
+        else:
+            producer_trace = copy.deepcopy(LAST_FREECAD_PRODUCER_TRACE)
+            try:
+                producer_trace = bind_producer_trace_artifacts(
+                    producer_trace,
+                    input_document=fixture,
+                    response_document=payload,
+                )
+            except Exception as exc:
+                print(f"invalid producer trace binding {fixture_path}: {exc}", file=sys.stderr)
+                producer_trace = None
+                case_result["artifacts"]["producerTraceDiagnostic"] = {
+                    "status": "invalid",
+                    "detail": str(exc),
+                }
+            else:
+                case_result["artifacts"]["producerTraceDiagnostic"] = {"status": "generated"}
 
         try:
             ledger = collect_expected_ledger(fixture_path, fixture, payload, target_override)
@@ -11397,6 +11703,8 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
                 case_result["artifacts"]["candidateWrite"] = {
                     "status": "written",
                     "path": str(candidate_path.resolve()),
+                    "publicSha256": file_sha256(candidate_path),
+                    "ledgerSha256": file_sha256(ledger_path_for_expected(candidate_path)),
                 }
             public_equal = compare_json(out_path, payload)
             case_result["artifacts"]["publicAuthority"] = {
@@ -11409,60 +11717,52 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
             case_result["artifacts"]["ledgerAuthority"] = {
                 "status": "equal" if ledger_equal else "different",
             }
-            if not ledger_equal:
-                failures += 1
-                record_case_error("ledger-authority", "candidate ledger differs")
-            trace_path = producer_trace_path_for_expected(out_path)
-            if not trace_path.exists():
-                print(f"missing expected producer trace: {trace_path}", file=sys.stderr)
-                failures += 1
-                case_result["artifacts"]["producerTraceDiagnostic"] = {
-                    "status": "missing",
-                    "path": str(trace_path.resolve()),
-                }
-                record_case_error("producer-trace-diagnostic", "checked-in producer trace is missing")
-            else:
-                try:
-                    trace_comparison = compare_native_producer_traces(
-                        json.loads(trace_path.read_text(encoding="utf-8")),
-                        producer_trace,
-                        fixture=fixture,
-                        expected_response=json.loads(out_path.read_text(encoding="utf-8")),
-                        actual_response=payload,
-                    )
+            if public_equal and ledger_equal:
+                if producer_trace is not None:
                     case_result["artifacts"]["producerTraceDiagnostic"] = {
-                        "status": trace_comparison.status,
-                        "classification": trace_comparison.classification,
-                        "jsonPointer": trace_comparison.json_pointer,
-                        "detail": trace_comparison.detail,
+                        "status": "not_evaluated",
+                        "reason": "public-ledger-aligned",
                     }
-                    if trace_comparison.status != "equal":
-                        print(
-                            "expected producer trace differs: "
-                            f"{trace_path}: {trace_comparison.classification} "
-                            f"{trace_comparison.json_pointer or ''}",
-                            file=sys.stderr,
-                        )
-                        failures += 1
-                        record_case_error(
-                            "producer-trace-diagnostic",
-                            f"{trace_comparison.classification}: {trace_comparison.detail}",
-                        )
-                except Exception as exc:
-                    print(f"invalid producer trace comparison {trace_path}: {exc}", file=sys.stderr)
-                    failures += 1
+            elif producer_trace is not None:
+                trace_path = producer_trace_path_for_expected(out_path)
+                if not trace_path.exists():
                     case_result["artifacts"]["producerTraceDiagnostic"] = {
-                        "status": "invalid",
-                        "detail": str(exc),
+                        "status": "unavailable",
+                        "path": str(trace_path.resolve()),
+                        "detail": "checked-in producer trace is missing",
                     }
-                    record_case_error("producer-trace-diagnostic", str(exc))
+                else:
+                    try:
+                        trace_comparison = compare_native_producer_traces(
+                            json.loads(trace_path.read_text(encoding="utf-8")),
+                            producer_trace,
+                            fixture=fixture,
+                            expected_response=json.loads(out_path.read_text(encoding="utf-8")),
+                            actual_response=payload,
+                        )
+                        case_result["artifacts"]["producerTraceDiagnostic"] = {
+                            "status": trace_comparison.status,
+                            "classification": trace_comparison.classification,
+                            "jsonPointer": trace_comparison.json_pointer,
+                            "detail": trace_comparison.detail,
+                        }
+                    except Exception as exc:
+                        print(f"invalid producer trace comparison {trace_path}: {exc}", file=sys.stderr)
+                        case_result["artifacts"]["producerTraceDiagnostic"] = {
+                            "status": "invalid",
+                            "detail": str(exc),
+                        }
         else:
             atomic_write_json(out_path, payload)
             atomic_write_json(ledger_path_for_expected(out_path), ledger)
-            atomic_write_json(producer_trace_path_for_expected(out_path), producer_trace)
+            if producer_trace is not None:
+                atomic_write_json(producer_trace_path_for_expected(out_path), producer_trace)
+            case_result["publicExpectedSha256"] = file_sha256(out_path)
+            case_result["ledgerSha256"] = file_sha256(ledger_path_for_expected(out_path))
             case_result["artifacts"]["publicAuthority"] = {"status": "written"}
             case_result["artifacts"]["ledgerAuthority"] = {"status": "written"}
-            case_result["artifacts"]["producerTraceDiagnostic"] = {"status": "written"}
+            if producer_trace is not None:
+                case_result["artifacts"]["producerTraceDiagnostic"] = {"status": "written"}
         if args.validate_ledger:
             try:
                 if args.check:
@@ -11500,9 +11800,68 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
 
     if args.report:
         first_failure = next((case for case in case_results if case["status"] == "failed"), None)
-        atomic_write_json(
-            Path(args.report),
-            {
+        producer_diagnostics = []
+        for case in case_results:
+            artifacts = case.get("artifacts", {})
+            public_status = artifacts.get("publicAuthority", {}).get("status")
+            ledger_status = artifacts.get("ledgerAuthority", {}).get("status")
+            if not args.producer_trace:
+                continue
+            if public_status != "different" and ledger_status != "different" and artifacts.get(
+                "producerTraceDiagnostic", {}
+            ).get("status") == "not_evaluated":
+                continue
+            diagnostic = artifacts.get("producerTraceDiagnostic")
+            if isinstance(diagnostic, dict):
+                producer_diagnostics.append(
+                    {
+                        "phase": case.get("phase"),
+                        "case": case.get("case"),
+                        "artifact": "producer-trace",
+                        **diagnostic,
+                    }
+                )
+        orchestration_status = (
+            "passed" if failures == 0 and processed == len(paths) else "failed"
+        )
+        if args.check:
+            public_expected_status = (
+                "passed"
+                if paths
+                and all(
+                    case.get("artifacts", {}).get("publicAuthority", {}).get("status")
+                    == "equal"
+                    for case in case_results
+                    if case.get("status") != "skipped"
+                )
+                else "failed"
+            )
+        else:
+            public_expected_status = "not_evaluated"
+        if args.validate_ledger:
+            ledger_validation_status = (
+                "passed"
+                if paths
+                and all(
+                    case.get("artifacts", {}).get("ledgerValidation", {}).get("status") == "valid"
+                    for case in case_results
+                    if case.get("status") != "skipped"
+                )
+                else "failed"
+            )
+        else:
+            ledger_validation_status = "not_evaluated"
+        ledger_drift_status = (
+            "drifted"
+            if args.check
+            and any(
+                case.get("artifacts", {}).get("ledgerAuthority", {}).get("status") == "different"
+                for case in case_results
+            )
+            else "unchanged" if args.check else "not_evaluated"
+        )
+        producer_status = producer_trace_status(producer_diagnostics)
+        report_payload = {
                 "schema": "freecad-fixture-regression-report/v1",
                 "mode": "collection",
                 "fixturesRoot": str(fixtures_root.resolve()),
@@ -11511,16 +11870,31 @@ def run_inside_freecad(args: argparse.Namespace) -> int:
                     Path(args.freecadcmd),
                     capture_source_control=not getattr(args, "embedded_backend", False),
                 ),
+                "collector": collector_receipt(),
+                "collectorInvocation": freecadcmd_invocation(
+                    list(getattr(args, "_collector_argv", [])),
+                    args,
+                ),
+                "runtime": freecad_runtime_receipt(),
                 "candidateRoot": str(Path(args.candidate_root).resolve()) if args.candidate_root else None,
                 "discovered": len(paths),
                 "processed": processed,
                 "skipped": skipped,
                 "failed": failures,
-                "status": "passed" if failures == 0 and processed == len(paths) else "failed",
+                "status": orchestration_status,
+                "publicExpectedStatus": public_expected_status,
+                "ledgerValidationStatus": ledger_validation_status,
+                "ledgerDriftStatus": ledger_drift_status,
+                "producerTraceStatus": producer_status,
                 "cases": case_results,
                 "firstFailure": first_failure,
-            },
-        )
+                "producerTraceDiagnostics": producer_diagnostics,
+                "firstProducerTraceDiagnostic": (
+                    producer_diagnostics[0] if producer_diagnostics else None
+                ),
+            }
+        report_payload["provenanceWarnings"] = provenance_warnings(report_payload)
+        atomic_write_json(Path(args.report), report_payload)
     if args.phase or args.all_native:
         print(f"processed={processed} skipped={skipped} failed={failures}", file=sys.stderr)
     return 1 if failures else 0
@@ -11867,10 +12241,14 @@ def run_embedded(
 def run_via_freecadcmd(argv: list[str], args: argparse.Namespace) -> int:
     # FreeCAD's --pass is multitoken but option-looking values can still be parsed
     # by the outer CLI. Keep wrapper invocations lossless by passing real args via env.
+    invocation = freecadcmd_invocation(argv, args)
     env = os.environ.copy()
-    env[ENV_ARG_NAME] = json.dumps(script_args(argv), ensure_ascii=False)
-    command = [args.freecadcmd, str(Path(__file__).resolve()), "--pass", ENV_ARG_MARKER]
-    return subprocess.run(command, cwd=Path.cwd(), env=env).returncode
+    env.update(invocation["environment"])
+    return subprocess.run(
+        invocation["argv"],
+        cwd=Path(invocation["cwd"]),
+        env=env,
+    ).returncode
 
 
 def main(argv: list[str] | None = None) -> int:
