@@ -1,0 +1,34 @@
+{
+  "case": "part-offset2d-open-wire-no-fill",
+  "evidence": {
+    "postRepeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m4-part-offset2d-open-wire-no-fill-post-repeat2.json",
+      "sha256": "4af016e56d8ebb5a68637f3ca196151cd1d6739914b606a8ce77f61510b96ae3"
+    },
+    "promotionReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m4-part-offset2d-open-wire-no-fill.json",
+      "sha256": "22e1f08a5e92a3f2c4499bfe690e20867107db3cc8ed677170f6ccfd7c8bb6a4"
+    }
+  },
+  "failure": {
+    "artifact": "public",
+    "kind": "candidate-determinism"
+  },
+  "phase": "c3m4",
+  "preservedInput": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-offset2d-open-wire-no-fill.json",
+    "sha256": "6dd77c3cd4612244a10c4d821332438d52bc6a63ab460fb8e8eb2e164ff53a97"
+  },
+  "reason": "post-promotion-public-nondeterminism",
+  "revokedArtifacts": [
+    "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-open-wire-no-fill.freecad.json",
+    "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-open-wire-no-fill.freecad.ledger.json",
+    "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m4-part-offset2d-open-wire-no-fill.json"
+  ],
+  "roleTransition": {
+    "from": "native",
+    "to": "unsupported"
+  },
+  "schema": "freecad-fixture-authority-revocation/v1",
+  "status": "passed"
+}

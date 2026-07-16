@@ -1,0 +1,82 @@
+{
+  "case": "subshape-binder-basic-support-whole-face-edge-list",
+  "phase": "c8m1",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "25cdae1a88355658c663c79dc44733cb86aa02004d1411dce57e6dbbcc6ccfd1",
+    "manifestBeforeSha256": "88da87027441734fc09869e6ff847eb4bd9a67ace68ea98548ca7aab4297ab47",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c8m1-subshape-binder-basic-support-whole-face-edge-list-collect.json",
+      "sha256": "a4476efce455936a6e3a44a6c7e562e8a8247575336c1994a548d2bb3bbce50a"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/subshape-binder-basic-support-whole-face-edge-list.json",
+      "sha256": "e28f326cffd2c10765b9d6d1b049801b966e3747b6cb318bcfc867d8f21dab33"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/expected/subshape-binder-basic-support-whole-face-edge-list.freecad.ledger.json",
+      "sha256": "808d462a99432dde7a773ed41d123880c92226b058684fc373b923525a99a93d"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/expected/subshape-binder-basic-support-whole-face-edge-list.freecad.json",
+      "sha256": "f131de7a4f876889e17c9af4be4bb351a131300e1d95b4708818a532007dda6a"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c8m1-subshape-binder-basic-support-whole-face-edge-list-repeat2.json",
+      "sha256": "6bbc35695ad00753f2980b6952b9d03f8c29dcf480519783a1eec6387e75dd6a"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/subshape-binder-basic-support-whole-face-edge-list.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/expected/subshape-binder-basic-support-whole-face-edge-list.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c8m1-subshape-binder-basic-support-whole-face-edge-list.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/expected/subshape-binder-basic-support-whole-face-edge-list.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

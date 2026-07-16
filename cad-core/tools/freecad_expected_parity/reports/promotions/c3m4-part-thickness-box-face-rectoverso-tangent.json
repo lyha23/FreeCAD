@@ -1,0 +1,82 @@
+{
+  "case": "part-thickness-box-face-rectoverso-tangent",
+  "phase": "c3m4",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "61cf7c13630db6dd6466ece73cd27b5a58aa0258fcd56e94aa2028d25823f6cd",
+    "manifestBeforeSha256": "ed7316072e43b298dff7a1e687f39aaec4dc213e69fef9a21d6dad26051d4173",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m4-part-thickness-box-face-rectoverso-tangent-collect.json",
+      "sha256": "6be350208567606facf60e5137ad3cccae585fe416b74f66e0ccf9485c0ecb6e"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m4/part-thickness-box-face-rectoverso-tangent.json",
+      "sha256": "070965d00437adcd75bcbca832752260c9d018a04f14358bbc7305cbd7260e0b"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m4/expected/part-thickness-box-face-rectoverso-tangent.freecad.ledger.json",
+      "sha256": "5232177358dbc1920aad803440af69f64839045bf83daaed0c5cf595b1d0a410"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m4/expected/part-thickness-box-face-rectoverso-tangent.freecad.json",
+      "sha256": "6efe787d0d690e03c40c1ea1d693874e5e6d95de8b06761adcf4b364c91610e3"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m4-part-thickness-box-face-rectoverso-tangent-repeat2.json",
+      "sha256": "c60d520110b43d1eede71b8a2ec3ace0776c4f61686c4db7a32cc9d38af335b0"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-thickness-box-face-rectoverso-tangent.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-thickness-box-face-rectoverso-tangent.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m4-part-thickness-box-face-rectoverso-tangent.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-thickness-box-face-rectoverso-tangent.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

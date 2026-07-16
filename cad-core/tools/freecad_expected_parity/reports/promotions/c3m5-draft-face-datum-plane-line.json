@@ -1,0 +1,82 @@
+{
+  "case": "draft-face-datum-plane-line",
+  "phase": "c3m5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "cc96b8ff95b613b15d517e31ca89fd14460970daf3f7f1046679fed317f3efac",
+    "manifestBeforeSha256": "5df9ea8d6bc82760033ef8207914f24c2cb79395c0324ebc693292c82017885d",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-draft-face-datum-plane-line-collect.json",
+      "sha256": "6de2e9ac091a7bead872954e9d88aa1e2d9ea32b28e76c36b539c933349eae14"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/draft-face-datum-plane-line.json",
+      "sha256": "b1ff93f9c0027793381952d70021c140e7243f38e069c0f47fb2d8dbce34d25f"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/draft-face-datum-plane-line.freecad.ledger.json",
+      "sha256": "61fd49581f3f3ae7e2d3df567fd5001125f12c68deb62b083e0d2ad5976866c2"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/draft-face-datum-plane-line.freecad.json",
+      "sha256": "c5966a11ba0296d0bc37ceca9fa91086e23559130799a80603407c34af40438d"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-draft-face-datum-plane-line-repeat2.json",
+      "sha256": "059e11f733c205ad63ef2f3f0743f6d2643dcdbcc11428d3162e1d5e79c7faff"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/draft-face-datum-plane-line.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/draft-face-datum-plane-line.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m5-draft-face-datum-plane-line.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/draft-face-datum-plane-line.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

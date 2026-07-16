@@ -1,0 +1,143 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          0.5000001,
+          0.5000001000000008,
+          4.0000001
+        ],
+        "min": [
+          -0.5000001,
+          -0.5000001,
+          -1e-07
+        ]
+      },
+      "object": "AdditivePipeAuxiliary",
+      "object_fields": {
+        "add_sub": "add",
+        "feature": "partdesign_pipe",
+        "mode": "Auxiliary",
+        "shape": "occt_solid",
+        "source_profile": "SketchPipeProfile",
+        "spine": "PipeSpine",
+        "status": "ok",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "transformation": "Constant",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 3.9999999999999996
+    },
+    {
+      "bbox": {
+        "max": [
+          0.5,
+          0.5000000000000009,
+          4.0
+        ],
+        "min": [
+          -0.5,
+          -0.5,
+          0.0
+        ]
+      },
+      "object": "AdditivePipeBinormal",
+      "object_fields": {
+        "add_sub": "add",
+        "feature": "partdesign_pipe",
+        "mode": "Binormal",
+        "shape": "occt_solid",
+        "source_profile": "SketchPipeProfile",
+        "spine": "PipeSpine",
+        "status": "ok",
+        "topo_naming_history": "maker_history:partdesign_pipe",
+        "transformation": "Constant",
+        "transition": "Transformed"
+      },
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 3.9999999999999996
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:fd21d425c0ff8146942d4058ded963b186beb9300dcd8696da7368bbb8ccd024",
+    "objects": {
+      "AdditivePipeAuxiliary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:6976698561c5ad09082fb8765f4c53ff1aea6c573ba8d60c5b96b1e713412cc5",
+        "subshapes": {}
+      },
+      "AdditivePipeBinormal": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4f89673287e482a4fee4442d682aa6b699ae5276154cc689c50cae69e59bb718",
+        "subshapes": {}
+      },
+      "AuxiliarySpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:8e42554f3a8b4b72f30bc47766982d9ca59037d0130c7878d64482d051a9f341",
+        "subshapes": {}
+      },
+      "PipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:35c2d7914263c7fbd36f5722431598c7320a2c474aab85730fc0c7d8ca430799",
+        "subshapes": {}
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1e7d65765a3be1fa3170772425f7aeddf4affbd20b8e8f110332464675647054",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

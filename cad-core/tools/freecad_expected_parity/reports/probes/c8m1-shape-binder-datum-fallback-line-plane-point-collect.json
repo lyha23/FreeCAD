@@ -1,0 +1,98 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": null,
+  "cases": [
+    {
+      "artifacts": {
+        "candidateWrite": {
+          "status": "not-requested"
+        },
+        "ledgerAuthority": {
+          "status": "written"
+        },
+        "ledgerValidation": {
+          "status": "valid"
+        },
+        "producerTraceDiagnostic": {
+          "reason": "disabled-by-request",
+          "status": "not_evaluated"
+        },
+        "publicAuthority": {
+          "status": "written"
+        }
+      },
+      "case": "shape-binder-datum-fallback-line-plane-point",
+      "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/expected/shape-binder-datum-fallback-line-plane-point.freecad.json",
+      "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/shape-binder-datum-fallback-line-plane-point.json",
+      "fixtureSha256": "53b7429fb99c82e648881088a9b933ba5be22fb3a8450a210c20d98c7b86a79e",
+      "ledgerOutcome": "accepted",
+      "ledgerSha256": "ce6e15b561a0d095dbaae8bc72386d05ce74a9ceec8f67d7a244390fab7ade8b",
+      "phase": "c8m1",
+      "publicExpectedSha256": "6230b450f75ae4b7846faa0cc6f850c27d90e4bd4e1148b5baf6f6f661b2f9a8",
+      "status": "passed"
+    }
+  ],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+  },
+  "collectorInvocation": {
+    "argv": [
+      "/Users/li/.cargo/bin/FreeCADCmd",
+      "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "--pass",
+      "__cad_core_expected_args_env__"
+    ],
+    "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+    "environment": {
+      "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/c8m1/shape-binder-datum-fallback-line-plane-point.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/fixtures/c8m1/expected/shape-binder-datum-fallback-line-plane-point.freecad.json\", \"--validate-ledger\", \"--report\", \"tools/freecad_expected_parity/reports/probes/c8m1-shape-binder-datum-fallback-line-plane-point-collect.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+    }
+  },
+  "discovered": 1,
+  "failed": 0,
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+  "ledgerDriftStatus": "not_evaluated",
+  "ledgerValidationStatus": "passed",
+  "mode": "collection",
+  "processed": 1,
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: source commit",
+    "missing provenance: dirty summary",
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build type",
+    "missing provenance: build generator"
+  ],
+  "publicExpectedStatus": "not_evaluated",
+  "runtime": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "occtVersion": "7.8.1"
+  },
+  "schema": "freecad-fixture-regression-report/v1",
+  "skipped": 0,
+  "status": "passed"
+}

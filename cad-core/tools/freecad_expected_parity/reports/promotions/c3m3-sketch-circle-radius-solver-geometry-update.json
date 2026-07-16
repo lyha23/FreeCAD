@@ -1,0 +1,82 @@
+{
+  "case": "sketch-circle-radius-solver-geometry-update",
+  "phase": "c3m3",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "898710716726e2a7a1e76be4aafce64793af0742d59c5085524fd8b1811c5e47",
+    "manifestBeforeSha256": "e9c175f38a9ccc4015dbeef90121cf9be5fafbb64c86099f4ae76f0bbfae922d",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-circle-radius-solver-geometry-update-collect.json",
+      "sha256": "b5e003a7d4f3d696694f6c4d6e99dbd5c8593b07e7cdd989df22fd94567fe9f0"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-circle-radius-solver-geometry-update.json",
+      "sha256": "d352d189655b28d25f1b857f45b95b16f2896ff42d69e680e8d14f5a3d0e20f8"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-circle-radius-solver-geometry-update.freecad.ledger.json",
+      "sha256": "df7dcf4e0c11e5e4d5e5c9229dae6c94f62fb612e23050175e9c838fb6cd99be"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-circle-radius-solver-geometry-update.freecad.json",
+      "sha256": "a21b3d82e6beaca4e50af0a577a6f23fe806deee9507315ba03220bada3a263e"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-circle-radius-solver-geometry-update-repeat2.json",
+      "sha256": "1cc13be95a030d0e764085211b7af63a31e3118b78617bc6ddca394fc3a78b4d"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-circle-radius-solver-geometry-update.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-circle-radius-solver-geometry-update.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m3-sketch-circle-radius-solver-geometry-update.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-circle-radius-solver-geometry-update.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

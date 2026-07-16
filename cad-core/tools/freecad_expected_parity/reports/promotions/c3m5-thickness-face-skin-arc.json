@@ -1,0 +1,82 @@
+{
+  "case": "thickness-face-skin-arc",
+  "phase": "c3m5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "1b3af43d270b8bc3e890f4f91c24bbd0e8eb52d02abfb93252cfbc2b981bf388",
+    "manifestBeforeSha256": "4fa30759719490ac3265f1b6d60293c7cd5c72f8369106d2f5de6200302e3dfc",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-thickness-face-skin-arc-collect.json",
+      "sha256": "2b1f9f35535d9c72ebe0ce20c641a15a935f0b5f903806adfb143cd1c9192313"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/thickness-face-skin-arc.json",
+      "sha256": "cf0e1842e1805d3912effb8e5969ea783637ebf321c5dacd925324564028965f"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/thickness-face-skin-arc.freecad.ledger.json",
+      "sha256": "da491a67066c7a43c66c0908e7cfd3d84d59d20da2977115ed244ebc0f120420"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/thickness-face-skin-arc.freecad.json",
+      "sha256": "bb4336dfff52f98f1518b53939ac05dbf4af0a398024af4bafc1e47399c8cf6c"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-thickness-face-skin-arc-repeat2.json",
+      "sha256": "6811eafe329cb40144887eb863b2be2116c6e940a0cd9eebaa6d5b91ed7c76e3"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/thickness-face-skin-arc.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/thickness-face-skin-arc.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m5-thickness-face-skin-arc.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/thickness-face-skin-arc.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

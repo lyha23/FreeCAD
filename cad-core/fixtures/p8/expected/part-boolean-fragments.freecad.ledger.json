@@ -1,0 +1,1497 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-boolean-fragments",
+    "expectedPayloadHash": "sha256:9c44151023e6711ad0e42b5555372f6ec3dace091d801b16029f325f59c4bad1",
+    "inputHash": "sha256:f2ebd2ce58624aa577964ea009f303d573f2dcc1abdf60c4f6ec3a0e8eccc5a3",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:73556f190fccc287ce5a77b104323cc2bf3ead1194e234ba0ea7daaf5d52115b"
+  },
+  "inputReferences": [],
+  "objects": {
+    "BooleanFragments": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12",
+          "Edge13",
+          "Edge14",
+          "Edge15",
+          "Edge16",
+          "Edge17",
+          "Edge18",
+          "Edge19",
+          "Edge20",
+          "Edge21",
+          "Edge22",
+          "Edge23",
+          "Edge24",
+          "Edge25",
+          "Edge26",
+          "Edge27",
+          "Edge28"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6",
+          "Face7",
+          "Face8",
+          "Face9",
+          "Face10",
+          "Face11",
+          "Face12",
+          "Face13",
+          "Face14",
+          "Face15",
+          "Face16"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8",
+          "Vertex9",
+          "Vertex10",
+          "Vertex11",
+          "Vertex12",
+          "Vertex13",
+          "Vertex14",
+          "Vertex15",
+          "Vertex16"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "Edge10;:M2(Edge10;:H*,E);GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge10;:M2(Edge10;:H*,E);GFS;:H*:*,E;:H,E",
+              "raw": "Edge10;:M2(Edge10;:Hefb,E);GFS;:Hefa:18,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge15"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge15"
+            }
+          },
+          "Edge10;:M2;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge10;:M2;GFS;:H*:*,E;:H,E",
+              "raw": "Edge10;:M2;GFS;:Hefb:8,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge23"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge23"
+            }
+          },
+          "Edge10;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge10;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge10;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge7"
+            }
+          },
+          "Edge11;:M2(Edge11;:H*,E);GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge11;:M2(Edge11;:H*,E);GFS;:H*:*,E;:H,E",
+              "raw": "Edge11;:M2(Edge11;:Hefb,E);GFS;:Hefa:18,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge16"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge16"
+            }
+          },
+          "Edge11;:M2;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge11;:M2;GFS;:H*:*,E;:H,E",
+              "raw": "Edge11;:M2;GFS;:Hefb:8,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge24"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge24"
+            }
+          },
+          "Edge11;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge11;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge11;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge10"
+            }
+          },
+          "Edge12;:M2(Edge12;:H*,E);GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge12;:M2(Edge12;:H*,E);GFS;:H*:*,E;:H,E",
+              "raw": "Edge12;:M2(Edge12;:Hefb,E);GFS;:Hefa:18,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge20"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge20"
+            }
+          },
+          "Edge12;:M2;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge12;:M2;GFS;:H*:*,E;:H,E",
+              "raw": "Edge12;:M2;GFS;:Hefb:8,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge28"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge28"
+            }
+          },
+          "Edge12;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge12;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge12;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge8"
+            }
+          },
+          "Edge1;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E;:H,E",
+              "raw": "Edge1;:Hefa,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge1"
+            }
+          },
+          "Edge1;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge1;:M;GFS;:Hefb:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge6"
+            }
+          },
+          "Edge2;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:H*,E;:H,E",
+              "raw": "Edge2;:Hefa,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge2"
+            }
+          },
+          "Edge2;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge2;:M;GFS;:Hefb:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge9"
+            }
+          },
+          "Edge3;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:H*,E;:H,E",
+              "raw": "Edge3;:Hefa,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge3"
+            }
+          },
+          "Edge3;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge3;:M;GFS;:Hefb:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge11"
+            }
+          },
+          "Edge4;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:H*,E;:H,E",
+              "raw": "Edge4;:Hefa,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge4"
+            }
+          },
+          "Edge4;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge4;:M;GFS;:Hefb:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge12"
+            }
+          },
+          "Edge5;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge5;:H*,E;:H,E",
+              "raw": "Edge5;:Hefb,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge22"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge22"
+            }
+          },
+          "Edge5;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge5;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge5;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge14"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge14"
+            }
+          },
+          "Edge6;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge6;:H*,E;:H,E",
+              "raw": "Edge6;:Hefb,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge26"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge26"
+            }
+          },
+          "Edge6;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge6;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge6;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge18"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge18"
+            }
+          },
+          "Edge7;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge7;:H*,E;:H,E",
+              "raw": "Edge7;:Hefb,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge27"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge27"
+            }
+          },
+          "Edge7;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge7;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge7;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge19"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge19"
+            }
+          },
+          "Edge8;:H*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge8;:H*,E;:H,E",
+              "raw": "Edge8;:Hefb,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge25"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge25"
+            }
+          },
+          "Edge8;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge8;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge8;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge17"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge17"
+            }
+          },
+          "Edge9;:M2(Edge9;:H*,E);GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge9;:M2(Edge9;:H*,E);GFS;:H*:*,E;:H,E",
+              "raw": "Edge9;:M2(Edge9;:Hefb,E);GFS;:Hefa:17,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge13"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge13"
+            }
+          },
+          "Edge9;:M2;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge9;:M2;GFS;:H*:*,E;:H,E",
+              "raw": "Edge9;:M2;GFS;:Hefb:8,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge21"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge21"
+            }
+          },
+          "Edge9;:M;GFS;:H*:*,E;:H,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge9;:M;GFS;:H*:*,E;:H,E",
+              "raw": "Edge9;:M;GFS;:Hefa:7,E;:H,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Edge5"
+            }
+          },
+          "Face1;:H*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:H*,F;:H,F",
+              "raw": "Face1;:Hefa,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face1"
+            }
+          },
+          "Face1;:M;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:M;GFS;:H*:*,F;:H,F",
+              "raw": "Face1;:M;GFS;:Hefb:7,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face6"
+            }
+          },
+          "Face2;:H*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face2;:H*,F;:H,F",
+              "raw": "Face2;:Hefb,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face14"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face14"
+            }
+          },
+          "Face2;:M;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face2;:M;GFS;:H*:*,F;:H,F",
+              "raw": "Face2;:M;GFS;:Hefa:7,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face9"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face9"
+            }
+          },
+          "Face3;:M2(Face3;:H*,F);GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face3;:M2(Face3;:H*,F);GFS;:H*:*,F;:H,F",
+              "raw": "Face3;:M2(Face3;:Hefb,F);GFS;:Hefa:17,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face7"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face7"
+            }
+          },
+          "Face3;:M2;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face3;:M2;GFS;:H*:*,F;:H,F",
+              "raw": "Face3;:M2;GFS;:Hefb:8,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face12"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face12"
+            }
+          },
+          "Face3;:M;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face3;:M;GFS;:H*:*,F;:H,F",
+              "raw": "Face3;:M;GFS;:Hefa:7,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face2"
+            }
+          },
+          "Face4;:M2(Face4;:H*,F);GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face4;:M2(Face4;:H*,F);GFS;:H*:*,F;:H,F",
+              "raw": "Face4;:M2(Face4;:Hefb,F);GFS;:Hefa:17,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face11"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face11"
+            }
+          },
+          "Face4;:M2;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face4;:M2;GFS;:H*:*,F;:H,F",
+              "raw": "Face4;:M2;GFS;:Hefb:8,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face16"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face16"
+            }
+          },
+          "Face4;:M;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face4;:M;GFS;:H*:*,F;:H,F",
+              "raw": "Face4;:M;GFS;:Hefa:7,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face4"
+            }
+          },
+          "Face5;:M2(Face5;:H*,F);GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face5;:M2(Face5;:H*,F);GFS;:H*:*,F;:H,F",
+              "raw": "Face5;:M2(Face5;:Hefb,F);GFS;:Hefa:17,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face8"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face8"
+            }
+          },
+          "Face5;:M2;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face5;:M2;GFS;:H*:*,F;:H,F",
+              "raw": "Face5;:M2;GFS;:Hefb:8,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face13"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face13"
+            }
+          },
+          "Face5;:M;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face5;:M;GFS;:H*:*,F;:H,F",
+              "raw": "Face5;:M;GFS;:Hefa:7,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face5"
+            }
+          },
+          "Face6;:M2(Face6;:H*,F);GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face6;:M2(Face6;:H*,F);GFS;:H*:*,F;:H,F",
+              "raw": "Face6;:M2(Face6;:Hefb,F);GFS;:Hefa:17,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face10"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face10"
+            }
+          },
+          "Face6;:M2;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face6;:M2;GFS;:H*:*,F;:H,F",
+              "raw": "Face6;:M2;GFS;:Hefb:8,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face15"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face15"
+            }
+          },
+          "Face6;:M;GFS;:H*:*,F;:H,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face6;:M;GFS;:H*:*,F;:H,F",
+              "raw": "Face6;:M;GFS;:Hefa:7,F;:H,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Face3"
+            }
+          },
+          "Vertex1;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V;:H,V",
+              "raw": "Vertex1;:Hefa,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex1;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex1;:M;GFS;:Hefb:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex6"
+            }
+          },
+          "Vertex2;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V;:H,V",
+              "raw": "Vertex2;:Hefa,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex2"
+            }
+          },
+          "Vertex2;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex2;:M;GFS;:Hefb:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex5"
+            }
+          },
+          "Vertex3;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V;:H,V",
+              "raw": "Vertex3;:Hefa,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex3"
+            }
+          },
+          "Vertex3;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex3;:M;GFS;:Hefb:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex7"
+            }
+          },
+          "Vertex4;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V;:H,V",
+              "raw": "Vertex4;:Hefa,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex4"
+            }
+          },
+          "Vertex4;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex4;:M;GFS;:Hefb:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex8"
+            }
+          },
+          "Vertex5;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex5;:H*,V;:H,V",
+              "raw": "Vertex5;:Hefb,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex14"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex14"
+            }
+          },
+          "Vertex5;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex5;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex5;:M;GFS;:Hefa:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex10"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex10"
+            }
+          },
+          "Vertex6;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex6;:H*,V;:H,V",
+              "raw": "Vertex6;:Hefb,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex13"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex13"
+            }
+          },
+          "Vertex6;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex6;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex6;:M;GFS;:Hefa:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex9"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex9"
+            }
+          },
+          "Vertex7;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex7;:H*,V;:H,V",
+              "raw": "Vertex7;:Hefb,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex16"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex16"
+            }
+          },
+          "Vertex7;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex7;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex7;:M;GFS;:Hefa:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex12"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex12"
+            }
+          },
+          "Vertex8;:H*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex8;:H*,V;:H,V",
+              "raw": "Vertex8;:Hefb,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex15"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex15"
+            }
+          },
+          "Vertex8;:M;GFS;:H*:*,V;:H,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex8;:M;GFS;:H*:*,V;:H,V",
+              "raw": "Vertex8;:M;GFS;:Hefa:7,V;:H,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BooleanFragments",
+              "subname": "Vertex11"
+            },
+            "target": {
+              "object": "BooleanFragments",
+              "subname": "Vertex11"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::BooleanFragments"
+    },
+    "BoxA": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "BoxB": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "BooleanFragments": {
+        "covers": [
+          "BooleanFragments"
+        ],
+        "ledgerObject": "BooleanFragments",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "BoxA": {
+        "covers": [
+          "BoxA"
+        ],
+        "ledgerObject": "BoxA",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "BoxB": {
+        "covers": [
+          "BoxB"
+        ],
+        "ledgerObject": "BoxB",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:73556f190fccc287ce5a77b104323cc2bf3ead1194e234ba0ea7daaf5d52115b",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

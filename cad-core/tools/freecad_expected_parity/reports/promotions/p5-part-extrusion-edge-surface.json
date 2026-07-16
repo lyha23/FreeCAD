@@ -1,0 +1,82 @@
+{
+  "case": "part-extrusion-edge-surface",
+  "phase": "p5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "cc90e7e65e0ade2c765cfe9d3c94fe337a1063549a0ad678970f758bb7f20a3e",
+    "manifestBeforeSha256": "37025b721e69c6a9fd6d7862fbd011a6fd6389125b60281ebf5b867f42b51e5e",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-edge-surface-collect.json",
+      "sha256": "f5f9259a892138d9afd2af55d4c8c9ae6bbfb5862d249d24b744b92bb1b3f833"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/part-extrusion-edge-surface.json",
+      "sha256": "36464a86abde2bb9468a7b7f6d29b6c4c1534aeae89f30a6c235891c7e056a38"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-edge-surface.freecad.ledger.json",
+      "sha256": "867251416a9bdb544cf2abac38b06b17e3c49639c94243e05aacfa5e7d8a52a4"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-edge-surface.freecad.json",
+      "sha256": "fc252b39f2bab6073df4de459e2e4684b215c8a1f51fb74e2c64e6eeef1404ba"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-edge-surface-repeat2.json",
+      "sha256": "038cbe60541371f50d76765a2a1d125e6ac82eb0b7f66ab9ae2e20d3a72b15cd"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/part-extrusion-edge-surface.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-edge-surface.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p5-part-extrusion-edge-surface.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-edge-surface.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

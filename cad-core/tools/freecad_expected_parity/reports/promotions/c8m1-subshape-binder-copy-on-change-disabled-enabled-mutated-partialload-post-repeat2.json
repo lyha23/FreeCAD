@@ -1,0 +1,307 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "c1a5ec99df94badd1f4cb3c9997b8cf69764f6e6e752f0d47517e1f85f95d170"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "subshape-binder-copy-on-change-disabled-enabled-mutated-partialload",
+        "fixtureSha256": "8140dbedd2d6ca2d8418f25599a5c524612bf4f875339dfce678eb8db3757bdc",
+        "ledgerSha256": "2ee5673037f35f1e67eb3a21b2a7203602251c77172a2580cf87e6b340c19ed4",
+        "phase": "c8m1",
+        "producerTraceSha256": null,
+        "publicSha256": "f0538b9f18399b97f83110321f948aab056411ddc96311e5c3d46c96e1758b9e"
+      }
+    ],
+    "phases": 1,
+    "sha256": "5eb824e449febf6c0ff325cd25ef25b53853715a33a9117cd4cbccc8512398d8"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c8m1/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "c40b39ae7c1a2200319062b060091d35917ef02e1880578b869a904df7060a47",
+                "path": "/private/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-a/c8m1/expected/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.freecad.json",
+                "publicSha256": "9ffb11fd78dbddf19319ddc431fa11e43c058f4c46c0b9ffc3bbe12adc312ffc",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "subshape-binder-copy-on-change-disabled-enabled-mutated-partialload",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/expected/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json",
+            "fixtureSha256": "8140dbedd2d6ca2d8418f25599a5c524612bf4f875339dfce678eb8db3757bdc",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2ee5673037f35f1e67eb3a21b2a7203602251c77172a2580cf87e6b340c19ed4",
+            "phase": "c8m1",
+            "publicExpectedSha256": "f0538b9f18399b97f83110321f948aab056411ddc96311e5c3d46c96e1758b9e",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "c1a5ec99df94badd1f4cb3c9997b8cf69764f6e6e752f0d47517e1f85f95d170"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c8m1/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c8m1/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "39bee84edb43587872f6ee901bc628b1567e625c7a01de4159859be555b3268b",
+                "path": "/private/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-b/c8m1/expected/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.freecad.json",
+                "publicSha256": "adb84efad42021914658408de5c1c114bd763c57e40b6e89de369a057a00940d",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "subshape-binder-copy-on-change-disabled-enabled-mutated-partialload",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/expected/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c8m1/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json",
+            "fixtureSha256": "8140dbedd2d6ca2d8418f25599a5c524612bf4f875339dfce678eb8db3757bdc",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "2ee5673037f35f1e67eb3a21b2a7203602251c77172a2580cf87e6b340c19ed4",
+            "phase": "c8m1",
+            "publicExpectedSha256": "f0538b9f18399b97f83110321f948aab056411ddc96311e5c3d46c96e1758b9e",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "c1a5ec99df94badd1f4cb3c9997b8cf69764f6e6e752f0d47517e1f85f95d170"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c8m1/subshape-binder-copy-on-change-disabled-enabled-mutated-partialload.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-c8m1-subshape-binder-copy-on-change-post-promotion/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

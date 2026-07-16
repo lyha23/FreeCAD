@@ -1,0 +1,307 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+  },
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "part-extrusion-reverse-taper",
+        "fixtureSha256": "d2ace523de53dd968b11b76f149dc6e1439f4974cd80f82a06806a5bca06a3e5",
+        "ledgerSha256": "db4e32bdfb25f9453d50ef487c15e126d0b9fbb1bd4e04f58191cc31af590a37",
+        "phase": "p5",
+        "producerTraceSha256": null,
+        "publicSha256": "7d7a9f8d2c4591e12265c0204ebd8cbc652a743de306c442520a8f4e0c80a033"
+      }
+    ],
+    "phases": 1,
+    "sha256": "815a2f9ad2d5b5d96020313997a1306d052595f3bf6a1f05736e54acee52579b"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/p5/part-extrusion-reverse-taper.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "b6e61d2c6a31e3492fb81021a2c23b3ebd43e7680f28d8c10611c2a1575eacfe",
+                "path": "/private/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-a/p5/expected/part-extrusion-reverse-taper.freecad.json",
+                "publicSha256": "f0b6d305ba1014ff18ccd9372746eb4b83f9cf8ee144f848ff95b03c61a3b9cb",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "part-extrusion-reverse-taper",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-reverse-taper.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/part-extrusion-reverse-taper.json",
+            "fixtureSha256": "d2ace523de53dd968b11b76f149dc6e1439f4974cd80f82a06806a5bca06a3e5",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "db4e32bdfb25f9453d50ef487c15e126d0b9fbb1bd4e04f58191cc31af590a37",
+            "phase": "p5",
+            "publicExpectedSha256": "7d7a9f8d2c4591e12265c0204ebd8cbc652a743de306c442520a8f4e0c80a033",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/p5/part-extrusion-reverse-taper.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/p5/part-extrusion-reverse-taper.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "86dca62fb68f6263d509042f3cf94c84a8bd833eb8046d5c5173b81e89dbbd18",
+                "path": "/private/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-b/p5/expected/part-extrusion-reverse-taper.freecad.json",
+                "publicSha256": "3eaeff34181221d5ec4a52819f2c427a7f46c76f42e3fc219d7c80e2e61069e5",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "equal"
+              }
+            },
+            "case": "part-extrusion-reverse-taper",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-reverse-taper.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/part-extrusion-reverse-taper.json",
+            "fixtureSha256": "d2ace523de53dd968b11b76f149dc6e1439f4974cd80f82a06806a5bca06a3e5",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "db4e32bdfb25f9453d50ef487c15e126d0b9fbb1bd4e04f58191cc31af590a37",
+            "phase": "p5",
+            "publicExpectedSha256": "7d7a9f8d2c4591e12265c0204ebd8cbc652a743de306c442520a8f4e0c80a033",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/p5/part-extrusion-reverse-taper.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "passed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/private/tmp/freecad-expected-p5-part-extrusion-reverse-taper-post-promotion/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "passed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

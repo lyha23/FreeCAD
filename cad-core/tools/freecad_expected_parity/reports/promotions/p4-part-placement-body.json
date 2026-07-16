@@ -1,0 +1,82 @@
+{
+  "case": "part-placement-body",
+  "phase": "p4",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "d4547ce7520551789e002e90e6f7f0456147b83e4f63f0dc8e522ec3e0e8b4e4",
+    "manifestBeforeSha256": "b0d03dad4d371d7485162d3d7a085d90f148a843820720846c0d097101a1513d",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p4-part-placement-body-collect.json",
+      "sha256": "697dc14a14eaf378027fe099ae6a0eb7da60ff5ffd06dc1f3efc8d17d6636184"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p4/part-placement-body.json",
+      "sha256": "cc6ceafafab05f6498fa58878926faf242a67891b7860937f25e5bc0ddab5dae"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p4/expected/part-placement-body.freecad.ledger.json",
+      "sha256": "bc96eecd0563d9a4e73014761915f5c7e4e867087cfb3f5722d56794feffd466"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p4/expected/part-placement-body.freecad.json",
+      "sha256": "e151b74e5fa4007c5fc737dc03c10bd25af853913488da2594fca410426ae1f6"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p4-part-placement-body-repeat2.json",
+      "sha256": "3850d001e6afe6d2a3f3a29786a62693f842d8f75149c1ca5a75080fa20f96a9"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p4/part-placement-body.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p4/expected/part-placement-body.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p4-part-placement-body.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p4/expected/part-placement-body.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

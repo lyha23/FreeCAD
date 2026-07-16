@@ -1,0 +1,128 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          3.0000000999999994,
+          2.255603495554722,
+          1e-07
+        ],
+        "min": [
+          -2.5050474911933076,
+          -2.7545915630404547,
+          -1e-07
+        ]
+      },
+      "object": "Spiral",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Spiral.Edge1",
+          "id": "Spiral:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Spiral.Edge2",
+          "id": "Spiral:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Spiral.Vertex1",
+          "id": "Spiral:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Spiral.Vertex2",
+          "id": "Spiral:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Spiral.Vertex3",
+          "id": "Spiral:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        }
+      ],
+      "topology_counts": {
+        "edges": 2,
+        "faces": 0,
+        "vertices": 3
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:71c33882e4bfc306c4d50b03f62b7bbb07b8a8dd013153ea5b5ce359a4f05d1e",
+    "objects": {
+      "Spiral": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:e09fdbd950c7d9c74b44ceb893ceb4652f69956a7f4eae0c31624982a57db49e",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

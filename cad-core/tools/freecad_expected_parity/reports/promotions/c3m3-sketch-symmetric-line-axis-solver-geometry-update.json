@@ -1,0 +1,82 @@
+{
+  "case": "sketch-symmetric-line-axis-solver-geometry-update",
+  "phase": "c3m3",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "8cca629ee31e636a7ac6022c059c247325c8d571b8f937fdd6ae7bb94950e35f",
+    "manifestBeforeSha256": "7e1498b5a2e60ad6b346ce9f14fe6d1357c88e3b26b21617b401852ce482dc3f",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-symmetric-line-axis-solver-geometry-update-collect.json",
+      "sha256": "6ec3f3cd7b7ecd133cf2609c8eaca7f65c5b7d578ce35f4660611f846a471489"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-symmetric-line-axis-solver-geometry-update.json",
+      "sha256": "98d7a44954d1d02b942428606257863c3e7313d17148fa78236e9193c176abd1"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-symmetric-line-axis-solver-geometry-update.freecad.ledger.json",
+      "sha256": "4ba1ba4d87437dafbc102bd9b131c30beab02f47ff67bba1c8d01a00621b14b8"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-symmetric-line-axis-solver-geometry-update.freecad.json",
+      "sha256": "ce2cad82ccc89465e0248e8c99da9520059c73a547623ed45e10f5bdec46df8e"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-symmetric-line-axis-solver-geometry-update-repeat2.json",
+      "sha256": "64e3fbc5a6ee5839564445b9171e727ed9c07f6e748702bbb4f7ea6ad24a88b4"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-symmetric-line-axis-solver-geometry-update.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-symmetric-line-axis-solver-geometry-update.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m3-sketch-symmetric-line-axis-solver-geometry-update.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-symmetric-line-axis-solver-geometry-update.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

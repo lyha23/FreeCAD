@@ -1,0 +1,82 @@
+{
+  "case": "sketch-horizontal-solver-geometry-update",
+  "phase": "c3m3",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "ddd73e7140575eae5ba5ab6b2b62a0810699b81235a881795e3bc7bafb32d5e4",
+    "manifestBeforeSha256": "afede79f1733832fe4517b0a8de06e98d7d19d831f10cc1aa7a9dbcfeadc0164",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-horizontal-solver-geometry-update-collect.json",
+      "sha256": "97f2a6790c2e54f965a050bd610362b1ef7243999a26d942c8ba5f4bb7b63b3e"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-horizontal-solver-geometry-update.json",
+      "sha256": "b6602a1b87ea8ac5b50226975cc80dd478069ab00ea2acd5650dc6b56ef8c715"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-horizontal-solver-geometry-update.freecad.ledger.json",
+      "sha256": "28c7b6ea500696d435eb6191079904a6b13866315c71652419807175e39e0b1f"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-horizontal-solver-geometry-update.freecad.json",
+      "sha256": "fdedaa28d96c2ae228c149421b73583cde7b942e34a74adb0d028c324c67d8d4"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-horizontal-solver-geometry-update-repeat2.json",
+      "sha256": "5058723889d3c554687b8df83aa1ef9a1f331bed847b169e982ef7078581e969"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-horizontal-solver-geometry-update.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-horizontal-solver-geometry-update.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m3-sketch-horizontal-solver-geometry-update.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-horizontal-solver-geometry-update.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

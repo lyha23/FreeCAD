@@ -1,0 +1,1268 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-pipe-additive-body",
+    "expectedPayloadHash": "sha256:a9a6598e671fb63eb9692b578740dc89686cc6a4ac2043cf207b014ed7917d46",
+    "inputHash": "sha256:6913266bfde774127a65c54241eb7606040dcf6075f55415929293585d821bab",
+    "phase": "c4m2",
+    "topoNamingStateHash": "sha256:65790fa0598bde98aeaf987bee90b337ce5bd2ed2e3939720d7f20e98b5f282e"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AdditivePipe": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::AdditivePipe"
+    },
+    "Body": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [
+        {
+          "childIndex": 0,
+          "childObject": "AdditivePipe",
+          "elementMap": {
+            "encoding": "cad-core.element-map.v1",
+            "entries": {
+              "AdditivePipe.#11;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#11;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#11;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge1"
+                }
+              },
+              "AdditivePipe.#12;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#12;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#12;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge3"
+                }
+              },
+              "AdditivePipe.#13;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#13;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#13;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge6"
+                }
+              },
+              "AdditivePipe.#14;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#14;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#14;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge9"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge9"
+                }
+              },
+              "AdditivePipe.#16:1;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#16:1;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#16:1;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge2"
+                }
+              },
+              "AdditivePipe.#16:2;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#16:2;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#16:2;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge5"
+                }
+              },
+              "AdditivePipe.#16:3;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#16:3;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#16:3;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge8"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge8"
+                }
+              },
+              "AdditivePipe.#16:4;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#16:4;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#16:4;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge11"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge11"
+                }
+              },
+              "AdditivePipe.#18:1;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#18:1;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#18:1;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge4"
+                }
+              },
+              "AdditivePipe.#18:2;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#18:2;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#18:2;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge7"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge7"
+                }
+              },
+              "AdditivePipe.#18:3;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#18:3;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#18:3;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge10"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge10"
+                }
+              },
+              "AdditivePipe.#18:4;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#18:4;:G;SEW;:H*:*,E",
+                  "raw": "AdditivePipe.#18:4;:G;SEW;:H1193:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Edge12"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge12"
+                }
+              },
+              "AdditivePipe.#1a:2;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#1a:2;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#1a:2;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex1"
+                }
+              },
+              "AdditivePipe.#1c:b;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#1c:b;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#1c:b;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex2"
+                }
+              },
+              "AdditivePipe.#1d:4;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#1d:4;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#1d:4;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex3"
+                }
+              },
+              "AdditivePipe.#1e:c;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#1e:c;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#1e:c;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex4"
+                }
+              },
+              "AdditivePipe.#1f:6;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#1f:6;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#1f:6;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex5"
+                }
+              },
+              "AdditivePipe.#20:d;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#20:d;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#20:d;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex6"
+                }
+              },
+              "AdditivePipe.#21:8;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#21:8;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#21:8;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex7"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex7"
+                }
+              },
+              "AdditivePipe.#22:e;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#22:e;:G;SEW;:H*:*,V",
+                  "raw": "AdditivePipe.#22:e;:G;SEW;:H1193:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Vertex8"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex8"
+                }
+              },
+              "AdditivePipe.#25:1;:L#23;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#25:1;:L#23;SEW;:H*:*,F",
+                  "raw": "AdditivePipe.#25:1;:L#23;SEW;:H1193:a,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Face5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face5"
+                }
+              },
+              "AdditivePipe.#27:1;:L#26;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#27:1;:L#26;SEW;:H*:*,F",
+                  "raw": "AdditivePipe.#27:1;:L#26;SEW;:H1193:a,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Face6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face6"
+                }
+              },
+              "AdditivePipe.#f:1;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#f:1;:G;SEW;:H*:*,F",
+                  "raw": "AdditivePipe.#f:1;:G;SEW;:H1193:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face1"
+                }
+              },
+              "AdditivePipe.#f:2;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#f:2;:G;SEW;:H*:*,F",
+                  "raw": "AdditivePipe.#f:2;:G;SEW;:H1193:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Face2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face2"
+                }
+              },
+              "AdditivePipe.#f:3;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#f:3;:G;SEW;:H*:*,F",
+                  "raw": "AdditivePipe.#f:3;:G;SEW;:H1193:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Face3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face3"
+                }
+              },
+              "AdditivePipe.#f:4;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditivePipe.#f:4;:G;SEW;:H*:*,F",
+                  "raw": "AdditivePipe.#f:4;:G;SEW;:H1193:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditivePipe",
+                  "subname": "Face4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face4"
+                }
+              }
+            },
+            "status": "history_partial"
+          },
+          "key": "Body:AdditivePipe:AdditivePipe",
+          "ownerObject": "Body",
+          "pathPrefix": "AdditivePipe"
+        }
+      ],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "AdditivePipe.#11;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#11;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#11;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge1"
+            }
+          },
+          "AdditivePipe.#12;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#12;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#12;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge3"
+            }
+          },
+          "AdditivePipe.#13;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#13;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#13;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge6"
+            }
+          },
+          "AdditivePipe.#14;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#14;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#14;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge9"
+            }
+          },
+          "AdditivePipe.#16:1;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#16:1;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#16:1;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge2"
+            }
+          },
+          "AdditivePipe.#16:2;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#16:2;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#16:2;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge5"
+            }
+          },
+          "AdditivePipe.#16:3;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#16:3;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#16:3;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge8"
+            }
+          },
+          "AdditivePipe.#16:4;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#16:4;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#16:4;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge11"
+            }
+          },
+          "AdditivePipe.#18:1;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#18:1;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#18:1;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge4"
+            }
+          },
+          "AdditivePipe.#18:2;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#18:2;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#18:2;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge7"
+            }
+          },
+          "AdditivePipe.#18:3;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#18:3;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#18:3;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge10"
+            }
+          },
+          "AdditivePipe.#18:4;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#18:4;:G;SEW;:H*:*,E",
+              "raw": "AdditivePipe.#18:4;:G;SEW;:H1193:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge12"
+            }
+          },
+          "AdditivePipe.#1a:2;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#1a:2;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#1a:2;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex1"
+            }
+          },
+          "AdditivePipe.#1c:b;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#1c:b;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#1c:b;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex2"
+            }
+          },
+          "AdditivePipe.#1d:4;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#1d:4;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#1d:4;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex3"
+            }
+          },
+          "AdditivePipe.#1e:c;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#1e:c;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#1e:c;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex4"
+            }
+          },
+          "AdditivePipe.#1f:6;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#1f:6;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#1f:6;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex5"
+            }
+          },
+          "AdditivePipe.#20:d;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#20:d;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#20:d;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex6"
+            }
+          },
+          "AdditivePipe.#21:8;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#21:8;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#21:8;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex7"
+            }
+          },
+          "AdditivePipe.#22:e;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#22:e;:G;SEW;:H*:*,V",
+              "raw": "AdditivePipe.#22:e;:G;SEW;:H1193:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex8"
+            }
+          },
+          "AdditivePipe.#25:1;:L#23;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#25:1;:L#23;SEW;:H*:*,F",
+              "raw": "AdditivePipe.#25:1;:L#23;SEW;:H1193:a,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face5"
+            }
+          },
+          "AdditivePipe.#27:1;:L#26;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#27:1;:L#26;SEW;:H*:*,F",
+              "raw": "AdditivePipe.#27:1;:L#26;SEW;:H1193:a,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face6"
+            }
+          },
+          "AdditivePipe.#f:1;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#f:1;:G;SEW;:H*:*,F",
+              "raw": "AdditivePipe.#f:1;:G;SEW;:H1193:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face1"
+            }
+          },
+          "AdditivePipe.#f:2;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#f:2;:G;SEW;:H*:*,F",
+              "raw": "AdditivePipe.#f:2;:G;SEW;:H1193:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face2"
+            }
+          },
+          "AdditivePipe.#f:3;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#f:3;:G;SEW;:H*:*,F",
+              "raw": "AdditivePipe.#f:3;:G;SEW;:H1193:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face3"
+            }
+          },
+          "AdditivePipe.#f:4;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditivePipe:AdditivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditivePipe.#f:4;:G;SEW;:H*:*,F",
+              "raw": "AdditivePipe.#f:4;:G;SEW;:H1193:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditivePipe",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face4"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Body"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "AdditivePipe": {
+        "covers": [
+          "AdditivePipe"
+        ],
+        "ledgerObject": "AdditivePipe",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Body": {
+        "covers": [
+          "Body",
+          "SketchPipeProfile",
+          "SketchPipeSpine",
+          "AdditivePipe"
+        ],
+        "ledgerObject": "Body",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeSpine": {
+        "covers": [
+          "SketchPipeSpine"
+        ],
+        "ledgerObject": "SketchPipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:65790fa0598bde98aeaf987bee90b337ce5bd2ed2e3939720d7f20e98b5f282e",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

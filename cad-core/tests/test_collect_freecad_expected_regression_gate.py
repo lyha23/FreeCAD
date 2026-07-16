@@ -184,6 +184,53 @@ class RegressionGateCliTests(unittest.TestCase):
         self.assertIn("/tmp/fixtures/p1/case.json", child)
         self.assertNotIn("--all-native", child)
 
+    def test_accepts_single_case_staging_repeat_without_checked_in_authority(self) -> None:
+        args = collector.parse_args(
+            [
+                "/tmp/staging/fixtures/p1/case.json",
+                "--fixtures-root",
+                "/tmp/staging/fixtures",
+                "--validate-ledger",
+                "--repeat",
+                "2",
+                "--candidate-root",
+                "/tmp/staging/candidates/p1/case",
+                "--report",
+                "/tmp/staging/reports/p1/case/repeat2.json",
+            ]
+        )
+
+        child = collector.staging_repeat_child_argv(
+            args,
+            candidate_root=Path("/tmp/staging/candidates/p1/case/run-a"),
+            report=Path("/tmp/staging/candidates/p1/case/run-a.report.json"),
+        )
+
+        self.assertFalse(args.check)
+        self.assertIn("--out", child)
+        self.assertNotIn("--check", child)
+        self.assertNotIn("--candidate-root", child)
+        output = Path(child[child.index("--out") + 1])
+        self.assertEqual(
+            Path("/tmp/staging/candidates/p1/case/run-a/p1/expected/case.freecad.json"),
+            output,
+        )
+
+    def test_staging_repeat_requires_strict_ledger_validation(self) -> None:
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                collector.parse_args(
+                    [
+                        "/tmp/staging/fixtures/p1/case.json",
+                        "--fixtures-root",
+                        "/tmp/staging/fixtures",
+                        "--repeat",
+                        "2",
+                        "--candidate-root",
+                        "/tmp/staging/candidates/p1/case",
+                    ]
+                )
+
     def test_explicit_phase_without_native_authority_fails_closed(self) -> None:
         args = collector.parse_args(
             [
@@ -557,6 +604,103 @@ class CandidateArtifactTests(unittest.TestCase):
 
 
 class RepeatedRegressionGateTests(unittest.TestCase):
+    def test_staging_repeat_runs_two_independent_collections_without_authority(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            fixtures = root / "staging" / "fixtures"
+            fixture = fixtures / "p1" / "case.json"
+            fixture.parent.mkdir(parents=True)
+            fixture.write_text(
+                json.dumps(
+                    {
+                        "Objects": [
+                            {"Name": "Box", "TypeId": "Part::Box", "Properties": {}}
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            candidate_root = root / "staging" / "candidates" / "p1" / "case"
+            report = root / "staging" / "reports" / "p1" / "case" / "repeat2.json"
+            freecadcmd = root / "FreeCADCmd"
+            freecadcmd.write_bytes(b"candidate")
+            args = collector.parse_args(
+                [
+                    str(fixture),
+                    "--fixtures-root",
+                    str(fixtures),
+                    "--validate-ledger",
+                    "--repeat",
+                    "2",
+                    "--candidate-root",
+                    str(candidate_root),
+                    "--report",
+                    str(report),
+                    "--freecadcmd",
+                    str(freecadcmd),
+                ]
+            )
+
+            def fake_run(_argv: list[str], child_args: object) -> int:
+                output = Path(child_args.out)
+                collector.atomic_write_json(output, {"object": "Box"})
+                collector.atomic_write_json(
+                    collector.ledger_path_for_expected(output),
+                    {"outcome": "accepted"},
+                )
+                collector.atomic_write_json(
+                    Path(child_args.report),
+                    {
+                        "discovered": 1,
+                        "processed": 1,
+                        "skipped": 0,
+                        "failed": 0,
+                        "status": "passed",
+                        "publicExpectedStatus": "not_evaluated",
+                        "ledgerValidationStatus": "passed",
+                        "ledgerDriftStatus": "not_evaluated",
+                        "producerTraceStatus": "not_evaluated",
+                        "candidate": {
+                            "path": str(freecadcmd.resolve()),
+                            "sha256": collector.file_sha256(freecadcmd),
+                        },
+                        "collector": collector.collector_receipt(),
+                        "runtime": {
+                            "freecadVersion": "1.2.0 revision test",
+                            "occtVersion": "7.8.1",
+                        },
+                    },
+                )
+                return 0
+
+            with mock.patch.object(collector, "run_via_freecadcmd", side_effect=fake_run) as run:
+                with contextlib.redirect_stderr(io.StringIO()):
+                    result = collector.run_repeated_staging_collections(args)
+
+            payload = json.loads(report.read_text(encoding="utf-8"))
+            run_a = candidate_root / "run-a" / "p1" / "expected" / "case.freecad.json"
+            run_b = candidate_root / "run-b" / "p1" / "expected" / "case.freecad.json"
+            run_a_input = candidate_root / "run-a" / "p1" / "case.json"
+            run_b_input = candidate_root / "run-b" / "p1" / "case.json"
+            run_a_exists = run_a.is_file()
+            run_b_exists = run_b.is_file()
+            isolated_inputs_exist = run_a_input.is_file() and run_b_input.is_file()
+
+        self.assertEqual(0, result)
+        self.assertEqual(2, run.call_count)
+        self.assertTrue(run_a_exists)
+        self.assertTrue(run_b_exists)
+        self.assertTrue(isolated_inputs_exist)
+        self.assertEqual("repeated-staging-collection", payload["mode"])
+        self.assertEqual("passed", payload["status"])
+        self.assertEqual("passed", payload["publicExpectedStatus"])
+        self.assertEqual("passed", payload["ledgerValidationStatus"])
+        self.assertEqual("unchanged", payload["ledgerDriftStatus"])
+        self.assertEqual("not_evaluated", payload["producerTraceStatus"])
+        self.assertEqual(1, payload["manifest"]["cases"])
+        self.assertEqual(2, len(payload["runs"]))
+        self.assertEqual([], payload["candidateRunDifferences"])
+
     def test_runs_collector_twice_without_traces_and_publishes_passing_report(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -1336,6 +1480,503 @@ class CollectionReportTests(unittest.TestCase):
                 "different",
                 payload["firstProducerTraceDiagnostic"]["status"],
             )
+
+    def test_document_object_group_uses_native_membership_api(self) -> None:
+        class Group:
+            def __init__(self) -> None:
+                self.added: list[object] = []
+
+            def addObject(self, child: object) -> None:
+                self.added.append(child)
+
+        box = object()
+        group = Group()
+
+        handled = collector.set_document_object_group_property(
+            {"Box": box},
+            group,
+            "Group",
+            {
+                "PropertyType": "App::PropertyLinkList",
+                "values": ["Box"],
+            },
+        )
+
+        self.assertTrue(handled)
+        self.assertEqual([box], group.added)
+        self.assertIn("App::DocumentObjectGroup", collector.SUPPORTED_NATIVE_TYPES)
+
+    def test_retained_typeid_batches_are_enabled_for_native_probing(self) -> None:
+        self.assertLessEqual(
+            {
+                "App::Origin",
+                "App::Part",
+                "App::Plane",
+                "App::Point",
+                "Part::Extrusion",
+                "Part::GeometryCurve",
+                "Part::Offset",
+                "Part::Offset2D",
+                "Part::Thickness",
+                "PartDesign::Draft",
+                "PartDesign::ShapeBinder",
+                "PartDesign::SubShapeBinder",
+                "PartDesign::Thickness",
+            },
+            collector.SUPPORTED_NATIVE_TYPES,
+        )
+
+    def test_subshape_binder_partial_load_is_restored_after_support(self) -> None:
+        properties = {
+            "BindCopyOnChange": {
+                "PropertyType": "App::PropertyEnumeration",
+                "value": "Mutated",
+            },
+            "PartialLoad": {"PropertyType": "App::PropertyBool", "value": True},
+            "Support": {
+                "PropertyType": "App::PropertyXLinkSubList",
+                "SubSet": [{"value": "SupportBox", "SubList": []}],
+            },
+            "Refine": {"PropertyType": "App::PropertyBool", "value": False},
+        }
+
+        ordered = list(
+            collector.ordered_native_property_items(
+                "PartDesign::SubShapeBinder",
+                properties,
+            )
+        )
+
+        self.assertEqual(
+            ["Support", "Refine", "BindCopyOnChange", "PartialLoad"],
+            [name for name, _ in ordered],
+        )
+
+    def test_material_shape_property_uses_materials_public_value(self) -> None:
+        class Material:
+            UUID = "random-runtime-uuid"
+
+        class Box:
+            Name = "Box"
+            ShapeMaterial = None
+
+        materials = SimpleNamespace(Material=Material)
+        box = Box()
+        value = {
+            "PropertyType": "Materials::PropertyMaterial",
+            "Name": "Fixture steel",
+            "Author": "FreeCAD fixture",
+            "License": "CC0-1.0",
+            "Description": "Deterministic material public API coverage",
+        }
+
+        with mock.patch.dict(sys.modules, {"Materials": materials}):
+            collector.set_property(object(), {}, box, "ShapeMaterial", value)
+
+        self.assertEqual("Fixture steel", box.ShapeMaterial.Name)
+        self.assertEqual("FreeCAD fixture", box.ShapeMaterial.Author)
+        self.assertEqual("CC0-1.0", box.ShapeMaterial.License)
+        self.assertEqual(
+            {
+                "name": "Fixture steel",
+                "author": "FreeCAD fixture",
+                "license": "CC0-1.0",
+                "description": "Deterministic material public API coverage",
+                "url": "",
+                "reference": "",
+            },
+            collector.material_expected_payload(box.ShapeMaterial),
+        )
+
+    def test_spreadsheet_cells_use_sheet_set_and_alias_public_api(self) -> None:
+        class Sheet:
+            Name = "Sheet"
+
+            def __init__(self) -> None:
+                self.set_calls: list[tuple[str, str]] = []
+                self.alias_calls: list[tuple[str, str]] = []
+
+            def set(self, address: str, content: str) -> None:
+                self.set_calls.append((address, content))
+
+            def setAlias(self, address: str, alias: str) -> None:
+                self.alias_calls.append((address, alias))
+
+        sheet = Sheet()
+        value = {
+            "PropertyType": "Spreadsheet::PropertySheet",
+            "cells": [
+                {"address": "A1", "content": "3", "alias": "left"},
+                {"address": "B1", "content": "=left + 4"},
+            ],
+        }
+
+        collector.set_property(object(), {}, sheet, "Cells", value)
+
+        self.assertEqual([("A1", "3"), ("B1", "=left + 4")], sheet.set_calls)
+        self.assertEqual([("A1", "left")], sheet.alias_calls)
+
+    def test_stable_subshape_index_order_is_not_a_public_semantic_difference(self) -> None:
+        def result_subshape(indexed: str, token: str) -> dict[str, object]:
+            return {
+                "id": f"Offset2D:{indexed}",
+                "kind": "Edge",
+                "indexed": indexed,
+                "subname": indexed,
+                "stableSubname": token,
+                "identityStatus": "stable",
+                "fullSubname": f"Offset2D.{indexed}",
+                "rawFreecadMappedName": token,
+                "canonicalFreecadMappedName": token,
+                "resolvedIndexed": indexed,
+                "ShadowSub": [],
+                "ReferenceShadow": [],
+            }
+
+        def topo_state(first: str, second: str) -> dict[str, object]:
+            entries = {}
+            subshapes = {}
+            for indexed, token in (("Edge1", first), ("Edge2", second)):
+                subshapes[indexed] = {
+                    "subname": indexed,
+                    "identityStatus": "stable",
+                    "resolvedIndexed": indexed,
+                    "rawFreecadMappedName": token,
+                    "canonicalFreecadMappedName": token,
+                }
+                entries[token] = {
+                    "target": {"object": "Offset2D", "subname": indexed},
+                    "source": {"object": "Offset2D", "subname": indexed},
+                    "mappedName": {"raw": token, "canonical": token},
+                    "shapeKind": "edge",
+                    "recoverability": "resolved",
+                    "evidence": {
+                        "source": "freecad_expected_collector",
+                        "mapperHistoryIds": [],
+                        "childElementMapKey": None,
+                    },
+                }
+            return {
+                "topoNamingState": {
+                    "objects": {
+                        "Offset2D": {
+                            "subshapes": subshapes,
+                            "elementMap": {
+                                "encoding": "cad-core.element-map.v1",
+                                "status": "history_partial",
+                                "entries": entries,
+                            },
+                            "childElementMaps": [],
+                            "mapperHistory": [],
+                        }
+                    }
+                }
+            }
+
+        existing_object = {
+            "subshapes": [
+                result_subshape("Edge1", "stable-a"),
+                result_subshape("Edge2", "stable-b"),
+            ]
+        }
+        reordered_object = {
+            "subshapes": [
+                result_subshape("Edge1", "stable-b"),
+                result_subshape("Edge2", "stable-a"),
+            ]
+        }
+
+        self.assertNotIn(
+            "subshapes",
+            collector.compare_object_expected(existing_object, reordered_object),
+        )
+        self.assertEqual(
+            [],
+            collector.compare_topo_naming_state_expected(
+                topo_state("stable-a", "stable-b"),
+                topo_state("stable-b", "stable-a"),
+            ),
+        )
+
+        missing_token_object = {
+            "subshapes": [
+                result_subshape("Edge1", "stable-a"),
+                result_subshape("Edge2", "stable-c"),
+            ]
+        }
+        self.assertIn(
+            "subshapes",
+            collector.compare_object_expected(existing_object, missing_token_object),
+        )
+
+    def test_sketch_constraints_use_the_native_add_constraint_api(self) -> None:
+        class Sketch:
+            def __init__(self) -> None:
+                self.added: list[tuple[object, ...]] = []
+
+            def addConstraint(self, constraint: tuple[object, ...]) -> None:
+                self.added.append(constraint)
+
+        sketch = Sketch()
+        sketcher = SimpleNamespace(Constraint=lambda *args: args)
+
+        with mock.patch.dict(sys.modules, {"Sketcher": sketcher}):
+            collector.set_sketch_property(
+                object(),
+                {},
+                sketch,
+                "Constraints",
+                [{"Type": "Horizontal", "First": 0}],
+            )
+
+        self.assertEqual([("Horizontal", 0)], sketch.added)
+
+    def test_sketch_constraint_enum_and_datum_use_native_constructor_shape(self) -> None:
+        class Sketch:
+            def __init__(self) -> None:
+                self.added: list[tuple[object, ...]] = []
+
+            def addConstraint(self, constraint: tuple[object, ...]) -> None:
+                self.added.append(constraint)
+
+        sketch = Sketch()
+        sketcher = SimpleNamespace(Constraint=lambda *args: args)
+
+        with mock.patch.dict(sys.modules, {"Sketcher": sketcher}):
+            collector.set_sketch_property(
+                object(),
+                {},
+                sketch,
+                "Constraints",
+                [{"Type": 9, "First": 1, "Second": 2, "Datum": 1.25}],
+            )
+
+        self.assertEqual([("Angle", 1, 2, 1.25)], sketch.added)
+
+    def test_sketch_constraint_point_positions_use_freecad_pointpos_values(self) -> None:
+        class Sketch:
+            def __init__(self) -> None:
+                self.added: list[tuple[object, ...]] = []
+
+            def addConstraint(self, constraint: tuple[object, ...]) -> None:
+                self.added.append(constraint)
+
+        sketch = Sketch()
+        sketcher = SimpleNamespace(Constraint=lambda *args: args)
+
+        with mock.patch.dict(sys.modules, {"Sketcher": sketcher}):
+            collector.set_sketch_property(
+                object(),
+                {},
+                sketch,
+                "Constraints",
+                [
+                    {
+                        "Type": "Coincident",
+                        "First": 0,
+                        "FirstPos": "end",
+                        "Second": 1,
+                        "SecondPos": "start",
+                    }
+                ],
+            )
+
+        self.assertEqual([("Coincident", 0, 2, 1, 1)], sketch.added)
+
+    def test_sketch_symmetric_constraint_preserves_the_third_geometry(self) -> None:
+        class Sketch:
+            def __init__(self) -> None:
+                self.added: list[tuple[object, ...]] = []
+
+            def addConstraint(self, constraint: tuple[object, ...]) -> None:
+                self.added.append(constraint)
+
+        sketch = Sketch()
+        sketcher = SimpleNamespace(Constraint=lambda *args: args)
+
+        with mock.patch.dict(sys.modules, {"Sketcher": sketcher}):
+            collector.set_sketch_property(
+                object(),
+                {},
+                sketch,
+                "Constraints",
+                [
+                    {
+                        "Type": "Symmetric",
+                        "First": 1,
+                        "FirstPos": "start",
+                        "Second": 1,
+                        "SecondPos": "end",
+                        "Third": 0,
+                    }
+                ],
+            )
+
+        self.assertEqual([("Symmetric", 1, 1, 1, 2, 0)], sketch.added)
+
+    def test_sketch_angle_preserves_explicit_first_position_via_public_property(self) -> None:
+        class Constraint:
+            def __init__(self, *args: object) -> None:
+                self.args = args
+                self.FirstPos: int | None = None
+
+        class Sketch:
+            def __init__(self) -> None:
+                self.added: list[Constraint] = []
+
+            def addConstraint(self, constraint: Constraint) -> None:
+                self.added.append(constraint)
+
+        sketch = Sketch()
+        sketcher = SimpleNamespace(Constraint=Constraint)
+
+        with mock.patch.dict(sys.modules, {"Sketcher": sketcher}):
+            collector.set_sketch_property(
+                object(),
+                {},
+                sketch,
+                "Constraints",
+                [
+                    {
+                        "Type": "Angle",
+                        "First": 6,
+                        "FirstPos": "start",
+                        "Second": 5,
+                        "Value": 1.25,
+                    }
+                ],
+            )
+
+        self.assertEqual(("Angle", 6, 5, 1.25), sketch.added[0].args)
+        self.assertEqual(1, sketch.added[0].FirstPos)
+
+    def test_raw_vector_uses_the_native_property_type(self) -> None:
+        class FreeCAD:
+            @staticmethod
+            def Vector(x: float, y: float, z: float) -> tuple[float, float, float]:
+                return (x, y, z)
+
+        class Feature:
+            Name = "Pad"
+            Direction: object = None
+
+            def getTypeIdOfProperty(self, name: str) -> str:
+                self.assert_property_name = name
+                return "App::PropertyVector"
+
+        feature = Feature()
+
+        collector.set_property(FreeCAD, {}, feature, "Direction", [0, 1, 1])
+
+        self.assertEqual("Direction", feature.assert_property_name)
+        self.assertEqual((0.0, 1.0, 1.0), feature.Direction)
+
+    def test_integer_list_structured_property_is_written_generically(self) -> None:
+        class Feature:
+            ExternalTypes: object = None
+
+        feature = Feature()
+
+        collector.set_property(
+            object(),
+            {},
+            feature,
+            "ExternalTypes",
+            {"PropertyType": "App::PropertyIntegerList", "value": [2, 3]},
+        )
+
+        self.assertEqual([2, 3], feature.ExternalTypes)
+
+    def test_xlink_list_subset_resolves_object_links(self) -> None:
+        link_a = object()
+        link_b = object()
+
+        resolved = collector.created_link_list(
+            {"LinkA": link_a, "LinkB": link_b},
+            {
+                "PropertyType": "App::PropertyXLinkList",
+                "SubSet": [{"value": "LinkA"}, {"value": "LinkB"}],
+            },
+            "LinkGroup ElementList",
+        )
+
+        self.assertEqual([link_a, link_b], resolved)
+        self.assertEqual(
+            {"LinkA", "LinkB"},
+            collector.link_group_element_names(
+                {
+                    "Objects": [
+                        {
+                            "TypeId": "App::LinkGroup",
+                            "Properties": {
+                                "ElementList": {
+                                    "PropertyType": "App::PropertyXLinkList",
+                                    "SubSet": [
+                                        {"value": "LinkA"},
+                                        {"value": "LinkB"},
+                                    ],
+                                }
+                            },
+                        }
+                    ]
+                }
+            ),
+        )
+
+    def test_show_element_link_uses_element_count_instead_of_writing_element_list(self) -> None:
+        class Feature:
+            def __init__(self, type_id: str, name: str, object_id: int) -> None:
+                object.__setattr__(self, "TypeId", type_id)
+                object.__setattr__(self, "Name", name)
+                object.__setattr__(self, "ID", object_id)
+
+            def __setattr__(self, name: str, value: object) -> None:
+                if name == "ElementList":
+                    raise AttributeError("ElementList is read-only")
+                object.__setattr__(self, name, value)
+
+        class Document:
+            def __init__(self) -> None:
+                self.objects: list[Feature] = []
+
+            def addObject(self, type_id: str, name: str) -> Feature:
+                feature = Feature(type_id, name, len(self.objects) + 1)
+                self.objects.append(feature)
+                return feature
+
+        fixture = {
+            "Objects": [
+                {"Name": "Box", "ID": 1, "TypeId": "Part::Box", "Properties": {}},
+                {
+                    "Name": "ArrayLink",
+                    "ID": 2,
+                    "TypeId": "App::Link",
+                    "Properties": {
+                        "ShowElement": {
+                            "PropertyType": "App::PropertyBool",
+                            "value": True,
+                        },
+                        "ElementCount": {
+                            "PropertyType": "App::PropertyInteger",
+                            "value": 2,
+                        },
+                        "ElementList": {
+                            "PropertyType": "App::PropertyLinkList",
+                            "values": ["Box"],
+                        },
+                    },
+                },
+            ]
+        }
+
+        created = collector.create_objects(object(), Document(), fixture)
+
+        self.assertEqual(2, created["ArrayLink"].ElementCount)
+        fixture["Objects"][1]["Properties"]["ShowElement"]["value"] = False
+
+        hidden_created = collector.create_objects(object(), Document(), fixture)
+
+        self.assertEqual(2, hidden_created["ArrayLink"].ElementCount)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,127 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [
+    {
+      "code": "unsupported_property",
+      "source": "freecad_expected_collector"
+    },
+    {
+      "code": "native_expected_diagnostic",
+      "object": "AdvancedSweep",
+      "policy": "cad-core focused diagnostics own invalid support/mode/location/tolerance payloads",
+      "reason": "Part.BRepOffsetAPI_MakePipeShell Tolerance must be an object with tol3d/boundTol/tolAngular",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "events": [],
+  "fixture": {
+    "case": "part-sweep-advanced-deferred",
+    "expectedPayloadHash": "sha256:bfbdbb77735c51f51d752e87ad0cbda7dff6696fca27b8a90e9e7334537b92ec",
+    "inputHash": "sha256:15890e686461f7440698bec5779da7b8902ee24caf5a5f31d859ce744c34e13f",
+    "phase": "c4m1",
+    "topoNamingStateHash": "sha256:1f1b9ddf8612847e04f61805df2eae5eb3c33ec1b19d2b18435b5d93bb6ab677"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AdvancedSweep": {
+      "afterElements": {},
+      "beforeElements": {},
+      "published": false,
+      "role": "internal_or_fixture",
+      "type": "Part::Sweep"
+    },
+    "Path": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "Profile": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {
+      "AdvancedSweep": {
+        "coveredBy": "Path",
+        "reason": "not_referenced",
+        "sourceEventIds": []
+      }
+    },
+    "publishedObjects": {
+      "Path": {
+        "covers": [
+          "Path"
+        ],
+        "ledgerObject": "Path",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Profile": {
+        "covers": [
+          "Profile"
+        ],
+        "ledgerObject": "Profile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:1f1b9ddf8612847e04f61805df2eae5eb3c33ec1b19d2b18435b5d93bb6ab677",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

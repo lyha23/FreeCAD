@@ -1,0 +1,70 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-torus",
+    "expectedPayloadHash": "sha256:e8044f8f89eaffb3bf466104e97c6fef98a33f7fb76b744150ca015bdf1a868f",
+    "inputHash": "sha256:848022a5757686ddfa9186bd053aa33360e441318af7e2fc18660c8e6ee635c1",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:3e924dea4aea5d892c16d0e0fdb8a5d5b71a1c77e84d7993129d831700d1b083"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Torus": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2"
+        ],
+        "Face": [
+          "Face1"
+        ],
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Torus"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Torus": {
+        "covers": [
+          "Torus"
+        ],
+        "ledgerObject": "Torus",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:3e924dea4aea5d892c16d0e0fdb8a5d5b71a1c77e84d7993129d831700d1b083",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

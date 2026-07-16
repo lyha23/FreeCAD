@@ -1,0 +1,1244 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-thickness-box-face-rectoverso-tangent",
+    "expectedPayloadHash": "sha256:68ee81f300799e867599ba78ab745dada923ed0409038347ac39284b88cb3ac4",
+    "inputHash": "sha256:d36e199005a55945c90cc6dc20536cd19f27dd4cbe2a2bb181ae2ecc7508283d",
+    "phase": "c3m4",
+    "topoNamingStateHash": "sha256:038a947884b6b01f1670ac38204d58becf88c6a0dd5d9898ca3ba1a4af9b8170"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Box": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Box"
+    },
+    "Thickness": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12",
+          "Edge13",
+          "Edge14",
+          "Edge15",
+          "Edge16",
+          "Edge17",
+          "Edge18",
+          "Edge19",
+          "Edge20",
+          "Edge21",
+          "Edge22",
+          "Edge23",
+          "Edge24"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6",
+          "Face7",
+          "Face8",
+          "Face9",
+          "Face10",
+          "Face11"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8",
+          "Vertex9",
+          "Vertex10",
+          "Vertex11",
+          "Vertex12",
+          "Vertex13",
+          "Vertex14",
+          "Vertex15",
+          "Vertex16"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "Edge10;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge10;:G;THK;:H*:*,E",
+              "raw": "Edge10;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge14"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge14"
+            }
+          },
+          "Edge10;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge10;:H*,E",
+              "raw": "Edge10;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge6"
+            }
+          },
+          "Edge11;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge11;:G;THK;:H*:*,E",
+              "raw": "Edge11;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge24"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge24"
+            }
+          },
+          "Edge11;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge11;:H*,E",
+              "raw": "Edge11;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge11"
+            }
+          },
+          "Edge12;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge12;:G;THK;:H*:*,E",
+              "raw": "Edge12;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge16"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge16"
+            }
+          },
+          "Edge12;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge12;:H*,E",
+              "raw": "Edge12;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge12"
+            }
+          },
+          "Edge1;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:G;THK;:H*:*,E",
+              "raw": "Edge1;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge17"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge17"
+            }
+          },
+          "Edge1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge7"
+            }
+          },
+          "Edge2;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:G;THK;:H*:*,E",
+              "raw": "Edge2;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge15"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge15"
+            }
+          },
+          "Edge2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge2;:H*,E",
+              "raw": "Edge2;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge8"
+            }
+          },
+          "Edge3;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:G;THK;:H*:*,E",
+              "raw": "Edge3;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge18"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge18"
+            }
+          },
+          "Edge3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge3;:H*,E",
+              "raw": "Edge3;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge9"
+            }
+          },
+          "Edge4;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:G;THK;:H*:*,E",
+              "raw": "Edge4;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge19"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge19"
+            }
+          },
+          "Edge4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge4;:H*,E",
+              "raw": "Edge4;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge10"
+            }
+          },
+          "Edge5;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge5;:G;THK;:H*:*,E",
+              "raw": "Edge5;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge20"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge20"
+            }
+          },
+          "Edge5;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge5;:H*,E",
+              "raw": "Edge5;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge1"
+            }
+          },
+          "Edge6;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge6;:G;THK;:H*:*,E",
+              "raw": "Edge6;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge13"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge13"
+            }
+          },
+          "Edge6;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge6;:H*,E",
+              "raw": "Edge6;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge2"
+            }
+          },
+          "Edge7;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge7;:G;THK;:H*:*,E",
+              "raw": "Edge7;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge21"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge21"
+            }
+          },
+          "Edge7;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge7;:H*,E",
+              "raw": "Edge7;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge3"
+            }
+          },
+          "Edge8;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge8;:G;THK;:H*:*,E",
+              "raw": "Edge8;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge22"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge22"
+            }
+          },
+          "Edge8;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge8;:H*,E",
+              "raw": "Edge8;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge4"
+            }
+          },
+          "Edge9;:G;THK;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge9;:G;THK;:H*:*,E",
+              "raw": "Edge9;:G;THK;:Hf0d:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge23"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge23"
+            }
+          },
+          "Edge9;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Edge9;:H*,E",
+              "raw": "Edge9;:Hf0d,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "Thickness",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Edge5"
+            }
+          },
+          "Face1;:G;THK;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:G;THK;:H*:*,F",
+              "raw": "Face1;:G;THK;:Hf0d:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face7"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face7"
+            }
+          },
+          "Face1;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face1;:H*,F",
+              "raw": "Face1;:Hf0d,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face3"
+            }
+          },
+          "Face2;:G;THK;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face2;:G;THK;:H*:*,F",
+              "raw": "Face2;:G;THK;:Hf0d:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face8"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face8"
+            }
+          },
+          "Face2;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face2;:H*,F",
+              "raw": "Face2;:Hf0d,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face1"
+            }
+          },
+          "Face3;:G;THK;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face3;:G;THK;:H*:*,F",
+              "raw": "Face3;:G;THK;:Hf0d:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face9"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face9"
+            }
+          },
+          "Face3;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face3;:H*,F",
+              "raw": "Face3;:Hf0d,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face2"
+            }
+          },
+          "Face4;:G;THK;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face4;:G;THK;:H*:*,F",
+              "raw": "Face4;:G;THK;:Hf0d:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face10"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face10"
+            }
+          },
+          "Face4;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face4;:H*,F",
+              "raw": "Face4;:Hf0d,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face4"
+            }
+          },
+          "Face5;:G;THK;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face5;:G;THK;:H*:*,F",
+              "raw": "Face5;:G;THK;:Hf0d:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face11"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face11"
+            }
+          },
+          "Face5;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face5;:H*,F",
+              "raw": "Face5;:Hf0d,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face5"
+            }
+          },
+          "Face6;:M;THK;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Face6;:M;THK;:H*:*,F",
+              "raw": "Face6;:M;THK;:Hf0d:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "Thickness",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Face6"
+            }
+          },
+          "Vertex1;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:G;THK;:H*:*,V",
+              "raw": "Vertex1;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex11"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex11"
+            }
+          },
+          "Vertex1;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex6"
+            }
+          },
+          "Vertex2;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:G;THK;:H*:*,V",
+              "raw": "Vertex2;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex13"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex13"
+            }
+          },
+          "Vertex2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex5"
+            }
+          },
+          "Vertex3;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:G;THK;:H*:*,V",
+              "raw": "Vertex3;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex12"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex12"
+            }
+          },
+          "Vertex3;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex3;:H*,V",
+              "raw": "Vertex3;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex7"
+            }
+          },
+          "Vertex4;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:G;THK;:H*:*,V",
+              "raw": "Vertex4;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex14"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex14"
+            }
+          },
+          "Vertex4;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex4;:H*,V",
+              "raw": "Vertex4;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex8"
+            }
+          },
+          "Vertex5;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex5;:G;THK;:H*:*,V",
+              "raw": "Vertex5;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex9"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex9"
+            }
+          },
+          "Vertex5;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex5;:H*,V",
+              "raw": "Vertex5;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex1"
+            }
+          },
+          "Vertex6;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex6;:G;THK;:H*:*,V",
+              "raw": "Vertex6;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex15"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex15"
+            }
+          },
+          "Vertex6;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex6;:H*,V",
+              "raw": "Vertex6;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex2"
+            }
+          },
+          "Vertex7;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex7;:G;THK;:H*:*,V",
+              "raw": "Vertex7;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex10"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex10"
+            }
+          },
+          "Vertex7;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex7;:H*,V",
+              "raw": "Vertex7;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex3"
+            }
+          },
+          "Vertex8;:G;THK;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex8;:G;THK;:H*:*,V",
+              "raw": "Vertex8;:G;THK;:Hf0d:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex16"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex16"
+            }
+          },
+          "Vertex8;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "Vertex8;:H*,V",
+              "raw": "Vertex8;:Hf0d,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "Thickness",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Thickness",
+              "subname": "Vertex4"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Thickness"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Box": {
+        "covers": [
+          "Box"
+        ],
+        "ledgerObject": "Box",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Thickness": {
+        "covers": [
+          "Thickness"
+        ],
+        "ledgerObject": "Thickness",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:038a947884b6b01f1670ac38204d58becf88c6a0dd5d9898ca3ba1a4af9b8170",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

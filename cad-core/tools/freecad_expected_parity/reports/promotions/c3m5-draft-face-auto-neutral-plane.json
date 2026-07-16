@@ -1,0 +1,82 @@
+{
+  "case": "draft-face-auto-neutral-plane",
+  "phase": "c3m5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "e0618cdb6dbaf0a204ccf880be43fc0debba14cb5bf6ab187c4fb49fc639ee52",
+    "manifestBeforeSha256": "335bde992258a75d99c6ca1d6736cc1b5a9be947a5a957e67576a07ae293af3d",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-draft-face-auto-neutral-plane-collect.json",
+      "sha256": "b2029d4160ead169e9af105d93d811f2a7b4f5308aff092d942e8134146fd4bb"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/draft-face-auto-neutral-plane.json",
+      "sha256": "c438e85b9496a7594c1189aa105345dcef177842ee7935221cf476784d2d245d"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/draft-face-auto-neutral-plane.freecad.ledger.json",
+      "sha256": "6131bf5c4c4fb8ee07cbeb6015832f456ec01b519191981e2708f3bfc9297f86"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/draft-face-auto-neutral-plane.freecad.json",
+      "sha256": "2451f7027d42488e73da95e408a973579db0fc0dad626feff8b93758d255f14a"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-draft-face-auto-neutral-plane-repeat2.json",
+      "sha256": "2cb9f19cb91ea875e5cef7eed602bdf1f29d5f412cdaec7c81c16d0fb4291165"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/draft-face-auto-neutral-plane.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/draft-face-auto-neutral-plane.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m5-draft-face-auto-neutral-plane.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/draft-face-auto-neutral-plane.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

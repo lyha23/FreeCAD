@@ -1,0 +1,63 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-vertex",
+    "expectedPayloadHash": "sha256:151fbaf69c795f098311efba2bf485e5c8a68dbe9fe1799d407fb10d062c39ed",
+    "inputHash": "sha256:38b2371e7262b02caefe1ebf7d7be1973f2b4da12b1de8dec238a36dbfb29602",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:9a2a9ef2a1ec9238abaf5d47c0919ee02fece710f530dc3618d65d6997ab4f4e"
+  },
+  "inputReferences": [],
+  "objects": {
+    "Vertex": {
+      "afterElements": {
+        "Vertex": [
+          "Vertex1"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Vertex"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "Vertex": {
+        "covers": [
+          "Vertex"
+        ],
+        "ledgerObject": "Vertex",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:9a2a9ef2a1ec9238abaf5d47c0919ee02fece710f530dc3618d65d6997ab4f4e",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

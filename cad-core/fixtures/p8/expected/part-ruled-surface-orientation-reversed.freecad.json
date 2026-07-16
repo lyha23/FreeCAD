@@ -1,0 +1,108 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.0000001,
+          3.0000001,
+          2.0000001
+        ],
+        "min": [
+          -1.0000001,
+          -1e-07,
+          -1e-07
+        ]
+      },
+      "object": "ReversedRuledSurface",
+      "object_fields": {
+        "feature": "part_ruled_surface",
+        "orientation": "Reversed",
+        "shape": "occt_face",
+        "source_curve1": "SkewLine1",
+        "source_curve2": "SkewLine2",
+        "status": "ok"
+      },
+      "topology_counts": {
+        "edges": 4,
+        "faces": 1,
+        "vertices": 4
+      },
+      "volume": -1.3839889702338305e-16
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:b337422c2bf1dd88d0681cbddea80a5106d528a22b8f4fc6d7d7566199f790de",
+    "objects": {
+      "ReversedRuledSurface": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:156d3f1afa36585953bbf0967adbb8a66bbc37f705593f1f074f1c67a928dd6d",
+        "subshapes": {}
+      },
+      "SkewLine1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:94740116391f0cfe11805581276a5d6a6aee5030298da9c4c3d1f87b8efece94",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "SkewLine2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b4e01a5aa5e3adde4d5c1c5dcb8d23a91311f7d0785c19c2e4b08c7404e47f1d",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

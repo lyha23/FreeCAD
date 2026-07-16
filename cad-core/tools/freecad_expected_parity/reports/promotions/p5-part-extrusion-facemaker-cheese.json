@@ -1,0 +1,82 @@
+{
+  "case": "part-extrusion-facemaker-cheese",
+  "phase": "p5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "0717c7891ba9ba26e135e52ed5a066a414ab2c1fd6d070ffa126e71498380ecf",
+    "manifestBeforeSha256": "09bd00b2f1ffd0c71bf915db4af78c65b5fd913db5afe4c422803e9517395a94",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-facemaker-cheese-collect.json",
+      "sha256": "8fd3aa5cc501944821c5aed499fa708cfc3f37a93a93ef2e163215a9710e283a"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/part-extrusion-facemaker-cheese.json",
+      "sha256": "20b0b7de63e30cfd699b5dafbc5321f682536e185c40b82fcfc41adce0810c50"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-facemaker-cheese.freecad.ledger.json",
+      "sha256": "d1fe41608ba177a7dab0a8eddf23848bfe000365e1189f1da79c3edabaff460b"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-facemaker-cheese.freecad.json",
+      "sha256": "59fbfa23cb8431db3f957c31ec4e2ef6b9416136b11a09d26950d7c71c02e4f9"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-facemaker-cheese-repeat2.json",
+      "sha256": "a353b220917bc61c3b349f173e091dcefced1fbd550706684e5ba70e52e35fd5"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/part-extrusion-facemaker-cheese.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-facemaker-cheese.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p5-part-extrusion-facemaker-cheese.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-facemaker-cheese.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

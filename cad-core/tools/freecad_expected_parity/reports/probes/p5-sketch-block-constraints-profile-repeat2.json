@@ -1,0 +1,305 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-block-constraints-profile",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+  },
+  "executedCaseCount": 1,
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "sketch-block-constraints-profile",
+        "fixtureSha256": "c5922de6ec62aa09074d4e75b0bcd597421036d4fbc4bfea705bb2ac0b2223df",
+        "ledgerSha256": "6400c8aff050182c4c7d1a43ed65aac3409ad2ac372d7117a887f14bbd5e9a14",
+        "phase": "p5",
+        "producerTraceSha256": null,
+        "publicSha256": "885bf347820986e3e4f6ff85bde70987d8836008c3e3a88db0fd6b375cb9ce8f"
+      }
+    ],
+    "phases": 1,
+    "sha256": "48aa0ac69d02703ec69e61a09b3b12a2c54e4e6869a40d6cd43ec53609f3dff8"
+  },
+  "mode": "repeated-staging-collection",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runCount": 2,
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-block-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-a/p5/expected/sketch-block-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "sketch-block-constraints-profile",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-a/p5/expected/sketch-block-constraints-profile.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-block-constraints-profile.json",
+            "fixtureSha256": "c5922de6ec62aa09074d4e75b0bcd597421036d4fbc4bfea705bb2ac0b2223df",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "6400c8aff050182c4c7d1a43ed65aac3409ad2ac372d7117a887f14bbd5e9a14",
+            "phase": "p5",
+            "publicExpectedSha256": "885bf347820986e3e4f6ff85bde70987d8836008c3e3a88db0fd6b375cb9ce8f",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-block-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-a/p5/expected/sketch-block-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-block-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-b/p5/expected/sketch-block-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "sketch-block-constraints-profile",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-b/p5/expected/sketch-block-constraints-profile.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-block-constraints-profile.json",
+            "fixtureSha256": "c5922de6ec62aa09074d4e75b0bcd597421036d4fbc4bfea705bb2ac0b2223df",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "85cf46cd51692883f64e12ac37f9532c587ad03fcad953a25478e025ca1f2f16",
+            "phase": "p5",
+            "publicExpectedSha256": "b17fa7df5bd6f2a2d9b3858923f638e3c53011ff8aedbd964a9c8f8cabf31e85",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-block-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-b/p5/expected/sketch-block-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-block-constraints-profile/run-b"
+    }
+  ],
+  "runtimeIdentities": [
+    [
+      "1.2.0 revision 20260519",
+      "7.8.1"
+    ]
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "selectedCaseCount": 1,
+  "status": "passed",
+  "successfulRunCount": 2
+}

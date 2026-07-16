@@ -1,0 +1,82 @@
+{
+  "case": "sketch-construction-ignored",
+  "phase": "p5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "2fe92741896b6457204b44b907a10097a88df83adc5f41c1a1dfaa6049cd1f14",
+    "manifestBeforeSha256": "09850d1d78127c6248887968cfc9b08749d3781f945c2f76bac48c599d1fc2d5",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-sketch-construction-ignored-collect.json",
+      "sha256": "aecca4e3d3fa30e2109b19f689993e30f574cb9c3100c595bd0f2c83e9b80d47"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-construction-ignored.json",
+      "sha256": "9f819b4332d34ff1b4d6112a28e1dac94b3428926f8476f9267131edcc01c9e9"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/sketch-construction-ignored.freecad.ledger.json",
+      "sha256": "8a7e8b57a417317af413f509d769c19c43fdcd3e0c965065ac803664e7fa98dc"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/sketch-construction-ignored.freecad.json",
+      "sha256": "6262f6f89c3c62e0865a4b35093a960ec911725b041d120567cdaf742fab5cb2"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-sketch-construction-ignored-repeat2.json",
+      "sha256": "7257e96d329575af94671b3c45313d65e51013661dcab4477e27babb9438bde7"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/sketch-construction-ignored.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/sketch-construction-ignored.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p5-sketch-construction-ignored.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/sketch-construction-ignored.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

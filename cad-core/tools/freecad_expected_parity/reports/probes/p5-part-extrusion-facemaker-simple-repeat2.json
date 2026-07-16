@@ -1,0 +1,305 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+  },
+  "executedCaseCount": 1,
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "part-extrusion-facemaker-simple",
+        "fixtureSha256": "a0ed30867af31e6e75a4a5306054a1414fb847b86055630e4102027f715f5670",
+        "ledgerSha256": "a4ca96adb8e1437b302a86340364f55e0e733a2fd44f2a9dba993a70537a99ed",
+        "phase": "p5",
+        "producerTraceSha256": null,
+        "publicSha256": "91f8483334de39864657cfb0cc5b3ae1bfeb57dcf0888c2023c9edf884c95e72"
+      }
+    ],
+    "phases": 1,
+    "sha256": "feeca70dbeed7e84ca3569382ef2243fe18e31a020aaebe0e781cb1f14ff14dc"
+  },
+  "mode": "repeated-staging-collection",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runCount": 2,
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/part-extrusion-facemaker-simple.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-a/p5/expected/part-extrusion-facemaker-simple.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "part-extrusion-facemaker-simple",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-a/p5/expected/part-extrusion-facemaker-simple.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/part-extrusion-facemaker-simple.json",
+            "fixtureSha256": "a0ed30867af31e6e75a4a5306054a1414fb847b86055630e4102027f715f5670",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "a4ca96adb8e1437b302a86340364f55e0e733a2fd44f2a9dba993a70537a99ed",
+            "phase": "p5",
+            "publicExpectedSha256": "91f8483334de39864657cfb0cc5b3ae1bfeb57dcf0888c2023c9edf884c95e72",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/part-extrusion-facemaker-simple.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-a/p5/expected/part-extrusion-facemaker-simple.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/part-extrusion-facemaker-simple.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-b/p5/expected/part-extrusion-facemaker-simple.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "part-extrusion-facemaker-simple",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-b/p5/expected/part-extrusion-facemaker-simple.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/part-extrusion-facemaker-simple.json",
+            "fixtureSha256": "a0ed30867af31e6e75a4a5306054a1414fb847b86055630e4102027f715f5670",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b81f204b95f3eea9c898fa44242d5a48a5307f545a75ffb0065ad4af83d712d9",
+            "phase": "p5",
+            "publicExpectedSha256": "0d7143de52fa1c1ae6dcb8aaab966197f429e0f1221a566fd292e97789b4dbdb",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/part-extrusion-facemaker-simple.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-b/p5/expected/part-extrusion-facemaker-simple.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/part-extrusion-facemaker-simple/run-b"
+    }
+  ],
+  "runtimeIdentities": [
+    [
+      "1.2.0 revision 20260519",
+      "7.8.1"
+    ]
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "selectedCaseCount": 1,
+  "status": "passed",
+  "successfulRunCount": 2
+}

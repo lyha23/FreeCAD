@@ -1,0 +1,305 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-construction-ignored",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+  },
+  "executedCaseCount": 1,
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "sketch-construction-ignored",
+        "fixtureSha256": "9f819b4332d34ff1b4d6112a28e1dac94b3428926f8476f9267131edcc01c9e9",
+        "ledgerSha256": "9183ea0bba0ff02127569f2f5029120d5e74a86cd0ec5188f91c6e67e87d3d4d",
+        "phase": "p5",
+        "producerTraceSha256": null,
+        "publicSha256": "4b5327fa859c68b246d4b80c6c66facc55f4475a2b429bac6c5d774eaf0f0fbd"
+      }
+    ],
+    "phases": 1,
+    "sha256": "68f7f8ccca18facc79826e9b2cf3fd5fb9e502f343e9e40b6e616a1554d7077d"
+  },
+  "mode": "repeated-staging-collection",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runCount": 2,
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-construction-ignored.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-a/p5/expected/sketch-construction-ignored.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "sketch-construction-ignored",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-construction-ignored/run-a/p5/expected/sketch-construction-ignored.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-construction-ignored.json",
+            "fixtureSha256": "9f819b4332d34ff1b4d6112a28e1dac94b3428926f8476f9267131edcc01c9e9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "9183ea0bba0ff02127569f2f5029120d5e74a86cd0ec5188f91c6e67e87d3d4d",
+            "phase": "p5",
+            "publicExpectedSha256": "4b5327fa859c68b246d4b80c6c66facc55f4475a2b429bac6c5d774eaf0f0fbd",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-construction-ignored.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-a/p5/expected/sketch-construction-ignored.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-construction-ignored/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-construction-ignored.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-b/p5/expected/sketch-construction-ignored.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "sketch-construction-ignored",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-construction-ignored/run-b/p5/expected/sketch-construction-ignored.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-construction-ignored.json",
+            "fixtureSha256": "9f819b4332d34ff1b4d6112a28e1dac94b3428926f8476f9267131edcc01c9e9",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "652b5b12e592265783c356b7cb33d18ceb6c062aff69523c22bc481e7030c1da",
+            "phase": "p5",
+            "publicExpectedSha256": "40f22016441df6f180730c1ab28ff88a097634faf2cc8e59356bfb7c2c614521",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-construction-ignored.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-b/p5/expected/sketch-construction-ignored.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-construction-ignored/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-construction-ignored/run-b"
+    }
+  ],
+  "runtimeIdentities": [
+    [
+      "1.2.0 revision 20260519",
+      "7.8.1"
+    ]
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "selectedCaseCount": 1,
+  "status": "passed",
+  "successfulRunCount": 2
+}

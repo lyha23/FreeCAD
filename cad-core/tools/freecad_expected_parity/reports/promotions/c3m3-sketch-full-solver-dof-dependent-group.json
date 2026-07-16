@@ -1,0 +1,82 @@
+{
+  "case": "sketch-full-solver-dof-dependent-group",
+  "phase": "c3m3",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "0d30406344d8ddbe008661fecd75954942fd0050d102ff939fdd708995d93a0e",
+    "manifestBeforeSha256": "348be27bb34057f84e8664c792ac6e4f5ec6da0159c1b84c93cd7d2a15a308a5",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-full-solver-dof-dependent-group-collect.json",
+      "sha256": "ec3b0ecc41d3b6e1c517c478e78b77ff856815c2731e1b7755f65ba1afa54412"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-full-solver-dof-dependent-group.json",
+      "sha256": "bbc1eb629e7046434a1ce472a2b6f7247949e6fca10968e3a5200847dadab413"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-full-solver-dof-dependent-group.freecad.ledger.json",
+      "sha256": "efe894e5e2b711c4bcf21e909c9e56cb69153816bc567ba62653aecfbb0ab4ed"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-full-solver-dof-dependent-group.freecad.json",
+      "sha256": "b001211e1b408b93738eb003dcad0103ae9304704d68c125b19c79d2c24a65d3"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-full-solver-dof-dependent-group-repeat2.json",
+      "sha256": "ece19a715be9448609f556d17ae90208e0a5fe05d936ed35ead0259c0b43f06c"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-full-solver-dof-dependent-group.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-full-solver-dof-dependent-group.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m3-sketch-full-solver-dof-dependent-group.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-full-solver-dof-dependent-group.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

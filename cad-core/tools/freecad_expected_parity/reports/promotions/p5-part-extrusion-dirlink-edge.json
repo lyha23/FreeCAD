@@ -1,0 +1,82 @@
+{
+  "case": "part-extrusion-dirlink-edge",
+  "phase": "p5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "58d6b32eb9a8ceb7a04eb6d735073545f99eec46ef8ba81e968d765dca96fd56",
+    "manifestBeforeSha256": "5278935fd2450c6b0da471ec1bd75742d086a4144e44d33b3e5442fe4fccb9c2",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-dirlink-edge-collect.json",
+      "sha256": "bb3437c9f564f271db5c7d12e8a2397dd8244e62c3e692f718c5780616bbc399"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/part-extrusion-dirlink-edge.json",
+      "sha256": "d272edcf116fa2d9f8f73327b43bd6505c3bffbb286563649ac23389a971b88b"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-dirlink-edge.freecad.ledger.json",
+      "sha256": "2b8d1c4fde90ef8ca3f9968b56a56e8f30b8bf66b4196525cfef20f4b9a11e2d"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-dirlink-edge.freecad.json",
+      "sha256": "692c0111c2cd13e375b9c8e011c04f878cbf32348850633363f495d7332e13e6"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-dirlink-edge-repeat2.json",
+      "sha256": "cb2fea004600a0dcab1da42916d8c7f9e12db1262957373d992b5796c3401795"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/part-extrusion-dirlink-edge.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-dirlink-edge.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p5-part-extrusion-dirlink-edge.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-dirlink-edge.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

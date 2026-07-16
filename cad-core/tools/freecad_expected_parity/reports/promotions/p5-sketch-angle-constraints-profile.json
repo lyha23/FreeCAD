@@ -1,0 +1,82 @@
+{
+  "case": "sketch-angle-constraints-profile",
+  "phase": "p5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "e3b6916d11bbb120439d13be65aae7c0821b1b19f962b64a8f0b4dc608edb001",
+    "manifestBeforeSha256": "116e428ea936999e327b232d8677624cc3d71e372abe9f080b71d91d4a4b578c",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-sketch-angle-constraints-profile-collect.json",
+      "sha256": "8330a7c96371d589d4434d107b33ac4c574b5bdd027acf3b3fbbdd49ae4720d6"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-angle-constraints-profile.json",
+      "sha256": "dcf4eb493cd83ebcb9584f150f0103c3969dbebd3680d6fe7c8e93a7e447508c"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/sketch-angle-constraints-profile.freecad.ledger.json",
+      "sha256": "a2d44730773bdb4d22ac94ba7b850d361c84d7c70e49926a51e01db763b152ee"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/sketch-angle-constraints-profile.freecad.json",
+      "sha256": "6458d958cca3e519a7eb33aafd7ad08de3c14d9f16732288d3a356874cd24adf"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-sketch-angle-constraints-profile-repeat2.json",
+      "sha256": "6f7e923d3325e06f54bfcdd7506cae590df23f5c9bed91bb6900056c1b7a4949"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/sketch-angle-constraints-profile.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/sketch-angle-constraints-profile.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p5-sketch-angle-constraints-profile.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/sketch-angle-constraints-profile.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

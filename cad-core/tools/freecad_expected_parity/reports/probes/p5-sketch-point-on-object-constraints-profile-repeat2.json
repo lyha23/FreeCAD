@@ -1,0 +1,305 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+  },
+  "executedCaseCount": 1,
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "sketch-point-on-object-constraints-profile",
+        "fixtureSha256": "f6bfe34c2ada4962ed8b94dc79e961cf028ad65a5d59eec120385a1cf7a78218",
+        "ledgerSha256": "edc2802a3fd68ceef25005a27e0c44cb274dad15333a1268dcc107540376f423",
+        "phase": "p5",
+        "producerTraceSha256": null,
+        "publicSha256": "a212c8a57df4193a798d34a6cf8e9591c08b27cc464035497d821b37f2a9a369"
+      }
+    ],
+    "phases": 1,
+    "sha256": "17c3cc1cafd7cb70938d2ee53ee99f537fc09e24d6513a76ed6cba41d002e445"
+  },
+  "mode": "repeated-staging-collection",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "passed",
+  "runCount": 2,
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-point-on-object-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-a/p5/expected/sketch-point-on-object-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "sketch-point-on-object-constraints-profile",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-a/p5/expected/sketch-point-on-object-constraints-profile.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-point-on-object-constraints-profile.json",
+            "fixtureSha256": "f6bfe34c2ada4962ed8b94dc79e961cf028ad65a5d59eec120385a1cf7a78218",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "edc2802a3fd68ceef25005a27e0c44cb274dad15333a1268dcc107540376f423",
+            "phase": "p5",
+            "publicExpectedSha256": "a212c8a57df4193a798d34a6cf8e9591c08b27cc464035497d821b37f2a9a369",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-point-on-object-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-a/p5/expected/sketch-point-on-object-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-a.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-point-on-object-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-b/p5/expected/sketch-point-on-object-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": null,
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "status": "not-requested"
+              },
+              "ledgerAuthority": {
+                "status": "written"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "written"
+              }
+            },
+            "case": "sketch-point-on-object-constraints-profile",
+            "errors": [],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-b/p5/expected/sketch-point-on-object-constraints-profile.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/sketch-point-on-object-constraints-profile.json",
+            "fixtureSha256": "f6bfe34c2ada4962ed8b94dc79e961cf028ad65a5d59eec120385a1cf7a78218",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "9ef17edd0e113c0e1ddc8d481f867995760f7f807d5e4b2b77d9d4bc3381c9b2",
+            "phase": "p5",
+            "publicExpectedSha256": "b6be9925525d2257975004caf289388409bf10144bfd41b7cfa506d4aefd4dbe",
+            "status": "passed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/p5/sketch-point-on-object-constraints-profile.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-b/p5/expected/sketch-point-on-object-constraints-profile.freecad.json\", \"--validate-ledger\", \"--repeat\", \"1\", \"--report\", \"out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-b.report.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 0,
+        "firstFailure": null,
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "not_evaluated",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 1,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "not_evaluated",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "passed"
+      },
+      "returncode": 0,
+      "root": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/candidates/p5/sketch-point-on-object-constraints-profile/run-b"
+    }
+  ],
+  "runtimeIdentities": [
+    [
+      "1.2.0 revision 20260519",
+      "7.8.1"
+    ]
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "selectedCaseCount": 1,
+  "status": "passed",
+  "successfulRunCount": 2
+}

@@ -1,0 +1,129 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-ruled-surface-wire-wire",
+    "expectedPayloadHash": "sha256:082905f2a87e6703eee04385722a5385a674a4cfa3b6c5a58481418de10c69aa",
+    "inputHash": "sha256:97681fd74c5b1ea59665841c44495329899414ef83a443e52d8e35e3a9a4c280",
+    "phase": "c4m1",
+    "topoNamingStateHash": "sha256:d96b46c0ad75d4ee9fc66c88a7e4767f3f81cd7516ad0e3a1a0caa44ac568c72"
+  },
+  "inputReferences": [],
+  "objects": {
+    "LowerWire": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    },
+    "RuledSurface": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RuledSurface"
+    },
+    "UpperWire": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "LowerWire": {
+        "covers": [
+          "LowerWire"
+        ],
+        "ledgerObject": "LowerWire",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "RuledSurface": {
+        "covers": [
+          "RuledSurface"
+        ],
+        "ledgerObject": "RuledSurface",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "UpperWire": {
+        "covers": [
+          "UpperWire"
+        ],
+        "ledgerObject": "UpperWire",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:d96b46c0ad75d4ee9fc66c88a7e4767f3f81cd7516ad0e3a1a0caa44ac568c72",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

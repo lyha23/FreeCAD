@@ -1,0 +1,95 @@
+{
+  "diagnostics": [
+    {
+      "code": "unsupported_wrapper_lifecycle",
+      "source": "freecad_expected_collector"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "diagnostic_codes": [
+        "unsupported_wrapper_lifecycle"
+      ],
+      "native_error": "Part.BRepOffsetAPI.MakeFilling direct wrapper requires a mutable Python add/build/shape lifecycle; cad-core only supports request-local Part.makeFilledFace DTO inputs here.",
+      "native_error_code": "unsupported_wrapper_lifecycle",
+      "object": "WrapperBoundary",
+      "object_fields": {
+        "feature": "part_brepoffsetapi_makefilling_wrapper",
+        "freecad_native_document_object": false,
+        "helper": "Part.BRepOffsetAPI.MakeFilling",
+        "source_backed_helper": false,
+        "status": "error",
+        "wrapper_lifecycle": "python_mutable_builder_unsupported"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:368e9f151735e2279055febf912bd9ace85313e60c801c162040fd96baf88c3f",
+    "objects": {
+      "Profile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:b33b91886aac013eaa98b01f8cd524f3fa619bbbfcadff4c0c56638c325570f8",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "WrapperBoundary": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:caf6df43195db478c29c708a0015c7c19cdc3418a4477be57e13c24604261041",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

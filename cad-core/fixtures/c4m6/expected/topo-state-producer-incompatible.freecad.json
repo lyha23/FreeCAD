@@ -1,0 +1,20 @@
+{
+  "diagnostics": [
+    {
+      "actualProducer": {
+        "cadCoreVersion": "fixture-contract-v0",
+        "freecadVersion": "0.19 incompatible fixture",
+        "occtVersion": "6.9 incompatible fixture"
+      },
+      "code": "topo_state_producer_incompatible",
+      "expectedProducer": {
+        "cadCoreVersion": "fixture-contract-v1"
+      },
+      "message": "topoNamingState producer is incompatible; request-level recompute is refused",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": []
+}

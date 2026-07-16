@@ -1,0 +1,82 @@
+{
+  "case": "part-offset2d-face-no-fill",
+  "phase": "c3m4",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "e787e1482304428c638e737cd1e71ca5ce38d1ca702e5a0ae2f1b5166372720c",
+    "manifestBeforeSha256": "89b9b39e017a02c39becd00d032e15d2b36e7fc6bee99cdbffd458384345c9d0",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m4-part-offset2d-face-no-fill-collect.json",
+      "sha256": "5ed0f949058e569c0d0e38594103b241438b65be9ee70dcd1937e730987914db"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m4/part-offset2d-face-no-fill.json",
+      "sha256": "635f256ea290ff67650fef09b2d82f5c25c72d061bd00c0c8706e4b017ee6c69"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m4/expected/part-offset2d-face-no-fill.freecad.ledger.json",
+      "sha256": "efc4836cf93aa3a5458c420a4412c805a907234a16eff3f5c11b7466cbc84d00"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m4/expected/part-offset2d-face-no-fill.freecad.json",
+      "sha256": "bebb8dd93ac41af3b6f4bf0743c594730e214100f0b34e01f1066181c1418cb5"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m4-part-offset2d-face-no-fill-repeat2.json",
+      "sha256": "c1813b12736ea179c988d8ff01efa5fec87ac6a3e2ca6e099e84544bbe3c201d"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-offset2d-face-no-fill.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-face-no-fill.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m4-part-offset2d-face-no-fill.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-face-no-fill.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": null,
+  "cases": [
+    {
+      "artifacts": {
+        "candidateWrite": {
+          "status": "not-requested"
+        },
+        "ledgerAuthority": {
+          "status": "not-run"
+        },
+        "ledgerValidation": {
+          "status": "not-run"
+        },
+        "producerTraceDiagnostic": {
+          "status": "not-run"
+        },
+        "publicAuthority": {
+          "status": "not-run"
+        }
+      },
+      "case": "sketch-malformed-constraints",
+      "errors": [
+        {
+          "detail": "Constraint has invalid indexes",
+          "stage": "collection"
+        }
+      ],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-malformed-constraints.freecad.json",
+      "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-malformed-constraints.json",
+      "fixtureSha256": "0680865f0f932abc162f6fafb20ac985628e43ffe90b4abc871047ddd4e5838e",
+      "ledgerSha256": null,
+      "phase": "c3m3",
+      "publicExpectedSha256": null,
+      "status": "failed"
+    }
+  ],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "41ed5efa88de1b8e5f7f6b499c9c55987a01d7aa99f70ca0cbb3d998857a0832"
+  },
+  "collectorInvocation": {
+    "argv": [
+      "/Users/li/.cargo/bin/FreeCADCmd",
+      "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "--pass",
+      "__cad_core_expected_args_env__"
+    ],
+    "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+    "environment": {
+      "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/c3m3/sketch-malformed-constraints.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/fixtures/c3m3/expected/sketch-malformed-constraints.freecad.json\", \"--validate-ledger\", \"--report\", \"tools/freecad_expected_parity/reports/probes/c3m3-sketch-malformed-constraints-collect.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+    }
+  },
+  "discovered": 1,
+  "failed": 1,
+  "firstFailure": {
+    "artifacts": {
+      "candidateWrite": {
+        "status": "not-requested"
+      },
+      "ledgerAuthority": {
+        "status": "not-run"
+      },
+      "ledgerValidation": {
+        "status": "not-run"
+      },
+      "producerTraceDiagnostic": {
+        "status": "not-run"
+      },
+      "publicAuthority": {
+        "status": "not-run"
+      }
+    },
+    "case": "sketch-malformed-constraints",
+    "errors": [
+      {
+        "detail": "Constraint has invalid indexes",
+        "stage": "collection"
+      }
+    ],
+    "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-malformed-constraints.freecad.json",
+    "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-malformed-constraints.json",
+    "fixtureSha256": "0680865f0f932abc162f6fafb20ac985628e43ffe90b4abc871047ddd4e5838e",
+    "ledgerSha256": null,
+    "phase": "c3m3",
+    "publicExpectedSha256": null,
+    "status": "failed"
+  },
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+  "ledgerDriftStatus": "not_evaluated",
+  "ledgerValidationStatus": "failed",
+  "mode": "collection",
+  "processed": 0,
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: source commit",
+    "missing provenance: dirty summary",
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build type",
+    "missing provenance: build generator",
+    "missing provenance: cases[0].publicExpectedSha256",
+    "missing provenance: cases[0].ledgerSha256"
+  ],
+  "publicExpectedStatus": "not_evaluated",
+  "runtime": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "occtVersion": "7.8.1"
+  },
+  "schema": "freecad-fixture-regression-report/v1",
+  "skipped": 0,
+  "status": "failed"
+}

@@ -1,0 +1,98 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": null,
+  "cases": [
+    {
+      "artifacts": {
+        "candidateWrite": {
+          "status": "not-requested"
+        },
+        "ledgerAuthority": {
+          "status": "written"
+        },
+        "ledgerValidation": {
+          "status": "valid"
+        },
+        "producerTraceDiagnostic": {
+          "reason": "disabled-by-request",
+          "status": "not_evaluated"
+        },
+        "publicAuthority": {
+          "status": "written"
+        }
+      },
+      "case": "sketch-partially-redundant-block-horizontal",
+      "errors": [],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-partially-redundant-block-horizontal.freecad.json",
+      "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-partially-redundant-block-horizontal.json",
+      "fixtureSha256": "8e6a8fbe8976bf59767eed0d38fc8f78d1b513a1cddc0fbc9d3ff004d3d37f94",
+      "ledgerOutcome": "accepted",
+      "ledgerSha256": "d651b682a6e11867bfe391699aed81d31e2f70022a95d2e3cfdde3fb315014dd",
+      "phase": "c3m3",
+      "publicExpectedSha256": "dd6462badadbdba936a83a4de5e45255260148c32e8a536436c840e91a771412",
+      "status": "passed"
+    }
+  ],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "41ed5efa88de1b8e5f7f6b499c9c55987a01d7aa99f70ca0cbb3d998857a0832"
+  },
+  "collectorInvocation": {
+    "argv": [
+      "/Users/li/.cargo/bin/FreeCADCmd",
+      "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "--pass",
+      "__cad_core_expected_args_env__"
+    ],
+    "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+    "environment": {
+      "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/c3m3/sketch-partially-redundant-block-horizontal.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/fixtures/c3m3/expected/sketch-partially-redundant-block-horizontal.freecad.json\", \"--validate-ledger\", \"--report\", \"tools/freecad_expected_parity/reports/probes/c3m3-sketch-partially-redundant-block-horizontal-collect.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+    }
+  },
+  "discovered": 1,
+  "failed": 0,
+  "firstFailure": null,
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+  "ledgerDriftStatus": "not_evaluated",
+  "ledgerValidationStatus": "passed",
+  "mode": "collection",
+  "processed": 1,
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: source commit",
+    "missing provenance: dirty summary",
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build type",
+    "missing provenance: build generator"
+  ],
+  "publicExpectedStatus": "not_evaluated",
+  "runtime": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "occtVersion": "7.8.1"
+  },
+  "schema": "freecad-fixture-regression-report/v1",
+  "skipped": 0,
+  "status": "passed"
+}

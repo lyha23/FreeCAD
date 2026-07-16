@@ -1,0 +1,2750 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          2.0,
+          0.30000000000000054,
+          2.3
+        ],
+        "min": [
+          -0.3,
+          -0.30000000000000004,
+          0.0
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:1;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:1;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "AdditivePipeRightFrenet.#f:1;:G;SEW;:H*:*,F",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:2;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:2;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "AdditivePipeRightFrenet.#f:2;:G;SEW;:H*:*,F",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:3;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:3;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "AdditivePipeRightFrenet.#f:3;:G;SEW;:H*:*,F",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:4;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:4;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "AdditivePipeRightFrenet.#f:4;:G;SEW;:H*:*,F",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "AdditivePipeRightFrenet.#11:1;:G;SEW;:H*:*,F",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "AdditivePipeRightFrenet.#11:2;:G;SEW;:H*:*,F",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face7",
+          "id": "Body:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face7",
+          "stableSubname": "AdditivePipeRightFrenet.#11:3;:G;SEW;:H*:*,F",
+          "subname": "Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face8",
+          "id": "Body:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:G;SEW;:He92:7,F",
+          "resolvedIndexed": "Face8",
+          "stableSubname": "AdditivePipeRightFrenet.#11:4;:G;SEW;:H*:*,F",
+          "subname": "Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face9",
+          "id": "Body:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:He92:a,F",
+          "resolvedIndexed": "Face9",
+          "stableSubname": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:H*:*,F",
+          "subname": "Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Face10",
+          "id": "Body:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:He92:a,F",
+          "resolvedIndexed": "Face10",
+          "stableSubname": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:H*:*,F",
+          "subname": "Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#13;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#13;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "AdditivePipeRightFrenet.#13;:G;SEW;:H*:*,E",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:H*:*,E",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#16;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#16;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "AdditivePipeRightFrenet.#16;:G;SEW;:H*:*,E",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:U;PSH;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:U;PSH;:He92:7,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "AdditivePipeRightFrenet.#11:1;:U;PSH;:H*:*,E",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:H*:*,E",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#18;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#18;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "AdditivePipeRightFrenet.#18;:G;SEW;:H*:*,E",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:U;PSH;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:U;PSH;:He92:7,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "AdditivePipeRightFrenet.#11:2;:U;PSH;:H*:*,E",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:H*:*,E",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1a;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1a;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "AdditivePipeRightFrenet.#1a;:G;SEW;:H*:*,E",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:U;PSH;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:U;PSH;:He92:7,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "AdditivePipeRightFrenet.#11:3;:U;PSH;:H*:*,E",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:H*:*,E",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:U;PSH;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:U;PSH;:He92:7,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "AdditivePipeRightFrenet.#11:4;:U;PSH;:H*:*,E",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#15;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge13",
+          "id": "Body:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#15;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge13",
+          "stableSubname": "AdditivePipeRightFrenet.#15;:G;SEW;:H*:*,E",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#17;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge14",
+          "id": "Body:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#17;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge14",
+          "stableSubname": "AdditivePipeRightFrenet.#17;:G;SEW;:H*:*,E",
+          "subname": "Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge15",
+          "id": "Body:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge15",
+          "stableSubname": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:H*:*,E",
+          "subname": "Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#19;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge16",
+          "id": "Body:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#19;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge16",
+          "stableSubname": "AdditivePipeRightFrenet.#19;:G;SEW;:H*:*,E",
+          "subname": "Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge17",
+          "id": "Body:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge17",
+          "stableSubname": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:H*:*,E",
+          "subname": "Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1b;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge18",
+          "id": "Body:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1b;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge18",
+          "stableSubname": "AdditivePipeRightFrenet.#1b;:G;SEW;:H*:*,E",
+          "subname": "Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge19",
+          "id": "Body:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge19",
+          "stableSubname": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:H*:*,E",
+          "subname": "Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Edge20",
+          "id": "Body:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:He92:7,E",
+          "resolvedIndexed": "Edge20",
+          "stableSubname": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:H*:*,E",
+          "subname": "Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#21:2;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#21:2;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "AdditivePipeRightFrenet.#21:2;:G;SEW;:H*:*,V",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#15:2;:U;PSH;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#15:2;:U;PSH;:He92:7,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "AdditivePipeRightFrenet.#15:2;:U;PSH;:H*:*,V",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#22:4;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#22:4;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "AdditivePipeRightFrenet.#22:4;:G;SEW;:H*:*,V",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#17:4;:U;PSH;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#17:4;:U;PSH;:He92:7,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "AdditivePipeRightFrenet.#17:4;:U;PSH;:H*:*,V",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#23:6;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#23:6;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "AdditivePipeRightFrenet.#23:6;:G;SEW;:H*:*,V",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#19:6;:U;PSH;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#19:6;:U;PSH;:He92:7,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "AdditivePipeRightFrenet.#19:6;:U;PSH;:H*:*,V",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#24:8;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#24:8;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "AdditivePipeRightFrenet.#24:8;:G;SEW;:H*:*,V",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:He92:7,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:H*:*,V",
+          "subname": "Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#26:f;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex9",
+          "id": "Body:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#26:f;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex9",
+          "stableSubname": "AdditivePipeRightFrenet.#26:f;:G;SEW;:H*:*,V",
+          "subname": "Vertex9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#27:11;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex10",
+          "id": "Body:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#27:11;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex10",
+          "stableSubname": "AdditivePipeRightFrenet.#27:11;:G;SEW;:H*:*,V",
+          "subname": "Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#28:13;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex11",
+          "id": "Body:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#28:13;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex11",
+          "stableSubname": "AdditivePipeRightFrenet.#28:13;:G;SEW;:H*:*,V",
+          "subname": "Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#29;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeRightFrenet.Vertex12",
+          "id": "Body:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeRightFrenet.#29;:G;SEW;:He92:7,V",
+          "resolvedIndexed": "Vertex12",
+          "stableSubname": "AdditivePipeRightFrenet.#29;:G;SEW;:H*:*,V",
+          "subname": "Vertex12"
+        }
+      ],
+      "topology_counts": {
+        "edges": 20,
+        "faces": 10,
+        "vertices": 12
+      },
+      "volume": 1.4399999999999997
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:5bf2c6a7b3e50264bb482c49d01c43c52b94d05211fd65855035f0b1b37e03bd",
+    "objects": {
+      "AdditivePipeRightFrenet": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:ecd15818ac7526baa45e8c6c58f718504fbf2994703beb7fd51fd6ca8dcad98c",
+        "subshapes": {}
+      },
+      "Body": {
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "AdditivePipeRightFrenet",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "AdditivePipeRightFrenet.#11:1;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:1;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#11:1;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face5"
+                  }
+                },
+                "AdditivePipeRightFrenet.#11:1;:U;PSH;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:1;:U;PSH;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#11:1;:U;PSH;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge4"
+                  }
+                },
+                "AdditivePipeRightFrenet.#11:2;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:2;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#11:2;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face6"
+                  }
+                },
+                "AdditivePipeRightFrenet.#11:2;:U;PSH;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:2;:U;PSH;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#11:2;:U;PSH;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge7"
+                  }
+                },
+                "AdditivePipeRightFrenet.#11:3;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:3;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#11:3;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face7"
+                  }
+                },
+                "AdditivePipeRightFrenet.#11:3;:U;PSH;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:3;:U;PSH;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#11:3;:U;PSH;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge10"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge10"
+                  }
+                },
+                "AdditivePipeRightFrenet.#11:4;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:4;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#11:4;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face8"
+                  }
+                },
+                "AdditivePipeRightFrenet.#11:4;:U;PSH;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#11:4;:U;PSH;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#11:4;:U;PSH;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge12"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge12"
+                  }
+                },
+                "AdditivePipeRightFrenet.#13;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#13;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#13;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge1"
+                  }
+                },
+                "AdditivePipeRightFrenet.#15:2;:U;PSH;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#15:2;:U;PSH;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#15:2;:U;PSH;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex2"
+                  }
+                },
+                "AdditivePipeRightFrenet.#15;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#15;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#15;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge13"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge13"
+                  }
+                },
+                "AdditivePipeRightFrenet.#16;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#16;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#16;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge3"
+                  }
+                },
+                "AdditivePipeRightFrenet.#17:4;:U;PSH;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#17:4;:U;PSH;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#17:4;:U;PSH;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex4"
+                  }
+                },
+                "AdditivePipeRightFrenet.#17;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#17;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#17;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge14"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge14"
+                  }
+                },
+                "AdditivePipeRightFrenet.#18;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#18;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#18;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge6"
+                  }
+                },
+                "AdditivePipeRightFrenet.#19:6;:U;PSH;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#19:6;:U;PSH;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#19:6;:U;PSH;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex6"
+                  }
+                },
+                "AdditivePipeRightFrenet.#19;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#19;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#19;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge16"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge16"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1a;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1a;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1a;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge9"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge9"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1b:8;:U;PSH;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex8"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1b;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1b;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1b;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge18"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge18"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1d:1;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge2"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1d:2;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge5"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1d:3;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge8"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1d:4;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge11"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge11"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1f:1;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge15"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge15"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1f:2;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge17"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge17"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1f:3;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge19"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge19"
+                  }
+                },
+                "AdditivePipeRightFrenet.#1f:4;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:He92:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Edge20"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge20"
+                  }
+                },
+                "AdditivePipeRightFrenet.#21:2;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#21:2;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#21:2;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex1"
+                  }
+                },
+                "AdditivePipeRightFrenet.#22:4;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#22:4;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#22:4;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex3"
+                  }
+                },
+                "AdditivePipeRightFrenet.#23:6;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#23:6;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#23:6;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex5"
+                  }
+                },
+                "AdditivePipeRightFrenet.#24:8;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#24:8;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#24:8;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex7"
+                  }
+                },
+                "AdditivePipeRightFrenet.#26:f;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#26:f;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#26:f;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex9"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex9"
+                  }
+                },
+                "AdditivePipeRightFrenet.#27:11;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#27:11;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#27:11;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex10"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex10"
+                  }
+                },
+                "AdditivePipeRightFrenet.#28:13;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#28:13;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#28:13;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex11"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex11"
+                  }
+                },
+                "AdditivePipeRightFrenet.#29;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#29;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeRightFrenet.#29;:G;SEW;:He92:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Vertex12"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex12"
+                  }
+                },
+                "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:He92:a,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face9"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face9"
+                  }
+                },
+                "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:He92:a,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face10"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face10"
+                  }
+                },
+                "AdditivePipeRightFrenet.#f:1;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#f:1;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#f:1;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face1"
+                  }
+                },
+                "AdditivePipeRightFrenet.#f:2;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#f:2;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#f:2;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face2"
+                  }
+                },
+                "AdditivePipeRightFrenet.#f:3;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#f:3;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#f:3;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face3"
+                  }
+                },
+                "AdditivePipeRightFrenet.#f:4;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeRightFrenet.#f:4;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeRightFrenet.#f:4;:G;SEW;:He92:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeRightFrenet",
+                    "subname": "Face4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face4"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+            "ownerObject": "Body",
+            "pathPrefix": "AdditivePipeRightFrenet"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "AdditivePipeRightFrenet.#11:1;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:1;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#11:1;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face5"
+              }
+            },
+            "AdditivePipeRightFrenet.#11:1;:U;PSH;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:1;:U;PSH;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#11:1;:U;PSH;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge4"
+              }
+            },
+            "AdditivePipeRightFrenet.#11:2;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:2;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#11:2;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face6"
+              }
+            },
+            "AdditivePipeRightFrenet.#11:2;:U;PSH;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:2;:U;PSH;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#11:2;:U;PSH;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge7"
+              }
+            },
+            "AdditivePipeRightFrenet.#11:3;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:3;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#11:3;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face7"
+              }
+            },
+            "AdditivePipeRightFrenet.#11:3;:U;PSH;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:3;:U;PSH;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#11:3;:U;PSH;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge10"
+              }
+            },
+            "AdditivePipeRightFrenet.#11:4;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:4;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#11:4;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face8"
+              }
+            },
+            "AdditivePipeRightFrenet.#11:4;:U;PSH;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#11:4;:U;PSH;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#11:4;:U;PSH;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge12"
+              }
+            },
+            "AdditivePipeRightFrenet.#13;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#13;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#13;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge1"
+              }
+            },
+            "AdditivePipeRightFrenet.#15:2;:U;PSH;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#15:2;:U;PSH;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#15:2;:U;PSH;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex2"
+              }
+            },
+            "AdditivePipeRightFrenet.#15;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#15;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#15;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge13"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge13"
+              }
+            },
+            "AdditivePipeRightFrenet.#16;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#16;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#16;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge3"
+              }
+            },
+            "AdditivePipeRightFrenet.#17:4;:U;PSH;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#17:4;:U;PSH;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#17:4;:U;PSH;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex4"
+              }
+            },
+            "AdditivePipeRightFrenet.#17;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#17;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#17;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge14"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge14"
+              }
+            },
+            "AdditivePipeRightFrenet.#18;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#18;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#18;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge6"
+              }
+            },
+            "AdditivePipeRightFrenet.#19:6;:U;PSH;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#19:6;:U;PSH;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#19:6;:U;PSH;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex6"
+              }
+            },
+            "AdditivePipeRightFrenet.#19;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#19;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#19;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge16"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge16"
+              }
+            },
+            "AdditivePipeRightFrenet.#1a;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1a;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1a;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge9"
+              }
+            },
+            "AdditivePipeRightFrenet.#1b:8;:U;PSH;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex8"
+              }
+            },
+            "AdditivePipeRightFrenet.#1b;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1b;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1b;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge18"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge18"
+              }
+            },
+            "AdditivePipeRightFrenet.#1d:1;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge2"
+              }
+            },
+            "AdditivePipeRightFrenet.#1d:2;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge5"
+              }
+            },
+            "AdditivePipeRightFrenet.#1d:3;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge8"
+              }
+            },
+            "AdditivePipeRightFrenet.#1d:4;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge11"
+              }
+            },
+            "AdditivePipeRightFrenet.#1f:1;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge15"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge15"
+              }
+            },
+            "AdditivePipeRightFrenet.#1f:2;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge17"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge17"
+              }
+            },
+            "AdditivePipeRightFrenet.#1f:3;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge19"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge19"
+              }
+            },
+            "AdditivePipeRightFrenet.#1f:4;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:He92:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Edge20"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge20"
+              }
+            },
+            "AdditivePipeRightFrenet.#21:2;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#21:2;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#21:2;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex1"
+              }
+            },
+            "AdditivePipeRightFrenet.#22:4;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#22:4;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#22:4;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex3"
+              }
+            },
+            "AdditivePipeRightFrenet.#23:6;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#23:6;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#23:6;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex5"
+              }
+            },
+            "AdditivePipeRightFrenet.#24:8;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#24:8;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#24:8;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex7"
+              }
+            },
+            "AdditivePipeRightFrenet.#26:f;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#26:f;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#26:f;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex9"
+              }
+            },
+            "AdditivePipeRightFrenet.#27:11;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#27:11;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#27:11;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex10"
+              }
+            },
+            "AdditivePipeRightFrenet.#28:13;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#28:13;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#28:13;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex11"
+              }
+            },
+            "AdditivePipeRightFrenet.#29;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#29;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeRightFrenet.#29;:G;SEW;:He92:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Vertex12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex12"
+              }
+            },
+            "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:He92:a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face9"
+              }
+            },
+            "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:He92:a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face10"
+              }
+            },
+            "AdditivePipeRightFrenet.#f:1;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#f:1;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#f:1;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face1"
+              }
+            },
+            "AdditivePipeRightFrenet.#f:2;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#f:2;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#f:2;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face2"
+              }
+            },
+            "AdditivePipeRightFrenet.#f:3;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#f:3;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#f:3;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face3"
+              }
+            },
+            "AdditivePipeRightFrenet.#f:4;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeRightFrenet:AdditivePipeRightFrenet",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeRightFrenet.#f:4;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeRightFrenet.#f:4;:G;SEW;:He92:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeRightFrenet",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face4"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:93a8fae5d84ec9e2a3e4ef0a0ddb7126530696f9b7885e531e48563f0f29a498",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#13;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#13;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:U;PSH;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:U;PSH;:He92:7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:4;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:U;PSH;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:U;PSH;:He92:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#15;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#15;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge13",
+            "subname": "Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#17;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#17;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge14",
+            "subname": "Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:1;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge15",
+            "subname": "Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#19;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#19;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge16",
+            "subname": "Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:2;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1b;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1b;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "Edge18"
+          },
+          "Edge19": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:3;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge19",
+            "subname": "Edge19"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:1;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge20": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1f:4;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge20",
+            "subname": "Edge20"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#16;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#16;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:U;PSH;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:U;PSH;:He92:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:2;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#18;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#18;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:U;PSH;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:U;PSH;:He92:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1d:3;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1a;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1a;:G;SEW;:He92:7,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:1;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:1;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face10": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#2e:1;:L#2d;SEW;:He92:a,F",
+            "resolvedIndexed": "Face10",
+            "subname": "Face10"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:2;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:2;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:3;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:3;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#f:4;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#f:4;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:1;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:2;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:3;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face7",
+            "subname": "Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#11:4;:G;SEW;:He92:7,F",
+            "resolvedIndexed": "Face8",
+            "subname": "Face8"
+          },
+          "Face9": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#2c:1;:L#2a;SEW;:He92:a,F",
+            "resolvedIndexed": "Face9",
+            "subname": "Face9"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#21:2;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#21:2;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#27:11;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#27:11;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#28:13;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#28:13;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#29;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#29;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "Vertex12"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#15:2;:U;PSH;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#15:2;:U;PSH;:He92:7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#22:4;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#22:4;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#17:4;:U;PSH;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#17:4;:U;PSH;:He92:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#23:6;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#23:6;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#19:6;:U;PSH;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#19:6;:U;PSH;:He92:7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#24:8;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#24:8;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#1b:8;:U;PSH;:He92:7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "AdditivePipeRightFrenet.#26:f;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeRightFrenet.#26:f;:G;SEW;:He92:7,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "Vertex9"
+          }
+        }
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:de351694df3654a97346c373239a16e89f59ef42ffc7d6ded7b54f0171361deb",
+        "subshapes": {}
+      },
+      "SketchPipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:6e14a85b24c4f2b168ee34959247bd3d8a5ee49040b81b834e1d50e8e237d13c",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

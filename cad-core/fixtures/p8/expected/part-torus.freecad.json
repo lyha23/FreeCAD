@@ -1,0 +1,113 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          6.0,
+          6.0000001,
+          1.0000001
+        ],
+        "min": [
+          -6.0000001,
+          -6.0000001,
+          -1.0000001
+        ]
+      },
+      "object": "Torus",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Torus.Face1",
+          "id": "Torus:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Torus.Edge1",
+          "id": "Torus:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Torus.Edge2",
+          "id": "Torus:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "Torus.Vertex1",
+          "id": "Torus:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        }
+      ],
+      "topology_counts": {
+        "edges": 2,
+        "faces": 1,
+        "vertices": 1
+      },
+      "volume": 98.69604401089357
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:a1c922c78bcb05c92a65a9d4e3b4bb1cf672a614ff578212bd3e11747ec90134",
+    "objects": {
+      "Torus": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c692860c8c8a301777946550b6e98bcf349dc774aed0d2a95bc275def1d622c3",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

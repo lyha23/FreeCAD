@@ -1,0 +1,82 @@
+{
+  "case": "pocket-custom-vector",
+  "phase": "p3b",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "1fdd919313ce4003dedf47ba712e755d3ce4297355ac458f0f5ef5ba70068f05"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "d162cf794cd54e0681ba39c822077a629dda8552f1c38dc55683dc3b3fa97d90",
+    "manifestBeforeSha256": "d82234d7f8aeed0b7550449f50c0083028a9ea30774504354fd8aff0d419cbcc",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p3b/pocket-custom-vector/collect.json",
+      "sha256": "30e73d9b0c633c2aa945ccddb50aa6d674c14041f5edddd66e8d31425e3ea9be"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p3b/pocket-custom-vector.json",
+      "sha256": "4277f7379e7d058c8309f2d7a240d1003364b209e9b399dbc9194c7e7663220f"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p3b/expected/pocket-custom-vector.freecad.ledger.json",
+      "sha256": "ad2ce99f23555c757bdd978e610ce1a5ffc086efa85bacb458e249a13763ccfc"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p3b/expected/pocket-custom-vector.freecad.json",
+      "sha256": "6f3b0b1ea33b5ebe5bfed736cd77d0c6c875d12159a69f1a3c29a69972f3c3f3"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p3b/pocket-custom-vector/repeat2.json",
+      "sha256": "bb64018c89a5765726af6212f50a58197003a0437b3f1de25a33de9f0e4d8870"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p3b/pocket-custom-vector.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p3b/expected/pocket-custom-vector.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p3b-pocket-custom-vector.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p3b/expected/pocket-custom-vector.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

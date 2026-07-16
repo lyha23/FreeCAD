@@ -16,10 +16,20 @@ from collect_freecad_expected import (
     topo_state_request_error_response,
 )
 from freecad_expected_parity.catalog import load_catalog
+from freecad_expected_parity.retained_coverage import (
+    annotate_fixture_row,
+    build_module_coverage_report,
+    build_work_queues,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES_PATH = Path(__file__).with_name("freecad_expected_parity") / "fixture_roles.v1.json"
+FREECAD2_ROOT = ROOT.parent.parent / "FreeCAD2"
+DEFAULT_CLOSURE_CONTRACT = FREECAD2_ROOT / "tools" / "probe_release_contract.json"
+DEFAULT_PRUNING_PLAN = (
+    FREECAD2_ROOT / "docs" / "减法实现" / "FreeCAD2-无QtApp减枝实施方案.md"
+)
 SCHEMA = "freecad-fixture-authority-inventory/v1"
 
 COLLECTOR_STRUCTURED_PROPERTY_TYPES = {
@@ -30,6 +40,7 @@ COLLECTOR_STRUCTURED_PROPERTY_TYPES = {
     "App::PropertyEnumeration",
     "App::PropertyFloat",
     "App::PropertyInteger",
+    "App::PropertyIntegerList",
     "App::PropertyLength",
     "App::PropertyLink",
     "App::PropertyLinkGlobal",
@@ -47,12 +58,17 @@ COLLECTOR_STRUCTURED_PROPERTY_TYPES = {
     "App::PropertyVectorDistance",
     "App::PropertyVectorList",
     "App::PropertyXLink",
+    "App::PropertyXLinkList",
     "App::PropertyXLinkSub",
     "App::PropertyXLinkSubHidden",
     "App::PropertyXLinkSubList",
+    "Materials::PropertyMaterial",
+    "Part::PropertyGeometryList",
+    "Spreadsheet::PropertySheet",
 }
 
 FAMILY_PRIORITY = {
+    "material": 0,
     "part_primitives": 1,
     "sketch": 2,
     "body_pad_pocket": 3,
@@ -63,6 +79,7 @@ FAMILY_PRIORITY = {
     "dressup_transformed": 8,
     "loft_pipe_sweep": 9,
     "assembly_mesh": 10,
+    "spreadsheet": 11,
     "other": 99,
 }
 
@@ -110,17 +127,24 @@ def object_types(payload: dict[str, Any]) -> set[str]:
     }
 
 
-def has_non_empty_sketch_constraints(payload: dict[str, Any]) -> bool:
-    return any(
-        item.get("TypeId") == "Sketcher::SketchObject"
-        and bool((item.get("Properties") or {}).get("Constraints"))
-        for item in payload.get("Objects", [])
-        if isinstance(item, dict)
-    )
+def property_names(payload: dict[str, Any]) -> set[str]:
+    names: set[str] = set()
+    for item in payload.get("Objects", []):
+        if not isinstance(item, dict):
+            continue
+        properties = item.get("Properties")
+        if isinstance(properties, dict):
+            names.update(str(name) for name in properties)
+    return names
 
 
 def business_family(payload: dict[str, Any]) -> str:
     types = object_types(payload)
+    property_types = nested_property_types(payload)
+    if any(item.startswith("Materials::") for item in property_types):
+        return "material"
+    if "Spreadsheet::Sheet" in types:
+        return "spreadsheet"
     if types & {"Assembly::AssemblyObject", "Assembly::AssemblyLink", "Assembly::JointGroup", "Mesh::Import"}:
         return "assembly_mesh"
     if types & {"PartDesign::AdditiveLoft", "PartDesign::SubtractiveLoft", "PartDesign::AdditivePipe", "PartDesign::SubtractivePipe", "Part::Loft", "Part::Sweep"}:
@@ -149,6 +173,11 @@ def unsupported_classification(payload: dict[str, Any]) -> dict[str, Any]:
     types = object_types(payload)
     property_types = nested_property_types(payload)
     internal_types = sorted(item for item in types if item.startswith("CadCore::"))
+    non_native_property_types = sorted(
+        item
+        for item in property_types
+        if item.startswith(("CadCore::", "Chili::"))
+    )
     disabled_types = sorted(
         item
         for item in types
@@ -157,7 +186,6 @@ def unsupported_classification(payload: dict[str, Any]) -> dict[str, Any]:
     unsupported_property_types = sorted(
         item for item in property_types if item not in COLLECTOR_STRUCTURED_PROPERTY_TYPES
     )
-    constraints = has_non_empty_sketch_constraints(payload)
     request_rejection = topo_state_request_error_response(payload)
     rejection_diagnostics = (
         request_rejection.get("diagnostics")
@@ -182,12 +210,17 @@ def unsupported_classification(payload: dict[str, Any]) -> dict[str, Any]:
         close_condition = (
             "The intended public-root semantics execute, or a source-backed protocol-only decision replaces the case."
         )
-    elif internal_types:
+    elif internal_types or non_native_property_types:
         category = "non_native_fixture"
-        evidence.append("internal probe TypeId: " + ", ".join(internal_types))
+        if internal_types:
+            evidence.append("internal probe TypeId: " + ", ".join(internal_types))
+        if non_native_property_types:
+            evidence.append(
+                "non-native protocol property: " + ", ".join(non_native_property_types)
+            )
         next_action = "Keep outside native authority; replace with a public FreeCAD object graph before promotion."
         close_condition = "A public-root fixture replaces the internal probe and passes independent FreeCADCmd replay."
-    elif disabled_types or unsupported_property_types or constraints:
+    elif disabled_types or unsupported_property_types:
         category = "collector_general_gap"
         if disabled_types:
             evidence.append("collector-disabled TypeId: " + ", ".join(disabled_types))
@@ -196,8 +229,6 @@ def unsupported_classification(payload: dict[str, Any]) -> dict[str, Any]:
                 "collector-disabled structured property: "
                 + ", ".join(unsupported_property_types)
             )
-        if constraints:
-            evidence.append("non-empty Sketch Constraints are rejected by the collector")
         next_action = "Add source-backed generic TypeId/property support and focused tests, then collect in staging."
         close_condition = "The generic collector path produces a strict-valid expected/ledger pair and repeat 2 passes."
     else:
@@ -221,17 +252,24 @@ def unsupported_classification(payload: dict[str, Any]) -> dict[str, Any]:
 def probe_failure_category(detail: str) -> str:
     non_native_markers = (
         "link target None was not created",
+        "was not created",
         "not part of the enumeration",
         "object has no attribute",
         "requires the Profile sketch AttachmentSupport/Support",
         "requires Body Group membership",
         "external geometry target Missing",
+        "must be a 3D vector",
+        "unsupported link/list property LawSamples",
     )
     if any(marker in detail for marker in non_native_markers):
         return "non_native_fixture"
     freecad_boundary_markers = (
         "target object",
         "Not able to add external shape element",
+        "uses a subelement link; native App::PropertyLinkList collector only supports object links",
+        "Constraint has invalid indexes",
+        "self linking",
+        "Part::GeometryCurve edge expected collection supports one valid DTO per fixture",
     )
     if any(marker in detail for marker in freecad_boundary_markers):
         return "freecad_native_not_expressible"
@@ -279,6 +317,36 @@ def probe_receipts(root: Path) -> dict[tuple[str, str], dict[str, Any]]:
             "failureDetail": first_error.get("detail") if first_error else None,
             "repeat2Report": artifact_record(repeat_path, root) if repeat_path.is_file() else None,
             "repeat2Status": repeat_report.get("status") if repeat_report else None,
+            "repeat2FirstFailure": repeat_report.get("firstFailure") if repeat_report else None,
+        }
+    revocations_dir = root / "tools" / "freecad_expected_parity" / "reports" / "revocations"
+    for revocation_path in sorted(revocations_dir.glob("*.json")):
+        try:
+            revocation = json.loads(revocation_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if (
+            not isinstance(revocation, dict)
+            or revocation.get("schema") != "freecad-fixture-authority-revocation/v1"
+            or revocation.get("status") != "passed"
+        ):
+            continue
+        phase = revocation.get("phase")
+        case = revocation.get("case")
+        failure = revocation.get("failure")
+        key = (phase, case)
+        if (
+            not isinstance(phase, str)
+            or not isinstance(case, str)
+            or not isinstance(failure, dict)
+            or key not in receipts
+        ):
+            continue
+        receipts[key] = {
+            **receipts[key],
+            "repeat2Status": "failed",
+            "repeat2FirstFailure": failure,
+            "revocationReport": artifact_record(revocation_path, root),
         }
     return receipts
 
@@ -315,6 +383,35 @@ def apply_probe_receipt(
         )
         updated["closeCondition"] = (
             "The intended public-root semantics execute, or a source-backed protocol-only decision replaces the case."
+        )
+    elif receipt.get("ledgerOutcome") == "accepted" and receipt.get("repeat2Status") == "failed":
+        first_failure = receipt.get("repeat2FirstFailure")
+        public_nondeterminism = (
+            isinstance(first_failure, dict)
+            and first_failure.get("kind") == "candidate-determinism"
+            and first_failure.get("artifact") == "public"
+        )
+        updated["category"] = (
+            "freecad_native_not_expressible"
+            if public_nondeterminism
+            else "collector_general_gap"
+        )
+        updated["candidateEligible"] = False
+        updated["evidence"] = [
+            *updated.get("evidence", []),
+            (
+                "isolated FreeCADCmd repeat produced different public CAD results"
+                if public_nondeterminism
+                else "isolated repeat failed before a reproducible authority pair was established"
+            ),
+        ]
+        updated["nextAction"] = (
+            "Keep outside native authority until the controlled producer yields repeatable public semantics."
+            if public_nondeterminism
+            else "Repair the repeat/collector failure and rerun two isolated collections."
+        )
+        updated["closeCondition"] = (
+            "Two isolated FreeCADCmd runs produce semantically equal public expected and strict-valid ledgers."
         )
     elif receipt.get("ledgerOutcome") == "accepted" and receipt.get("repeat2Status") == "passed":
         updated["candidateEligible"] = True
@@ -412,13 +509,24 @@ def build_report(root: Path = ROOT, roles_path: Path = ROLES_PATH) -> dict[str, 
         if not isinstance(payload, dict):
             anomalies.append(f"fixture input must be an object: {relative(input_path, root)}")
             payload = {}
-        row: dict[str, Any] = {
-            "phase": phase,
-            "case": case,
-            "role": entry.get("role") if entry else None,
-            "objectCount": len(payload.get("Objects", [])) if isinstance(payload.get("Objects"), list) else 0,
-            "input": artifact_record(input_path, root),
-        }
+        row: dict[str, Any] = annotate_fixture_row(
+            {
+                "phase": phase,
+                "case": case,
+                "role": entry.get("role") if entry else None,
+                "objectCount": len(payload.get("Objects", []))
+                if isinstance(payload.get("Objects"), list)
+                else 0,
+                "input": artifact_record(input_path, root),
+                "contract": {
+                    "typeIds": sorted(object_types(payload)),
+                    "properties": sorted(property_names(payload)),
+                    "propertyTypes": sorted(nested_property_types(payload)),
+                    "capabilityFamilies": [business_family(payload)],
+                },
+            },
+            payload,
+        )
         expected_dir = input_path.parent / "expected"
         if row["role"] == "native":
             public_path = expected_dir / f"{case}.freecad.json"
@@ -467,6 +575,7 @@ def build_report(root: Path = ROOT, roles_path: Path = ROLES_PATH) -> dict[str, 
     if artifact_counts["protocolExpected"] != role_counts.get("protocol_only", 0):
         anomalies.append("protocol expected count does not match protocol_only role count")
 
+    work_queues = build_work_queues(unsupported_rows)
     report = {
         "schema": SCHEMA,
         "status": "passed" if not anomalies else "failed",
@@ -491,7 +600,15 @@ def build_report(root: Path = ROOT, roles_path: Path = ROLES_PATH) -> dict[str, 
         "unsupported": [
             {
                 key: row[key]
-                for key in ("phase", "case", "objectCount", "input", "classification")
+                for key in (
+                    "phase",
+                    "case",
+                    "objectCount",
+                    "ownerModules",
+                    "inRetainedClosure",
+                    "input",
+                    "classification",
+                )
             }
             for row in unsupported_rows
         ],
@@ -510,6 +627,7 @@ def build_report(root: Path = ROOT, roles_path: Path = ROLES_PATH) -> dict[str, 
             }
             for (phase, case), receipt in sorted(probes.items())
         ],
+        **work_queues,
         "nextNativeCandidates": next_candidates(unsupported_rows),
         "classificationPolicy": {
             "categories": [
@@ -521,6 +639,10 @@ def build_report(root: Path = ROOT, roles_path: Path = ROLES_PATH) -> dict[str, 
             "note": (
                 "Static classification never promotes a case. not_investigated candidates "
                 "must pass isolated FreeCADCmd collection, strict ledger validation, and repeat 2."
+            ),
+            "implementationQueueRule": (
+                "collector_general_gap cases remain in collectorImplementationQueue until "
+                "a generic TypeId/property implementation closes the batch."
             ),
         },
     }
@@ -544,16 +666,68 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", default=str(ROOT), help="cad-core root")
     parser.add_argument("--roles", default=str(ROLES_PATH), help="fixture role manifest")
     parser.add_argument("--report", help="machine-readable output path outside fixtures/")
+    parser.add_argument(
+        "--coverage-report",
+        help="write retained-module fixture coverage beside the authority inventory",
+    )
+    parser.add_argument(
+        "--closure-contract",
+        default=str(DEFAULT_CLOSURE_CONTRACT),
+        help="machine-readable FreeCAD2 retained target/runtime closure",
+    )
+    parser.add_argument(
+        "--pruning-plan",
+        default=str(DEFAULT_PRUNING_PLAN),
+        help="authoritative FreeCAD2 pruning plan",
+    )
+    parser.add_argument(
+        "--producer-report",
+        help="optional all-native producer report recorded as build identity",
+    )
+    parser.add_argument(
+        "--non-cad-smoke-root",
+        help="optional directory containing Help.json and AddonManager.json smoke receipts",
+    )
+    parser.add_argument(
+        "--require-coverage-passed",
+        action="store_true",
+        help="return failure unless every retained module is closed and native count expanded",
+    )
     parser.add_argument("--pretty", action="store_true", help="print the complete report")
     args = parser.parse_args(argv)
 
     root = Path(args.root).resolve()
     report_path = Path(args.report).resolve() if args.report else None
+    coverage_path = Path(args.coverage_report).resolve() if args.coverage_report else None
     if report_path is not None and report_path.is_relative_to((root / "fixtures").resolve()):
         parser.error("--report must be outside the checked-in fixture tree")
+    if coverage_path is not None and coverage_path.is_relative_to(
+        (root / "fixtures").resolve()
+    ):
+        parser.error("--coverage-report must be outside the checked-in fixture tree")
+    if args.require_coverage_passed and coverage_path is None:
+        parser.error("--require-coverage-passed requires --coverage-report")
     report = build_report(root, Path(args.roles))
     if report_path is not None:
         write_json(report_path, report)
+    coverage: dict[str, Any] | None = None
+    if coverage_path is not None:
+        smoke_root = Path(args.non_cad_smoke_root).resolve() if args.non_cad_smoke_root else None
+        coverage = build_module_coverage_report(
+            report,
+            closure_contract_path=Path(args.closure_contract),
+            pruning_plan_path=Path(args.pruning_plan),
+            producer_report_path=Path(args.producer_report)
+            if args.producer_report
+            else None,
+            non_cad_smoke_receipts={
+                entry: smoke_root / f"{entry}.json"
+                for entry in ("Help", "AddonManager")
+            }
+            if smoke_root is not None
+            else None,
+        )
+        write_json(coverage_path, coverage)
     if args.pretty:
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     else:
@@ -563,7 +737,13 @@ def main(argv: list[str] | None = None) -> int:
             f"status={report['status']} inputs={counts['inputs']} "
             f"roles={counts['roles']} classifications={counts['unsupportedClassifications']}"
         )
-    return 0 if report["status"] == "passed" else 1
+    if report["status"] != "passed":
+        return 1
+    if args.require_coverage_passed and (
+        coverage is None or coverage.get("coverageStatus") != "passed"
+    ):
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

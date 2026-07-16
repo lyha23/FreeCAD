@@ -20,6 +20,7 @@ SPEC = importlib.util.spec_from_file_location(
 assert SPEC and SPEC.loader
 audit = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(audit)
+from freecad_expected_parity import retained_coverage
 
 
 class FixtureAuthorityInventoryTests(unittest.TestCase):
@@ -70,7 +71,15 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         )
         self.write_json(
             fixtures / "collector-gap.json",
-            {"Objects": [{"Name": "Extrusion", "TypeId": "Part::Extrusion", "Properties": {}}]},
+            {
+                "Objects": [
+                    {
+                        "Name": "UnsupportedPartObject",
+                        "TypeId": "Part::UnsupportedNativeType",
+                        "Properties": {},
+                    }
+                ]
+            },
         )
         self.write_json(
             fixtures / "candidate.json",
@@ -87,6 +96,44 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
             },
         )
         return roles_path
+
+    def retained_closure(self, root: Path) -> tuple[Path, Path]:
+        contract_path = root / "probe_release_contract.json"
+        self.write_json(
+            contract_path,
+            {
+                "schema": "freecad2.probe-release-contract.v1",
+                "milestone": "M8",
+                "modules": [
+                    {"name": name, "targets": [name], "evidence": [f"src/Mod/{name}"]}
+                    for name in (
+                        "Material",
+                        "Part",
+                        "Sketcher",
+                        "PartDesign",
+                        "Mesh",
+                        "Spreadsheet",
+                        "Assembly",
+                    )
+                ],
+                "targetDependencies": ["OndselSolver"],
+                "releaseArtifacts": [
+                    {"target": target, "paths": {"macos": f"lib/{target}"}}
+                    for target in (
+                        "FreeCADBase",
+                        "FreeCADApp",
+                        "FreeCADMainCmd",
+                        "FreeCADMainPy",
+                    )
+                ],
+            },
+        )
+        plan_path = root / "pruning-plan.md"
+        plan_path.write_text(
+            "Retain headless Python/data entries Help/AddonManager.\n",
+            encoding="utf-8",
+        )
+        return contract_path, plan_path
 
     def test_builds_complete_inventory_and_four_way_classification(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -113,6 +160,107 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
             report["protocolOnly"][0]["classification"]["category"],
         )
         self.assertEqual(["candidate"], [item["case"] for item in report["nextNativeCandidates"]])
+        self.assertEqual(
+            ["collector-gap"],
+            [item["case"] for item in report["collectorImplementationQueue"]],
+        )
+
+    def test_supported_sketch_constraints_require_a_real_probe(self) -> None:
+        classification = audit.unsupported_classification(
+            {
+                "Objects": [
+                    {
+                        "Name": "Sketch",
+                        "TypeId": "Sketcher::SketchObject",
+                        "Properties": {
+                            "Geometry": [],
+                            "Constraints": [{"Type": "Horizontal", "First": 0}],
+                        },
+                    }
+                ]
+            }
+        )
+
+        self.assertEqual("not_investigated", classification["category"])
+        self.assertTrue(classification["candidateEligible"])
+
+    def test_invalid_native_constraint_indexes_are_not_a_collector_gap(self) -> None:
+        self.assertEqual(
+            "freecad_native_not_expressible",
+            audit.probe_failure_category("Constraint has invalid indexes"),
+        )
+
+    def test_native_self_links_are_not_a_collector_gap(self) -> None:
+        self.assertEqual(
+            "freecad_native_not_expressible",
+            audit.probe_failure_category("failed to set property Support: self linking"),
+        )
+
+    def test_invalid_geometry_curve_batch_is_not_a_collector_gap(self) -> None:
+        self.assertEqual(
+            "freecad_native_not_expressible",
+            audit.probe_failure_category(
+                "Part::GeometryCurve edge expected collection supports one valid DTO per fixture"
+            ),
+        )
+
+    def test_public_repeat_nondeterminism_is_a_native_authority_boundary(self) -> None:
+        classification = audit.apply_probe_receipt(
+            {
+                "category": "not_investigated",
+                "candidateEligible": True,
+                "evidence": [],
+            },
+            {
+                "status": "passed",
+                "ledgerOutcome": "accepted",
+                "repeat2Status": "failed",
+                "repeat2FirstFailure": {
+                    "kind": "candidate-determinism",
+                    "artifact": "public",
+                },
+            },
+        )
+
+        self.assertEqual("freecad_native_not_expressible", classification["category"])
+        self.assertFalse(classification["candidateEligible"])
+
+    def test_revocation_receipt_overrides_a_passing_staging_repeat(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            probes = root / "tools" / "freecad_expected_parity" / "reports" / "probes"
+            revocations = root / "tools" / "freecad_expected_parity" / "reports" / "revocations"
+            self.write_json(
+                probes / "p1-case-collect.json",
+                {
+                    "status": "passed",
+                    "cases": [
+                        {
+                            "phase": "p1",
+                            "case": "case",
+                            "ledgerOutcome": "accepted",
+                            "errors": [],
+                        }
+                    ],
+                },
+            )
+            self.write_json(probes / "p1-case-repeat2.json", {"status": "passed"})
+            self.write_json(
+                revocations / "p1-case.json",
+                {
+                    "schema": "freecad-fixture-authority-revocation/v1",
+                    "status": "passed",
+                    "phase": "p1",
+                    "case": "case",
+                    "failure": {"kind": "candidate-determinism", "artifact": "public"},
+                },
+            )
+
+            receipts = audit.probe_receipts(root)
+
+        receipt = receipts[("p1", "case")]
+        self.assertEqual("failed", receipt["repeat2Status"])
+        self.assertEqual("candidate-determinism", receipt["repeat2FirstFailure"]["kind"])
 
     def test_duplicate_role_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -127,6 +275,247 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         self.assertEqual("failed", report["status"])
         self.assertTrue(any("duplicate fixture role" in item for item in report["anomalies"]))
 
+    def test_maps_fixture_owners_and_emits_retained_work_queues(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            roles_path = self.bootstrap(root)
+
+            report = audit.build_report(root, roles_path)
+
+        rows = {item["case"]: item for item in report["cases"]}
+        self.assertEqual(["Part"], rows["native"]["ownerModules"])
+        self.assertTrue(rows["native"]["inRetainedClosure"])
+        self.assertEqual([], rows["internal"]["ownerModules"])
+        self.assertFalse(rows["internal"]["inRetainedClosure"])
+        self.assertEqual(
+            ["collector-gap"],
+            [item["case"] for item in report["retainedModuleCollectorImplementationQueue"]],
+        )
+        self.assertEqual(
+            ["candidate"],
+            [item["case"] for item in report["stagingCandidateQueue"]],
+        )
+        self.assertEqual([], report["promotionQueue"])
+        self.assertEqual(
+            ["internal"],
+            [item["case"] for item in report["blockedOrReclassified"]],
+        )
+
+    def test_reclassifies_protocol_properties_and_invalid_reference_probes(self) -> None:
+        chili = audit.unsupported_classification(
+            {
+                "Objects": [
+                    {
+                        "TypeId": "Sketcher::SketchObject",
+                        "Properties": {
+                            "PlaneFrame": {
+                                "PropertyType": "Chili::SketchPlaneFrame",
+                            }
+                        },
+                    }
+                ]
+            }
+        )
+
+        self.assertEqual("non_native_fixture", chili["category"])
+        self.assertEqual(
+            "non_native_fixture",
+            audit.probe_failure_category("link target MissingProjectionLine was not created"),
+        )
+        self.assertEqual(
+            "freecad_native_not_expressible",
+            audit.probe_failure_category(
+                "Sections[0] uses a subelement link; native App::PropertyLinkList collector only supports object links"
+            ),
+        )
+
+    def test_builds_module_coverage_from_retained_closure_and_fixture_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            roles_path = self.bootstrap(root)
+            contract_path, plan_path = self.retained_closure(root)
+            authority = audit.build_report(root, roles_path)
+
+            report = retained_coverage.build_module_coverage_report(
+                authority,
+                closure_contract_path=contract_path,
+                pruning_plan_path=plan_path,
+            )
+
+        self.assertEqual("failed", report["coverageStatus"])
+        self.assertEqual(4, report["globalFixtureCount"])
+        modules = {item["name"]: item for item in report["modules"]}
+        self.assertEqual(
+            [
+                "FreeCADBase",
+                "FreeCADApp",
+                "FreeCADMainCmd",
+                "FreeCADMainPy",
+                "Material",
+                "Part",
+                "Sketcher",
+                "PartDesign",
+                "Mesh",
+                "Spreadsheet",
+                "Assembly",
+                "OndselSolver",
+                "Help",
+                "AddonManager",
+            ],
+            [item["name"] for item in report["modules"]],
+        )
+        self.assertEqual(4, modules["Part"]["fixtureCount"])
+        self.assertEqual(1, modules["Part"]["nativeAuthorityCount"])
+        self.assertEqual(1, modules["Part"]["protocolOnlyCount"])
+        self.assertEqual(1, modules["Part"]["collectorGeneralGapCount"])
+        self.assertEqual(1, modules["Part"]["notInvestigatedCount"])
+        self.assertEqual(2, modules["Part"]["nativeEligibleWithoutAuthorityCount"])
+        self.assertEqual("failed", modules["Part"]["coverageStatus"])
+        self.assertEqual([], modules["Material"]["fixtures"])
+        self.assertEqual("failed", modules["Material"]["coverageStatus"])
+        self.assertEqual("non_cad_smoke", modules["Help"]["coverageKind"])
+        self.assertEqual("failed", modules["Help"]["coverageStatus"])
+
+    def test_module_owners_include_material_property_and_spreadsheet_object(self) -> None:
+        material_fixture = {
+            "Objects": [
+                {
+                    "Name": "Box",
+                    "TypeId": "Part::Box",
+                    "Properties": {
+                        "ShapeMaterial": {
+                            "PropertyType": "Materials::PropertyMaterial",
+                            "Name": "Fixture material",
+                        }
+                    },
+                }
+            ]
+        }
+        spreadsheet_fixture = {
+            "Objects": [
+                {
+                    "Name": "Sheet",
+                    "TypeId": "Spreadsheet::Sheet",
+                    "Properties": {},
+                }
+            ]
+        }
+
+        self.assertEqual(
+            ["Material", "Part"],
+            retained_coverage.fixture_owner_modules(material_fixture),
+        )
+        self.assertEqual(
+            ["Spreadsheet"],
+            retained_coverage.fixture_owner_modules(spreadsheet_fixture),
+        )
+        self.assertEqual("material", audit.business_family(material_fixture))
+        self.assertEqual("spreadsheet", audit.business_family(spreadsheet_fixture))
+
+    def test_non_cad_smoke_requires_structured_passing_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            receipt_path = Path(temp_dir) / "Help.json"
+            self.write_json(receipt_path, {"status": "passed"})
+            malformed = retained_coverage._non_cad_module_row(
+                "Help",
+                receipt_path,
+                evidence=["plan.md"],
+            )
+            self.write_json(
+                receipt_path,
+                {
+                    "schema": "freecad-non-cad-smoke/v1",
+                    "entry": "Help",
+                    "status": "passed",
+                    "producer": {"sha256": "abc123"},
+                    "checks": [
+                        {
+                            "id": "help-import-and-pure-path",
+                            "status": "passed",
+                        }
+                    ],
+                },
+            )
+            valid = retained_coverage._non_cad_module_row(
+                "Help",
+                receipt_path,
+                evidence=["plan.md"],
+            )
+
+        self.assertEqual("failed", malformed["coverageStatus"])
+        self.assertEqual("non_cad_smoke", valid["coverageStatus"])
+
+    def test_cli_rebuilds_inventory_and_coverage_baseline_together(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            roles_path = self.bootstrap(root)
+            contract_path, plan_path = self.retained_closure(root)
+            inventory_path = root / "reports" / "inventory.json"
+            coverage_path = root / "reports" / "coverage.json"
+
+            result = audit.main(
+                [
+                    "--root",
+                    str(root),
+                    "--roles",
+                    str(roles_path),
+                    "--report",
+                    str(inventory_path),
+                    "--coverage-report",
+                    str(coverage_path),
+                    "--closure-contract",
+                    str(contract_path),
+                    "--pruning-plan",
+                    str(plan_path),
+                ]
+            )
+
+            inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+            coverage = json.loads(coverage_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(0, result)
+        self.assertEqual("passed", inventory["status"])
+        self.assertEqual("passed", coverage["status"])
+        self.assertEqual("failed", coverage["coverageStatus"])
+
+    def test_module_coverage_rejects_failed_or_stale_producer_report(self) -> None:
+        authority = audit.build_report(CAD_CORE_ROOT, audit.ROLES_PATH)
+        smoke_receipts = {
+            entry: TOOLS
+            / "freecad_expected_parity"
+            / "reports"
+            / "non_cad_smoke"
+            / f"{entry}.json"
+            for entry in ("Help", "AddonManager")
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            producer_report = Path(temp_dir) / "all-native.json"
+            variants = {
+                "failed": {"status": "failed"},
+                "stale": {
+                    "status": "passed",
+                    "mode": "repeated-native-check",
+                    "manifest": {"cases": 557, "entries": []},
+                },
+            }
+            for label, payload in variants.items():
+                with self.subTest(label=label):
+                    self.write_json(producer_report, payload)
+                    coverage = retained_coverage.build_module_coverage_report(
+                        authority,
+                        closure_contract_path=audit.DEFAULT_CLOSURE_CONTRACT,
+                        pruning_plan_path=audit.DEFAULT_PRUNING_PLAN,
+                        producer_report_path=producer_report,
+                        non_cad_smoke_receipts=smoke_receipts,
+                    )
+                    self.assertEqual("failed", coverage["coverageStatus"])
+                    self.assertTrue(
+                        any(
+                            "producer report" in item
+                            for item in coverage["producerValidation"]["errors"]
+                        )
+                    )
+
     def test_checked_in_report_matches_live_inventory(self) -> None:
         report_path = (
             TOOLS
@@ -138,6 +527,40 @@ class FixtureAuthorityInventoryTests(unittest.TestCase):
         checked_in = json.loads(report_path.read_text(encoding="utf-8"))
         live = audit.build_report(CAD_CORE_ROOT, audit.ROLES_PATH)
         self.assertEqual(checked_in, live)
+
+    def test_checked_in_module_coverage_matches_live_closure(self) -> None:
+        report_path = (
+            TOOLS
+            / "freecad_expected_parity"
+            / "reports"
+            / "retained_module_fixture_coverage.v1.json"
+        )
+        producer_report = (
+            TOOLS
+            / "freecad_expected_parity"
+            / "reports"
+            / "all-native-check.v1.json"
+        )
+        self.assertTrue(report_path.is_file())
+        checked_in = json.loads(report_path.read_text(encoding="utf-8"))
+        authority = audit.build_report(CAD_CORE_ROOT, audit.ROLES_PATH)
+        live = retained_coverage.build_module_coverage_report(
+            authority,
+            closure_contract_path=audit.DEFAULT_CLOSURE_CONTRACT,
+            pruning_plan_path=audit.DEFAULT_PRUNING_PLAN,
+            producer_report_path=producer_report,
+            non_cad_smoke_receipts={
+                entry: TOOLS
+                / "freecad_expected_parity"
+                / "reports"
+                / "non_cad_smoke"
+                / f"{entry}.json"
+                for entry in ("Help", "AddonManager")
+            },
+        )
+        self.assertEqual(checked_in, live)
+        self.assertEqual("passed", live["coverageStatus"])
+        self.assertEqual(0, live["retainedModuleCollectorImplementationQueueCount"])
 
 
 if __name__ == "__main__":

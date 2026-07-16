@@ -1,0 +1,14 @@
+{
+  "diagnostics": [
+    {
+      "actualDocumentHash": "sha256:2bc59b8fc0a14fa209769a6b03bcf51d32034329862b3cb17ab6afa99c375cf2",
+      "code": "topo_state_document_hash_mismatch",
+      "expectedDocumentHash": "sha256:fa87e9bb6d95d6babf26595a00eec2e407f7808a1ce63c7a61646c3c797d57ac",
+      "message": "topoNamingState documentHash does not match the current DocumentObject graph; request-level recompute is refused",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": []
+}

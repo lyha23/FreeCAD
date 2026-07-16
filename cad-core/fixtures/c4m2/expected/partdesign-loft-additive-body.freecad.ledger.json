@@ -1,0 +1,1848 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "partdesign-loft-additive-body",
+    "expectedPayloadHash": "sha256:ef32b3aae9e3d16f452ba1fede262dc9612e64d9e013ffc2959de55daafa7644",
+    "inputHash": "sha256:54283fc21a62b0222d3f7b1559b9e3a6feffd64b9278570e757bd9ef9e38b5be",
+    "phase": "c4m2",
+    "topoNamingStateHash": "sha256:c14f0fef3243d8a776bad1dd2d169d372cedb08bbf4d2ac4d4e7802868f526e9"
+  },
+  "inputReferences": [],
+  "objects": {
+    "AdditiveLoft": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "#18:4;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#18:4;:G;SEW;:H*:*,E",
+              "raw": "#18:4;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge5"
+            }
+          },
+          "#19:2;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#19:2;:G;SEW;:H*:*,E",
+              "raw": "#19:2;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge7"
+            }
+          },
+          "#1a:6;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1a:6;:G;SEW;:H*:*,E",
+              "raw": "#1a:6;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge11"
+            }
+          },
+          "#1b:8;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1b:8;:G;SEW;:H*:*,E",
+              "raw": "#1b:8;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge12"
+            }
+          },
+          "#1d:1;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1d:1;:G;SEW;:H*:*,F",
+              "raw": "#1d:1;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Face1"
+            }
+          },
+          "#1e:1;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1e:1;:G;SEW;:H*:*,F",
+              "raw": "#1e:1;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Face2"
+            }
+          },
+          "#1f:2;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1f:2;:G;SEW;:H*:*,F",
+              "raw": "#1f:2;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Face4"
+            }
+          },
+          "#20:3;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#20:3;:G;SEW;:H*:*,F",
+              "raw": "#20:3;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Face5"
+            }
+          },
+          "#21:4;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#21:4;:G;SEW;:H*:*,F",
+              "raw": "#21:4;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Face6"
+            }
+          },
+          "#23:2;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#23:2;:G;SEW;:H*:*,V",
+              "raw": "#23:2;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex1"
+            }
+          },
+          "#24:4;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#24:4;:G;SEW;:H*:*,V",
+              "raw": "#24:4;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex2"
+            }
+          },
+          "#25:6;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#25:6;:G;SEW;:H*:*,V",
+              "raw": "#25:6;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex3"
+            }
+          },
+          "#26:8;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#26:8;:G;SEW;:H*:*,V",
+              "raw": "#26:8;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex4"
+            }
+          },
+          "#2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#2;:H*,V",
+              "raw": "#2;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex6"
+            }
+          },
+          "#4;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#4;:H*,V",
+              "raw": "#4;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex5"
+            }
+          },
+          "#6;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#6;:H*,V",
+              "raw": "#6;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex7"
+            }
+          },
+          "#8;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#8;:H*,V",
+              "raw": "#8;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex8"
+            }
+          },
+          "#b:1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:1;:H*,E",
+              "raw": "#b:1;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge6"
+            }
+          },
+          "#b:2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:2;:H*,E",
+              "raw": "#b:2;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge8"
+            }
+          },
+          "#b:3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:3;:H*,E",
+              "raw": "#b:3;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge9"
+            }
+          },
+          "#b:4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:4;:H*,E",
+              "raw": "#b:4;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge10"
+            }
+          },
+          "#f:1;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:1;:G;SEW;:H*:*,E",
+              "raw": "#f:1;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge1"
+            }
+          },
+          "#f:2;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:2;:G;SEW;:H*:*,E",
+              "raw": "#f:2;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge2"
+            }
+          },
+          "#f:3;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:3;:G;SEW;:H*:*,E",
+              "raw": "#f:3;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge3"
+            }
+          },
+          "#f:4;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:4;:G;SEW;:H*:*,E",
+              "raw": "#f:4;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Edge4"
+            }
+          },
+          "g1;SKT;:H*,E;FAC;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "g1;SKT;:H*,E;FAC;:H*:*,F",
+              "raw": "g1;SKT;:Hbbc,E;FAC;:Hbbc:4,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "AdditiveLoft",
+              "subname": "Face3"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::AdditiveLoft"
+    },
+    "Body": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [
+        {
+          "childIndex": 0,
+          "childObject": "AdditiveLoft",
+          "elementMap": {
+            "encoding": "cad-core.element-map.v1",
+            "entries": {
+              "AdditiveLoft.#18:4;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#18:4;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#18:4;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge5"
+                }
+              },
+              "AdditiveLoft.#19:2;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#19:2;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#19:2;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge7"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge7"
+                }
+              },
+              "AdditiveLoft.#1a:6;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#1a:6;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#1a:6;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge11"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge11"
+                }
+              },
+              "AdditiveLoft.#1b:8;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#1b:8;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#1b:8;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge12"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge12"
+                }
+              },
+              "AdditiveLoft.#1d:1;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#1d:1;:G;SEW;:H*:*,F",
+                  "raw": "AdditiveLoft.#1d:1;:G;SEW;:Hbbb:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face1"
+                }
+              },
+              "AdditiveLoft.#1e:1;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#1e:1;:G;SEW;:H*:*,F",
+                  "raw": "AdditiveLoft.#1e:1;:G;SEW;:Hbbb:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Face2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face2"
+                }
+              },
+              "AdditiveLoft.#1f:2;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#1f:2;:G;SEW;:H*:*,F",
+                  "raw": "AdditiveLoft.#1f:2;:G;SEW;:Hbbb:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Face4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face4"
+                }
+              },
+              "AdditiveLoft.#20:3;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#20:3;:G;SEW;:H*:*,F",
+                  "raw": "AdditiveLoft.#20:3;:G;SEW;:Hbbb:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Face5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face5"
+                }
+              },
+              "AdditiveLoft.#21:4;:G;SEW;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#21:4;:G;SEW;:H*:*,F",
+                  "raw": "AdditiveLoft.#21:4;:G;SEW;:Hbbb:7,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Face6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face6"
+                }
+              },
+              "AdditiveLoft.#23:2;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#23:2;:G;SEW;:H*:*,V",
+                  "raw": "AdditiveLoft.#23:2;:G;SEW;:Hbbb:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex1"
+                }
+              },
+              "AdditiveLoft.#24:4;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#24:4;:G;SEW;:H*:*,V",
+                  "raw": "AdditiveLoft.#24:4;:G;SEW;:Hbbb:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex2"
+                }
+              },
+              "AdditiveLoft.#25:6;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#25:6;:G;SEW;:H*:*,V",
+                  "raw": "AdditiveLoft.#25:6;:G;SEW;:Hbbb:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex3"
+                }
+              },
+              "AdditiveLoft.#26:8;:G;SEW;:H*:*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#26:8;:G;SEW;:H*:*,V",
+                  "raw": "AdditiveLoft.#26:8;:G;SEW;:Hbbb:7,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex4"
+                }
+              },
+              "AdditiveLoft.#2;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#2;:H*,V",
+                  "raw": "AdditiveLoft.#2;:Hbbc,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex6"
+                }
+              },
+              "AdditiveLoft.#4;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#4;:H*,V",
+                  "raw": "AdditiveLoft.#4;:Hbbc,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex5"
+                }
+              },
+              "AdditiveLoft.#6;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#6;:H*,V",
+                  "raw": "AdditiveLoft.#6;:Hbbc,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex7"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex7"
+                }
+              },
+              "AdditiveLoft.#8;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#8;:H*,V",
+                  "raw": "AdditiveLoft.#8;:Hbbc,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Vertex8"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex8"
+                }
+              },
+              "AdditiveLoft.#b:1;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#b:1;:H*,E",
+                  "raw": "AdditiveLoft.#b:1;:Hbbc,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge6"
+                }
+              },
+              "AdditiveLoft.#b:2;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#b:2;:H*,E",
+                  "raw": "AdditiveLoft.#b:2;:Hbbc,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge8"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge8"
+                }
+              },
+              "AdditiveLoft.#b:3;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#b:3;:H*,E",
+                  "raw": "AdditiveLoft.#b:3;:Hbbc,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge9"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge9"
+                }
+              },
+              "AdditiveLoft.#b:4;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#b:4;:H*,E",
+                  "raw": "AdditiveLoft.#b:4;:Hbbc,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge10"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge10"
+                }
+              },
+              "AdditiveLoft.#f:1;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#f:1;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#f:1;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge1"
+                }
+              },
+              "AdditiveLoft.#f:2;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#f:2;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#f:2;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge2"
+                }
+              },
+              "AdditiveLoft.#f:3;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#f:3;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#f:3;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge3"
+                }
+              },
+              "AdditiveLoft.#f:4;:G;SEW;:H*:*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.#f:4;:G;SEW;:H*:*,E",
+                  "raw": "AdditiveLoft.#f:4;:G;SEW;:Hbbb:7,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge4"
+                }
+              },
+              "AdditiveLoft.g1;SKT;:H*,E;FAC;:H*:*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "AdditiveLoft.g1;SKT;:H*,E;FAC;:H*:*,F",
+                  "raw": "AdditiveLoft.g1;SKT;:Hbbc,E;FAC;:Hbbc:4,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "AdditiveLoft",
+                  "subname": "Face3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face3"
+                }
+              }
+            },
+            "status": "history_partial"
+          },
+          "key": "Body:AdditiveLoft:AdditiveLoft",
+          "ownerObject": "Body",
+          "pathPrefix": "AdditiveLoft"
+        }
+      ],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "AdditiveLoft.#18:4;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#18:4;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#18:4;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge5"
+            }
+          },
+          "AdditiveLoft.#19:2;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#19:2;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#19:2;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge7"
+            }
+          },
+          "AdditiveLoft.#1a:6;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#1a:6;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#1a:6;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge11"
+            }
+          },
+          "AdditiveLoft.#1b:8;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#1b:8;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#1b:8;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge12"
+            }
+          },
+          "AdditiveLoft.#1d:1;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#1d:1;:G;SEW;:H*:*,F",
+              "raw": "AdditiveLoft.#1d:1;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face1"
+            }
+          },
+          "AdditiveLoft.#1e:1;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#1e:1;:G;SEW;:H*:*,F",
+              "raw": "AdditiveLoft.#1e:1;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face2"
+            }
+          },
+          "AdditiveLoft.#1f:2;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#1f:2;:G;SEW;:H*:*,F",
+              "raw": "AdditiveLoft.#1f:2;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face4"
+            }
+          },
+          "AdditiveLoft.#20:3;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#20:3;:G;SEW;:H*:*,F",
+              "raw": "AdditiveLoft.#20:3;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face5"
+            }
+          },
+          "AdditiveLoft.#21:4;:G;SEW;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#21:4;:G;SEW;:H*:*,F",
+              "raw": "AdditiveLoft.#21:4;:G;SEW;:Hbbb:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face6"
+            }
+          },
+          "AdditiveLoft.#23:2;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#23:2;:G;SEW;:H*:*,V",
+              "raw": "AdditiveLoft.#23:2;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex1"
+            }
+          },
+          "AdditiveLoft.#24:4;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#24:4;:G;SEW;:H*:*,V",
+              "raw": "AdditiveLoft.#24:4;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex2"
+            }
+          },
+          "AdditiveLoft.#25:6;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#25:6;:G;SEW;:H*:*,V",
+              "raw": "AdditiveLoft.#25:6;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex3"
+            }
+          },
+          "AdditiveLoft.#26:8;:G;SEW;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#26:8;:G;SEW;:H*:*,V",
+              "raw": "AdditiveLoft.#26:8;:G;SEW;:Hbbb:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex4"
+            }
+          },
+          "AdditiveLoft.#2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#2;:H*,V",
+              "raw": "AdditiveLoft.#2;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex6"
+            }
+          },
+          "AdditiveLoft.#4;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#4;:H*,V",
+              "raw": "AdditiveLoft.#4;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex5"
+            }
+          },
+          "AdditiveLoft.#6;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#6;:H*,V",
+              "raw": "AdditiveLoft.#6;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex7"
+            }
+          },
+          "AdditiveLoft.#8;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#8;:H*,V",
+              "raw": "AdditiveLoft.#8;:Hbbc,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex8"
+            }
+          },
+          "AdditiveLoft.#b:1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#b:1;:H*,E",
+              "raw": "AdditiveLoft.#b:1;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge6"
+            }
+          },
+          "AdditiveLoft.#b:2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#b:2;:H*,E",
+              "raw": "AdditiveLoft.#b:2;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge8"
+            }
+          },
+          "AdditiveLoft.#b:3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#b:3;:H*,E",
+              "raw": "AdditiveLoft.#b:3;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge9"
+            }
+          },
+          "AdditiveLoft.#b:4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#b:4;:H*,E",
+              "raw": "AdditiveLoft.#b:4;:Hbbc,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge10"
+            }
+          },
+          "AdditiveLoft.#f:1;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#f:1;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#f:1;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge1"
+            }
+          },
+          "AdditiveLoft.#f:2;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#f:2;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#f:2;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge2"
+            }
+          },
+          "AdditiveLoft.#f:3;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#f:3;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#f:3;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge3"
+            }
+          },
+          "AdditiveLoft.#f:4;:G;SEW;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.#f:4;:G;SEW;:H*:*,E",
+              "raw": "AdditiveLoft.#f:4;:G;SEW;:Hbbb:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge4"
+            }
+          },
+          "AdditiveLoft.g1;SKT;:H*,E;FAC;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:AdditiveLoft:AdditiveLoft",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "AdditiveLoft.g1;SKT;:H*,E;FAC;:H*:*,F",
+              "raw": "AdditiveLoft.g1;SKT;:Hbbc,E;FAC;:Hbbc:4,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "AdditiveLoft",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face3"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Body"
+    },
+    "SketchLoftProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchLoftSection": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "AdditiveLoft": {
+        "covers": [
+          "AdditiveLoft"
+        ],
+        "ledgerObject": "AdditiveLoft",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Body": {
+        "covers": [
+          "Body",
+          "SketchLoftProfile",
+          "SketchLoftSection",
+          "AdditiveLoft"
+        ],
+        "ledgerObject": "Body",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchLoftProfile": {
+        "covers": [
+          "SketchLoftProfile"
+        ],
+        "ledgerObject": "SketchLoftProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchLoftSection": {
+        "covers": [
+          "SketchLoftSection"
+        ],
+        "ledgerObject": "SketchLoftSection",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:c14f0fef3243d8a776bad1dd2d169d372cedb08bbf4d2ac4d4e7802868f526e9",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

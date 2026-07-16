@@ -1,0 +1,14 @@
+{
+  "diagnostics": [
+    {
+      "code": "topo_state_object_owner_incompatible",
+      "message": "topoNamingState contains an object that is not present in the current DocumentObject graph; request-level recompute is refused",
+      "object": "ForeignBox",
+      "offendingObject": "ForeignBox",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "elementReferenceUpdates": [],
+  "results": []
+}

@@ -1,0 +1,3003 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [
+      "ref:1"
+    ],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [
+    {
+      "id": "event:1",
+      "inputReferenceIds": [
+        "ref:1"
+      ],
+      "kind": "resolved",
+      "provenance": "FreeCADCmd.native_property_assignment",
+      "sources": [
+        {
+          "element": "InternalFace1",
+          "object": "SketchBase"
+        }
+      ],
+      "targets": [
+        {
+          "element": "InternalFace1",
+          "object": "SketchBase"
+        }
+      ]
+    }
+  ],
+  "fixture": {
+    "case": "partdesign-pipe-subtractive-lifecycle",
+    "expectedPayloadHash": "sha256:d5c7e18a494d5ce2d0b4bbd5dfb185e47038372ff47123aab4e417188721efd3",
+    "inputHash": "sha256:27f40771a55f8be92389e8c61984df220dfa70e65101bdb8299bf06cc03f6f04",
+    "phase": "c12m13",
+    "topoNamingStateHash": "sha256:3c5fd0ce803eb65e31bcd2f00696995e7930e365764de32a561ace5a86d761d7"
+  },
+  "inputReferences": [
+    {
+      "displaySubname": "",
+      "element": "g1;SKT;FAC",
+      "hasReferenceShadow": false,
+      "id": "ref:1",
+      "owner": "BasePad",
+      "path": [
+        "BasePad",
+        "SketchBase"
+      ],
+      "propertyPath": "Profile.SubSet.0",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "g1;SKT;FAC",
+      "target": "SketchBase"
+    }
+  ],
+  "objects": {
+    "BasePad": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "#11:8;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#11:8;:G;XTR;:H*:*,E",
+              "raw": "#11:8;:G;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge1"
+            }
+          },
+          "#12:2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#12:2;:G;XTR;:H*:*,E",
+              "raw": "#12:2;:G;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge2"
+            }
+          },
+          "#13:6;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#13:6;:G;XTR;:H*:*,E",
+              "raw": "#13:6;:G;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge5"
+            }
+          },
+          "#14:4;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#14:4;:G;XTR;:H*:*,E",
+              "raw": "#14:4;:G;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge8"
+            }
+          },
+          "#16:1;:G0;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:1;:G0;XTR;:H*:*,F",
+              "raw": "#16:1;:G0;XTR;:H898:8,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face6"
+            }
+          },
+          "#18:1;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#18:1;:U;XTR;:H*:*,E",
+              "raw": "#18:1;:U;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge12"
+            }
+          },
+          "#18:2;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#18:2;:U;XTR;:H*:*,E",
+              "raw": "#18:2;:U;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge10"
+            }
+          },
+          "#18:3;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#18:3;:U;XTR;:H*:*,E",
+              "raw": "#18:3;:U;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge7"
+            }
+          },
+          "#18:4;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#18:4;:U;XTR;:H*:*,E",
+              "raw": "#18:4;:U;XTR;:H898:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge4"
+            }
+          },
+          "#1a:8;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1a:8;:U;XTR;:H*:*,V",
+              "raw": "#1a:8;:U;XTR;:H898:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex2"
+            }
+          },
+          "#1b:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1b:2;:U;XTR;:H*:*,V",
+              "raw": "#1b:2;:U;XTR;:H898:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex4"
+            }
+          },
+          "#1c:6;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1c:6;:U;XTR;:H*:*,V",
+              "raw": "#1c:6;:U;XTR;:H898:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex6"
+            }
+          },
+          "#1d:4;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1d:4;:U;XTR;:H*:*,V",
+              "raw": "#1d:4;:U;XTR;:H898:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex8"
+            }
+          },
+          "#2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#2;:H*,V",
+              "raw": "#2;:H898,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex3"
+            }
+          },
+          "#4;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#4;:H*,V",
+              "raw": "#4;:H898,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex7"
+            }
+          },
+          "#6;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#6;:H*,V",
+              "raw": "#6;:H898,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex5"
+            }
+          },
+          "#8;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#8;:H*,V",
+              "raw": "#8;:H898,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex1"
+            }
+          },
+          "#b:1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:1;:H*,E",
+              "raw": "#b:1;:H898,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge11"
+            }
+          },
+          "#b:2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:2;:H*,E",
+              "raw": "#b:2;:H898,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge9"
+            }
+          },
+          "#b:3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:3;:H*,E",
+              "raw": "#b:3;:H898,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge6"
+            }
+          },
+          "#b:4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:4;:H*,E",
+              "raw": "#b:4;:H898,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge3"
+            }
+          },
+          "#f:1;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:1;:G;XTR;:H*:*,F",
+              "raw": "#f:1;:G;XTR;:H898:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face4"
+            }
+          },
+          "#f:1;;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:1;;:H*:*,F",
+              "raw": "#f:1;;:H898:1,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face5"
+            }
+          },
+          "#f:2;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:2;:G;XTR;:H*:*,F",
+              "raw": "#f:2;:G;XTR;:H898:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face3"
+            }
+          },
+          "#f:3;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:3;:G;XTR;:H*:*,F",
+              "raw": "#f:3;:G;XTR;:H898:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face2"
+            }
+          },
+          "#f:4;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:4;:G;XTR;:H*:*,F",
+              "raw": "#f:4;:G;XTR;:H898:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face1"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Pad"
+    },
+    "Body": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12",
+          "Edge13",
+          "Edge14",
+          "Edge15",
+          "Edge16",
+          "Edge17",
+          "Edge18",
+          "Edge19",
+          "Edge20",
+          "Edge21",
+          "Edge22",
+          "Edge23",
+          "Edge24"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6",
+          "Face7",
+          "Face8",
+          "Face9",
+          "Face10"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8",
+          "Vertex9",
+          "Vertex10",
+          "Vertex11",
+          "Vertex12",
+          "Vertex13",
+          "Vertex14",
+          "Vertex15",
+          "Vertex16"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [
+        {
+          "childIndex": 0,
+          "childObject": "SubtractivePipe",
+          "elementMap": {
+            "encoding": "cad-core.element-map.v1",
+            "entries": {
+              "SubtractivePipe.#11:8;:G;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#11:8;:G;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#11:8;:G;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge1"
+                }
+              },
+              "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#12:2;:G;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge2"
+                }
+              },
+              "SubtractivePipe.#13:6;:G;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#13:6;:G;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#13:6;:G;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge5"
+                }
+              },
+              "SubtractivePipe.#14:4;:G;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#14:4;:G;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#14:4;:G;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge8"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge8"
+                }
+              },
+              "SubtractivePipe.#16:1;:M;CUT;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#16:1;:M;CUT;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#16:1;:M;CUT;:H898:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face4"
+                }
+              },
+              "SubtractivePipe.#18:1;:U;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#18:1;:U;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#18:1;:U;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge10"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge10"
+                }
+              },
+              "SubtractivePipe.#18:2;:U;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#18:2;:U;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#18:2;:U;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge16"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge16"
+                }
+              },
+              "SubtractivePipe.#18:3;:U;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#18:3;:U;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#18:3;:U;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge7"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge7"
+                }
+              },
+              "SubtractivePipe.#18:4;:U;XTR;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#18:4;:U;XTR;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#18:4;:U;XTR;:H898:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge4"
+                }
+              },
+              "SubtractivePipe.#1a:8;:U;XTR;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#1a:8;:U;XTR;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#1a:8;:U;XTR;:H898:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex2"
+                }
+              },
+              "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#1b:2;:U;XTR;:H898:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex4"
+                }
+              },
+              "SubtractivePipe.#1c:6;:U;XTR;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#1c:6;:U;XTR;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#1c:6;:U;XTR;:H898:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex6"
+                }
+              },
+              "SubtractivePipe.#1d:4;:U;XTR;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#1d:4;:U;XTR;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#1d:4;:U;XTR;:H898:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex8"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex8"
+                }
+              },
+              "SubtractivePipe.#2;:H*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#2;:H*,V;:H*,V",
+                  "raw": "SubtractivePipe.#2;:H898,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex3"
+                }
+              },
+              "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#35:1;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge12"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge12"
+                }
+              },
+              "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#35:2;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge13"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge13"
+                }
+              },
+              "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#35:3;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge14"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge14"
+                }
+              },
+              "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#35:4;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge15"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge15"
+                }
+              },
+              "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#37:1;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge17"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge17"
+                }
+              },
+              "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#37:2;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge18"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge18"
+                }
+              },
+              "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#37:3;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge19"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge19"
+                }
+              },
+              "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#37:4;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge20"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge20"
+                }
+              },
+              "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#38:15;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge21"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge21"
+                }
+              },
+              "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#39:16;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge22"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge22"
+                }
+              },
+              "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#3a:17;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge23"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge23"
+                }
+              },
+              "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E",
+                  "raw": "SubtractivePipe.#3b:18;:M;CUT;:H-89c:7,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge24"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge24"
+                }
+              },
+              "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#3d:1;:M;CUT;:H898:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face5"
+                }
+              },
+              "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#3f:1;:M;CUT;:H-89c:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face7"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face7"
+                }
+              },
+              "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#3f:2;:M;CUT;:H-89c:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face8"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face8"
+                }
+              },
+              "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#3f:3;:M;CUT;:H-89c:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face9"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face9"
+                }
+              },
+              "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#3f:4;:M;CUT;:H-89c:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face10"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face10"
+                }
+              },
+              "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#41:2;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex9"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex9"
+                }
+              },
+              "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#42:4;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex10"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex10"
+                }
+              },
+              "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#43:6;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex11"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex11"
+                }
+              },
+              "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#44:8;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex12"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex12"
+                }
+              },
+              "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#45:15;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex13"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex13"
+                }
+              },
+              "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#46:16;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex14"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex14"
+                }
+              },
+              "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#47:17;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex15"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex15"
+                }
+              },
+              "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V",
+                  "raw": "SubtractivePipe.#48:18;:M;CUT;:H-89c:7,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex16"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex16"
+                }
+              },
+              "SubtractivePipe.#4;:H*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#4;:H*,V;:H*,V",
+                  "raw": "SubtractivePipe.#4;:H898,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex7"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex7"
+                }
+              },
+              "SubtractivePipe.#6;:H*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#6;:H*,V;:H*,V",
+                  "raw": "SubtractivePipe.#6;:H898,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex5"
+                }
+              },
+              "SubtractivePipe.#8;:H*,V;:H*,V": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#8;:H*,V;:H*,V",
+                  "raw": "SubtractivePipe.#8;:H898,V;:H899,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Vertex1"
+                }
+              },
+              "SubtractivePipe.#b:1;:H*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#b:1;:H*,E;:H*,E",
+                  "raw": "SubtractivePipe.#b:1;:H898,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge9"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge9"
+                }
+              },
+              "SubtractivePipe.#b:2;:H*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#b:2;:H*,E;:H*,E",
+                  "raw": "SubtractivePipe.#b:2;:H898,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge11"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge11"
+                }
+              },
+              "SubtractivePipe.#b:3;:H*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#b:3;:H*,E;:H*,E",
+                  "raw": "SubtractivePipe.#b:3;:H898,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge6"
+                }
+              },
+              "SubtractivePipe.#b:4;:H*,E;:H*,E": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#b:4;:H*,E;:H*,E",
+                  "raw": "SubtractivePipe.#b:4;:H898,E;:H899,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Edge3"
+                }
+              },
+              "SubtractivePipe.#f:1;:G;XTR;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#f:1;:G;XTR;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#f:1;:G;XTR;:H898:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face3"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face3"
+                }
+              },
+              "SubtractivePipe.#f:2;:G;XTR;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#f:2;:G;XTR;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#f:2;:G;XTR;:H898:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face6"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face6"
+                }
+              },
+              "SubtractivePipe.#f:3;:G;XTR;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#f:3;:G;XTR;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#f:3;:G;XTR;:H898:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face2"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face2"
+                }
+              },
+              "SubtractivePipe.#f:4;:G;XTR;:H*:*,F;:H*,F": {
+                "evidence": {
+                  "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+                  "mapperHistoryIds": [],
+                  "source": "freecad_partdesign_body_tip"
+                },
+                "mappedName": {
+                  "canonical": "SubtractivePipe.#f:4;:G;XTR;:H*:*,F;:H*,F",
+                  "raw": "SubtractivePipe.#f:4;:G;XTR;:H898:7,F;:H899,F"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "face",
+                "source": {
+                  "object": "SubtractivePipe",
+                  "subname": "Face1"
+                },
+                "target": {
+                  "object": "Body",
+                  "subname": "Face1"
+                }
+              }
+            },
+            "status": "history_partial"
+          },
+          "key": "Body:SubtractivePipe:SubtractivePipe",
+          "ownerObject": "Body",
+          "pathPrefix": "SubtractivePipe"
+        }
+      ],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "SubtractivePipe.#11:8;:G;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#11:8;:G;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#11:8;:G;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge1"
+            }
+          },
+          "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#12:2;:G;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#12:2;:G;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge2"
+            }
+          },
+          "SubtractivePipe.#13:6;:G;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#13:6;:G;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#13:6;:G;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge5"
+            }
+          },
+          "SubtractivePipe.#14:4;:G;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#14:4;:G;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#14:4;:G;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge8"
+            }
+          },
+          "SubtractivePipe.#16:1;:M;CUT;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#16:1;:M;CUT;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#16:1;:M;CUT;:H898:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face4"
+            }
+          },
+          "SubtractivePipe.#18:1;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#18:1;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#18:1;:U;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge10"
+            }
+          },
+          "SubtractivePipe.#18:2;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#18:2;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#18:2;:U;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge16"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge16"
+            }
+          },
+          "SubtractivePipe.#18:3;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#18:3;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#18:3;:U;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge7"
+            }
+          },
+          "SubtractivePipe.#18:4;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#18:4;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#18:4;:U;XTR;:H898:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge4"
+            }
+          },
+          "SubtractivePipe.#1a:8;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#1a:8;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#1a:8;:U;XTR;:H898:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex2"
+            }
+          },
+          "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#1b:2;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#1b:2;:U;XTR;:H898:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex4"
+            }
+          },
+          "SubtractivePipe.#1c:6;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#1c:6;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#1c:6;:U;XTR;:H898:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex6"
+            }
+          },
+          "SubtractivePipe.#1d:4;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#1d:4;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#1d:4;:U;XTR;:H898:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex8"
+            }
+          },
+          "SubtractivePipe.#2;:H*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#2;:H*,V;:H*,V",
+              "raw": "SubtractivePipe.#2;:H898,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex3"
+            }
+          },
+          "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#35:1;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#35:1;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge12"
+            }
+          },
+          "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#35:2;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#35:2;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge13"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge13"
+            }
+          },
+          "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#35:3;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#35:3;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge14"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge14"
+            }
+          },
+          "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#35:4;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#35:4;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge15"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge15"
+            }
+          },
+          "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#37:1;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#37:1;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge17"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge17"
+            }
+          },
+          "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#37:2;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#37:2;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge18"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge18"
+            }
+          },
+          "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#37:3;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#37:3;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge19"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge19"
+            }
+          },
+          "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#37:4;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#37:4;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge20"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge20"
+            }
+          },
+          "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#38:15;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#38:15;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge21"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge21"
+            }
+          },
+          "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#39:16;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#39:16;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge22"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge22"
+            }
+          },
+          "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#3a:17;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#3a:17;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge23"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge23"
+            }
+          },
+          "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#3b:18;:M;CUT;:H*:*,E;:H*,E",
+              "raw": "SubtractivePipe.#3b:18;:M;CUT;:H-89c:7,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge24"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge24"
+            }
+          },
+          "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#3d:1;:M;CUT;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#3d:1;:M;CUT;:H898:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face5"
+            }
+          },
+          "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#3f:1;:M;CUT;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#3f:1;:M;CUT;:H-89c:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face7"
+            }
+          },
+          "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#3f:2;:M;CUT;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#3f:2;:M;CUT;:H-89c:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face8"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face8"
+            }
+          },
+          "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#3f:3;:M;CUT;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#3f:3;:M;CUT;:H-89c:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face9"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face9"
+            }
+          },
+          "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#3f:4;:M;CUT;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#3f:4;:M;CUT;:H-89c:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face10"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face10"
+            }
+          },
+          "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#41:2;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#41:2;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex9"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex9"
+            }
+          },
+          "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#42:4;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#42:4;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex10"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex10"
+            }
+          },
+          "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#43:6;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#43:6;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex11"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex11"
+            }
+          },
+          "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#44:8;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#44:8;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex12"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex12"
+            }
+          },
+          "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#45:15;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#45:15;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex13"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex13"
+            }
+          },
+          "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#46:16;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#46:16;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex14"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex14"
+            }
+          },
+          "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#47:17;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#47:17;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex15"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex15"
+            }
+          },
+          "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#48:18;:M;CUT;:H*:*,V;:H*,V",
+              "raw": "SubtractivePipe.#48:18;:M;CUT;:H-89c:7,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex16"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex16"
+            }
+          },
+          "SubtractivePipe.#4;:H*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#4;:H*,V;:H*,V",
+              "raw": "SubtractivePipe.#4;:H898,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex7"
+            }
+          },
+          "SubtractivePipe.#6;:H*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#6;:H*,V;:H*,V",
+              "raw": "SubtractivePipe.#6;:H898,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex5"
+            }
+          },
+          "SubtractivePipe.#8;:H*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#8;:H*,V;:H*,V",
+              "raw": "SubtractivePipe.#8;:H898,V;:H899,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Vertex1"
+            }
+          },
+          "SubtractivePipe.#b:1;:H*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#b:1;:H*,E;:H*,E",
+              "raw": "SubtractivePipe.#b:1;:H898,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge9"
+            }
+          },
+          "SubtractivePipe.#b:2;:H*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#b:2;:H*,E;:H*,E",
+              "raw": "SubtractivePipe.#b:2;:H898,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge11"
+            }
+          },
+          "SubtractivePipe.#b:3;:H*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#b:3;:H*,E;:H*,E",
+              "raw": "SubtractivePipe.#b:3;:H898,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge6"
+            }
+          },
+          "SubtractivePipe.#b:4;:H*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#b:4;:H*,E;:H*,E",
+              "raw": "SubtractivePipe.#b:4;:H898,E;:H899,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Edge3"
+            }
+          },
+          "SubtractivePipe.#f:1;:G;XTR;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#f:1;:G;XTR;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#f:1;:G;XTR;:H898:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face3"
+            }
+          },
+          "SubtractivePipe.#f:2;:G;XTR;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#f:2;:G;XTR;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#f:2;:G;XTR;:H898:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face6"
+            }
+          },
+          "SubtractivePipe.#f:3;:G;XTR;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#f:3;:G;XTR;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#f:3;:G;XTR;:H898:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face2"
+            }
+          },
+          "SubtractivePipe.#f:4;:G;XTR;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": "Body:SubtractivePipe:SubtractivePipe",
+              "mapperHistoryIds": [],
+              "source": "freecad_partdesign_body_tip"
+            },
+            "mappedName": {
+              "canonical": "SubtractivePipe.#f:4;:G;XTR;:H*:*,F;:H*,F",
+              "raw": "SubtractivePipe.#f:4;:G;XTR;:H898:7,F;:H899,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SubtractivePipe",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "Body",
+              "subname": "Face1"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Body"
+    },
+    "SketchBase": {
+      "afterElements": {
+        "Face": [
+          "InternalFace1"
+        ]
+      },
+      "beforeElements": {
+        "Face": [
+          "InternalFace1"
+        ]
+      },
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "g1;SKT;FAC": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "legacy_internal_face_fixture_migration"
+            },
+            "mappedName": {
+              "canonical": "g1;SKT;FAC",
+              "raw": "g1;SKT;FAC"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SketchBase",
+              "subname": "InternalFace1"
+            },
+            "target": {
+              "object": "SketchBase",
+              "subname": "InternalFace1"
+            }
+          }
+        },
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeProfile": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SketchPipeSpine": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    },
+    "SubtractivePipe": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::SubtractivePipe"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "BasePad": {
+        "covers": [
+          "BasePad"
+        ],
+        "ledgerObject": "BasePad",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "Body": {
+        "covers": [
+          "Body",
+          "SketchBase",
+          "BasePad",
+          "SketchPipeProfile",
+          "SketchPipeSpine",
+          "SubtractivePipe"
+        ],
+        "ledgerObject": "Body",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchBase": {
+        "covers": [
+          "SketchBase"
+        ],
+        "ledgerObject": "SketchBase",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": [
+          "event:1"
+        ]
+      },
+      "SketchPipeProfile": {
+        "covers": [
+          "SketchPipeProfile"
+        ],
+        "ledgerObject": "SketchPipeProfile",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchPipeSpine": {
+        "covers": [
+          "SketchPipeSpine"
+        ],
+        "ledgerObject": "SketchPipeSpine",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SubtractivePipe": {
+        "covers": [
+          "SubtractivePipe"
+        ],
+        "ledgerObject": "SubtractivePipe",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:3c5fd0ce803eb65e31bcd2f00696995e7930e365764de32a561ace5a86d761d7",
+    "results": [
+      {
+        "inputReferenceId": "ref:1",
+        "status": "resolved"
+      }
+    ],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

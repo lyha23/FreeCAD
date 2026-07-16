@@ -442,15 +442,22 @@ def public_subshape_matches_ledger_evidence(
     identity_status = subshape.get("identityStatus")
     if identity_status == "current_only":
         return set(subshape) == {"subname", "identityStatus"}
-    if identity_status != "stable":
-        return False
-    if set(subshape) != {
+    identity_fields = {
         "subname",
         "identityStatus",
         "resolvedIndexed",
         "rawFreecadMappedName",
         "canonicalFreecadMappedName",
-    }:
+    }
+    if identity_status == "history_only":
+        return (
+            set(subshape) == identity_fields
+            and subshape.get("resolvedIndexed") == subshape_name
+            and dict_items(ledger_object.get("subshapeEvidence")).get(subshape_name) == subshape
+        )
+    if identity_status != "stable":
+        return False
+    if set(subshape) != identity_fields:
         return False
     if subshape.get("resolvedIndexed") != subshape_name:
         return False

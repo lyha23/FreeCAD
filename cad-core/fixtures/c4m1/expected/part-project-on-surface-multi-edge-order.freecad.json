@@ -1,0 +1,193 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          7.0,
+          4.0,
+          1.6484808021823699e-15
+        ],
+        "min": [
+          1.0,
+          1.0,
+          0.0
+        ]
+      },
+      "bbox_delta": 0.11,
+      "object": "ProjectedMultiEdges",
+      "object_fields": {
+        "feature": "part_project_on_surface",
+        "height": 0.0,
+        "mode": "Edges",
+        "offset": 0.0,
+        "projected_face_count": 0,
+        "projected_inner_wire_count": 0,
+        "projected_solid_count": 0,
+        "projected_wire_count": 0,
+        "projection_item_ledger": [
+          {
+            "projection_item_index": 0,
+            "source_object": "ProjectionRightLine",
+            "source_shape_kind": "edge",
+            "source_subname": "Edge1",
+            "stable_subname": "Edge1"
+          },
+          {
+            "projection_item_index": 1,
+            "source_object": "ProjectionLeftLine",
+            "source_shape_kind": "edge",
+            "source_subname": "Edge1",
+            "stable_subname": "Edge1"
+          }
+        ],
+        "projection_items": [
+          {
+            "object": "ProjectionRightLine",
+            "subshape": "Edge1"
+          },
+          {
+            "object": "ProjectionLeftLine",
+            "subshape": "Edge1"
+          }
+        ],
+        "projection_subshape": "Edge1",
+        "shape": "occt_compound",
+        "source_projection": "ProjectionRightLine",
+        "source_support": "SupportPlane",
+        "status": "ok",
+        "support_face": "Face1",
+        "topo_naming_history": "indexed_projected_edges_no_mapper_history"
+      },
+      "topology_counts": {
+        "edges": 2,
+        "faces": 0,
+        "vertices": 4
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:098470fe093d1f0e29c4fd041c68ce8b983997af31d2596c55c0aab73e55db91",
+    "objects": {
+      "ProjectedMultiEdges": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:f3b4d6ec3ab7041d9418904323a74c64c8386c175589ca7c27ee82c4ec1ca504",
+        "subshapes": {}
+      },
+      "ProjectionLeftLine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d572949be754b4e774991de804ed45e704c8d722c00ab1cd297cdf40d5b625c7",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "ProjectionRightLine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0d9c3d3c45d1082eeae772b7466f9ef697e1142fdd2a0e5212658b1491da7f07",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "SupportPlane": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:383430566ad552bf0c991c4e06a13cf4a145c398ce4fb293d7e94fcf2fab4246",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

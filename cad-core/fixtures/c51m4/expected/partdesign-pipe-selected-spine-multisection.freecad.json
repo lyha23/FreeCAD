@@ -1,0 +1,1754 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          0.6000000999999999,
+          0.6000000999999999,
+          4.0000001
+        ],
+        "min": [
+          -0.6000001000000005,
+          -0.6000000999999999,
+          -1e-07
+        ]
+      },
+      "object": "Body",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Face1",
+          "id": "Body:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H48b:7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H*:*,F",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Face2",
+          "id": "Body:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H48b:7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H*:*,F",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Face3",
+          "id": "Body:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H48b:7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H*:*,F",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Face4",
+          "id": "Body:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H48b:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H*:*,F",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Face5",
+          "id": "Body:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H48b:a,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H*:*,F",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H*:*,F",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Face6",
+          "id": "Body:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H48b:a,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H*:*,F",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge1",
+          "id": "Body:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H*:*,E",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge2",
+          "id": "Body:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H*:*,E",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge3",
+          "id": "Body:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H*:*,E",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge4",
+          "id": "Body:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge5",
+          "id": "Body:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H*:*,E",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge6",
+          "id": "Body:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge7",
+          "id": "Body:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H*:*,E",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge8",
+          "id": "Body:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H*:*,E",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge9",
+          "id": "Body:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge10",
+          "id": "Body:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H*:*,E",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge11",
+          "id": "Body:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H*:*,E",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H*:*,E",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Edge12",
+          "id": "Body:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H48b:7,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H*:*,E",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex1",
+          "id": "Body:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H*:*,V",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex2",
+          "id": "Body:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H*:*,V",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex3",
+          "id": "Body:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H*:*,V",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex4",
+          "id": "Body:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex5",
+          "id": "Body:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H*:*,V",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex6",
+          "id": "Body:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex7",
+          "id": "Body:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H*:*,V",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#33;:G;SEW;:H*:*,V",
+          "fullSubname": "Body.AdditivePipeSelectedSpine.Vertex8",
+          "id": "Body:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "AdditivePipeSelectedSpine.#33;:G;SEW;:H48b:7,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "AdditivePipeSelectedSpine.#33;:G;SEW;:H*:*,V",
+          "subname": "Vertex8"
+        }
+      ],
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 3.0533333333333332
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:fbf20839ebdfc184dcbf8b8d6d3f109fdf34917a0ad79f6796188c9ce158f5aa",
+    "objects": {
+      "AdditivePipeSelectedSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:906415cd298451c6b9e39ec3172a40ca4ef62baa98c378c2653de3434ec35ef9",
+        "subshapes": {}
+      },
+      "Body": {
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "AdditivePipeSelectedSpine",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H48b:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Face1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face1"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H48b:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Face2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face2"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H48b:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Face3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face3"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H*:*,F",
+                    "raw": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H48b:7,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Face4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face4"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#1c;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge1"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#1d;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge3"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge6"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge9"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge9"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge2"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge4"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge5"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge7"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge8"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge10"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge10"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge11"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge11"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H*:*,E": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H*:*,E",
+                    "raw": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H48b:7,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Edge12"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Edge12"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex1"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#2d;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex2"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex3"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex3"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex4"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex4"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex5"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#31;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex6"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex7"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex7"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#33;:G;SEW;:H*:*,V": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#33;:G;SEW;:H*:*,V",
+                    "raw": "AdditivePipeSelectedSpine.#33;:G;SEW;:H48b:7,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Vertex8"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Vertex8"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H*:*,F",
+                    "raw": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H48b:a,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Face5"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face5"
+                  }
+                },
+                "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H*:*,F": {
+                  "evidence": {
+                    "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_partdesign_body_tip"
+                  },
+                  "mappedName": {
+                    "canonical": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H*:*,F",
+                    "raw": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H48b:a,F"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "face",
+                  "source": {
+                    "object": "AdditivePipeSelectedSpine",
+                    "subname": "Face6"
+                  },
+                  "target": {
+                    "object": "Body",
+                    "subname": "Face6"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+            "ownerObject": "Body",
+            "pathPrefix": "AdditivePipeSelectedSpine"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H48b:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face1"
+              }
+            },
+            "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H48b:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face2"
+              }
+            },
+            "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H48b:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face3"
+              }
+            },
+            "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H*:*,F",
+                "raw": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H48b:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face4"
+              }
+            },
+            "AdditivePipeSelectedSpine.#1c;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge1"
+              }
+            },
+            "AdditivePipeSelectedSpine.#1d;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge3"
+              }
+            },
+            "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge6"
+              }
+            },
+            "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge9"
+              }
+            },
+            "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge2"
+              }
+            },
+            "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge4"
+              }
+            },
+            "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge5"
+              }
+            },
+            "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge7"
+              }
+            },
+            "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge8"
+              }
+            },
+            "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge10"
+              }
+            },
+            "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge11"
+              }
+            },
+            "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H*:*,E",
+                "raw": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H48b:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Edge12"
+              }
+            },
+            "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex1"
+              }
+            },
+            "AdditivePipeSelectedSpine.#2d;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex2"
+              }
+            },
+            "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex3"
+              }
+            },
+            "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex4"
+              }
+            },
+            "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex5"
+              }
+            },
+            "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#31;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex6"
+              }
+            },
+            "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex7"
+              }
+            },
+            "AdditivePipeSelectedSpine.#33;:G;SEW;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#33;:G;SEW;:H*:*,V",
+                "raw": "AdditivePipeSelectedSpine.#33;:G;SEW;:H48b:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Vertex8"
+              }
+            },
+            "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H*:*,F",
+                "raw": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H48b:a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face5"
+              }
+            },
+            "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": "Body:AdditivePipeSelectedSpine:AdditivePipeSelectedSpine",
+                "mapperHistoryIds": [],
+                "source": "freecad_partdesign_body_tip"
+              },
+              "mappedName": {
+                "canonical": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H*:*,F",
+                "raw": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H48b:a,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "AdditivePipeSelectedSpine",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Body",
+                "subname": "Face6"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:ccec8174095e870803d459b205f360916e3a980f616734aafcfaea7a3a04c009",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1c;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#27:3;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#28:4;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#29:4;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#21:1;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1d;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#23:1;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#24:2;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1e;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#25:2;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#26:3;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1f;:G;SEW;:H48b:7,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#18:1;:G;SEW;:H48b:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#19:2;:G;SEW;:H48b:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1a:3;:G;SEW;:H48b:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#1b:4;:G;SEW;:H48b:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#36:1;:L#34;SEW;:H48b:a,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#38:1;:L#37;SEW;:H48b:a,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2b:2;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2d;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2e:4;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#2f;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#30:6;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#31;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#32:8;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "AdditivePipeSelectedSpine.#33;:G;SEW;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "AdditivePipeSelectedSpine.#33;:G;SEW;:H48b:7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "SketchPipeProfile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:53341220dabcec69426a23f7ec8489a05bf8578f2a2053c1fb711be8201f642b",
+        "subshapes": {}
+      },
+      "SketchPipeSectionEnd": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1ecac3ebc5fab5f01c352505f37ec8c8b4936ae7e44c852c89610c3dfc12f338",
+        "subshapes": {}
+      },
+      "SketchPipeSpine": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4fc80b464fb7ccc28dc7906a65355c95a0c569e0c5363207d38a9efa8a196576",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

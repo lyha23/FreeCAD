@@ -1,0 +1,82 @@
+{
+  "case": "sketch-symmetric-center-point-solver-geometry-update",
+  "phase": "c3m3",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "39039478d78b67ccbffd356e1c8642b7ed399e25dc7c143a694f2683fdd07ff0",
+    "manifestBeforeSha256": "84019d07541b932b95cb91417f98919a8b37a278bde60537852e0e6fe08a227b",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-symmetric-center-point-solver-geometry-update-collect.json",
+      "sha256": "13281846c841c0d9177bd6b698e7a622936fd8385f0c62881408c1607424f7a8"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/sketch-symmetric-center-point-solver-geometry-update.json",
+      "sha256": "aa115ab96ffc7d54d3cec2eb54658022863bfe4def7d0dca8b86248c48b286a7"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-symmetric-center-point-solver-geometry-update.freecad.ledger.json",
+      "sha256": "dcc68c1e4a79db5bb5bdbee4213a738ba8c493bbb61380c35c0eaeab3c23e8f3"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m3/expected/sketch-symmetric-center-point-solver-geometry-update.freecad.json",
+      "sha256": "5b3da4f8c532763f4001476ca6197cbaa1b620e6449d894ba327afea1d3613c7"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m3-sketch-symmetric-center-point-solver-geometry-update-repeat2.json",
+      "sha256": "c236bd4851a69846b6af93de84765d1fe5913110f69b6a0acc8f16e580ab0e51"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-symmetric-center-point-solver-geometry-update.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-symmetric-center-point-solver-geometry-update.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m3-sketch-symmetric-center-point-solver-geometry-update.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-symmetric-center-point-solver-geometry-update.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

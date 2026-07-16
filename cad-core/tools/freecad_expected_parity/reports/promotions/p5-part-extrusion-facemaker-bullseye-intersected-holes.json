@@ -1,0 +1,82 @@
+{
+  "case": "part-extrusion-facemaker-bullseye-intersected-holes",
+  "phase": "p5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "c1a5ec99df94badd1f4cb3c9997b8cf69764f6e6e752f0d47517e1f85f95d170"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "0bed4c7824cdefd32795b834975f456d879c655f460a0f3c635a74208111f085",
+    "manifestBeforeSha256": "2888492284db0c999b6e6f4bd154c9b95d16bb296c45bd5620f19fc001fcbd80",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-facemaker-bullseye-intersected-holes-collect.json",
+      "sha256": "ca63d09b610a3802838b1bc51f350f297e4b570cf1fbcbe0167b0dbe1936ff58"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/part-extrusion-facemaker-bullseye-intersected-holes.json",
+      "sha256": "95358bee8b3c43b235862674e77523fde9a01a9618ca9ff322d37f4f3ef39a62"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-facemaker-bullseye-intersected-holes.freecad.ledger.json",
+      "sha256": "6e77dc9f4ab79803ec7259b524bf484af3a42831e9afc8aedc1217f09de3e537"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p5/expected/part-extrusion-facemaker-bullseye-intersected-holes.freecad.json",
+      "sha256": "0509b7b6623f9580b526aee880afe4d21b74247b9f2930ee0ea46db135e8f8c5"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/p5-part-extrusion-facemaker-bullseye-intersected-holes-repeat2.json",
+      "sha256": "c05e18f06f6409ce026c4c5f6ff0ba005979c1551e730bf2eeabf3457bceddb1"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/part-extrusion-facemaker-bullseye-intersected-holes.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-facemaker-bullseye-intersected-holes.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p5-part-extrusion-facemaker-bullseye-intersected-holes.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p5/expected/part-extrusion-facemaker-bullseye-intersected-holes.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

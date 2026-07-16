@@ -1,0 +1,82 @@
+{
+  "case": "pad-custom-direction-sketch-rotation",
+  "phase": "p3b",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "1fdd919313ce4003dedf47ba712e755d3ce4297355ac458f0f5ef5ba70068f05"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "af48c367c45baccdb496d8ce5be1cce19db0db0d931b627edb84b405c4e260b4",
+    "manifestBeforeSha256": "022e741ef553ac8323d490fa6b31e2b15211d55c48eb66605736a161bd0be1ba",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p3b/pad-custom-direction-sketch-rotation/collect.json",
+      "sha256": "0ad8f16a7bbbd190edf3c8a37c7130447848f21b6467bc93dc2d30ae167bb7ab"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p3b/pad-custom-direction-sketch-rotation.json",
+      "sha256": "eba3bbf05d6d1204233f2949773e06628fc421b743539d96d04cca325649bf9f"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p3b/expected/pad-custom-direction-sketch-rotation.freecad.ledger.json",
+      "sha256": "909f9032df7e0acd7c48a9119e36909878407be906a8396054907c949dd621cc"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p3b/expected/pad-custom-direction-sketch-rotation.freecad.json",
+      "sha256": "269d79e1bb81f8072a54c1ff3784273273b0c916ae11da5a25bf1b875db75c1a"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p3b/pad-custom-direction-sketch-rotation/repeat2.json",
+      "sha256": "71db6e2d15793ffc494758de346c214dcb7e44c9661ded254bb03156cf56a7ea"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p3b/pad-custom-direction-sketch-rotation.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p3b/expected/pad-custom-direction-sketch-rotation.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p3b-pad-custom-direction-sketch-rotation.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p3b/expected/pad-custom-direction-sketch-rotation.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

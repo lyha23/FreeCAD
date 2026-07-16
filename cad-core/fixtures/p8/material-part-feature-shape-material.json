@@ -1,0 +1,38 @@
+{
+  "Objects": [
+    {
+      "Name": "MaterialBox",
+      "ID": 1,
+      "TypeId": "Part::Box",
+      "Properties": {
+        "Length": 2,
+        "Width": 3,
+        "Height": 4,
+        "ShapeMaterial": {
+          "PropertyType": "Materials::PropertyMaterial",
+          "Name": "Fixture steel",
+          "Author": "FreeCAD fixture",
+          "License": "CC0-1.0",
+          "Description": "Deterministic Materials::PropertyMaterial coverage",
+          "URL": "https://www.freecad.org/",
+          "Reference": "cad-core native authority"
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "MaterialBox"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:714e0178acaced68a34f9aaf584bb0f7134090397051fa3ab39742b12249a736"
+  }
+}

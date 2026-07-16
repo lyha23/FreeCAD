@@ -1,0 +1,673 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          4.0,
+          0.5,
+          5.500000000000001
+        ],
+        "min": [
+          -0.5000000000000001,
+          -0.5000000000000002,
+          0.0
+        ]
+      },
+      "object": "Sweep",
+      "object_fields": {
+        "feature": "part_sweep",
+        "frenet": true,
+        "linearize": false,
+        "sections": [
+          "Profile"
+        ],
+        "shape": "occt_shell",
+        "solid": false,
+        "spine": "PathSource",
+        "status": "ok",
+        "topo_naming_history": "maker_history:pipeshell",
+        "transition": "Right corner"
+      },
+      "topology_counts": {
+        "edges": 20,
+        "faces": 8,
+        "vertices": 12
+      },
+      "volume": 3.3750000000000004
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:5a4cec962a83734d097b6a2444726bc348d8d999810dd394c37010c7059554f8",
+    "objects": {
+      "PathEdgeA": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c664462c2b63b4d5269784118967e9f5e6e997cb7361f640518ff9d15c88d280",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "PathEdgeB": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:046571aff3a2b150eb4638e57f44e9bec82c19edb6fb600ab9ca3404aaf7b474",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "PathEdgeC": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:cfb3f95f0c2899eda68fbb26242aa019530ae6df2ae6f981a721890d8726e039",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          }
+        }
+      },
+      "PathSource": {
+        "childElementMaps": [
+          {
+            "childIndex": 0,
+            "childObject": "PathEdgeA",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Edge1;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge1;:H*,E",
+                    "raw": "Edge1;:H75,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "PathEdgeA",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Edge1"
+                  }
+                },
+                "Vertex1;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex1;:H*,V",
+                    "raw": "Vertex1;:H75,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeA",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Vertex1"
+                  }
+                },
+                "Vertex2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeA:Child0",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex2;:H*,V",
+                    "raw": "Vertex2;:H75,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeA",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Vertex2"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "PathSource:PathEdgeA:Child0",
+            "ownerObject": "PathSource",
+            "pathPrefix": "Child0"
+          },
+          {
+            "childIndex": 1,
+            "childObject": "PathEdgeB",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Edge1;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge1;:H*,E",
+                    "raw": "Edge1;:H76,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "PathEdgeB",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Edge2"
+                  }
+                },
+                "Vertex1;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex1;:H*,V",
+                    "raw": "Vertex1;:H76,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeB",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Vertex3"
+                  }
+                },
+                "Vertex2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeB:Child1",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex2;:H*,V",
+                    "raw": "Vertex2;:H76,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeB",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Vertex4"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "PathSource:PathEdgeB:Child1",
+            "ownerObject": "PathSource",
+            "pathPrefix": "Child1"
+          },
+          {
+            "childIndex": 2,
+            "childObject": "PathEdgeC",
+            "elementMap": {
+              "encoding": "cad-core.element-map.v1",
+              "entries": {
+                "Edge1;:H*,E": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeC:Child2",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Edge1;:H*,E",
+                    "raw": "Edge1;:H77,E"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "edge",
+                  "source": {
+                    "object": "PathEdgeC",
+                    "subname": "Edge1"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Edge3"
+                  }
+                },
+                "Vertex1;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeC:Child2",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex1;:H*,V",
+                    "raw": "Vertex1;:H77,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeC",
+                    "subname": "Vertex1"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Vertex5"
+                  }
+                },
+                "Vertex2;:H*,V": {
+                  "evidence": {
+                    "childElementMapKey": "PathSource:PathEdgeC:Child2",
+                    "mapperHistoryIds": [],
+                    "source": "freecad_part_compound_links"
+                  },
+                  "mappedName": {
+                    "canonical": "Vertex2;:H*,V",
+                    "raw": "Vertex2;:H77,V"
+                  },
+                  "recoverability": "resolved",
+                  "shapeKind": "vertex",
+                  "source": {
+                    "object": "PathEdgeC",
+                    "subname": "Vertex2"
+                  },
+                  "target": {
+                    "object": "PathSource",
+                    "subname": "Vertex6"
+                  }
+                }
+              },
+              "status": "history_partial"
+            },
+            "key": "PathSource:PathEdgeC:Child2",
+            "ownerObject": "PathSource",
+            "pathPrefix": "Child2"
+          }
+        ],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H75,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Edge1"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Edge1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H76,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Edge2"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Edge2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Edge1;:H*,E",
+                  "raw": "Edge1;:H77,E"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "edge",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Edge3"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Edge3"
+                }
+              }
+            ],
+            "id": "canonical-collision-f830556f6a22e398",
+            "mappedName": {
+              "canonical": "Edge1;:H*,E",
+              "raw": "Edge1;:H75,E"
+            },
+            "message": "Canonical elementMap key Edge1;:H*,E maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H75,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Vertex1"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Vertex1"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H76,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Vertex3"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Vertex3"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex1;:H*,V",
+                  "raw": "Vertex1;:H77,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Vertex5"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Vertex5"
+                }
+              }
+            ],
+            "id": "canonical-collision-4da08c1dfc2af35a",
+            "mappedName": {
+              "canonical": "Vertex1;:H*,V",
+              "raw": "Vertex1;:H75,V"
+            },
+            "message": "Canonical elementMap key Vertex1;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          },
+          {
+            "candidates": [
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V",
+                  "raw": "Vertex2;:H75,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Vertex2"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Vertex2"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V",
+                  "raw": "Vertex2;:H76,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Vertex4"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Vertex4"
+                }
+              },
+              {
+                "mappedName": {
+                  "canonical": "Vertex2;:H*,V",
+                  "raw": "Vertex2;:H77,V"
+                },
+                "recoverability": "resolved",
+                "shapeKind": "vertex",
+                "source": {
+                  "object": "PathSource",
+                  "subname": "Vertex6"
+                },
+                "target": {
+                  "object": "PathSource",
+                  "subname": "Vertex6"
+                }
+              }
+            ],
+            "id": "canonical-collision-883d7c81ab7978ea",
+            "mappedName": {
+              "canonical": "Vertex2;:H*,V",
+              "raw": "Vertex2;:H75,V"
+            },
+            "message": "Canonical elementMap key Vertex2;:H*,V maps to multiple current targets; the collector keeps it out of elementMap",
+            "recoverability": "ambiguous",
+            "relation": "ambiguous",
+            "source": "freecad_expected_collector"
+          }
+        ],
+        "objectHash": "sha256:a506b06c044b62a986ca963af57393ef4db2afb96dc7b7a855199de805193686",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H75,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H76,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "Edge1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge1;:H77,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H75,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H75,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H76,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H76,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "Vertex1;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex1;:H77,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "Vertex2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Vertex2;:H77,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          }
+        }
+      },
+      "Profile": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0b8e507f8e7bec6c91c491642e93b0a2e1b53a3a7b55b510751620a3ef5d754a",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "Sweep": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3559aa08996d4629d66b7f7b322d0d4c5b74fc03d95e5decb3adad4d02da65d6",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

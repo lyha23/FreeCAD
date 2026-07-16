@@ -1,0 +1,409 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumLineEllipseDirectrix1",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          6.25,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          1.0,
+          -2.220446049250313e-16
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineEllipseDirectrix2",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          -6.25,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.0,
+          1.0,
+          -2.220446049250313e-16
+        ],
+        "map_mode": "Directrix2",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPointEllipseFocus1",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus1",
+        "point": [
+          4.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPointEllipseFocus2",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus2",
+        "point": [
+          -4.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineHyperbolaDirectrix1",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          3.3608019874162074,
+          1.2267884908896378,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          -0.34289780745545134,
+          0.939372712847379,
+          3.3306690738754696e-16
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineHyperbolaDirectrix2",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          -3.3608019874162074,
+          -1.2267884908896378,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          -0.34289780745545134,
+          0.939372712847379,
+          3.3306690738754696e-16
+        ],
+        "map_mode": "Directrix2",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineHyperbolaAsymptote1",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.6868519354928473,
+          0.7267973711494354,
+          -1.6653345369377348e-16
+        ],
+        "map_mode": "Asymptote1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineHyperbolaAsymptote2",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          0.9935490582152566,
+          -0.11340312570461665,
+          0.0
+        ],
+        "map_mode": "Asymptote2",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPointHyperbolaFocus1",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus1",
+        "point": [
+          4.201002484270259,
+          1.5334856136120472,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPointHyperbolaFocus2",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus2",
+        "point": [
+          -4.201002484270259,
+          -1.5334856136120472,
+          0.0
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumLineParabolaDirectrix1",
+      "object_fields": {
+        "attached": true,
+        "base": [
+          -1.9378248434212897,
+          -0.49480791850904593,
+          0.0
+        ],
+        "datum": "line",
+        "direction": [
+          -0.24740395925452302,
+          0.9689124217106448,
+          1.6653345369377348e-16
+        ],
+        "map_mode": "Directrix1",
+        "status": "ok"
+      }
+    },
+    {
+      "object": "DatumPointParabolaFocus1",
+      "object_fields": {
+        "attached": true,
+        "datum": "point",
+        "map_mode": "Focus1",
+        "point": [
+          1.9378248434212895,
+          0.4948079185090459,
+          0.0
+        ],
+        "status": "ok"
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:67075f3eda459c5832dc29b063cbef3ec4ac932d90e505a7cbb50450d729cd57",
+    "objects": {
+      "DatumLineEllipseDirectrix1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:52ba70ff1e688ca9a9b39e52dc4756e8ad0b194527ea1f82c6e57b5c21c77ef2",
+        "subshapes": {}
+      },
+      "DatumLineEllipseDirectrix2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c7bca85626b306c36315cf541236e660657927401951cc74b83b59a2cb477dd5",
+        "subshapes": {}
+      },
+      "DatumLineHyperbolaAsymptote1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:aec0fce864caf83c75119b9b38feee7cdb6d7c337f1d17fcd138e0fc596fb0a0",
+        "subshapes": {}
+      },
+      "DatumLineHyperbolaAsymptote2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:62e972c6b668326f5598544737074f3287404c5141a61e833ca7facc1e362905",
+        "subshapes": {}
+      },
+      "DatumLineHyperbolaDirectrix1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:0e5248b4f7190b1a9f3183abde7b52883ce8d58bdd9a80a03f925c6975d23a40",
+        "subshapes": {}
+      },
+      "DatumLineHyperbolaDirectrix2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:63148ae1146932c1ed138f20f883e2ad61be24a81b6fa0693ad92af9907f77b5",
+        "subshapes": {}
+      },
+      "DatumLineParabolaDirectrix1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:cc7005998e46fc8e802be26cbbc6800ef5907fabb68be7b4f8fe4792c65d5cd9",
+        "subshapes": {}
+      },
+      "DatumPointEllipseFocus1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3898a1a0a84f20aad98ef7484b6dcca1dcbb1ff29b1902b8c3b15c96ce955787",
+        "subshapes": {}
+      },
+      "DatumPointEllipseFocus2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4e190b4d09de43bee6b9156a6b3ad883df9a26c1303b588e14b0191027aa55c5",
+        "subshapes": {}
+      },
+      "DatumPointHyperbolaFocus1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1cf5f9135d9367c427f169f35669a3e5c33d677def5ce66db4b462b91b75550b",
+        "subshapes": {}
+      },
+      "DatumPointHyperbolaFocus2": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:07eb965936e958905a3a7084954b387c977224d67342abeb40d0008035134f6d",
+        "subshapes": {}
+      },
+      "DatumPointParabolaFocus1": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:4941543b7bd587d0f3da590a90d99ed57af4fa625153fc14cc2167e1e03acdd3",
+        "subshapes": {}
+      },
+      "EllipseEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1d9e0aa0b5ddedf1c8ef344b3e049ffce929e16fe5dff4543876270a0f6d5621",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "HyperbolaSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:2c4d501dced26bf7fdfaceb9857d3404f85a853c3538bac222ebcd6df4c3ec2c",
+        "subshapes": {}
+      },
+      "ParabolaSketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:3bfd4a4326b9985512cd8d8f865892e3780c80a345729c3d7608f3f468c3672d",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

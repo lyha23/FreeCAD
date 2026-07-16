@@ -1,0 +1,82 @@
+{
+  "case": "thickness-face-rectoverso-intersection",
+  "phase": "c3m5",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "8056f6e725e103c0e360e36519aa7caf51f48fbdbaeb3f705c102e14fb800cc0",
+    "manifestBeforeSha256": "1c07cd236c64bfb865e3681d2eb42d0333d4bcf630d0bc5abadb63f23988f663",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-thickness-face-rectoverso-intersection-collect.json",
+      "sha256": "f117335347523b92347f67759d166cd740fcb71dd31764881c88be89772f22ba"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/thickness-face-rectoverso-intersection.json",
+      "sha256": "2ba9630e475188d5f64ee33857777fea89cb306db74af0a01707de491c4c98a5"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/thickness-face-rectoverso-intersection.freecad.ledger.json",
+      "sha256": "e63283d9298f9acd942ce8050122b4df6fcb0788aaec8d9164c442e688b606ce"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c3m5/expected/thickness-face-rectoverso-intersection.freecad.json",
+      "sha256": "d96d76024c9332320ce6968012d02411bcb16858297132c0f7e18f9656f3a029"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/probes/c3m5-thickness-face-rectoverso-intersection-repeat2.json",
+      "sha256": "9c174174fa3546f280c7d4e657d79a559b6741a67a5902d02107d248e7ae375b"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/thickness-face-rectoverso-intersection.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/thickness-face-rectoverso-intersection.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/c3m5-thickness-face-rectoverso-intersection.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m5/expected/thickness-face-rectoverso-intersection.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}

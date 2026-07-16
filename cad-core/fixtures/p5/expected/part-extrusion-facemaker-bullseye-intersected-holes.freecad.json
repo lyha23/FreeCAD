@@ -1,0 +1,3566 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          10.0,
+          10.0,
+          5.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object": "Extrude",
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:1;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face1",
+          "id": "Extrude:Face1",
+          "identityStatus": "stable",
+          "indexed": "Face1",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:1;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face1",
+          "stableSubname": "#13:1;:G;XTR;:H*:*,F",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:2;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face2",
+          "id": "Extrude:Face2",
+          "identityStatus": "stable",
+          "indexed": "Face2",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:2;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face2",
+          "stableSubname": "#13:2;:G;XTR;:H*:*,F",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:3;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face3",
+          "id": "Extrude:Face3",
+          "identityStatus": "stable",
+          "indexed": "Face3",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:3;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face3",
+          "stableSubname": "#13:3;:G;XTR;:H*:*,F",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:4;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face4",
+          "id": "Extrude:Face4",
+          "identityStatus": "stable",
+          "indexed": "Face4",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:4;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face4",
+          "stableSubname": "#13:4;:G;XTR;:H*:*,F",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:5;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face5",
+          "id": "Extrude:Face5",
+          "identityStatus": "stable",
+          "indexed": "Face5",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:5;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face5",
+          "stableSubname": "#13:5;:G;XTR;:H*:*,F",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:6;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face6",
+          "id": "Extrude:Face6",
+          "identityStatus": "stable",
+          "indexed": "Face6",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:6;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face6",
+          "stableSubname": "#13:6;:G;XTR;:H*:*,F",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:7;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face7",
+          "id": "Extrude:Face7",
+          "identityStatus": "stable",
+          "indexed": "Face7",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:7;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face7",
+          "stableSubname": "#13:7;:G;XTR;:H*:*,F",
+          "subname": "Face7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:8;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face8",
+          "id": "Extrude:Face8",
+          "identityStatus": "stable",
+          "indexed": "Face8",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:8;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face8",
+          "stableSubname": "#13:8;:G;XTR;:H*:*,F",
+          "subname": "Face8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:9;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face9",
+          "id": "Extrude:Face9",
+          "identityStatus": "stable",
+          "indexed": "Face9",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:9;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face9",
+          "stableSubname": "#13:9;:G;XTR;:H*:*,F",
+          "subname": "Face9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:a;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face10",
+          "id": "Extrude:Face10",
+          "identityStatus": "stable",
+          "indexed": "Face10",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:a;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face10",
+          "stableSubname": "#13:a;:G;XTR;:H*:*,F",
+          "subname": "Face10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:b;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face11",
+          "id": "Extrude:Face11",
+          "identityStatus": "stable",
+          "indexed": "Face11",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:b;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face11",
+          "stableSubname": "#13:b;:G;XTR;:H*:*,F",
+          "subname": "Face11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:c;:G;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face12",
+          "id": "Extrude:Face12",
+          "identityStatus": "stable",
+          "indexed": "Face12",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:c;:G;XTR;:H9aa:7,F",
+          "resolvedIndexed": "Face12",
+          "stableSubname": "#13:c;:G;XTR;:H*:*,F",
+          "subname": "Face12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge13;:G;XTR;:H*,F",
+          "fullSubname": "Extrude.Face13",
+          "id": "Extrude:Face13",
+          "identityStatus": "stable",
+          "indexed": "Face13",
+          "kind": "Face",
+          "rawFreecadMappedName": "Edge13;:G;XTR;:H:7,F",
+          "resolvedIndexed": "Face13",
+          "stableSubname": "Edge13;:G;XTR;:H*,F",
+          "subname": "Face13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge14;:G;XTR;:H*,F",
+          "fullSubname": "Extrude.Face14",
+          "id": "Extrude:Face14",
+          "identityStatus": "stable",
+          "indexed": "Face14",
+          "kind": "Face",
+          "rawFreecadMappedName": "Edge14;:G;XTR;:H:7,F",
+          "resolvedIndexed": "Face14",
+          "stableSubname": "Edge14;:G;XTR;:H*,F",
+          "subname": "Face14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge15;:G;XTR;:H*,F",
+          "fullSubname": "Extrude.Face15",
+          "id": "Extrude:Face15",
+          "identityStatus": "stable",
+          "indexed": "Face15",
+          "kind": "Face",
+          "rawFreecadMappedName": "Edge15;:G;XTR;:H:7,F",
+          "resolvedIndexed": "Face15",
+          "stableSubname": "Edge15;:G;XTR;:H*,F",
+          "subname": "Face15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge16;:G;XTR;:H*,F",
+          "fullSubname": "Extrude.Face16",
+          "id": "Extrude:Face16",
+          "identityStatus": "stable",
+          "indexed": "Face16",
+          "kind": "Face",
+          "rawFreecadMappedName": "Edge16;:G;XTR;:H:7,F",
+          "resolvedIndexed": "Face16",
+          "stableSubname": "Edge16;:G;XTR;:H*,F",
+          "subname": "Face16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#13:1;FAC;:H*:*,F",
+          "fullSubname": "Extrude.Face17",
+          "id": "Extrude:Face17",
+          "identityStatus": "stable",
+          "indexed": "Face17",
+          "kind": "Face",
+          "rawFreecadMappedName": "#13:1;FAC;:H9aa:4,F",
+          "resolvedIndexed": "Face17",
+          "stableSubname": "#13:1;FAC;:H*:*,F",
+          "subname": "Face17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#25:1;:G0;XTR;:H*:*,F",
+          "fullSubname": "Extrude.Face18",
+          "id": "Extrude:Face18",
+          "identityStatus": "stable",
+          "indexed": "Face18",
+          "kind": "Face",
+          "rawFreecadMappedName": "#25:1;:G0;XTR;:H9aa:8,F",
+          "resolvedIndexed": "Face18",
+          "stableSubname": "#25:1;:G0;XTR;:H*:*,F",
+          "subname": "Face18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#18:2;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge1",
+          "id": "Extrude:Edge1",
+          "identityStatus": "stable",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#18:2;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge1",
+          "stableSubname": "#18:2;:G;XTR;:H*:*,E",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#19:3;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge2",
+          "id": "Extrude:Edge2",
+          "identityStatus": "stable",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#19:3;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge2",
+          "stableSubname": "#19:3;:G;XTR;:H*:*,E",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:1;:H*,E",
+          "fullSubname": "Extrude.Edge3",
+          "id": "Extrude:Edge3",
+          "identityStatus": "stable",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:1;:H9aa,E",
+          "resolvedIndexed": "Edge3",
+          "stableSubname": "#7:1;:H*,E",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:1;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge4",
+          "id": "Extrude:Edge4",
+          "identityStatus": "stable",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:1;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge4",
+          "stableSubname": "#27:1;:U;XTR;:H*:*,E",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#1a:4;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge5",
+          "id": "Extrude:Edge5",
+          "identityStatus": "stable",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#1a:4;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge5",
+          "stableSubname": "#1a:4;:G;XTR;:H*:*,E",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:2;:H*,E",
+          "fullSubname": "Extrude.Edge6",
+          "id": "Extrude:Edge6",
+          "identityStatus": "stable",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:2;:H9aa,E",
+          "resolvedIndexed": "Edge6",
+          "stableSubname": "#7:2;:H*,E",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:2;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge7",
+          "id": "Extrude:Edge7",
+          "identityStatus": "stable",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:2;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge7",
+          "stableSubname": "#27:2;:U;XTR;:H*:*,E",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#1b:5;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge8",
+          "id": "Extrude:Edge8",
+          "identityStatus": "stable",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#1b:5;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge8",
+          "stableSubname": "#1b:5;:G;XTR;:H*:*,E",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:3;:H*,E",
+          "fullSubname": "Extrude.Edge9",
+          "id": "Extrude:Edge9",
+          "identityStatus": "stable",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:3;:H9aa,E",
+          "resolvedIndexed": "Edge9",
+          "stableSubname": "#7:3;:H*,E",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:3;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge10",
+          "id": "Extrude:Edge10",
+          "identityStatus": "stable",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:3;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge10",
+          "stableSubname": "#27:3;:U;XTR;:H*:*,E",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:4;:H*,E",
+          "fullSubname": "Extrude.Edge11",
+          "id": "Extrude:Edge11",
+          "identityStatus": "stable",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:4;:H9aa,E",
+          "resolvedIndexed": "Edge11",
+          "stableSubname": "#7:4;:H*,E",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:4;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge12",
+          "id": "Extrude:Edge12",
+          "identityStatus": "stable",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:4;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge12",
+          "stableSubname": "#27:4;:U;XTR;:H*:*,E",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#1c:8;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge13",
+          "id": "Extrude:Edge13",
+          "identityStatus": "stable",
+          "indexed": "Edge13",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#1c:8;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge13",
+          "stableSubname": "#1c:8;:G;XTR;:H*:*,E",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#1d;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge14",
+          "id": "Extrude:Edge14",
+          "identityStatus": "stable",
+          "indexed": "Edge14",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#1d;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge14",
+          "stableSubname": "#1d;:G;XTR;:H*:*,E",
+          "subname": "Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:5;:H*,E",
+          "fullSubname": "Extrude.Edge15",
+          "id": "Extrude:Edge15",
+          "identityStatus": "stable",
+          "indexed": "Edge15",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:5;:H9aa,E",
+          "resolvedIndexed": "Edge15",
+          "stableSubname": "#7:5;:H*,E",
+          "subname": "Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:5;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge16",
+          "id": "Extrude:Edge16",
+          "identityStatus": "stable",
+          "indexed": "Edge16",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:5;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge16",
+          "stableSubname": "#27:5;:U;XTR;:H*:*,E",
+          "subname": "Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#1e:a;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge17",
+          "id": "Extrude:Edge17",
+          "identityStatus": "stable",
+          "indexed": "Edge17",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#1e:a;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge17",
+          "stableSubname": "#1e:a;:G;XTR;:H*:*,E",
+          "subname": "Edge17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:6;:H*,E",
+          "fullSubname": "Extrude.Edge18",
+          "id": "Extrude:Edge18",
+          "identityStatus": "stable",
+          "indexed": "Edge18",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:6;:H9aa,E",
+          "resolvedIndexed": "Edge18",
+          "stableSubname": "#7:6;:H*,E",
+          "subname": "Edge18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:6;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge19",
+          "id": "Extrude:Edge19",
+          "identityStatus": "stable",
+          "indexed": "Edge19",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:6;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge19",
+          "stableSubname": "#27:6;:U;XTR;:H*:*,E",
+          "subname": "Edge19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#1f:9;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge20",
+          "id": "Extrude:Edge20",
+          "identityStatus": "stable",
+          "indexed": "Edge20",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#1f:9;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge20",
+          "stableSubname": "#1f:9;:G;XTR;:H*:*,E",
+          "subname": "Edge20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:7;:H*,E",
+          "fullSubname": "Extrude.Edge21",
+          "id": "Extrude:Edge21",
+          "identityStatus": "stable",
+          "indexed": "Edge21",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:7;:H9aa,E",
+          "resolvedIndexed": "Edge21",
+          "stableSubname": "#7:7;:H*,E",
+          "subname": "Edge21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:7;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge22",
+          "id": "Extrude:Edge22",
+          "identityStatus": "stable",
+          "indexed": "Edge22",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:7;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge22",
+          "stableSubname": "#27:7;:U;XTR;:H*:*,E",
+          "subname": "Edge22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#20;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge23",
+          "id": "Extrude:Edge23",
+          "identityStatus": "stable",
+          "indexed": "Edge23",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#20;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge23",
+          "stableSubname": "#20;:G;XTR;:H*:*,E",
+          "subname": "Edge23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:8;:H*,E",
+          "fullSubname": "Extrude.Edge24",
+          "id": "Extrude:Edge24",
+          "identityStatus": "stable",
+          "indexed": "Edge24",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:8;:H9aa,E",
+          "resolvedIndexed": "Edge24",
+          "stableSubname": "#7:8;:H*,E",
+          "subname": "Edge24"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:8;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge25",
+          "id": "Extrude:Edge25",
+          "identityStatus": "stable",
+          "indexed": "Edge25",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:8;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge25",
+          "stableSubname": "#27:8;:U;XTR;:H*:*,E",
+          "subname": "Edge25"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#21;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge26",
+          "id": "Extrude:Edge26",
+          "identityStatus": "stable",
+          "indexed": "Edge26",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#21;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge26",
+          "stableSubname": "#21;:G;XTR;:H*:*,E",
+          "subname": "Edge26"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:9;:H*,E",
+          "fullSubname": "Extrude.Edge27",
+          "id": "Extrude:Edge27",
+          "identityStatus": "stable",
+          "indexed": "Edge27",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:9;:H9aa,E",
+          "resolvedIndexed": "Edge27",
+          "stableSubname": "#7:9;:H*,E",
+          "subname": "Edge27"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:9;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge28",
+          "id": "Extrude:Edge28",
+          "identityStatus": "stable",
+          "indexed": "Edge28",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:9;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge28",
+          "stableSubname": "#27:9;:U;XTR;:H*:*,E",
+          "subname": "Edge28"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:a;:H*,E",
+          "fullSubname": "Extrude.Edge29",
+          "id": "Extrude:Edge29",
+          "identityStatus": "stable",
+          "indexed": "Edge29",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:a;:H9aa,E",
+          "resolvedIndexed": "Edge29",
+          "stableSubname": "#7:a;:H*,E",
+          "subname": "Edge29"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:a;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge30",
+          "id": "Extrude:Edge30",
+          "identityStatus": "stable",
+          "indexed": "Edge30",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:a;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge30",
+          "stableSubname": "#27:a;:U;XTR;:H*:*,E",
+          "subname": "Edge30"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:b;:H*,E",
+          "fullSubname": "Extrude.Edge31",
+          "id": "Extrude:Edge31",
+          "identityStatus": "stable",
+          "indexed": "Edge31",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:b;:H9aa,E",
+          "resolvedIndexed": "Edge31",
+          "stableSubname": "#7:b;:H*,E",
+          "subname": "Edge31"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:b;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge32",
+          "id": "Extrude:Edge32",
+          "identityStatus": "stable",
+          "indexed": "Edge32",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:b;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge32",
+          "stableSubname": "#27:b;:U;XTR;:H*:*,E",
+          "subname": "Edge32"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#7:c;:H*,E",
+          "fullSubname": "Extrude.Edge33",
+          "id": "Extrude:Edge33",
+          "identityStatus": "stable",
+          "indexed": "Edge33",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#7:c;:H9aa,E",
+          "resolvedIndexed": "Edge33",
+          "stableSubname": "#7:c;:H*,E",
+          "subname": "Edge33"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#27:c;:U;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge34",
+          "id": "Extrude:Edge34",
+          "identityStatus": "stable",
+          "indexed": "Edge34",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#27:c;:U;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge34",
+          "stableSubname": "#27:c;:U;XTR;:H*:*,E",
+          "subname": "Edge34"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#22;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge35",
+          "id": "Extrude:Edge35",
+          "identityStatus": "stable",
+          "indexed": "Edge35",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#22;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge35",
+          "stableSubname": "#22;:G;XTR;:H*:*,E",
+          "subname": "Edge35"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge13",
+          "fullSubname": "Extrude.Edge36",
+          "id": "Extrude:Edge36",
+          "identityStatus": "history_only",
+          "indexed": "Edge36",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Edge13",
+          "resolvedIndexed": "Edge13",
+          "stableSubname": "",
+          "subname": "Edge13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2a:d;:U;XTR;:H*,E",
+          "fullSubname": "Extrude.Edge37",
+          "id": "Extrude:Edge37",
+          "identityStatus": "stable",
+          "indexed": "Edge37",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#2a:d;:U;XTR;:H:7,E",
+          "resolvedIndexed": "Edge37",
+          "stableSubname": "#2a:d;:U;XTR;:H*,E",
+          "subname": "Edge37"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#23:b;:G;XTR;:H*:*,E",
+          "fullSubname": "Extrude.Edge38",
+          "id": "Extrude:Edge38",
+          "identityStatus": "stable",
+          "indexed": "Edge38",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#23:b;:G;XTR;:H9aa:7,E",
+          "resolvedIndexed": "Edge38",
+          "stableSubname": "#23:b;:G;XTR;:H*:*,E",
+          "subname": "Edge38"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge14",
+          "fullSubname": "Extrude.Edge39",
+          "id": "Extrude:Edge39",
+          "identityStatus": "history_only",
+          "indexed": "Edge39",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Edge14",
+          "resolvedIndexed": "Edge14",
+          "stableSubname": "",
+          "subname": "Edge14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2a:e;:U;XTR;:H*,E",
+          "fullSubname": "Extrude.Edge40",
+          "id": "Extrude:Edge40",
+          "identityStatus": "stable",
+          "indexed": "Edge40",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#2a:e;:U;XTR;:H:7,E",
+          "resolvedIndexed": "Edge40",
+          "stableSubname": "#2a:e;:U;XTR;:H*,E",
+          "subname": "Edge40"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge15",
+          "fullSubname": "Extrude.Edge41",
+          "id": "Extrude:Edge41",
+          "identityStatus": "history_only",
+          "indexed": "Edge41",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Edge15",
+          "resolvedIndexed": "Edge15",
+          "stableSubname": "",
+          "subname": "Edge15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2a:f;:U;XTR;:H*,E",
+          "fullSubname": "Extrude.Edge42",
+          "id": "Extrude:Edge42",
+          "identityStatus": "stable",
+          "indexed": "Edge42",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#2a:f;:U;XTR;:H:7,E",
+          "resolvedIndexed": "Edge42",
+          "stableSubname": "#2a:f;:U;XTR;:H*,E",
+          "subname": "Edge42"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "Edge16",
+          "fullSubname": "Extrude.Edge43",
+          "id": "Extrude:Edge43",
+          "identityStatus": "history_only",
+          "indexed": "Edge43",
+          "kind": "Edge",
+          "rawFreecadMappedName": "Edge16",
+          "resolvedIndexed": "Edge16",
+          "stableSubname": "",
+          "subname": "Edge16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2a:10;:U;XTR;:H*,E",
+          "fullSubname": "Extrude.Edge44",
+          "id": "Extrude:Edge44",
+          "identityStatus": "stable",
+          "indexed": "Edge44",
+          "kind": "Edge",
+          "rawFreecadMappedName": "#2a:10;:U;XTR;:H:7,E",
+          "resolvedIndexed": "Edge44",
+          "stableSubname": "#2a:10;:U;XTR;:H*,E",
+          "subname": "Edge44"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2;:H*,V",
+          "fullSubname": "Extrude.Vertex1",
+          "id": "Extrude:Vertex1",
+          "identityStatus": "stable",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#2;:H9aa,V",
+          "resolvedIndexed": "Vertex1",
+          "stableSubname": "#2;:H*,V",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2c:2;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex2",
+          "id": "Extrude:Vertex2",
+          "identityStatus": "stable",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#2c:2;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex2",
+          "stableSubname": "#2c:2;:U;XTR;:H*:*,V",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#3;:H*,V",
+          "fullSubname": "Extrude.Vertex3",
+          "id": "Extrude:Vertex3",
+          "identityStatus": "stable",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#3;:H9aa,V",
+          "resolvedIndexed": "Vertex3",
+          "stableSubname": "#3;:H*,V",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2d:3;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex4",
+          "id": "Extrude:Vertex4",
+          "identityStatus": "stable",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#2d:3;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex4",
+          "stableSubname": "#2d:3;:U;XTR;:H*:*,V",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#4;:H*,V",
+          "fullSubname": "Extrude.Vertex5",
+          "id": "Extrude:Vertex5",
+          "identityStatus": "stable",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#4;:H9aa,V",
+          "resolvedIndexed": "Vertex5",
+          "stableSubname": "#4;:H*,V",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2e:4;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex6",
+          "id": "Extrude:Vertex6",
+          "identityStatus": "stable",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#2e:4;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex6",
+          "stableSubname": "#2e:4;:U;XTR;:H*:*,V",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#5;:H*,V",
+          "fullSubname": "Extrude.Vertex7",
+          "id": "Extrude:Vertex7",
+          "identityStatus": "stable",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#5;:H9aa,V",
+          "resolvedIndexed": "Vertex7",
+          "stableSubname": "#5;:H*,V",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#2f:5;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex8",
+          "id": "Extrude:Vertex8",
+          "identityStatus": "stable",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#2f:5;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex8",
+          "stableSubname": "#2f:5;:U;XTR;:H*:*,V",
+          "subname": "Vertex8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#8;:H*,V",
+          "fullSubname": "Extrude.Vertex9",
+          "id": "Extrude:Vertex9",
+          "identityStatus": "stable",
+          "indexed": "Vertex9",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#8;:H9aa,V",
+          "resolvedIndexed": "Vertex9",
+          "stableSubname": "#8;:H*,V",
+          "subname": "Vertex9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#30:8;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex10",
+          "id": "Extrude:Vertex10",
+          "identityStatus": "stable",
+          "indexed": "Vertex10",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#30:8;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex10",
+          "stableSubname": "#30:8;:U;XTR;:H*:*,V",
+          "subname": "Vertex10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#f;:H*,V",
+          "fullSubname": "Extrude.Vertex11",
+          "id": "Extrude:Vertex11",
+          "identityStatus": "stable",
+          "indexed": "Vertex11",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#f;:H9aa,V",
+          "resolvedIndexed": "Vertex11",
+          "stableSubname": "#f;:H*,V",
+          "subname": "Vertex11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#31;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex12",
+          "id": "Extrude:Vertex12",
+          "identityStatus": "stable",
+          "indexed": "Vertex12",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#31;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex12",
+          "stableSubname": "#31;:U;XTR;:H*:*,V",
+          "subname": "Vertex12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#10;:H*,V",
+          "fullSubname": "Extrude.Vertex13",
+          "id": "Extrude:Vertex13",
+          "identityStatus": "stable",
+          "indexed": "Vertex13",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#10;:H9aa,V",
+          "resolvedIndexed": "Vertex13",
+          "stableSubname": "#10;:H*,V",
+          "subname": "Vertex13"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#32:a;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex14",
+          "id": "Extrude:Vertex14",
+          "identityStatus": "stable",
+          "indexed": "Vertex14",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#32:a;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex14",
+          "stableSubname": "#32:a;:U;XTR;:H*:*,V",
+          "subname": "Vertex14"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#9;:H*,V",
+          "fullSubname": "Extrude.Vertex15",
+          "id": "Extrude:Vertex15",
+          "identityStatus": "stable",
+          "indexed": "Vertex15",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#9;:H9aa,V",
+          "resolvedIndexed": "Vertex15",
+          "stableSubname": "#9;:H*,V",
+          "subname": "Vertex15"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#33:9;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex16",
+          "id": "Extrude:Vertex16",
+          "identityStatus": "stable",
+          "indexed": "Vertex16",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#33:9;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex16",
+          "stableSubname": "#33:9;:U;XTR;:H*:*,V",
+          "subname": "Vertex16"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#e;:H*,V",
+          "fullSubname": "Extrude.Vertex17",
+          "id": "Extrude:Vertex17",
+          "identityStatus": "stable",
+          "indexed": "Vertex17",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#e;:H9aa,V",
+          "resolvedIndexed": "Vertex17",
+          "stableSubname": "#e;:H*,V",
+          "subname": "Vertex17"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#34:14;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex18",
+          "id": "Extrude:Vertex18",
+          "identityStatus": "stable",
+          "indexed": "Vertex18",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#34:14;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex18",
+          "stableSubname": "#34:14;:U;XTR;:H*:*,V",
+          "subname": "Vertex18"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#a;:H*,V",
+          "fullSubname": "Extrude.Vertex19",
+          "id": "Extrude:Vertex19",
+          "identityStatus": "stable",
+          "indexed": "Vertex19",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#a;:H9aa,V",
+          "resolvedIndexed": "Vertex19",
+          "stableSubname": "#a;:H*,V",
+          "subname": "Vertex19"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#35:15;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex20",
+          "id": "Extrude:Vertex20",
+          "identityStatus": "stable",
+          "indexed": "Vertex20",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#35:15;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex20",
+          "stableSubname": "#35:15;:U;XTR;:H*:*,V",
+          "subname": "Vertex20"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#b;:H*,V",
+          "fullSubname": "Extrude.Vertex21",
+          "id": "Extrude:Vertex21",
+          "identityStatus": "stable",
+          "indexed": "Vertex21",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#b;:H9aa,V",
+          "resolvedIndexed": "Vertex21",
+          "stableSubname": "#b;:H*,V",
+          "subname": "Vertex21"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#36:16;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex22",
+          "id": "Extrude:Vertex22",
+          "identityStatus": "stable",
+          "indexed": "Vertex22",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#36:16;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex22",
+          "stableSubname": "#36:16;:U;XTR;:H*:*,V",
+          "subname": "Vertex22"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#11;:H*,V",
+          "fullSubname": "Extrude.Vertex23",
+          "id": "Extrude:Vertex23",
+          "identityStatus": "stable",
+          "indexed": "Vertex23",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#11;:H9aa,V",
+          "resolvedIndexed": "Vertex23",
+          "stableSubname": "#11;:H*,V",
+          "subname": "Vertex23"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "canonicalFreecadMappedName": "#37:b;:U;XTR;:H*:*,V",
+          "fullSubname": "Extrude.Vertex24",
+          "id": "Extrude:Vertex24",
+          "identityStatus": "stable",
+          "indexed": "Vertex24",
+          "kind": "Vertex",
+          "rawFreecadMappedName": "#37:b;:U;XTR;:H9aa:7,V",
+          "resolvedIndexed": "Vertex24",
+          "stableSubname": "#37:b;:U;XTR;:H*:*,V",
+          "subname": "Vertex24"
+        }
+      ],
+      "topology_counts": {
+        "edges": 44,
+        "faces": 18,
+        "vertices": 24
+      },
+      "volume": 339.9999999999997
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:80d5f8efc75a3564af13e567c6d1513297bf709c280f32dbb7f6c699ae5275df",
+    "objects": {
+      "Extrude": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {
+            "#10;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#10;:H*,V",
+                "raw": "#10;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex13"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex13"
+              }
+            },
+            "#11;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#11;:H*,V",
+                "raw": "#11;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex23"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex23"
+              }
+            },
+            "#13:1;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:1;:G;XTR;:H*:*,F",
+                "raw": "#13:1;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face1"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face1"
+              }
+            },
+            "#13:1;FAC;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:1;FAC;:H*:*,F",
+                "raw": "#13:1;FAC;:H9aa:4,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face17"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face17"
+              }
+            },
+            "#13:2;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:2;:G;XTR;:H*:*,F",
+                "raw": "#13:2;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face2"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face2"
+              }
+            },
+            "#13:3;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:3;:G;XTR;:H*:*,F",
+                "raw": "#13:3;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face3"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face3"
+              }
+            },
+            "#13:4;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:4;:G;XTR;:H*:*,F",
+                "raw": "#13:4;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face4"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face4"
+              }
+            },
+            "#13:5;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:5;:G;XTR;:H*:*,F",
+                "raw": "#13:5;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face5"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face5"
+              }
+            },
+            "#13:6;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:6;:G;XTR;:H*:*,F",
+                "raw": "#13:6;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face6"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face6"
+              }
+            },
+            "#13:7;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:7;:G;XTR;:H*:*,F",
+                "raw": "#13:7;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face7"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face7"
+              }
+            },
+            "#13:8;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:8;:G;XTR;:H*:*,F",
+                "raw": "#13:8;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face8"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face8"
+              }
+            },
+            "#13:9;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:9;:G;XTR;:H*:*,F",
+                "raw": "#13:9;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face9"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face9"
+              }
+            },
+            "#13:a;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:a;:G;XTR;:H*:*,F",
+                "raw": "#13:a;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face10"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face10"
+              }
+            },
+            "#13:b;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:b;:G;XTR;:H*:*,F",
+                "raw": "#13:b;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face11"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face11"
+              }
+            },
+            "#13:c;:G;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#13:c;:G;XTR;:H*:*,F",
+                "raw": "#13:c;:G;XTR;:H9aa:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face12"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face12"
+              }
+            },
+            "#18:2;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#18:2;:G;XTR;:H*:*,E",
+                "raw": "#18:2;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge1"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge1"
+              }
+            },
+            "#19:3;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#19:3;:G;XTR;:H*:*,E",
+                "raw": "#19:3;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge2"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge2"
+              }
+            },
+            "#1a:4;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1a:4;:G;XTR;:H*:*,E",
+                "raw": "#1a:4;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge5"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge5"
+              }
+            },
+            "#1b:5;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1b:5;:G;XTR;:H*:*,E",
+                "raw": "#1b:5;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge8"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge8"
+              }
+            },
+            "#1c:8;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1c:8;:G;XTR;:H*:*,E",
+                "raw": "#1c:8;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge13"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge13"
+              }
+            },
+            "#1d;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1d;:G;XTR;:H*:*,E",
+                "raw": "#1d;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge14"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge14"
+              }
+            },
+            "#1e:a;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1e:a;:G;XTR;:H*:*,E",
+                "raw": "#1e:a;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge17"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge17"
+              }
+            },
+            "#1f:9;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#1f:9;:G;XTR;:H*:*,E",
+                "raw": "#1f:9;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge20"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge20"
+              }
+            },
+            "#20;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#20;:G;XTR;:H*:*,E",
+                "raw": "#20;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge23"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge23"
+              }
+            },
+            "#21;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#21;:G;XTR;:H*:*,E",
+                "raw": "#21;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge26"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge26"
+              }
+            },
+            "#22;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#22;:G;XTR;:H*:*,E",
+                "raw": "#22;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge35"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge35"
+              }
+            },
+            "#23:b;:G;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#23:b;:G;XTR;:H*:*,E",
+                "raw": "#23:b;:G;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge38"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge38"
+              }
+            },
+            "#25:1;:G0;XTR;:H*:*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#25:1;:G0;XTR;:H*:*,F",
+                "raw": "#25:1;:G0;XTR;:H9aa:8,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face18"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face18"
+              }
+            },
+            "#27:1;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:1;:U;XTR;:H*:*,E",
+                "raw": "#27:1;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge4"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge4"
+              }
+            },
+            "#27:2;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:2;:U;XTR;:H*:*,E",
+                "raw": "#27:2;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge7"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge7"
+              }
+            },
+            "#27:3;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:3;:U;XTR;:H*:*,E",
+                "raw": "#27:3;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge10"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge10"
+              }
+            },
+            "#27:4;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:4;:U;XTR;:H*:*,E",
+                "raw": "#27:4;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge12"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge12"
+              }
+            },
+            "#27:5;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:5;:U;XTR;:H*:*,E",
+                "raw": "#27:5;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge16"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge16"
+              }
+            },
+            "#27:6;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:6;:U;XTR;:H*:*,E",
+                "raw": "#27:6;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge19"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge19"
+              }
+            },
+            "#27:7;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:7;:U;XTR;:H*:*,E",
+                "raw": "#27:7;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge22"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge22"
+              }
+            },
+            "#27:8;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:8;:U;XTR;:H*:*,E",
+                "raw": "#27:8;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge25"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge25"
+              }
+            },
+            "#27:9;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:9;:U;XTR;:H*:*,E",
+                "raw": "#27:9;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge28"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge28"
+              }
+            },
+            "#27:a;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:a;:U;XTR;:H*:*,E",
+                "raw": "#27:a;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge30"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge30"
+              }
+            },
+            "#27:b;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:b;:U;XTR;:H*:*,E",
+                "raw": "#27:b;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge32"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge32"
+              }
+            },
+            "#27:c;:U;XTR;:H*:*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#27:c;:U;XTR;:H*:*,E",
+                "raw": "#27:c;:U;XTR;:H9aa:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge34"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge34"
+              }
+            },
+            "#2;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2;:H*,V",
+                "raw": "#2;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex1"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex1"
+              }
+            },
+            "#2a:10;:U;XTR;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2a:10;:U;XTR;:H*,E",
+                "raw": "#2a:10;:U;XTR;:H:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge44"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge44"
+              }
+            },
+            "#2a:d;:U;XTR;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2a:d;:U;XTR;:H*,E",
+                "raw": "#2a:d;:U;XTR;:H:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge37"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge37"
+              }
+            },
+            "#2a:e;:U;XTR;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2a:e;:U;XTR;:H*,E",
+                "raw": "#2a:e;:U;XTR;:H:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge40"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge40"
+              }
+            },
+            "#2a:f;:U;XTR;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2a:f;:U;XTR;:H*,E",
+                "raw": "#2a:f;:U;XTR;:H:7,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge42"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge42"
+              }
+            },
+            "#2c:2;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2c:2;:U;XTR;:H*:*,V",
+                "raw": "#2c:2;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex2"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex2"
+              }
+            },
+            "#2d:3;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2d:3;:U;XTR;:H*:*,V",
+                "raw": "#2d:3;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex4"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex4"
+              }
+            },
+            "#2e:4;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2e:4;:U;XTR;:H*:*,V",
+                "raw": "#2e:4;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex6"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex6"
+              }
+            },
+            "#2f:5;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#2f:5;:U;XTR;:H*:*,V",
+                "raw": "#2f:5;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex8"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex8"
+              }
+            },
+            "#30:8;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#30:8;:U;XTR;:H*:*,V",
+                "raw": "#30:8;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex10"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex10"
+              }
+            },
+            "#31;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#31;:U;XTR;:H*:*,V",
+                "raw": "#31;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex12"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex12"
+              }
+            },
+            "#32:a;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#32:a;:U;XTR;:H*:*,V",
+                "raw": "#32:a;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex14"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex14"
+              }
+            },
+            "#33:9;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#33:9;:U;XTR;:H*:*,V",
+                "raw": "#33:9;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex16"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex16"
+              }
+            },
+            "#34:14;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#34:14;:U;XTR;:H*:*,V",
+                "raw": "#34:14;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex18"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex18"
+              }
+            },
+            "#35:15;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#35:15;:U;XTR;:H*:*,V",
+                "raw": "#35:15;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex20"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex20"
+              }
+            },
+            "#36:16;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#36:16;:U;XTR;:H*:*,V",
+                "raw": "#36:16;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex22"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex22"
+              }
+            },
+            "#37:b;:U;XTR;:H*:*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#37:b;:U;XTR;:H*:*,V",
+                "raw": "#37:b;:U;XTR;:H9aa:7,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex24"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex24"
+              }
+            },
+            "#3;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#3;:H*,V",
+                "raw": "#3;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex3"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex3"
+              }
+            },
+            "#4;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#4;:H*,V",
+                "raw": "#4;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex5"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex5"
+              }
+            },
+            "#5;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#5;:H*,V",
+                "raw": "#5;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex7"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex7"
+              }
+            },
+            "#7:1;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:1;:H*,E",
+                "raw": "#7:1;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge3"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge3"
+              }
+            },
+            "#7:2;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:2;:H*,E",
+                "raw": "#7:2;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge6"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge6"
+              }
+            },
+            "#7:3;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:3;:H*,E",
+                "raw": "#7:3;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge9"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge9"
+              }
+            },
+            "#7:4;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:4;:H*,E",
+                "raw": "#7:4;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge11"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge11"
+              }
+            },
+            "#7:5;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:5;:H*,E",
+                "raw": "#7:5;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge15"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge15"
+              }
+            },
+            "#7:6;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:6;:H*,E",
+                "raw": "#7:6;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge18"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge18"
+              }
+            },
+            "#7:7;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:7;:H*,E",
+                "raw": "#7:7;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge21"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge21"
+              }
+            },
+            "#7:8;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:8;:H*,E",
+                "raw": "#7:8;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge24"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge24"
+              }
+            },
+            "#7:9;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:9;:H*,E",
+                "raw": "#7:9;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge27"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge27"
+              }
+            },
+            "#7:a;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:a;:H*,E",
+                "raw": "#7:a;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge29"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge29"
+              }
+            },
+            "#7:b;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:b;:H*,E",
+                "raw": "#7:b;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge31"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge31"
+              }
+            },
+            "#7:c;:H*,E": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#7:c;:H*,E",
+                "raw": "#7:c;:H9aa,E"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "edge",
+              "source": {
+                "object": "Extrude",
+                "subname": "Edge33"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Edge33"
+              }
+            },
+            "#8;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#8;:H*,V",
+                "raw": "#8;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex9"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex9"
+              }
+            },
+            "#9;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#9;:H*,V",
+                "raw": "#9;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex15"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex15"
+              }
+            },
+            "#a;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#a;:H*,V",
+                "raw": "#a;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex19"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex19"
+              }
+            },
+            "#b;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#b;:H*,V",
+                "raw": "#b;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex21"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex21"
+              }
+            },
+            "#e;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#e;:H*,V",
+                "raw": "#e;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex17"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex17"
+              }
+            },
+            "#f;:H*,V": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "#f;:H*,V",
+                "raw": "#f;:H9aa,V"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "vertex",
+              "source": {
+                "object": "Extrude",
+                "subname": "Vertex11"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Vertex11"
+              }
+            },
+            "Edge13;:G;XTR;:H*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge13;:G;XTR;:H*,F",
+                "raw": "Edge13;:G;XTR;:H:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face13"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face13"
+              }
+            },
+            "Edge14;:G;XTR;:H*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge14;:G;XTR;:H*,F",
+                "raw": "Edge14;:G;XTR;:H:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face14"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face14"
+              }
+            },
+            "Edge15;:G;XTR;:H*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge15;:G;XTR;:H*,F",
+                "raw": "Edge15;:G;XTR;:H:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face15"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face15"
+              }
+            },
+            "Edge16;:G;XTR;:H*,F": {
+              "evidence": {
+                "childElementMapKey": null,
+                "mapperHistoryIds": [],
+                "source": "freecad_expected_collector"
+              },
+              "mappedName": {
+                "canonical": "Edge16;:G;XTR;:H*,F",
+                "raw": "Edge16;:G;XTR;:H:7,F"
+              },
+              "recoverability": "resolved",
+              "shapeKind": "face",
+              "source": {
+                "object": "Extrude",
+                "subname": "Face16"
+              },
+              "target": {
+                "object": "Extrude",
+                "subname": "Face16"
+              }
+            }
+          },
+          "status": "history_partial"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:047cf573e21549ba82dcb7fb588efe1484b27e43800bdf12399a0b8c38abfeee",
+        "subshapes": {
+          "Edge1": {
+            "canonicalFreecadMappedName": "#18:2;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#18:2;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge1",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "canonicalFreecadMappedName": "#27:3;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:3;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge10",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "canonicalFreecadMappedName": "#7:4;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:4;:H9aa,E",
+            "resolvedIndexed": "Edge11",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "canonicalFreecadMappedName": "#27:4;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:4;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge12",
+            "subname": "Edge12"
+          },
+          "Edge13": {
+            "canonicalFreecadMappedName": "Edge13",
+            "identityStatus": "history_only",
+            "rawFreecadMappedName": "Edge13",
+            "resolvedIndexed": "Edge13",
+            "subname": "Edge13"
+          },
+          "Edge14": {
+            "canonicalFreecadMappedName": "Edge14",
+            "identityStatus": "history_only",
+            "rawFreecadMappedName": "Edge14",
+            "resolvedIndexed": "Edge14",
+            "subname": "Edge14"
+          },
+          "Edge15": {
+            "canonicalFreecadMappedName": "Edge15",
+            "identityStatus": "history_only",
+            "rawFreecadMappedName": "Edge15",
+            "resolvedIndexed": "Edge15",
+            "subname": "Edge15"
+          },
+          "Edge16": {
+            "canonicalFreecadMappedName": "Edge16",
+            "identityStatus": "history_only",
+            "rawFreecadMappedName": "Edge16",
+            "resolvedIndexed": "Edge16",
+            "subname": "Edge16"
+          },
+          "Edge17": {
+            "canonicalFreecadMappedName": "#1e:a;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#1e:a;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge17",
+            "subname": "Edge17"
+          },
+          "Edge18": {
+            "canonicalFreecadMappedName": "#7:6;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:6;:H9aa,E",
+            "resolvedIndexed": "Edge18",
+            "subname": "Edge18"
+          },
+          "Edge19": {
+            "canonicalFreecadMappedName": "#27:6;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:6;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge19",
+            "subname": "Edge19"
+          },
+          "Edge2": {
+            "canonicalFreecadMappedName": "#19:3;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#19:3;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge2",
+            "subname": "Edge2"
+          },
+          "Edge20": {
+            "canonicalFreecadMappedName": "#1f:9;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#1f:9;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge20",
+            "subname": "Edge20"
+          },
+          "Edge21": {
+            "canonicalFreecadMappedName": "#7:7;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:7;:H9aa,E",
+            "resolvedIndexed": "Edge21",
+            "subname": "Edge21"
+          },
+          "Edge22": {
+            "canonicalFreecadMappedName": "#27:7;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:7;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge22",
+            "subname": "Edge22"
+          },
+          "Edge23": {
+            "canonicalFreecadMappedName": "#20;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#20;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge23",
+            "subname": "Edge23"
+          },
+          "Edge24": {
+            "canonicalFreecadMappedName": "#7:8;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:8;:H9aa,E",
+            "resolvedIndexed": "Edge24",
+            "subname": "Edge24"
+          },
+          "Edge25": {
+            "canonicalFreecadMappedName": "#27:8;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:8;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge25",
+            "subname": "Edge25"
+          },
+          "Edge26": {
+            "canonicalFreecadMappedName": "#21;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#21;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge26",
+            "subname": "Edge26"
+          },
+          "Edge27": {
+            "canonicalFreecadMappedName": "#7:9;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:9;:H9aa,E",
+            "resolvedIndexed": "Edge27",
+            "subname": "Edge27"
+          },
+          "Edge28": {
+            "canonicalFreecadMappedName": "#27:9;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:9;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge28",
+            "subname": "Edge28"
+          },
+          "Edge29": {
+            "canonicalFreecadMappedName": "#7:a;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:a;:H9aa,E",
+            "resolvedIndexed": "Edge29",
+            "subname": "Edge29"
+          },
+          "Edge3": {
+            "canonicalFreecadMappedName": "#7:1;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:1;:H9aa,E",
+            "resolvedIndexed": "Edge3",
+            "subname": "Edge3"
+          },
+          "Edge30": {
+            "canonicalFreecadMappedName": "#27:a;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:a;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge30",
+            "subname": "Edge30"
+          },
+          "Edge31": {
+            "canonicalFreecadMappedName": "#7:b;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:b;:H9aa,E",
+            "resolvedIndexed": "Edge31",
+            "subname": "Edge31"
+          },
+          "Edge32": {
+            "canonicalFreecadMappedName": "#27:b;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:b;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge32",
+            "subname": "Edge32"
+          },
+          "Edge33": {
+            "canonicalFreecadMappedName": "#7:c;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:c;:H9aa,E",
+            "resolvedIndexed": "Edge33",
+            "subname": "Edge33"
+          },
+          "Edge34": {
+            "canonicalFreecadMappedName": "#27:c;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:c;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge34",
+            "subname": "Edge34"
+          },
+          "Edge35": {
+            "canonicalFreecadMappedName": "#22;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#22;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge35",
+            "subname": "Edge35"
+          },
+          "Edge37": {
+            "canonicalFreecadMappedName": "#2a:d;:U;XTR;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2a:d;:U;XTR;:H:7,E",
+            "resolvedIndexed": "Edge37",
+            "subname": "Edge37"
+          },
+          "Edge38": {
+            "canonicalFreecadMappedName": "#23:b;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#23:b;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge38",
+            "subname": "Edge38"
+          },
+          "Edge4": {
+            "canonicalFreecadMappedName": "#27:1;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:1;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge4",
+            "subname": "Edge4"
+          },
+          "Edge40": {
+            "canonicalFreecadMappedName": "#2a:e;:U;XTR;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2a:e;:U;XTR;:H:7,E",
+            "resolvedIndexed": "Edge40",
+            "subname": "Edge40"
+          },
+          "Edge42": {
+            "canonicalFreecadMappedName": "#2a:f;:U;XTR;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2a:f;:U;XTR;:H:7,E",
+            "resolvedIndexed": "Edge42",
+            "subname": "Edge42"
+          },
+          "Edge44": {
+            "canonicalFreecadMappedName": "#2a:10;:U;XTR;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2a:10;:U;XTR;:H:7,E",
+            "resolvedIndexed": "Edge44",
+            "subname": "Edge44"
+          },
+          "Edge5": {
+            "canonicalFreecadMappedName": "#1a:4;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#1a:4;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge5",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "canonicalFreecadMappedName": "#7:2;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:2;:H9aa,E",
+            "resolvedIndexed": "Edge6",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "canonicalFreecadMappedName": "#27:2;:U;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#27:2;:U;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge7",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "canonicalFreecadMappedName": "#1b:5;:G;XTR;:H*:*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#1b:5;:G;XTR;:H9aa:7,E",
+            "resolvedIndexed": "Edge8",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "canonicalFreecadMappedName": "#7:3;:H*,E",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#7:3;:H9aa,E",
+            "resolvedIndexed": "Edge9",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "canonicalFreecadMappedName": "#13:1;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:1;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face1",
+            "subname": "Face1"
+          },
+          "Face10": {
+            "canonicalFreecadMappedName": "#13:a;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:a;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face10",
+            "subname": "Face10"
+          },
+          "Face11": {
+            "canonicalFreecadMappedName": "#13:b;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:b;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face11",
+            "subname": "Face11"
+          },
+          "Face12": {
+            "canonicalFreecadMappedName": "#13:c;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:c;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face12",
+            "subname": "Face12"
+          },
+          "Face13": {
+            "canonicalFreecadMappedName": "Edge13;:G;XTR;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge13;:G;XTR;:H:7,F",
+            "resolvedIndexed": "Face13",
+            "subname": "Face13"
+          },
+          "Face14": {
+            "canonicalFreecadMappedName": "Edge14;:G;XTR;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge14;:G;XTR;:H:7,F",
+            "resolvedIndexed": "Face14",
+            "subname": "Face14"
+          },
+          "Face15": {
+            "canonicalFreecadMappedName": "Edge15;:G;XTR;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge15;:G;XTR;:H:7,F",
+            "resolvedIndexed": "Face15",
+            "subname": "Face15"
+          },
+          "Face16": {
+            "canonicalFreecadMappedName": "Edge16;:G;XTR;:H*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "Edge16;:G;XTR;:H:7,F",
+            "resolvedIndexed": "Face16",
+            "subname": "Face16"
+          },
+          "Face17": {
+            "canonicalFreecadMappedName": "#13:1;FAC;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:1;FAC;:H9aa:4,F",
+            "resolvedIndexed": "Face17",
+            "subname": "Face17"
+          },
+          "Face18": {
+            "canonicalFreecadMappedName": "#25:1;:G0;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#25:1;:G0;XTR;:H9aa:8,F",
+            "resolvedIndexed": "Face18",
+            "subname": "Face18"
+          },
+          "Face2": {
+            "canonicalFreecadMappedName": "#13:2;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:2;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face2",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "canonicalFreecadMappedName": "#13:3;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:3;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face3",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "canonicalFreecadMappedName": "#13:4;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:4;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face4",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "canonicalFreecadMappedName": "#13:5;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:5;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face5",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "canonicalFreecadMappedName": "#13:6;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:6;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face6",
+            "subname": "Face6"
+          },
+          "Face7": {
+            "canonicalFreecadMappedName": "#13:7;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:7;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face7",
+            "subname": "Face7"
+          },
+          "Face8": {
+            "canonicalFreecadMappedName": "#13:8;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:8;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face8",
+            "subname": "Face8"
+          },
+          "Face9": {
+            "canonicalFreecadMappedName": "#13:9;:G;XTR;:H*:*,F",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#13:9;:G;XTR;:H9aa:7,F",
+            "resolvedIndexed": "Face9",
+            "subname": "Face9"
+          },
+          "Vertex1": {
+            "canonicalFreecadMappedName": "#2;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2;:H9aa,V",
+            "resolvedIndexed": "Vertex1",
+            "subname": "Vertex1"
+          },
+          "Vertex10": {
+            "canonicalFreecadMappedName": "#30:8;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#30:8;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex10",
+            "subname": "Vertex10"
+          },
+          "Vertex11": {
+            "canonicalFreecadMappedName": "#f;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#f;:H9aa,V",
+            "resolvedIndexed": "Vertex11",
+            "subname": "Vertex11"
+          },
+          "Vertex12": {
+            "canonicalFreecadMappedName": "#31;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#31;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex12",
+            "subname": "Vertex12"
+          },
+          "Vertex13": {
+            "canonicalFreecadMappedName": "#10;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#10;:H9aa,V",
+            "resolvedIndexed": "Vertex13",
+            "subname": "Vertex13"
+          },
+          "Vertex14": {
+            "canonicalFreecadMappedName": "#32:a;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#32:a;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex14",
+            "subname": "Vertex14"
+          },
+          "Vertex15": {
+            "canonicalFreecadMappedName": "#9;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#9;:H9aa,V",
+            "resolvedIndexed": "Vertex15",
+            "subname": "Vertex15"
+          },
+          "Vertex16": {
+            "canonicalFreecadMappedName": "#33:9;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#33:9;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex16",
+            "subname": "Vertex16"
+          },
+          "Vertex17": {
+            "canonicalFreecadMappedName": "#e;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#e;:H9aa,V",
+            "resolvedIndexed": "Vertex17",
+            "subname": "Vertex17"
+          },
+          "Vertex18": {
+            "canonicalFreecadMappedName": "#34:14;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#34:14;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex18",
+            "subname": "Vertex18"
+          },
+          "Vertex19": {
+            "canonicalFreecadMappedName": "#a;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#a;:H9aa,V",
+            "resolvedIndexed": "Vertex19",
+            "subname": "Vertex19"
+          },
+          "Vertex2": {
+            "canonicalFreecadMappedName": "#2c:2;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2c:2;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex2",
+            "subname": "Vertex2"
+          },
+          "Vertex20": {
+            "canonicalFreecadMappedName": "#35:15;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#35:15;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex20",
+            "subname": "Vertex20"
+          },
+          "Vertex21": {
+            "canonicalFreecadMappedName": "#b;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#b;:H9aa,V",
+            "resolvedIndexed": "Vertex21",
+            "subname": "Vertex21"
+          },
+          "Vertex22": {
+            "canonicalFreecadMappedName": "#36:16;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#36:16;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex22",
+            "subname": "Vertex22"
+          },
+          "Vertex23": {
+            "canonicalFreecadMappedName": "#11;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#11;:H9aa,V",
+            "resolvedIndexed": "Vertex23",
+            "subname": "Vertex23"
+          },
+          "Vertex24": {
+            "canonicalFreecadMappedName": "#37:b;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#37:b;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex24",
+            "subname": "Vertex24"
+          },
+          "Vertex3": {
+            "canonicalFreecadMappedName": "#3;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#3;:H9aa,V",
+            "resolvedIndexed": "Vertex3",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "canonicalFreecadMappedName": "#2d:3;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2d:3;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex4",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "canonicalFreecadMappedName": "#4;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#4;:H9aa,V",
+            "resolvedIndexed": "Vertex5",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "canonicalFreecadMappedName": "#2e:4;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2e:4;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex6",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "canonicalFreecadMappedName": "#5;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#5;:H9aa,V",
+            "resolvedIndexed": "Vertex7",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "canonicalFreecadMappedName": "#2f:5;:U;XTR;:H*:*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#2f:5;:U;XTR;:H9aa:7,V",
+            "resolvedIndexed": "Vertex8",
+            "subname": "Vertex8"
+          },
+          "Vertex9": {
+            "canonicalFreecadMappedName": "#8;:H*,V",
+            "identityStatus": "stable",
+            "rawFreecadMappedName": "#8;:H9aa,V",
+            "resolvedIndexed": "Vertex9",
+            "subname": "Vertex9"
+          }
+        }
+      },
+      "Sketch": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:81257ae23558efa957a58ca4f5f3f6dd085254ace49139d58ef18da1c5918698",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

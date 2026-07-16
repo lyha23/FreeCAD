@@ -8,6 +8,7 @@ import json
 import math
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -66,11 +67,16 @@ LAST_FREECAD_LEDGER_CAPTURE: dict[str, Any] | None = None
 LAST_FREECAD_PRODUCER_TRACE: dict[str, Any] | None = None
 COLLECT_PRODUCER_TRACE = False
 SUPPORTED_NATIVE_TYPES = {
+    "App::DocumentObjectGroup",
     "App::FeaturePython",
     "App::Line",
     "App::Link",
     "App::LinkElement",
     "App::LinkGroup",
+    "App::Origin",
+    "App::Part",
+    "App::Plane",
+    "App::Point",
     "Assembly::AssemblyLink",
     "Assembly::AssemblyObject",
     "Assembly::JointGroup",
@@ -81,6 +87,7 @@ SUPPORTED_NATIVE_TYPES = {
     "PartDesign::Boolean",
     "PartDesign::Chamfer",
     "PartDesign::CoordinateSystem",
+    "PartDesign::Draft",
     "PartDesign::Fillet",
     "PartDesign::FeatureBase",
     "PartDesign::Hole",
@@ -95,9 +102,12 @@ SUPPORTED_NATIVE_TYPES = {
     "PartDesign::Pocket",
     "PartDesign::Revolution",
     "PartDesign::Groove",
+    "PartDesign::ShapeBinder",
+    "PartDesign::SubShapeBinder",
     "PartDesign::SubtractiveLoft",
     "PartDesign::SubtractivePipe",
     "PartDesign::Scaled",
+    "PartDesign::Thickness",
     "Part::Box",
     "Part::BooleanFragments",
     "Part::Common",
@@ -107,7 +117,9 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::Cylinder",
     "Part::Ellipse",
     "Part::Ellipsoid",
+    "Part::Extrusion",
     "Part::Fuse",
+    "Part::GeometryCurve",
     "Part::Helix",
     "Part::ImportIges",
     "Part::ImportBrep",
@@ -116,6 +128,8 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::Loft",
     "Part::MultiCommon",
     "Part::MultiFuse",
+    "Part::Offset",
+    "Part::Offset2D",
     "Part::Plane",
     "Part::Prism",
     "Part::ProjectOnSurface",
@@ -125,11 +139,13 @@ SUPPORTED_NATIVE_TYPES = {
     "Part::Sphere",
     "Part::Spiral",
     "Part::Sweep",
+    "Part::Thickness",
     "Part::Torus",
     "Part::Vertex",
     "Part::Wedge",
     "Part::XOR",
     "Sketcher::SketchObject",
+    "Spreadsheet::Sheet",
 }
 
 HOLE_PRE_BODY_PROPERTIES = {
@@ -378,13 +394,18 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         parser.error("--all-native requires --check so checked-in authority is never overwritten")
     if args.repeat < 1:
         parser.error("--repeat must be at least 1")
-    if args.repeat > 1 and not args.check:
-        parser.error("--repeat greater than 1 requires --check")
     if args.repeat > 1 and not args.candidate_root:
         parser.error("--repeat greater than 1 requires --candidate-root")
     if args.repeat > 1 and not (args.all_native or args.phase or args.fixture):
         parser.error("--repeat greater than 1 requires --all-native, --phase, or one fixture")
-    if args.candidate_root and not args.check:
+    staging_repeat = args.repeat > 1 and not args.check
+    if staging_repeat and (args.all_native or args.phase or not args.fixture):
+        parser.error("staging repeat requires exactly one fixture path")
+    if staging_repeat and not args.validate_ledger:
+        parser.error("staging repeat requires --validate-ledger")
+    if staging_repeat and args.out:
+        parser.error("staging repeat owns per-run --out paths")
+    if args.candidate_root and not args.check and not staging_repeat:
         parser.error("--candidate-root requires --check")
     return args
 
@@ -1364,7 +1385,13 @@ def write_regression_failure_report(
         report_path,
         {
             "schema": "freecad-fixture-regression-report/v1",
-            "mode": "repeated-native-check" if args.repeat > 1 else "collection",
+            "mode": (
+                "repeated-native-check"
+                if args.repeat > 1 and args.check
+                else "repeated-staging-collection"
+                if args.repeat > 1
+                else "collection"
+            ),
             "status": "failed",
             "publicExpectedStatus": "not_evaluated",
             "ledgerValidationStatus": "not_evaluated",
@@ -1411,6 +1438,45 @@ def regression_child_argv(
     ]
     if args.skip_unsupported:
         child.append("--skip-unsupported")
+    if args.producer_trace:
+        child.append("--producer-trace")
+    return child
+
+
+def staging_repeat_child_argv(
+    args: argparse.Namespace,
+    *,
+    candidate_root: Path,
+    report: Path,
+) -> list[str]:
+    if not args.fixture or args.phase or args.all_native or args.check:
+        raise ValueError("staging repeat requires one unchecked fixture")
+    fixtures_root = Path(args.fixtures_root)
+    fixture_path = Path(args.fixture)
+    try:
+        fixture_path.resolve().relative_to(fixtures_root.resolve())
+    except ValueError as exc:
+        raise ValueError(f"staging fixture is outside fixtures root: {fixture_path}") from exc
+    expected_path = expected_path_for_fixture(fixtures_root, fixture_path)
+    output_path = candidate_expected_path(
+        candidate_root,
+        fixtures_root=fixtures_root,
+        expected_path=expected_path,
+    )
+    child = [
+        args.fixture,
+        "--fixtures-root",
+        args.fixtures_root,
+        "--out",
+        str(output_path),
+        "--validate-ledger",
+        "--repeat",
+        "1",
+        "--report",
+        str(report),
+        "--freecadcmd",
+        args.freecadcmd,
+    ]
     if args.producer_trace:
         child.append("--producer-trace")
     return child
@@ -1702,6 +1768,297 @@ def run_repeated_checks(args: argparse.Namespace) -> int:
     return 0 if status == "passed" else 1
 
 
+def selected_staging_manifest(
+    args: argparse.Namespace,
+    fixtures_root: Path,
+) -> list[NativeExpectedCase]:
+    if args.check or args.phase or args.all_native or not args.fixture:
+        raise ValueError("staging repeat requires one unchecked fixture")
+    fixture_path = Path(args.fixture).resolve()
+    fixtures_root = fixtures_root.resolve()
+    try:
+        relative_fixture = fixture_path.relative_to(fixtures_root)
+    except ValueError as exc:
+        raise ValueError(f"staging fixture is outside fixtures root: {fixture_path}") from exc
+    if len(relative_fixture.parts) != 2 or fixture_path.suffix != ".json":
+        raise ValueError(
+            "staging fixture must be fixtures/<phase>/<case>.json: "
+            f"{fixture_path}"
+        )
+    if not fixture_path.is_file():
+        raise ValueError(f"staging fixture does not exist: {fixture_path}")
+    expected_path = expected_path_for_fixture(fixtures_root, fixture_path)
+    return [
+        NativeExpectedCase(
+            phase=fixture_path.parent.name,
+            case=fixture_path.stem,
+            fixture_path=fixture_path,
+            expected_path=expected_path,
+            ledger_path=ledger_path_for_expected(expected_path),
+            producer_trace_path=None,
+        )
+    ]
+
+
+def staging_run_passed(
+    run: Mapping[str, Any],
+    *,
+    expected_cases: int,
+    producer_trace_requested: bool,
+) -> bool:
+    report = run.get("report", {})
+    if not isinstance(report, Mapping):
+        return False
+    candidate = report.get("candidate")
+    collector = report.get("collector")
+    runtime = report.get("runtime")
+    if (
+        run.get("returncode") != 0
+        or report.get("status") != "passed"
+        or report.get("ledgerValidationStatus") != "passed"
+        or report.get("discovered") != expected_cases
+        or report.get("processed") != expected_cases
+        or report.get("skipped") != 0
+        or report.get("failed") != 0
+        or not isinstance(candidate, Mapping)
+        or not candidate.get("path")
+        or not candidate.get("sha256")
+        or not isinstance(collector, Mapping)
+        or not collector.get("sha256")
+        or not isinstance(runtime, Mapping)
+        or not runtime.get("freecadVersion")
+        or not runtime.get("occtVersion")
+    ):
+        return False
+    producer_status = report.get("producerTraceStatus")
+    if producer_trace_requested:
+        return producer_status in {
+            "not_evaluated",
+            "passed",
+            "failed",
+            "invalid",
+            "unavailable",
+        }
+    return producer_status == "not_evaluated"
+
+
+def staging_manifest_report(
+    manifest: Sequence[NativeExpectedCase],
+    run_root: Path,
+    *,
+    fixtures_root: Path,
+) -> dict[str, Any]:
+    entries: list[dict[str, Any]] = []
+    for entry in manifest:
+        public_path = candidate_expected_path(
+            run_root,
+            fixtures_root=fixtures_root,
+            expected_path=entry.expected_path,
+        )
+        ledger_path = ledger_path_for_expected(public_path)
+        entries.append(
+            {
+                "phase": entry.phase,
+                "case": entry.case,
+                "fixtureSha256": file_sha256(entry.fixture_path),
+                "publicSha256": file_sha256(public_path) if public_path.is_file() else None,
+                "ledgerSha256": file_sha256(ledger_path) if ledger_path.is_file() else None,
+                "producerTraceSha256": (
+                    file_sha256(producer_trace_path_for_expected(public_path))
+                    if producer_trace_path_for_expected(public_path).is_file()
+                    else None
+                ),
+            }
+        )
+    authority_entries = [
+        {
+            key: entry[key]
+            for key in ("phase", "case", "fixtureSha256", "publicSha256", "ledgerSha256")
+        }
+        for entry in entries
+    ]
+    return {
+        "phases": len({entry.phase for entry in manifest}),
+        "cases": len(manifest),
+        "sha256": canonical_json_sha256(authority_entries),
+        "entries": entries,
+    }
+
+
+def run_repeated_staging_collections(args: argparse.Namespace) -> int:
+    """Collect one unpromoted fixture in independent processes and compare run A/B."""
+
+    fixtures_root = Path(args.fixtures_root)
+    manifest = selected_staging_manifest(args, fixtures_root)
+    candidate_root = Path(args.candidate_root)
+    validate_regression_output_path(
+        candidate_root,
+        fixtures_root=fixtures_root,
+        label="candidate root",
+    )
+    if args.report:
+        validate_regression_output_path(
+            Path(args.report),
+            fixtures_root=fixtures_root,
+            label="report path",
+        )
+    candidate_root.mkdir(parents=True, exist_ok=True)
+    run_roots: list[Path] = []
+    run_results: list[dict[str, Any]] = []
+    for run_index in range(args.repeat):
+        label = run_label(run_index)
+        run_root = candidate_root / label
+        if run_root.exists() and any(run_root.iterdir()):
+            raise ValueError(f"candidate run directory is not empty: {run_root}")
+        run_report = candidate_root / f"{label}.report.json"
+        if run_report.exists():
+            raise ValueError(f"candidate run report already exists: {run_report}")
+        isolated_fixture = run_root / manifest[0].phase / f"{manifest[0].case}.json"
+        isolated_fixture.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(manifest[0].fixture_path, isolated_fixture)
+        child_argv = staging_repeat_child_argv(
+            args,
+            candidate_root=run_root,
+            report=run_report,
+        )
+        child_args = parse_args(child_argv)
+        invocation = freecadcmd_invocation(child_argv, child_args)
+        returncode = run_via_freecadcmd(child_argv, child_args)
+        report_payload: dict[str, Any] = {}
+        if run_report.is_file():
+            report_payload = json.loads(run_report.read_text(encoding="utf-8"))
+        run_results.append(
+            {
+                "label": label,
+                "root": str(run_root.resolve()),
+                "returncode": returncode,
+                "collectorInvocation": invocation,
+                "report": report_payload,
+            }
+        )
+        run_roots.append(run_root)
+
+    variations: list[dict[str, Any]] = []
+    producer_diagnostics: list[dict[str, Any]] = []
+    ledger_drifts: list[dict[str, Any]] = []
+    differences = compare_candidate_runs(
+        manifest,
+        run_roots,
+        fixtures_root=fixtures_root,
+        variations=variations,
+        producer_diagnostics=producer_diagnostics if args.producer_trace else None,
+        ledger_drifts=ledger_drifts,
+    )
+    run_failures = [
+        run
+        for run in run_results
+        if not staging_run_passed(
+            run,
+            expected_cases=len(manifest),
+            producer_trace_requested=args.producer_trace,
+        )
+    ]
+    status = "passed" if not run_failures and not differences else "failed"
+    first_failure: dict[str, Any] | None = None
+    for run in run_results:
+        if not staging_run_passed(
+            run,
+            expected_cases=len(manifest),
+            producer_trace_requested=args.producer_trace,
+        ):
+            first_failure = {
+                "run": run["label"],
+                "kind": "run-or-report-failure",
+                "returncode": run["returncode"],
+                "reportStatus": run["report"].get("status"),
+                "caseResult": run["report"].get("firstFailure"),
+            }
+            break
+    if first_failure is None and differences:
+        first_failure = {"kind": "candidate-determinism", **differences[0]}
+    public_expected_status = (
+        "passed"
+        if not run_failures
+        and not any(item.get("artifact") in {"public", "missing"} for item in differences)
+        else "failed"
+    )
+    ledger_validation_status = (
+        "passed"
+        if run_results
+        and all(run["report"].get("ledgerValidationStatus") == "passed" for run in run_results)
+        else "failed"
+    )
+    ledger_drift_status = "drifted" if ledger_drifts else "unchanged"
+    producer_status = producer_trace_status(producer_diagnostics)
+    successful_runs = sum(
+        staging_run_passed(
+            run,
+            expected_cases=len(manifest),
+            producer_trace_requested=args.producer_trace,
+        )
+        for run in run_results
+    )
+    final_report = {
+        "schema": "freecad-fixture-regression-report/v1",
+        "mode": "repeated-staging-collection",
+        "status": status,
+        "publicExpectedStatus": public_expected_status,
+        "ledgerValidationStatus": ledger_validation_status,
+        "ledgerDriftStatus": ledger_drift_status,
+        "producerTraceStatus": producer_status,
+        "fixturesRoot": str(fixtures_root.resolve()),
+        "candidateRoot": str(candidate_root.resolve()),
+        "candidate": candidate_provenance(Path(args.freecadcmd)),
+        "collector": collector_receipt(),
+        "manifest": staging_manifest_report(
+            manifest,
+            run_roots[0],
+            fixtures_root=fixtures_root,
+        ),
+        "selectedCaseCount": len(manifest),
+        "executedCaseCount": len(manifest) if successful_runs == args.repeat else 0,
+        "runCount": args.repeat,
+        "successfulRunCount": successful_runs,
+        "runs": run_results,
+        "candidateRunDifferences": differences,
+        "candidateRunLedgerDrifts": ledger_drifts,
+        "candidateRunVariations": variations,
+        "producerTraceDiagnostics": producer_diagnostics,
+        "firstFailure": first_failure,
+        "firstProducerTraceDiagnostic": (
+            producer_diagnostics[0] if producer_diagnostics else None
+        ),
+    }
+    final_report["runtimeIdentities"] = [
+        list(identity)
+        for identity in sorted({
+            (
+                str(run.get("report", {}).get("runtime", {}).get("freecadVersion")),
+                str(run.get("report", {}).get("runtime", {}).get("occtVersion")),
+            )
+            for run in run_results
+        })
+        if identity != ("None", "None")
+    ]
+    final_report["provenanceWarnings"] = sorted(
+        {
+            warning
+            for run in run_results
+            for warning in run.get("report", {}).get("provenanceWarnings", [])
+            if isinstance(warning, str)
+        }
+    )
+    report_path = Path(args.report) if args.report else candidate_root / "report.json"
+    atomic_write_json(report_path, final_report)
+    print(
+        "staging fixture repeat: "
+        f"status={status} case={manifest[0].phase}/{manifest[0].case} "
+        f"repeats={args.repeat} differences={len(differences)}",
+        file=sys.stderr,
+    )
+    return 0 if status == "passed" else 1
+
+
 def fixture_paths(args: argparse.Namespace) -> list[Path]:
     fixtures_root = Path(args.fixtures_root)
     if args.all_native:
@@ -1770,11 +2127,18 @@ def list_field(value: dict, *names: str) -> list:
 
 def link_list_targets(value: dict, field: str) -> list[str]:
     targets: list[str] = []
-    for index, item in enumerate(list_field(value, "values", "value")):
+    property_type = value.get("PropertyType")
+    for index, item in enumerate(list_field(value, "values", "value", "SubSet")):
         if isinstance(item, str):
             targets.append(item)
             continue
         if isinstance(item, dict):
+            if property_type == "App::PropertyXLinkList":
+                target = item.get("value")
+                subnames = item.get("SubList")
+                if isinstance(target, str) and not subnames:
+                    targets.append(target)
+                    continue
             raise UnsupportedFixture(
                 f"{field}[{index}] uses a subelement link; native App::PropertyLinkList "
                 "collector only supports object links"
@@ -2459,6 +2823,176 @@ def set_sketch_geometry(FreeCAD: Any, obj: Any, value: Any) -> None:
         obj.addGeometry(geometry, construction)
 
 
+SKETCH_CONSTRAINT_TYPE_NAMES = {
+    1: "Coincident",
+    2: "Horizontal",
+    3: "Vertical",
+    4: "Parallel",
+    5: "Tangent",
+    6: "Distance",
+    7: "DistanceX",
+    8: "DistanceY",
+    9: "Angle",
+    10: "Perpendicular",
+    11: "Radius",
+    12: "Equal",
+    13: "PointOnObject",
+    14: "Symmetric",
+    15: "InternalAlignment",
+    16: "SnellsLaw",
+    17: "Block",
+    18: "Diameter",
+}
+SKETCH_POINT_POSITIONS = {
+    "none": 0,
+    "start": 1,
+    "end": 2,
+    "mid": 3,
+}
+
+
+def sketch_constraint_position(value: Any, field: str, index: int) -> int:
+    if isinstance(value, str):
+        position = SKETCH_POINT_POSITIONS.get(value.lower())
+    elif isinstance(value, int) and value in SKETCH_POINT_POSITIONS.values():
+        position = value
+    else:
+        position = None
+    if position is None:
+        raise UnsupportedFixture(
+            f"Sketch Constraints[{index}].{field} must be none/start/end/mid or 0..3"
+        )
+    return position
+
+
+def sketch_constraint_constructor_args(item: dict[str, Any], index: int) -> tuple[Any, ...]:
+    raw_type = item.get("Type")
+    if isinstance(raw_type, int):
+        constraint_type = SKETCH_CONSTRAINT_TYPE_NAMES.get(raw_type)
+    elif isinstance(raw_type, str):
+        constraint_type = raw_type
+    else:
+        constraint_type = None
+    if constraint_type is None:
+        raise UnsupportedFixture(f"Sketch Constraints[{index}] has unsupported Type {raw_type!r}")
+
+    first = item.get("First")
+    if not isinstance(first, int):
+        raise UnsupportedFixture(f"Sketch Constraints[{index}].First must be an integer")
+    second = item.get("Second")
+    third = item.get("Third")
+    datum = item.get("Value", item.get("Datum"))
+    if second is not None and not isinstance(second, int):
+        raise UnsupportedFixture(f"Sketch Constraints[{index}].Second must be an integer")
+    if third is not None and not isinstance(third, int):
+        raise UnsupportedFixture(f"Sketch Constraints[{index}].Third must be an integer")
+    if datum is not None and not isinstance(datum, (int, float)):
+        raise UnsupportedFixture(f"Sketch Constraints[{index}] datum must be a number")
+
+    first_pos = (
+        sketch_constraint_position(item["FirstPos"], "FirstPos", index)
+        if "FirstPos" in item
+        else None
+    )
+    second_pos = (
+        sketch_constraint_position(item["SecondPos"], "SecondPos", index)
+        if "SecondPos" in item
+        else None
+    )
+    third_pos = (
+        sketch_constraint_position(item["ThirdPos"], "ThirdPos", index)
+        if "ThirdPos" in item
+        else None
+    )
+    if second_pos is not None and first_pos is None:
+        raise UnsupportedFixture(
+            f"Sketch Constraints[{index}].SecondPos requires FirstPos"
+        )
+    if third_pos is not None and third is None:
+        raise UnsupportedFixture(f"Sketch Constraints[{index}].ThirdPos requires Third")
+    if third is not None:
+        if second is None:
+            raise UnsupportedFixture(f"Sketch Constraints[{index}].Third requires Second")
+        if first_pos is not None and second_pos is not None:
+            if third_pos is not None:
+                return constraint_type, first, first_pos, second, second_pos, third, third_pos
+            if datum is not None:
+                return constraint_type, first, first_pos, second, second_pos, third, float(datum)
+            return constraint_type, first, first_pos, second, second_pos, third
+        if first_pos is None and second_pos is None and third_pos is not None:
+            via_point_type = {
+                "Angle": "AngleViaPoint",
+                "Perpendicular": "PerpendicularViaPoint",
+                "Tangent": "TangentViaPoint",
+            }.get(constraint_type)
+            if via_point_type is None:
+                raise UnsupportedFixture(
+                    f"Sketch Constraints[{index}] has no native via-point constructor"
+                )
+            if datum is not None:
+                return via_point_type, first, second, third, third_pos, float(datum)
+            return via_point_type, first, second, third, third_pos
+        raise UnsupportedFixture(
+            f"Sketch Constraints[{index}] has incomplete positions for Third"
+        )
+    if first_pos is not None:
+        if (
+            constraint_type in {"Angle", "Distance"}
+            and second is not None
+            and second_pos is None
+            and datum is not None
+        ):
+            return constraint_type, first, second, float(datum)
+        if constraint_type == "Block" and first_pos == 0 and second is None and datum is None:
+            return constraint_type, first
+        if second is not None and second_pos is not None and datum is not None:
+            return constraint_type, first, first_pos, second, second_pos, float(datum)
+        if second is not None and second_pos is not None:
+            return constraint_type, first, first_pos, second, second_pos
+        if second is not None and datum is not None:
+            return constraint_type, first, first_pos, second, float(datum)
+        if second is not None:
+            return constraint_type, first, first_pos, second
+        if datum is not None:
+            return constraint_type, first, first_pos, float(datum)
+        raise UnsupportedFixture(
+            f"Sketch Constraints[{index}].FirstPos requires Second or a datum"
+        )
+    if second is not None and datum is not None:
+        return constraint_type, first, second, float(datum)
+    if datum is not None:
+        return constraint_type, first, float(datum)
+    if second is not None:
+        return constraint_type, first, second
+    return constraint_type, first
+
+
+def set_sketch_constraints(obj: Any, value: Any) -> None:
+    if not isinstance(value, list):
+        raise UnsupportedFixture("Sketch Constraints must be a list")
+
+    import Sketcher  # type: ignore
+
+    for index, item in enumerate(value):
+        if not isinstance(item, dict):
+            raise UnsupportedFixture(f"Sketch Constraints[{index}] must be an object")
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/ConstraintPyImp.cpp
+        # ::ConstraintPy::PyInit() accepts a string ConstraintType followed by the indexed
+        # geometry/position/datum constructor shape; Constraint.h::ConstraintType fixes the
+        # persisted integer-to-name order used by fixture DTOs. Then
+        # SketchObjectConstraints.cpp::SketchObject::addConstraint() owns insertion and
+        # geometry-state bookkeeping. Use that public API instead of assigning Constraints.
+        constraint = Sketcher.Constraint(*sketch_constraint_constructor_args(item, index))
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Sketcher/App/ConstraintPyImp.cpp
+        # ::ConstraintPy::setFirstPos()/setSecondPos()/setThirdPos() expose writable public
+        # fields. Some constructors intentionally omit a position (for example Angle's
+        # (GeoIndex1, GeoIndex2, Value)); restore the explicit DTO position before insertion.
+        for field in ("FirstPos", "SecondPos", "ThirdPos"):
+            if field in item and hasattr(constraint, field):
+                setattr(constraint, field, sketch_constraint_position(item[field], field, index))
+        obj.addConstraint(constraint)
+
+
 def external_geometry_facade(geometry: Any) -> Any:
     import Sketcher  # type: ignore
 
@@ -2516,8 +3050,7 @@ def set_sketch_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: s
         set_sketch_geometry(FreeCAD, obj, value)
         return
     if name == "Constraints":
-        if value:
-            raise UnsupportedFixture("Sketch Constraints are not enabled in this collector yet")
+        set_sketch_constraints(obj, value)
         return
     if name == "ExternalGeo":
         set_sketch_external_geo(FreeCAD, obj, value)
@@ -2591,7 +3124,102 @@ def safe_setattr(obj: Any, name: str, value: Any) -> None:
     try:
         setattr(obj, name, value)
     except Exception as exc:
-        raise UnsupportedFixture(f"failed to set property {name}: {exc}") from exc
+        owner = str(getattr(obj, "Name", ""))
+        owner_context = f" on {owner}" if owner else ""
+        raise UnsupportedFixture(f"failed to set property {name}{owner_context}: {exc}") from exc
+
+
+def native_property_type(obj: Any, name: str) -> str | None:
+    getter = getattr(obj, "getTypeIdOfProperty", None)
+    if not callable(getter):
+        return None
+    try:
+        value = getter(name)
+    except Exception:
+        return None
+    return str(value) if value else None
+
+
+MATERIAL_STRING_FIELDS = (
+    ("Name", "name"),
+    ("Author", "author"),
+    ("License", "license"),
+    ("Description", "description"),
+    ("URL", "url"),
+    ("Reference", "reference"),
+)
+
+
+def material_expected_payload(material: Any) -> dict[str, str]:
+    return {
+        output_name: str(getattr(material, field_name, "") or "")
+        for field_name, output_name in MATERIAL_STRING_FIELDS
+    }
+
+
+def set_material_property(obj: Any, name: str, value: dict[str, Any]) -> None:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Material/App/PropertyMaterial.cpp
+    # ::PropertyMaterial::setPyObject() accepts a "Materials.Material" value, while
+    # /Users/li/Chili3DProject/FreeCAD/src/Mod/Part/App/PartFeature.cpp
+    # ::PartFeature::PartFeature() exposes it as ShapeMaterial.
+    import Materials  # type: ignore
+
+    material = Materials.Material()
+    supported = {"PropertyType", *(field_name for field_name, _ in MATERIAL_STRING_FIELDS)}
+    unknown = sorted(set(value) - supported)
+    if unknown:
+        raise UnsupportedFixture(f"unsupported Materials::PropertyMaterial fields: {unknown}")
+    for field_name, _ in MATERIAL_STRING_FIELDS:
+        field_value = value.get(field_name)
+        if field_value is None:
+            continue
+        if not isinstance(field_value, str):
+            raise UnsupportedFixture(f"Materials::PropertyMaterial {field_name} must be a string")
+        setattr(material, field_name, field_value)
+    safe_setattr(obj, name, material)
+
+
+def set_spreadsheet_cells(obj: Any, value: dict[str, Any]) -> None:
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/SheetPyImp.cpp
+    # ::SheetPy::set() forwards cell text to Sheet::setCell(), and ::setAlias()
+    # forwards aliases to Sheet::setAlias(). These are the native public mutation APIs;
+    # the hidden Spreadsheet::PropertySheet slot is not assigned directly.
+    cells = value.get("cells")
+    if not isinstance(cells, list):
+        raise UnsupportedFixture("Spreadsheet::PropertySheet cells must be a list")
+    for index, cell in enumerate(cells):
+        if not isinstance(cell, dict):
+            raise UnsupportedFixture(f"Spreadsheet::PropertySheet cells[{index}] must be an object")
+        unknown = sorted(set(cell) - {"address", "content", "alias"})
+        if unknown:
+            raise UnsupportedFixture(
+                f"Spreadsheet::PropertySheet cells[{index}] has unsupported fields: {unknown}"
+            )
+        address = cell.get("address")
+        content = cell.get("content")
+        if not isinstance(address, str) or not address:
+            raise UnsupportedFixture(
+                f"Spreadsheet::PropertySheet cells[{index}].address must be a non-empty string"
+            )
+        if not isinstance(content, str):
+            raise UnsupportedFixture(
+                f"Spreadsheet::PropertySheet cells[{index}].content must be a string"
+            )
+        try:
+            obj.set(address, content)
+            alias = cell.get("alias")
+            if alias is not None:
+                if not isinstance(alias, str) or not alias:
+                    raise UnsupportedFixture(
+                        f"Spreadsheet::PropertySheet cells[{index}].alias must be a non-empty string"
+                    )
+                obj.setAlias(address, alias)
+        except UnsupportedFixture:
+            raise
+        except Exception as exc:
+            raise UnsupportedFixture(
+                f"Spreadsheet::PropertySheet cannot set {address}: {exc}"
+            ) from exc
 
 
 def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, value: Any) -> None:
@@ -2621,6 +3249,12 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
                 # "Placement2"; these are property slots on the joint, not the object's own
                 # App::GeoFeature "Placement".
                 safe_setattr(obj, name, placement_value(FreeCAD, value))
+            return
+        if property_type == "Materials::PropertyMaterial":
+            set_material_property(obj, name, value)
+            return
+        if property_type == "Spreadsheet::PropertySheet":
+            set_spreadsheet_cells(obj, value)
             return
         if property_type in {
             "App::PropertyBool",
@@ -2652,6 +3286,9 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
             return
         if property_type == "App::PropertyBoolList":
             safe_setattr(obj, name, [bool(item) for item in value.get("value", [])])
+            return
+        if property_type == "App::PropertyIntegerList":
+            safe_setattr(obj, name, [int(item) for item in value.get("value", [])])
             return
         if property_type in {
             "App::PropertyLink",
@@ -2721,9 +3358,37 @@ def set_property(FreeCAD: Any, created: dict[str, Any], obj: Any, name: str, val
         raise UnsupportedFixture(f"unsupported structured property {name}: {property_type or sorted(value)}")
     if isinstance(value, list) and any(isinstance(item, dict) for item in value):
         raise UnsupportedFixture(f"unsupported link/list property {name}")
+    if (
+        isinstance(value, list)
+        and len(value) == 3
+        and all(isinstance(item, (int, float)) for item in value)
+        and native_property_type(obj, name)
+        in {"App::PropertyVector", "App::PropertyVectorDistance", "App::PropertyDirection"}
+    ):
+        value = FreeCAD.Vector(float(value[0]), float(value[1]), float(value[2]))
     if name == "FileName" and isinstance(value, str):
         value = fixture_file_name(value)
     safe_setattr(obj, name, value)
+
+
+def ordered_native_property_items(
+    type_id: str,
+    properties: dict[str, Any],
+) -> list[tuple[str, Any]]:
+    items = list(properties.items())
+    if type_id != "PartDesign::SubShapeBinder":
+        return items
+
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/PartDesign/App/ShapeBinder.cpp
+    # ::SubShapeBinder::onChanged() invokes setupCopyOnChange() for BindCopyOnChange,
+    # and checkPropertyStatus() forwards PartialLoad to
+    # "Support.setAllowPartial(PartialLoad.getValue())".  Restore the in-document
+    # Support first so Mutated copy setup and partial-link parsing do not treat that
+    # ordinary object link as an external path requiring a saved owner document.
+    deferred_names = ("BindCopyOnChange", "PartialLoad")
+    return [item for item in items if item[0] not in deferred_names] + [
+        (name, properties[name]) for name in deferred_names if name in properties
+    ]
 
 
 def set_link_visibility_list(obj: Any, value: Any) -> None:
@@ -2749,7 +3414,10 @@ def link_group_element_names(fixture: dict) -> set[str]:
         if not isinstance(spec, dict) or spec.get("TypeId") != "App::LinkGroup":
             continue
         element_list = spec.get("Properties", {}).get("ElementList")
-        if isinstance(element_list, dict) and element_list.get("PropertyType") == "App::PropertyLinkList":
+        if isinstance(element_list, dict) and element_list.get("PropertyType") in {
+            "App::PropertyLinkList",
+            "App::PropertyXLinkList",
+        }:
             try:
                 names.update(link_list_targets(element_list, "LinkGroup ElementList"))
             except UnsupportedFixture:
@@ -2775,8 +3443,13 @@ def create_native_object_for_fixture(
 
 
 def set_link_group_element_list(created: dict[str, Any], obj: Any, value: Any) -> None:
-    if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyLinkList":
-        raise UnsupportedFixture("App::LinkGroup ElementList must be an App::PropertyLinkList")
+    if not isinstance(value, dict) or value.get("PropertyType") not in {
+        "App::PropertyLinkList",
+        "App::PropertyXLinkList",
+    }:
+        raise UnsupportedFixture(
+            "App::LinkGroup ElementList must be an App::PropertyLinkList or App::PropertyXLinkList"
+        )
     elements = created_link_list(created, value, "LinkGroup ElementList")
 
     # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
@@ -2846,6 +3519,32 @@ def set_body_property(created: dict[str, Any], obj: Any, name: str, value: Any) 
             obj.addObject(created[target])
         return True
     return False
+
+
+def set_document_object_group_property(
+    created: dict[str, Any],
+    obj: Any,
+    name: str,
+    value: Any,
+) -> bool:
+    if name != "Group":
+        return False
+    if not isinstance(value, dict) or value.get("PropertyType") != "App::PropertyLinkList":
+        raise UnsupportedFixture(
+            "App::DocumentObjectGroup Group must be an App::PropertyLinkList"
+        )
+    targets = link_list_targets(value, "DocumentObjectGroup Group")
+    missing = [target for target in targets if target not in created]
+    if missing:
+        raise UnsupportedFixture(
+            "DocumentObjectGroup members were not created: " + ", ".join(missing)
+        )
+    # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/GroupExtension.cpp
+    # ::GroupExtension::addObject() is the public membership path and maintains the
+    # Group extension bookkeeping used by nested group and App::Link traversal.
+    for target in targets:
+        obj.addObject(created[target])
+    return True
 
 
 def set_compound_property(created: dict[str, Any], obj: Any, name: str, value: Any) -> bool:
@@ -2982,6 +3681,12 @@ def create_native_object(FreeCAD: Any, doc: Any, type_id: str, name: str) -> Any
         from BOPTools import SplitFeatures  # type: ignore
 
         return SplitFeatures.makeXOR(name)
+    if type_id == "Spreadsheet::Sheet":
+        # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/Mod/Spreadsheet/App/AppSpreadsheet.cpp
+        # ::PyMOD_INIT_FUNC(Spreadsheet) registers Spreadsheet::Sheet; importing the module is the
+        # public headless activation path before Document::addObject().
+        import Spreadsheet  # type: ignore # noqa: F401
+
     return doc.addObject(type_id, name)
 
 
@@ -3085,7 +3790,10 @@ def create_assembly_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, 
 
     for spec in fixture.get("Objects", []):
         obj = created[spec["Name"]]
-        for prop_name, prop_value in spec.get("Properties", {}).items():
+        for prop_name, prop_value in ordered_native_property_items(
+            spec["TypeId"],
+            spec.get("Properties", {}),
+        ):
             if spec["TypeId"] == "Assembly::JointGroup" and prop_name == "Group":
                 # Parent-created Joint objects are already owned by JointGroup. Reassigning the
                 # same child list through the raw Group property produces native out-of-scope
@@ -3142,7 +3850,14 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
             elif show_element is not None:
                 link_show_element = bool(show_element)
 
-        for prop_name, prop_value in properties.items():
+        for prop_name, prop_value in ordered_native_property_items(type_id, properties):
+            if type_id == "App::DocumentObjectGroup" and set_document_object_group_property(
+                created,
+                obj,
+                prop_name,
+                prop_value,
+            ):
+                continue
             if type_id == "PartDesign::Body" and set_body_property(created, obj, prop_name, prop_value):
                 continue
             if type_id == "Part::Compound" and set_compound_property(created, obj, prop_name, prop_value):
@@ -3176,6 +3891,12 @@ def create_objects(FreeCAD: Any, doc: Any, fixture: dict) -> dict[str, Any]:
                 continue
             if type_id == "App::LinkGroup" and prop_name == "ElementList":
                 set_link_group_element_list(created, obj, prop_value)
+                continue
+            if type_id == "App::Link" and prop_name == "ElementList":
+                # FreeCAD: /Users/li/Chili3DProject/FreeCAD/src/App/Link.cpp
+                # ::LinkBaseExtension::update() owns the read-only "ElementList" for
+                # ShowElement links and regenerates it from "ElementCount". The fixture
+                # field describes the resulting child list; it is not a writable input.
                 continue
             if type_id == "App::Link" and prop_name == "ElementCount" and link_show_element:
                 # FreeCAD: /Users/li/Chili3DProject/重构Chili/FreeCAD/src/App/Link.cpp
@@ -5949,7 +6670,7 @@ def ledger_element_maps_evidence_stable_subshape(
     return False
 
 
-def ledger_unmapped_stable_subshape_evidence(
+def ledger_unmapped_subshape_evidence(
     object_name: str,
     object_state: dict[str, Any],
 ) -> dict[str, Any]:
@@ -5960,15 +6681,19 @@ def ledger_unmapped_stable_subshape_evidence(
     for subshape_name, subshape in subshapes.items():
         if not isinstance(subshape_name, str) or not isinstance(subshape, dict):
             continue
-        if subshape.get("identityStatus") != "stable":
+        identity_status = subshape.get("identityStatus")
+        if identity_status not in {"stable", "history_only"}:
             continue
-        if ledger_element_maps_evidence_stable_subshape(
+        if identity_status == "stable" and ledger_element_maps_evidence_stable_subshape(
             object_name,
             subshape_name,
             subshape,
             object_state,
         ):
             continue
+        # history_only is deliberately not promoted into ElementMap: FreeCAD exposed
+        # producer history, but getElementName(raw) did not resolve back to this indexed
+        # subshape. Preserve that raw capture as exact structural evidence instead.
         evidence[subshape_name] = copy.deepcopy(subshape)
     return evidence
 
@@ -6015,7 +6740,7 @@ def ledger_objects_from_states(
             record["mapperHistory"] = copy.deepcopy(object_state.get("mapperHistory", []))
             raw_object_state = raw_objects.get(object_name)
             subshape_evidence = (
-                ledger_unmapped_stable_subshape_evidence(
+                ledger_unmapped_subshape_evidence(
                     str(object_name),
                     raw_object_state,
                 )
@@ -10267,6 +10992,58 @@ def boolean_payload(obj: Any, fixture: dict | None = None) -> dict:
     return payload
 
 
+def normalized_spreadsheet_value(value: Any) -> Any:
+    if value is None or isinstance(value, (bool, int, str)):
+        return value
+    if isinstance(value, float):
+        return float(value) if math.isfinite(value) else str(value)
+    quantity_value = getattr(value, "Value", None)
+    if isinstance(quantity_value, (int, float)):
+        unit = str(getattr(value, "Unit", "") or "")
+        return {
+            "value": float(quantity_value),
+            "unit": unit,
+        }
+    return str(value)
+
+
+def spreadsheet_payload(obj: Any, fixture: dict | None) -> dict[str, Any]:
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties") if isinstance(spec, dict) else None
+    cells_property = properties.get("Cells") if isinstance(properties, dict) else None
+    cells = cells_property.get("cells") if isinstance(cells_property, dict) else None
+    if not isinstance(cells, list):
+        raise UnsupportedFixture(f"Spreadsheet target {obj.Name} has no Cells fixture contract")
+
+    rows: list[dict[str, Any]] = []
+    for index, cell in enumerate(cells):
+        if not isinstance(cell, dict) or not isinstance(cell.get("address"), str):
+            raise UnsupportedFixture(f"Spreadsheet target {obj.Name} has invalid cell {index}")
+        address = str(cell["address"])
+        try:
+            alias = obj.getAlias(address)
+            rows.append({
+                "address": address,
+                "content": str(obj.getContents(address)),
+                "alias": str(alias) if alias is not None else None,
+                "value": normalized_spreadsheet_value(obj.get(address)),
+            })
+        except Exception as exc:
+            raise UnsupportedFixture(
+                f"Spreadsheet target {obj.Name} cannot read {address}: {exc}"
+            ) from exc
+    return {
+        "object_fields": {
+            "status": "ok",
+            "shape": "spreadsheet",
+            "cell_count": len(rows),
+        },
+        "spreadsheet": {
+            "cells": rows,
+        },
+    }
+
+
 def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict[str, Any] | None = None) -> dict:
     type_id = getattr(obj, "TypeId", "")
     if type_id == "Assembly::AssemblyLink":
@@ -10281,6 +11058,8 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return app_link_payload(obj, "app_link")
     if type_id == "App::LinkElement":
         return app_link_payload(obj, "app_link_element")
+    if type_id == "Spreadsheet::Sheet":
+        return spreadsheet_payload(obj, fixture)
     if type_id == "Part::RuledSurface":
         return ruled_surface_payload(obj, fixture)
     if type_id == "Part::Loft":
@@ -10310,6 +11089,14 @@ def object_expected_payload(obj: Any, fixture: dict | None = None, created: dict
         return sketch_summary(obj)
     payload = shape_summary(shape)
     payload["subshapes"] = subshape_response_entries(obj, shape)
+    spec = fixture_spec_for_object(fixture, str(obj.Name))
+    properties = spec.get("Properties") if isinstance(spec, dict) else None
+    shape_material = properties.get("ShapeMaterial") if isinstance(properties, dict) else None
+    if (
+        isinstance(shape_material, dict)
+        and shape_material.get("PropertyType") == "Materials::PropertyMaterial"
+    ):
+        payload["material"] = material_expected_payload(getattr(obj, "ShapeMaterial"))
     return payload
 
 
@@ -10965,10 +11752,75 @@ def canonicalize_freecad_mapped_names_and_keys(value: Any) -> Any:
     return value
 
 
+def comparable_result_subshapes(value: Any) -> Any:
+    canonical = canonicalize_freecad_mapped_names(value)
+    if not isinstance(canonical, list) or not canonical:
+        return canonical
+    if not all(
+        isinstance(item, dict)
+        and item.get("identityStatus") == "stable"
+        and isinstance(item.get("stableSubname"), str)
+        and bool(item.get("stableSubname"))
+        for item in canonical
+    ):
+        return canonical
+
+    by_token: dict[str, Any] = {}
+    for item in canonical:
+        token = str(item["stableSubname"])
+        if token in by_token:
+            return canonical
+        projected = dict(item)
+        # FreeCAD may assign different current EdgeN/VertexN indexes to the same
+        # source-backed stable token while preserving the geometry and token set.
+        # Indexed/display fields are therefore ordering evidence, not stable identity.
+        for key in ("id", "indexed", "subname", "fullSubname", "resolvedIndexed"):
+            projected.pop(key, None)
+        by_token[token] = projected
+    return {"stableByToken": by_token}
+
+
+def normalize_stable_topo_subshape_order(value: dict[str, Any]) -> dict[str, Any]:
+    objects = value.get("objects")
+    if not isinstance(objects, dict):
+        return value
+    for object_state in objects.values():
+        if not isinstance(object_state, dict):
+            continue
+        if object_state.get("mapperHistory") or object_state.get("childElementMaps"):
+            continue
+        subshapes = object_state.get("subshapes")
+        if not isinstance(subshapes, dict) or not subshapes:
+            continue
+        if not all(
+            isinstance(entry, dict)
+            and entry.get("identityStatus") == "stable"
+            and isinstance(entry.get("canonicalFreecadMappedName"), str)
+            and bool(entry.get("canonicalFreecadMappedName"))
+            for entry in subshapes.values()
+        ):
+            continue
+        by_token: dict[str, Any] = {}
+        collision = False
+        for entry in subshapes.values():
+            token = str(entry["canonicalFreecadMappedName"])
+            if token in by_token:
+                collision = True
+                break
+            projected = dict(entry)
+            projected.pop("subname", None)
+            projected.pop("resolvedIndexed", None)
+            by_token[token] = projected
+        if not collision:
+            object_state["subshapes"] = by_token
+    return value
+
+
 def comparable_topo_naming_state(value: dict) -> dict:
     comparable = canonicalize_freecad_mapped_names_and_keys(value)
     if not isinstance(comparable, dict):
         return {}
+    comparable = normalize_stable_topo_subshape_order(comparable)
     producer = comparable.get("producer")
     if isinstance(producer, dict):
         producer = dict(producer)
@@ -11439,9 +12291,9 @@ def compare_object_expected(existing: dict, generated: dict) -> list[str]:
         errors.append("length")
     if "topology_counts" in existing and existing["topology_counts"] != generated["topology_counts"]:
         errors.append("topology_counts")
-    if "subshapes" in existing and canonicalize_freecad_mapped_names(
+    if "subshapes" in existing and comparable_result_subshapes(
         existing["subshapes"]
-    ) != canonicalize_freecad_mapped_names(generated.get("subshapes")):
+    ) != comparable_result_subshapes(generated.get("subshapes")):
         errors.append("subshapes")
     if "sketch_external" in existing:
         generated_external = generated.get("sketch_external", {})
@@ -12295,7 +13147,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(raw_argv)
     if args.repeat > 1:
         try:
-            return run_repeated_checks(args)
+            if args.check:
+                return run_repeated_checks(args)
+            return run_repeated_staging_collections(args)
         except (OSError, ValueError, json.JSONDecodeError) as exc:
             print(f"native fixture regression failed: {exc}", file=sys.stderr)
             if isinstance(exc, json.JSONDecodeError):

@@ -1,0 +1,432 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+  },
+  "firstFailure": {
+    "caseResult": {
+      "artifacts": {
+        "candidateWrite": {
+          "ledgerSha256": "29f11e6be67a3b4bdad4e88c3aad3c917ea58d257a8ed8b0eb67ac18357dad86",
+          "path": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+          "publicSha256": "e185f83c5b28c4af9bf91cdcc6e4b6b916ef62e9f9da1d62c3079abd85a361a1",
+          "status": "written"
+        },
+        "ledgerAuthority": {
+          "status": "different"
+        },
+        "ledgerValidation": {
+          "status": "valid"
+        },
+        "producerTraceDiagnostic": {
+          "reason": "disabled-by-request",
+          "status": "not_evaluated"
+        },
+        "publicAuthority": {
+          "status": "different"
+        }
+      },
+      "case": "part-offset2d-open-wire-fill",
+      "errors": [
+        {
+          "detail": "candidate public expected differs",
+          "stage": "public-authority"
+        }
+      ],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+      "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-offset2d-open-wire-fill.json",
+      "fixtureSha256": "aaf268f8ca7684a5e0f8002022c6d2cbac82143b274a43cfe9bd745b87ee3206",
+      "ledgerOutcome": "accepted",
+      "ledgerSha256": "6909dbee22ccb393ca31b1c184e2ffc3c788955e2f711dfd2272b7634c280a46",
+      "phase": "c3m4",
+      "publicExpectedSha256": "8796532fe9b8867812e089861fbdd8b25dbc9c2803798dd37829f20fde43f3cd",
+      "status": "failed"
+    },
+    "kind": "checked-in-regression",
+    "run": "run-a"
+  },
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "drifted",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "part-offset2d-open-wire-fill",
+        "fixtureSha256": "aaf268f8ca7684a5e0f8002022c6d2cbac82143b274a43cfe9bd745b87ee3206",
+        "ledgerSha256": "6909dbee22ccb393ca31b1c184e2ffc3c788955e2f711dfd2272b7634c280a46",
+        "phase": "c3m4",
+        "producerTraceSha256": null,
+        "publicSha256": "8796532fe9b8867812e089861fbdd8b25dbc9c2803798dd37829f20fde43f3cd"
+      }
+    ],
+    "phases": 1,
+    "sha256": "2a4ac50d83b5e4ad85410ce6adc767c121af5aff8cc41d10d9bdfed19c04a3ab"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "failed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m4/part-offset2d-open-wire-fill.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "29f11e6be67a3b4bdad4e88c3aad3c917ea58d257a8ed8b0eb67ac18357dad86",
+                "path": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+                "publicSha256": "e185f83c5b28c4af9bf91cdcc6e4b6b916ef62e9f9da1d62c3079abd85a361a1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "different"
+              }
+            },
+            "case": "part-offset2d-open-wire-fill",
+            "errors": [
+              {
+                "detail": "candidate public expected differs",
+                "stage": "public-authority"
+              }
+            ],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-offset2d-open-wire-fill.json",
+            "fixtureSha256": "aaf268f8ca7684a5e0f8002022c6d2cbac82143b274a43cfe9bd745b87ee3206",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "6909dbee22ccb393ca31b1c184e2ffc3c788955e2f711dfd2272b7634c280a46",
+            "phase": "c3m4",
+            "publicExpectedSha256": "8796532fe9b8867812e089861fbdd8b25dbc9c2803798dd37829f20fde43f3cd",
+            "status": "failed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m4/part-offset2d-open-wire-fill.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 1,
+        "firstFailure": {
+          "artifacts": {
+            "candidateWrite": {
+              "ledgerSha256": "29f11e6be67a3b4bdad4e88c3aad3c917ea58d257a8ed8b0eb67ac18357dad86",
+              "path": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+              "publicSha256": "e185f83c5b28c4af9bf91cdcc6e4b6b916ef62e9f9da1d62c3079abd85a361a1",
+              "status": "written"
+            },
+            "ledgerAuthority": {
+              "status": "different"
+            },
+            "ledgerValidation": {
+              "status": "valid"
+            },
+            "producerTraceDiagnostic": {
+              "reason": "disabled-by-request",
+              "status": "not_evaluated"
+            },
+            "publicAuthority": {
+              "status": "different"
+            }
+          },
+          "case": "part-offset2d-open-wire-fill",
+          "errors": [
+            {
+              "detail": "candidate public expected differs",
+              "stage": "public-authority"
+            }
+          ],
+          "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+          "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-offset2d-open-wire-fill.json",
+          "fixtureSha256": "aaf268f8ca7684a5e0f8002022c6d2cbac82143b274a43cfe9bd745b87ee3206",
+          "ledgerOutcome": "accepted",
+          "ledgerSha256": "6909dbee22ccb393ca31b1c184e2ffc3c788955e2f711dfd2272b7634c280a46",
+          "phase": "c3m4",
+          "publicExpectedSha256": "8796532fe9b8867812e089861fbdd8b25dbc9c2803798dd37829f20fde43f3cd",
+          "status": "failed"
+        },
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "drifted",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 0,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "failed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "failed"
+      },
+      "returncode": 1,
+      "root": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m4/part-offset2d-open-wire-fill.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "d9da604d03f8c0c90623932af02432b75e2970640c5c40405e9ad2480dfdb700",
+                "path": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+                "publicSha256": "b00ff63b37122d3e6f8e06369684b7a984c8b8a5c69580a6d7f4454ee4a746f1",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "different"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "different"
+              }
+            },
+            "case": "part-offset2d-open-wire-fill",
+            "errors": [
+              {
+                "detail": "candidate public expected differs",
+                "stage": "public-authority"
+              }
+            ],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-offset2d-open-wire-fill.json",
+            "fixtureSha256": "aaf268f8ca7684a5e0f8002022c6d2cbac82143b274a43cfe9bd745b87ee3206",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "6909dbee22ccb393ca31b1c184e2ffc3c788955e2f711dfd2272b7634c280a46",
+            "phase": "c3m4",
+            "publicExpectedSha256": "8796532fe9b8867812e089861fbdd8b25dbc9c2803798dd37829f20fde43f3cd",
+            "status": "failed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m4/part-offset2d-open-wire-fill.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 1,
+        "firstFailure": {
+          "artifacts": {
+            "candidateWrite": {
+              "ledgerSha256": "d9da604d03f8c0c90623932af02432b75e2970640c5c40405e9ad2480dfdb700",
+              "path": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+              "publicSha256": "b00ff63b37122d3e6f8e06369684b7a984c8b8a5c69580a6d7f4454ee4a746f1",
+              "status": "written"
+            },
+            "ledgerAuthority": {
+              "status": "different"
+            },
+            "ledgerValidation": {
+              "status": "valid"
+            },
+            "producerTraceDiagnostic": {
+              "reason": "disabled-by-request",
+              "status": "not_evaluated"
+            },
+            "publicAuthority": {
+              "status": "different"
+            }
+          },
+          "case": "part-offset2d-open-wire-fill",
+          "errors": [
+            {
+              "detail": "candidate public expected differs",
+              "stage": "public-authority"
+            }
+          ],
+          "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/expected/part-offset2d-open-wire-fill.freecad.json",
+          "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m4/part-offset2d-open-wire-fill.json",
+          "fixtureSha256": "aaf268f8ca7684a5e0f8002022c6d2cbac82143b274a43cfe9bd745b87ee3206",
+          "ledgerOutcome": "accepted",
+          "ledgerSha256": "6909dbee22ccb393ca31b1c184e2ffc3c788955e2f711dfd2272b7634c280a46",
+          "phase": "c3m4",
+          "publicExpectedSha256": "8796532fe9b8867812e089861fbdd8b25dbc9c2803798dd37829f20fde43f3cd",
+          "status": "failed"
+        },
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "drifted",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 0,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "failed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "failed"
+      },
+      "returncode": 1,
+      "root": "/private/tmp/freecad-expected-c3m4-part-offset2d-open-wire-fill-post-promotion/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "failed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

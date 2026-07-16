@@ -1,0 +1,66 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          0.5759315285580932,
+          1.4534597424226756,
+          0.0
+        ],
+        "min": [
+          0.0,
+          -1.091442565787471,
+          0.0
+        ]
+      },
+      "length": 2.7146723564939235,
+      "length_delta": 1e-05,
+      "named_shapes": {
+        "ParabolaEdge": {
+          "owner": "ParabolaEdge"
+        }
+      },
+      "object": "ParabolaEdge",
+      "object_fields": {
+        "curve_kind": "parabola",
+        "curve_type": "GeomAbs_Parabola",
+        "dto": "PartConicCurveDTO",
+        "feature": "part_geometry_curve",
+        "part_geometry_type": "Part.Parabola",
+        "shape": "occt_edge",
+        "status": "ok"
+      },
+      "topology_counts": {
+        "edges": 1,
+        "faces": 0,
+        "vertices": 2
+      },
+      "volume": 0.0
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:242c03e12c30a00bc56340a42de3c7440e6840b38f594f59ba3f4f21d611cf00",
+    "objects": {
+      "ParabolaEdge": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:10431aa84599cf63dde71a9db8ad59d2f093dcc51250dccbcd65341253a892d9",
+        "subshapes": {}
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

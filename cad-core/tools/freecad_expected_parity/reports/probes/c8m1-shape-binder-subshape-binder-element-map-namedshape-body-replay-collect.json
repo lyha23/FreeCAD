@@ -1,0 +1,135 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": null,
+  "cases": [
+    {
+      "artifacts": {
+        "candidateWrite": {
+          "status": "not-requested"
+        },
+        "ledgerAuthority": {
+          "status": "not-run"
+        },
+        "ledgerValidation": {
+          "status": "not-run"
+        },
+        "producerTraceDiagnostic": {
+          "status": "not-run"
+        },
+        "publicAuthority": {
+          "status": "not-run"
+        }
+      },
+      "case": "shape-binder-subshape-binder-element-map-namedshape-body-replay",
+      "errors": [
+        {
+          "detail": "target object Body has no shape",
+          "stage": "collection"
+        }
+      ],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/expected/shape-binder-subshape-binder-element-map-namedshape-body-replay.freecad.json",
+      "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/shape-binder-subshape-binder-element-map-namedshape-body-replay.json",
+      "fixtureSha256": "e7beb87077e5e9e86c3673ddf19141eca5f4f54f2967aa3293b5eb18e4ec8f0f",
+      "ledgerSha256": null,
+      "phase": "c8m1",
+      "publicExpectedSha256": null,
+      "status": "failed"
+    }
+  ],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "acdd50f4f9bee23eb0e3aa9ed545bde8b709699b9fb028edf3f333bb2a40e04f"
+  },
+  "collectorInvocation": {
+    "argv": [
+      "/Users/li/.cargo/bin/FreeCADCmd",
+      "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "--pass",
+      "__cad_core_expected_args_env__"
+    ],
+    "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+    "environment": {
+      "CAD_CORE_EXPECTED_ARGS_JSON": "[\"out/fixture-staging/fixtures/c8m1/shape-binder-subshape-binder-element-map-namedshape-body-replay.json\", \"--fixtures-root\", \"out/fixture-staging/fixtures\", \"--out\", \"out/fixture-staging/fixtures/c8m1/expected/shape-binder-subshape-binder-element-map-namedshape-body-replay.freecad.json\", \"--validate-ledger\", \"--report\", \"tools/freecad_expected_parity/reports/probes/c8m1-shape-binder-subshape-binder-element-map-namedshape-body-replay-collect.json\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+    }
+  },
+  "discovered": 1,
+  "failed": 1,
+  "firstFailure": {
+    "artifacts": {
+      "candidateWrite": {
+        "status": "not-requested"
+      },
+      "ledgerAuthority": {
+        "status": "not-run"
+      },
+      "ledgerValidation": {
+        "status": "not-run"
+      },
+      "producerTraceDiagnostic": {
+        "status": "not-run"
+      },
+      "publicAuthority": {
+        "status": "not-run"
+      }
+    },
+    "case": "shape-binder-subshape-binder-element-map-namedshape-body-replay",
+    "errors": [
+      {
+        "detail": "target object Body has no shape",
+        "stage": "collection"
+      }
+    ],
+    "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/expected/shape-binder-subshape-binder-element-map-namedshape-body-replay.freecad.json",
+    "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/c8m1/shape-binder-subshape-binder-element-map-namedshape-body-replay.json",
+    "fixtureSha256": "e7beb87077e5e9e86c3673ddf19141eca5f4f54f2967aa3293b5eb18e4ec8f0f",
+    "ledgerSha256": null,
+    "phase": "c8m1",
+    "publicExpectedSha256": null,
+    "status": "failed"
+  },
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures",
+  "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+  "ledgerDriftStatus": "not_evaluated",
+  "ledgerValidationStatus": "failed",
+  "mode": "collection",
+  "processed": 0,
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: source commit",
+    "missing provenance: dirty summary",
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build type",
+    "missing provenance: build generator",
+    "missing provenance: cases[0].publicExpectedSha256",
+    "missing provenance: cases[0].ledgerSha256"
+  ],
+  "publicExpectedStatus": "not_evaluated",
+  "runtime": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "occtVersion": "7.8.1"
+  },
+  "schema": "freecad-fixture-regression-report/v1",
+  "skipped": 0,
+  "status": "failed"
+}

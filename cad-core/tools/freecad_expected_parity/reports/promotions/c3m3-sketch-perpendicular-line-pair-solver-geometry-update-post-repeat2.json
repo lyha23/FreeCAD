@@ -1,0 +1,432 @@
+{
+  "candidate": {
+    "build": {
+      "buildType": null,
+      "cCompiler": null,
+      "cmakeCache": null,
+      "cmakeCacheSha256": null,
+      "cxxCompiler": null,
+      "directory": "/Applications/FreeCAD.app/Contents/Resources",
+      "generator": null,
+      "homeDirectory": null
+    },
+    "commit": null,
+    "dirty": null,
+    "dirtyEntries": null,
+    "dirtyStatusSha256": null,
+    "exists": true,
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+    "sourceRoot": null
+  },
+  "candidateRoot": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion",
+  "candidateRunDifferences": [],
+  "candidateRunLedgerDrifts": [],
+  "candidateRunVariations": [],
+  "collector": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+    "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+  },
+  "firstFailure": {
+    "caseResult": {
+      "artifacts": {
+        "candidateWrite": {
+          "ledgerSha256": "02f720afa6bb859f59d031298d92a4e7e815ae964bc860439abe52f438a77bc2",
+          "path": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+          "publicSha256": "4e486707cc6de1d920e9ede237f035a49261fcc5380fe67cb6ae7e9dc6cf9f43",
+          "status": "written"
+        },
+        "ledgerAuthority": {
+          "status": "equal"
+        },
+        "ledgerValidation": {
+          "status": "valid"
+        },
+        "producerTraceDiagnostic": {
+          "reason": "disabled-by-request",
+          "status": "not_evaluated"
+        },
+        "publicAuthority": {
+          "status": "different"
+        }
+      },
+      "case": "sketch-perpendicular-line-pair-solver-geometry-update",
+      "errors": [
+        {
+          "detail": "candidate public expected differs",
+          "stage": "public-authority"
+        }
+      ],
+      "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+      "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json",
+      "fixtureSha256": "6abf807e7c758c3f8de3011ba0852239d1e7710d00c510861001afcb83b96e45",
+      "ledgerOutcome": "accepted",
+      "ledgerSha256": "b7724c3b75807572a69f4b14fee2e89387cc665e53c0e34dec48f44526d0a071",
+      "phase": "c3m3",
+      "publicExpectedSha256": "e6883a3255b4459ce68c33ef65f87b616186903ee937ffd46523b2faa187e41c",
+      "status": "failed"
+    },
+    "kind": "checked-in-regression",
+    "run": "run-a"
+  },
+  "firstProducerTraceDiagnostic": null,
+  "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+  "ledgerDriftStatus": "unchanged",
+  "ledgerValidationStatus": "passed",
+  "manifest": {
+    "cases": 1,
+    "entries": [
+      {
+        "case": "sketch-perpendicular-line-pair-solver-geometry-update",
+        "fixtureSha256": "6abf807e7c758c3f8de3011ba0852239d1e7710d00c510861001afcb83b96e45",
+        "ledgerSha256": "b7724c3b75807572a69f4b14fee2e89387cc665e53c0e34dec48f44526d0a071",
+        "phase": "c3m3",
+        "producerTraceSha256": null,
+        "publicSha256": "e6883a3255b4459ce68c33ef65f87b616186903ee937ffd46523b2faa187e41c"
+      }
+    ],
+    "phases": 1,
+    "sha256": "9b9f757666c2e3a85c6715dbd31686d5c1cf2c9b1909b1de7e754aedaba5ac6b"
+  },
+  "mode": "repeated-native-check",
+  "producerTraceDiagnostics": [],
+  "producerTraceStatus": "not_evaluated",
+  "provenanceWarnings": [
+    "missing provenance: CMake cache SHA256",
+    "missing provenance: build generator",
+    "missing provenance: build type",
+    "missing provenance: dirty summary",
+    "missing provenance: source commit"
+  ],
+  "publicExpectedStatus": "failed",
+  "runs": [
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-a",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "02f720afa6bb859f59d031298d92a4e7e815ae964bc860439abe52f438a77bc2",
+                "path": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+                "publicSha256": "4e486707cc6de1d920e9ede237f035a49261fcc5380fe67cb6ae7e9dc6cf9f43",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "different"
+              }
+            },
+            "case": "sketch-perpendicular-line-pair-solver-geometry-update",
+            "errors": [
+              {
+                "detail": "candidate public expected differs",
+                "stage": "public-authority"
+              }
+            ],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json",
+            "fixtureSha256": "6abf807e7c758c3f8de3011ba0852239d1e7710d00c510861001afcb83b96e45",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b7724c3b75807572a69f4b14fee2e89387cc665e53c0e34dec48f44526d0a071",
+            "phase": "c3m3",
+            "publicExpectedSha256": "e6883a3255b4459ce68c33ef65f87b616186903ee937ffd46523b2faa187e41c",
+            "status": "failed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a\", \"--report\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 1,
+        "firstFailure": {
+          "artifacts": {
+            "candidateWrite": {
+              "ledgerSha256": "02f720afa6bb859f59d031298d92a4e7e815ae964bc860439abe52f438a77bc2",
+              "path": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+              "publicSha256": "4e486707cc6de1d920e9ede237f035a49261fcc5380fe67cb6ae7e9dc6cf9f43",
+              "status": "written"
+            },
+            "ledgerAuthority": {
+              "status": "equal"
+            },
+            "ledgerValidation": {
+              "status": "valid"
+            },
+            "producerTraceDiagnostic": {
+              "reason": "disabled-by-request",
+              "status": "not_evaluated"
+            },
+            "publicAuthority": {
+              "status": "different"
+            }
+          },
+          "case": "sketch-perpendicular-line-pair-solver-geometry-update",
+          "errors": [
+            {
+              "detail": "candidate public expected differs",
+              "stage": "public-authority"
+            }
+          ],
+          "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+          "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json",
+          "fixtureSha256": "6abf807e7c758c3f8de3011ba0852239d1e7710d00c510861001afcb83b96e45",
+          "ledgerOutcome": "accepted",
+          "ledgerSha256": "b7724c3b75807572a69f4b14fee2e89387cc665e53c0e34dec48f44526d0a071",
+          "phase": "c3m3",
+          "publicExpectedSha256": "e6883a3255b4459ce68c33ef65f87b616186903ee937ffd46523b2faa187e41c",
+          "status": "failed"
+        },
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 0,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "failed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "failed"
+      },
+      "returncode": 1,
+      "root": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-a"
+    },
+    {
+      "collectorInvocation": {
+        "argv": [
+          "/Users/li/.cargo/bin/FreeCADCmd",
+          "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "--pass",
+          "__cad_core_expected_args_env__"
+        ],
+        "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+        "environment": {
+          "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+        }
+      },
+      "label": "run-b",
+      "report": {
+        "candidate": {
+          "build": {
+            "buildType": null,
+            "cCompiler": null,
+            "cmakeCache": null,
+            "cmakeCacheSha256": null,
+            "cxxCompiler": null,
+            "directory": "/Applications/FreeCAD.app/Contents/Resources",
+            "generator": null,
+            "homeDirectory": null
+          },
+          "commit": null,
+          "dirty": null,
+          "dirtyEntries": null,
+          "dirtyStatusSha256": null,
+          "exists": true,
+          "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+          "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+          "sourceRoot": null
+        },
+        "candidateRoot": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b",
+        "cases": [
+          {
+            "artifacts": {
+              "candidateWrite": {
+                "ledgerSha256": "21f7586fd2c47bdf243b45e6fb800022836fc3b579296f51673a3a6fb5af8cd3",
+                "path": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+                "publicSha256": "f0acbe3f5574a10d93950fd6ea99444ce37f1c07897b77b698d1345f5a8aad33",
+                "status": "written"
+              },
+              "ledgerAuthority": {
+                "status": "equal"
+              },
+              "ledgerValidation": {
+                "status": "valid"
+              },
+              "producerTraceDiagnostic": {
+                "reason": "disabled-by-request",
+                "status": "not_evaluated"
+              },
+              "publicAuthority": {
+                "status": "different"
+              }
+            },
+            "case": "sketch-perpendicular-line-pair-solver-geometry-update",
+            "errors": [
+              {
+                "detail": "candidate public expected differs",
+                "stage": "public-authority"
+              }
+            ],
+            "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+            "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json",
+            "fixtureSha256": "6abf807e7c758c3f8de3011ba0852239d1e7710d00c510861001afcb83b96e45",
+            "ledgerOutcome": "accepted",
+            "ledgerSha256": "b7724c3b75807572a69f4b14fee2e89387cc665e53c0e34dec48f44526d0a071",
+            "phase": "c3m3",
+            "publicExpectedSha256": "e6883a3255b4459ce68c33ef65f87b616186903ee937ffd46523b2faa187e41c",
+            "status": "failed"
+          }
+        ],
+        "collector": {
+          "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+          "sha256": "9e040b33b7ae9b7ffce548923e47f3addf87c18b4c0525664ae437237b0a6d9b"
+        },
+        "collectorInvocation": {
+          "argv": [
+            "/Users/li/.cargo/bin/FreeCADCmd",
+            "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+            "--pass",
+            "__cad_core_expected_args_env__"
+          ],
+          "cwd": "/Users/li/Chili3DProject/FreeCAD/cad-core",
+          "environment": {
+            "CAD_CORE_EXPECTED_ARGS_JSON": "[\"fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json\", \"--check\", \"--validate-ledger\", \"--repeat\", \"1\", \"--candidate-root\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b\", \"--report\", \"/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b.report.json\", \"--fixtures-root\", \"fixtures\", \"--freecadcmd\", \"/Users/li/.cargo/bin/FreeCADCmd\"]"
+          }
+        },
+        "discovered": 1,
+        "failed": 1,
+        "firstFailure": {
+          "artifacts": {
+            "candidateWrite": {
+              "ledgerSha256": "21f7586fd2c47bdf243b45e6fb800022836fc3b579296f51673a3a6fb5af8cd3",
+              "path": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+              "publicSha256": "f0acbe3f5574a10d93950fd6ea99444ce37f1c07897b77b698d1345f5a8aad33",
+              "status": "written"
+            },
+            "ledgerAuthority": {
+              "status": "equal"
+            },
+            "ledgerValidation": {
+              "status": "valid"
+            },
+            "producerTraceDiagnostic": {
+              "reason": "disabled-by-request",
+              "status": "not_evaluated"
+            },
+            "publicAuthority": {
+              "status": "different"
+            }
+          },
+          "case": "sketch-perpendicular-line-pair-solver-geometry-update",
+          "errors": [
+            {
+              "detail": "candidate public expected differs",
+              "stage": "public-authority"
+            }
+          ],
+          "expected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/expected/sketch-perpendicular-line-pair-solver-geometry-update.freecad.json",
+          "fixture": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/c3m3/sketch-perpendicular-line-pair-solver-geometry-update.json",
+          "fixtureSha256": "6abf807e7c758c3f8de3011ba0852239d1e7710d00c510861001afcb83b96e45",
+          "ledgerOutcome": "accepted",
+          "ledgerSha256": "b7724c3b75807572a69f4b14fee2e89387cc665e53c0e34dec48f44526d0a071",
+          "phase": "c3m3",
+          "publicExpectedSha256": "e6883a3255b4459ce68c33ef65f87b616186903ee937ffd46523b2faa187e41c",
+          "status": "failed"
+        },
+        "firstProducerTraceDiagnostic": null,
+        "fixturesRoot": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures",
+        "freecadcmd": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+        "ledgerDriftStatus": "unchanged",
+        "ledgerValidationStatus": "passed",
+        "mode": "collection",
+        "processed": 0,
+        "producerTraceDiagnostics": [],
+        "producerTraceStatus": "not_evaluated",
+        "provenanceWarnings": [
+          "missing provenance: source commit",
+          "missing provenance: dirty summary",
+          "missing provenance: CMake cache SHA256",
+          "missing provenance: build type",
+          "missing provenance: build generator"
+        ],
+        "publicExpectedStatus": "failed",
+        "runtime": {
+          "freecadVersion": "1.2.0 revision 20260519",
+          "occtVersion": "7.8.1"
+        },
+        "schema": "freecad-fixture-regression-report/v1",
+        "skipped": 0,
+        "status": "failed"
+      },
+      "returncode": 1,
+      "root": "/private/tmp/freecad-expected-c3m3-sketch-perpendicular-line-pair-solver-geometry-update-post-promotion/run-b"
+    }
+  ],
+  "schema": "freecad-fixture-regression-report/v1",
+  "status": "failed",
+  "summary": {
+    "invalidCases": 0,
+    "projectedEquivalentCases": 0,
+    "rawDifferentCases": 0,
+    "semanticDifferentCases": 0
+  }
+}

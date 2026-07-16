@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "actual": {
+        "mitName": "MIT License",
+        "mitOsiApproved": true,
+        "version": "1.2.3 -beta"
+      },
+      "expected": {
+        "mitName": "MIT License",
+        "mitOsiApproved": true,
+        "version": "1.2.3 -beta"
+      },
+      "id": "addon-manager-metadata-and-spdx-data",
+      "status": "passed"
+    }
+  ],
+  "entry": "AddonManager",
+  "errors": [],
+  "moduleEvidence": [
+    {
+      "path": "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_metadata.py",
+      "sha256": "d7e559c517289e8713e5f4f675a6e9a83bad728f10248a38ac3ee812b7c374db"
+    },
+    {
+      "path": "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/addonmanager_licenses.py",
+      "sha256": "0d47fb892de084bdc6045fb3f0228b6afe4bde2e02f2d1b20c6fab6abf923cc6"
+    },
+    {
+      "path": "/Applications/FreeCAD.app/Contents/Resources/Mod/AddonManager/Resources/licenses/spdx.json",
+      "sha256": "e6ad507c74e91bc08fed146a03d3cc9999361d221ee2aa54af1f84079e772edc"
+    }
+  ],
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+    "requestedPath": "/Users/li/.cargo/bin/FreeCADCmd",
+    "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a"
+  },
+  "schema": "freecad-non-cad-smoke/v1",
+  "status": "passed",
+  "tool": {
+    "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_non_cad_smoke.py",
+    "sha256": "b7ed70ae187faf0440464d52ba3531a00d9d08a7444a650283806fd35d8c2b82"
+  }
+}

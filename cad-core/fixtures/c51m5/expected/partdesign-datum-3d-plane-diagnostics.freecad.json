@@ -1,0 +1,380 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "object": "DatumCSTranslateWrongShape",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "Translate",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSThreePointsMissingThird",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "ThreePointsPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSThreePointsCoincident",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "ThreePointsPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSThreePointsCollinear",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "ThreePointsNormal",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSTangentMissingVertex",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "object": "DatumCSTangentWrongShapes",
+      "object_fields": {
+        "attached": true,
+        "datum": "coordinate_system",
+        "map_mode": "TangentPlane",
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "ok",
+        "x_axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "y_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "z_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:9944758504823450f1a7bb4bd1c11dfc13b8d65e8539cfa88ab051e7aa2d61a2",
+    "objects": {
+      "CoincidentPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c11f55014ba67699b6c954484bb92a9dfbe9782a68e6ae41c3a990f69201debc",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "CollinearPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:9ccce6bf40dd51d00eb07864f6eb70390b22720ce12ede2791f9401ba7c83bb3",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "DatumCSTangentMissingVertex": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1335738823d620ca1df0cdf7bb5d552a51a819987b3154d8e8968e10f54b363b",
+        "subshapes": {}
+      },
+      "DatumCSTangentWrongShapes": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c494e4de031935e323843eef780f86682eb0b708b23fab7c82690c386c3d0ce1",
+        "subshapes": {}
+      },
+      "DatumCSThreePointsCoincident": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:dea5ac472266c8aa18726ceaa8fd7ee02bf21128be622b7a0e533703cb5426b9",
+        "subshapes": {}
+      },
+      "DatumCSThreePointsCollinear": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:20b90974ab6defbbd15febe3272e993d3e69d61ad66dc93535fc276bf722174c",
+        "subshapes": {}
+      },
+      "DatumCSThreePointsMissingThird": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:7ae51c90c37290ba2e60dec0324bee5c63071f788649e34580b1fcd9f4e27416",
+        "subshapes": {}
+      },
+      "DatumCSTranslateWrongShape": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:402c4401fb338c11a34a9215423632a9cb23214afcedbd8dfd14ddee4fa2ee8f",
+        "subshapes": {}
+      },
+      "PlaneXY": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d673e0976881f98798ed293f952dcdd4a100f65f3965cf45bbe6f1369ce0ac92",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          }
+        }
+      },
+      "SecondPoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:1885cfe1016f97b24f60c03879438c3a542faa2361144c17153e88f1b77054be",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      },
+      "SinglePoint": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:d7ef6770b4e7ff92a8bc60cef20baacdd21a08a5a734a648de2840f2ee1e47f5",
+        "subshapes": {
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

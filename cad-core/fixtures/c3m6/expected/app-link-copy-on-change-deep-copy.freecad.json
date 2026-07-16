@@ -1,0 +1,565 @@
+{
+  "diagnostics": [],
+  "elementReferenceUpdates": [],
+  "results": [
+    {
+      "bbox": {
+        "max": [
+          2.0,
+          3.0,
+          4.0
+        ],
+        "min": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "object": "BoxLink",
+      "object_fields": {
+        "link": "app_link",
+        "linked_object": "Box",
+        "shape": "occt_solid"
+      },
+      "subshapes": [
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Face1",
+          "id": "BoxLink:Face1",
+          "identityStatus": "current_only",
+          "indexed": "Face1",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Face2",
+          "id": "BoxLink:Face2",
+          "identityStatus": "current_only",
+          "indexed": "Face2",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Face3",
+          "id": "BoxLink:Face3",
+          "identityStatus": "current_only",
+          "indexed": "Face3",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Face4",
+          "id": "BoxLink:Face4",
+          "identityStatus": "current_only",
+          "indexed": "Face4",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Face5",
+          "id": "BoxLink:Face5",
+          "identityStatus": "current_only",
+          "indexed": "Face5",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Face6",
+          "id": "BoxLink:Face6",
+          "identityStatus": "current_only",
+          "indexed": "Face6",
+          "kind": "Face",
+          "stableSubname": "",
+          "subname": "Face6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge1",
+          "id": "BoxLink:Edge1",
+          "identityStatus": "current_only",
+          "indexed": "Edge1",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge2",
+          "id": "BoxLink:Edge2",
+          "identityStatus": "current_only",
+          "indexed": "Edge2",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge3",
+          "id": "BoxLink:Edge3",
+          "identityStatus": "current_only",
+          "indexed": "Edge3",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge4",
+          "id": "BoxLink:Edge4",
+          "identityStatus": "current_only",
+          "indexed": "Edge4",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge5",
+          "id": "BoxLink:Edge5",
+          "identityStatus": "current_only",
+          "indexed": "Edge5",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge6",
+          "id": "BoxLink:Edge6",
+          "identityStatus": "current_only",
+          "indexed": "Edge6",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge7",
+          "id": "BoxLink:Edge7",
+          "identityStatus": "current_only",
+          "indexed": "Edge7",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge8",
+          "id": "BoxLink:Edge8",
+          "identityStatus": "current_only",
+          "indexed": "Edge8",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge8"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge9",
+          "id": "BoxLink:Edge9",
+          "identityStatus": "current_only",
+          "indexed": "Edge9",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge9"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge10",
+          "id": "BoxLink:Edge10",
+          "identityStatus": "current_only",
+          "indexed": "Edge10",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge10"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge11",
+          "id": "BoxLink:Edge11",
+          "identityStatus": "current_only",
+          "indexed": "Edge11",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge11"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Edge12",
+          "id": "BoxLink:Edge12",
+          "identityStatus": "current_only",
+          "indexed": "Edge12",
+          "kind": "Edge",
+          "stableSubname": "",
+          "subname": "Edge12"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex1",
+          "id": "BoxLink:Vertex1",
+          "identityStatus": "current_only",
+          "indexed": "Vertex1",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex1"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex2",
+          "id": "BoxLink:Vertex2",
+          "identityStatus": "current_only",
+          "indexed": "Vertex2",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex2"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex3",
+          "id": "BoxLink:Vertex3",
+          "identityStatus": "current_only",
+          "indexed": "Vertex3",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex3"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex4",
+          "id": "BoxLink:Vertex4",
+          "identityStatus": "current_only",
+          "indexed": "Vertex4",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex4"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex5",
+          "id": "BoxLink:Vertex5",
+          "identityStatus": "current_only",
+          "indexed": "Vertex5",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex5"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex6",
+          "id": "BoxLink:Vertex6",
+          "identityStatus": "current_only",
+          "indexed": "Vertex6",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex6"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex7",
+          "id": "BoxLink:Vertex7",
+          "identityStatus": "current_only",
+          "indexed": "Vertex7",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex7"
+        },
+        {
+          "ReferenceShadow": [],
+          "ShadowSub": [],
+          "fullSubname": "BoxLink.Vertex8",
+          "id": "BoxLink:Vertex8",
+          "identityStatus": "current_only",
+          "indexed": "Vertex8",
+          "kind": "Vertex",
+          "stableSubname": "",
+          "subname": "Vertex8"
+        }
+      ],
+      "topology_counts": {
+        "edges": 12,
+        "faces": 6,
+        "vertices": 8
+      },
+      "volume": 23.999999999999996
+    }
+  ],
+  "topoNamingState": {
+    "documentHash": "sha256:0719b05c5cd8fda4a2dee262e169021987e3bc60616a0f12c748921e3629e14f",
+    "objects": {
+      "Box": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:c39a297f788f133ae9f5525a5909f1291af7559af21610d28270008f788f9d3c",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "current_only",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "current_only",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "current_only",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "current_only",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "current_only",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "current_only",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "current_only",
+            "subname": "Vertex8"
+          }
+        }
+      },
+      "BoxLink": {
+        "childElementMaps": [],
+        "elementMap": {
+          "encoding": "cad-core.element-map.v1",
+          "entries": {},
+          "status": "indexed_only"
+        },
+        "elementMapVersion": "cad-core.element-map.v1",
+        "mapperHistory": [],
+        "objectHash": "sha256:24f0ccffacf4a0ecf88f6d7115a1f6d5c206eb19f92c1ae9917268bbe43714bd",
+        "subshapes": {
+          "Edge1": {
+            "identityStatus": "current_only",
+            "subname": "Edge1"
+          },
+          "Edge10": {
+            "identityStatus": "current_only",
+            "subname": "Edge10"
+          },
+          "Edge11": {
+            "identityStatus": "current_only",
+            "subname": "Edge11"
+          },
+          "Edge12": {
+            "identityStatus": "current_only",
+            "subname": "Edge12"
+          },
+          "Edge2": {
+            "identityStatus": "current_only",
+            "subname": "Edge2"
+          },
+          "Edge3": {
+            "identityStatus": "current_only",
+            "subname": "Edge3"
+          },
+          "Edge4": {
+            "identityStatus": "current_only",
+            "subname": "Edge4"
+          },
+          "Edge5": {
+            "identityStatus": "current_only",
+            "subname": "Edge5"
+          },
+          "Edge6": {
+            "identityStatus": "current_only",
+            "subname": "Edge6"
+          },
+          "Edge7": {
+            "identityStatus": "current_only",
+            "subname": "Edge7"
+          },
+          "Edge8": {
+            "identityStatus": "current_only",
+            "subname": "Edge8"
+          },
+          "Edge9": {
+            "identityStatus": "current_only",
+            "subname": "Edge9"
+          },
+          "Face1": {
+            "identityStatus": "current_only",
+            "subname": "Face1"
+          },
+          "Face2": {
+            "identityStatus": "current_only",
+            "subname": "Face2"
+          },
+          "Face3": {
+            "identityStatus": "current_only",
+            "subname": "Face3"
+          },
+          "Face4": {
+            "identityStatus": "current_only",
+            "subname": "Face4"
+          },
+          "Face5": {
+            "identityStatus": "current_only",
+            "subname": "Face5"
+          },
+          "Face6": {
+            "identityStatus": "current_only",
+            "subname": "Face6"
+          },
+          "Vertex1": {
+            "identityStatus": "current_only",
+            "subname": "Vertex1"
+          },
+          "Vertex2": {
+            "identityStatus": "current_only",
+            "subname": "Vertex2"
+          },
+          "Vertex3": {
+            "identityStatus": "current_only",
+            "subname": "Vertex3"
+          },
+          "Vertex4": {
+            "identityStatus": "current_only",
+            "subname": "Vertex4"
+          },
+          "Vertex5": {
+            "identityStatus": "current_only",
+            "subname": "Vertex5"
+          },
+          "Vertex6": {
+            "identityStatus": "current_only",
+            "subname": "Vertex6"
+          },
+          "Vertex7": {
+            "identityStatus": "current_only",
+            "subname": "Vertex7"
+          },
+          "Vertex8": {
+            "identityStatus": "current_only",
+            "subname": "Vertex8"
+          }
+        }
+      }
+    },
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 46970",
+      "occtVersion": "7.8.1"
+    },
+    "schemaVersion": "cad-core.topo-state.v1"
+  }
+}

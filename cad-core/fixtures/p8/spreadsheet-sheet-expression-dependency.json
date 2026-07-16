@@ -1,0 +1,44 @@
+{
+  "Objects": [
+    {
+      "Name": "Sheet",
+      "ID": 1,
+      "TypeId": "Spreadsheet::Sheet",
+      "Properties": {
+        "Cells": {
+          "PropertyType": "Spreadsheet::PropertySheet",
+          "cells": [
+            {
+              "address": "A1",
+              "content": "3",
+              "alias": "left"
+            },
+            {
+              "address": "A2",
+              "content": "4"
+            },
+            {
+              "address": "B1",
+              "content": "=left + A2"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "recompute": {
+    "objs": [
+      "Sheet"
+    ]
+  },
+  "topoNamingState": {
+    "schemaVersion": "cad-core.topo-state.v1",
+    "producer": {
+      "cadCoreVersion": "fixture-contract-v1",
+      "freecadVersion": "1.2.0 revision 20260519",
+      "occtVersion": "fixture-occt-unspecified"
+    },
+    "objects": {},
+    "documentHash": "sha256:8bad85c5a348ec0f45e97fd331d4dee55219d8cedca4f1cd07ebc6cf7a0b3f91"
+  }
+}

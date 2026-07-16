@@ -1,0 +1,125 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-conic-edge-extrusion",
+    "expectedPayloadHash": "sha256:ff723f12ce4293f615c8925864896e2cc52e96dc079a31dda248338411227509",
+    "inputHash": "sha256:203479ff93c27064bdac2d4aa9da70152d37193a0a28c96184b96fc684f095e8",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:d648fec2e3afee8484ffab0a14d4409b60e481591d477d60ae76dd2b2aedd8a3"
+  },
+  "inputReferences": [],
+  "objects": {
+    "HyperbolaEdge": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeometryCurve"
+    },
+    "HyperbolaExtrusion": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Extrusion"
+    },
+    "ParabolaEdge": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::GeometryCurve"
+    },
+    "ParabolaExtrusion": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Extrusion"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "HyperbolaEdge": {
+        "covers": [
+          "HyperbolaEdge"
+        ],
+        "ledgerObject": "HyperbolaEdge",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "HyperbolaExtrusion": {
+        "covers": [
+          "HyperbolaExtrusion"
+        ],
+        "ledgerObject": "HyperbolaExtrusion",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ParabolaEdge": {
+        "covers": [
+          "ParabolaEdge"
+        ],
+        "ledgerObject": "ParabolaEdge",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "ParabolaExtrusion": {
+        "covers": [
+          "ParabolaExtrusion"
+        ],
+        "ledgerObject": "ParabolaExtrusion",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:d648fec2e3afee8484ffab0a14d4409b60e481591d477d60ae76dd2b2aedd8a3",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

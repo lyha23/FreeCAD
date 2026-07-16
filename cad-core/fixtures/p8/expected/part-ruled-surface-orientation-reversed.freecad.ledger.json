@@ -1,0 +1,119 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-ruled-surface-orientation-reversed",
+    "expectedPayloadHash": "sha256:e57753f4dc9987a175a3343248be734d34ceaece0dc1bffc12f4fe8024ac7b31",
+    "inputHash": "sha256:3d821babae3e5ed281adc25c3a0cdc30fd5815db51eed7844889d760801c6ea1",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:54deb7677af9296fed526760f2b0e5c7af72aea3d78273815d25ff34a5298d8c"
+  },
+  "inputReferences": [],
+  "objects": {
+    "ReversedRuledSurface": {
+      "afterElements": {},
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RuledSurface"
+    },
+    "SkewLine1": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    },
+    "SkewLine2": {
+      "afterElements": {
+        "Edge": [
+          "Edge1"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::Line"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "ReversedRuledSurface": {
+        "covers": [
+          "ReversedRuledSurface"
+        ],
+        "ledgerObject": "ReversedRuledSurface",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SkewLine1": {
+        "covers": [
+          "SkewLine1"
+        ],
+        "ledgerObject": "SkewLine1",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SkewLine2": {
+        "covers": [
+          "SkewLine2"
+        ],
+        "ledgerObject": "SkewLine2",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:54deb7677af9296fed526760f2b0e5c7af72aea3d78273815d25ff34a5298d8c",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

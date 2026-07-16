@@ -1,0 +1,66 @@
+{
+  "diagnostics": [
+    {
+      "actualDocumentHash": "sha256:987dcbc43b5a7452bac88552db84be326a72c3f88161623efda47bf7b4e4f1e1",
+      "code": "topo_state_document_hash_mismatch",
+      "expectedDocumentHash": "sha256:c4dc2a32cc4e2a2ca9fd9279b330862474e1c4d645687a11787901f9471723ff",
+      "message": "topoNamingState documentHash does not match the current DocumentObject graph; request-level recompute is refused",
+      "severity": "error",
+      "source": "topoNamingState"
+    }
+  ],
+  "fixture": {
+    "case": "body-display-only-support-transform-cache",
+    "expectedPayloadHash": "sha256:3e338837e50eb773fc3efad72124295bdf1cce6fd04375d5ea48bf5e56929f7b",
+    "inputHash": "sha256:cd28c5376bee5af0372138a303260d738149ad71cdcc4a4e382d038c120b3ef2",
+    "phase": "c3m5"
+  },
+  "inputReferences": [
+    {
+      "displaySubname": "Edge1",
+      "element": "g100001",
+      "hasReferenceShadow": false,
+      "id": "ref:1",
+      "owner": "Pad",
+      "path": [
+        "Pad",
+        "草图 2:10:13 PM"
+      ],
+      "propertyPath": "Profile.SubSet.0",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "g100001",
+      "target": "草图 2:10:13 PM"
+    },
+    {
+      "displaySubname": "Face1",
+      "element": "g100001",
+      "hasReferenceShadow": false,
+      "id": "ref:2",
+      "owner": "Pad2",
+      "path": [
+        "Pad2",
+        "Pad"
+      ],
+      "propertyPath": "Profile.SubSet.0",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "g100001",
+      "target": "Pad"
+    }
+  ],
+  "outcome": "rejected",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "rejection": {
+    "diagnosticCodes": [
+      "topo_state_document_hash_mismatch"
+    ],
+    "reason": "FreeCADCmd rejected the request before publishing topoNamingState"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

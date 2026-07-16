@@ -1,0 +1,1340 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [
+      "ref:1"
+    ],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [
+    {
+      "id": "event:1",
+      "inputReferenceIds": [
+        "ref:1"
+      ],
+      "kind": "resolved",
+      "provenance": "FreeCADCmd.native_property_assignment",
+      "sources": [
+        {
+          "element": "InternalFace1",
+          "object": "SketchBase"
+        }
+      ],
+      "targets": [
+        {
+          "element": "InternalFace1",
+          "object": "SketchBase"
+        }
+      ]
+    }
+  ],
+  "fixture": {
+    "case": "pad-profile-linked-face",
+    "expectedPayloadHash": "sha256:209f829a3c83cbd416c202054d25af96f6409a197c62a585644ce487a0108d8d",
+    "inputHash": "sha256:e8a4046e2a926c738451008e50dcf9ebf60567b6ff16c84e375ae883c5eaf898",
+    "phase": "p7",
+    "topoNamingStateHash": "sha256:fbe452164ffe030ce8bb938867fe9b372c4f0ef3c9c0c839cf95f071276094cc"
+  },
+  "inputReferences": [
+    {
+      "displaySubname": "",
+      "element": "g1;SKT;FAC",
+      "hasReferenceShadow": false,
+      "id": "ref:1",
+      "owner": "BasePad",
+      "path": [
+        "BasePad",
+        "SketchBase"
+      ],
+      "propertyPath": "Profile.SubSet.0",
+      "required": true,
+      "source": "topoNamingState",
+      "stableSubname": "g1;SKT;FAC",
+      "target": "SketchBase"
+    }
+  ],
+  "objects": {
+    "BasePad": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "#10:1;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#10:1;:G;XTR;:H*:*,E",
+              "raw": "#10:1;:G;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge2"
+            }
+          },
+          "#11:2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#11:2;:G;XTR;:H*:*,E",
+              "raw": "#11:2;:G;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge5"
+            }
+          },
+          "#12:2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#12:2;:G;XTR;:H*:*,E",
+              "raw": "#12:2;:G;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge8"
+            }
+          },
+          "#14:1;:G0;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#14:1;:G0;XTR;:H*:*,F",
+              "raw": "#14:1;:G0;XTR;:H55e:8,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face6"
+            }
+          },
+          "#16:1;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:1;:U;XTR;:H*:*,E",
+              "raw": "#16:1;:U;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge12"
+            }
+          },
+          "#16:2;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:2;:U;XTR;:H*:*,E",
+              "raw": "#16:2;:U;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge10"
+            }
+          },
+          "#16:3;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:3;:U;XTR;:H*:*,E",
+              "raw": "#16:3;:U;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge7"
+            }
+          },
+          "#16:4;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:4;:U;XTR;:H*:*,E",
+              "raw": "#16:4;:U;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge4"
+            }
+          },
+          "#18:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#18:2;:U;XTR;:H*:*,V",
+              "raw": "#18:2;:U;XTR;:H55e:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex2"
+            }
+          },
+          "#19:1;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#19:1;:U;XTR;:H*:*,V",
+              "raw": "#19:1;:U;XTR;:H55e:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex4"
+            }
+          },
+          "#1a:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1a:2;:U;XTR;:H*:*,V",
+              "raw": "#1a:2;:U;XTR;:H55e:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex6"
+            }
+          },
+          "#1b:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1b:2;:U;XTR;:H*:*,V",
+              "raw": "#1b:2;:U;XTR;:H55e:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex8"
+            }
+          },
+          "#2:1;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#2:1;:H*,V",
+              "raw": "#2:1;:H55e,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex3"
+            }
+          },
+          "#4:2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#4:2;:H*,V",
+              "raw": "#4:2;:H55e,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex7"
+            }
+          },
+          "#6:2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#6:2;:H*,V",
+              "raw": "#6:2;:H55e,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex5"
+            }
+          },
+          "#8:2;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#8:2;:H*,V",
+              "raw": "#8:2;:H55e,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "BasePad",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Vertex1"
+            }
+          },
+          "#b:1;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:1;:H*,E",
+              "raw": "#b:1;:H55e,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge11"
+            }
+          },
+          "#b:2;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:2;:H*,E",
+              "raw": "#b:2;:H55e,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge9"
+            }
+          },
+          "#b:3;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:3;:H*,E",
+              "raw": "#b:3;:H55e,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge6"
+            }
+          },
+          "#b:4;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#b:4;:H*,E",
+              "raw": "#b:4;:H55e,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge3"
+            }
+          },
+          "#d:1;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#d:1;:G;XTR;:H*:*,F",
+              "raw": "#d:1;:G;XTR;:H55e:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face4"
+            }
+          },
+          "#d:1;;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#d:1;;:H*:*,F",
+              "raw": "#d:1;;:H55e:1,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face5"
+            }
+          },
+          "#d:2;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#d:2;:G;XTR;:H*:*,F",
+              "raw": "#d:2;:G;XTR;:H55e:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face3"
+            }
+          },
+          "#d:3;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#d:3;:G;XTR;:H*:*,F",
+              "raw": "#d:3;:G;XTR;:H55e:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face2"
+            }
+          },
+          "#d:4;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#d:4;:G;XTR;:H*:*,F",
+              "raw": "#d:4;:G;XTR;:H55e:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "BasePad",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Face1"
+            }
+          },
+          "#f:2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#f:2;:G;XTR;:H*:*,E",
+              "raw": "#f:2;:G;XTR;:H55e:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "BasePad",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "BasePad",
+              "subname": "Edge1"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Pad"
+    },
+    "PadFromFace": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6",
+          "Edge7",
+          "Edge8",
+          "Edge9",
+          "Edge10",
+          "Edge11",
+          "Edge12"
+        ],
+        "Face": [
+          "Face1",
+          "Face2",
+          "Face3",
+          "Face4",
+          "Face5",
+          "Face6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6",
+          "Vertex7",
+          "Vertex8"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "#14:1;:G0;XTR;:H*:*,F;:H*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#14:1;:G0;XTR;:H*:*,F;:H*,F",
+              "raw": "#14:1;:G0;XTR;:H55e:8,F;:H55f,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Face5"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Face5"
+            }
+          },
+          "#16:1;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:1;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "#16:1;:U;XTR;:H55e:7,E;:H55f,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge11"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge11"
+            }
+          },
+          "#16:2;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:2;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "#16:2;:U;XTR;:H55e:7,E;:H55f,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge9"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge9"
+            }
+          },
+          "#16:3;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:3;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "#16:3;:U;XTR;:H55e:7,E;:H55f,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge6"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge6"
+            }
+          },
+          "#16:4;:U;XTR;:H*:*,E;:H*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#16:4;:U;XTR;:H*:*,E;:H*,E",
+              "raw": "#16:4;:U;XTR;:H55e:7,E;:H55f,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge3"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge3"
+            }
+          },
+          "#18:2;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#18:2;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "#18:2;:U;XTR;:H55e:7,V;:H55f,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex1"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex1"
+            }
+          },
+          "#19:1;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#19:1;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "#19:1;:U;XTR;:H55e:7,V;:H55f,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex3"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex3"
+            }
+          },
+          "#1a:2;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1a:2;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "#1a:2;:U;XTR;:H55e:7,V;:H55f,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex5"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex5"
+            }
+          },
+          "#1b:2;:U;XTR;:H*:*,V;:H*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1b:2;:U;XTR;:H*:*,V;:H*,V",
+              "raw": "#1b:2;:U;XTR;:H55e:7,V;:H55f,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex7"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex7"
+            }
+          },
+          "#1d:2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1d:2;:G;XTR;:H*:*,E",
+              "raw": "#1d:2;:G;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge1"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge1"
+            }
+          },
+          "#1e:1;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1e:1;:G;XTR;:H*:*,E",
+              "raw": "#1e:1;:G;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge2"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge2"
+            }
+          },
+          "#1f:2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#1f:2;:G;XTR;:H*:*,E",
+              "raw": "#1f:2;:G;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge5"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge5"
+            }
+          },
+          "#20:2;:G;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#20:2;:G;XTR;:H*:*,E",
+              "raw": "#20:2;:G;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge8"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge8"
+            }
+          },
+          "#22:1;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#22:1;:G;XTR;:H*:*,F",
+              "raw": "#22:1;:G;XTR;:H55f:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Face4"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Face4"
+            }
+          },
+          "#22:2;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#22:2;:G;XTR;:H*:*,F",
+              "raw": "#22:2;:G;XTR;:H55f:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Face3"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Face3"
+            }
+          },
+          "#22:3;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#22:3;:G;XTR;:H*:*,F",
+              "raw": "#22:3;:G;XTR;:H55f:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Face2"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Face2"
+            }
+          },
+          "#22:4;:G;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#22:4;:G;XTR;:H*:*,F",
+              "raw": "#22:4;:G;XTR;:H55f:7,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Face1"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Face1"
+            }
+          },
+          "#24:1;:G0;XTR;:H*:*,F": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#24:1;:G0;XTR;:H*:*,F",
+              "raw": "#24:1;:G0;XTR;:H55f:8,F"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Face6"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Face6"
+            }
+          },
+          "#26:1;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#26:1;:U;XTR;:H*:*,E",
+              "raw": "#26:1;:U;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge12"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge12"
+            }
+          },
+          "#26:2;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#26:2;:U;XTR;:H*:*,E",
+              "raw": "#26:2;:U;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge10"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge10"
+            }
+          },
+          "#26:3;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#26:3;:U;XTR;:H*:*,E",
+              "raw": "#26:3;:U;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge7"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge7"
+            }
+          },
+          "#26:4;:U;XTR;:H*:*,E": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#26:4;:U;XTR;:H*:*,E",
+              "raw": "#26:4;:U;XTR;:H55f:7,E"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "edge",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Edge4"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Edge4"
+            }
+          },
+          "#28:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#28:2;:U;XTR;:H*:*,V",
+              "raw": "#28:2;:U;XTR;:H55f:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex2"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex2"
+            }
+          },
+          "#29:1;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#29:1;:U;XTR;:H*:*,V",
+              "raw": "#29:1;:U;XTR;:H55f:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex4"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex4"
+            }
+          },
+          "#2a:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#2a:2;:U;XTR;:H*:*,V",
+              "raw": "#2a:2;:U;XTR;:H55f:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex6"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex6"
+            }
+          },
+          "#2b:2;:U;XTR;:H*:*,V": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "freecad_expected_collector"
+            },
+            "mappedName": {
+              "canonical": "#2b:2;:U;XTR;:H*:*,V",
+              "raw": "#2b:2;:U;XTR;:H55f:7,V"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "vertex",
+            "source": {
+              "object": "PadFromFace",
+              "subname": "Vertex8"
+            },
+            "target": {
+              "object": "PadFromFace",
+              "subname": "Vertex8"
+            }
+          }
+        },
+        "status": "history_partial"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "PartDesign::Pad"
+    },
+    "SketchBase": {
+      "afterElements": {
+        "Face": [
+          "InternalFace1"
+        ]
+      },
+      "beforeElements": {
+        "Face": [
+          "InternalFace1"
+        ]
+      },
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {
+          "g1;SKT;FAC": {
+            "evidence": {
+              "childElementMapKey": null,
+              "mapperHistoryIds": [],
+              "source": "legacy_internal_face_fixture_migration"
+            },
+            "mappedName": {
+              "canonical": "g1;SKT;FAC",
+              "raw": "g1;SKT;FAC"
+            },
+            "recoverability": "resolved",
+            "shapeKind": "face",
+            "source": {
+              "object": "SketchBase",
+              "subname": "InternalFace1"
+            },
+            "target": {
+              "object": "SketchBase",
+              "subname": "InternalFace1"
+            }
+          }
+        },
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Sketcher::SketchObject"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 20260519",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "BasePad": {
+        "covers": [
+          "BasePad"
+        ],
+        "ledgerObject": "BasePad",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "PadFromFace": {
+        "covers": [
+          "PadFromFace"
+        ],
+        "ledgerObject": "PadFromFace",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      },
+      "SketchBase": {
+        "covers": [
+          "SketchBase"
+        ],
+        "ledgerObject": "SketchBase",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": [
+          "event:1"
+        ]
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:fbe452164ffe030ce8bb938867fe9b372c4f0ef3c9c0c839cf95f071276094cc",
+    "results": [
+      {
+        "inputReferenceId": "ref:1",
+        "status": "resolved"
+      }
+    ],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

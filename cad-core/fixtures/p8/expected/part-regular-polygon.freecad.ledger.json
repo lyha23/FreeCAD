@@ -1,0 +1,76 @@
+{
+  "coverage": {
+    "coveredInputReferenceIds": [],
+    "uncoveredInputReferenceIds": []
+  },
+  "diagnostics": [],
+  "events": [],
+  "fixture": {
+    "case": "part-regular-polygon",
+    "expectedPayloadHash": "sha256:4ee428bdc6ef4df5f51342cbf711d00bd66bb2b636b7ea35b1a233414e00619b",
+    "inputHash": "sha256:d5673e1fa60bb036a0cb64e4bf84783a4f3c49ba644347321e30146e4cb56ccd",
+    "phase": "p8",
+    "topoNamingStateHash": "sha256:bd41b091d765c803f5f4f4ab71d76b625e290b7f691e9f978440df683c12a362"
+  },
+  "inputReferences": [],
+  "objects": {
+    "RegularPolygon": {
+      "afterElements": {
+        "Edge": [
+          "Edge1",
+          "Edge2",
+          "Edge3",
+          "Edge4",
+          "Edge5",
+          "Edge6"
+        ],
+        "Vertex": [
+          "Vertex1",
+          "Vertex2",
+          "Vertex3",
+          "Vertex4",
+          "Vertex5",
+          "Vertex6"
+        ]
+      },
+      "beforeElements": {},
+      "childElementMaps": [],
+      "elementMap": {
+        "encoding": "cad-core.element-map.v1",
+        "entries": {},
+        "status": "indexed_only"
+      },
+      "mapperHistory": [],
+      "published": true,
+      "role": "protocol_published",
+      "type": "Part::RegularPolygon"
+    }
+  },
+  "outcome": "accepted",
+  "producer": {
+    "freecadVersion": "1.2.0 revision 46970",
+    "name": "FreeCADCmd",
+    "occtVersion": "7.8.1",
+    "scriptVersion": "collect_freecad_expected.py:ledger-v1"
+  },
+  "projection": {
+    "droppedObjects": {},
+    "publishedObjects": {
+      "RegularPolygon": {
+        "covers": [
+          "RegularPolygon"
+        ],
+        "ledgerObject": "RegularPolygon",
+        "reason": "expected topoNamingState publication boundary",
+        "sourceEventIds": []
+      }
+    }
+  },
+  "roundTrip": {
+    "diagnostics": [],
+    "inputTopoNamingStateHash": "sha256:bd41b091d765c803f5f4f4ab71d76b625e290b7f691e9f978440df683c12a362",
+    "results": [],
+    "status": "passed"
+  },
+  "schema": "freecad-toponaming-ledger/v1"
+}

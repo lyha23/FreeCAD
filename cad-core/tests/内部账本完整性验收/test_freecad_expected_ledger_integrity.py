@@ -180,6 +180,34 @@ class FreecadExpectedLedgerIntegrityTest(unittest.TestCase):
 
         self.assertIn("public subshape identity does not match ledger evidence: Body.Edge1", errors)
 
+    def test_history_only_subshape_requires_exact_ledger_evidence(self) -> None:
+        subshape = {
+            "subname": "Edge13",
+            "identityStatus": "history_only",
+            "resolvedIndexed": "Edge13",
+            "rawFreecadMappedName": "Edge13",
+            "canonicalFreecadMappedName": "Edge13",
+        }
+        ledger_object = {"subshapeEvidence": {"Edge13": copy.deepcopy(subshape)}}
+
+        self.assertTrue(
+            validator.public_subshape_matches_ledger_evidence(
+                "Extrude",
+                "Edge13",
+                subshape,
+                ledger_object,
+            )
+        )
+        ledger_object["subshapeEvidence"]["Edge13"]["rawFreecadMappedName"] = "forged"
+        self.assertFalse(
+            validator.public_subshape_matches_ledger_evidence(
+                "Extrude",
+                "Edge13",
+                subshape,
+                ledger_object,
+            )
+        )
+
     def test_published_projection_must_use_same_ledger_object(self) -> None:
         def point_body_at_pad(_expected, ledger) -> None:
             projection = ledger["projection"]["publishedObjects"]["Body"]
@@ -591,6 +619,32 @@ class FreecadExpectedLedgerIntegrityTest(unittest.TestCase):
         )
 
         self.assertNotIn("Edge1", objects["Body"].get("subshapeEvidence", {}))
+
+    def test_history_only_raw_capture_is_preserved_as_subshape_evidence(self) -> None:
+        history_only = {
+            "subname": "Edge13",
+            "identityStatus": "history_only",
+            "resolvedIndexed": "Edge13",
+            "rawFreecadMappedName": "Edge13",
+            "canonicalFreecadMappedName": "Edge13",
+        }
+        object_state = {
+            "objectHash": "sha256:extrude",
+            "elementMapVersion": "cad-core.element-map.v1",
+            "subshapes": {"Edge13": copy.deepcopy(history_only)},
+            "elementMap": {"encoding": "cad-core.element-map.v1", "entries": {}},
+            "childElementMaps": [],
+            "mapperHistory": [],
+        }
+
+        objects = collector.ledger_objects_from_states(
+            {"Objects": [{"Name": "Extrude", "TypeId": "Part::Extrusion"}]},
+            {"objects": {"Extrude": copy.deepcopy(object_state)}},
+            {"objects": {"Extrude": copy.deepcopy(object_state)}},
+            [],
+        )
+
+        self.assertEqual(history_only, objects["Extrude"]["subshapeEvidence"]["Edge13"])
 
     def test_round_trip_results_require_native_replay_bindings(self) -> None:
         replay_payload = validator.load_json(REAL_EXPECTED_PATH)

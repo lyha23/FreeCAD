@@ -1,0 +1,82 @@
+{
+  "case": "app-link-linked-plain-group-nested-label-subshape",
+  "phase": "p8",
+  "producer": {
+    "candidate": {
+      "build": {
+        "buildType": null,
+        "cCompiler": null,
+        "cmakeCache": null,
+        "cmakeCacheSha256": null,
+        "cxxCompiler": null,
+        "directory": "/Applications/FreeCAD.app/Contents/Resources",
+        "generator": null,
+        "homeDirectory": null
+      },
+      "commit": null,
+      "dirty": null,
+      "dirtyEntries": null,
+      "dirtyStatusSha256": null,
+      "exists": true,
+      "path": "/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd",
+      "sha256": "391b638fa65bd761d55291be0a8e7ac22bd4d5ba40ccbd9b14621209a402181a",
+      "sourceRoot": null
+    },
+    "collector": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/collect_freecad_expected.py",
+      "sha256": "29b37d88f5a855ef99812b5d549a81c5942e860a26891018c466e13ff0f54530"
+    },
+    "producerTraceStatus": "not_evaluated",
+    "runtimeIdentities": [
+      [
+        "1.2.0 revision 20260519",
+        "7.8.1"
+      ]
+    ]
+  },
+  "roleTransition": {
+    "from": "unsupported",
+    "manifestAfterSha256": "df9e9c57986c5b358db1b4f9ee473f0584f9635d52a4f4c994bd3e7073308855",
+    "manifestBeforeSha256": "70268adcd2c63179f5286f1684ba70e0c7081ad49de599153b7d48f7b1f3c27b",
+    "to": "native"
+  },
+  "schema": "freecad-fixture-authority-promotion/v1",
+  "staging": {
+    "collectReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/app-link-linked-plain-group-nested-label-subshape/collect.json",
+      "sha256": "516eecf84afb030f403f2c8ec20bfdd4a6dfb3c73cf11309f1c5cce76342b4dc"
+    },
+    "input": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/app-link-linked-plain-group-nested-label-subshape.json",
+      "sha256": "0b6c5a789cc6b4e1d450b4106d3a641005c0563ade40394fa667ac26035e2683"
+    },
+    "ledger": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/app-link-linked-plain-group-nested-label-subshape.freecad.ledger.json",
+      "sha256": "8598a0ccc252b1780665744641bb89f1e4640ecb1a05023900d9d4e26c0959b3"
+    },
+    "publicExpected": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/fixtures/p8/expected/app-link-linked-plain-group-nested-label-subshape.freecad.json",
+      "sha256": "fc4b325f36f64b44f2bc3374dabb959653f88de67d5ec95cfbf6f35871ab30ea"
+    },
+    "repeatReport": {
+      "path": "/Users/li/Chili3DProject/FreeCAD/cad-core/out/fixture-staging/reports/p8/app-link-linked-plain-group-nested-label-subshape/repeat2.json",
+      "sha256": "2fe1730f07e0de693906ef0d4740d574313c2ed9710fc3474dd1f27fdc3ec511"
+    }
+  },
+  "status": "passed",
+  "targets": {
+    "input": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/app-link-linked-plain-group-nested-label-subshape.json",
+    "ledger": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/app-link-linked-plain-group-nested-label-subshape.freecad.ledger.json",
+    "producerReport": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/reports/promotions/p8-app-link-linked-plain-group-nested-label-subshape.json",
+    "publicExpected": "/Users/li/Chili3DProject/FreeCAD/cad-core/fixtures/p8/expected/app-link-linked-plain-group-nested-label-subshape.freecad.json",
+    "roleManifest": "/Users/li/Chili3DProject/FreeCAD/cad-core/tools/freecad_expected_parity/fixture_roles.v1.json"
+  },
+  "verification": {
+    "ledgerValidationStatus": "passed",
+    "publicExpectedStatus": "passed",
+    "runCount": 2,
+    "stagingCollectStatus": "passed",
+    "stagingRepeatStatus": "passed",
+    "successfulRunCount": 2
+  }
+}
